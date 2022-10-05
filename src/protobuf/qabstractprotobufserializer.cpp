@@ -4,6 +4,8 @@
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
+#include <QtProtobuf/qprotobufmessage.h>
+
 QT_BEGIN_NAMESPACE
 
 /*!
@@ -15,9 +17,9 @@ QT_BEGIN_NAMESPACE
     \reentrant
 
     The QProtobufSerializer class registers serializers/deserializers for
-    classes implementing a protobuf message, inheriting QObject. These classes
-    are generated automatically, based on a .proto file, using the cmake build
-    macro qt6_add_protobuf or by running qtprotobufgen directly.
+    classes implementing a protobuf message, inheriting QProtobufMessage. These
+    classes are generated automatically, based on a .proto file, using the cmake
+    build macro qt6_add_protobuf or by running qtprotobufgen directly.
 
     This class should be used as base for specific serializers. The handlers
     property contains all message-specific serializers and should be used while
@@ -49,10 +51,10 @@ QT_BEGIN_NAMESPACE
 QAbstractProtobufSerializer::~QAbstractProtobufSerializer() = default;
 
 /*!
-    \fn template<typename T> QAbstractProtobufSerializer::serialize(const QObject *object) const
+    \fn template<typename T> QAbstractProtobufSerializer::serialize(const QProtobufMessage *message) const
 
-    This function serializes a registered Protobuf message \a object into a
-    QByteArray. \a object must not be \nullptr.
+    This function serializes a registered Protobuf message \a message into a
+    QByteArray. \a message must not be \nullptr.
 
     For a given type, \c{T}, you should call the \c{serialize()} function on an
     instance of that type, which in turn will call this function for you.
@@ -60,11 +62,11 @@ QAbstractProtobufSerializer::~QAbstractProtobufSerializer() = default;
     \sa deserialize()
 */
 
-QByteArray QAbstractProtobufSerializer::doSerialize(const QObject *object,
-                                                    const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
+QByteArray QAbstractProtobufSerializer::doSerialize(const QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
 {
-    Q_ASSERT(object);
-    return serializeMessage(object, ordering);
+    Q_ASSERT(message);
+    return serializeMessage(message, ordering);
 }
 
 /*!
@@ -82,27 +84,26 @@ QByteArray QAbstractProtobufSerializer::doSerialize(const QObject *object,
     \sa serialize()
 */
 
-bool QAbstractProtobufSerializer::doDeserialize(QObject *object,
-                                                const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-                                                QByteArrayView data) const
+bool QAbstractProtobufSerializer::doDeserialize(QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QByteArrayView data) const
 {
-    Q_ASSERT(object);
-    return deserializeMessage(object, ordering, data);
+    Q_ASSERT(message);
+    return deserializeMessage(message, ordering, data);
 }
 
 /*!
-    \fn QByteArray QAbstractProtobufSerializer::serializeMessage(const QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
+    \fn QByteArray QAbstractProtobufSerializer::serializeMessage(const QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
 
     This is called by serialize() to serialize a registered Protobuf message
-    \a object with \a ordering. \a object must not be \nullptr.
+    \a message with \a ordering. \a message must not be \nullptr.
     Returns a QByteArray containing the serialized message.
 */
 
 /*!
-    \fn bool QAbstractProtobufSerializer::deserializeMessage(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QByteArrayView data) const
+    \fn bool QAbstractProtobufSerializer::deserializeMessage(QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QByteArrayView data) const
 
     This is called by deserialize() to deserialize a registered Protobuf message
-    \a object with \a ordering from a QByteArrayView \a data. \a object can be
+    \a message with \a ordering from a QByteArrayView \a data. \a message can be
     assumed to not be \nullptr.
     Returns \c true if deserialization was successful, otherwise \c false.
 */

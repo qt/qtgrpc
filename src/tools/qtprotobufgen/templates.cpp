@@ -67,7 +67,7 @@ const char *Templates::PreambleTemplate()
 {
     return "#ifndef Q_PROTOBUF_$filename$_H\n"
            "#define Q_PROTOBUF_$filename$_H\n\n"
-           "#include <QtCore/QObject>\n";
+           "#include <QtProtobuf/QProtobufMessage>\n";
 }
 
 const char *Templates::FooterTemplate()
@@ -154,9 +154,9 @@ const char *Templates::ClassMessageForwardDeclarationTemplate()
 }
 const char *Templates::ClassMessageBeginDeclarationTemplate()
 {
-    return "\nclass $export_macro$ $classname$ : public QObject\n"
+    return "\nclass $export_macro$ $classname$ : public QProtobufMessage\n"
            "{\n"
-           "    Q_OBJECT\n"
+           "    Q_GADGET\n"
            "    Q_PROTOBUF_OBJECT\n"
            "    Q_DECLARE_PROTOBUF_SERIALIZERS($classname$)\n";
 }
@@ -164,42 +164,41 @@ const char *Templates::ClassMessageBeginDeclarationTemplate()
 const char *Templates::PropertyTemplate()
 {
     return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
-           "set$property_name_cap$ NOTIFY $property_name$Changed SCRIPTABLE $scriptable$)\n";
+           "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
 }
 const char *Templates::PropertyRepeatedTemplate()
 {
     return "Q_PROPERTY($property_list_type$ $property_name$ READ $property_name$ WRITE "
-           "set$property_name_cap$ NOTIFY $property_name$Changed SCRIPTABLE $scriptable$)\n";
+           "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
 }
 const char *Templates::PropertyRepeatedMessageTemplate()
 {
     return "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
-           "set$property_name_cap$ NOTIFY $property_name$Changed SCRIPTABLE $scriptable$)\n";
+           "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
 }
 const char *Templates::PropertyNonScriptableTemplate()
 {
     return "Q_PROPERTY($property_type$ $property_name$_p READ $property_name$ WRITE "
-           "set$property_name_cap$ NOTIFY $property_name$Changed SCRIPTABLE false)\n";
+           "set$property_name_cap$ SCRIPTABLE false)\n";
 }
 const char *Templates::PropertyNonScriptableAliasTemplate()
 {
     return "Q_PROPERTY($qml_alias_type$ $property_name$ READ $property_name$_p WRITE "
-           "set$property_name_cap$_p NOTIFY $property_name$Changed SCRIPTABLE true)\n";
+           "set$property_name_cap$_p SCRIPTABLE true)\n";
 }
 const char *Templates::PropertyMessageTemplate()
 {
     return "Q_PROPERTY($property_type$ *$property_name$ READ $property_name$_p WRITE "
-           "set$property_name_cap$_p NOTIFY $property_name$Changed)\n";
+           "set$property_name_cap$_p)\n";
 }
 const char *Templates::PropertyQmlListTemplate()
 {
-    return "Q_PROPERTY(QQmlListProperty<$property_type$> $property_name$ READ $property_name$_l "
-           "NOTIFY $property_name$Changed)\n";
+    return "Q_PROPERTY(QQmlListProperty<$property_type$> $property_name$ READ $property_name$_l)\n";
 }
 
 const char *Templates::ConstructorMessageDeclarationTemplate()
 {
-    return "$classname$(QObject *parent = nullptr);\n";
+    return "$classname$();\n";
 }
 
 const char *Templates::DestructorMessageDeclarationTemplate()
@@ -238,7 +237,7 @@ const char *Templates::EnumFieldTemplate()
 
 const char *Templates::ConstructorMessageDefinitionTemplate()
 {
-    return "$type$::$type$(QObject *parent) : QObject(parent)";
+    return "$type$::$type$() : QProtobufMessage(&$type$::staticMetaObject)";
 }
 
 const char *Templates::EmptyConstructorTemplate()
@@ -255,19 +254,13 @@ const char *Templates::MoveConstructorDeclarationTemplate()
 }
 const char *Templates::CopyConstructorDefinitionTemplate()
 {
-    return "$classname$::$classname$(const $classname$ &other) : QObject()";
+    return "$classname$::$classname$(const $classname$ &other) : "
+           "QProtobufMessage(other)";
 }
 const char *Templates::MoveConstructorDefinitionTemplate()
 {
-    return "$classname$::$classname$($classname$ &&other) noexcept : QObject()";
-}
-const char *Templates::EmptyCopyConstructorDefinitionTemplate()
-{
-    return "$classname$::$classname$(const $classname$ &) : QObject() {}\n";
-}
-const char *Templates::EmptyMoveConstructorDefinitionTemplate()
-{
-    return "$classname$::$classname$($classname$ &&) noexcept : QObject() {}\n";
+    return "$classname$::$classname$($classname$ &&other) noexcept : "
+           "QProtobufMessage(std::move(other))";
 }
 const char *Templates::DeletedCopyConstructorTemplate()
 {
@@ -289,10 +282,8 @@ const char *Templates::CopyMemberMessageTemplate()
 }
 const char *Templates::AssignMemberMessageTemplate()
 {
-    return "if (m_$property_name$ != other.m_$property_name$) {\n"
-           "    *m_$property_name$ = *other.m_$property_name$;\n"
-           "    $property_name$Changed();\n"
-           "}\n";
+    return "if (m_$property_name$ != other.m_$property_name$)\n"
+           "    *m_$property_name$ = *other.m_$property_name$;\n";
 }
 const char *Templates::MoveMemberMessageTemplate()
 {
@@ -302,31 +293,23 @@ const char *Templates::MoveMemberMessageTemplate()
 }
 const char *Templates::MoveAssignMemberMessageTemplate()
 {
-    return "if (m_$property_name$ != other.m_$property_name$) {\n"
-           "    *m_$property_name$ = std::move(*other.m_$property_name$);\n"
-           "    $property_name$Changed();\n"
-           "    other.$property_name$Changed();\n"
-           "}\n";
+    return "if (m_$property_name$ != other.m_$property_name$)\n"
+           "    *m_$property_name$ = std::move(*other.m_$property_name$);\n";
 }
 const char *Templates::MoveAssignMemberComplexTemplate()
 {
-    return "if (m_$property_name$ != other.m_$property_name$) {\n"
-           "    m_$property_name$ = std::move(other.m_$property_name$);\n"
-           "    $property_name$Changed();\n"
-           "    other.$property_name$Changed();\n"
-           "}\n";
+    return "if (m_$property_name$ != other.m_$property_name$)\n"
+           "    m_$property_name$ = std::move(other.m_$property_name$);\n";
 }
 
 const char *Templates::MoveConstructorMemberComplexTemplate()
 {
-    return "m_$property_name$ = std::move(other.m_$property_name$);\n"
-           "other.$property_name$Changed();\n";
+    return "m_$property_name$ = std::move(other.m_$property_name$);\n";
 }
 
 const char *Templates::MoveMemberTemplate()
 {
-    return "set$property_name_cap$(std::exchange(other.m_$property_name$, 0));\n"
-           "other.$property_name$Changed();\n";
+    return "set$property_name_cap$(std::exchange(other.m_$property_name$, 0));\n";
 }
 const char *Templates::MoveMemberEnumTemplate()
 {
@@ -339,11 +322,9 @@ const char *Templates::AssignmentOperatorDeclarationTemplate()
 }
 const char *Templates::AssignmentOperatorDefinitionTemplate()
 {
-    return "$classname$ &$classname$::operator =(const $classname$ &other)\n{\n";
-}
-const char *Templates::EmptyAssignmentOperatorDefinitionTemplate()
-{
-    return "$classname$ &$classname$::operator =(const $classname$ &) { return *this; }\n";
+    return "$classname$ &$classname$::operator =(const $classname$ &other)\n"
+    "{\n"
+    "    QProtobufMessage::operator=(other);\n";
 }
 const char *Templates::AssignmentOperatorReturnTemplate()
 {
@@ -356,11 +337,9 @@ const char *Templates::MoveAssignmentOperatorDeclarationTemplate()
 }
 const char *Templates::MoveAssignmentOperatorDefinitionTemplate()
 {
-    return "$classname$ &$classname$::operator =($classname$ &&other) noexcept\n{\n";
-}
-const char *Templates::EmptyMoveAssignmentOperatorDefinitionTemplate()
-{
-    return "$classname$ &$classname$::operator =($classname$ &&) noexcept { return *this; }\n";
+    return "$classname$ &$classname$::operator =($classname$ &&other) noexcept\n"
+    "{\n"
+    "    QProtobufMessage::operator=(std::move(other));\n";
 }
 
 const char *Templates::EqualOperatorDeclarationTemplate()
@@ -370,13 +349,7 @@ const char *Templates::EqualOperatorDeclarationTemplate()
 const char *Templates::EqualOperatorDefinitionTemplate()
 {
     return "bool $classname$::operator ==(const $classname$ &other) const\n{\n"
-           "    return ";
-}
-const char *Templates::EmptyEqualOperatorDefinitionTemplate()
-{
-    return "bool $classname$::operator ==(const $classname$ &) const\n{\n"
-           "    return true;\n"
-           "}\n\n";
+           "    return QProtobufMessage::isEqual(*this, other)";
 }
 const char *Templates::EqualOperatorMemberTemplate()
 {
@@ -464,10 +437,8 @@ const char *Templates::PrivateSetterMessageDeclarationTemplate()
 const char *Templates::PrivateSetterMessageDefinitionTemplate()
 {
     return "void $classname$::set$property_name_cap$_p($setter_type$ *$property_name$)\n{\n"
-           "    if (m_$property_name$.get() != $property_name$) {\n"
+           "    if (m_$property_name$.get() != $property_name$)\n"
            "        m_$property_name$.reset($property_name$);\n"
-           "        $property_name$Changed();\n"
-           "    }\n"
            "}\n\n";
 }
 
@@ -478,10 +449,8 @@ const char *Templates::SetterMessageDeclarationTemplate()
 const char *Templates::SetterMessageDefinitionTemplate()
 {
     return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n{\n"
-           "    if (*m_$property_name$ != $property_name$) {\n"
+           "    if (*m_$property_name$ != $property_name$)\n"
            "        *m_$property_name$ = $property_name$;\n"
-           "        $property_name$Changed();\n"
-           "    }\n"
            "}\n\n";
 }
 
@@ -492,29 +461,23 @@ const char *Templates::SetterComplexDeclarationTemplate()
 const char *Templates::SetterComplexDefinitionTemplate()
 {
     return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n{\n"
-           "    if (m_$property_name$ != $property_name$) {\n"
+           "    if (m_$property_name$ != $property_name$)\n"
            "        m_$property_name$ = $property_name$;\n"
-           "        $property_name$Changed();\n"
-           "    }\n"
            "}\n\n";
 }
 
 const char *Templates::SetterTemplate()
 {
     return "void set$property_name_cap$(const $setter_type$ &$property_name$) {\n"
-           "    if (m_$property_name$ != $property_name$) {\n"
+           "    if (m_$property_name$ != $property_name$)\n"
            "        m_$property_name$ = $property_name$;\n"
-           "        $property_name$Changed();\n"
-           "    }\n"
            "}\n\n";
 }
 const char *Templates::SetterNonScriptableTemplate()
 {
     return "void set$property_name_cap$_p(const $qml_alias_type$ &$property_name$) {\n"
-           "    if (m_$property_name$ != $property_name$) {\n"
+           "    if (m_$property_name$ != $property_name$)\n"
            "        m_$property_name$ = $property_name$;\n"
-           "        $property_name$Changed();\n"
-           "    }\n"
            "}\n\n";
 }
 

@@ -27,11 +27,6 @@ void BasePrinter::printPrivateBlock()
     m_printer->Print(Templates::PrivateBlockTemplate());
 }
 
-void BasePrinter::printSignalsBlock()
-{
-    m_printer->Print(Templates::SignalsBlockTemplate());
-}
-
 void BasePrinter::printCommentsImpl(std::string comments)
 {
     utils::trim(comments);

@@ -25,7 +25,7 @@ private slots:
 void QtProtobufNoPackageTypesGenerationTest::NoPackageEmptyMessageMessageTest()
 {
     QCOMPARE(::EmptyMessage::propertyOrdering.fieldCount(), 0);
-    QCOMPARE(::EmptyMessage::staticMetaObject.propertyCount(), 1);
+    QCOMPARE(::EmptyMessage::staticMetaObject.propertyCount(), 0);
 }
 
 void QtProtobufNoPackageTypesGenerationTest::NoPackageSimpleIntMessageTest()

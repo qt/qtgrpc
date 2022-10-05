@@ -7,12 +7,12 @@
 
 #include <QtProtobuf/qtprotobufglobal.h>
 #include <QtProtobuf/qtprotobuftypes.h>
+#include <QtProtobuf/qprotobufmessage.h>
 
 #include <type_traits>
 
 QT_BEGIN_NAMESPACE
 
-class QObject;
 class Q_PROTOBUF_EXPORT QAbstractProtobufSerializer
 {
 
@@ -25,11 +25,11 @@ public:
     };
 
     template<typename T>
-    QByteArray serialize(const QObject *object) const
+    QByteArray serialize(const QProtobufMessage *message) const
     {
         static_assert(QtProtobufPrivate::HasProtobufPropertyOrdering<T>,
                       "T must have the Q_PROTOBUF_OBJECT macro");
-        return doSerialize(object, T::propertyOrdering);
+        return doSerialize(message, T::propertyOrdering);
     }
 
     template<typename T>
@@ -37,6 +37,8 @@ public:
     {
         static_assert(QtProtobufPrivate::HasProtobufPropertyOrdering<T>,
                       "T must have the Q_PROTOBUF_OBJECT macro");
+        static_assert(std::is_base_of_v<QProtobufMessage, T>,
+                      "T must be derived from QProtobufMessage");
         // Initialize default object first and make copy afterwards, it's necessary to set default
         // values of properties that was not stored in data.
         T newValue;
@@ -52,16 +54,16 @@ public:
 
 protected:
     virtual QByteArray
-    serializeMessage(const QObject *object,
+    serializeMessage(const QProtobufMessage *message,
                      const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const = 0;
-    virtual bool deserializeMessage(QObject *object,
+    virtual bool deserializeMessage(QProtobufMessage *message,
                                     const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                                     QByteArrayView data) const = 0;
 
 private:
-    QByteArray doSerialize(const QObject *object,
+    QByteArray doSerialize(const QProtobufMessage *message,
                            const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const;
-    bool doDeserialize(QObject *object,
+    bool doDeserialize(QProtobufMessage *message,
                        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                        QByteArrayView data) const;
 };

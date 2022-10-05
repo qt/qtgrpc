@@ -30,7 +30,6 @@ private:
     void printSetters();
     void printPrivateGetters();
     void printPrivateSetters();
-    void printSignals();
     void printPrivateMethods();
     void printClassMembers();
     void printConstructors();

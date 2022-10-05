@@ -28,7 +28,6 @@ public:
 
     void printPublicBlock();
     void printPrivateBlock();
-    void printSignalsBlock();
 
     template <typename T>
     void printComments(T *descriptor)

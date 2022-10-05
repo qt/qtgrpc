@@ -151,14 +151,13 @@ void MessageDefinitionPrinter::printUintData(const char *templateString)
     constexpr size_t NullTerminator = 1;
     // JSon data starts where string metadata ends
     size_t jsonOffset = metaCharDataSize() + NullTerminator;
-    int index = 0;
     const int numFields = m_descriptor->field_count();
     for (int i = 0; i < numFields; ++i) {
         const FieldDescriptor *field = m_descriptor->field(i);
         const std::map<std::string, std::string> variables = {
             { "json_name_offset", std::to_string(jsonOffset) },
             { "field_number", std::to_string(field->number()) },
-            { "property_index", std::to_string(++index) },
+            { "property_index", std::to_string(i) },
             { "field_flags", common::collectFieldFlags(field) },
             { "json_name", field->json_name() },
         };
@@ -212,9 +211,8 @@ void MessageDefinitionPrinter::printConstructors()
 
     if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
         m_printer->Print(
-                "Timestamp::Timestamp(const QDateTime &datetime, QObject *parent) : "
-                "QObject(parent)\n"
-                ", m_seconds(datetime.toMSecsSinceEpoch() / 1000)\n"
+                "Timestamp::Timestamp(const QDateTime &datetime) : QProtobufMessage(&Timestamp::staticMetaObject),"
+                "m_seconds(datetime.toMSecsSinceEpoch() / 1000)\n"
                 ", m_nanos((datetime.toMSecsSinceEpoch() % 1000) * 1000)\n"
                 "{}\n"
                 "Timestamp::operator QDateTime() const\n"
@@ -276,12 +274,6 @@ void MessageDefinitionPrinter::printInitializationList()
 void MessageDefinitionPrinter::printCopyFunctionality()
 {
     assert(m_descriptor != nullptr);
-    if (m_descriptor->field_count() == 0) {
-        m_printer->Print(m_typeMap, Templates::EmptyCopyConstructorDefinitionTemplate());
-        m_printer->Print(m_typeMap, Templates::EmptyAssignmentOperatorDefinitionTemplate());
-        return;
-    }
-
     m_printer->Print(m_typeMap, Templates::CopyConstructorDefinitionTemplate());
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
@@ -323,12 +315,6 @@ void MessageDefinitionPrinter::printCopyFunctionality()
 void MessageDefinitionPrinter::printMoveSemantic()
 {
     assert(m_descriptor != nullptr);
-    if (m_descriptor->field_count() == 0) {
-        m_printer->Print(m_typeMap, Templates::EmptyMoveConstructorDefinitionTemplate());
-        m_printer->Print(m_typeMap, Templates::EmptyMoveAssignmentOperatorDefinitionTemplate());
-        return;
-    }
-
     m_printer->Print(m_typeMap, Templates::MoveConstructorDefinitionTemplate());
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
@@ -391,24 +377,14 @@ void MessageDefinitionPrinter::printMoveSemantic()
 void MessageDefinitionPrinter::printComparisonOperators()
 {
     assert(m_descriptor != nullptr);
-    if (m_descriptor->field_count() == 0) {
-        m_printer->Print(m_typeMap, Templates::EmptyEqualOperatorDefinitionTemplate());
-        m_printer->Print(m_typeMap, Templates::NotEqualOperatorDefinitionTemplate());
-        return;
-    }
 
     m_printer->Print(m_typeMap, Templates::EqualOperatorDefinitionTemplate());
 
-    bool isFirst = true;
+    Indent();
+    Indent();
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, PropertyMap &propertyMap) {
-                if (!isFirst) {
-                    m_printer->Print("\n&& ");
-                } else {
-                    Indent();
-                    Indent();
-                    isFirst = false;
-                }
+                m_printer->Print("\n&& ");
                 if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap, Templates::EqualOperatorMemberMessageTemplate());
                 } else if (field->type() == FieldDescriptor::TYPE_MESSAGE && field->is_repeated()) {
@@ -417,12 +393,8 @@ void MessageDefinitionPrinter::printComparisonOperators()
                     m_printer->Print(propertyMap, Templates::EqualOperatorMemberTemplate());
                 }
             });
-
-    // Only if at least one field "copied"
-    if (!isFirst) {
-        Outdent();
-        Outdent();
-    }
+    Outdent();
+    Outdent();
 
     m_printer->Print(";\n");
     m_printer->Print(Templates::SimpleBlockEnclosureTemplate());

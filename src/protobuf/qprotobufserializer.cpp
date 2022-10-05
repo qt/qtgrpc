@@ -14,6 +14,7 @@
 #include <QtCore/qreadwritelock.h>
 
 #include <QtProtobuf/private/qprotobufserializer_p.h>
+#include <QtProtobuf/private/qprotobufmessage_p.h>
 
 
 QT_BEGIN_NAMESPACE
@@ -72,9 +73,9 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
     \reentrant
 
     The QProtobufSerializer class registers serializers/deserializers for
-    classes implementing a protobuf message, inheriting QObject. These classes
-    are generated automatically, based on a .proto file, using the cmake build
-    macro qt6_add_protobuf or by running qtprotobufgen directly.
+    classes implementing a protobuf message, inheriting QProtobufMessage. These
+    classes are generated automatically, based on a .proto file, using the cmake
+    build macro qt6_add_protobuf or by running qtprotobufgen directly.
 */
 
 /*!
@@ -101,7 +102,7 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
     \fn template<typename K, typename V> inline void qRegisterProtobufMapType();
 
     Registers a Protobuf map type \c K and \c V.
-    \c V must be a QObject.
+    \c V must be a QProtobufMessage.
     This function is normally called by generated code.
 */
 
@@ -321,19 +322,22 @@ QProtobufSerializer::~QProtobufSerializer() = default;
 
 /*!
     This is called by serialize() to serialize a registered Protobuf message
-    \a object with \a ordering. \a object must not be \nullptr.
+    \a message with \a ordering. \a message must not be
+    \nullptr.
     Returns a QByteArray containing the serialized message.
 */
 QByteArray QProtobufSerializer::serializeMessage(
-        const QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
+        const QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
 {
     QByteArray result;
     for (int index = 0; index < ordering.fieldCount(); ++index) {
-        int propertyIndex = ordering.getPropertyIndex(index);
+        int propertyIndex =
+                ordering.getPropertyIndex(index) + message->metaObject()->propertyOffset();
         int fieldIndex = ordering.getFieldNumber(index);
         Q_ASSERT_X(fieldIndex < 536870912 && fieldIndex > 0, "", "fieldIndex is out of range");
-        QMetaProperty metaProperty = object->metaObject()->property(propertyIndex);
-        QVariant propertyValue = metaProperty.read(object);
+        QMetaProperty metaProperty = message->metaObject()->property(propertyIndex);
+        QVariant propertyValue = metaProperty.readOnGadget(message);
         result.append(d_ptr->serializeProperty(propertyValue,
                                                QProtobufPropertyOrderingInfo(ordering, index)));
     }
@@ -355,17 +359,18 @@ void QProtobufSerializerPrivate::clearError()
 
 /*!
     This is called by deserialize() to deserialize a registered Protobuf message
-    \a object with \a ordering from a QByteArrayView \a data. \a object can be
-    assumed to not be \nullptr.
+    \a message with \a ordering, from a QByteArrayView \a data. \a message
+    can be assumed to not be \nullptr.
     Returns \c true if deserialization was successful, otherwise \c false.
 */
-bool QProtobufSerializer::deserializeMessage(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-                                             QByteArrayView data) const
+bool QProtobufSerializer::deserializeMessage(
+        QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+        QByteArrayView data) const
 {
     d_ptr->clearError();
     QProtobufSelfcheckIterator it(data);
     while (it.isValid() && it != data.end()) {
-        if (!d_ptr->deserializeProperty(object, ordering, it))
+        if (!d_ptr->deserializeProperty(message, ordering, it))
             return false;
     }
     if (!it.isValid())
@@ -374,31 +379,33 @@ bool QProtobufSerializer::deserializeMessage(QObject *object, const QtProtobufPr
 }
 
 /*!
-    Serialize an \a object with \a ordering and \a fieldInfo.
+    Serialize an \a message with \a ordering and \a fieldInfo.
     Returns a QByteArray containing the serialized message.
 
     You should not call this function directly.
 */
 QByteArray
-QProtobufSerializer::serializeObject(const QObject *object,
+QProtobufSerializer::serializeObject(const QProtobufMessage *message,
                                      const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                                      const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
     QByteArray result = QProtobufSerializerPrivate::encodeHeader(
             fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited);
     result.append(QProtobufSerializerPrivate::prependLengthDelimitedSize(
-            serializeMessage(object, ordering)));
+            serializeMessage(message, ordering)));
     return result;
 }
 
 /*!
-    Deserialize an \a object with \a ordering from a QProtobufSelfcheckIterator
+    Deserialize an \a message with \a ordering from a QProtobufSelfcheckIterator
     \a it. Returns \c true if deserialization was successful, otherwise
     \c false.
 
     You should not call this function directly.
 */
-bool QProtobufSerializer::deserializeObject(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QProtobufSelfcheckIterator &it) const
+bool QProtobufSerializer::deserializeObject(QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+        QProtobufSelfcheckIterator &it) const
 {
     if (it.bytesLeft() == 0) {
         d_ptr->setUnexpectedEndOfStreamError();
@@ -409,32 +416,35 @@ bool QProtobufSerializer::deserializeObject(QObject *object, const QtProtobufPri
         d_ptr->setUnexpectedEndOfStreamError();
         return false;
     }
-    return deserializeMessage(object, ordering, array.value());
+    return deserializeMessage(message, ordering, array.value());
 }
 
 /*!
-    This function is called to serialize \a object as a part of list property
+    This function is called to serialize \a message as a part of list property
     with \a ordering and \a fieldInfo.
 
     You should not call this function directly.
 */
 QByteArray QProtobufSerializer::serializeListObject(
-        const QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+        const QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
         const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
-    return serializeObject(object, ordering, fieldInfo);
+    return serializeObject(message, ordering, fieldInfo);
 }
 
 /*!
-    This function deserializes an \a object from byte stream as part of list property, with
+    This function deserializes an \a message from byte stream as part of list property, with
     \a ordering from a QProtobufSelfcheckIterator \a it.
     Returns \c true if deserialization was successful, otherwise \c false.
 
     You should not call this function directly.
 */
-bool QProtobufSerializer::deserializeListObject(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QProtobufSelfcheckIterator &it) const
+bool QProtobufSerializer::deserializeListObject(QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+        QProtobufSelfcheckIterator &it) const
 {
-    return deserializeObject(object, ordering, it);
+    return deserializeObject(message, ordering, it);
 }
 
 /*!
@@ -619,7 +629,10 @@ QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
     return result;
 }
 
-bool QProtobufSerializerPrivate::deserializeProperty(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QProtobufSelfcheckIterator &it)
+bool QProtobufSerializerPrivate::deserializeProperty(
+        QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+        QProtobufSelfcheckIterator &it)
 {
     Q_ASSERT(it.isValid() && it.bytesLeft() > 0);
     //Each iteration we expect iterator is setup to beginning of next chunk
@@ -643,14 +656,14 @@ bool QProtobufSerializerPrivate::deserializeProperty(QObject *object, const QtPr
         return true;
     }
 
-    int propertyIndex = ordering.getPropertyIndex(index);
-    QMetaProperty metaProperty = object->metaObject()->property(propertyIndex);
+    int propertyIndex = ordering.getPropertyIndex(index) + message->metaObject()->propertyOffset();
+    QMetaProperty metaProperty = message->metaObject()->property(propertyIndex);
 
     qProtoDebug() << "wireType:" << wireType << "metaProperty:" << metaProperty.typeName()
                   << "currentByte:" << QString::number((*it), 16);
 
     QVariant newPropertyValue;
-    newPropertyValue = metaProperty.read(object);
+    newPropertyValue = metaProperty.readOnGadget(message);
     QMetaType metaType = metaProperty.metaType();
 
     //TODO: replace with some common function
@@ -671,7 +684,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(QObject *object, const QtPr
         handler.deserializer(q_ptr, it, newPropertyValue);
     }
 
-    metaProperty.write(object, newPropertyValue);
+    metaProperty.writeOnGadget(message, newPropertyValue);
     return true;
 }
 

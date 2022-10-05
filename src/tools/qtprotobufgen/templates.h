@@ -65,8 +65,6 @@ public:
     static const char *MoveConstructorDeclarationTemplate();
     static const char *CopyConstructorDefinitionTemplate();
     static const char *MoveConstructorDefinitionTemplate();
-    static const char *EmptyCopyConstructorDefinitionTemplate();
-    static const char *EmptyMoveConstructorDefinitionTemplate();
     static const char *DeletedCopyConstructorTemplate();
     static const char *DeletedMoveConstructorTemplate();
     static const char *CopyMemberTemplate();
@@ -80,14 +78,11 @@ public:
     static const char *MoveMemberEnumTemplate();
     static const char *AssignmentOperatorDeclarationTemplate();
     static const char *AssignmentOperatorDefinitionTemplate();
-    static const char *EmptyAssignmentOperatorDefinitionTemplate();
     static const char *AssignmentOperatorReturnTemplate();
     static const char *MoveAssignmentOperatorDeclarationTemplate();
     static const char *MoveAssignmentOperatorDefinitionTemplate();
-    static const char *EmptyMoveAssignmentOperatorDefinitionTemplate();
     static const char *EqualOperatorDeclarationTemplate();
     static const char *EqualOperatorDefinitionTemplate();
-    static const char *EmptyEqualOperatorDefinitionTemplate();
     static const char *EqualOperatorMemberTemplate();
     static const char *EqualOperatorMemberMessageTemplate();
     static const char *EqualOperatorMemberRepeatedTemplate();

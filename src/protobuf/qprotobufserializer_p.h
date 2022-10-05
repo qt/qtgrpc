@@ -569,7 +569,7 @@ public:
     serializeProperty(const QVariant &propertyValue,
                       const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo);
     Q_REQUIRED_RESULT
-    bool deserializeProperty(QObject *object,
+    bool deserializeProperty(QProtobufMessage *message,
                              const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                              QProtobufSelfcheckIterator &it);
 

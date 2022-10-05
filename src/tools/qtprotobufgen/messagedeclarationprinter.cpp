@@ -98,7 +98,7 @@ void MessageDeclarationPrinter::printConstructors()
     m_printer->Print(m_typeMap, Templates::ConstructorMessageDeclarationTemplate());
 
     if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
-        m_printer->Print("Timestamp(const QDateTime &datetime, QObject *parent = nullptr);\n"
+        m_printer->Print("Timestamp(const QDateTime &datetime);\n"
                         "operator QDateTime() const;\n");
     }
 }
@@ -263,17 +263,6 @@ void MessageDeclarationPrinter::printPrivateSetters()
     Outdent();
 }
 
-void MessageDeclarationPrinter::printSignals()
-{
-    Indent();
-    const int numFields = m_descriptor->field_count();
-    for (int i = 0; i < numFields; ++i) {
-        m_printer->Print(common::producePropertyMap(m_descriptor->field(i), m_descriptor),
-                        Templates::SignalTemplate());
-    }
-    Outdent();
-}
-
 void MessageDeclarationPrinter::printPrivateMethods()
 {
     Indent();
@@ -351,9 +340,6 @@ void MessageDeclarationPrinter::printClassBody()
     Indent();
     m_printer->Print(m_typeMap, Templates::MetaTypeRegistrationDeclaration());
     Outdent();
-
-    printSignalsBlock();
-    printSignals();
 
     printPrivateBlock();
     printPrivateGetters();

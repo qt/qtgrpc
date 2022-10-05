@@ -42,7 +42,7 @@ using namespace qtprotobufnamespace::tests;
 void QtProtobufTypesGenerationTest::EmptyMessageTest()
 {
     QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::propertyOrdering.fieldCount(), 0);
-    QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::staticMetaObject.propertyCount(), 1);
+    QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::staticMetaObject.propertyCount(), 0);
     QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.EmptyMessage");
 }
@@ -308,7 +308,6 @@ void QtProtobufTypesGenerationTest::AssignmentOperatorTest()
     qtprotobufnamespace::tests::SimpleIntMessage test2;
     test2.setTestFieldInt(35);
 
-    QSignalSpy updateSpy(&test, &qtprotobufnamespace::tests::SimpleIntMessage::testFieldIntChanged);
     test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::int32>(15));
     test.setTestFieldInt(25);
     test = test2;
@@ -318,7 +317,6 @@ void QtProtobufTypesGenerationTest::AssignmentOperatorTest()
     QT_WARNING_POP
     test = test2;
     QCOMPARE(test2.testFieldInt(), test.testFieldInt());
-    QCOMPARE(updateSpy.count(), 3);
 }
 
 void QtProtobufTypesGenerationTest::MoveOperatorTest()
@@ -328,9 +326,6 @@ void QtProtobufTypesGenerationTest::MoveOperatorTest()
     qtprotobufnamespace::tests::SimpleIntMessage test2;
     test2.setTestFieldInt(35);
 
-    QSignalSpy updateSpy(&test, &qtprotobufnamespace::tests::SimpleIntMessage::testFieldIntChanged);
-    QSignalSpy movedUpdateSpy(&test2, &qtprotobufnamespace::tests::SimpleIntMessage::testFieldIntChanged);
-
     qtprotobufnamespace::tests::SimpleIntMessage test3(std::move(test2));
     test2.setTestFieldInt(35);
 
@@ -339,8 +334,6 @@ void QtProtobufTypesGenerationTest::MoveOperatorTest()
     test = std::move(test2);
     QCOMPARE(test.testFieldInt(), 35);
     QCOMPARE(test2.testFieldInt(), 0);
-    QCOMPARE(updateSpy.count(), 3);
-    QCOMPARE(movedUpdateSpy.count(), 3);
 }
 
 void QtProtobufTypesGenerationTest::AccessMessageFieldsFromGetter()

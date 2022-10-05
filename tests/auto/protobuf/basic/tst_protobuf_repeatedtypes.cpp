@@ -303,9 +303,6 @@ void QtProtobufRepeatedTypesGenerationTest::MoveOperatorRepeatedTest()
     RepeatedIntMessage test2;
     test2.setTestRepeatedInt({ 55, 44, 11, 33 });
 
-    QSignalSpy updateSpy(&test, &RepeatedIntMessage::testRepeatedIntChanged);
-    QSignalSpy movedUpdateSpy(&test2, &RepeatedIntMessage::testRepeatedIntChanged);
-
     RepeatedIntMessage test3(std::move(test2));
     test2.setTestRepeatedInt({55,44,11,35});
 
@@ -314,8 +311,6 @@ void QtProtobufRepeatedTypesGenerationTest::MoveOperatorRepeatedTest()
     test = std::move(test2);
     QCOMPARE(QtProtobuf::int32List({55,44,11,35}), test.testRepeatedInt());
     QVERIFY(test2.testRepeatedInt().isEmpty());
-    QCOMPARE(updateSpy.count(), 3);
-    QCOMPARE(movedUpdateSpy.count(), 3);
 }
 
 void QtProtobufRepeatedTypesGenerationTest::RepeatedComplexMessageCompareTest()
