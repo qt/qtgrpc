@@ -1,0 +1,654 @@
+// Copyright (C) 2022 The Qt Company Ltd.
+// Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>, Viktor Kopp <vifactor@gmail.com>
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+
+#include "qprotobufserializer.h"
+#include "qprotobufserializer_p.h"
+
+#include "qtprotobuftypes.h"
+
+#include <QtCore/qmetatype.h>
+#include <QtCore/qcoreapplication.h>
+#include <QtCore/qmetaobject.h>
+#include <QtCore/qvariant.h>
+#include <QtCore/qreadwritelock.h>
+
+#include <QtProtobuf/private/qprotobufserializer_p.h>
+
+
+QT_BEGIN_NAMESPACE
+
+namespace {
+
+/*
+    \internal
+    \brief The HandlersRegistry is a container to store mapping between metatype
+    identifier and serialization handlers.
+*/
+struct HandlersRegistry
+{
+    void registerHandler(QMetaType type, const QtProtobufPrivate::SerializationHandler &handlers)
+    {
+        QWriteLocker locker(&m_lock);
+        m_registry[type] = handlers;
+    }
+
+    QtProtobufPrivate::SerializationHandler findHandler(QMetaType type)
+    {
+        QtProtobufPrivate::SerializationHandler handler;
+        QReadLocker locker(&m_lock);
+        auto it = m_registry.constFind(type);
+        if (it != m_registry.end())
+            handler = it.value();
+        return handler;
+    }
+
+private:
+    QReadWriteLock m_lock;
+    QHash<QMetaType, QtProtobufPrivate::SerializationHandler> m_registry;
+};
+Q_GLOBAL_STATIC(HandlersRegistry, handlersRegistry)
+} // namespace
+
+void QtProtobufPrivate::registerHandler(QMetaType type,
+                                        const QtProtobufPrivate::SerializationHandler &handlers)
+{
+    handlersRegistry->registerHandler(type, handlers);
+}
+
+QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType type)
+{
+    if (!handlersRegistry.exists())
+        return {};
+    return handlersRegistry->findHandler(type);
+}
+
+/*!
+    \class QProtobufSerializer
+    \inmodule QtProtobuf
+    \since 6.4
+    \brief The QProtobufSerializer class is interface that represents
+           basic functions for serialization/deserialization.
+    \reentrant
+
+    The QProtobufSerializer class registers serializers/deserializers for
+    classes implementing a protobuf message, inheriting QObject. These classes
+    are generated automatically, based on a .proto file, using the cmake build
+    macro qt6_add_protobuf or by running qtprotobufgen directly.
+*/
+
+/*!
+    \fn QProtobufSerializer::DeserializationError QProtobufSerializer::deserializationError() const
+
+    Returns the last deserialization error.
+*/
+
+/*!
+    \fn QString QProtobufSerializer::deserializationErrorString() const
+
+    Returns a human-readable string describing the last deserialization error.
+    If there was no error, an empty string is returned.
+*/
+
+/*!
+    \fn template<typename T> inline void qRegisterProtobufType()
+
+    Registers a Protobuf type \a T.
+    This function is normally called by generated code.
+*/
+
+/*!
+    \fn template<typename K, typename V> inline void qRegisterProtobufMapType();
+
+    Registers a Protobuf map type \c K and \c V.
+    \c V must be a QObject.
+    This function is normally called by generated code.
+*/
+
+/*!
+    \fn template<typename T> inline void qRegisterProtobufEnumType();
+
+    Registers serializers for enumeration type \c T in QtProtobuf global
+    serializers registry.
+
+    This function is normally called by generated code.
+*/
+
+using namespace Qt::StringLiterals;
+using namespace QtProtobufPrivate;
+
+template<>
+Q_REQUIRED_RESULT
+QByteArray QProtobufSerializerPrivate::serializeListType<QByteArray>(const QByteArrayList &listValue, int &outFieldIndex)
+{
+    qProtoDebug("listValue.count %" PRIdQSIZETYPE " outFieldIndex %d", listValue.count(),
+                outFieldIndex);
+
+    if (listValue.isEmpty()) {
+        outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+        return QByteArray();
+    }
+
+    QByteArray serializedList;
+    for (const QByteArray &value : listValue) {
+        serializedList.append(QProtobufSerializerPrivate::encodeHeader(
+                outFieldIndex, QtProtobuf::WireTypes::LengthDelimited));
+        serializedList.append(serializeLengthDelimited(value, false));
+    }
+
+    outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+    return serializedList;
+}
+
+template<>
+Q_REQUIRED_RESULT
+bool QProtobufSerializerPrivate::deserializeList<QByteArray>(QProtobufSelfcheckIterator &it, QVariant &previousValue)
+{
+    qProtoDebug("currentByte: 0x%x", *it);
+
+    std::optional<QByteArray> result = deserializeLengthDelimited(it);
+    if (result) {
+        QByteArrayList list = previousValue.value<QByteArrayList>();
+        list.append(std::move(*result));
+        previousValue.setValue(list);
+        return true;
+    }
+    return false;
+}
+
+template<>
+Q_REQUIRED_RESULT
+bool QProtobufSerializerPrivate::deserializeList<QString>(QProtobufSelfcheckIterator &it, QVariant &previousValue)
+{
+    qProtoDebug("currentByte: 0x%x", *it);
+
+    std::optional<QByteArray> result = deserializeLengthDelimited(it);
+    if (result) {
+        QStringList list = previousValue.value<QStringList>();
+        list.append(QString::fromUtf8(*result));
+        previousValue.setValue(list);
+        return true;
+    }
+    return false;
+}
+
+/*!
+    Constructs a new serializer instance.
+*/
+QProtobufSerializer::QProtobufSerializer() : d_ptr(new QProtobufSerializerPrivate(this))
+{
+}
+
+/*!
+    Destroys the serializer instance.
+*/
+QProtobufSerializer::~QProtobufSerializer() = default;
+
+/*!
+    This is called by serialize() to serialize a registered Protobuf message
+    \a object with \a ordering. \a object must not be \nullptr.
+    Returns a QByteArray containing the serialized message.
+*/
+QByteArray QProtobufSerializer::serializeMessage(
+        const QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
+{
+    QByteArray result;
+    for (int index = 0; index < ordering.fieldCount(); ++index) {
+        int propertyIndex = ordering.getPropertyIndex(index);
+        int fieldIndex = ordering.getFieldNumber(index);
+        Q_ASSERT_X(fieldIndex < 536870912 && fieldIndex > 0, "", "fieldIndex is out of range");
+        QMetaProperty metaProperty = object->metaObject()->property(propertyIndex);
+        QVariant propertyValue = metaProperty.read(object);
+        result.append(d_ptr->serializeProperty(propertyValue,
+                                               QProtobufPropertyOrderingInfo(ordering, index)));
+    }
+
+    return result;
+}
+
+void QProtobufSerializerPrivate::setUnexpectedEndOfStreamError()
+{
+    setDeserializationError(QAbstractProtobufSerializer::UnexpectedEndOfStreamError,
+                            QCoreApplication::tr("QtProtobuf", "Unexpected end of stream"));
+}
+
+void QProtobufSerializerPrivate::clearError()
+{
+    deserializationError = QAbstractProtobufSerializer::NoError;
+    deserializationErrorString.clear();
+}
+
+/*!
+    This is called by deserialize() to deserialize a registered Protobuf message
+    \a object with \a ordering from a QByteArrayView \a data. \a object can be
+    assumed to not be \nullptr.
+    Returns \c true if deserialization was successful, otherwise \c false.
+*/
+bool QProtobufSerializer::deserializeMessage(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                                             QByteArrayView data) const
+{
+    d_ptr->clearError();
+    QProtobufSelfcheckIterator it(data);
+    while (it.isValid() && it != data.end()) {
+        if (!d_ptr->deserializeProperty(object, ordering, it))
+            return false;
+    }
+    if (!it.isValid())
+        d_ptr->setUnexpectedEndOfStreamError();
+    return it.isValid();
+}
+
+/*!
+    Serialize an \a object with \a ordering and \a fieldInfo.
+    Returns a QByteArray containing the serialized message.
+
+    You should not call this function directly.
+*/
+QByteArray
+QProtobufSerializer::serializeObject(const QObject *object,
+                                     const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                                     const QProtobufPropertyOrderingInfo &fieldInfo) const
+{
+    QByteArray result = QProtobufSerializerPrivate::encodeHeader(
+            fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited);
+    result.append(QProtobufSerializerPrivate::prependLengthDelimitedSize(
+            serializeMessage(object, ordering)));
+    return result;
+}
+
+/*!
+    Deserialize an \a object with \a ordering from a QProtobufSelfcheckIterator
+    \a it. Returns \c true if deserialization was successful, otherwise
+    \c false.
+
+    You should not call this function directly.
+*/
+bool QProtobufSerializer::deserializeObject(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QProtobufSelfcheckIterator &it) const
+{
+    if (it.bytesLeft() == 0) {
+        d_ptr->setUnexpectedEndOfStreamError();
+        return false;
+    }
+    std::optional<QByteArray> array = QProtobufSerializerPrivate::deserializeLengthDelimited(it);
+    if (!array) {
+        d_ptr->setUnexpectedEndOfStreamError();
+        return false;
+    }
+    return deserializeMessage(object, ordering, array.value());
+}
+
+/*!
+    This function is called to serialize \a object as a part of list property
+    with \a ordering and \a fieldInfo.
+
+    You should not call this function directly.
+*/
+QByteArray QProtobufSerializer::serializeListObject(
+        const QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+        const QProtobufPropertyOrderingInfo &fieldInfo) const
+{
+    return serializeObject(object, ordering, fieldInfo);
+}
+
+/*!
+    This function deserializes an \a object from byte stream as part of list property, with
+    \a ordering from a QProtobufSelfcheckIterator \a it.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    You should not call this function directly.
+*/
+bool QProtobufSerializer::deserializeListObject(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QProtobufSelfcheckIterator &it) const
+{
+    return deserializeObject(object, ordering, it);
+}
+
+/*!
+    This function serializes QMap pair of \a key and \a value with
+    \a fieldInfo to a QByteArray
+
+    You should not call this function directly.
+*/
+QByteArray
+QProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
+                                      const QProtobufPropertyOrderingInfo &fieldInfo) const
+{
+    QByteArray result = QProtobufSerializerPrivate::encodeHeader(
+            fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited);
+    result.append(QProtobufSerializerPrivate::prependLengthDelimitedSize(
+            d_ptr->serializeProperty(key, fieldInfo.infoForMapKey())
+            + d_ptr->serializeProperty(value, fieldInfo.infoForMapValue())));
+    return result;
+}
+
+/*!
+    This function deserializes QMap pair of \a key and \a value from a
+    QProtobufSelfcheckIterator \a it.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    You should not call this function directly.
+*/
+bool QProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value, QProtobufSelfcheckIterator &it) const
+{
+    return d_ptr->deserializeMapPair(key, value, it);
+}
+
+/*!
+    This function serializes \a value as a QByteArray for enum associated with
+    property \a fieldInfo.
+
+    You should not call this function directly.
+*/
+QByteArray QProtobufSerializer::serializeEnum(QtProtobuf::int64 value,
+                                              const QProtobufPropertyOrderingInfo &fieldInfo) const
+{
+    QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Varint;
+    int fieldIndex = fieldInfo.getFieldNumber();
+    QByteArray result = QProtobufSerializerPrivate::serializeBasic<QtProtobuf::int64>(value, fieldIndex);
+    if (fieldIndex != QtProtobufPrivate::NotUsedFieldIndex)
+        result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
+    return result;
+}
+
+/*!
+    This function serializes a list, \a value, as a QByteArray for enum
+    associated with property \a fieldInfo.
+
+    You should not call this function directly.
+*/
+QByteArray
+QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
+                                       const QProtobufPropertyOrderingInfo &fieldInfo) const
+{
+    QtProtobuf::WireTypes type = QtProtobuf::WireTypes::LengthDelimited;
+    int fieldIndex = fieldInfo.getFieldNumber();
+    QByteArray result =
+            QProtobufSerializerPrivate::serializeListType<QtProtobuf::int64>(value, fieldIndex);
+    if (fieldIndex != QtProtobufPrivate::NotUsedFieldIndex)
+        result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
+    return result;
+}
+
+/*!
+    This function deserializes an enum \a value from a QProtobufSelfcheckIterator \a it.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    You should not call this function directly.
+*/
+bool QProtobufSerializer::deserializeEnum(QtProtobuf::int64 &value, QProtobufSelfcheckIterator &it) const
+{
+    QVariant variantValue;
+    if (!QProtobufSerializerPrivate::deserializeBasic<QtProtobuf::int64>(it, variantValue)) {
+        d_ptr->setUnexpectedEndOfStreamError();
+        return false;
+    }
+    value = variantValue.value<QtProtobuf::int64>();
+    return true;
+}
+
+/*!
+    This function deserializes a list of enum \a value from a QProtobufSelfcheckIterator \a it.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    You should not call this function directly.
+*/
+bool QProtobufSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value, QProtobufSelfcheckIterator &it) const
+{
+    QVariant variantValue;
+    if (!QProtobufSerializerPrivate::deserializeList<QtProtobuf::int64>(it, variantValue)) {
+        d_ptr->setUnexpectedEndOfStreamError();
+        return false;
+    }
+    value = variantValue.value<QList<QtProtobuf::int64>>();
+    return true;
+}
+
+QProtobufSerializerPrivate::QProtobufSerializerPrivate(QProtobufSerializer *q) : q_ptr(q)
+{
+    //if handlers is not empty initialization already done
+    if (handlers.empty()) {
+        using QtProtobuf::WireTypes;
+
+        wrapSerializer<float, serializeBasic, deserializeBasic<float>, WireTypes::Fixed32>();
+        wrapSerializer<double, serializeBasic, deserializeBasic<double>, WireTypes::Fixed64>();
+        wrapSerializer<QtProtobuf::int32, serializeBasic, deserializeBasic<QtProtobuf::int32>, WireTypes::Varint>();
+        wrapSerializer<QtProtobuf::int64, serializeBasic, deserializeBasic<QtProtobuf::int64>, WireTypes::Varint>();
+        wrapSerializer<QtProtobuf::uint32, serializeBasic, deserializeBasic<QtProtobuf::uint32>, WireTypes::Varint>();
+        wrapSerializer<QtProtobuf::uint64, serializeBasic, deserializeBasic<QtProtobuf::uint64>, WireTypes::Varint>();
+        wrapSerializer<QtProtobuf::sint32, serializeBasic, deserializeBasic<QtProtobuf::sint32>, WireTypes::Varint>();
+        wrapSerializer<QtProtobuf::sint64, serializeBasic, deserializeBasic<QtProtobuf::sint64>, WireTypes::Varint>();
+        wrapSerializer<QtProtobuf::fixed32, serializeBasic, deserializeBasic<QtProtobuf::fixed32>, WireTypes::Fixed32>();
+        wrapSerializer<QtProtobuf::fixed64, serializeBasic, deserializeBasic<QtProtobuf::fixed64>, WireTypes::Fixed64>();
+        wrapSerializer<QtProtobuf::sfixed32, serializeBasic, deserializeBasic<QtProtobuf::sfixed32>, WireTypes::Fixed32>();
+        wrapSerializer<QtProtobuf::sfixed64, serializeBasic, deserializeBasic<QtProtobuf::sfixed64>, WireTypes::Fixed64>();
+        wrapSerializer<QtProtobuf::boolean, bool, serializeBasic<bool>, deserializeBasic<bool>, WireTypes::Varint>();
+        wrapSerializer<QString, serializeBasic, deserializeBasic<QString>, WireTypes::LengthDelimited>();
+        wrapSerializer<QByteArray, serializeBasic, deserializeBasic<QByteArray>, WireTypes::LengthDelimited>();
+
+        wrapSerializer<QtProtobuf::floatList, serializeListType, deserializeList<float>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::doubleList, serializeListType, deserializeList<double>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::fixed32List, serializeListType, deserializeList<QtProtobuf::fixed32>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::fixed64List, serializeListType, deserializeList<QtProtobuf::fixed64>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::sfixed32List, serializeListType, deserializeList<QtProtobuf::sfixed32>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::sfixed64List, serializeListType, deserializeList<QtProtobuf::sfixed64>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::int32List, serializeListType, deserializeList<QtProtobuf::int32>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::int64List, serializeListType, deserializeList<QtProtobuf::int64>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::sint32List, serializeListType, deserializeList<QtProtobuf::sint32>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::sint64List, serializeListType, deserializeList<QtProtobuf::sint64>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::uint32List, serializeListType, deserializeList<QtProtobuf::uint32>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::uint64List, serializeListType, deserializeList<QtProtobuf::uint64>, WireTypes::LengthDelimited>();
+        wrapSerializer<QtProtobuf::boolList, serializeListType, deserializeList<bool>, WireTypes::LengthDelimited>();
+        wrapSerializer<QStringList, QStringList, serializeListType<QString>, deserializeList<QString>, WireTypes::LengthDelimited>();
+        wrapSerializer<QByteArrayList, serializeListType, deserializeList<QByteArray>, WireTypes::LengthDelimited>();
+    }
+}
+
+void QProtobufSerializerPrivate::skipVarint(QProtobufSelfcheckIterator &it)
+{
+    while ((*it) & 0x80)
+        ++it;
+    ++it;
+}
+
+void QProtobufSerializerPrivate::skipLengthDelimited(QProtobufSelfcheckIterator &it)
+{
+    //Get length of length-delimited field
+    auto opt = QProtobufSerializerPrivate::deserializeVarintCommon<QtProtobuf::uint64>(it);
+    if (!opt) {
+        it += it.bytesLeft();
+        return;
+    }
+    QtProtobuf::uint64 length = opt.value();
+    it += length;
+}
+
+qsizetype QProtobufSerializerPrivate::skipSerializedFieldBytes(QProtobufSelfcheckIterator &it, QtProtobuf::WireTypes type)
+{
+    const auto *initialIt = QByteArray::const_iterator(it);
+    switch (type) {
+    case QtProtobuf::WireTypes::Varint:
+        skipVarint(it);
+        break;
+    case QtProtobuf::WireTypes::Fixed32:
+        it += sizeof(decltype(QtProtobuf::fixed32::_t));
+        break;
+    case QtProtobuf::WireTypes::Fixed64:
+        it += sizeof(decltype(QtProtobuf::fixed64::_t));
+        break;
+    case QtProtobuf::WireTypes::LengthDelimited:
+        skipLengthDelimited(it);
+        break;
+    case QtProtobuf::WireTypes::Unknown:
+    default:
+        Q_UNREACHABLE();
+        return 0;
+    }
+
+    return std::distance(initialIt, QByteArray::const_iterator(it));
+}
+
+QByteArray
+QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
+                                              const QProtobufPropertyOrderingInfo &fieldInfo)
+{
+    qProtoDebug() << "propertyValue" << propertyValue << "fieldIndex"
+                  << fieldInfo.getFieldNumber() << propertyValue.metaType().name();
+
+    QByteArray result;
+    QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Unknown;
+
+    QMetaType metaType = propertyValue.metaType();
+
+    //TODO: replace with some common function
+    auto basicIt = handlers.find(metaType);
+    if (basicIt != handlers.end()) {
+        type = basicIt->type;
+        int fieldIndex = fieldInfo.getFieldNumber();
+        result.append(basicIt->serializer(propertyValue, fieldIndex));
+        if (fieldIndex != QtProtobufPrivate::NotUsedFieldIndex
+            && type != QtProtobuf::WireTypes::Unknown) {
+            result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
+        }
+    } else {
+        auto handler = QtProtobufPrivate::findHandler(metaType);
+        if (!handler.serializer) {
+            qProtoWarning() << "No serializer for type" << propertyValue.typeName();
+            return result;
+        }
+        handler.serializer(q_ptr, propertyValue, fieldInfo, result);
+    }
+    return result;
+}
+
+bool QProtobufSerializerPrivate::deserializeProperty(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QProtobufSelfcheckIterator &it)
+{
+    Q_ASSERT(it.isValid() && it.bytesLeft() > 0);
+    //Each iteration we expect iterator is setup to beginning of next chunk
+    int fieldNumber = QtProtobufPrivate::NotUsedFieldIndex;
+    QtProtobuf::WireTypes wireType = QtProtobuf::WireTypes::Unknown;
+    if (!QProtobufSerializerPrivate::decodeHeader(it, fieldNumber, wireType)) {
+        setDeserializationError(
+                QAbstractProtobufSerializer::InvalidHeaderError,
+                QCoreApplication::tr("QtProtobuf",
+                                     "Message received doesn't contains valid header byte."));
+        return false;
+    }
+
+    int index = ordering.indexOfFieldNumber(fieldNumber);
+    if (index == -1) {
+        // This is an unknown field.
+        // Currently we just skip it, but starting with protobuf 3.5 we should
+        // preserve the unknown field and include it if the message is
+        // serialized again. TBD.
+        QProtobufSerializerPrivate::skipSerializedFieldBytes(it, wireType);
+        return true;
+    }
+
+    int propertyIndex = ordering.getPropertyIndex(index);
+    QMetaProperty metaProperty = object->metaObject()->property(propertyIndex);
+
+    qProtoDebug() << "wireType:" << wireType << "metaProperty:" << metaProperty.typeName()
+                  << "currentByte:" << QString::number((*it), 16);
+
+    QVariant newPropertyValue;
+    newPropertyValue = metaProperty.read(object);
+    QMetaType metaType = metaProperty.metaType();
+
+    //TODO: replace with some common function
+    auto basicIt = handlers.find(metaType);
+    if (basicIt != handlers.end()) {
+        basicIt->deserializer(it, newPropertyValue);
+    } else {
+        auto handler = QtProtobufPrivate::findHandler(metaType);
+        if (!handler.deserializer) {
+            qProtoWarning() << "No deserializer for type" << metaProperty.typeName();
+            setDeserializationError(
+                    QAbstractProtobufSerializer::NoDeserializerError,
+                    QCoreApplication::tr("QtProtobuf",
+                                         "No deserializer is registered for type %1"));
+            return false;
+        }
+        handler.deserializer(q_ptr, it, newPropertyValue);
+    }
+
+    metaProperty.write(object, newPropertyValue);
+    return true;
+}
+
+bool QProtobufSerializerPrivate::deserializeMapPair(QVariant &key, QVariant &value, QProtobufSelfcheckIterator &it)
+{
+    int mapIndex = 0;
+    QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Unknown;
+    auto opt = QProtobufSerializerPrivate::deserializeVarintCommon<QtProtobuf::uint32>(it);
+    if (!opt) {
+        setUnexpectedEndOfStreamError();
+        return false;
+    }
+    unsigned int count = opt.value();
+    qProtoDebug("count: %u", count);
+    QProtobufSelfcheckIterator last = it + count;
+    while (it.isValid() && it != last) {
+        if (!QProtobufSerializerPrivate::decodeHeader(it, mapIndex, type)) {
+            setDeserializationError(
+                        QAbstractProtobufSerializer::InvalidHeaderError,
+                        QCoreApplication::tr("QtProtobuf",
+                                             "Message received doesn't contains valid header byte."));
+            return false;
+        }
+        if (mapIndex == 1) {
+            //Only simple types are supported as keys
+            QMetaType metaType = key.metaType();
+            auto basicIt = handlers.find(metaType);
+            if (basicIt == handlers.end()) {
+                // clang-format off
+                QString errorStr = QCoreApplication::tr("QtProtobuf",
+                        "Either there is no deserializer for type %1 or it is not a builtin type")
+                        .arg(QLatin1String(key.typeName()));
+                // clang-format on
+                setDeserializationError(QAbstractProtobufSerializer::NoDeserializerError, errorStr);
+                return false;
+            }
+            basicIt->deserializer(it, key);
+        } else {
+            //TODO: replace with some common function
+            QMetaType metaType = value.metaType();
+            auto basicIt = handlers.find(metaType);
+            if (basicIt != handlers.end()) {
+                basicIt->deserializer(it, value);
+            } else {
+                auto handler = QtProtobufPrivate::findHandler(metaType);
+                if (!handler.deserializer) {
+                    qProtoWarning() << "No deserializer for type" << value.typeName();
+                    setDeserializationError(
+                                QAbstractProtobufSerializer::NoDeserializerError,
+                                QCoreApplication::tr("QtProtobuf",
+                                                     "No deserializer is registered for type %1")
+                                .arg(QLatin1String(value.typeName())));
+                    return false;
+                }
+                handler.deserializer(q_ptr, it, value);
+            }
+        }
+    }
+    return it == last;
+}
+
+QAbstractProtobufSerializer::DeserializationError QProtobufSerializer::deserializationError() const
+{
+    return d_ptr->deserializationError;
+}
+
+QString QProtobufSerializer::deserializationErrorString() const
+{
+    return d_ptr->deserializationErrorString;
+}
+
+void QProtobufSerializerPrivate::setDeserializationError(
+        QAbstractProtobufSerializer::DeserializationError error, const QString &errorString)
+{
+    deserializationError = error;
+    deserializationErrorString = errorString;
+}
+
+QProtobufSerializerPrivate::ProtobufSerializerRegistry QProtobufSerializerPrivate::handlers = {};
+
+QT_END_NAMESPACE

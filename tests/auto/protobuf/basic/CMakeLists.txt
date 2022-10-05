@@ -1,0 +1,158 @@
+# Copyright (C) 2022 The Qt Company Ltd.
+# SPDX-License-Identifier: BSD-3-Clause
+
+qt6_add_protobuf(tst_protobuf_basictypes_gen
+    PROTO_FILES
+        proto/basicmessages.proto
+    FIELD_ENUM
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
+)
+qt_autogen_tools_initial_setup(tst_protobuf_basictypes_gen)
+
+qt_internal_add_test(tst_protobuf_basictypes
+    SOURCES
+        tst_protobuf_basictypes.cpp
+    INCLUDE_DIRECTORIES
+        ../shared
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+)
+
+qt6_add_protobuf(tst_protobuf_repeatedtypes_gen
+    PROTO_FILES
+        proto/repeatedmessages.proto
+    FIELD_ENUM
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
+)
+qt_autogen_tools_initial_setup(tst_protobuf_repeatedtypes_gen)
+
+# @todo: this explicit linking is needed, try to make it automatic since it's a dependency
+# between the proto files. In the future!
+target_link_libraries(tst_protobuf_repeatedtypes_gen
+    PUBLIC
+        tst_protobuf_basictypes_gen
+)
+
+qt_internal_add_test(tst_protobuf_repeatedtypes
+    SOURCES
+        tst_protobuf_repeatedtypes.cpp
+    INCLUDE_DIRECTORIES
+        ../shared
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+        tst_protobuf_repeatedtypes_gen
+)
+
+qt6_add_protobuf(tst_protobuf_maptypes_gen
+    PROTO_FILES
+        proto/mapmessages.proto
+    FIELD_ENUM
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
+)
+qt_autogen_tools_initial_setup(tst_protobuf_maptypes_gen)
+
+# @todo: this explicit linking is needed, try to make it automatic since it's a dependency
+# between the proto files.
+target_link_libraries(tst_protobuf_maptypes_gen
+    PUBLIC
+        tst_protobuf_basictypes_gen
+)
+
+qt_internal_add_test(tst_protobuf_maptypes
+    SOURCES
+        tst_protobuf_maptypes.cpp
+    INCLUDE_DIRECTORIES
+        ../shared
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+        tst_protobuf_maptypes_gen
+)
+
+qt6_add_protobuf(tst_protobuf_fieldindexrange_gen
+    PROTO_FILES
+        proto/fieldindexrange.proto
+    FIELD_ENUM
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
+)
+qt_autogen_tools_initial_setup(tst_protobuf_fieldindexrange_gen)
+
+qt_internal_add_test(tst_protobuf_serialization_basictypes
+    SOURCES
+        tst_protobuf_serialization_basictypes.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+        tst_protobuf_fieldindexrange_gen
+)
+
+qt_internal_add_test(tst_protobuf_serialization_repeatedtypes
+    SOURCES
+        tst_protobuf_serialization_repeatedtypes.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+        tst_protobuf_repeatedtypes_gen
+)
+
+qt_internal_add_test(tst_protobuf_serialization_maptypes
+    SOURCES
+        tst_protobuf_serialization_maptypes.cpp tst_protobuf_serialization_maptypes.h
+        tst_protobuf_serialization_complex_maptypes.cpp
+    INCLUDE_DIRECTORIES
+        ../shared
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+        tst_protobuf_maptypes_gen
+)
+
+qt_internal_add_test(tst_protobuf_deserialization_basictypes
+    SOURCES
+        tst_protobuf_deserialization_basictypes.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+        tst_protobuf_fieldindexrange_gen
+)
+
+qt_internal_add_test(tst_protobuf_deserialization_repeatedtypes
+    SOURCES
+        tst_protobuf_deserialization_repeatedtypes.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+        tst_protobuf_repeatedtypes_gen
+)
+
+qt_internal_add_test(tst_protobuf_deserialization_maptypes
+    SOURCES
+        tst_protobuf_deserialization_maptypes.cpp tst_protobuf_deserialization_maptypes.h
+        tst_protobuf_deserialization_complex_maptypes.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+        tst_protobuf_maptypes_gen
+)
+
+if(UNIX AND NOT CMAKE_CROSSCOMPILING)
+    qt_internal_add_test(tst_protobuf_internals
+        SOURCES
+            tst_protobuf_internals.cpp
+        LIBRARIES
+            Qt::Test
+            Qt::Protobuf
+            tst_protobuf_basictypes_gen
+    )
+endif()

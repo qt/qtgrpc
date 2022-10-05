@@ -1,0 +1,109 @@
+// Copyright (C) 2022 The Qt Company Ltd.
+// Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+
+#include <QtProtobuf/qabstractprotobufserializer.h>
+
+QT_BEGIN_NAMESPACE
+
+/*!
+    \class QAbstractProtobufSerializer
+    \inmodule QtProtobuf
+    \since 6.4
+    \brief The QAbstractProtobufSerializer class is interface that represents
+           basic functions for serialization/deserialization.
+    \reentrant
+
+    The QProtobufSerializer class registers serializers/deserializers for
+    classes implementing a protobuf message, inheriting QObject. These classes
+    are generated automatically, based on a .proto file, using the cmake build
+    macro qt6_add_protobuf or by running qtprotobufgen directly.
+
+    This class should be used as base for specific serializers. The handlers
+    property contains all message-specific serializers and should be used while
+    serialization/deserialization. Inherited classes should reimplement scope of
+    virtual methods that used by registered message
+    serialization/deserialization functions.
+*/
+
+/*!
+    \enum QAbstractProtobufSerializer::DeserializationError
+
+    This enum contains possible errors that can occur during deserialization.
+    When an error occurs, call deserializationErrorString() to get a
+    human-readable error message.
+
+    \value NoError                      No error occurred.
+    \value InvalidHeaderError           Something went wrong while attempting to
+                                        decode a header in the message.
+    \value NoDeserializerError          While deserializing a message, no
+                                        deserializer was found for a type in the
+                                        message.
+    \value UnexpectedEndOfStreamError   While deserializing a message, the
+                                        stream ended unexpectedly.
+*/
+
+/*!
+    Destroys this QAbstractProtobufSerializer.
+*/
+QAbstractProtobufSerializer::~QAbstractProtobufSerializer() = default;
+
+/*!
+    \fn template<typename T> QAbstractProtobufSerializer::serialize(const QObject *object) const
+
+    This function serializes a registered Protobuf message \a object into a
+    QByteArray. \a object must not be \nullptr.
+
+    For a given type, \c{T}, you should call the \c{serialize()} function on an
+    instance of that type, which in turn will call this function for you.
+
+    \sa deserialize()
+*/
+
+QByteArray QAbstractProtobufSerializer::doSerialize(const QObject *object,
+                                                    const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
+{
+    Q_ASSERT(object);
+    return serializeMessage(object, ordering);
+}
+
+/*!
+    \fn template<typename T> QAbstractProtobufSerializer::deserialize(T *object, QByteArrayView data) const
+
+    This function deserializes a registered Protobuf message \a object from a
+    QByteArray \a data. \a object must not be \nullptr.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    For a given type, \c{T}, you should call the \c{deserialize()} function on
+    an instance of that type, which in turn will call this function for you.
+
+    Unexpected/unknown properties in the \a data are skipped.
+
+    \sa serialize()
+*/
+
+bool QAbstractProtobufSerializer::doDeserialize(QObject *object,
+                                                const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                                                QByteArrayView data) const
+{
+    Q_ASSERT(object);
+    return deserializeMessage(object, ordering, data);
+}
+
+/*!
+    \fn QByteArray QAbstractProtobufSerializer::serializeMessage(const QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
+
+    This is called by serialize() to serialize a registered Protobuf message
+    \a object with \a ordering. \a object must not be \nullptr.
+    Returns a QByteArray containing the serialized message.
+*/
+
+/*!
+    \fn bool QAbstractProtobufSerializer::deserializeMessage(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QByteArrayView data) const
+
+    This is called by deserialize() to deserialize a registered Protobuf message
+    \a object with \a ordering from a QByteArrayView \a data. \a object can be
+    assumed to not be \nullptr.
+    Returns \c true if deserialization was successful, otherwise \c false.
+*/
+QT_END_NAMESPACE

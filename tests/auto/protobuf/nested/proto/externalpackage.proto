@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package qtprotobufnamespace1.tests.nested;
+
+message NestedFieldMessage {
+    message NestedMessage {
+        sint32 field = 1;
+    }
+    NestedMessage nested = 1;
+}

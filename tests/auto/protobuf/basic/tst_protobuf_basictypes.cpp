@@ -1,0 +1,329 @@
+// Copyright (C) 2022 The Qt Company Ltd.
+// Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>, Viktor Kopp <vifactor@gmail.com>
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
+
+#include "basicmessages.qpb.h"
+
+#include <QMetaProperty>
+#include <QSignalSpy>
+#include <QtTest/QtTest>
+
+#include <qtprotobuftestscommon.h>
+
+class QtProtobufTypesGenerationTest : public QObject
+{
+    Q_OBJECT
+private slots:
+    void EmptyMessageTest();
+    void BoolMessageTest();
+    void IntMessageTest();
+    void SIntMessageTest();
+    void UIntMessageTest();
+    void Int64MessageTest();
+    void SInt64MessageTest();
+    void UInt64MessageTest();
+    void FixedInt32MessageTest();
+    void FixedInt64MessageTest();
+    void SFixedInt32MessageTest();
+    void SFixedInt64MessageTest();
+    void StringMessageTest();
+    void FloatMessageTest();
+    void DoubleMessageTest();
+    void ComplexMessageTest();
+    void BytesMessageTest();
+
+    void AssignmentOperatorTest();
+    void MoveOperatorTest();
+    void AccessMessageFieldsFromGetter();
+};
+
+using namespace qtprotobufnamespace::tests;
+
+void QtProtobufTypesGenerationTest::EmptyMessageTest()
+{
+    QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::propertyOrdering.fieldCount(), 0);
+    QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::staticMetaObject.propertyCount(), 1);
+}
+
+void QtProtobufTypesGenerationTest::BoolMessageTest()
+{
+    const char *propertyName = "testFieldBool";
+    qProtobufAssertMessagePropertyRegistered<SimpleBoolMessage, bool>(1, "bool", propertyName);
+
+    SimpleBoolMessage test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue(true)));
+    QCOMPARE(test.property(propertyName).value<bool>(), true);
+    QCOMPARE(test.testFieldBool(), true);
+
+    QCOMPARE(SimpleBoolMessage::TestFieldBoolProtoFieldNumber, 1);
+}
+
+void QtProtobufTypesGenerationTest::IntMessageTest()
+{
+    const char *propertyName = "testFieldInt" QT_PROTOBUF_PROPERTY_SUFFIX;
+    qProtobufAssertMessagePropertyRegistered<qtprotobufnamespace::tests::SimpleIntMessage, QtProtobuf::int32>(1, "QtProtobuf::int32", propertyName);
+
+    qtprotobufnamespace::tests::SimpleIntMessage test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::int32>(1)));
+    QCOMPARE(test.property(propertyName).value<QtProtobuf::int32>(), 1);
+    QCOMPARE(test.testFieldInt(), 1);
+
+    QCOMPARE(qtprotobufnamespace::tests::SimpleIntMessage::TestFieldIntProtoFieldNumber, 1);
+}
+
+void QtProtobufTypesGenerationTest::SIntMessageTest()
+{
+    const char *propertyName = "testFieldInt";
+    qProtobufAssertMessagePropertyRegistered<SimpleSIntMessage, QtProtobuf::sint32>(1, "QtProtobuf::sint32", propertyName);
+
+    SimpleSIntMessage test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::sint32>(1)));
+    QCOMPARE(test.property(propertyName).value<QtProtobuf::sint32>(), 1);
+    QCOMPARE(test.testFieldInt(), 1);
+
+    QCOMPARE(SimpleSIntMessage::TestFieldIntProtoFieldNumber, 1);
+}
+
+void QtProtobufTypesGenerationTest::UIntMessageTest()
+{
+    const char *propertyName = "testFieldInt";
+    qProtobufAssertMessagePropertyRegistered<SimpleUIntMessage, QtProtobuf::uint32>(1, "QtProtobuf::uint32", propertyName);
+
+    SimpleUIntMessage test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::uint32>(1)));
+    QCOMPARE(test.property(propertyName).value<QtProtobuf::uint32>(), (uint32_t)1);
+    QCOMPARE(test.testFieldInt(), 1u);
+
+    QCOMPARE(SimpleUIntMessage::TestFieldIntProtoFieldNumber, 1);
+}
+
+void QtProtobufTypesGenerationTest::Int64MessageTest()
+{
+    const char *propertyName = "testFieldInt";
+    qProtobufAssertMessagePropertyRegistered<SimpleInt64Message, QtProtobuf::int64>(1, "QtProtobuf::int64", propertyName);
+
+    SimpleInt64Message test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::int64>(1)));
+    QCOMPARE(test.property(propertyName).value<QtProtobuf::int64>(), 1);
+    QCOMPARE(test.testFieldInt(), 1);
+
+    QCOMPARE(SimpleInt64Message::TestFieldIntProtoFieldNumber, 1);
+}
+
+void QtProtobufTypesGenerationTest::SInt64MessageTest()
+{
+    const char *propertyName = "testFieldInt";
+    qProtobufAssertMessagePropertyRegistered<SimpleSInt64Message, QtProtobuf::sint64>(1, "QtProtobuf::sint64", propertyName);
+
+    SimpleSInt64Message test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::sint64>(1)));
+    QCOMPARE(test.property(propertyName).value<QtProtobuf::sint64>(), 1);
+    QCOMPARE(test.testFieldInt(), 1);
+
+    QCOMPARE(SimpleSInt64Message::TestFieldIntProtoFieldNumber, 1);
+}
+
+void QtProtobufTypesGenerationTest::UInt64MessageTest()
+{
+    const char *propertyName = "testFieldInt";
+    qProtobufAssertMessagePropertyRegistered<SimpleUInt64Message, QtProtobuf::uint64>(1, "QtProtobuf::uint64", propertyName);
+
+    SimpleUInt64Message test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::uint64>(1)));
+    QCOMPARE(test.property(propertyName).value<QtProtobuf::uint64>(), 1u);
+    QCOMPARE(test.testFieldInt(), 1u);
+
+    QCOMPARE(SimpleUInt64Message::TestFieldIntProtoFieldNumber, 1u);
+}
+
+void QtProtobufTypesGenerationTest::FixedInt32MessageTest()
+{
+    const char *propertyName = "testFieldFixedInt32" QT_PROTOBUF_PROPERTY_SUFFIX;
+    qProtobufAssertMessagePropertyRegistered<SimpleFixedInt32Message, QtProtobuf::fixed32>(1, "QtProtobuf::fixed32", propertyName);
+
+    SimpleFixedInt32Message test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::fixed32>(1)));
+    QCOMPARE(test.property(propertyName).value<QtProtobuf::fixed32>(), 1u);
+    QCOMPARE(test.testFieldFixedInt32(), 1u);
+
+    QCOMPARE(SimpleFixedInt32Message::TestFieldFixedInt32ProtoFieldNumber, 1u);
+}
+
+void QtProtobufTypesGenerationTest::FixedInt64MessageTest()
+{
+    const char *propertyName = "testFieldFixedInt64";
+    qProtobufAssertMessagePropertyRegistered<SimpleFixedInt64Message, QtProtobuf::fixed64>(1, "QtProtobuf::fixed64", propertyName);
+
+    SimpleFixedInt64Message test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::fixed64>(1)));
+    QCOMPARE(test.property(propertyName).value<QtProtobuf::fixed64>(), 1u);
+    QCOMPARE(test.testFieldFixedInt64(), 1u);
+
+    QCOMPARE(SimpleFixedInt64Message::TestFieldFixedInt64ProtoFieldNumber, 1u);
+}
+
+void QtProtobufTypesGenerationTest::SFixedInt32MessageTest()
+{
+    const char *propertyName = "testFieldFixedInt32" QT_PROTOBUF_PROPERTY_SUFFIX;
+    qProtobufAssertMessagePropertyRegistered<SimpleSFixedInt32Message, QtProtobuf::sfixed32>(1, "QtProtobuf::sfixed32", propertyName);
+
+    SimpleSFixedInt32Message test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::sfixed32>(1)));
+    QCOMPARE(test.property(propertyName).value<QtProtobuf::sfixed32>(), 1);
+    QCOMPARE(test.testFieldFixedInt32(), 1);
+
+    QCOMPARE(SimpleSFixedInt32Message::TestFieldFixedInt32ProtoFieldNumber, 1);
+}
+
+void QtProtobufTypesGenerationTest::SFixedInt64MessageTest()
+{
+    const char *propertyName = "testFieldFixedInt64";
+    qProtobufAssertMessagePropertyRegistered<SimpleSFixedInt64Message, QtProtobuf::sfixed64>(1, "QtProtobuf::sfixed64", propertyName);
+
+    SimpleSFixedInt64Message test;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::sfixed64>(1)));
+    QCOMPARE(test.property(propertyName).value<QtProtobuf::sfixed64>(), 1);
+    QCOMPARE(test.testFieldFixedInt64(), 1);
+
+    QCOMPARE(SimpleSFixedInt64Message::TestFieldFixedInt64ProtoFieldNumber, 1);
+}
+
+void QtProtobufTypesGenerationTest::StringMessageTest()
+{
+    const char *propertyName = "testFieldString";
+    SimpleStringMessage test;
+    int index = SimpleStringMessage::propertyOrdering.indexOfFieldNumber(6);
+    int propertyNumber = SimpleStringMessage::propertyOrdering.getPropertyIndex(index); // See simpletest.proto
+    QCOMPARE(SimpleStringMessage::staticMetaObject.property(propertyNumber).typeId(), QMetaType::QString);
+    QCOMPARE(SimpleStringMessage::staticMetaObject.property(propertyNumber).name(), propertyName);
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue(QString("test1"))));
+    QCOMPARE(test.property(propertyName).toString(), QStringLiteral("test1"));
+    QCOMPARE(test.testFieldString(), QStringLiteral("test1"));
+
+    QCOMPARE(SimpleStringMessage::TestFieldStringProtoFieldNumber, 6);
+}
+
+void QtProtobufTypesGenerationTest::FloatMessageTest()
+{
+    const char *propertyName = "testFieldFloat";
+    SimpleFloatMessage test;
+    int index = SimpleFloatMessage::propertyOrdering.indexOfFieldNumber(7);
+    int propertyNumber = SimpleFloatMessage::propertyOrdering.getPropertyIndex(index); //See simpletest.proto
+    QCOMPARE(SimpleFloatMessage::staticMetaObject.property(propertyNumber).typeId(), QMetaType::Float);
+    QCOMPARE(QLatin1String(SimpleFloatMessage::staticMetaObject.property(propertyNumber).name()), QStringLiteral("testFieldFloat"));
+
+    float assignedValue = 1.55f;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<float>(assignedValue)));
+    QCOMPARE(test.property(propertyName).toFloat(), assignedValue);
+    QCOMPARE(test.testFieldFloat(), assignedValue);
+
+    QCOMPARE(SimpleFloatMessage::TestFieldFloatProtoFieldNumber, 7);
+}
+
+void QtProtobufTypesGenerationTest::DoubleMessageTest()
+{
+    const char *propertyName = "testFieldDouble";
+    SimpleDoubleMessage test;
+    int index = SimpleDoubleMessage::propertyOrdering.indexOfFieldNumber(8);
+    int propertyNumber = SimpleDoubleMessage::propertyOrdering.getPropertyIndex(index); //See simpletest.proto
+    QCOMPARE(SimpleDoubleMessage::staticMetaObject.property(propertyNumber).typeId(), QMetaType::Double);
+    QCOMPARE(SimpleDoubleMessage::staticMetaObject.property(propertyNumber).name(), propertyName);
+
+    double assignedValue = 0.55;
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<double>(assignedValue)));
+    QCOMPARE(test.property(propertyName).toDouble(), assignedValue);
+    QCOMPARE(test.testFieldDouble(), assignedValue);
+
+    QCOMPARE(SimpleDoubleMessage::TestFieldDoubleProtoFieldNumber, 8);
+}
+
+void QtProtobufTypesGenerationTest::ComplexMessageTest()
+{
+    const char *propertyName = "testComplexField";
+    qProtobufAssertMessagePropertyRegistered<qtprotobufnamespace::tests::ComplexMessage, qtprotobufnamespace::tests::SimpleStringMessage*>(
+                2, "qtprotobufnamespace::tests::SimpleStringMessage*", propertyName);
+
+    qtprotobufnamespace::tests::SimpleStringMessage stringMsg;
+    stringMsg.setTestFieldString({ "test qwerty" });
+    ComplexMessage test;
+    QVERIFY(test.setProperty(
+            propertyName,
+            QVariant::fromValue<qtprotobufnamespace::tests::SimpleStringMessage *>(
+                    new qtprotobufnamespace::tests::SimpleStringMessage(stringMsg))));
+    QCOMPARE(*(test.property(propertyName)
+                       .value<qtprotobufnamespace::tests::SimpleStringMessage *>()),
+             stringMsg);
+    QCOMPARE(test.testComplexField(), stringMsg);
+}
+
+void QtProtobufTypesGenerationTest::BytesMessageTest()
+{
+    const char *propertyName = "testFieldBytes";
+    SimpleBytesMessage test;
+    int index = SimpleBytesMessage::propertyOrdering.indexOfFieldNumber(1);
+    int propertyNumber = SimpleBytesMessage::propertyOrdering.getPropertyIndex(index); //See simpletest.proto
+    QCOMPARE(SimpleBytesMessage::staticMetaObject.property(propertyNumber).typeId(), QMetaType::QByteArray);
+    QCOMPARE(SimpleBytesMessage::staticMetaObject.property(propertyNumber).name(), propertyName);
+    QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QByteArray>("\x01\x02\x03\x04\x05")));
+    QCOMPARE(test.property(propertyName).toByteArray(), QByteArray("\x01\x02\x03\x04\x05"));
+    QCOMPARE(test.testFieldBytes(), QByteArray("\x01\x02\x03\x04\x05"));
+}
+
+void QtProtobufTypesGenerationTest::AssignmentOperatorTest()
+{
+    const char *propertyName = "testFieldInt";
+    qtprotobufnamespace::tests::SimpleIntMessage test;
+    qtprotobufnamespace::tests::SimpleIntMessage test2;
+    test2.setTestFieldInt(35);
+
+    QSignalSpy updateSpy(&test, &qtprotobufnamespace::tests::SimpleIntMessage::testFieldIntChanged);
+    test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::int32>(15));
+    test.setTestFieldInt(25);
+    test = test2;
+    QT_WARNING_PUSH
+    QT_WARNING_DISABLE_CLANG("-Wself-assign-overloaded")
+    test = test;
+    QT_WARNING_POP
+    test = test2;
+    QCOMPARE(test2.testFieldInt(), test.testFieldInt());
+    QCOMPARE(updateSpy.count(), 3);
+}
+
+void QtProtobufTypesGenerationTest::MoveOperatorTest()
+{
+    const char *propertyName = "testFieldInt";
+    qtprotobufnamespace::tests::SimpleIntMessage test;
+    qtprotobufnamespace::tests::SimpleIntMessage test2;
+    test2.setTestFieldInt(35);
+
+    QSignalSpy updateSpy(&test, &qtprotobufnamespace::tests::SimpleIntMessage::testFieldIntChanged);
+    QSignalSpy movedUpdateSpy(&test2, &qtprotobufnamespace::tests::SimpleIntMessage::testFieldIntChanged);
+
+    qtprotobufnamespace::tests::SimpleIntMessage test3(std::move(test2));
+    test2.setTestFieldInt(35);
+
+    test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::int32>(15));
+    test.setTestFieldInt(25);
+    test = std::move(test2);
+    QCOMPARE(test.testFieldInt(), 35);
+    QCOMPARE(test2.testFieldInt(), 0);
+    QCOMPARE(updateSpy.count(), 3);
+    QCOMPARE(movedUpdateSpy.count(), 3);
+}
+
+void QtProtobufTypesGenerationTest::AccessMessageFieldsFromGetter()
+{
+    SimpleStringMessage stringMsg;
+    stringMsg.setTestFieldString({ "AccessMessageFieldsFromGetter" });
+    ComplexMessage expected;
+    expected.setTestFieldInt(0);
+    expected.setTestComplexField(stringMsg);
+
+    ComplexMessage actual;
+    actual.testComplexField().setTestFieldString("AccessMessageFieldsFromGetter");
+
+    QCOMPARE(actual, expected);
+}
+
+QTEST_MAIN(QtProtobufTypesGenerationTest)
+#include "tst_protobuf_basictypes.moc"

@@ -1,10 +1,23 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
-# Dummy module for tools target
 qt_internal_add_module(Protobuf
-    NO_SYNC_QT
-    HEADER_MODULE
+    SOURCES
+        qtprotobufglobal.h
+        qabstractprotobufserializer.cpp qabstractprotobufserializer.h
+        qprotobuflazymessagepointer.h
+        qprotobufobject.h
+        qprotobufselfcheckiterator.h
+        qprotobufserializer.cpp qprotobufserializer.h qprotobufserializer_p.h
+        qtprotobuflogging.cpp qtprotobuflogging_p.h
+        qtprotobuftypes.cpp qtprotobuftypes.h
+    GENERATE_CPP_EXPORTS
+    PUBLIC_LIBRARIES
+        Qt::Core
+    LIBRARIES
+        Qt::CorePrivate
+    PRIVATE_MODULE_INTERFACE
+        Qt::CorePrivate
 )
 
 qt_internal_add_docs(Protobuf

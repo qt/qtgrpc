@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "externalpackage.proto";
+
+package qtprotobufnamespace.tests;
+
+message SimpleExternalEnumMessage {
+    qtprotobufnamespace1.externaltests.ExternalTestEnum externalEnum = 1;
+}
+
+message RepeatedExternalComplexMessage {
+    repeated qtprotobufnamespace1.externaltests.ExternalComplexMessage testExternalComplex = 1;
+}
+
+message NestedExternal {
+    qtprotobufnamespace1.externaltests.NestedFieldMessage.NestedMessage externalNested = 1;
+}
