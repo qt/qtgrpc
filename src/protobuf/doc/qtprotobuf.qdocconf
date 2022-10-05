@@ -1,0 +1,50 @@
+include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
+
+project                 = QtProtobuf
+description             = Qt Protobuf Reference Documentation
+version                 = $QT_VERSION
+
+examplesinstallpath     = protobuf
+
+qhp.projects            = QtProtobuf
+
+qhp.QtProtobuf.file                = qtprotobuf.qhp
+qhp.QtProtobuf.namespace           = org.qt-project.qtprotobuf.$QT_VERSION_TAG
+qhp.QtProtobuf.virtualFolder       = qtprotobuf
+qhp.QtProtobuf.indexTitle          = Qt Protobuf
+qhp.QtProtobuf.indexRoot           =
+
+qhp.QtProtobuf.subprojects = qmltypes examples classes
+qhp.QtProtobuf.subprojects.qmltypes.title = QML Types
+qhp.QtProtobuf.subprojects.qmltypes.indexTitle = Qt Protobuf QML Types
+qhp.QtProtobuf.subprojects.qmltypes.selectors = qmlclass
+qhp.QtProtobuf.subprojects.qmltypes.sortPages = true
+qhp.QtProtobuf.subprojects.examples.title = Examples
+qhp.QtProtobuf.subprojects.examples.indexTitle = Qt Protobuf Examples and Tutorials
+qhp.QtProtobuf.subprojects.examples.selectors = doc:example
+qhp.QtProtobuf.subprojects.classes.title      = C++ Classes
+qhp.QtProtobuf.subprojects.classes.indexTitle = Qt Protobuf C++ Classes
+qhp.QtProtobuf.subprojects.classes.selectors  = class doc:headerfile
+qhp.QtProtobuf.subprojects.classes.sortPages  = true
+
+depends += qtcore
+
+headerdirs  += ..
+
+sourcedirs  += src \
+               .. \
+               ../../tools/qtprotobufgen/doc/src
+
+exampledirs +=  ../../../examples/protobuf
+
+imagedirs   += images
+
+navigation.landingpage = "Qt Protobuf"
+navigation.qmltypespage = "Qt Protobuf QML Types"
+navigation.cppclassespage = "Qt Protobuf C++ Classes"
+
+tagfile                 = qtprotobuf.tags
+
+# Fail the documentation build if there are more warnings than the limit
+warninglimit = 0
+

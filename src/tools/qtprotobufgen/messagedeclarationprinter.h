@@ -1,0 +1,51 @@
+// Copyright (C) 2022 The Qt Company Ltd.
+// Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>, Tatyana Borisova <tanusshhka@mail.ru>
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
+
+#ifndef MESSAGEDECLARATIONPRINTER_H
+#define MESSAGEDECLARATIONPRINTER_H
+
+#include "descriptorprinterbase.h"
+
+namespace QtProtobuf::generator {
+
+class MessageDeclarationPrinter final : public DescriptorPrinterBase<google::protobuf::Descriptor>
+{
+public:
+    explicit MessageDeclarationPrinter(const ::google::protobuf::Descriptor *message,
+                                       std::shared_ptr<::google::protobuf::io::Printer> printer);
+    ~MessageDeclarationPrinter();
+
+    void printClassDeclaration();
+    void printClassForwardDeclaration();
+
+    void printMetaTypesDeclaration();
+private:
+    void printCopyFunctionality();
+    void printMoveSemantic();
+    void printComparisonOperators();
+    void printClassBody();
+    void printProperties();
+    void printGetters();
+    void printSetters();
+    void printPrivateGetters();
+    void printPrivateSetters();
+    void printSignals();
+    void printPrivateMethods();
+    void printClassMembers();
+    void printConstructors();
+    void printDestructor();
+    void printMaps();
+    void printNested();
+    void printClassDeclarationBegin();
+    void printFieldEnum();
+
+    void printQEnums();
+
+    //Recursive functionality
+    void printClassDeclarationPrivate();
+    void printClassForwardDeclarationPrivate();
+};
+} // namespace QtProtobuf::generator
+
+#endif // MESSAGEDECLARATIONPRINTER_H
