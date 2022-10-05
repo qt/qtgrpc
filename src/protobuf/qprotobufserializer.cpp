@@ -342,6 +342,11 @@ QByteArray QProtobufSerializer::serializeMessage(
                                                QProtobufPropertyOrderingInfo(ordering, index)));
     }
 
+    // Restore any unknown fields we have stored away:
+    const QProtobufMessagePrivate *messagePrivate = QProtobufMessagePrivate::get(message);
+    for (const auto &[bytes, occurrences] : messagePrivate->unknownEntries.asKeyValueRange())
+        result += bytes.repeated(occurrences);
+
     return result;
 }
 
@@ -638,6 +643,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(
     //Each iteration we expect iterator is setup to beginning of next chunk
     int fieldNumber = QtProtobufPrivate::NotUsedFieldIndex;
     QtProtobuf::WireTypes wireType = QtProtobuf::WireTypes::Unknown;
+    const QProtobufSelfcheckIterator itBeforeHeader = it; // copy this, we may need it later
     if (!QProtobufSerializerPrivate::decodeHeader(it, fieldNumber, wireType)) {
         setDeserializationError(
                 QAbstractProtobufSerializer::InvalidHeaderError,
@@ -648,11 +654,20 @@ bool QProtobufSerializerPrivate::deserializeProperty(
 
     int index = ordering.indexOfFieldNumber(fieldNumber);
     if (index == -1) {
-        // This is an unknown field.
-        // Currently we just skip it, but starting with protobuf 3.5 we should
-        // preserve the unknown field and include it if the message is
-        // serialized again. TBD.
-        QProtobufSerializerPrivate::skipSerializedFieldBytes(it, wireType);
+        // This is an unknown field, it may have been added in a later revision
+        // of the Message we are currently deserializing. We must store the
+        // bytes for this field and re-emit them later if this message is
+        // serialized again.
+        qsizetype length = std::distance(itBeforeHeader, it); // size of header
+        length += QProtobufSerializerPrivate::skipSerializedFieldBytes(it, wireType);
+
+        if (!it.isValid()) {
+            setUnexpectedEndOfStreamError();
+            return false;
+        }
+
+        QProtobufMessagePrivate *messagePrivate = QProtobufMessagePrivate::get(message);
+        messagePrivate->storeUnknownEntry(QByteArrayView(itBeforeHeader.data(), length));
         return true;
     }
 

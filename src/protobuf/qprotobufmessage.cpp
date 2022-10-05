@@ -55,6 +55,11 @@ int QProtobufMessagePrivate::getPropertyIndex(QAnyStringView propertyName) const
     });
 }
 
+void QProtobufMessagePrivate::storeUnknownEntry(QByteArrayView entry)
+{
+    ++unknownEntries[entry.toByteArray()];
+}
+
 /*!
     Set the property \a propertyName to the value stored in \a value.
 

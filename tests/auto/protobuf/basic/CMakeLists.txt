@@ -161,6 +161,18 @@ qt6_add_protobuf(tst_protobuf_non_packed_repeatedtypes
 )
 qt_autogen_tools_initial_setup(tst_protobuf_non_packed_repeatedtypes)
 
+qt_internal_add_test(tst_protobuf_unknown_field
+    SOURCES
+        tst_protobuf_unknown_field.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf)
+
+qt6_add_protobuf(tst_protobuf_unknown_field
+    PROTO_FILES
+        proto/unknownfield.proto
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
+)
 
 qt_internal_add_test(tst_protobuf_raw_serializers
     SOURCES

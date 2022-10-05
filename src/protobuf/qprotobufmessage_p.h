@@ -34,6 +34,7 @@ public:
     const QMetaObject *metaObject = nullptr;
 
     int getPropertyIndex(QAnyStringView propertyName) const;
+    void storeUnknownEntry(QByteArrayView entry);
 
     static QProtobufMessagePrivate *get(QProtobufMessage *message) { return message->d_func(); }
     static const QProtobufMessagePrivate *get(const QProtobufMessage *message)

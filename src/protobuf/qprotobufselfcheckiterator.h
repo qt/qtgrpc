@@ -131,6 +131,13 @@ private:
         return lhs.m_it != other;
     }
 
+    friend qint64 operator-(const QProtobufSelfcheckIterator &lhs,
+                            const QProtobufSelfcheckIterator &rhs) noexcept
+    {
+        Q_ASSERT(lhs.m_containerBegin == rhs.m_containerBegin);
+        return lhs.m_it - rhs.m_it;
+    }
+
     const QByteArrayView::const_iterator m_containerBegin;
     const QByteArrayView::const_iterator m_containerEnd;
     QByteArrayView::const_iterator m_it;
