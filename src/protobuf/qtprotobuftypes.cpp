@@ -4,7 +4,11 @@
 
 #include <QtProtobuf/qtprotobufglobal.h>
 
+#include <QtCore/qreadwritelock.h>
 #include <QtCore/qmutex.h>
+#include <QtCore/qpair.h>
+
+#include <QtProtobuf/private/qtprotobuflogging_p.h>
 
 #include "qtprotobuftypes.h"
 #include "qprotobufobject.h"
@@ -14,7 +18,60 @@
 
 QT_BEGIN_NAMESPACE
 
-#define registerProtobufType(X) qRegisterMetaType<X>(#X)
+namespace {
+/*
+    \internal
+    \brief The ProtobufOrderingRegistry stores the mapping between
+           QtProtobufPrivate::QProtobufPropertyOrdering and QMetaType.
+*/
+struct ProtobufOrderingRegistry
+{
+    using ProtobufOrderingRegistryRecord =
+                                    QPair<QMetaType, QtProtobufPrivate::QProtobufPropertyOrdering>;
+
+    void registerOrdering(QMetaType type, QtProtobufPrivate::QProtobufPropertyOrdering ordering)
+    {
+        QWriteLocker locker(&m_lock);
+        m_registry[ordering.getMessageFullName().toString()] =
+                ProtobufOrderingRegistryRecord(type, ordering);
+    }
+
+    QtProtobufPrivate::QProtobufPropertyOrdering getOrdering(QMetaType type) const
+    {
+        QtProtobufPrivate::QProtobufPropertyOrdering ordering{ nullptr };
+
+        QReadLocker locker(&m_lock);
+        for (auto it = m_registry.constBegin(); it != m_registry.constEnd(); ++it) {
+            if (type == it.value().first) {
+                ordering = it.value().second;
+                break;
+            }
+        }
+
+        return ordering;
+    }
+
+    ProtobufOrderingRegistryRecord
+    findMessageByName(const QString &messageName) const
+    {
+        ProtobufOrderingRegistryRecord record = {
+            QMetaType(QMetaType::UnknownType), { nullptr }
+        };
+
+        QReadLocker locker(&m_lock);
+        auto it = m_registry.constFind(messageName);
+        if (it != m_registry.constEnd())
+            record = it.value();
+        return record;
+    }
+
+private:
+    mutable QReadWriteLock m_lock;
+    QHash<QString, ProtobufOrderingRegistryRecord> m_registry;
+};
+
+Q_GLOBAL_STATIC(ProtobufOrderingRegistry, orderingRegistry)
+}
 
 namespace QtProtobufPrivate {
     constexpr uint jsonNameOffsetsOffset = 0;
@@ -109,6 +166,31 @@ namespace QtProtobufPrivate {
                  || (offset == jsonNameOffsetsOffset && uint(index) == data->numFields));
         return *(uint_data() + offset + index);
     }
+
+    void registerOrdering(QMetaType type, QProtobufPropertyOrdering ordering)
+    {
+        orderingRegistry->registerOrdering(type, ordering);
+    }
+
+    QProtobufPropertyOrdering getOrderingByMetaType(QMetaType type)
+    {
+        return orderingRegistry->getOrdering(type);
+    }
+
+    QProtobufMessage *constructMessageByName(const QString &messageType)
+    {
+        qRegisterProtobufTypes();
+        ProtobufOrderingRegistry::ProtobufOrderingRegistryRecord messageOrderingRecord =
+                orderingRegistry->findMessageByName(messageType);
+        QMetaType type = messageOrderingRecord.first;
+        if (type.id() != QMetaType::UnknownType) {
+            void *msg = type.create();
+            return reinterpret_cast<QProtobufMessage *>(msg);
+        }
+        qProtoWarning() << "Unable to find protobuf message with name" << messageType
+                        << ". Message is not registered.";
+        return nullptr;
+    }
 }
 
 namespace QtProtobuf {
@@ -155,32 +237,32 @@ static void qRegisterBaseTypes()
 {
     [[maybe_unused]] // definitely unused
     static bool registered = [] {
-        registerProtobufType(QtProtobuf::int32);
-        registerProtobufType(QtProtobuf::int64);
-        registerProtobufType(QtProtobuf::uint32);
-        registerProtobufType(QtProtobuf::uint64);
-        registerProtobufType(QtProtobuf::sint32);
-        registerProtobufType(QtProtobuf::sint64);
-        registerProtobufType(QtProtobuf::fixed32);
-        registerProtobufType(QtProtobuf::fixed64);
-        registerProtobufType(QtProtobuf::sfixed32);
-        registerProtobufType(QtProtobuf::sfixed64);
-        registerProtobufType(QtProtobuf::boolean);
+        qRegisterMetaType<QtProtobuf::int32>();
+        qRegisterMetaType<QtProtobuf::int64>();
+        qRegisterMetaType<QtProtobuf::uint32>();
+        qRegisterMetaType<QtProtobuf::uint64>();
+        qRegisterMetaType<QtProtobuf::sint32>();
+        qRegisterMetaType<QtProtobuf::sint64>();
+        qRegisterMetaType<QtProtobuf::fixed32>();
+        qRegisterMetaType<QtProtobuf::fixed64>();
+        qRegisterMetaType<QtProtobuf::sfixed32>();
+        qRegisterMetaType<QtProtobuf::sfixed64>();
+        qRegisterMetaType<QtProtobuf::boolean>();
 
-        registerProtobufType(QtProtobuf::int32List);
-        registerProtobufType(QtProtobuf::int64List);
-        registerProtobufType(QtProtobuf::uint32List);
-        registerProtobufType(QtProtobuf::uint64List);
-        registerProtobufType(QtProtobuf::sint32List);
-        registerProtobufType(QtProtobuf::sint64List);
-        registerProtobufType(QtProtobuf::fixed32List);
-        registerProtobufType(QtProtobuf::fixed64List);
-        registerProtobufType(QtProtobuf::sfixed32List);
-        registerProtobufType(QtProtobuf::sfixed64List);
+        qRegisterMetaType<QtProtobuf::int32List>();
+        qRegisterMetaType<QtProtobuf::int64List>();
+        qRegisterMetaType<QtProtobuf::uint32List>();
+        qRegisterMetaType<QtProtobuf::uint64List>();
+        qRegisterMetaType<QtProtobuf::sint32List>();
+        qRegisterMetaType<QtProtobuf::sint64List>();
+        qRegisterMetaType<QtProtobuf::fixed32List>();
+        qRegisterMetaType<QtProtobuf::fixed64List>();
+        qRegisterMetaType<QtProtobuf::sfixed32List>();
+        qRegisterMetaType<QtProtobuf::sfixed64List>();
 
-        registerProtobufType(QtProtobuf::doubleList);
-        registerProtobufType(QtProtobuf::floatList);
-        registerProtobufType(QtProtobuf::boolList);
+        qRegisterMetaType<QtProtobuf::doubleList>();
+        qRegisterMetaType<QtProtobuf::floatList>();
+        qRegisterMetaType<QtProtobuf::boolList>();
 
         QtProtobuf::registerBasicConverters<QtProtobuf::int32>();
         QtProtobuf::registerBasicConverters<QtProtobuf::int64>();

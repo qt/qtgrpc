@@ -11,6 +11,7 @@
 #include <QtCore/QHash>
 #include <QtCore/QMetaType>
 #include <QtCore/QtEndian>
+#include <QtProtobuf/QProtobufMessage>
 
 #include <memory>
 #include <functional>
@@ -48,6 +49,8 @@ private:
     const uint &uint_dataForIndex(int index, uint offset) const;
 };
 static_assert(std::is_trivially_destructible_v<QProtobufPropertyOrdering>);
+
+extern Q_PROTOBUF_EXPORT void registerOrdering(QMetaType type, QProtobufPropertyOrdering ordering);
 
 // Convenience structure to hold a reference to a single entry
 struct QProtobufPropertyOrderingInfo
@@ -207,6 +210,7 @@ struct qMakeUnsignedImpl<int64> {
 };
 template <typename T>
 using qMakeUnsigned = typename qMakeUnsignedImpl<T>::type;
+
 } //namespace QtProtobuf
 
 Q_PROTOBUF_EXPORT void qRegisterProtobufTypes();

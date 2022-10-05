@@ -107,4 +107,25 @@ bool QAbstractProtobufSerializer::doDeserialize(QProtobufMessage *message,
     assumed to not be \nullptr.
     Returns \c true if deserialization was successful, otherwise \c false.
 */
+
+namespace QtProtobufPrivate {
+extern QtProtobufPrivate::QProtobufPropertyOrdering getOrderingByMetaType(QMetaType type);
+}
+
+QByteArray QAbstractProtobufSerializer::serializeRawMessage(const QProtobufMessage *message) const
+{
+    Q_ASSERT(message != nullptr && message->metaObject() != nullptr);
+    auto ordering = QtProtobufPrivate::getOrderingByMetaType(message->metaObject()->metaType());
+    Q_ASSERT(ordering.data != nullptr);
+    return serializeMessage(message, ordering);
+}
+
+bool QAbstractProtobufSerializer::deserializeRawMessage(QProtobufMessage *message, QByteArrayView data) const
+{
+    Q_ASSERT(message != nullptr && message->metaObject() != nullptr);
+    auto ordering = QtProtobufPrivate::getOrderingByMetaType(message->metaObject()->metaType());
+    Q_ASSERT(ordering.data != nullptr);
+    return deserializeMessage(message, ordering, data);
+}
+
 QT_END_NAMESPACE

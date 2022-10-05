@@ -8,6 +8,8 @@
 #include <QSignalSpy>
 #include <QTest>
 
+#include <memory>
+
 #include <qtprotobuftestscommon.h>
 
 class QtProtobufTypesGenerationTest : public QObject
@@ -35,6 +37,8 @@ private slots:
     void AssignmentOperatorTest();
     void MoveOperatorTest();
     void AccessMessageFieldsFromGetter();
+
+    void InvalidMessageConstructorTest();
 };
 
 using namespace qtprotobufnamespace::tests;
@@ -45,6 +49,10 @@ void QtProtobufTypesGenerationTest::EmptyMessageTest()
     QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::staticMetaObject.propertyCount(), 0);
     QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.EmptyMessage");
+
+    std::unique_ptr<QProtobufMessage> rawMessage(
+            QProtobufMessage::constructByName("qtprotobufnamespace.tests.EmptyMessage"));
+    QVERIFY(reinterpret_cast<qtprotobufnamespace::tests::EmptyMessage*>(rawMessage.get()) != nullptr);
 }
 
 void QtProtobufTypesGenerationTest::BoolMessageTest()
@@ -284,6 +292,15 @@ void QtProtobufTypesGenerationTest::ComplexMessageTest()
                        .value<qtprotobufnamespace::tests::SimpleStringMessage *>()),
              stringMsg);
     QCOMPARE(test.testComplexField(), stringMsg);
+
+    std::unique_ptr<QProtobufMessage> rawObject(
+            QProtobufMessage::constructByName("qtprotobufnamespace.tests.ComplexMessage"));
+    auto *rawMessage = reinterpret_cast<qtprotobufnamespace::tests::ComplexMessage*>(rawObject.get());
+    QVERIFY(rawMessage);
+    QCOMPARE(rawMessage->testFieldInt(), 0);
+    qtprotobufnamespace::tests::SimpleStringMessage embeddedStringMessage =
+            rawMessage->testComplexField();
+    QCOMPARE(embeddedStringMessage.testFieldString(), QString());
 }
 
 void QtProtobufTypesGenerationTest::BytesMessageTest()
@@ -349,6 +366,14 @@ void QtProtobufTypesGenerationTest::AccessMessageFieldsFromGetter()
 
     QCOMPARE(actual, expected);
 }
+
+void QtProtobufTypesGenerationTest::InvalidMessageConstructorTest()
+{
+    std::unique_ptr<QProtobufMessage> message(QProtobufMessage::constructByName(
+            "qtprotobufnamespace.tests.InvalidMessageConstructorTestNotExists"));
+    QCOMPARE(message, nullptr);
+}
+
 
 QTEST_MAIN(QtProtobufTypesGenerationTest)
 #include "tst_protobuf_basictypes.moc"

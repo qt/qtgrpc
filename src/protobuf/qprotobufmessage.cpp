@@ -125,6 +125,27 @@ bool QProtobufMessage::isEqual(const QProtobufMessage &lhs, const QProtobufMessa
     return lhs.d_func()->unknownEntries == rhs.d_func()->unknownEntries;
 }
 
+namespace QtProtobufPrivate {
+/*!
+    \internal
+*/
+extern QProtobufMessage *constructMessageByName(const QString &messageType);
+}
+
+/*!
+    Constructs QProtobufMessage using \a messageType.
+    Returns a pointer to the constructed QProtobufMessage.
+
+    This function attempts to create a message whose type matches \a messageType. If \a messageType
+    is unknown, the function returns \nullptr. If the message is not found in the registry, the
+    function returns \nullptr.
+    Ownership of the constructed message is given to the function caller.
+*/
+QProtobufMessage *QProtobufMessage::constructByName(const QString &messageType)
+{
+    return QtProtobufPrivate::constructMessageByName(messageType);
+}
+
 QT_END_NAMESPACE
 
 #include "moc_qprotobufmessage.cpp"

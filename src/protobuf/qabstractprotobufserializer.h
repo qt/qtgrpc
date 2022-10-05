@@ -52,6 +52,9 @@ public:
     virtual QAbstractProtobufSerializer::DeserializationError deserializationError() const = 0;
     virtual QString deserializationErrorString() const = 0;
 
+    QByteArray serializeRawMessage(const QProtobufMessage *message) const;
+    bool deserializeRawMessage(QProtobufMessage *message, QByteArrayView data) const;
+
 protected:
     virtual QByteArray
     serializeMessage(const QProtobufMessage *message,

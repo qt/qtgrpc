@@ -276,6 +276,7 @@ void deserializeEnumList(const QProtobufSerializer *serializer, QProtobufSelfche
 template<typename T>
 inline void qRegisterProtobufType() {
     T::registerTypes();
+    QtProtobufPrivate::registerOrdering(QMetaType::fromType<T>(), T::propertyOrdering);
     QtProtobufPrivate::registerHandler(QMetaType::fromType<T *>(), { QtProtobufPrivate::serializeObject<T>,
             QtProtobufPrivate::deserializeObject<T> });
     QtProtobufPrivate::registerHandler(QMetaType::fromType<QList<std::shared_ptr<T>>>(), { QtProtobufPrivate::serializeList<T>,

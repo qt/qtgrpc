@@ -162,6 +162,15 @@ qt6_add_protobuf(tst_protobuf_non_packed_repeatedtypes
 qt_autogen_tools_initial_setup(tst_protobuf_non_packed_repeatedtypes)
 
 
+qt_internal_add_test(tst_protobuf_raw_serializers
+    SOURCES
+        tst_protobuf_raw_serializers.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::ProtobufPrivate
+        tst_protobuf_basictypes_gen
+)
+
 if(UNIX AND NOT CMAKE_CROSSCOMPILING)
     qt_internal_add_test(tst_protobuf_internals
         SOURCES

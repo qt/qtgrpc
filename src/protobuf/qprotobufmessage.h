@@ -21,6 +21,8 @@ public:
     QVariant property(QAnyStringView propertyName) const;
     bool setProperty(QAnyStringView propertyName, const QVariant &value);
 
+    Q_REQUIRED_RESULT static QProtobufMessage *constructByName(const QString &messageType);
+
 protected:
     explicit QProtobufMessage(const QMetaObject *metaObject);
     QProtobufMessage(const QProtobufMessage &other);
@@ -37,6 +39,7 @@ private:
     const QMetaObject *metaObject() const;
 
     friend class QProtobufSerializer;
+    friend class QAbstractProtobufSerializer;
     friend class QProtobufSerializerPrivate;
     friend class QAbstractProtobufSerializer;
 
