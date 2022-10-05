@@ -6,7 +6,7 @@
 #define QTPROTOBUFTESTSCOMMON_H
 
 #include <QMetaType>
-#include <QtTest/QtTest>
+#include <QTest>
 
 #if defined(QT_QML_LIB)
     #define QT_PROTOBUF_PROPERTY_SUFFIX "_p"

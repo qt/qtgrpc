@@ -4,7 +4,7 @@
 
 #include "enummessages.qpb.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QProtobufSerializer>
 
 class QtProtobufEnumTypesDeserializationTest : public QObject

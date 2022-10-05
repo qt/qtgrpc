@@ -5,7 +5,7 @@
 #include "nestedmessages.qpb.h"
 #include "externalpackage.qpb.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <qtprotobuftestscommon.h>
 #include <QProtobufSerializer>
 

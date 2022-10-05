@@ -5,7 +5,7 @@
 #include "basicmessages.qpb.h"
 #include "repeatedmessages.qpb.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QProtobufSerializer>
 
 class QtProtobufRepeatedTypesSerializationTest : public QObject

@@ -5,7 +5,7 @@
 #include "basicmessages.qpb.h"
 #include "fieldindexrange.qpb.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QProtobufSerializer>
 
 #include <limits>

@@ -6,7 +6,7 @@
 
 #include <QMetaProperty>
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <qtprotobuftestscommon.h>
 
 using namespace MyTestNamespace::qtprotobufnamespace::tests;

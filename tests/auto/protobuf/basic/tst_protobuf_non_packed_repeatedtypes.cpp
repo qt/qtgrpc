@@ -4,7 +4,7 @@
 
 #include "repeatednonpackedmessages.qpb.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QProtobufSerializer>
 
 class QtProtobufNonPackedRepeatedTypesTest : public QObject

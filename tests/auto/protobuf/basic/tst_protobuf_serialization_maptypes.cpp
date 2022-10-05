@@ -9,7 +9,7 @@
 
 #include <qtprotobuftestscommon.h>
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 using namespace qtprotobufnamespace::tests;
 

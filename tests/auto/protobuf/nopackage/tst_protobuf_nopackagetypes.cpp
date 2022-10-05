@@ -7,7 +7,7 @@
 
 #include <QMetaProperty>
 #include <QSignalSpy>
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include <qtprotobuftestscommon.h>
 

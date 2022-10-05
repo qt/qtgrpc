@@ -7,7 +7,7 @@
 #undef private
 #undef protected
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 using namespace qtprotobufnamespace::tests;
 

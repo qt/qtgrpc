@@ -4,7 +4,7 @@
 
 #include "duplicated_metatypes.qpb.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <qtprotobuftestscommon.h>
 
 class QtProtobufDuplicatedMetatypesTest : public QObject

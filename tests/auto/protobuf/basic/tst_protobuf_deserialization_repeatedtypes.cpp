@@ -7,7 +7,7 @@
 
 #include <QObject>
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QProtobufSerializer>
 
 #include <limits>

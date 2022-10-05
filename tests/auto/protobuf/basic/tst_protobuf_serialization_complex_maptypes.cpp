@@ -3,7 +3,7 @@
 
 #include "tst_protobuf_serialization_maptypes.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include "basicmessages.qpb.h"
 #include "mapmessages.qpb.h"
 
