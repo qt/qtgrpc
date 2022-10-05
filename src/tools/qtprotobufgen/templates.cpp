@@ -589,11 +589,11 @@ const char *Templates::SemicolonBlockEnclosureTemplate()
 }
 const char *Templates::InitializerMemberTemplate()
 {
-    return "    m_$property_name$($initializer$)";
+    return "m_$property_name$($initializer$)";
 }
 const char *Templates::InitializerMemberMessageTemplate()
 {
-    return "    m_$property_name$(nullptr)";
+    return "m_$property_name$(nullptr)";
 }
 const char *Templates::EmptyBracesTemplate()
 {

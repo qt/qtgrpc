@@ -204,6 +204,7 @@ void MessageDefinitionPrinter::printConstructors()
 void MessageDefinitionPrinter::printInitializationList()
 {
     const auto numFields = m_descriptor->field_count();
+    Indent();
     for (int i = 0; i < numFields; ++i) {
         const FieldDescriptor *field = m_descriptor->field(i);
         auto propertyMap = common::producePropertyMap(field, m_descriptor);
@@ -246,6 +247,7 @@ void MessageDefinitionPrinter::printInitializationList()
             }
         }
     }
+    Outdent();
 }
 
 void MessageDefinitionPrinter::printCopyFunctionality()
