@@ -430,6 +430,11 @@ void tst_qtprotobufgen::cmdLineGeneratedNoOptions_data()
                 << "repeatednonpackedmessages"
                 << "/no-options/"
                 << QString(extension);
+
+        QTest::addRow("anymessages%s", extension.data())
+                << "anymessages"
+                << "/no-options/"
+                << QString(extension);
     }
 }
 

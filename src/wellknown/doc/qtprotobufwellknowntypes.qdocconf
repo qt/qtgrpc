@@ -1,0 +1,45 @@
+include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
+include($QT_INSTALL_DOCS/config/exampleurl-qtbase.qdocconf)
+
+project                 = QtProtobufWellKnownTypes
+description             = Qt Protobuf Well-known Types Reference Documentation
+version                 = $QT_VERSION
+
+moduleheader            = QtProtobufWellKnownTypesDoc
+includepaths           += ./include
+
+examplesinstallpath     = protobufwellknowntypes
+
+qhp.projects            = QtProtobufWellKnownTypes
+
+qhp.QtProtobuf.file                = qtprotobufwellknowntypes.qhp
+qhp.QtProtobuf.namespace           = org.qt-project.qtprotobufwellknowntypes.$QT_VERSION_TAG
+qhp.QtProtobuf.virtualFolder       = qtprotobufwellknowntypes
+qhp.QtProtobuf.indexTitle          = Qt Protobuf Well-known Types
+qhp.QtProtobuf.indexRoot           =
+
+qhp.QtProtobuf.subprojects         = classes
+qhp.QtProtobuf.subprojects.classes.title = C++ Classes
+qhp.QtProtobuf.subprojects.classes.indexTitle = Qt Protobuf Well-known Types C++ Classes
+qhp.QtProtobuf.subprojects.classes.selectors = class fake:headerfile
+qhp.QtProtobuf.subprojects.classes.sortPages = true
+
+tagfile                 = ../../../doc/qtprotobufwellknowntypes/qtprotobufwellknowntypes.tags
+
+depends                 = qtprotobuf
+
+headerdirs  += ..
+
+sourcedirs  += ..
+
+#exampledirs +=
+
+#imagedirs   += images
+
+defines += QT_BUILD_PROTOBUFWELLKNOWNTYPES_LIB
+
+navigation.landingpage = "Qt Protobuf Well-known Types"
+navigation.cppclassespage = "Qt Protobuf Well-known Types C++ Classes"
+
+# Fail the documentation build if there are more warnings than the limit
+warninglimit = 0

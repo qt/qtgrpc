@@ -148,6 +148,8 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
         if (message->full_name() == "google.protobuf.Timestamp") {
             externalIncludes.insert("QDateTime");
         }
+        if (message->full_name() == "google.protobuf.Any")
+            externalIncludes.insert("QtProtobufWellKnownTypes/qprotobufanysupport.h");
     });
 
     if (hasQtTypes) {
@@ -157,6 +159,11 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     for (int i = 0; i < file->dependency_count(); ++i) {
         if (file->dependency(i)->name() == "QtProtobuf/QtCore.proto"
                 || file->dependency(i)->name() == "QtProtobuf/QtGui.proto") {
+            continue;
+        }
+        // Override the any.proto include with our own specific support
+        if (file->dependency(i)->name() == "google/protobuf/any.proto") {
+            externalIncludes.insert("QtProtobufWellKnownTypes/qprotobufanysupport.h");
             continue;
         }
         internalIncludes.insert(utils::removeFileSuffix(file->dependency(i)->name())

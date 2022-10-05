@@ -67,6 +67,11 @@ void MessageDefinitionPrinter::printRegisterBody()
 
     m_printer->Print(m_typeMap, CommonTemplates::MetaTypeRegistrationMessageDefinition());
     Indent();
+
+    // Special case:
+    if (m_descriptor->full_name() == "google.protobuf.Any")
+        m_printer->Print("QT_PREPEND_NAMESPACE(QtProtobuf)::Any::registerTypes();\n");
+
     if (Options::instance().hasQml()) {
         m_printer->Print(m_typeMap, CommonTemplates::MetaTypeRegistrationQmlListTemplate());
         m_printer->Print(m_typeMap, CommonTemplates::QmlRegisterTypeTemplate());
@@ -437,7 +442,7 @@ void MessageDefinitionPrinter::printGetters()
                 m_descriptor, [&](const FieldDescriptor *field, PropertyMap &propertyMap) {
         switch (field->type()) {
         case FieldDescriptor::TYPE_MESSAGE:
-            if (!field->is_map() && !field->is_repeated() && !common::isQtType(field)) {
+            if (common::isPureMessage(field)) {
                 m_printer->Print(propertyMap,
                                  CommonTemplates::PrivateSetterMessageDefinitionTemplate());
                 m_printer->Print(propertyMap,

@@ -42,6 +42,14 @@ if(Protobuf_FOUND AND TARGET protobuf::libprotoc AND TARGET protobuf::libprotobu
 
     add_library(WrapProtobuf::WrapLibProtobuf INTERFACE IMPORTED)
     target_link_libraries(WrapProtobuf::WrapLibProtobuf INTERFACE protobuf::libprotobuf)
+
+    get_target_property(WrapProtobuf_INCLUDE_DIRS
+        protobuf::libprotobuf
+        INTERFACE_INCLUDE_DIRECTORIES
+    )
+    set_target_properties(WrapProtobuf::WrapLibProtobuf PROPERTIES
+        _qt_internal_proto_include_dirs "${WrapProtobuf_INCLUDE_DIRS}"
+    )
 endif()
 
 if(TARGET WrapProtobuf::WrapLibProtoc)

@@ -18,8 +18,10 @@
 
 #include <QtCore/qloggingcategory.h>
 
+#include <QtProtobuf/qtprotobufglobal.h>
+
 QT_BEGIN_NAMESPACE
-Q_DECLARE_LOGGING_CATEGORY(Protobuf)
+Q_DECLARE_EXPORTED_LOGGING_CATEGORY(Protobuf, Q_PROTOBUF_EXPORT)
 QT_END_NAMESPACE
 
 #define qProtoDebug(...) qCDebug(Protobuf, __VA_ARGS__)

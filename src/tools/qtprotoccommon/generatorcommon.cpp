@@ -121,6 +121,42 @@ TypeMap common::produceQtTypeMap(const Descriptor *type, const Descriptor *scope
              { "setter_type", scopeName } };
 }
 
+TypeMap common::produceOverriddenTypeMap(const Descriptor *type, const Descriptor *scope)
+{
+    std::string namespaces = getFullNamespace(type, "::");
+    std::string qmlPackage = getFullNamespace(type, ".");
+
+    std::string name = type->name();
+    std::string listName;
+    if (type->full_name() == "google.protobuf.Any") {
+        namespaces = "QtProtobuf";
+        name = "QtProtobuf::Any";
+        listName = std::string("QList<QtProtobuf::Any>");
+        qmlPackage = "QtProtobuf";
+    } else {
+        listName = std::string("QList<") + name + ">";
+    }
+    const std::string scopeNamespaces =
+            getScopeNamespace(namespaces, getFullNamespace(scope, "::"));
+    const std::string fullName = name;
+    const std::string scopeName = fullName;
+    const std::string fullListName = listName;
+    const std::string scopeListName = listName;
+
+    return { { "type", name },
+             { "full_type", fullName },
+             { "scope_type", scopeName },
+             { "list_type", listName },
+             { "full_list_type", fullListName },
+             { "scope_list_type", scopeListName },
+             { "scope_namespaces", scopeNamespaces },
+             { "qml_package", qmlPackage },
+             { "property_type", fullName },
+             { "property_list_type", fullListName },
+             { "getter_type", scopeName },
+             { "setter_type", scopeName } };
+}
+
 TypeMap common::produceMessageTypeMap(const Descriptor *type, const Descriptor *scope)
 {
     std::string namespaces = getFullNamespace(type, "::");
@@ -328,10 +364,16 @@ bool common::isQtType(const FieldDescriptor *field)
                                                          // conversion inside library
 }
 
+bool common::isOverridden(const FieldDescriptor *field)
+{
+    return field->type() == FieldDescriptor::TYPE_MESSAGE
+            && field->message_type()->full_name() == "google.protobuf.Any";
+}
+
 bool common::isPureMessage(const FieldDescriptor *field)
 {
     return field->type() == FieldDescriptor::TYPE_MESSAGE && !field->is_map()
-            && !field->is_repeated() && !common::isQtType(field);
+            && !field->is_repeated() && !common::isQtType(field) && !common::isOverridden(field);
 }
 
 void common::iterateMessageFields(const Descriptor *message, const IterateMessageLogic &callback)
@@ -350,8 +392,11 @@ TypeMap common::produceTypeMap(const FieldDescriptor *field, const Descriptor *s
 
     switch (field->type()) {
     case FieldDescriptor::TYPE_MESSAGE:
-        return isQtType(field) ? produceQtTypeMap(field->message_type(), nullptr)
-                               : produceMessageTypeMap(field->message_type(), scope);
+        if (isQtType(field))
+            return produceQtTypeMap(field->message_type(), nullptr);
+        if (isOverridden(field))
+            return produceOverriddenTypeMap(field->message_type(), nullptr);
+        return produceMessageTypeMap(field->message_type(), scope);
     case FieldDescriptor::TYPE_ENUM:
         return produceEnumTypeMap(field->enum_type(), scope);
     default:

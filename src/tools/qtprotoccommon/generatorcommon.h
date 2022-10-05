@@ -55,6 +55,7 @@ struct common {
     static std::string getScopeNamespace(std::string_view original, std::string_view scope);
     static std::map<std::string, std::string> getNestedScopeNamespace(const std::string &className);
     static TypeMap produceQtTypeMap(const Descriptor *type, const Descriptor *scope);
+    static TypeMap produceOverriddenTypeMap(const Descriptor *type, const Descriptor *scope);
     static TypeMap produceMessageTypeMap(const Descriptor *type, const Descriptor *scope);
     static TypeMap produceEnumTypeMap(const EnumDescriptor *type, const Descriptor *scope);
     static TypeMap produceSimpleTypeMap(FieldDescriptor::Type type);
@@ -68,6 +69,7 @@ struct common {
     static EnumVisibility enumVisibility(const EnumDescriptor *type, const Descriptor *scope);
     static bool hasQmlAlias(const FieldDescriptor *field);
     static bool isQtType(const FieldDescriptor *field);
+    static bool isOverridden(const FieldDescriptor *field);
     static bool isPureMessage(const FieldDescriptor *field);
 
     using IterateMessageLogic = std::function<void(const FieldDescriptor *, PropertyMap &)>;

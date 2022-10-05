@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package qtproto.tests;
+
+message AnyMessage {
+    google.protobuf.Any field = 1;
+}
+
+message RepeatedAnyMessage {
+    repeated google.protobuf.Any anys = 1;
+}
+
+message TwoAnyMessage {
+    google.protobuf.Any one = 1;
+    google.protobuf.Any two = 2;
+}
+
+message Example {
+    string str = 1;
+    sint32 i = 2;
+    sint32 j = 3;
+    sint32 h = 4;
+    string str2 = 5;
+}
+
+message SimpleMessage {
+    int32 i = 500000;
+}

@@ -167,6 +167,12 @@ struct ProtoTypeRegistrar
 };
 
 template<typename T>
+bool repeatedValueCompare(const QList<T> &a, const QList<T> &b)
+{
+    return std::equal(a.begin(), a.end(), b.begin(), b.end());
+}
+
+template<typename T>
 bool repeatedValueCompare(const QList<std::shared_ptr<T>> &a, const QList<std::shared_ptr<T>> &b)
 {
     auto dereferenced = [](const std::shared_ptr<T> &lhs, const std::shared_ptr<T> &rhs) {

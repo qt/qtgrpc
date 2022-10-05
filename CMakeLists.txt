@@ -44,5 +44,6 @@ endif()
 include("${CMAKE_CURRENT_LIST_DIR}/src/tools/qtprotobufgen/Qt6ProtobufToolsMacros.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/src/tools/qtgrpcgen/Qt6GrpcToolsMacros.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/src/protobuf/Qt6ProtobufBuildInternals.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/src/wellknown/Qt6ProtobufWellKnownTypesBuildInternals.cmake")
 
 qt_build_repo()
