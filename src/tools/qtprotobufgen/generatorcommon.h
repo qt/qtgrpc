@@ -9,6 +9,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <string_view>
 #include <functional>
 
 #include "utils.h"
@@ -35,18 +36,6 @@ struct common {
         NEIGHBOR_ENUM
     };
 
-    static std::vector<std::string> getNamespaces(const std::string &fullTypeName);
-    template <typename T>
-    static std::vector<std::string> getNamespaces(const T *type)
-    {
-        if (type == nullptr)
-            return {};
-        std::string fullTypeName = type->full_name();
-        return getNamespaces(fullTypeName);
-    }
-
-    static std::vector<std::string> getNestedNamespaces(const Descriptor *type);
-
     static std::string buildExportMacro(std::string identifier)
     {
         if (identifier.empty())
@@ -54,9 +43,18 @@ struct common {
         return "QPB_" + identifier + "_EXPORT";
     }
 
-    static std::string getNamespacesString(const std::vector<std::string> &namespacesList,
-                                           std::string_view separator);
-    static std::string getScopeNamespacesString(std::string original, const std::string &scope);
+    static std::string getFullNamespace(std::string_view fullDescriptorName,
+                                        std::string_view separator);
+    template<typename T>
+    static std::string getFullNamespace(const T *type, std::string_view separator)
+    {
+        if (type == nullptr)
+            return {};
+        return getFullNamespace(type->full_name(), separator);
+    }
+
+    static std::string getNestedNamespace(const Descriptor *type, std::string_view separator);
+    static std::string getScopeNamespace(std::string_view original, std::string_view scope);
     static std::map<std::string, std::string> getNestedScopeNamespace(const std::string &className);
     static TypeMap produceQtTypeMap(const Descriptor *type, const Descriptor *scope);
     static TypeMap produceMessageTypeMap(const Descriptor *type, const Descriptor *scope);
@@ -82,10 +80,6 @@ struct common {
     static bool hasNestedMessages(const Descriptor *message);
 
     static bool isNested(const Descriptor *message);
-    static bool isNestedOf(const Descriptor *message, const Descriptor *containing)
-    {
-        return containing == message->containing_type();
-    }
     static const Descriptor *findHighestMessage(const Descriptor *message);
 };
 } // namespace QtProtobuf::generator

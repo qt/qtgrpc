@@ -13,44 +13,78 @@ using namespace ::google::protobuf;
 using namespace ::google::protobuf::io;
 using namespace ::QtProtobuf::generator;
 
-std::vector<std::string> common::getNamespaces(const std::string &fullTypeName)
+/*
+    Constructs a C++ namespace from the full protobuf descriptor name. E.g. for
+    the message descriptor "test.protobuf.MessageType" the function
+    returns "test::protobuf", if the separator is "::".
+*/
+std::string common::getFullNamespace(std::string_view fullDescriptorName,
+                                     std::string_view separator)
 {
-    std::vector<std::string> namespacesList;
-    std::string extraNamespace = Options::instance().extraNamespace();
-    if (!extraNamespace.empty() && extraNamespace != "QT_NAMESPACE")
-        namespacesList.push_back(extraNamespace);
-    for (auto &ns : utils::split(fullTypeName, "."))
-        namespacesList.push_back(std::move(ns));
-    if (!namespacesList.empty())
-        namespacesList.pop_back(); // Remove name
-    return namespacesList;
+    std::string output = Options::instance().extraNamespace();
+    std::string::size_type nameIndex = fullDescriptorName.rfind('.');
+    if (nameIndex == std::string::npos)
+        return output;
+    std::string namespacesStr =
+            utils::replace(fullDescriptorName.substr(0, nameIndex), ".", separator);
+    if (!output.empty() && !namespacesStr.empty())
+        output += separator;
+    output += namespacesStr;
+    return output;
 }
 
-std::vector<std::string> common::getNestedNamespaces(const Descriptor *type)
+/*
+    Constructs a C++ namespace for wrapping nested message types.
+    E.g. for the message descriptor with name "test.protobuf.MessageType.NestedMessageType" the
+    function returns "test::protobuf::MessageType_QtProtobufNested", if the separator
+    is "::".
+*/
+std::string common::getNestedNamespace(const Descriptor *type, std::string_view separator)
 {
-    auto namespaces = getNamespaces(type);
-    for (size_t i = utils::count(type->file()->package(), '.') + 1; i < namespaces.size(); ++i)
-        namespaces[i] += Templates::QtProtobufNestedNamespace();
-    return namespaces;
+    static const std::string nestedSuffix = Templates::QtProtobufNestedNamespace();
+
+    const std::size_t packageSize =
+            type->file()->package().size() > 0 ? type->file()->package().size() + 1 : 0;
+    const std::size_t nameSize = type->name().size() > 0 ? type->name().size() + 1 : 0;
+    const std::size_t namespaceSize = type->full_name().size() - packageSize - nameSize;
+    if (namespaceSize == 0)
+        return {};
+    std::string nestedNamespaces =
+            utils::replace(type->full_name().substr(packageSize, namespaceSize), ".",
+                           nestedSuffix + std::string(separator));
+    if (!nestedNamespaces.empty())
+        nestedNamespaces += nestedSuffix;
+    std::string output = utils::replace(type->file()->package(), ".", separator);
+    if (!output.empty() && !nestedNamespaces.empty())
+        output += separator;
+    output += nestedNamespaces;
+    return output;
 }
 
-std::string common::getNamespacesString(const std::vector<std::string> &namespacesList,
-                                        std::string_view separator)
-{
-    return utils::join(namespacesList, separator);
-}
-
-std::string common::getScopeNamespacesString(std::string original, const std::string &scope)
+/*
+    Cuts the prepending 'scope' namespaces from the original string to create the minimum required
+    C++ identifier that can be used inside the scope namespace. Both strings should be C++
+    namespaces separated by double colon.
+    E.g. for the original namespace "test::protobuf" with the "test" scope the function should
+    return "protobuf".
+*/
+std::string common::getScopeNamespace(std::string_view original, std::string_view scope)
 {
     if (scope.empty())
-        return original;
+        return std::string(original);
 
     if (original == scope)
         return "";
 
-    if (utils::startsWith(original, scope + "::"))
-        return original.substr(scope.size() + 2);
-    return original;
+    std::string scopeWithSeparator;
+    scopeWithSeparator.reserve(scope.size() + 2);
+    scopeWithSeparator += scope;
+    scopeWithSeparator += "::";
+
+    if (utils::startsWith(original, scopeWithSeparator))
+        return std::string(original.substr(scopeWithSeparator.size()));
+
+    return std::string(original);
 }
 
 std::map<std::string, std::string> common::getNestedScopeNamespace(const std::string &className)
@@ -60,11 +94,9 @@ std::map<std::string, std::string> common::getNestedScopeNamespace(const std::st
 
 TypeMap common::produceQtTypeMap(const Descriptor *type, const Descriptor *scope)
 {
-    std::vector<std::string> namespaceList = getNamespaces(type);
-    std::string namespaces = getNamespacesString(namespaceList, "::");
-    std::string scopeNamespaces =
-            getScopeNamespacesString(namespaces, getNamespacesString(getNamespaces(scope), "::"));
-    std::string qmlPackage = getNamespacesString(namespaceList, ".");
+    std::string namespaces = getFullNamespace(type, "::");
+    std::string scopeNamespaces = getScopeNamespace(namespaces, getFullNamespace(scope, "::"));
+    std::string qmlPackage = getFullNamespace(type, ".");
 
     std::string name = type->name();
     std::string fullName = name;
@@ -90,16 +122,10 @@ TypeMap common::produceQtTypeMap(const Descriptor *type, const Descriptor *scope
 
 TypeMap common::produceMessageTypeMap(const Descriptor *type, const Descriptor *scope)
 {
-    std::vector<std::string> namespaceList = getNamespaces(type);
-
-    std::vector<std::string> nestedNamespaceList =
-            isNested(type) ? getNestedNamespaces(type) : namespaceList;
-
-    std::string namespaces = getNamespacesString(namespaceList, "::");
-    std::string scopeNamespaces =
-            getScopeNamespacesString(getNamespacesString(nestedNamespaceList, "::"),
-                                     getNamespacesString(getNamespaces(scope), "::"));
-    std::string qmlPackage = getNamespacesString(namespaceList, ".");
+    std::string namespaces = getFullNamespace(type, "::");
+    std::string nestedNamespaces = isNested(type) ? getNestedNamespace(type, "::") : namespaces;
+    std::string scopeNamespaces = getScopeNamespace(nestedNamespaces, getFullNamespace(scope, "::"));
+    std::string qmlPackage = getFullNamespace(type, ".");
     if (qmlPackage.empty())
         qmlPackage = "QtProtobuf";
 
@@ -136,23 +162,22 @@ TypeMap common::produceMessageTypeMap(const Descriptor *type, const Descriptor *
 TypeMap common::produceEnumTypeMap(const EnumDescriptor *type, const Descriptor *scope)
 {
     EnumVisibility visibility = enumVisibility(type, scope);
-    std::vector<std::string> namespaceList = getNamespaces(type);
+    std::string namespaces = getFullNamespace(type, "::");
 
     std::string name = utils::capitalizeAsciiName(type->name());
     // qml package should consist only from proto spackage
-    std::string qmlPackage = getNamespacesString(namespaceList, ".");
+    std::string qmlPackage = getFullNamespace(type, ".");
     if (qmlPackage.empty())
         qmlPackage = "QtProtobuf";
     // Not used:
     std::string enumGadget = scope != nullptr ? utils::capitalizeAsciiName(scope->name()) : "";
     if (visibility == GLOBAL_ENUM) {
         enumGadget = name + Templates::EnumClassSuffix();
-        namespaceList.push_back(enumGadget); // Global enums are stored in helper Gadget
+        namespaces += "::";
+        namespaces += enumGadget; // Global enums are stored in helper Gadget
     }
 
-    std::string namespaces = getNamespacesString(namespaceList, "::");
-    std::string scopeNamespaces =
-            getScopeNamespacesString(namespaces, getNamespacesString(getNamespaces(scope), "::"));
+    std::string scopeNamespaces = getScopeNamespace(namespaces, getFullNamespace(scope, "::"));
 
     std::string fullName = namespaces.empty() ? name : (namespaces + "::" + name);
     std::string scopeName = scopeNamespaces.empty() ? name : (scopeNamespaces + "::" + name);
@@ -244,8 +269,7 @@ TypeMap common::produceSimpleTypeMap(FieldDescriptor::Type type)
 
 bool common::isQtType(const FieldDescriptor *field)
 {
-    auto namespaces = getNamespaces(field->message_type());
-    return namespaces.size() == 1 && namespaces.front() == "QtProtobuf"
+    return utils::startsWith(field->message_type()->full_name(), "QtProtobuf.")
             && field->file()->package() != "QtProtobuf"; // Used for qttypes library to avoid types
                                                          // conversion inside library
 }

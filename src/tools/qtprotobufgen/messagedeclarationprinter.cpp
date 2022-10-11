@@ -29,13 +29,13 @@ MessageDeclarationPrinter::~MessageDeclarationPrinter() = default;
 void MessageDeclarationPrinter::printClassForwardDeclarationPrivate()
 {
     if (common::hasNestedMessages(m_descriptor)) {
-        auto scope_namespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
-        m_printer->Print(scope_namespaces, Templates::NamespaceTemplate());
+        auto scopeNamespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
+        m_printer->Print(scopeNamespaces, Templates::NamespaceTemplate());
         common::iterateNestedMessages(m_descriptor, [this](const Descriptor *nestedMessage) {
             MessageDeclarationPrinter nesterPrinter(nestedMessage, m_printer);
             nesterPrinter.printClassForwardDeclarationPrivate();
         });
-        m_printer->Print(scope_namespaces, Templates::NamespaceClosingTemplate());
+        m_printer->Print(scopeNamespaces, Templates::NamespaceClosingTemplate());
     }
 
     m_printer->Print(m_typeMap, Templates::ClassMessageForwardDeclarationTemplate());
@@ -55,13 +55,13 @@ void MessageDeclarationPrinter::printClassDeclaration()
 void MessageDeclarationPrinter::printClassDeclarationPrivate()
 {
     if (common::hasNestedMessages(m_descriptor)) {
-        auto scope_namespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
-        m_printer->Print(scope_namespaces, Templates::NamespaceTemplate());
+        auto scopeNamespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
+        m_printer->Print(scopeNamespaces, Templates::NamespaceTemplate());
         common::iterateNestedMessages(m_descriptor, [this](const Descriptor *nestedMessage) {
             MessageDeclarationPrinter nesterPrinter(nestedMessage, m_printer);
             nesterPrinter.printClassDeclarationPrivate();
         });
-        m_printer->Print(scope_namespaces, Templates::NamespaceClosingTemplate());
+        m_printer->Print(scopeNamespaces, Templates::NamespaceClosingTemplate());
     }
     printComments(m_descriptor);
     printClassDeclarationBegin();

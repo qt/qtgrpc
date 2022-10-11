@@ -44,6 +44,9 @@ std::vector<std::string> split(std::string_view s, std::string_view c, bool keep
 std::string replace(std::string_view where, std::string_view from, std::string_view to)
 {
     assert(!from.empty());
+    if (from == to)
+        return std::string(where);
+
     std::string out;
     out.reserve(where.size());
     std::size_t pos = 0;

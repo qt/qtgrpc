@@ -26,13 +26,13 @@ MessageDefinitionPrinter::~MessageDefinitionPrinter() = default;
 void MessageDefinitionPrinter::printClassDefinitionPrivate()
 {
     if (common::hasNestedMessages(m_descriptor)) {
-        auto scope_namespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
-        m_printer->Print(scope_namespaces, Templates::NamespaceTemplate());
+        auto scopeNamespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
+        m_printer->Print(scopeNamespaces, Templates::NamespaceTemplate());
         common::iterateNestedMessages(m_descriptor, [this](const Descriptor *nestedMessage) {
             MessageDefinitionPrinter nestedPrinter(nestedMessage, m_printer);
             nestedPrinter.printClassDefinitionPrivate();
         });
-        m_printer->Print(scope_namespaces, Templates::NamespaceClosingTemplate());
+        m_printer->Print(scopeNamespaces, Templates::NamespaceClosingTemplate());
     }
 
     printDestructor();
@@ -455,14 +455,14 @@ void MessageDefinitionPrinter::printDestructor()
 void MessageDefinitionPrinter::printClassRegistration(Printer *printer)
 {
     if (common::hasNestedMessages(m_descriptor)) {
-        auto scope_namespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
-        printer->Print(scope_namespaces, Templates::NamespaceTemplate());
+        auto scopeNamespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
+        printer->Print(scopeNamespaces, Templates::NamespaceTemplate());
         common::iterateNestedMessages(
                 m_descriptor, [this, &printer](const Descriptor *nestedMessage) {
                     MessageDefinitionPrinter nestedPrinter(nestedMessage, m_printer);
                     nestedPrinter.printClassRegistration(printer);
                 });
-        printer->Print(scope_namespaces, Templates::NamespaceClosingTemplate());
+        printer->Print(scopeNamespaces, Templates::NamespaceClosingTemplate());
     }
 
     printer->Print(m_typeMap, Templates::RegistrarTemplate());

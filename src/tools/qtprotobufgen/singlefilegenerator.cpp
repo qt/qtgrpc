@@ -130,16 +130,17 @@ bool SingleFileGenerator::GenerateMessages(const FileDescriptor *file,
                              Templates::ExportMacroTemplate());
     }
 
-    auto namespaces = file->message_type_count() > 0 ? common::getNamespaces(file->message_type(0))
-                                                     : common::getNamespaces(file->enum_type(0));
     const bool hasQtNamespace = (Options::instance().extraNamespace() == "QT_NAMESPACE");
-    const std::string scope_namespaces = common::getNamespacesString(namespaces, "::");
+    const std::string scopeNamespaces = file->message_type_count() > 0
+            ? common::getFullNamespace(file->message_type(0), "::")
+            : common::getFullNamespace(file->enum_type(0), "::");
     auto openNamespaces = [&](auto printer) { // open namespaces
         printer->Print("\n");
         if (hasQtNamespace)
             printer->PrintRaw("QT_BEGIN_NAMESPACE\n");
-        if (!scope_namespaces.empty())
-            printer->Print({{"scope_namespaces", scope_namespaces}}, Templates::NamespaceTemplate());
+        if (!scopeNamespaces.empty())
+            printer->Print({ { "scope_namespaces", scopeNamespaces } },
+                           Templates::NamespaceTemplate());
     };
     openNamespaces(headerPrinter);
     openNamespaces(sourcePrinter);
@@ -169,8 +170,9 @@ bool SingleFileGenerator::GenerateMessages(const FileDescriptor *file,
             });
 
     auto closeNamespaces = [&](auto printer) {
-        if (!scope_namespaces.empty())
-            printer->Print({{"scope_namespaces", scope_namespaces}}, Templates::NamespaceClosingTemplate());
+        if (!scopeNamespaces.empty())
+            printer->Print({ { "scope_namespaces", scopeNamespaces } },
+                           Templates::NamespaceClosingTemplate());
         if (hasQtNamespace)
             printer->PrintRaw("QT_END_NAMESPACE\n");
         printer->Print("\n");
