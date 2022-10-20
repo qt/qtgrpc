@@ -29,6 +29,8 @@ struct common {
     using FieldDescriptor = ::google::protobuf::FieldDescriptor;
     using EnumDescriptor = ::google::protobuf::EnumDescriptor;
     using FileDescriptor = ::google::protobuf::FileDescriptor;
+    using MethodDescriptor = ::google::protobuf::MethodDescriptor;
+    using ServiceDescriptor = ::google::protobuf::ServiceDescriptor;
 
     enum EnumVisibility {
         GLOBAL_ENUM,
@@ -62,6 +64,9 @@ struct common {
     static TypeMap produceSimpleTypeMap(FieldDescriptor::Type type);
     static TypeMap produceTypeMap(const FieldDescriptor *field, const Descriptor *scope);
     static PropertyMap producePropertyMap(const FieldDescriptor *field, const Descriptor *scope);
+    static MethodMap produceMethodMap(const MethodDescriptor *method, const std::string &scope);
+    static TypeMap produceServiceTypeMap(const ServiceDescriptor *service, const Descriptor *scope);
+    static TypeMap produceClientTypeMap(const ServiceDescriptor *service, const Descriptor *scope);
     static std::string qualifiedName(const std::string &name);
     static bool isLocalEnum(const EnumDescriptor *type, const google::protobuf::Descriptor *scope);
     static EnumVisibility enumVisibility(const EnumDescriptor *type, const Descriptor *scope);

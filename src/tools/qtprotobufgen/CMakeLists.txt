@@ -25,6 +25,9 @@ qt_internal_add_tool(${target_name}
         messagedefinitionprinter.cpp messagedefinitionprinter.h
         enumdeclarationprinter.cpp enumdeclarationprinter.h
         enumdefinitionprinter.cpp enumdefinitionprinter.h
+        serverdeclarationprinter.cpp serverdeclarationprinter.h
+        clientdeclarationprinter.cpp clientdeclarationprinter.h
+        clientdefinitionprinter.cpp clientdefinitionprinter.h
     EXTRA_CMAKE_FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/${QT_CMAKE_EXPORT_NAMESPACE}ProtobufToolsMacros.cmake"
         "${CMAKE_CURRENT_SOURCE_DIR}/QtProtocCommandWrapper.cmake"

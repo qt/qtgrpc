@@ -6,3 +6,6 @@ if(QT_FEATURE_qtprotobufgen AND NOT CMAKE_CROSSCOMPILING)
     add_subdirectory(protobufgen)
 endif()
 
+if(QT_FEATURE_grpc)
+    add_subdirectory(grpc)
+endif()

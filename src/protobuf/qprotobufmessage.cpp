@@ -17,7 +17,6 @@ QT_BEGIN_NAMESPACE
     and property(), without depending on what the message is.
 */
 
-
 /*!
     \internal
     Used from generated classes to construct the QProtobufMessage base class.

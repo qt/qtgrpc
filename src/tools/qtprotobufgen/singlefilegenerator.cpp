@@ -3,10 +3,13 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 
 #include "singlefilegenerator.h"
-#include "messagedeclarationprinter.h"
-#include "messagedefinitionprinter.h"
+#include "clientdeclarationprinter.h"
+#include "clientdefinitionprinter.h"
 #include "enumdeclarationprinter.h"
 #include "enumdefinitionprinter.h"
+#include "messagedeclarationprinter.h"
+#include "messagedefinitionprinter.h"
+#include "serverdeclarationprinter.h"
 
 #include "templates.h"
 #include "utils.h"
@@ -40,7 +43,7 @@ bool SingleFileGenerator::Generate(const FileDescriptor *file,
         return false;
     }
 
-    return GenerateMessages(file, generatorContext);
+    return GenerateMessages(file, generatorContext) && GenerateServices(file, generatorContext);
 }
 
 bool SingleFileGenerator::GenerateMessages(const FileDescriptor *file,
@@ -81,7 +84,6 @@ bool SingleFileGenerator::GenerateMessages(const FileDescriptor *file,
 
     externalIncludes.insert("QByteArray");
     externalIncludes.insert("QString");
-
 
     bool hasQtTypes = false;
     common::iterateMessages(file, [&externalIncludes, &hasQtTypes](const Descriptor *message) {
@@ -191,5 +193,161 @@ bool SingleFileGenerator::GenerateMessages(const FileDescriptor *file,
                          "#include \"moc_$source_file$.cpp\"\n");
 
     headerPrinter->Print({{"filename", filename}}, Templates::FooterTemplate());
+    return true;
+}
+
+bool SingleFileGenerator::GenerateServices(const FileDescriptor *file,
+                                           GeneratorContext *generatorContext) const
+{
+    if (file->service_count() <= 0)
+        return true;
+
+    std::set<std::string> internalIncludes;
+
+    const auto filename = utils::extractFileBasename(file->name());
+    const std::string basename = generateBaseName(file, filename);
+    std::unique_ptr<io::ZeroCopyOutputStream> clientHeaderStream(generatorContext->Open(
+            basename + Templates::GrpcClientFileSuffix() + Templates::ProtoFileSuffix() + ".h"));
+    std::unique_ptr<io::ZeroCopyOutputStream> clientSourceStream(generatorContext->Open(
+            basename + Templates::GrpcClientFileSuffix() + Templates::ProtoFileSuffix() + ".cpp"));
+    std::unique_ptr<io::ZeroCopyOutputStream> serviceHeaderStream(generatorContext->Open(
+            basename + Templates::GrpcServiceFileSuffix() + Templates::ProtoFileSuffix() + ".h"));
+    std::shared_ptr<::google::protobuf::io::Printer> clientHeaderPrinter(
+            new ::google::protobuf::io::Printer(clientHeaderStream.get(), '$'));
+    std::shared_ptr<::google::protobuf::io::Printer> clientSourcePrinter(
+            new ::google::protobuf::io::Printer(clientSourceStream.get(), '$'));
+    std::shared_ptr<::google::protobuf::io::Printer> serviceHeaderPrinter(
+            new ::google::protobuf::io::Printer(serviceHeaderStream.get(), '$'));
+
+    printDisclaimer(clientHeaderPrinter.get());
+    clientHeaderPrinter->Print({ { "filename", filename + "_client" } },
+                               Templates::PreambleTemplate());
+
+    printDisclaimer(serviceHeaderPrinter.get());
+    serviceHeaderPrinter->Print({ { "filename", filename + "_service" } },
+                                Templates::PreambleTemplate());
+
+    clientHeaderPrinter->Print(Templates::DefaultProtobufIncludesTemplate());
+    if (Options::instance().hasQml())
+        clientHeaderPrinter->Print(Templates::QmlProtobufIncludesTemplate());
+
+    serviceHeaderPrinter->Print(Templates::DefaultProtobufIncludesTemplate());
+    if (Options::instance().hasQml())
+        serviceHeaderPrinter->Print(Templates::QmlProtobufIncludesTemplate());
+
+    printDisclaimer(clientSourcePrinter.get());
+    clientSourcePrinter->Print({ { "include",
+                                   basename + Templates::GrpcClientFileSuffix()
+                                           + Templates::ProtoFileSuffix() } },
+                               Templates::InternalIncludeTemplate());
+
+    for (int i = 0; i < file->service_count(); i++) {
+        const ServiceDescriptor *service = file->service(i);
+        for (int i = 0; i < service->method_count(); i++) {
+            const MethodDescriptor *method = service->method(i);
+            if (method->input_type()->file() != service->file()) {
+                internalIncludes.insert(
+                        utils::removeFileSuffix(method->input_type()->file()->name())
+                        + Templates::ProtoFileSuffix());
+            }
+
+            if (method->output_type()->file() != service->file()) {
+                internalIncludes.insert(
+                        utils::removeFileSuffix(method->output_type()->file()->name())
+                        + Templates::ProtoFileSuffix());
+            }
+        }
+    }
+
+    std::set<std::string> externalIncludes;
+    externalIncludes.insert("QAbstractGrpcClient");
+    externalIncludes.insert("QGrpcCallReply");
+    externalIncludes.insert("QGrpcStream");
+
+    if (file->message_type_count() > 0)
+        internalIncludes.insert(basename + Templates::ProtoFileSuffix());
+
+    for (const auto &include : externalIncludes) {
+        clientHeaderPrinter->Print({ { "include", include } },
+                                   Templates::ExternalIncludeTemplate());
+        serviceHeaderPrinter->Print({ { "include", include } },
+                                    Templates::ExternalIncludeTemplate());
+    }
+
+    std::set<std::string> serviceIncludes;
+    serviceIncludes.insert("QAbstractGrpcService");
+    for (const auto &type : serviceIncludes)
+        serviceHeaderPrinter->Print({ { "include", type } }, Templates::ExternalIncludeTemplate());
+
+    for (const auto &include : internalIncludes) {
+        clientHeaderPrinter->Print({ { "include", include } },
+                                   Templates::InternalIncludeTemplate());
+        serviceHeaderPrinter->Print({ { "include", include } },
+                                    Templates::InternalIncludeTemplate());
+    }
+
+    if (Options::instance().hasQml()) {
+        clientSourcePrinter->Print({ { "include", "QQmlEngine" } },
+                                   Templates::ExternalIncludeTemplate());
+        clientSourcePrinter->Print({ { "include", "QJSEngine" } },
+                                   Templates::ExternalIncludeTemplate());
+        clientSourcePrinter->Print({ { "include", "QJSValue" } },
+                                   Templates::ExternalIncludeTemplate());
+    }
+
+    clientHeaderPrinter->PrintRaw("\n");
+    serviceHeaderPrinter->PrintRaw("\n");
+    if (!Options::instance().exportMacro().empty()) {
+        clientHeaderPrinter->Print({ { "export_macro", Options::instance().exportMacro() } },
+                                   Templates::ExportMacroTemplate());
+        serviceHeaderPrinter->Print({ { "export_macro", Options::instance().exportMacro() } },
+                                    Templates::ExportMacroTemplate());
+    }
+
+    const bool hasQtNamespace = (Options::instance().extraNamespace() == "QT_NAMESPACE");
+    const std::string scopeNamespaces = file->message_type_count() > 0
+            ? common::getFullNamespace(file->message_type(0), "::")
+            : common::getFullNamespace(file->enum_type(0), "::");
+    auto openNamespaces = [&](auto printer) { // open namespaces
+        printer->Print("\n");
+        if (hasQtNamespace)
+            printer->PrintRaw("QT_BEGIN_NAMESPACE\n");
+        if (!scopeNamespaces.empty())
+            printer->Print({ { "scope_namespaces", scopeNamespaces } },
+                           Templates::NamespaceTemplate());
+    };
+    openNamespaces(clientHeaderPrinter);
+    openNamespaces(clientSourcePrinter);
+    openNamespaces(serviceHeaderPrinter);
+
+    for (int i = 0; i < file->service_count(); i++) {
+        const ServiceDescriptor *service = file->service(i);
+
+        ClientDeclarationPrinter clientDecl(service, clientHeaderPrinter);
+        clientDecl.run();
+
+        ClientDefinitionPrinter clientDef(service, clientSourcePrinter);
+        clientDef.run();
+
+        ServerDeclarationPrinter serverDecl(service, serviceHeaderPrinter);
+        serverDecl.run();
+    }
+
+    auto closeNamespaces = [&](auto printer) {
+        if (!scopeNamespaces.empty())
+            printer->Print({ { "scope_namespaces", scopeNamespaces } },
+                           Templates::NamespaceClosingTemplate());
+        if (hasQtNamespace)
+            printer->PrintRaw("QT_END_NAMESPACE\n");
+        printer->Print("\n");
+    };
+    closeNamespaces(clientHeaderPrinter);
+    closeNamespaces(clientSourcePrinter);
+    closeNamespaces(serviceHeaderPrinter);
+
+    clientHeaderPrinter->Print({ { "filename", filename + "_client" } },
+                               Templates::FooterTemplate());
+    serviceHeaderPrinter->Print({ { "filename", filename + "_service" } },
+                                Templates::FooterTemplate());
     return true;
 }

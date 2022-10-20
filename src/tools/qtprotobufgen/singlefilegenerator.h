@@ -32,6 +32,8 @@ public:
 private:
     bool GenerateMessages(const ::google::protobuf::FileDescriptor *file,
                           ::google::protobuf::compiler::GeneratorContext *generatorContext) const;
+    bool GenerateServices(const ::google::protobuf::FileDescriptor *file,
+                          ::google::protobuf::compiler::GeneratorContext *generatorContext) const;
 };
 } // namespace QtProtobuf
 

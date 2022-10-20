@@ -267,6 +267,59 @@ TypeMap common::produceSimpleTypeMap(FieldDescriptor::Type type)
              { "setter_type", fullName } };
 }
 
+MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::string &scope)
+{
+    std::string inputTypeName = method->input_type()->full_name();
+    std::string outputTypeName = method->output_type()->full_name();
+    std::string methodName = method->name();
+    std::string methodNameUpper = method->name();
+    methodNameUpper[0] = static_cast<char>(::toupper(methodNameUpper[0]));
+    inputTypeName = utils::replace(inputTypeName, ".", "::");
+    outputTypeName = utils::replace(outputTypeName, ".", "::");
+    return { { "classname", scope },          { "return_type", outputTypeName },
+             { "method_name", methodName },   { "method_name_upper", methodNameUpper },
+             { "param_type", inputTypeName }, { "param_name", "arg" },
+             { "return_name", "ret" } };
+}
+
+TypeMap common::produceServiceTypeMap(const ServiceDescriptor *service, const Descriptor *scope)
+{
+    const std::string name = "Service";
+    const std::string fullName = "Service";
+    const std::string scopeName = service->name();
+    const std::string exportMacro = common::buildExportMacro(Options::instance().exportMacro());
+
+    const std::string namespaces = getFullNamespace(service, "::");
+    const std::string scopeNamespaces = getScopeNamespace(namespaces,
+                                                          getFullNamespace(scope, "::"));
+
+    return { { "classname", name },
+             { "full_type", fullName },
+             { "scope_type", scopeName },
+             { "scope_namespaces", scopeNamespaces },
+             { "parent_class", "QAbstractGrpcService" },
+             { "export_macro", exportMacro } };
+}
+
+TypeMap common::produceClientTypeMap(const ServiceDescriptor *service, const Descriptor *scope)
+{
+    const std::string name = "Client";
+    const std::string fullName = "Client";
+    const std::string scopeName = service->name();
+    const std::string exportMacro = common::buildExportMacro(Options::instance().exportMacro());
+
+    const std::string namespaces = getFullNamespace(service, "::");
+    const std::string scopeNamespaces = getScopeNamespace(namespaces,
+                                                          getFullNamespace(scope, "::"));
+
+    return { { "classname", name },
+             { "full_type", fullName },
+             { "scope_type", scopeName },
+             { "scope_namespaces", scopeNamespaces },
+             { "parent_class", "QAbstractGrpcClient" },
+             { "export_macro", exportMacro } };
+}
+
 bool common::isQtType(const FieldDescriptor *field)
 {
     return utils::startsWith(field->message_type()->full_name(), "QtProtobuf.")

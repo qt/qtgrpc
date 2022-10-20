@@ -1,0 +1,16 @@
+// Copyright (C) 2022 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
+
+/*!
+\page qtgrpc-overview.html
+\title Qt gRPC Overview
+\brief Provides insight into the QtGrpc module.
+
+QtGrpc provides support for comunicating with gRPC services.
+
+QtGrpc together with QtProtobuf allows users to define data and messages in \c proto files,
+and then use the code generators, which generates code allowing accessors for fields
+and gRPC services in the Qt framework.
+Such code allows users to send calls or stream messages to the server.
+
+*/

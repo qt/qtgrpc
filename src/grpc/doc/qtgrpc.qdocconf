@@ -1,0 +1,48 @@
+include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
+
+project                 = QtGrpc
+description             = Qt gRPC Reference Documentation
+version                 = $QT_VERSION
+
+examplesinstallpath     = grpc
+
+qhp.projects            = QtGrpc
+
+qhp.QtGrpc.file                = qtgrpc.qhp
+qhp.QtGrpc.namespace           = org.qt-project.qtgrpc.$QT_VERSION_TAG
+qhp.QtGrpc.virtualFolder       = qtgrpc
+qhp.QtGrpc.indexTitle          = Qt Grpc
+qhp.QtGrpc.indexRoot           =
+
+qhp.QtGrpc.subprojects = qmltypes examples classes
+qhp.QtGrpc.subprojects.qmltypes.title = QML Types
+qhp.QtGrpc.subprojects.qmltypes.indexTitle = Qt gRPC QML Types
+qhp.QtGrpc.subprojects.qmltypes.selectors = qmlclass
+qhp.QtGrpc.subprojects.qmltypes.sortPages = true
+qhp.QtGrpc.subprojects.examples.title = Examples
+qhp.QtGrpc.subprojects.examples.indexTitle = Qt gRPC Examples and Tutorials
+qhp.QtGrpc.subprojects.examples.selectors = doc:example
+qhp.QtGrpc.subprojects.classes.title      = C++ Classes
+qhp.QtGrpc.subprojects.classes.indexTitle = Qt gRPC C++ Classes
+qhp.QtGrpc.subprojects.classes.selectors  = class doc:headerfile
+qhp.QtGrpc.subprojects.classes.sortPages  = true
+
+depends += qtcore qtnetwork
+
+headerdirs  += ..
+
+sourcedirs  += ..
+
+exampledirs +=  ../../../examples/grpc
+
+imagedirs   += images
+
+navigation.landingpage = "Qt gRPC"
+navigation.qmltypespage = "Qt gRPC QML Types"
+navigation.cppclassespage = "Qt gRPC C++ Classes"
+
+tagfile                 = qtgrpc.tags
+
+# Fail the documentation build if there are more warnings than the limit
+warninglimit = 0
+

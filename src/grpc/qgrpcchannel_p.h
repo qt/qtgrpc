@@ -1,0 +1,106 @@
+// Copyright (C) 2022 The Qt Company Ltd.
+// Copyright (C) 2019 Giulio Girardi <giulio.girardi@protechgroup.it>
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+
+#ifndef QGRPCCHANNEL_P_H
+#define QGRPCCHANNEL_P_H
+
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+
+#include <QtCore/QObject>
+#include <QtCore/QThread>
+#include <QtCore/qbytearray.h>
+#include <QtGrpc/qabstractgrpcclient.h>
+#include <QtGrpc/qabstractgrpccredentials.h>
+#include <QtGrpc/qgrpccallreply.h>
+#include <QtGrpc/qgrpcchannel.h>
+#include <QtGrpc/qgrpccredentials.h>
+#include <QtGrpc/qgrpcstream.h>
+
+QT_REQUIRE_CONFIG(native_grpc);
+#include <grpcpp/channel.h>
+#include <grpcpp/impl/codegen/byte_buffer.h>
+#include <grpcpp/impl/codegen/client_context.h>
+#include <grpcpp/impl/codegen/sync_stream.h>
+#include <grpcpp/security/credentials.h>
+
+QT_BEGIN_NAMESPACE
+
+class QGrpcChannelStream : public QObject
+{
+    Q_OBJECT
+
+public:
+    QGrpcChannelStream(grpc::Channel *channel, const QString &method, const QByteArray &data,
+                       QObject *parent = nullptr);
+    ~QGrpcChannelStream();
+
+    void cancel();
+    void start();
+
+Q_SIGNALS:
+    void dataReady(const QByteArray &data);
+    void finished();
+
+public:
+    QGrpcStatus status;
+
+private:
+    QThread *thread;
+    grpc::ClientContext context;
+    grpc::ClientReader<grpc::ByteBuffer> *reader = nullptr;
+};
+
+class QGrpcChannelCall : public QObject
+{
+    Q_OBJECT
+
+public:
+    QGrpcChannelCall(grpc::Channel *channel, const QString &method, const QByteArray &data,
+                     QObject *parent = nullptr);
+    ~QGrpcChannelCall();
+
+    void cancel();
+    void start();
+    void waitForFinished(const QDeadlineTimer &deadline = QDeadlineTimer(QDeadlineTimer::Forever));
+
+Q_SIGNALS:
+    void finished();
+
+public:
+    QGrpcStatus status;
+    QByteArray response;
+
+private:
+    QThread *thread;
+    grpc::ClientContext context;
+};
+
+struct QGrpcChannelPrivate
+{
+    std::shared_ptr<grpc::Channel> m_channel;
+    std::shared_ptr<grpc::ChannelCredentials> m_credentials;
+
+    QGrpcChannelPrivate(const QUrl &url, QGrpcChannel::NativeGrpcChannelCredentials credentialsType,
+                        const QStringList &credentialsList);
+    ~QGrpcChannelPrivate();
+
+    void call(const QString &method, const QString &service, const QByteArray &args,
+              QGrpcCallReply *reply);
+    QGrpcStatus call(const QString &method, const QString &service, const QByteArray &args,
+                     QByteArray &ret);
+    void stream(QGrpcStream *stream, const QString &service, QAbstractGrpcClient *client);
+};
+
+QT_END_NAMESPACE
+
+#endif // QGRPCCHANNEL_P_H

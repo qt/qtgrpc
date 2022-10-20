@@ -317,5 +317,16 @@ function(_qt_internal_preparse_proto_file out_generated_files proto_file)
             "${folder_path}${basename}_protobuftyperegistrations.cpp"
         )
     endif()
+    if(proto_services)
+        if(QT_FEATURE_native_grpc)
+            list(APPEND output_files
+                "${folder_path}${basename}_service.grpc.qpb.h"
+            )
+        endif()
+        list(APPEND output_files
+            "${folder_path}${basename}_client.grpc.qpb.h"
+            "${folder_path}${basename}_client.grpc.qpb.cpp"
+        )
+    endif()
     set(${out_generated_files} "${output_files}" PARENT_SCOPE)
 endfunction()

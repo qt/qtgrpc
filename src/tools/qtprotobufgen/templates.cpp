@@ -244,6 +244,12 @@ const char *Templates::EmptyConstructorTemplate()
 {
     return "$classname$() {}\n";
 }
+
+const char *Templates::QObjectConstructorMessageDeclarationTemplate()
+{
+    return "explicit $classname$(QObject *parent = nullptr);\n";
+}
+
 const char *Templates::CopyConstructorDeclarationTemplate()
 {
     return "$classname$(const $classname$ &other);\n";
@@ -323,8 +329,8 @@ const char *Templates::AssignmentOperatorDeclarationTemplate()
 const char *Templates::AssignmentOperatorDefinitionTemplate()
 {
     return "$classname$ &$classname$::operator =(const $classname$ &other)\n"
-    "{\n"
-    "    QProtobufMessage::operator=(other);\n";
+           "{\n"
+           "    QProtobufMessage::operator=(other);\n";
 }
 const char *Templates::AssignmentOperatorReturnTemplate()
 {
@@ -338,8 +344,8 @@ const char *Templates::MoveAssignmentOperatorDeclarationTemplate()
 const char *Templates::MoveAssignmentOperatorDefinitionTemplate()
 {
     return "$classname$ &$classname$::operator =($classname$ &&other) noexcept\n"
-    "{\n"
-    "    QProtobufMessage::operator=(std::move(other));\n";
+           "{\n"
+           "    QProtobufMessage::operator=(std::move(other));\n";
 }
 
 const char *Templates::EqualOperatorDeclarationTemplate()
@@ -640,8 +646,8 @@ const char *Templates::RepeatedSuffix()
 // Those marked "Limited" have limited usage in QML, since QML only supports signed integers.
 // See https://doc.qt.io/qt-6/qtqml-typesystem-valuetypes.html for types that are supported by the
 // QML JS engine.
-const std::unordered_map<::google::protobuf::FieldDescriptor::Type, std::string> &
-Templates::TypeReflection()
+const std::unordered_map<::google::protobuf::FieldDescriptor::Type, std::string>
+        &Templates::TypeReflection()
 {
     static std::unordered_map<::google::protobuf::FieldDescriptor::Type, std::string> map{
         { ::google::protobuf::FieldDescriptor::TYPE_DOUBLE, "double" },
@@ -666,6 +672,16 @@ Templates::TypeReflection()
 const char *Templates::ProtoFileSuffix()
 {
     return ".qpb";
+}
+
+const char *Templates::GrpcClientFileSuffix()
+{
+    return "_client.grpc";
+}
+
+const char *Templates::GrpcServiceFileSuffix()
+{
+    return "_service.grpc";
 }
 
 const char *Templates::EnumClassSuffix()
@@ -706,4 +722,210 @@ const char *Templates::ExportMacroTemplate()
            "#else\n"
            "#  define QPB_$export_macro$_EXPORT\n"
            "#endif\n";
+}
+
+const char *Templates::ChildClassDeclarationTemplate()
+{
+    return "\nclass $export_macro$ $classname$ : public $parent_class$\n"
+           "{\n"
+           "    Q_OBJECT\n";
+}
+
+const char *Templates::ClientMethodDeclarationSyncTemplate()
+{
+    return "QGrpcStatus $method_name$(const $param_type$ &$param_name$, "
+           "$return_type$ *$return_name$);\n";
+}
+
+const char *Templates::ClientMethodDeclarationAsyncTemplate()
+{
+    return "QSharedPointer<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$);\n";
+}
+
+const char *Templates::ClientMethodDeclarationAsync2Template()
+{
+    return "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$, const QObject "
+           "*context, "
+           "const std::function<void(QSharedPointer<QGrpcCallReply>)> &callback);\n";
+}
+
+const char *Templates::ClientMethodDeclarationQmlTemplate()
+{
+    return "Q_INVOKABLE void $method_name$($param_type$ *$param_name$, const QJSValue &callback, "
+           "const QJSValue &errorCallback);\n";
+}
+
+const char *Templates::ClientMethodDeclarationQml2Template()
+{
+    return "Q_INVOKABLE void $method_name$($param_type$ *$param_name$, $return_type$ "
+           "*$return_name$, const QJSValue &errorCallback);\n";
+}
+
+const char *Templates::ServerMethodDeclarationTemplate()
+{
+    return "Q_INVOKABLE virtual $return_type$ $method_name$(const $param_type$ &$param_name$) = "
+           "0;\n";
+}
+
+const char *Templates::ClientConstructorDefinitionTemplate()
+{
+    return "\n$classname$::$classname$(QObject *parent) : $parent_class$(\"$service_name$\", "
+           "parent)\n"
+           "{\n"
+           "}\n";
+}
+
+const char *Templates::ClientMethodDefinitionSyncTemplate()
+{
+    return "\nQGrpcStatus $classname$::$method_name$(const $param_type$ &$param_name$, "
+           "$return_type$ *$return_name$)\n"
+           "{\n"
+           "    return call<$param_type$>(\"$method_name$\", $param_name$, $return_name$);\n"
+           "}\n";
+}
+
+const char *Templates::ClientMethodDefinitionAsyncTemplate()
+{
+    return "\nQSharedPointer<QGrpcCallReply> $classname$::$method_name$(const $param_type$ "
+           "&$param_name$)\n"
+           "{\n"
+           "    return call<$param_type$>(\"$method_name$\", $param_name$);\n"
+           "}\n";
+}
+
+const char *Templates::ClientMethodDefinitionAsync2Template()
+{
+    return "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$, const QObject "
+           "*context, const std::function<void(QSharedPointer<QGrpcCallReply>)> &callback)\n"
+           "{\n"
+           "    QSharedPointer<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
+           "$param_name$);\n"
+           "    QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, "
+           "callback]() "
+           "{\n"
+           "        callback(reply);\n"
+           "    });\n"
+           "}\n";
+}
+
+const char *Templates::ClientMethodDefinitionQmlTemplate()
+{
+    return "\nvoid $classname$::$method_name$($param_type$ *$param_name$, const QJSValue "
+           "&callback, "
+           "const QJSValue &errorCallback)\n"
+           "{\n"
+           "    if (!callback.isCallable()) {\n"
+           "        qWarning() << \"Unable to call $classname$::$method_name$, callback is not "
+           "callable\";\n"
+           "        return;\n"
+           "    }\n\n"
+           "    if (arg == nullptr) {\n"
+           "        qWarning() << \"Invalid argument provided for method "
+           "$classname$::$method_name$, "
+           "argument of type '$param_type$ *' expected\";\n"
+           "        return;\n"
+           "    }\n\n"
+           "    QJSEngine *jsEngine = qjsEngine(this);\n"
+           "    if (jsEngine == nullptr) {\n"
+           "        qWarning() << \"Unable to call $classname$::$method_name$, it's only callable "
+           "from JS engine context\";\n"
+           "        return;\n"
+           "    }\n\n"
+           "    QSharedPointer<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
+           "*$param_name$);\n"
+           "    reply->subscribe(jsEngine, [this, reply, callback, jsEngine]() {\n"
+           "        auto result = new $return_type$(reply->read<$return_type$>());\n"
+           "        qmlEngine(this)->setObjectOwnership(result, QQmlEngine::JavaScriptOwnership);\n"
+           "        QJSValue(callback).call(QJSValueList{jsEngine->toScriptValue(result)});\n"
+           "    }, [errorCallback, jsEngine](const QGrpcStatus &status) {\n"
+           "        QJSValue(errorCallback).call(QJSValueList{jsEngine->toScriptValue(status)});\n"
+           "    });\n"
+           "}\n";
+}
+
+const char *Templates::ClientMethodDefinitionQml2Template()
+{
+    return "\nvoid $classname$::$method_name$($param_type$ *$param_name$, $return_type$ "
+           "*$return_name$, const QJSValue &errorCallback)\n"
+           "{\n"
+           "    if ($return_name$ == nullptr) {\n"
+           "        qWarning() << \"Invalid argument provided for method "
+           "$classname$::$method_name$, "
+           "argument of type '$return_type$ *' expected\";\n"
+           "        return;\n"
+           "    }\n\n"
+           "    QWeakPointer<$return_type$> safeReturn($return_name$);\n\n"
+           "    if ($param_name$ == nullptr) {\n"
+           "        qWarning() << \"Invalid argument provided for method "
+           "$classname$::$method_name$, "
+           "argument of type '$param_type$ *' expected\";\n"
+           "        return;\n"
+           "    }\n\n"
+           "    QJSEngine *jsEngine = qjsEngine(this);\n"
+           "    if (jsEngine == nullptr) {\n"
+           "        qWarning() << \"Unable to call $classname$::$method_name$, it's only callable "
+           "from JS engine context\";\n"
+           "        return;\n"
+           "    }\n\n"
+           "    QSharedPointer<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
+           "*$param_name$);\n"
+           "    reply->subscribe(jsEngine, [this, reply, jsEngine, safeReturn]() {\n"
+           "        if (safeReturn.isNull()) {\n"
+           "            qWarning() << \"Return value is destroyed. Ignore call result\";\n"
+           "            return;\n"
+           "        }\n"
+           "        *safeReturn = $return_type$(reply->read<$return_type$>());\n"
+           "    }, [errorCallback, jsEngine](const QGrpcStatus &status) {\n"
+           "        QJSValue(errorCallback).call(QJSValueList{jsEngine->toScriptValue(status)});\n"
+           "    });\n"
+           "}\n";
+}
+
+const char *Templates::ClientMethodServerStreamDeclarationTemplate()
+{
+    return "QSharedPointer<QGrpcStream> stream$method_name_upper$(const $param_type$ "
+           "&$param_name$);\n";
+}
+
+const char *Templates::ClientMethodServerStream2DeclarationTemplate()
+{
+    return "QSharedPointer<QGrpcStream> stream$method_name_upper$(const $param_type$ "
+           "&$param_name$, const "
+           "QWeakPointer<$return_type$> &$return_name$);\n";
+}
+
+const char *Templates::ClientMethodServerStreamQmlDeclarationTemplate()
+{
+    return "Q_INVOKABLE QSharedPointer<QGrpcStream> qmlStream$method_name_upper$_p($param_type$ "
+           "*$param_name$, "
+           "$return_type$ *$return_name$);\n";
+}
+
+const char *Templates::ClientMethodServerStreamDefinitionTemplate()
+{
+    return "QSharedPointer<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
+           "&$param_name$)\n"
+           "{\n"
+           "    return stream<$param_type$>(\"$method_name$\", $param_name$);\n"
+           "}\n";
+}
+
+const char *Templates::ClientMethodServerStream2DefinitionTemplate()
+{
+    return "QSharedPointer<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
+           "&$param_name$, const QWeakPointer<$return_type$> &$return_name$)\n"
+           "{\n"
+           "    return stream<$param_type$>(\"$method_name$\", $param_name$, $return_name$);\n"
+           "}\n";
+}
+
+const char *Templates::ClientMethodServerStreamQmlDefinitionTemplate()
+{
+    return "QSharedPointer<QGrpcStream> $classname$::qmlStream$method_name_upper$_p($param_type$ "
+           "*$param_name$, "
+           "$return_type$ *$return_name$)\n"
+           "{\n"
+           "    return stream<$param_type$>(\"$method_name$\", *$param_name$, "
+           "QWeakPointer<$return_type$>($return_name$));\n"
+           "}\n";
 }

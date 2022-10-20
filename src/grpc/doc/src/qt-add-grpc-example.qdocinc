@@ -1,0 +1,28 @@
+\badcode
+cmake_minimum_required(VERSION 3.16...3.22)
+project(MyProject)
+
+find_package(Qt6 REQUIRED COMPONENTS Grpc Protobuf)
+qt_standard_project_setup()
+
+qt_add_protobuf(MyMessages
+    FOLDER
+    PROTO_FILES
+        path/to/message.proto
+        path/to/other_message.proto
+    PROTO_INCLUDES
+        /path/to/proto/include
+)
+target_link_libraries(MyMessages PRIVATE Qt6::Grpc)
+
+qt_add_executable(MyApp main.cpp)
+
+target_link_libraries(MyApp PRIVATE MyMessages)
+\endcode
+
+In the example above we generate a library called \c{MyMessages}
+by calling \l{qt_add_protobuf.html}{qt_add_protobuf()} cmake function.
+Then we are linking generated library with \c{Qt6::Grpc} library.
+
+We then create a target for an executable called \c{MyApp} which we link
+to the \c{MyMessages} library.
