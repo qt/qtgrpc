@@ -48,7 +48,7 @@ std::string extractCompositeOptionValue(const std::string &option)
 void Options::setFromString(const std::string &options)
 {
     Options &instance = mutableInstance();
-    for (const auto &option : utils::split(options, ":")) {
+    for (const auto &option : utils::split(options, ";")) {
         QT_PROTOBUF_DEBUG("option: " << option);
         if (option == QmlPluginOption) {
             QT_PROTOBUF_DEBUG("set m_hasQml: true");

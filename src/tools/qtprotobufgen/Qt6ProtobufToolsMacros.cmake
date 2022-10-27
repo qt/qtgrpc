@@ -64,10 +64,8 @@ function(qt6_add_protobuf target)
         list(APPEND generation_options "FIELD_ENUM")
     endif()
 
-    list(JOIN generation_options ":" generation_options_string)
     if(arg_EXTRA_NAMESPACE)
-        set(generation_options_string
-            "${generation_options_string}:EXTRA_NAMESPACE=\"${arg_EXTRA_NAMESPACE}\"")
+        list(APPEND generation_options "EXTRA_NAMESPACE=${arg_EXTRA_NAMESPACE}")
     endif()
 
     if(TARGET ${target})
@@ -79,8 +77,7 @@ function(qt6_add_protobuf target)
     endif()
     # Add EXPORT_MACRO if the target is, or we will create, a shared library
     if (target_type STREQUAL SHARED_LIBRARY)
-        set(generation_options_string
-            "${generation_options_string}:EXPORT_MACRO=\"${target_upper}\"")
+        list(APPEND generation_options "EXPORT_MACRO=${target_upper}")
     endif()
 
     set(proto_includes "")
@@ -150,15 +147,16 @@ function(qt6_add_protobuf target)
     list(REMOVE_DUPLICATES proto_includes)
     list(JOIN proto_files "\\$<SEMICOLON>"  proto_files_string)
     list(JOIN proto_includes "\\$<SEMICOLON>"  proto_includes_string)
+    list(JOIN generation_options "\\\\$<SEMICOLON>" generation_options_string)
     string(JOIN "\\$<SEMICOLON>" protoc_arguments
         "--plugin=protoc-gen-qtprotobufgen=${qtprotobufgen_file}"
         "--qtprotobufgen_out=${out_dir}"
+        "--qtprotobufgen_opt=${generation_options_string}"
         "${proto_files_string}"
         "${proto_includes_string}"
     )
     add_custom_command(OUTPUT ${generated_files}
         COMMAND ${CMAKE_COMMAND}
-            -DQT_PROTOBUF_OPTIONS=${generation_options_string}
             -DPROTOC_EXECUTABLE=$<TARGET_FILE:WrapProtoc::WrapProtoc>
             -DPROTOC_ARGS=${protoc_arguments}
             -DWORKING_DIRECTORY=${out_dir}

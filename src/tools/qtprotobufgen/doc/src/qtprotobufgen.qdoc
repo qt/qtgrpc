@@ -37,15 +37,20 @@ Usually qtprotobufgen would be invoked through cmake using the
 
 \badcode
     protoc --plugin=protoc-gen-qtprotobuf=<path/to/bin/>qtprotobufgen \
-        --qtprotobuf_out=<output_dir> [-I/extra/proto/include/path] \
+        --qtprotobuf_out="[<options>:]<output_dir>" \
+        [--qtprotobuf_opt="<options>"] \
+        [-I/extra/proto/include/path] \
         <protofile>.proto
 \endcode
 
-To pass options to the generator when invoked manually you must pass the
-corresponding keys as the \c{QT_PROTOBUF_OPTIONS} environment variable. Keys
-need to be presented as a colon-separated list:
+The \c{options} argument is a semicolon-separated list of \l{Options}.
+It can be passed in \e{two} different ways. Either by prepending to the options
+to the output_dir argument, delimited by a colon. Or through a separate
+argument, \c{--qtprotobuf_opt}.
+You also can pass the corresponding keys as the \c{QT_PROTOBUF_OPTIONS}
+environment variable. Keys need to be presented as a semicolon-separated list:
 \badcode
-    export QT_PROTOBUF_OPTIONS="COMMENTS:FOLDER:EXTRA_NAMESPACE=MyTopLevelNamespace"
+    export QT_PROTOBUF_OPTIONS="COMMENTS;FOLDER;EXTRA_NAMESPACE=MyTopLevelNamespace"
 \endcode
 
 \section2 Options

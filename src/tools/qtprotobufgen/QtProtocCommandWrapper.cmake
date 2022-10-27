@@ -2,7 +2,6 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
-
 set(ENV{QT_PROTOBUF_OPTIONS} "${QT_PROTOBUF_OPTIONS}")
 
 execute_process(COMMAND

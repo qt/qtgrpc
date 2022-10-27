@@ -28,6 +28,7 @@ bool GeneratorBase::GenerateAll(const std::vector<const FileDescriptor *> &files
                                 const std::string &parameter, GeneratorContext *generatorContext,
                                 std::string *error) const
 {
+    Options::setFromString(parameter);
     return CodeGenerator::GenerateAll(files, parameter, generatorContext, error);
 }
 
