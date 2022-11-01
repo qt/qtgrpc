@@ -1,0 +1,17 @@
+# Blacklist for testing
+[initTestCase]
+macos arm ci
+[cmakeGeneratedFile_data]
+macos arm ci
+[cmakeGeneratedFile]
+macos arm ci
+[cmdLineGeneratedFile_data]
+macos arm ci
+[cmdLineGeneratedFile]
+macos arm ci
+[cmdLineGeneratedNoOptions_data]
+macos arm ci
+[cmdLineGeneratedNoOptions]
+macos arm ci
+[cleanupTestCase]
+macos arm ci

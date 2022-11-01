@@ -2,3 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 add_subdirectory(protobuf)
+if(QT_FEATURE_qtprotobufgen AND NOT CMAKE_CROSSCOMPILING)
+    add_subdirectory(protobufgen)
+endif()
+
