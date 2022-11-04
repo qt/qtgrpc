@@ -289,6 +289,7 @@ void QGrpcChannelPrivate::stream(QGrpcStream *stream, const QString &service,
                                        if (sub->status.code() != QGrpcStatus::Ok) {
                                            stream->errorOccurred(sub->status);
                                        }
+                                       stream->finished();
                                    });
 
     *abortConnection = QObject::connect(stream, &QGrpcStream::finished, sub.get(),

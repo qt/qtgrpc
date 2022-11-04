@@ -390,9 +390,8 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
                         grpcStream->errorOccurred(QGrpcStatus{
                                 grpcStatus,
                                 QLatin1StringView(networkReply->rawHeader(GrpcStatusMessage)) });
-                    } else {
-                        grpcStream->finished();
                     }
+                    grpcStream->finished();
                     break;
                 }
                 default:

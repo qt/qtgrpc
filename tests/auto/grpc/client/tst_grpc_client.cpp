@@ -260,9 +260,6 @@ void QtGrpcClientTest::StreamStringTest()
 
 void QtGrpcClientTest::StreamStringAndAbortTest()
 {
-    // TODO
-    QSKIP("Fix-me: QTBUG-10821");
-
     SimpleStringMessage result;
     SimpleStringMessage request;
     request.setTestFieldString("Stream");
@@ -284,15 +281,12 @@ void QtGrpcClientTest::StreamStringAndAbortTest()
 
 void QtGrpcClientTest::StreamStringAndDeferredAbortTest()
 {
-    // TODO
-    QSKIP("Fix-me: QTBUG-10821");
-
     SimpleStringMessage result;
     SimpleStringMessage request;
     request.setTestFieldString("Stream");
 
     auto stream = _client->streamTestMethodServerStream(request);
-    QTimer::singleShot(3100, stream.get(), [stream]() { stream->abort(); });
+    QTimer::singleShot(3400, stream.get(), [stream]() { stream->abort(); });
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
@@ -456,9 +450,6 @@ void QtGrpcClientTest::StreamAndGetAsyncReplyTest()
 
 void QtGrpcClientTest::MultipleStreamsTest()
 {
-    // TODO
-    QSKIP("Fix-me: QTBUG-10821");
-
     SimpleStringMessage result;
     SimpleStringMessage request;
     request.setTestFieldString("Stream");
