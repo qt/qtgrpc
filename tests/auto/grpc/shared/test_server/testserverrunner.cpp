@@ -13,6 +13,7 @@
 #include <memory>
 
 namespace {
+
 using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
@@ -48,7 +49,7 @@ Status TestServiceServiceImpl::testMethod(grpc::ServerContext *, const SimpleStr
     qInfo() << "testMethod called with: " << request->testfieldstring();
     response->set_testfieldstring(request->testfieldstring());
     if (request->testfieldstring() == "sleep") {
-        QThread::sleep(1);
+        QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
     }
     return Status();
 }
@@ -62,22 +63,22 @@ Status TestServiceServiceImpl::testMethodServerStream(grpc::ServerContext *,
     SimpleStringMessage msg;
 
     msg.set_testfieldstring(request->testfieldstring() + "1");
-    QThread::sleep(1);
+    QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
     qInfo() << "send back " << (request->testfieldstring() + "1");
     writer->Write(msg);
 
     msg.set_testfieldstring(request->testfieldstring() + "2");
-    QThread::sleep(1);
+    QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
     qInfo() << "send back " << (request->testfieldstring() + "2");
     writer->Write(msg);
 
     msg.set_testfieldstring(request->testfieldstring() + "3");
-    QThread::sleep(1);
+    QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
     qInfo() << "send back " << (request->testfieldstring() + "3");
     writer->Write(msg);
 
     msg.set_testfieldstring(request->testfieldstring() + "4");
-    QThread::sleep(1);
+    QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
     qInfo() << "send back " << (request->testfieldstring() + "4");
     writer->WriteLast(msg, grpc::WriteOptions());
 
