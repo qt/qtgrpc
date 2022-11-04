@@ -7,6 +7,13 @@ endif()
 
 include("${PROJECT_SOURCE_DIR}/src/tools/qtprotobufgen/Qt6ProtobufToolsMacros.cmake")
 
+if(NOT QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC)
+    set(QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC 300)
+endif()
+
+# Set the default message latency for the gRPC tests in milliseconds.
+add_compile_definitions(QT_GRPC_TEST_MESSAGE_LATENCY=${QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC})
+
 if(QT_FEATURE_native_grpc)
     add_subdirectory(shared)
     add_subdirectory(client)
