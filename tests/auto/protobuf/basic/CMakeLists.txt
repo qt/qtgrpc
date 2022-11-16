@@ -146,6 +146,22 @@ qt_internal_add_test(tst_protobuf_deserialization_maptypes
         tst_protobuf_maptypes_gen
 )
 
+qt_internal_add_test(tst_protobuf_non_packed_repeatedtypes
+    SOURCES
+        tst_protobuf_non_packed_repeatedtypes.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::CorePrivate
+)
+qt6_add_protobuf(tst_protobuf_non_packed_repeatedtypes
+    PROTO_FILES
+        proto/repeatednonpackedmessages.proto
+    FIELD_ENUM
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
+)
+qt_autogen_tools_initial_setup(tst_protobuf_non_packed_repeatedtypes)
+
+
 if(UNIX AND NOT CMAKE_CROSSCOMPILING)
     qt_internal_add_test(tst_protobuf_internals
         SOURCES

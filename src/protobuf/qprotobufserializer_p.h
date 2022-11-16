@@ -259,6 +259,35 @@ public:
         return serializedList;
     }
 
+    template<typename V, QtProtobuf::WireTypes W,
+             typename std::enable_if_t<std::is_integral<V>::value
+                                               || std::is_same<V, QtProtobuf::fixed32>::value
+                                               || std::is_same<V, QtProtobuf::sfixed32>::value
+                                               || std::is_same<V, float>::value
+                                               || std::is_same<V, QtProtobuf::fixed64>::value
+                                               || std::is_same<V, QtProtobuf::sfixed64>::value
+                                               || std::is_same<V, double>::value
+                                               || std::is_same<QtProtobuf::int32, V>::value
+                                               || std::is_same<QtProtobuf::int64, V>::value,
+                                       int> = 0>
+    static QByteArray serializeNonPackedListTypeCommon(const QList<V> &listValue,
+                                                       int &outFieldIndex)
+    {
+        qProtoDebug("listValue.count %" PRIdQSIZETYPE " outFieldIndex %d", listValue.count(),
+                    outFieldIndex);
+        QByteArray header = QProtobufSerializerPrivate::encodeHeader(outFieldIndex, W);
+        outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+        QByteArray serializedList;
+        for (auto &value : listValue) {
+            serializedList.append(header);
+            QByteArray element = serializeBasic<V>(value, outFieldIndex);
+            if (element.isEmpty())
+                element.append('\0');
+            serializedList.append(element);
+        }
+        return serializedList;
+    }
+
     //###########################################################################
     //                               Deserializers
     //###########################################################################
@@ -404,6 +433,21 @@ public:
         }
         previousValue.setValue(out);
         return true;
+    }
+
+    template<typename V>
+    Q_REQUIRED_RESULT static bool deserializeNonPackedList(QProtobufSelfcheckIterator &it,
+                                                           QVariant &previousValue)
+    {
+        qProtoDebug("currentByte: 0x%x", *it);
+        QVariant variantValue;
+        if (deserializeBasic<V>(it, variantValue)) {
+            auto out = previousValue.value<QList<V>>();
+            qProtoDebug() << out;
+            out.append(variantValue.value<V>());
+            previousValue.setValue(out);
+        }
+        return false;
     }
 
     //###########################################################################

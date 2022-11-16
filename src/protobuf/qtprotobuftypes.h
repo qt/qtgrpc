@@ -22,7 +22,7 @@ QT_BEGIN_NAMESPACE
 
 namespace QtProtobufPrivate {
 
-enum FieldFlag : uint { NoFlags = 0x0 };
+enum FieldFlag : uint { NoFlags = 0x0, NonPacked = 0x1 };
 
 struct QProtobufPropertyOrdering
 {

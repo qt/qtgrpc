@@ -489,7 +489,7 @@ const Descriptor *common::findHighestMessage(const Descriptor *message)
     return highestMessage;
 }
 
-std::string common::collectFieldFlags([[maybe_unused]] const FieldDescriptor *field)
+std::string common::collectFieldFlags(const FieldDescriptor *field)
 {
     std::string_view separator = " | ";
     std::string_view active_separator;
@@ -502,7 +502,16 @@ std::string common::collectFieldFlags([[maybe_unused]] const FieldDescriptor *fi
         active_separator = separator;
     };
 
-    writeFlag("NoFlags");
+    if (field->type() != FieldDescriptor::TYPE_STRING
+        && field->type() != FieldDescriptor::TYPE_BYTES
+        && field->type() != FieldDescriptor::TYPE_MESSAGE
+        && field->type() != FieldDescriptor::TYPE_ENUM && !field->is_map() && field->is_repeated()
+        && !field->is_packed()) {
+        writeFlag("NonPacked");
+    }
+
+    if (flags.empty())
+        writeFlag("NoFlags");
 
     return flags;
 }
