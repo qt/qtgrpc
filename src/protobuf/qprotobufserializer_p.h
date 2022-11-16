@@ -48,12 +48,11 @@ public:
 
     // SerializationHandlers contains set of objects that required for class serializaion/deserialization
     struct ProtobufSerializationHandler {
+        QMetaType metaType;
         Serializer serializer; // serializer assigned to class
         Deserializer deserializer; // deserializer assigned to class
-        QtProtobuf::WireTypes type; // Serialization WireType
+        QtProtobuf::WireTypes wireType; // Serialization WireType
     };
-
-    using ProtobufSerializerRegistry = QHash<QMetaType, ProtobufSerializationHandler>;
 
     explicit QProtobufSerializerPrivate(QProtobufSerializer *q);
     ~QProtobufSerializerPrivate() = default;
@@ -463,30 +462,6 @@ public:
         return s(variantValue.value<T>(), fieldIndex);
     }
 
-    template <typename T, QByteArray (*s)(const T &, int &), Deserializer d,
-              QtProtobuf::WireTypes type,
-              typename std::enable_if_t<!std::is_base_of<QObject, T>::value, int> = 0>
-    static void wrapSerializer()
-    {
-        handlers[QMetaType::fromType<T>()] = {
-                serializeWrapper<T, s>,
-                d,
-                type
-        };
-    }
-
-    template <typename T, typename S, QByteArray (*s)(const S &, int &), Deserializer d,
-              QtProtobuf::WireTypes type,
-              typename std::enable_if_t<!std::is_base_of<QObject, T>::value, int> = 0>
-    static void wrapSerializer()
-    {
-        handlers[QMetaType::fromType<T>()] = {
-                serializeWrapper<S, s>,
-                d,
-                type
-        };
-    }
-
     // this set of 3 methods is used to skip bytes corresponding to an unexpected property
     // in a serialized message met while the message being deserialized
     static qsizetype skipSerializedFieldBytes(QProtobufSelfcheckIterator &it,
@@ -512,7 +487,6 @@ public:
     QString deserializationErrorString;
 
 private:
-    static ProtobufSerializerRegistry handlers;
     QProtobufSerializer *q_ptr;
 };
 
