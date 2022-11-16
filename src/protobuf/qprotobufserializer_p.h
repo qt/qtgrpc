@@ -38,7 +38,85 @@ using QtProtobufPrivate::QProtobufSelfcheckIterator;
 
 class QProtobufSerializerPrivate
 {
-    Q_DISABLE_COPY_MOVE(QProtobufSerializerPrivate)
+    // The below type trait structures help to determine the required encoding method for protobuf
+    // types.
+    // See https://developers.google.com/protocol-buffers/docs/encoding#cheat-sheet for details.
+
+    // Tests if V is a Varint-compatible unsigned integer type.
+    // uint32 | uint64
+    template<typename V>
+    struct IsUnsignedInt
+        : std::integral_constant<bool, std::is_integral<V>::value && std::is_unsigned<V>::value>
+    {};
+
+    // Tests if V is a Varint-compatible signed integer type.
+    // int32 | int64
+    template<typename V>
+    struct IsSignedInt
+        : std::integral_constant<bool,
+                                 std::is_same<V, QtProtobuf::int32>::value
+                                         || std::is_same<V, QtProtobuf::int64>::value>
+    {};
+
+    // Tests if V is a Varint-compatible signed integer type, with ZigZag encoding support.
+    // sint32 | sint64
+    template<typename V>
+    struct IsZigZagInt
+        : std::integral_constant<bool, std::is_integral<V>::value && std::is_signed<V>::value>
+    {};
+
+    // Tests if V is a Varint-compatible integer type.
+    // int32 | int64 | uint32 | uint64 | sint32 | sint64
+    template<typename V>
+    struct IsInt
+        : std::integral_constant<bool, std::is_integral<V>::value || IsSignedInt<V>::value>
+    {};
+
+    // Tests if V is a 32-bit integer without the need for encoding.
+    // sfixed32 | fixed32
+    template<typename V>
+    struct IsFixed32Int
+        : std::integral_constant<bool,
+                                 std::is_same<V, QtProtobuf::fixed32>::value
+                                         || std::is_same<V, QtProtobuf::sfixed32>::value>
+    {};
+
+    // Tests if V is a 64-bit integer without the need for encoding.
+    // sfixed64 | fixed64
+    template<typename V>
+    struct IsFixed64Int
+        : std::integral_constant<bool,
+                                 std::is_same<V, QtProtobuf::fixed64>::value
+                                         || std::is_same<V, QtProtobuf::sfixed64>::value>
+    {};
+
+    // Tests if V is an integer without the need for encoding.
+    // sfixed32 | fixed32 | sfixed64 | fixed64
+    template<typename V>
+    struct IsFixedInt
+        : std::integral_constant<bool, IsFixed32Int<V>::value || IsFixed64Int<V>::value>
+    {};
+
+    // Tests if V is a 32-bit type without the need for encoding.
+    // sfixed32 | fixed32 | float
+    template<typename V>
+    struct IsI32
+        : std::integral_constant<bool, IsFixed32Int<V>::value || std::is_same<V, float>::value>
+    {};
+
+    // Tests if V is a 64-bit type without the need for encoding.
+    // sfixed64 | fixed64 | double
+    template<typename V>
+    struct IsI64
+        : std::integral_constant<bool, IsFixed64Int<V>::value || std::is_same<V, double>::value>
+    {};
+
+    // Tests if V is a type without the need for encoding.
+    // sfixed32 | fixed32 | float | sfixed64 | fixed64 | double
+    template<typename V>
+    struct IsI32OrI64 : std::integral_constant<bool, IsI64<V>::value || IsI32<V>::value>
+    {};
+
 public:
 
     // Serializer is interface function for serialize method
@@ -60,10 +138,9 @@ public:
     //                               Serializers
     //###########################################################################
 
-    template <typename V,
-              typename std::enable_if_t<std::is_integral<V>::value
-                                        && std::is_unsigned<V>::value, int> = 0>
-    static QByteArray serializeVarintCommon(const V &value) {
+    template<typename V, typename std::enable_if_t<IsUnsignedInt<V>::value, int> = 0>
+    static QByteArray serializeVarintCommon(const V &value)
+    {
         qProtoDebug() << "value" << value;
         V varint = value;
         QByteArray result;
@@ -110,12 +187,9 @@ public:
         outFieldIndex: Index of the value in parent structure (ignored)
         Returns a byte array with 'value' encoded
     */
-    template <typename V,
-              typename std::enable_if_t<std::is_same<V, QtProtobuf::fixed32>::value
-                                        || std::is_same<V, QtProtobuf::fixed64>::value
-                                        || std::is_same<V, QtProtobuf::sfixed32>::value
-                                        || std::is_same<V, QtProtobuf::sfixed64>::value, int> = 0>
-    static QByteArray serializeBasic(const V &value, int &/*outFieldIndex*/) {
+    template<typename V, typename std::enable_if_t<IsFixedInt<V>::value, int> = 0>
+    static QByteArray serializeBasic(const V &value, int & /*outFieldIndex*/)
+    {
         qProtoDebug() << "value" << value;
 
         //Reserve required number of bytes
@@ -134,9 +208,7 @@ public:
         outFieldIndex: Index of the value in parent structure
         Returns a byte array with 'value' encoded
     */
-    template<typename V,
-             typename std::enable_if_t<std::is_integral<V>::value && std::is_signed_v<V>,
-                                       int> = 0>
+    template<typename V, typename std::enable_if_t<IsZigZagInt<V>::value, int> = 0>
     static QByteArray serializeBasic(const V &value, int &outFieldIndex)
     {
         qProtoDebug() << "value" << value;
@@ -149,10 +221,9 @@ public:
         return serializeBasic(uValue, outFieldIndex);
     }
 
-    template <typename V,
-              typename std::enable_if_t<std::is_same<V, QtProtobuf::int32>::value
-                                        || std::is_same<V, QtProtobuf::int64>::value, int> = 0>
-    static QByteArray serializeBasic(const V &value, int &outFieldIndex) {
+    template<typename V, typename std::enable_if_t<IsSignedInt<V>::value, int> = 0>
+    static QByteArray serializeBasic(const V &value, int &outFieldIndex)
+    {
         qProtoDebug() << "value" << value;
         // Non-ZigZag signed integers should always be (de)serialized as the
         // QtProtobuf::uint64
@@ -172,10 +243,9 @@ public:
         outFieldIndex: Index of the value in parent structure
         Returns a byte array with 'value' encoded
     */
-    template <typename V,
-              typename std::enable_if_t<std::is_integral<V>::value
-                                        && std::is_unsigned<V>::value, int> = 0>
-    static QByteArray serializeBasic(const V &value, int &outFieldIndex) {
+    template<typename V, typename std::enable_if_t<IsUnsignedInt<V>::value, int> = 0>
+    static QByteArray serializeBasic(const V &value, int &outFieldIndex)
+    {
         qProtoDebug() << "value" << value;
         quint64 varint = quint64(value);
         QByteArray result;
@@ -212,10 +282,9 @@ public:
     }
 
     //--------------------------List types serializers---------------------------
-    template<typename V,
-             typename std::enable_if_t<!(std::is_same<V, QString>::value
-                                       || std::is_base_of<QObject, V>::value), int> = 0>
-    static QByteArray serializeListType(const QList<V> &listValue, int &outFieldIndex) {
+    template<typename V, typename std::enable_if_t<!std::is_same<V, QString>::value, int> = 0>
+    static QByteArray serializeListType(const QList<V> &listValue, int &outFieldIndex)
+    {
         qProtoDebug("listValue.count %" PRIdQSIZETYPE " outFieldIndex %d", listValue.count(),
                     outFieldIndex);
 
@@ -260,16 +329,7 @@ public:
     }
 
     template<typename V, QtProtobuf::WireTypes W,
-             typename std::enable_if_t<std::is_integral<V>::value
-                                               || std::is_same<V, QtProtobuf::fixed32>::value
-                                               || std::is_same<V, QtProtobuf::sfixed32>::value
-                                               || std::is_same<V, float>::value
-                                               || std::is_same<V, QtProtobuf::fixed64>::value
-                                               || std::is_same<V, QtProtobuf::sfixed64>::value
-                                               || std::is_same<V, double>::value
-                                               || std::is_same<QtProtobuf::int32, V>::value
-                                               || std::is_same<QtProtobuf::int64, V>::value,
-                                       int> = 0>
+             typename std::enable_if_t<IsInt<V>::value || IsI32OrI64<V>::value, int> = 0>
     static QByteArray serializeNonPackedListTypeCommon(const QList<V> &listValue,
                                                        int &outFieldIndex)
     {
@@ -291,11 +351,10 @@ public:
     //###########################################################################
     //                               Deserializers
     //###########################################################################
-    template <typename V,
-              typename std::enable_if_t<std::is_integral<V>::value
-                                        && std::is_unsigned<V>::value, int> = 0>
-    Q_REQUIRED_RESULT
-    static std::optional<V> deserializeVarintCommon(QProtobufSelfcheckIterator &it) {
+    template<typename V, typename std::enable_if_t<IsUnsignedInt<V>::value, int> = 0>
+    Q_REQUIRED_RESULT static std::optional<V>
+    deserializeVarintCommon(QProtobufSelfcheckIterator &it)
+    {
         qProtoDebug("currentByte: 0x%x", *it);
 
         quint64 value = 0;
@@ -315,14 +374,10 @@ public:
     }
 
     //-------------Integral and floating point types deserializers---------------
-    template <typename V,
-              typename std::enable_if_t<std::is_floating_point<V>::value
-                                        || std::is_same<V, QtProtobuf::fixed32>::value
-                                        || std::is_same<V, QtProtobuf::fixed64>::value
-                                        || std::is_same<V, QtProtobuf::sfixed32>::value
-                                        || std::is_same<V, QtProtobuf::sfixed64>::value, int> = 0>
-    Q_REQUIRED_RESULT
-    static bool deserializeBasic(QProtobufSelfcheckIterator &it, QVariant &variantValue) {
+    template<typename V, typename std::enable_if_t<IsI32OrI64<V>::value, int> = 0>
+    Q_REQUIRED_RESULT static bool deserializeBasic(QProtobufSelfcheckIterator &it,
+                                                   QVariant &variantValue)
+    {
         qsizetype size = sizeof(V);
         if (it.bytesLeft() < size)
             return false;
@@ -332,11 +387,10 @@ public:
         return true;
     }
 
-    template <typename V,
-              typename std::enable_if_t<std::is_integral<V>::value
-                                        && std::is_unsigned<V>::value, int> = 0>
-    Q_REQUIRED_RESULT
-    static bool deserializeBasic(QProtobufSelfcheckIterator &it, QVariant &variantValue) {
+    template<typename V, typename std::enable_if_t<IsUnsignedInt<V>::value, int> = 0>
+    Q_REQUIRED_RESULT static bool deserializeBasic(QProtobufSelfcheckIterator &it,
+                                                   QVariant &variantValue)
+    {
         qProtoDebug("currentByte: 0x%x", *it);
 
         auto opt = deserializeVarintCommon<V>(it);
@@ -346,8 +400,7 @@ public:
         return true;
     }
 
-    template<typename V,
-             typename std::enable_if_t<std::is_integral<V>::value && std::is_signed_v<V>, int> = 0>
+    template<typename V, typename std::enable_if_t<IsZigZagInt<V>::value, int> = 0>
     Q_REQUIRED_RESULT static bool deserializeBasic(QProtobufSelfcheckIterator &it,
                                                    QVariant &variantValue)
     {
@@ -362,10 +415,7 @@ public:
         return true;
     }
 
-    template<typename V,
-             typename std::enable_if_t<std::is_same<QtProtobuf::int32, V>::value
-                                               || std::is_same<QtProtobuf::int64, V>::value,
-                                       int> = 0>
+    template<typename V, typename std::enable_if_t<IsSignedInt<V>::value, int> = 0>
     Q_REQUIRED_RESULT static bool deserializeBasic(QProtobufSelfcheckIterator &it,
                                                    QVariant &variantValue)
     {
@@ -409,10 +459,10 @@ public:
     }
 
     //-------------------------List types deserializers--------------------------
-    template <typename V,
-              typename std::enable_if_t<!std::is_base_of<QObject, V>::value, int> = 0>
-    Q_REQUIRED_RESULT
-    static bool deserializeList(QProtobufSelfcheckIterator &it, QVariant &previousValue) {
+    template<typename V>
+    Q_REQUIRED_RESULT static bool deserializeList(QProtobufSelfcheckIterator &it,
+                                                  QVariant &previousValue)
+    {
         qProtoDebug("currentByte: 0x%x", *it);
 
         QList<V> out;
@@ -453,7 +503,8 @@ public:
     //###########################################################################
     //                             Common functions
     //###########################################################################
-    static std::optional<QByteArray> deserializeLengthDelimited(QProtobufSelfcheckIterator &it) {
+    static std::optional<QByteArray> deserializeLengthDelimited(QProtobufSelfcheckIterator &it)
+    {
         if (it.bytesLeft() == 0)
             return std::nullopt;
         qProtoDebug("currentByte: 0x%x", *it);
@@ -469,7 +520,8 @@ public:
         return {result};
     }
 
-    static QByteArray serializeLengthDelimited(const QByteArray &data, bool optional = true) {
+    static QByteArray serializeLengthDelimited(const QByteArray &data, bool optional = true)
+    {
         qProtoDebug("data.size: %" PRIdQSIZETYPE " data: %s", data.size(), data.toHex().data());
         if (optional && data.isEmpty())
             return {};
@@ -496,9 +548,9 @@ public:
         return serializeVarintCommon<uint32_t>(data.size()) + data;
     }
 
-    template <typename T,
-               QByteArray(*s)(const T &, int &)>
-    static QByteArray serializeWrapper(const QVariant &variantValue, int &fieldIndex) {
+    template<typename T, QByteArray (*s)(const T &, int &)>
+    static QByteArray serializeWrapper(const QVariant &variantValue, int &fieldIndex)
+    {
         if (variantValue.isNull()) {
             fieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
             return QByteArray();
@@ -517,9 +569,12 @@ public:
     serializeProperty(const QVariant &propertyValue,
                       const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo);
     Q_REQUIRED_RESULT
-    bool deserializeProperty(QObject *object, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QProtobufSelfcheckIterator &it);
+    bool deserializeProperty(QObject *object,
+                             const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                             QProtobufSelfcheckIterator &it);
 
-    void setDeserializationError(QAbstractProtobufSerializer::DeserializationError error, const QString &errorString);
+    void setDeserializationError(QAbstractProtobufSerializer::DeserializationError error,
+                                 const QString &errorString);
     void clearError();
     void setUnexpectedEndOfStreamError();
 
@@ -531,6 +586,7 @@ public:
     QString deserializationErrorString;
 
 private:
+    Q_DISABLE_COPY_MOVE(QProtobufSerializerPrivate)
     QProtobufSerializer *q_ptr;
 };
 
