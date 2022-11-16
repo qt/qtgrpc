@@ -61,6 +61,12 @@ namespace QtProtobufPrivate {
         return -1;
     }
 
+    uint QProtobufPropertyOrdering::getFieldFlags(int index) const
+    {
+        Q_ASSERT(data);
+        return uint_dataForIndex(index, data->flagsOffset);
+    }
+
     const uint *QProtobufPropertyOrdering::uint_data() const
     {
         Q_ASSERT(data);
@@ -79,7 +85,7 @@ namespace QtProtobufPrivate {
     const char *QProtobufPropertyOrdering::char_data() const
     {
         Q_ASSERT(data);
-        const uint LastOffset = data->propertyIndexOffset;
+        const uint LastOffset = data->flagsOffset;
         const uint *u_data = &uint_dataForIndex(int(data->numFields - 1), LastOffset);
         ++u_data;
         quintptr uptr_data = quintptr(u_data);

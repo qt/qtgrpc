@@ -22,6 +22,8 @@ QT_BEGIN_NAMESPACE
 
 namespace QtProtobufPrivate {
 
+enum FieldFlag : uint { NoFlags = 0x0 };
+
 struct QProtobufPropertyOrdering
 {
     const struct Data {
@@ -29,11 +31,13 @@ struct QProtobufPropertyOrdering
         uint numFields;
         uint fieldNumberOffset;
         uint propertyIndexOffset;
+        uint flagsOffset;
     } *data;
 
     Q_PROTOBUF_EXPORT QUtf8StringView getJsonName(int index) const;
     Q_PROTOBUF_EXPORT int getFieldNumber(int index) const;
     Q_PROTOBUF_EXPORT int getPropertyIndex(int index) const;
+    Q_PROTOBUF_EXPORT uint getFieldFlags(int index) const;
     Q_PROTOBUF_EXPORT int indexOfFieldNumber(int fieldNumber) const;
     inline int fieldCount() const { return int(data->numFields); }
 private:
@@ -58,6 +62,7 @@ struct QProtobufPropertyOrderingInfo
         return (overrideFieldNumber >= 0) ? overrideFieldNumber : ordering.getFieldNumber(index);
     }
     inline int getPropertyIndex() const { return ordering.getPropertyIndex(index); }
+    inline uint getFieldFlags() const { return ordering.getFieldFlags(index); }
 
     // Needed for maps, which uses field number 1 and 2 for key and value respectively
     QProtobufPropertyOrderingInfo infoForMapKey() const { return { ordering, index, 1 }; }

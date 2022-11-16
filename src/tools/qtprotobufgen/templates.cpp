@@ -552,6 +552,11 @@ const char *Templates::QtPropertyIndicesUintDataTemplate()
     return "$property_index$, /* = $json_name$ */\n";
 }
 
+const char *Templates::FieldFlagsUintDataTemplate()
+{
+    return "$field_flags$, /* = $json_name$ */\n";
+}
+
 const char *Templates::PropertyOrderingDataOpeningTemplate()
 {
     return "static constexpr struct {\n"
@@ -565,6 +570,7 @@ const char *Templates::PropertyOrderingDataOpeningTemplate()
            "        $num_fields$, /* = num fields */\n"
            "        $field_number_offset$, /* = field number offset */\n"
            "        $property_index_offset$, /* = property index offset */\n"
+           "        $field_flags_offset$, /* = field flags offset */\n"
            "    },\n";
 }
 

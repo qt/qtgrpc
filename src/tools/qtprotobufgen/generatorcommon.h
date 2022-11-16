@@ -81,6 +81,8 @@ struct common {
 
     static bool isNested(const Descriptor *message);
     static const Descriptor *findHighestMessage(const Descriptor *message);
+
+    static std::string collectFieldFlags(const google::protobuf::FieldDescriptor *field);
 };
 } // namespace QtProtobuf::generator
 

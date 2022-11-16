@@ -488,3 +488,21 @@ const Descriptor *common::findHighestMessage(const Descriptor *message)
         highestMessage = highestMessage->containing_type();
     return highestMessage;
 }
+
+std::string common::collectFieldFlags([[maybe_unused]] const FieldDescriptor *field)
+{
+    std::string_view separator = " | ";
+    std::string_view active_separator;
+    std::string flags;
+
+    auto writeFlag = [&](const char *flag) {
+        flags += active_separator;
+        flags += "QtProtobufPrivate::";
+        flags += flag;
+        active_separator = separator;
+    };
+
+    writeFlag("NoFlags");
+
+    return flags;
+}

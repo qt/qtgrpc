@@ -117,6 +117,7 @@ public:
     static const char *JsonNameOffsetsUintDataTemplate();
     static const char *FieldNumbersUintDataTemplate();
     static const char *QtPropertyIndicesUintDataTemplate();
+    static const char *FieldFlagsUintDataTemplate();
     static const char *PropertyOrderingDataOpeningTemplate();
     static const char *PropertyOrderingDataClosingTemplate();
     static const char *PropertyOrderingDefinitionTemplate();

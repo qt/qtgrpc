@@ -7,6 +7,7 @@
 #include <google/protobuf/descriptor.h>
 #include "options.h"
 #include "templates.h"
+#include "generatorcommon.h"
 
 #include <cassert>
 
@@ -86,7 +87,7 @@ void MessageDefinitionPrinter::printRegisterBody()
 void MessageDefinitionPrinter::printFieldsOrdering()
 {
     const int fieldCount = m_descriptor->field_count();
-    constexpr int MetaFieldsCount = 3;
+    constexpr int MetaFieldsCount = 4;
     constexpr int Version = 0;
 
     int uint_dataOffset = 1; // the json name offsets are always stored at offset 0
@@ -99,6 +100,8 @@ void MessageDefinitionPrinter::printFieldsOrdering()
         { "field_number_offset", std::to_string(fieldCount * (uint_dataOffset++) + 1) },
         // +1 for EOS offset in JSON data
         { "property_index_offset", std::to_string(fieldCount * (uint_dataOffset++) + 1) },
+        // +1 for EOS offset in JSON data
+        { "field_flags_offset", std::to_string(fieldCount * (uint_dataOffset++) + 1) },
         // +1 for EOS offset in JSON data
         { "uint_size", std::to_string(fieldCount * MetaFieldsCount + 1) },
         { "char_size", std::to_string(char_dataSize) },
@@ -125,6 +128,9 @@ void MessageDefinitionPrinter::printFieldsOrdering()
     m_printer->Print("// Property indices:\n");
     printUintData(Templates::QtPropertyIndicesUintDataTemplate());
 
+    m_printer->Print("// Field flags:\n");
+    printUintData(Templates::FieldFlagsUintDataTemplate());
+
     Outdent();
     m_printer->Print("},\n");
 
@@ -150,6 +156,7 @@ void MessageDefinitionPrinter::printUintData(const char *templateString)
             { "json_name_offset", std::to_string(jsonOffset) },
             { "field_number", std::to_string(field->number()) },
             { "property_index", std::to_string(++index) },
+            { "field_flags", common::collectFieldFlags(field) },
             { "json_name", field->json_name() },
         };
         m_printer->Print(variables, templateString);
