@@ -13,8 +13,8 @@ qt_feature("qtprotobufgen" PRIVATE
     SECTION "Utilities"
     LABEL "Qt protobuf generator"
     PURPOSE "Provides support for generating Qt-based classes for use with Protocol Buffers."
-    CONDITION TARGET WrapProtobuf::WrapLibProtoc AND TARGET WrapProtobuf::WrapLibProtobuf AND
-        TARGET WrapProtoc::WrapProtoc
+    CONDITION (TARGET WrapProtobuf::WrapLibProtoc AND TARGET WrapProtobuf::WrapLibProtobuf AND
+        TARGET WrapProtoc::WrapProtoc) OR (CMAKE_CROSSCOMPILING AND NOT QT_FORCE_BUILD_TOOLS)
 )
 
 qt_configure_add_summary_section(NAME "QtProtobuf tools")

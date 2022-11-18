@@ -51,7 +51,14 @@ if(Protobuf_FOUND AND TARGET protobuf::protoc)
 endif()
 
 if(NOT __WrapProtoc_protoc_imported_location)
-    find_program(__WrapProtoc_protoc_imported_location NAMES protoc protoc.exe)
+    if(CMAKE_CROSSCOMPILING)
+        set(__WrapProtoc_extra_prefix_paths "${QT_ADDITIONAL_HOST_PACKAGES_PREFIX_PATH}")
+    endif()
+    find_program(__WrapProtoc_protoc_imported_location
+        NAMES protoc protoc.exe
+        PATHS ${__WrapProtoc_extra_prefix_paths}
+        PATH_SUFFIXES bin
+    )
 endif()
 
 if(__WrapProtoc_protoc_imported_location)
