@@ -3,6 +3,189 @@
 
 set(__qt_protobuf_macros_module_base_dir "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 
+# List of the common protoc generator options.
+macro(_qt_internal_get_protoc_common_options option_args single_args multi_args)
+    set(${option_args}
+        COPY_COMMENTS
+        GENERATE_PACKAGE_SUBFOLDERS
+    )
+    set(${single_args}
+        EXTRA_NAMESPACE
+        EXPORT_MACRO
+    )
+
+    set(${multi_args} "")
+endmacro()
+
+# List of arguments common for the protoc generating functions.
+macro(_qt_internal_get_protoc_generate_arguments option_args single_args multi_args)
+    set(${option_args} "")
+    set(${single_args}
+        OUTPUT_DIRECTORY
+        PROTO_FILES_BASE_DIR
+        OUTPUT_HEADERS
+        OUTPUT_TARGETS
+    )
+    set(${multi_args}
+        PROTO_FILES
+        PROTO_INCLUDES
+    )
+endmacro()
+
+# The macro collects options in protoc compatible format. Options are written into out_var.
+# All input arguments are names of the lists containing the corresponding options.
+macro(_qt_internal_get_protoc_options out_var prefix option single multi)
+    set(${out_var} "")
+    foreach(opt IN LISTS ${option})
+        if(${prefix}_${opt})
+            list(APPEND ${out_var} ${opt})
+        endif()
+    endforeach()
+
+    foreach(opt IN LISTS ${single} ${multi})
+        if(${prefix}_${opt})
+            list(APPEND ${out_var} "${opt}=${${prefix}_${opt}}")
+        endif()
+    endforeach()
+endmacro()
+
+# The base function that generates rules to call the protoc executable with the custom generator
+# plugin.
+# Multi-value Arguments:
+#   PROTO_FILES - list of the .proto file paths. Paths should be absolute for the correct work of
+#       this function.
+#   PROTO_INCLUDES - list of the protobuf include paths.
+#   GENERATED_FILES - list of files that are expected
+#                     to be genreated by the custom generator plugin.
+function(_qt_internal_protoc_generate target generator output_directory)
+    cmake_parse_arguments(arg "" "" "PROTO_FILES;PROTO_INCLUDES;GENERATED_FILES" ${ARGN})
+
+    if(NOT arg_PROTO_FILES)
+        message(FATAL_ERROR "PROTO_FILES list is empty.")
+    endif()
+
+    unset(proto_includes)
+    if(arg_PROTO_INCLUDES)
+        set(proto_includes "${arg_PROTO_INCLUDES}")
+    endif()
+
+    if(NOT arg_GENERATED_FILES)
+        set(generated_files "${arg_GENERATED_FILES}")
+        message(FATAL_ERROR
+            "List of generated sources for target '${target}' is empty")
+    endif()
+
+    get_filename_component(output_directory "${output_directory}" REALPATH)
+    file(MAKE_DIRECTORY ${output_directory})
+
+    unset(num_deps)
+    if(TARGET ${target})
+        get_target_property(num_deps ${target} _qt_${generator}_deps_num)
+    endif()
+    if(NOT num_deps)
+        set(num_deps 0)
+    endif()
+    set(deps_target ${target}_${generator}_deps_${num_deps})
+    math(EXPR num_deps "${num_deps} + 1")
+
+    set(generator_file $<TARGET_FILE:${QT_CMAKE_EXPORT_NAMESPACE}::${generator}>)
+
+    unset(proto_includes_string)
+    if(proto_includes)
+        list(JOIN proto_includes "\\$<SEMICOLON>-I"  proto_includes_string)
+        set(proto_includes_string "-I${proto_includes_string}")
+    endif()
+    list(JOIN arg_PROTO_FILES "\\$<SEMICOLON>"  proto_files_string)
+    list(JOIN generation_options "\\\\$<SEMICOLON>" generation_options_string)
+    string(JOIN "\\$<SEMICOLON>" protoc_arguments
+        "--plugin=protoc-gen-${generator}=${generator_file}"
+        "--${generator}_out=${output_directory}"
+        "--${generator}_opt=${generation_options_string}"
+        "${proto_files_string}"
+        "${proto_includes_string}"
+    )
+    add_custom_command(OUTPUT ${generated_files}
+        COMMAND ${CMAKE_COMMAND}
+            -DPROTOC_EXECUTABLE=$<TARGET_FILE:WrapProtoc::WrapProtoc>
+            -DPROTOC_ARGS=${protoc_arguments}
+            -DWORKING_DIRECTORY=${output_directory}
+            -DGENERATOR_NAME=${generator}
+            -P
+            ${__qt_protobuf_macros_module_base_dir}/QtProtocCommandWrapper.cmake
+        WORKING_DIRECTORY ${output_directory}
+        DEPENDS
+            ${QT_CMAKE_EXPORT_NAMESPACE}::${generator}
+            ${proto_files}
+        COMMENT "Generating QtProtobuf ${target} sources for ${generator}..."
+        COMMAND_EXPAND_LISTS
+        VERBATIM
+    )
+    add_custom_target(${deps_target} DEPENDS ${generated_files})
+    set_property(TARGET ${target} APPEND PROPERTY
+        AUTOGEN_TARGET_DEPENDS "${deps_target}")
+    set_property(TARGET ${target} PROPERTY _qt_${generator}_deps_num "${num_deps}")
+    set_source_files_properties(${generated_files} PROPERTIES
+        GENERATED TRUE
+    )
+
+    target_include_directories(${target} PUBLIC "$<BUILD_INTERFACE:${output_directory}>")
+endfunction()
+
+# The function looks for the enum and message definitions inside provided PROTO_FILES and returns
+# list of the absolute .proto file paths, protobuf include paths and files that are expected to be
+# generated by qtprotobufgen.
+# Optional arguments:
+#   GENERATE_PACKAGE_SUBFOLDERS - generated files will be located in package-base subdirectories.
+#
+# Multi-value arguments:
+#   PROTO_FILES - input list of the proto files. May contain either absolute or relative paths.
+function(_qt_internal_protobuf_preparse_proto_files
+    out_proto_files out_proto_includes out_generated_files base_dir)
+
+    cmake_parse_arguments(arg "GENERATE_PACKAGE_SUBFOLDERS" "" "PROTO_FILES" ${ARGN})
+
+    unset(proto_files)
+    unset(proto_includes)
+    unset(output_files)
+    foreach(f IN LISTS arg_PROTO_FILES)
+        if(NOT IS_ABSOLUTE "${f}")
+            set(f "${base_dir}/${f}")
+            get_filename_component(f "${f}" ABSOLUTE)
+        endif()
+        get_filename_component(f "${f}" REALPATH)
+        list(APPEND proto_files "${f}")
+
+        _qt_internal_preparse_proto_file_common(result proto_package "${f}" "message;enum")
+        if(NOT result)
+            message(STATUS "No messages or enums found in ${f}. Skipping.")
+            return()
+        endif()
+
+        get_filename_component(proto_file_base_dir "${f}" DIRECTORY)
+        list(PREPEND proto_includes "${proto_file_base_dir}")
+
+        string(REPLACE "." "/" package_full_path "${proto_package}")
+        set(folder_path "")
+        if(arg_GENERATE_PACKAGE_SUBFOLDERS)
+            set(folder_path "${package_full_path}/")
+        endif()
+
+        get_filename_component(basename "${f}" NAME_WLE)
+        list(APPEND output_files
+            "${folder_path}${basename}.qpb.h"
+            "${folder_path}${basename}.qpb.cpp"
+            "${folder_path}${basename}_protobuftyperegistrations.cpp"
+        )
+    endforeach()
+    list(REMOVE_DUPLICATES proto_files)
+    list(REMOVE_DUPLICATES proto_includes)
+    list(REMOVE_DUPLICATES output_files)
+
+    set(${out_proto_files} "${proto_files}" PARENT_SCOPE)
+    set(${out_proto_includes} "${proto_includes}" PARENT_SCOPE)
+    set(${out_generated_files} "${output_files}" PARENT_SCOPE)
+endfunction()
+
 # TODO Qt6:
 #     - Collect PROTO_INCLUDES from the LINK_LIBRARIES property of TARGET
 #     - Collect proto files from the source files of the ${TARGET}
@@ -10,107 +193,98 @@ set(__qt_protobuf_macros_module_base_dir "${CMAKE_CURRENT_LIST_DIR}" CACHE INTER
 # This function is currently in Technical Preview
 # Its signature and behavior might change.
 function(qt6_add_protobuf target)
-    set(options COPY_COMMENTS GENERATE_PACKAGE_SUBFOLDERS)
-    set(oneValueArgs
-        OUTPUT_DIRECTORY
-        EXTRA_NAMESPACE
-        PROTO_FILES_BASE_DIR
-        OUTPUT_HEADERS
-        OUTPUT_TARGETS
+    _qt_internal_get_protoc_common_options(protoc_option_opt protoc_single_opt protoc_multi_opt)
+    _qt_internal_get_protoc_generate_arguments(protoc_option_arg protoc_single_arg protoc_multi_arg)
+
+    set(option_args
+        ${protoc_option_opt}
+        ${protoc_option_arg}
     )
-    set(multiValueArgs PROTO_FILES PROTO_INCLUDES)
-    cmake_parse_arguments(arg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    unset(proto_files)
-    foreach(proto_file IN LISTS arg_PROTO_FILES)
-        if(NOT IS_ABSOLUTE "${proto_file}")
-            if(arg_PROTO_FILES_BASE_DIR)
-                set(proto_file "${arg_PROTO_FILES_BASE_DIR}/${proto_file}")
-            endif()
-            get_filename_component(proto_file "${proto_file}" ABSOLUTE)
-        endif()
-        get_filename_component(proto_file "${proto_file}" REALPATH)
-        list(APPEND proto_files "${proto_file}")
-    endforeach()
-    list(REMOVE_DUPLICATES proto_files)
+    set(single_args
+        ${protoc_single_opt}
+        ${protoc_single_arg}
+    )
 
-    if(DEFINED arg_OUTPUT_TARGETS)
-        set(${arg_OUTPUT_TARGETS} "")
+    set(multi_args
+        ${protoc_multi_opt}
+        ${protoc_multi_arg}
+    )
+    cmake_parse_arguments(arg "${option_args}" "${single_args}" "${multi_args}" ${ARGN})
+
+    _qt_internal_get_protoc_options(generation_options arg
+        protoc_option_opt protoc_single_opt protoc_multi_opt)
+
+    if(arg_PROTO_FILES_BASE_DIR)
+        set(base_dir "${arg_PROTO_FILES_BASE_DIR}")
+    else()
+        set(base_dir "${CMAKE_CURRENT_SOURCE_DIR}")
     endif()
-
-    if(DEFINED arg_OUTPUT_HEADERS)
-        set(${arg_OUTPUT_HEADERS} "")
-    endif()
-
-    if("${proto_files}" STREQUAL "")
-        message(FATAL_ERROR "PROTO_FILES list is empty.")
-    endif()
-
-    string(TOUPPER "${target}" target_upper)
-
-    set(generation_options "")
-    set(extra_pre_parse_options "")
-
-    if(arg_COPY_COMMENTS)
-        list(APPEND generation_options "COPY_COMMENTS")
-    endif()
-
+    unset(extra_pre_parse_options)
     if(arg_GENERATE_PACKAGE_SUBFOLDERS)
-        list(APPEND generation_options "GENERATE_PACKAGE_SUBFOLDERS")
         list(APPEND extra_pre_parse_options "GENERATE_PACKAGE_SUBFOLDERS")
     endif()
-
-    if(arg_EXTRA_NAMESPACE)
-        list(APPEND generation_options "EXTRA_NAMESPACE=${arg_EXTRA_NAMESPACE}")
+    _qt_internal_protobuf_preparse_proto_files(proto_files proto_includes generated_files
+        "${base_dir}"
+        ${extra_pre_parse_options}
+        PROTO_FILES
+            ${arg_PROTO_FILES}
+    )
+    if(arg_PROTO_INCLUDES)
+        list(APPEND proto_includes ${arg_PROTO_INCLUDES})
     endif()
 
+    set(is_shared FALSE)
+    set(is_static FALSE)
+    set(is_executable FALSE)
     if(TARGET ${target})
         get_target_property(target_type ${target} TYPE)
-    elseif(BUILD_SHARED_LIBS)
-        set(target_type "SHARED_LIBRARY")
+        if(target_type STREQUAL "SHARED_LIBRARY" OR target_type STREQUAL "MODULE_LIBRARY")
+            set(is_shared TRUE)
+        elseif(target_type STREQUAL "STATIC_LIBRARY")
+            set(is_static TRUE)
+        elseif(target_type STREQUAL "EXECUTABLE")
+            set(is_executable TRUE)
+        else()
+            message(FATAL_ERROR "Unsupported target type '${target_type}'.")
+        endif()
     else()
-        set(target_type "STATIC_LIBRARY")
-    endif()
-    # Add EXPORT_MACRO if the target is, or we will create, a shared library
-    if (target_type STREQUAL SHARED_LIBRARY)
-        list(APPEND generation_options "EXPORT_MACRO=${target_upper}")
-    endif()
+        if(BUILD_SHARED_LIBS)
+            set(target_type "SHARED_LIBRARY")
+            set(is_shared TRUE)
+        else()
+            set(target_type "STATIC_LIBRARY")
+            set(is_static TRUE)
+        endif()
 
-    set(proto_includes "")
-    foreach(proto_include IN LISTS arg_PROTO_INCLUDES)
-        get_filename_component(proto_include "${proto_include}" REALPATH)
-        list(APPEND proto_includes "${proto_include}")
-    endforeach()
-
-    unset(generated_files)
-    foreach(proto_file IN LISTS proto_files)
-        get_filename_component(proto_file_base_dir "${proto_file}" DIRECTORY)
-        list(PREPEND proto_includes "-I${proto_file_base_dir}")
-        _qt_internal_preparse_proto_file(preparsed_files "${proto_file}" ${extra_pre_parse_options})
-        list(APPEND generated_files ${preparsed_files})
-    endforeach()
-
-    if(NOT generated_files)
-        message(FATAL_ERROR
-            "Unable to get the list of generated sources for target '${target}'")
+        _qt_internal_add_library(${target})
+        if(DEFINED arg_OUTPUT_TARGETS)
+            list(APPEND ${arg_OUTPUT_TARGETS} "${target}")
+        endif()
     endif()
 
-    list(REMOVE_DUPLICATES generated_files)
-
-    if(NOT DEFINED arg_OUTPUT_DIRECTORY OR "${arg_OUTPUT_DIRECTORY}" STREQUAL "")
-        set(out_dir ${CMAKE_CURRENT_BINARY_DIR})
-    else()
-        set(out_dir ${arg_OUTPUT_DIRECTORY})
+    if(is_static OR is_shared)
+        # Add EXPORT_MACRO if the target is, or we will create, a shared library
+        string(TOUPPER "${target}" target_upper)
+        if (is_shared)
+            list(APPEND generation_options "EXPORT_MACRO=${target_upper}")
+        endif()
+        # Define this so we can conditionally set the export macro
+        target_compile_definitions(${target}
+            PRIVATE "QT_BUILD_${target_upper}_LIB")
     endif()
 
-    get_filename_component(out_dir "${out_dir}" REALPATH)
+    set(output_directory "${CMAKE_CURRENT_BINARY_DIR}")
+    if(DEFINED arg_OUTPUT_DIRECTORY)
+        set(output_directory "${arg_OUTPUT_DIRECTORY}")
+    endif()
 
-    file(MAKE_DIRECTORY ${out_dir})
+    list(TRANSFORM generated_files PREPEND "${output_directory}/")
 
-    list(TRANSFORM generated_files PREPEND "${out_dir}/")
-
-    set_source_files_properties(${generated_files} PROPERTIES
-        GENERATED TRUE
+    _qt_internal_protoc_generate(${target} qtprotobufgen "${output_directory}"
+        PROTO_FILES ${proto_files}
+        PROTO_INCLUDES ${proto_includes}
+        GENERATED_FILES ${generated_files}
     )
 
     # Filter generated headers
@@ -128,80 +302,26 @@ function(qt6_add_protobuf target)
         endif()
     endforeach()
 
-    unset(num_deps)
-    if(TARGET ${target})
-        get_target_property(num_deps ${target} _qt_protobufgen_deps_num)
+    target_sources(${target} PRIVATE ${generated_headers} ${generated_sources})
+
+    if(is_static OR is_shared)
+        set_target_properties(${target}
+            PROPERTIES
+                PUBLIC_HEADER "${generated_headers}"
+                AUTOMOC ON
+        )
     endif()
-    if(NOT num_deps)
-        set(num_deps 0)
-    endif()
-    set(deps_target ${target}_protobufgen_deps_${num_deps})
-    math(EXPR num_deps "${num_deps} + 1")
 
-    set(qtprotobufgen_file $<TARGET_FILE:${QT_CMAKE_EXPORT_NAMESPACE}::qtprotobufgen>)
-
-    list(REMOVE_DUPLICATES proto_includes)
-    list(JOIN proto_files "\\$<SEMICOLON>"  proto_files_string)
-    list(JOIN proto_includes "\\$<SEMICOLON>"  proto_includes_string)
-    list(JOIN generation_options "\\\\$<SEMICOLON>" generation_options_string)
-    string(JOIN "\\$<SEMICOLON>" protoc_arguments
-        "--plugin=protoc-gen-qtprotobufgen=${qtprotobufgen_file}"
-        "--qtprotobufgen_out=${out_dir}"
-        "--qtprotobufgen_opt=${generation_options_string}"
-        "${proto_files_string}"
-        "${proto_includes_string}"
-    )
-    add_custom_command(OUTPUT ${generated_files}
-        COMMAND ${CMAKE_COMMAND}
-            -DPROTOC_EXECUTABLE=$<TARGET_FILE:WrapProtoc::WrapProtoc>
-            -DPROTOC_ARGS=${protoc_arguments}
-            -DWORKING_DIRECTORY=${out_dir}
-            -P
-            ${__qt_protobuf_macros_module_base_dir}/QtProtocCommandWrapper.cmake
-        WORKING_DIRECTORY ${out_dir}
-        DEPENDS
-            ${QT_CMAKE_EXPORT_NAMESPACE}::qtprotobufgen
-            ${proto_files}
-        COMMENT "Generating QtProtobuf ${target} sources..."
-        COMMAND_EXPAND_LISTS
-        VERBATIM
-    )
-    add_custom_target(${deps_target} DEPENDS ${generated_files})
-
-    if(TARGET ${target})
-        target_sources(${target} PRIVATE ${generated_headers} ${generated_sources})
-    else()
-        if(DEFINED arg_OUTPUT_TARGETS)
-            list(APPEND arg_OUTPUT_TARGETS "${target}")
-        endif()
-        _qt_internal_add_library(${target} ${generated_headers} ${generated_sources})
-    endif()
-    set_property(TARGET ${target} APPEND PROPERTY
-        AUTOGEN_TARGET_DEPENDS "${deps_target}")
-
-    set_property(TARGET ${target} PROPERTY _qt_protobufgen_deps_num "${num_deps}")
-
-    set_target_properties(${target}
-        PROPERTIES
-            PUBLIC_HEADER "${generated_headers}"
-            AUTOMOC ON
-    )
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         target_compile_options(${target}
             PRIVATE "/Zc:__cplusplus" "/permissive-" "/bigobj")
     endif()
-    if(NOT target_type STREQUAL "EXECUTABLE")
-        # Define this so we can conditionally set the export macro
-        target_compile_definitions(${target}
-            PRIVATE "QT_BUILD_${target_upper}_LIB")
-    endif()
-
 
     target_link_libraries(${target} PRIVATE
         ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
     )
 
-    if(target_type STREQUAL "STATIC_LIBRARY" OR (WIN32 AND NOT target_type STREQUAL "EXECUTABLE"))
+    if(is_static OR (WIN32 AND NOT is_executable))
         if(TARGET ${target}_protobuf_registration)
             target_sources(${target}_protobuf_registration PRIVATE ${generated_typeregistrations})
         else()
@@ -232,8 +352,6 @@ function(qt6_add_protobuf target)
         target_sources(${target} PRIVATE ${generated_typeregistrations})
     endif()
 
-    target_include_directories(${target} PUBLIC "$<BUILD_INTERFACE:${out_dir}>")
-
     if(DEFINED arg_OUTPUT_HEADERS)
         set(${arg_OUTPUT_HEADERS} "${generated_headers}" PARENT_SCOPE)
     endif()
@@ -254,9 +372,10 @@ if(NOT QT_NO_CREATE_VERSIONLESS_FUNCTIONS)
     endfunction()
 endif()
 
-function(_qt_internal_preparse_proto_file out_generated_files proto_file)
-    cmake_parse_arguments(arg "GENERATE_PACKAGE_SUBFOLDERS" "" "" ${ARGN})
-
+# The common parsing function looking for the 'lookup_keys' definitions inside the 'proto_file'.
+# The function sets the 'out_result' variable to true if one of 'lookup_keys' is found. Also the
+# function writes to the 'out_package' variable the package name that the .proto file belongs to.
+function(_qt_internal_preparse_proto_file_common out_result out_package proto_file lookup_keys)
     if(NOT proto_file OR NOT EXISTS "${proto_file}")
         message(FATAL_ERROR "Unable to scan '${proto_file}': file doesn't exist.")
     endif()
@@ -275,19 +394,14 @@ function(_qt_internal_preparse_proto_file out_generated_files proto_file)
     set(unclosed_braces 0)
     set(in_message_scope FALSE)
 
+    set(found_key FALSE)
+    list(JOIN lookup_keys "|" lookup_keys_regex)
     foreach(item IN LISTS file_content)
         if(item MATCHES "^[\t ]*package[\t ]+([a-zA-Z0-9_.-]+)")
             set(proto_package "${CMAKE_MATCH_1}")
-        elseif(item MATCHES "^[\t ]*message${proto_key_common_regex}")
-            # Skip adding nested messages to the list.
-            if(unclosed_braces EQUAL 0)
-                list(APPEND proto_messages "${CMAKE_MATCH_1}")
-                set(in_message_scope TRUE)
-            endif()
-        elseif(item MATCHES "^[\t ]*service${proto_key_common_regex}")
-            list(APPEND proto_services "${CMAKE_MATCH_1}")
-        elseif(item MATCHES "^[\t ]*enum${proto_key_common_regex}")
-            list(APPEND proto_enums "${CMAKE_MATCH_1}")
+        elseif(item MATCHES "^[\t ]*(${lookup_keys_regex})${proto_key_common_regex}")
+            set(found_key TRUE)
+            break()
         endif()
         if(in_message_scope)
             if(item MATCHES "[^/]*\\{")
@@ -302,31 +416,6 @@ function(_qt_internal_preparse_proto_file out_generated_files proto_file)
         endif()
     endforeach()
 
-    unset(output_files)
-    string(REPLACE "." "/" package_full_path "${proto_package}")
-    get_filename_component(basename "${proto_file}" NAME_WLE)
-
-    set(folder_path "")
-    if(arg_GENERATE_PACKAGE_SUBFOLDERS)
-        set(folder_path "${package_full_path}/")
-    endif()
-    if(proto_messages OR proto_enums)
-        list(APPEND output_files
-            "${folder_path}${basename}.qpb.h"
-            "${folder_path}${basename}.qpb.cpp"
-            "${folder_path}${basename}_protobuftyperegistrations.cpp"
-        )
-    endif()
-    if(proto_services)
-        if(QT_FEATURE_native_grpc)
-            list(APPEND output_files
-                "${folder_path}${basename}_service.grpc.qpb.h"
-            )
-        endif()
-        list(APPEND output_files
-            "${folder_path}${basename}_client.grpc.qpb.h"
-            "${folder_path}${basename}_client.grpc.qpb.cpp"
-        )
-    endif()
-    set(${out_generated_files} "${output_files}" PARENT_SCOPE)
+    set(${out_package} "${proto_package}" PARENT_SCOPE)
+    set(${out_result} "${found_key}" PARENT_SCOPE)
 endfunction()

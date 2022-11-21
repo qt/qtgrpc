@@ -148,6 +148,7 @@ qt_internal_add_test(tst_protobuf_non_packed_repeatedtypes
     LIBRARIES
         Qt::Test
         Qt::CorePrivate
+        Qt::Protobuf
 )
 qt6_add_protobuf(tst_protobuf_non_packed_repeatedtypes
     PROTO_FILES
