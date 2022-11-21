@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package qtgrpc.tests;
+
+message SimpleStringMessage {
+    string testFieldString = 6;
+}
+
+message SimpleIntMessage {
+    sint32 testField= 1;
+}
+
+message BlobMessage {
+    bytes testBytes = 1;
+}
+
+service TestService {
+  rpc testMethod(SimpleStringMessage) returns (SimpleStringMessage) {}
+  rpc testMethodServerStream(SimpleStringMessage) returns (stream SimpleStringMessage) {}
+  rpc testMethodClientStream(stream SimpleStringMessage) returns (SimpleStringMessage) {}
+  rpc testMethodBiStream(stream SimpleStringMessage) returns (stream SimpleStringMessage) {}
+}

@@ -7,8 +7,9 @@
 
 #include "descriptorprinterbase.h"
 
-namespace QtProtobuf::generator {
-class EnumDeclarationPrinter final : public DescriptorPrinterBase<google::protobuf::EnumDescriptor>
+namespace QtProtobuf {
+class EnumDeclarationPrinter final
+        : public qtprotoccommon::DescriptorPrinterBase<google::protobuf::EnumDescriptor>
 {
 public:
     explicit EnumDeclarationPrinter(
@@ -30,6 +31,6 @@ private:
     void printEnumClass();
 };
 
-} // namespace QtProtobuf::generator
+} // namespace QtProtobuf
 
 #endif // ENUMDECLARATIONPRINTER_H

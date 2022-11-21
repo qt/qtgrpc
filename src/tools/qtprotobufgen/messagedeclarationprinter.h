@@ -7,9 +7,10 @@
 
 #include "descriptorprinterbase.h"
 
-namespace QtProtobuf::generator {
+namespace QtProtobuf {
 
-class MessageDeclarationPrinter final : public DescriptorPrinterBase<google::protobuf::Descriptor>
+class MessageDeclarationPrinter final
+        : public qtprotoccommon::DescriptorPrinterBase<google::protobuf::Descriptor>
 {
 public:
     explicit MessageDeclarationPrinter(const ::google::protobuf::Descriptor *message,
@@ -45,6 +46,7 @@ private:
     void printClassDeclarationPrivate();
     void printClassForwardDeclarationPrivate();
 };
-} // namespace QtProtobuf::generator
+
+} // namespace QtProtobuf
 
 #endif // MESSAGEDECLARATIONPRINTER_H

@@ -1,10 +1,6 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
-# The include is needed by Qt::Protobuf tests that use qt6_add_protobuf call to
-# generate the code of protobuf messages for testing.
-include("${CMAKE_CURRENT_SOURCE_DIR}/${QT_CMAKE_EXPORT_NAMESPACE}ProtobufToolsMacros.cmake")
-
 qt_get_tool_target_name(target_name qtprotobufgen)
 qt_internal_add_tool(${target_name}
     TARGET_DESCRIPTION "Qt protobuf generator"
@@ -12,22 +8,12 @@ qt_internal_add_tool(${target_name}
     TOOLS_TARGET Protobuf
     CORE_LIBRARY None
     SOURCES
-        utils.cpp utils.h
-        descriptorprinterbase.h
         main.cpp
-        generatorcommon.cpp generatorcommon.h
-        options.cpp options.h
-        templates.cpp templates.h
-        generatorbase.cpp generatorbase.h
-        singlefilegenerator.cpp singlefilegenerator.h
-        baseprinter.cpp baseprinter.h
+        qprotobufgenerator.cpp qprotobufgenerator.h
         messagedeclarationprinter.cpp messagedeclarationprinter.h
         messagedefinitionprinter.cpp messagedefinitionprinter.h
         enumdeclarationprinter.cpp enumdeclarationprinter.h
         enumdefinitionprinter.cpp enumdefinitionprinter.h
-        serverdeclarationprinter.cpp serverdeclarationprinter.h
-        clientdeclarationprinter.cpp clientdeclarationprinter.h
-        clientdefinitionprinter.cpp clientdefinitionprinter.h
     EXTRA_CMAKE_FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/${QT_CMAKE_EXPORT_NAMESPACE}ProtobufToolsMacros.cmake"
         "${CMAKE_CURRENT_SOURCE_DIR}/QtProtocCommandWrapper.cmake"
@@ -36,6 +22,7 @@ qt_internal_add_tool(${target_name}
     LIBRARIES
         WrapProtobuf::WrapLibProtobuf
         WrapProtobuf::WrapLibProtoc
+        QtProtocCommon
 )
 
 qt_internal_return_unless_building_tools()

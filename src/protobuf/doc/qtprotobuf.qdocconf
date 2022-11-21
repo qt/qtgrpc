@@ -30,7 +30,7 @@ qhp.QtProtobuf.subprojects.classes.sortPages  = true
 depends += qtdoc qtcore qtcmake
 
 {headerdirs,sourcedirs} += ..
-sourcedirs += ../../tools/qtprotobufgen/doc/src
+sourcedirs += ../../tools/doc/src
 
 exampledirs +=  ../../../examples/protobuf
 
