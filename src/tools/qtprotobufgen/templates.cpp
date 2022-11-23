@@ -571,6 +571,7 @@ const char *Templates::PropertyOrderingDataOpeningTemplate()
            "        $field_number_offset$, /* = field number offset */\n"
            "        $property_index_offset$, /* = property index offset */\n"
            "        $field_flags_offset$, /* = field flags offset */\n"
+           "        $message_full_name_size$, /* = message full name length */\n"
            "    },\n";
 }
 

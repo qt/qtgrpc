@@ -32,6 +32,7 @@ private:
     void printFieldsOrdering();
     void printUintData(const char *templateString);
     void printCharData();
+    size_t metaCharDataSize() const;
     size_t charDataSize() const;
 
     void printConstructors();

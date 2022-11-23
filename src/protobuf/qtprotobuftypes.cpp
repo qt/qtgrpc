@@ -20,6 +20,13 @@ namespace QtProtobufPrivate {
     constexpr uint jsonNameOffsetsOffset = 0;
     // Use this constant to make the +/- 1 more easily readable
     constexpr int NullTerminator = 1;
+    QUtf8StringView QProtobufPropertyOrdering::getMessageFullName() const
+    {
+        Q_ASSERT(data);
+        const char *name = char_data();
+        return { name, qsizetype(data->fullPackageNameSize) };
+    }
+
     QUtf8StringView QProtobufPropertyOrdering::getJsonName(int index) const
     {
         Q_ASSERT(data);
@@ -86,8 +93,7 @@ namespace QtProtobufPrivate {
     {
         Q_ASSERT(data);
         const uint LastOffset = data->flagsOffset;
-        const uint *u_data = &uint_dataForIndex(int(data->numFields - 1), LastOffset);
-        ++u_data;
+        const uint *u_data = uint_data() + LastOffset + data->numFields;
         quintptr uptr_data = quintptr(u_data);
         if (size_t(uptr_data) % alignof(char) != 0)
             uptr_data += alignof(char) - size_t(uptr_data) % alignof(char);

@@ -89,22 +89,25 @@ void MessageDefinitionPrinter::printFieldsOrdering()
     const int fieldCount = m_descriptor->field_count();
     constexpr int MetaFieldsCount = 4;
     constexpr int Version = 0;
+    constexpr int NullTerminator = 1;
+    constexpr int FakeJsonNameOffset = 1;
 
-    int uint_dataOffset = 1; // the json name offsets are always stored at offset 0
-    auto char_dataSize = charDataSize();
+    int uint_dataOffset = 1;
+    size_t metadataCharSize = metaCharDataSize();
+    size_t char_dataSize = charDataSize();
+    size_t char_dataSizeTotal = metadataCharSize + NullTerminator + char_dataSize;
     std::map<std::string, std::string> dataVariables = {
         { "version_number", std::to_string(Version) },
         { "classname", m_typeMap["classname"] },
         { "num_fields", std::to_string(fieldCount) },
-        // +1 for EOS offset in JSON data
-        { "field_number_offset", std::to_string(fieldCount * (uint_dataOffset++) + 1) },
-        // +1 for EOS offset in JSON data
-        { "property_index_offset", std::to_string(fieldCount * (uint_dataOffset++) + 1) },
-        // +1 for EOS offset in JSON data
-        { "field_flags_offset", std::to_string(fieldCount * (uint_dataOffset++) + 1) },
-        // +1 for EOS offset in JSON data
-        { "uint_size", std::to_string(fieldCount * MetaFieldsCount + 1) },
-        { "char_size", std::to_string(char_dataSize) },
+        { "field_number_offset",
+          std::to_string(fieldCount * (uint_dataOffset++) + NullTerminator) },
+        { "property_index_offset",
+          std::to_string(fieldCount * (uint_dataOffset++) + NullTerminator) },
+        { "field_flags_offset", std::to_string(fieldCount * (uint_dataOffset++) + NullTerminator) },
+        { "uint_size", std::to_string(fieldCount * MetaFieldsCount + FakeJsonNameOffset) },
+        { "char_size", std::to_string(char_dataSizeTotal) },
+        { "message_full_name_size", std::to_string(metadataCharSize) },
     };
     assert(uint_dataOffset == MetaFieldsCount);
 
@@ -118,7 +121,7 @@ void MessageDefinitionPrinter::printFieldsOrdering()
     printUintData(Templates::JsonNameOffsetsUintDataTemplate());
     // Include an extra offset which points to the end-of-string, so we can efficiently get the
     // length of all the strings by subtracting adjacent offsets:
-    m_printer->Print({ { "json_name_offset", std::to_string(char_dataSize - 1) },
+    m_printer->Print({ { "json_name_offset", std::to_string(char_dataSizeTotal - NullTerminator) },
                        { "json_name", "end-of-string-marker" } },
                      Templates::JsonNameOffsetsUintDataTemplate());
 
@@ -135,9 +138,7 @@ void MessageDefinitionPrinter::printFieldsOrdering()
     m_printer->Print("},\n");
 
     // char_data
-    m_printer->Print("// char_data\n\"");
     printCharData();
-    m_printer->Print("\"\n");
     Outdent();
 
     m_printer->Print(m_typeMap, Templates::PropertyOrderingDataClosingTemplate());
@@ -147,7 +148,9 @@ void MessageDefinitionPrinter::printFieldsOrdering()
 
 void MessageDefinitionPrinter::printUintData(const char *templateString)
 {
-    size_t jsonOffset = 0;
+    constexpr size_t NullTerminator = 1;
+    // JSon data starts where string metadata ends
+    size_t jsonOffset = metaCharDataSize() + NullTerminator;
     int index = 0;
     const int numFields = m_descriptor->field_count();
     for (int i = 0; i < numFields; ++i) {
@@ -162,12 +165,19 @@ void MessageDefinitionPrinter::printUintData(const char *templateString)
         m_printer->Print(variables, templateString);
 
         const size_t length = field->json_name().length();
-        jsonOffset += length + 1; // +1 for the embedded null terminator
+        jsonOffset += length + NullTerminator;
     }
 }
 
 void MessageDefinitionPrinter::printCharData()
 {
+    m_printer->Print("// char_data\n");
+
+    m_printer->Print("/* metadata char_data: */\n\"");
+    m_printer->Print(m_descriptor->full_name().c_str());
+    m_printer->Print("\\0\" /* = full message name */\n");
+
+    m_printer->Print("/* field char_data: */\n\"");
     const int numFields = m_descriptor->field_count();
     for (int i = 0; i < numFields; ++i) {
         const FieldDescriptor *field = m_descriptor->field(i);
@@ -175,17 +185,23 @@ void MessageDefinitionPrinter::printCharData()
             m_printer->Print("\"\n\"");
         m_printer->Print({ { "json_name", field->json_name() } }, "$json_name$\\0");
     }
+    m_printer->Print("\"\n");
+}
+
+size_t MessageDefinitionPrinter::metaCharDataSize() const
+{
+    return m_descriptor->full_name().size();
 }
 
 size_t MessageDefinitionPrinter::charDataSize() const
 {
-    size_t size = 1; // 1 for the trailing null terminator
+    size_t size = 0;
     const int numFields = m_descriptor->field_count();
     for (int i = 0; i < numFields; ++i) {
         const FieldDescriptor *field = m_descriptor->field(i);
         size += field->json_name().length() + 1; // +1 for the embedded null terminator
     }
-    return size;
+    return size + 1; // 1 for the trailing null terminator
 }
 
 void MessageDefinitionPrinter::printConstructors()

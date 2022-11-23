@@ -39,6 +39,7 @@ void QtProtobufNoPackageTypesGenerationTest::NoPackageSimpleIntMessageTest()
     QCOMPARE(test.testFieldInt(), 1);
 
     QCOMPARE(::SimpleIntMessage::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(), "SimpleIntMessage");
 }
 
 void QtProtobufNoPackageTypesGenerationTest::NoPackageEnumTest()
@@ -79,6 +80,7 @@ void QtProtobufNoPackageTypesGenerationTest::NoPackageExternalTest()
             QVariant::fromValue<SimpleIntMessageExt *>(new SimpleIntMessageExt(intMsg))));
     QCOMPARE(test.property(propertyName).value<SimpleIntMessageExt*>()->testFieldInt(), 42);
     QCOMPARE(test.testField().testFieldInt(), 42);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(), "NoPackageExternalMessage");
 }
 
 void QtProtobufNoPackageTypesGenerationTest::NoPackageMessageTest()
@@ -94,6 +96,7 @@ void QtProtobufNoPackageTypesGenerationTest::NoPackageMessageTest()
             propertyName, QVariant::fromValue<SimpleIntMessage *>(new SimpleIntMessage(intMsg))));
     QCOMPARE(test.property(propertyName).value<SimpleIntMessage*>()->testFieldInt(), 42);
     QCOMPARE(test.testField().testFieldInt(), 42);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(), "NoPackageMessage");
 }
 
 QTEST_MAIN(QtProtobufNoPackageTypesGenerationTest)

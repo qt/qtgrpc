@@ -43,6 +43,8 @@ void QtProtobufTypesGenerationTest::EmptyMessageTest()
 {
     QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::propertyOrdering.fieldCount(), 0);
     QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::staticMetaObject.propertyCount(), 1);
+    QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.EmptyMessage");
 }
 
 void QtProtobufTypesGenerationTest::BoolMessageTest()
@@ -56,6 +58,8 @@ void QtProtobufTypesGenerationTest::BoolMessageTest()
     QCOMPARE(test.testFieldBool(), true);
 
     QCOMPARE(SimpleBoolMessage::TestFieldBoolProtoFieldNumber, 1);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleBoolMessage");
 }
 
 void QtProtobufTypesGenerationTest::IntMessageTest()
@@ -69,6 +73,8 @@ void QtProtobufTypesGenerationTest::IntMessageTest()
     QCOMPARE(test.testFieldInt(), 1);
 
     QCOMPARE(qtprotobufnamespace::tests::SimpleIntMessage::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleIntMessage");
 }
 
 void QtProtobufTypesGenerationTest::SIntMessageTest()
@@ -82,6 +88,8 @@ void QtProtobufTypesGenerationTest::SIntMessageTest()
     QCOMPARE(test.testFieldInt(), 1);
 
     QCOMPARE(SimpleSIntMessage::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleSIntMessage");
 }
 
 void QtProtobufTypesGenerationTest::UIntMessageTest()
@@ -95,6 +103,8 @@ void QtProtobufTypesGenerationTest::UIntMessageTest()
     QCOMPARE(test.testFieldInt(), 1u);
 
     QCOMPARE(SimpleUIntMessage::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleUIntMessage");
 }
 
 void QtProtobufTypesGenerationTest::Int64MessageTest()
@@ -108,6 +118,8 @@ void QtProtobufTypesGenerationTest::Int64MessageTest()
     QCOMPARE(test.testFieldInt(), 1);
 
     QCOMPARE(SimpleInt64Message::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleInt64Message");
 }
 
 void QtProtobufTypesGenerationTest::SInt64MessageTest()
@@ -121,6 +133,8 @@ void QtProtobufTypesGenerationTest::SInt64MessageTest()
     QCOMPARE(test.testFieldInt(), 1);
 
     QCOMPARE(SimpleSInt64Message::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleSInt64Message");
 }
 
 void QtProtobufTypesGenerationTest::UInt64MessageTest()
@@ -134,6 +148,8 @@ void QtProtobufTypesGenerationTest::UInt64MessageTest()
     QCOMPARE(test.testFieldInt(), 1u);
 
     QCOMPARE(SimpleUInt64Message::TestFieldIntProtoFieldNumber, 1u);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleUInt64Message");
 }
 
 void QtProtobufTypesGenerationTest::FixedInt32MessageTest()
@@ -147,6 +163,8 @@ void QtProtobufTypesGenerationTest::FixedInt32MessageTest()
     QCOMPARE(test.testFieldFixedInt32(), 1u);
 
     QCOMPARE(SimpleFixedInt32Message::TestFieldFixedInt32ProtoFieldNumber, 1u);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleFixedInt32Message");
 }
 
 void QtProtobufTypesGenerationTest::FixedInt64MessageTest()
@@ -160,6 +178,8 @@ void QtProtobufTypesGenerationTest::FixedInt64MessageTest()
     QCOMPARE(test.testFieldFixedInt64(), 1u);
 
     QCOMPARE(SimpleFixedInt64Message::TestFieldFixedInt64ProtoFieldNumber, 1u);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleFixedInt64Message");
 }
 
 void QtProtobufTypesGenerationTest::SFixedInt32MessageTest()
@@ -173,6 +193,8 @@ void QtProtobufTypesGenerationTest::SFixedInt32MessageTest()
     QCOMPARE(test.testFieldFixedInt32(), 1);
 
     QCOMPARE(SimpleSFixedInt32Message::TestFieldFixedInt32ProtoFieldNumber, 1);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleSFixedInt32Message");
 }
 
 void QtProtobufTypesGenerationTest::SFixedInt64MessageTest()
@@ -186,6 +208,8 @@ void QtProtobufTypesGenerationTest::SFixedInt64MessageTest()
     QCOMPARE(test.testFieldFixedInt64(), 1);
 
     QCOMPARE(SimpleSFixedInt64Message::TestFieldFixedInt64ProtoFieldNumber, 1);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleSFixedInt64Message");
 }
 
 void QtProtobufTypesGenerationTest::StringMessageTest()
@@ -201,6 +225,8 @@ void QtProtobufTypesGenerationTest::StringMessageTest()
     QCOMPARE(test.testFieldString(), QStringLiteral("test1"));
 
     QCOMPARE(SimpleStringMessage::TestFieldStringProtoFieldNumber, 6);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleStringMessage");
 }
 
 void QtProtobufTypesGenerationTest::FloatMessageTest()
@@ -218,6 +244,8 @@ void QtProtobufTypesGenerationTest::FloatMessageTest()
     QCOMPARE(test.testFieldFloat(), assignedValue);
 
     QCOMPARE(SimpleFloatMessage::TestFieldFloatProtoFieldNumber, 7);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleFloatMessage");
 }
 
 void QtProtobufTypesGenerationTest::DoubleMessageTest()
@@ -235,6 +263,8 @@ void QtProtobufTypesGenerationTest::DoubleMessageTest()
     QCOMPARE(test.testFieldDouble(), assignedValue);
 
     QCOMPARE(SimpleDoubleMessage::TestFieldDoubleProtoFieldNumber, 8);
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleDoubleMessage");
 }
 
 void QtProtobufTypesGenerationTest::ComplexMessageTest()
@@ -267,6 +297,8 @@ void QtProtobufTypesGenerationTest::BytesMessageTest()
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QByteArray>("\x01\x02\x03\x04\x05")));
     QCOMPARE(test.property(propertyName).toByteArray(), QByteArray("\x01\x02\x03\x04\x05"));
     QCOMPARE(test.testFieldBytes(), QByteArray("\x01\x02\x03\x04\x05"));
+    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+             "qtprotobufnamespace.tests.SimpleBytesMessage");
 }
 
 void QtProtobufTypesGenerationTest::AssignmentOperatorTest()

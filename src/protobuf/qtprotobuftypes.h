@@ -32,8 +32,10 @@ struct QProtobufPropertyOrdering
         uint fieldNumberOffset;
         uint propertyIndexOffset;
         uint flagsOffset;
+        uint fullPackageNameSize;
     } *data;
 
+    Q_PROTOBUF_EXPORT QUtf8StringView getMessageFullName() const;
     Q_PROTOBUF_EXPORT QUtf8StringView getJsonName(int index) const;
     Q_PROTOBUF_EXPORT int getFieldNumber(int index) const;
     Q_PROTOBUF_EXPORT int getPropertyIndex(int index) const;
