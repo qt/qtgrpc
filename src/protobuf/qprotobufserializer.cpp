@@ -67,7 +67,7 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
 /*!
     \class QProtobufSerializer
     \inmodule QtProtobuf
-    \since 6.4
+    \since 6.5
     \brief The QProtobufSerializer class is interface that represents
            basic functions for serialization/deserialization.
     \reentrant

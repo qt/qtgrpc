@@ -11,7 +11,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \class QAbstractProtobufSerializer
     \inmodule QtProtobuf
-    \since 6.4
+    \since 6.5
     \brief The QAbstractProtobufSerializer class is interface that represents
            basic functions for serialization/deserialization.
     \reentrant
