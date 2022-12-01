@@ -348,7 +348,7 @@ QByteArray QProtobufSerializer::serializeMessage(
 void QProtobufSerializerPrivate::setUnexpectedEndOfStreamError()
 {
     setDeserializationError(QAbstractProtobufSerializer::UnexpectedEndOfStreamError,
-                            QCoreApplication::tr("QtProtobuf", "Unexpected end of stream"));
+                            QCoreApplication::translate("QtProtobuf", "Unexpected end of stream"));
 }
 
 void QProtobufSerializerPrivate::clearError()
@@ -641,8 +641,8 @@ bool QProtobufSerializerPrivate::deserializeProperty(
     if (!QProtobufSerializerPrivate::decodeHeader(it, fieldNumber, wireType)) {
         setDeserializationError(
                 QAbstractProtobufSerializer::InvalidHeaderError,
-                QCoreApplication::tr("QtProtobuf",
-                                     "Message received doesn't contains valid header byte."));
+                QCoreApplication::translate("QtProtobuf",
+                                     "Message received doesn't contain valid header byte."));
         return false;
     }
 
@@ -677,7 +677,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(
             qProtoWarning() << "No deserializer for type" << metaProperty.typeName();
             setDeserializationError(
                     QAbstractProtobufSerializer::NoDeserializerError,
-                    QCoreApplication::tr("QtProtobuf",
+                    QCoreApplication::translate("QtProtobuf",
                                          "No deserializer is registered for type %1"));
             return false;
         }
@@ -704,8 +704,8 @@ bool QProtobufSerializerPrivate::deserializeMapPair(QVariant &key, QVariant &val
         if (!QProtobufSerializerPrivate::decodeHeader(it, mapIndex, type)) {
             setDeserializationError(
                         QAbstractProtobufSerializer::InvalidHeaderError,
-                        QCoreApplication::tr("QtProtobuf",
-                                             "Message received doesn't contains valid header byte."));
+                        QCoreApplication::translate("QtProtobuf",
+                                             "Message received doesn't contain valid header byte."));
             return false;
         }
         if (mapIndex == 1) {
@@ -714,7 +714,7 @@ bool QProtobufSerializerPrivate::deserializeMapPair(QVariant &key, QVariant &val
             auto basicHandler = findIntegratedTypeHandler(metaType, false);
             if (!basicHandler) {
                 // clang-format off
-                QString errorStr = QCoreApplication::tr("QtProtobuf",
+                QString errorStr = QCoreApplication::translate("QtProtobuf",
                                                         "Either there is no deserializer for type "
                                                         "%1 or it is not a builtin type")
                         .arg(QLatin1String(key.typeName()));
@@ -735,7 +735,7 @@ bool QProtobufSerializerPrivate::deserializeMapPair(QVariant &key, QVariant &val
                     qProtoWarning() << "No deserializer for type" << value.typeName();
                     setDeserializationError(
                                 QAbstractProtobufSerializer::NoDeserializerError,
-                                QCoreApplication::tr("QtProtobuf",
+                                QCoreApplication::translate("QtProtobuf",
                                                      "No deserializer is registered for type %1")
                                 .arg(QLatin1String(value.typeName())));
                     return false;
