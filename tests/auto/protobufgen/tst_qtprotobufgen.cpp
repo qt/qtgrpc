@@ -172,17 +172,15 @@ void tst_qtprotobufgen::initTestCase()
     m_protoFiles = QFINDTESTDATA("../shared/data/proto/");
     QVERIFY(!m_protoFiles.isEmpty());
 
-    QString dataPath = QFINDTESTDATA("data");
-    QVERIFY(!dataPath.isEmpty());
-
-    QDir dataDir(dataPath);
-    dataDir.mkdir(QLatin1StringView("cmd_line_generation"));
+    QDir testOutputBaseDir(QCoreApplication::applicationDirPath());
+    testOutputBaseDir.mkdir(QLatin1StringView("cmd_line_generation"));
     QLatin1StringView folders[] = {"comments"_L1, "extra-namespace"_L1,
                                    "fieldenum"_L1, "folder"_L1, "no-options"_L1};
     for (QLatin1StringView folder : folders)
-        dataDir.mkdir("cmd_line_generation/"_L1 + folder);
+        testOutputBaseDir.mkdir("cmd_line_generation/"_L1 + folder);
 
-    m_commandLineGenerated = dataDir.absolutePath() + QLatin1StringView("/cmd_line_generation");
+    m_commandLineGenerated = testOutputBaseDir.absolutePath() +
+                             QLatin1StringView("/cmd_line_generation");
     QVERIFY(!m_commandLineGenerated.isEmpty());
 #ifdef Q_OS_MACOS
     if (!protocolCompilerAvailableToRun())
