@@ -15,7 +15,6 @@ qt6_add_protobuf(tst_protobuf_duplicatedmetatypes
     PROTO_FILES
         proto/duplicated_metatypes.proto
         proto/duplicated_metatypes_external.proto
-    FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_duplicatedmetatypes)

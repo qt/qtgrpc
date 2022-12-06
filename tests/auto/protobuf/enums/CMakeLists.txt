@@ -4,7 +4,6 @@
 qt6_add_protobuf(tst_protobuf_enumtypes_gen
     PROTO_FILES
         enummessages.proto
-    FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_enumtypes_gen)

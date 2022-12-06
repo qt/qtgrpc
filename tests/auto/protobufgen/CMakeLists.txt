@@ -21,7 +21,6 @@ qt_add_protobuf(tst_qtprotobufgen
 qt_add_protobuf(tst_qtprotobufgen
     PROTO_FILES
         ../shared/data/proto/fieldindexrange.proto
-    FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/fieldenum"
 )
 

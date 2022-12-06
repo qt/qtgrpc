@@ -5,7 +5,6 @@ qt6_add_protobuf(tst_protobuf_extranamespace_qtprotobuf_gen
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
     PROTO_FILES proto/extranamespace.proto
     EXTRA_NAMESPACE "MyTestNamespace"
-    FIELD_ENUM
 )
 qt_autogen_tools_initial_setup(tst_protobuf_extranamespace_qtprotobuf_gen)
 

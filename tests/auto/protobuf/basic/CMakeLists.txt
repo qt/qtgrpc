@@ -4,7 +4,6 @@
 qt6_add_protobuf(tst_protobuf_basictypes_gen
     PROTO_FILES
         proto/basicmessages.proto
-    FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_basictypes_gen)
@@ -23,7 +22,6 @@ qt_internal_add_test(tst_protobuf_basictypes
 qt6_add_protobuf(tst_protobuf_repeatedtypes_gen
     PROTO_FILES
         proto/repeatedmessages.proto
-    FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_repeatedtypes_gen)
@@ -50,7 +48,6 @@ qt_internal_add_test(tst_protobuf_repeatedtypes
 qt6_add_protobuf(tst_protobuf_maptypes_gen
     PROTO_FILES
         proto/mapmessages.proto
-    FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_maptypes_gen)
@@ -77,7 +74,6 @@ qt_internal_add_test(tst_protobuf_maptypes
 qt6_add_protobuf(tst_protobuf_fieldindexrange_gen
     PROTO_FILES
         proto/fieldindexrange.proto
-    FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_fieldindexrange_gen)
@@ -156,7 +152,6 @@ qt_internal_add_test(tst_protobuf_non_packed_repeatedtypes
 qt6_add_protobuf(tst_protobuf_non_packed_repeatedtypes
     PROTO_FILES
         proto/repeatednonpackedmessages.proto
-    FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_non_packed_repeatedtypes)

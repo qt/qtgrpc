@@ -16,7 +16,7 @@ static const char ExtraNamespaceGenerationOption[] = "EXTRA_NAMESPACE";
 static const char ExportMacroGenerationOption[] = "EXPORT_MACRO";
 
 Options::Options()
-    : m_hasQml(false), m_generateComments(false), m_isFolder(false), m_generateFieldEnum(false)
+    : m_hasQml(false), m_generateComments(false), m_isFolder(false), m_generateFieldEnum(true)
 {
 }
 
@@ -61,8 +61,10 @@ void Options::setFromString(const std::string &options)
             QT_PROTOBUF_DEBUG("set m_isFolder: true");
             instance.m_isFolder = true;
         } else if (option == FieldEnumGenerationOption) {
-            QT_PROTOBUF_DEBUG("set m_generateFieldEnum: true");
-            instance.m_generateFieldEnum = true;
+            // TODO: Opt in this option by default since it's required for
+            // OneOf fields.
+            // QT_PROTOBUF_DEBUG("set m_generateFieldEnum: true");
+            // instance.m_generateFieldEnum = true;
         } else if (option.find(ExtraNamespaceGenerationOption) == 0) {
             instance.m_extraNamespace = extractCompositeOptionValue(option);
             QT_PROTOBUF_DEBUG("set m_extraNamespace: " << instance.m_extraNamespace);

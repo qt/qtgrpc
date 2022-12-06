@@ -5,7 +5,6 @@ qt6_add_protobuf(tst_protobuf_nestedtypes_qtprotobuf_gen
     PROTO_FILES
         proto/nestedmessages.proto
         proto/externalpackage.proto
-    FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_nestedtypes_qtprotobuf_gen)

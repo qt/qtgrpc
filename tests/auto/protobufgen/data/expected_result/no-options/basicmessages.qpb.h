@@ -81,6 +81,11 @@ class  SimpleBoolMessage : public QProtobufMessage
     Q_PROPERTY(bool testFieldBool READ testFieldBool WRITE setTestFieldBool SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldBoolProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleBoolMessage();
     ~SimpleBoolMessage() override;
     SimpleBoolMessage(const SimpleBoolMessage &other);
@@ -114,6 +119,11 @@ class  SimpleIntMessage : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldIntProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleIntMessage();
     ~SimpleIntMessage() override;
     SimpleIntMessage(const SimpleIntMessage &other);
@@ -147,6 +157,11 @@ class  SimpleSIntMessage : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldIntProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleSIntMessage();
     ~SimpleSIntMessage() override;
     SimpleSIntMessage(const SimpleSIntMessage &other);
@@ -180,6 +195,11 @@ class  SimpleUIntMessage : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::uint32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldIntProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleUIntMessage();
     ~SimpleUIntMessage() override;
     SimpleUIntMessage(const SimpleUIntMessage &other);
@@ -213,6 +233,11 @@ class  SimpleInt64Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::int64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldIntProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleInt64Message();
     ~SimpleInt64Message() override;
     SimpleInt64Message(const SimpleInt64Message &other);
@@ -246,6 +271,11 @@ class  SimpleSInt64Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldIntProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleSInt64Message();
     ~SimpleSInt64Message() override;
     SimpleSInt64Message(const SimpleSInt64Message &other);
@@ -279,6 +309,11 @@ class  SimpleUInt64Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::uint64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldIntProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleUInt64Message();
     ~SimpleUInt64Message() override;
     SimpleUInt64Message(const SimpleUInt64Message &other);
@@ -312,6 +347,11 @@ class  SimpleStringMessage : public QProtobufMessage
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldStringProtoFieldNumber = 6,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleStringMessage();
     ~SimpleStringMessage() override;
     SimpleStringMessage(const SimpleStringMessage &other);
@@ -341,6 +381,11 @@ class  SimpleFloatMessage : public QProtobufMessage
     Q_PROPERTY(float testFieldFloat READ testFieldFloat WRITE setTestFieldFloat SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldFloatProtoFieldNumber = 7,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleFloatMessage();
     ~SimpleFloatMessage() override;
     SimpleFloatMessage(const SimpleFloatMessage &other);
@@ -374,6 +419,11 @@ class  SimpleDoubleMessage : public QProtobufMessage
     Q_PROPERTY(double testFieldDouble READ testFieldDouble WRITE setTestFieldDouble SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldDoubleProtoFieldNumber = 8,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleDoubleMessage();
     ~SimpleDoubleMessage() override;
     SimpleDoubleMessage(const SimpleDoubleMessage &other);
@@ -407,6 +457,11 @@ class  SimpleBytesMessage : public QProtobufMessage
     Q_PROPERTY(QByteArray testFieldBytes READ testFieldBytes WRITE setTestFieldBytes SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldBytesProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleBytesMessage();
     ~SimpleBytesMessage() override;
     SimpleBytesMessage(const SimpleBytesMessage &other);
@@ -436,6 +491,11 @@ class  SimpleFixedInt32Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::fixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldFixedInt32ProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleFixedInt32Message();
     ~SimpleFixedInt32Message() override;
     SimpleFixedInt32Message(const SimpleFixedInt32Message &other);
@@ -469,6 +529,11 @@ class  SimpleFixedInt64Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::fixed64 testFieldFixedInt64 READ testFieldFixedInt64 WRITE setTestFieldFixedInt64 SCRIPTABLE false)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldFixedInt64ProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleFixedInt64Message();
     ~SimpleFixedInt64Message() override;
     SimpleFixedInt64Message(const SimpleFixedInt64Message &other);
@@ -502,6 +567,11 @@ class  SimpleSFixedInt32Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sfixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldFixedInt32ProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleSFixedInt32Message();
     ~SimpleSFixedInt32Message() override;
     SimpleSFixedInt32Message(const SimpleSFixedInt32Message &other);
@@ -535,6 +605,11 @@ class  SimpleSFixedInt64Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sfixed64 testFieldFixedInt64 READ testFieldFixedInt64 WRITE setTestFieldFixedInt64 SCRIPTABLE false)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldFixedInt64ProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleSFixedInt64Message();
     ~SimpleSFixedInt64Message() override;
     SimpleSFixedInt64Message(const SimpleSFixedInt64Message &other);
@@ -569,6 +644,12 @@ class  ComplexMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage *testComplexField READ testComplexField_p WRITE setTestComplexField_p)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldIntProtoFieldNumber = 1,
+        TestComplexFieldProtoFieldNumber = 2,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     ComplexMessage();
     ~ComplexMessage() override;
     ComplexMessage(const ComplexMessage &other);

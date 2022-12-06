@@ -34,6 +34,11 @@ class  FieldIndexTest1Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 31,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     FieldIndexTest1Message();
     ~FieldIndexTest1Message() override;
     FieldIndexTest1Message(const FieldIndexTest1Message &other);
@@ -67,6 +72,11 @@ class  FieldIndexTest2Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 8191,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     FieldIndexTest2Message();
     ~FieldIndexTest2Message() override;
     FieldIndexTest2Message(const FieldIndexTest2Message &other);
@@ -100,6 +110,11 @@ class  FieldIndexTest3Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 2097151,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     FieldIndexTest3Message();
     ~FieldIndexTest3Message() override;
     FieldIndexTest3Message(const FieldIndexTest3Message &other);
@@ -133,6 +148,11 @@ class  FieldIndexTest4Message : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 536870911,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     FieldIndexTest4Message();
     ~FieldIndexTest4Message() override;
     FieldIndexTest4Message(const FieldIndexTest4Message &other);

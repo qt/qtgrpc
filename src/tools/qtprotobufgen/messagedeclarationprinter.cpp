@@ -280,10 +280,6 @@ void MessageDeclarationPrinter::printQEnums()
 {
     if (Options::instance().generateFieldEnum()) {
         printFieldEnum();
-        Indent();
-        m_printer->Print({ { "type", Templates::QtProtobufFieldEnum() } }, Templates::QEnumTemplate());
-        Outdent();
-        m_printer->Print("\n");
     }
 
     if (m_descriptor->enum_type_count() <= 0)
@@ -372,14 +368,18 @@ void MessageDeclarationPrinter::printDestructor()
 
 void MessageDeclarationPrinter::printFieldEnum()
 {
-    Indent();
-    m_printer->Print(Templates::FieldEnumTemplate());
-    Indent();
-    common::iterateMessageFields(m_descriptor,
-                                 [&](const FieldDescriptor *, const PropertyMap &propertyMap) {
-                                     m_printer->Print(propertyMap, Templates::FieldNumberTemplate());
-                                 });
-    Outdent();
-    m_printer->Print(Templates::SemicolonBlockEnclosureTemplate());
-    Outdent();
+    if (m_descriptor->field_count() > 0) {
+        Indent();
+        m_printer->Print(Templates::FieldEnumTemplate());
+        Indent();
+        common::iterateMessageFields(m_descriptor,
+                                    [&](const FieldDescriptor *, const PropertyMap &propertyMap) {
+                                        m_printer->Print(propertyMap, Templates::FieldNumberTemplate());
+                                    });
+        Outdent();
+        m_printer->Print(Templates::SemicolonBlockEnclosureTemplate());
+        m_printer->Print({ { "type", Templates::QtProtobufFieldEnum() } }, Templates::QEnumTemplate());
+        Outdent();
+        m_printer->Print("\n");
+    }
 }

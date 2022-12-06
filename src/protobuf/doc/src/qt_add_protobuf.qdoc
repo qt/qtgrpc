@@ -16,7 +16,7 @@ Usually \c{qtprotobufgen} would be invoked through \c cmake using the
 
 \badcode
     qt_add_protobuf(<target>
-        [COMMENTS] [FOLDER] [FIELD_ENUM]
+        [COMMENTS] [FOLDER]
         [OUTPUT_DIRECTORY ""]
         [EXTRA_NAMESPACE ""]
         [OUT_GENERATED_HEADERS <var>]

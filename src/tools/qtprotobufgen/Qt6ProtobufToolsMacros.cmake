@@ -10,7 +10,7 @@ set(__qt_protobuf_macros_module_base_dir "${CMAKE_CURRENT_LIST_DIR}" CACHE INTER
 # This function is currently in Technical Preview
 # Its signature and behavior might change.
 function(qt6_add_protobuf target)
-    set(options COMMENTS FOLDER FIELD_ENUM)
+    set(options COMMENTS FOLDER)
     set(oneValueArgs
         OUTPUT_DIRECTORY
         EXTRA_NAMESPACE
@@ -58,10 +58,6 @@ function(qt6_add_protobuf target)
     if(arg_FOLDER)
         list(APPEND generation_options "FOLDER")
         list(APPEND extra_pre_parse_options "FOLDER")
-    endif()
-
-    if(arg_FIELD_ENUM)
-        list(APPEND generation_options "FIELD_ENUM")
     endif()
 
     if(arg_EXTRA_NAMESPACE)

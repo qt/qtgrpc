@@ -44,6 +44,11 @@ class  AnnotatedMessage1 : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     AnnotatedMessage1();
     ~AnnotatedMessage1() override;
     AnnotatedMessage1(const AnnotatedMessage1 &other);
@@ -77,6 +82,11 @@ class  AnnotatedMessage2 : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     AnnotatedMessage2();
     ~AnnotatedMessage2() override;
     AnnotatedMessage2(const AnnotatedMessage2 &other);
@@ -110,6 +120,11 @@ class  AnnotatedMessage3 : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     AnnotatedMessage3();
     ~AnnotatedMessage3() override;
     AnnotatedMessage3(const AnnotatedMessage3 &other);
@@ -143,6 +158,11 @@ class  AnnotatedMessage4 : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     AnnotatedMessage4();
     ~AnnotatedMessage4() override;
     AnnotatedMessage4(const AnnotatedMessage4 &other);
@@ -176,6 +196,11 @@ class  AnnotatedMessage5 : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     AnnotatedMessage5();
     ~AnnotatedMessage5() override;
     AnnotatedMessage5(const AnnotatedMessage5 &other);
@@ -209,6 +234,11 @@ class  AnnotatedMessage6 : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     AnnotatedMessage6();
     ~AnnotatedMessage6() override;
     AnnotatedMessage6(const AnnotatedMessage6 &other);
@@ -242,6 +272,11 @@ class  AnnotatedMessage7 : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     AnnotatedMessage7();
     ~AnnotatedMessage7() override;
     AnnotatedMessage7(const AnnotatedMessage7 &other);
@@ -275,6 +310,11 @@ class  AnnotatedMessage8 : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     AnnotatedMessage8();
     ~AnnotatedMessage8() override;
     AnnotatedMessage8(const AnnotatedMessage8 &other);
@@ -308,6 +348,11 @@ class  AnnotatedMessage9 : public QProtobufMessage
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     AnnotatedMessage9();
     ~AnnotatedMessage9() override;
     AnnotatedMessage9(const AnnotatedMessage9 &other);

@@ -15,7 +15,6 @@ qt6_add_protobuf(tst_protobuf_externalpackage
     PROTO_FILES
         proto/externalpackage.proto
         proto/externalpackageconsumer.proto
-    FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_externalpackage)

@@ -313,7 +313,7 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
 
         QTest::addRow("fieldindexrange%s", extension.data())
                 << "fieldindexrange"
-                << "FIELD_ENUM"
+                << ""
                 << "/fieldenum/"
                 << QString(extension)
                 << "";

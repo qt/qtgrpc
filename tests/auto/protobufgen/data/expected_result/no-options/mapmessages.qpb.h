@@ -203,6 +203,11 @@ class  SimpleSInt32StringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint32, QString>;
     SimpleSInt32StringMapMessage();
     ~SimpleSInt32StringMapMessage() override;
@@ -237,6 +242,11 @@ class  SimpleSInt64StringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 2,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint64, QString>;
     SimpleSInt64StringMapMessage();
     ~SimpleSInt64StringMapMessage() override;
@@ -271,6 +281,11 @@ class  SimpleInt32StringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 3,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int32, QString>;
     SimpleInt32StringMapMessage();
     ~SimpleInt32StringMapMessage() override;
@@ -305,6 +320,11 @@ class  SimpleInt64StringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 4,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int64, QString>;
     SimpleInt64StringMapMessage();
     ~SimpleInt64StringMapMessage() override;
@@ -339,6 +359,11 @@ class  SimpleUInt32StringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 5,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint32, QString>;
     SimpleUInt32StringMapMessage();
     ~SimpleUInt32StringMapMessage() override;
@@ -373,6 +398,11 @@ class  SimpleUInt64StringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 6,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint64, QString>;
     SimpleUInt64StringMapMessage();
     ~SimpleUInt64StringMapMessage() override;
@@ -407,6 +437,11 @@ class  SimpleFixed32StringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 7,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed32, QString>;
     SimpleFixed32StringMapMessage();
     ~SimpleFixed32StringMapMessage() override;
@@ -441,6 +476,11 @@ class  SimpleFixed64StringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 8,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed64, QString>;
     SimpleFixed64StringMapMessage();
     ~SimpleFixed64StringMapMessage() override;
@@ -475,6 +515,11 @@ class  SimpleSFixed32StringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 9,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed32, QString>;
     SimpleSFixed32StringMapMessage();
     ~SimpleSFixed32StringMapMessage() override;
@@ -509,6 +554,11 @@ class  SimpleSFixed64StringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 10,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed64, QString>;
     SimpleSFixed64StringMapMessage();
     ~SimpleSFixed64StringMapMessage() override;
@@ -543,6 +593,11 @@ class  SimpleStringStringMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringStringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 13,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QString, QString>;
     SimpleStringStringMapMessage();
     ~SimpleStringStringMapMessage() override;
@@ -577,6 +632,11 @@ class  SimpleSInt32SInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint32, QtProtobuf::sint32>;
     SimpleSInt32SInt32MapMessage();
     ~SimpleSInt32SInt32MapMessage() override;
@@ -611,6 +671,11 @@ class  SimpleSInt64SInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 2,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint64, QtProtobuf::sint32>;
     SimpleSInt64SInt32MapMessage();
     ~SimpleSInt64SInt32MapMessage() override;
@@ -645,6 +710,11 @@ class  SimpleInt32SInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 3,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int32, QtProtobuf::sint32>;
     SimpleInt32SInt32MapMessage();
     ~SimpleInt32SInt32MapMessage() override;
@@ -679,6 +749,11 @@ class  SimpleInt64SInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 4,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int64, QtProtobuf::sint32>;
     SimpleInt64SInt32MapMessage();
     ~SimpleInt64SInt32MapMessage() override;
@@ -713,6 +788,11 @@ class  SimpleUInt32SInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 5,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint32, QtProtobuf::sint32>;
     SimpleUInt32SInt32MapMessage();
     ~SimpleUInt32SInt32MapMessage() override;
@@ -747,6 +827,11 @@ class  SimpleUInt64SInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 6,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint64, QtProtobuf::sint32>;
     SimpleUInt64SInt32MapMessage();
     ~SimpleUInt64SInt32MapMessage() override;
@@ -781,6 +866,11 @@ class  SimpleFixed32SInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 7,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed32, QtProtobuf::sint32>;
     SimpleFixed32SInt32MapMessage();
     ~SimpleFixed32SInt32MapMessage() override;
@@ -815,6 +905,11 @@ class  SimpleFixed64SInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 8,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed64, QtProtobuf::sint32>;
     SimpleFixed64SInt32MapMessage();
     ~SimpleFixed64SInt32MapMessage() override;
@@ -849,6 +944,11 @@ class  SimpleSFixed32SInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 9,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed32, QtProtobuf::sint32>;
     SimpleSFixed32SInt32MapMessage();
     ~SimpleSFixed32SInt32MapMessage() override;
@@ -883,6 +983,11 @@ class  SimpleSFixed64SInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 10,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed64, QtProtobuf::sint32>;
     SimpleSFixed64SInt32MapMessage();
     ~SimpleSFixed64SInt32MapMessage() override;
@@ -917,6 +1022,11 @@ class  SimpleStringSInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringSInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 13,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QString, QtProtobuf::sint32>;
     SimpleStringSInt32MapMessage();
     ~SimpleStringSInt32MapMessage() override;
@@ -951,6 +1061,11 @@ class  SimpleSInt32SInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint32, QtProtobuf::sint64>;
     SimpleSInt32SInt64MapMessage();
     ~SimpleSInt32SInt64MapMessage() override;
@@ -985,6 +1100,11 @@ class  SimpleSInt64SInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 2,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint64, QtProtobuf::sint64>;
     SimpleSInt64SInt64MapMessage();
     ~SimpleSInt64SInt64MapMessage() override;
@@ -1019,6 +1139,11 @@ class  SimpleInt32SInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 3,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int32, QtProtobuf::sint64>;
     SimpleInt32SInt64MapMessage();
     ~SimpleInt32SInt64MapMessage() override;
@@ -1053,6 +1178,11 @@ class  SimpleInt64SInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 4,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int64, QtProtobuf::sint64>;
     SimpleInt64SInt64MapMessage();
     ~SimpleInt64SInt64MapMessage() override;
@@ -1087,6 +1217,11 @@ class  SimpleUInt32SInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 5,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint32, QtProtobuf::sint64>;
     SimpleUInt32SInt64MapMessage();
     ~SimpleUInt32SInt64MapMessage() override;
@@ -1121,6 +1256,11 @@ class  SimpleUInt64SInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 6,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint64, QtProtobuf::sint64>;
     SimpleUInt64SInt64MapMessage();
     ~SimpleUInt64SInt64MapMessage() override;
@@ -1155,6 +1295,11 @@ class  SimpleFixed32SInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 7,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed32, QtProtobuf::sint64>;
     SimpleFixed32SInt64MapMessage();
     ~SimpleFixed32SInt64MapMessage() override;
@@ -1189,6 +1334,11 @@ class  SimpleFixed64SInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 8,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed64, QtProtobuf::sint64>;
     SimpleFixed64SInt64MapMessage();
     ~SimpleFixed64SInt64MapMessage() override;
@@ -1223,6 +1373,11 @@ class  SimpleSFixed32SInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 9,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed32, QtProtobuf::sint64>;
     SimpleSFixed32SInt64MapMessage();
     ~SimpleSFixed32SInt64MapMessage() override;
@@ -1257,6 +1412,11 @@ class  SimpleSFixed64SInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 10,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed64, QtProtobuf::sint64>;
     SimpleSFixed64SInt64MapMessage();
     ~SimpleSFixed64SInt64MapMessage() override;
@@ -1291,6 +1451,11 @@ class  SimpleStringSInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringSInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 13,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QString, QtProtobuf::sint64>;
     SimpleStringSInt64MapMessage();
     ~SimpleStringSInt64MapMessage() override;
@@ -1325,6 +1490,11 @@ class  SimpleSInt32UInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint32, QtProtobuf::uint32>;
     SimpleSInt32UInt32MapMessage();
     ~SimpleSInt32UInt32MapMessage() override;
@@ -1359,6 +1529,11 @@ class  SimpleSInt64UInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 2,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint64, QtProtobuf::uint32>;
     SimpleSInt64UInt32MapMessage();
     ~SimpleSInt64UInt32MapMessage() override;
@@ -1393,6 +1568,11 @@ class  SimpleInt32UInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 3,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int32, QtProtobuf::uint32>;
     SimpleInt32UInt32MapMessage();
     ~SimpleInt32UInt32MapMessage() override;
@@ -1427,6 +1607,11 @@ class  SimpleInt64UInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 4,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int64, QtProtobuf::uint32>;
     SimpleInt64UInt32MapMessage();
     ~SimpleInt64UInt32MapMessage() override;
@@ -1461,6 +1646,11 @@ class  SimpleUInt32UInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 5,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint32, QtProtobuf::uint32>;
     SimpleUInt32UInt32MapMessage();
     ~SimpleUInt32UInt32MapMessage() override;
@@ -1495,6 +1685,11 @@ class  SimpleUInt64UInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 6,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint64, QtProtobuf::uint32>;
     SimpleUInt64UInt32MapMessage();
     ~SimpleUInt64UInt32MapMessage() override;
@@ -1529,6 +1724,11 @@ class  SimpleFixed32UInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 7,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed32, QtProtobuf::uint32>;
     SimpleFixed32UInt32MapMessage();
     ~SimpleFixed32UInt32MapMessage() override;
@@ -1563,6 +1763,11 @@ class  SimpleFixed64UInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 8,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed64, QtProtobuf::uint32>;
     SimpleFixed64UInt32MapMessage();
     ~SimpleFixed64UInt32MapMessage() override;
@@ -1597,6 +1802,11 @@ class  SimpleSFixed32UInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 9,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed32, QtProtobuf::uint32>;
     SimpleSFixed32UInt32MapMessage();
     ~SimpleSFixed32UInt32MapMessage() override;
@@ -1631,6 +1841,11 @@ class  SimpleSFixed64UInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 10,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed64, QtProtobuf::uint32>;
     SimpleSFixed64UInt32MapMessage();
     ~SimpleSFixed64UInt32MapMessage() override;
@@ -1665,6 +1880,11 @@ class  SimpleStringUInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringUInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 13,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QString, QtProtobuf::uint32>;
     SimpleStringUInt32MapMessage();
     ~SimpleStringUInt32MapMessage() override;
@@ -1699,6 +1919,11 @@ class  SimpleSInt32UInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint32, QtProtobuf::uint64>;
     SimpleSInt32UInt64MapMessage();
     ~SimpleSInt32UInt64MapMessage() override;
@@ -1733,6 +1958,11 @@ class  SimpleSInt64UInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 2,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint64, QtProtobuf::uint64>;
     SimpleSInt64UInt64MapMessage();
     ~SimpleSInt64UInt64MapMessage() override;
@@ -1767,6 +1997,11 @@ class  SimpleInt32UInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 3,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int32, QtProtobuf::uint64>;
     SimpleInt32UInt64MapMessage();
     ~SimpleInt32UInt64MapMessage() override;
@@ -1801,6 +2036,11 @@ class  SimpleInt64UInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 4,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int64, QtProtobuf::uint64>;
     SimpleInt64UInt64MapMessage();
     ~SimpleInt64UInt64MapMessage() override;
@@ -1835,6 +2075,11 @@ class  SimpleUInt32UInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 5,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint32, QtProtobuf::uint64>;
     SimpleUInt32UInt64MapMessage();
     ~SimpleUInt32UInt64MapMessage() override;
@@ -1869,6 +2114,11 @@ class  SimpleUInt64UInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 6,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint64, QtProtobuf::uint64>;
     SimpleUInt64UInt64MapMessage();
     ~SimpleUInt64UInt64MapMessage() override;
@@ -1903,6 +2153,11 @@ class  SimpleFixed32UInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 7,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed32, QtProtobuf::uint64>;
     SimpleFixed32UInt64MapMessage();
     ~SimpleFixed32UInt64MapMessage() override;
@@ -1937,6 +2192,11 @@ class  SimpleFixed64UInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 8,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed64, QtProtobuf::uint64>;
     SimpleFixed64UInt64MapMessage();
     ~SimpleFixed64UInt64MapMessage() override;
@@ -1971,6 +2231,11 @@ class  SimpleSFixed32UInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 9,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed32, QtProtobuf::uint64>;
     SimpleSFixed32UInt64MapMessage();
     ~SimpleSFixed32UInt64MapMessage() override;
@@ -2005,6 +2270,11 @@ class  SimpleSFixed64UInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 10,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed64, QtProtobuf::uint64>;
     SimpleSFixed64UInt64MapMessage();
     ~SimpleSFixed64UInt64MapMessage() override;
@@ -2039,6 +2309,11 @@ class  SimpleStringUInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringUInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 13,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QString, QtProtobuf::uint64>;
     SimpleStringUInt64MapMessage();
     ~SimpleStringUInt64MapMessage() override;
@@ -2073,6 +2348,11 @@ class  SimpleSInt32Int32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint32, QtProtobuf::int32>;
     SimpleSInt32Int32MapMessage();
     ~SimpleSInt32Int32MapMessage() override;
@@ -2107,6 +2387,11 @@ class  SimpleSInt64Int32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 2,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint64, QtProtobuf::int32>;
     SimpleSInt64Int32MapMessage();
     ~SimpleSInt64Int32MapMessage() override;
@@ -2141,6 +2426,11 @@ class  SimpleInt32Int32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 3,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int32, QtProtobuf::int32>;
     SimpleInt32Int32MapMessage();
     ~SimpleInt32Int32MapMessage() override;
@@ -2175,6 +2465,11 @@ class  SimpleInt64Int32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 4,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int64, QtProtobuf::int32>;
     SimpleInt64Int32MapMessage();
     ~SimpleInt64Int32MapMessage() override;
@@ -2209,6 +2504,11 @@ class  SimpleUInt32Int32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 5,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint32, QtProtobuf::int32>;
     SimpleUInt32Int32MapMessage();
     ~SimpleUInt32Int32MapMessage() override;
@@ -2243,6 +2543,11 @@ class  SimpleUInt64Int32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 6,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint64, QtProtobuf::int32>;
     SimpleUInt64Int32MapMessage();
     ~SimpleUInt64Int32MapMessage() override;
@@ -2277,6 +2582,11 @@ class  SimpleFixed32Int32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 7,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed32, QtProtobuf::int32>;
     SimpleFixed32Int32MapMessage();
     ~SimpleFixed32Int32MapMessage() override;
@@ -2311,6 +2621,11 @@ class  SimpleFixed64Int32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 8,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed64, QtProtobuf::int32>;
     SimpleFixed64Int32MapMessage();
     ~SimpleFixed64Int32MapMessage() override;
@@ -2345,6 +2660,11 @@ class  SimpleSFixed32Int32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 9,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed32, QtProtobuf::int32>;
     SimpleSFixed32Int32MapMessage();
     ~SimpleSFixed32Int32MapMessage() override;
@@ -2379,6 +2699,11 @@ class  SimpleSFixed64Int32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 10,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed64, QtProtobuf::int32>;
     SimpleSFixed64Int32MapMessage();
     ~SimpleSFixed64Int32MapMessage() override;
@@ -2413,6 +2738,11 @@ class  SimpleStringInt32MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 13,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QString, QtProtobuf::int32>;
     SimpleStringInt32MapMessage();
     ~SimpleStringInt32MapMessage() override;
@@ -2447,6 +2777,11 @@ class  SimpleSInt32Int64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint32, QtProtobuf::int64>;
     SimpleSInt32Int64MapMessage();
     ~SimpleSInt32Int64MapMessage() override;
@@ -2481,6 +2816,11 @@ class  SimpleSInt64Int64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 2,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint64, QtProtobuf::int64>;
     SimpleSInt64Int64MapMessage();
     ~SimpleSInt64Int64MapMessage() override;
@@ -2515,6 +2855,11 @@ class  SimpleInt32Int64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 3,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int32, QtProtobuf::int64>;
     SimpleInt32Int64MapMessage();
     ~SimpleInt32Int64MapMessage() override;
@@ -2549,6 +2894,11 @@ class  SimpleInt64Int64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 4,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int64, QtProtobuf::int64>;
     SimpleInt64Int64MapMessage();
     ~SimpleInt64Int64MapMessage() override;
@@ -2583,6 +2933,11 @@ class  SimpleUInt32Int64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 5,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint32, QtProtobuf::int64>;
     SimpleUInt32Int64MapMessage();
     ~SimpleUInt32Int64MapMessage() override;
@@ -2617,6 +2972,11 @@ class  SimpleUInt64Int64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 6,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint64, QtProtobuf::int64>;
     SimpleUInt64Int64MapMessage();
     ~SimpleUInt64Int64MapMessage() override;
@@ -2651,6 +3011,11 @@ class  SimpleFixed32Int64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 7,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed32, QtProtobuf::int64>;
     SimpleFixed32Int64MapMessage();
     ~SimpleFixed32Int64MapMessage() override;
@@ -2685,6 +3050,11 @@ class  SimpleFixed64Int64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 8,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed64, QtProtobuf::int64>;
     SimpleFixed64Int64MapMessage();
     ~SimpleFixed64Int64MapMessage() override;
@@ -2719,6 +3089,11 @@ class  SimpleSFixed32Int64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 9,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed32, QtProtobuf::int64>;
     SimpleSFixed32Int64MapMessage();
     ~SimpleSFixed32Int64MapMessage() override;
@@ -2753,6 +3128,11 @@ class  SimpleSFixed64Int64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 10,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed64, QtProtobuf::int64>;
     SimpleSFixed64Int64MapMessage();
     ~SimpleSFixed64Int64MapMessage() override;
@@ -2787,6 +3167,11 @@ class  SimpleStringInt64MapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 13,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QString, QtProtobuf::int64>;
     SimpleStringInt64MapMessage();
     ~SimpleStringInt64MapMessage() override;
@@ -2821,6 +3206,11 @@ class  SimpleSInt32ComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint32, std::shared_ptr<ComplexMessage>>;
     SimpleSInt32ComplexMessageMapMessage();
     ~SimpleSInt32ComplexMessageMapMessage() override;
@@ -2855,6 +3245,11 @@ class  SimpleSInt64ComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 2,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sint64, std::shared_ptr<ComplexMessage>>;
     SimpleSInt64ComplexMessageMapMessage();
     ~SimpleSInt64ComplexMessageMapMessage() override;
@@ -2889,6 +3284,11 @@ class  SimpleInt32ComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 3,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int32, std::shared_ptr<ComplexMessage>>;
     SimpleInt32ComplexMessageMapMessage();
     ~SimpleInt32ComplexMessageMapMessage() override;
@@ -2923,6 +3323,11 @@ class  SimpleInt64ComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 4,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::int64, std::shared_ptr<ComplexMessage>>;
     SimpleInt64ComplexMessageMapMessage();
     ~SimpleInt64ComplexMessageMapMessage() override;
@@ -2957,6 +3362,11 @@ class  SimpleUInt32ComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 5,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint32, std::shared_ptr<ComplexMessage>>;
     SimpleUInt32ComplexMessageMapMessage();
     ~SimpleUInt32ComplexMessageMapMessage() override;
@@ -2991,6 +3401,11 @@ class  SimpleUInt64ComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 6,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::uint64, std::shared_ptr<ComplexMessage>>;
     SimpleUInt64ComplexMessageMapMessage();
     ~SimpleUInt64ComplexMessageMapMessage() override;
@@ -3025,6 +3440,11 @@ class  SimpleFixed32ComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 7,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed32, std::shared_ptr<ComplexMessage>>;
     SimpleFixed32ComplexMessageMapMessage();
     ~SimpleFixed32ComplexMessageMapMessage() override;
@@ -3059,6 +3479,11 @@ class  SimpleFixed64ComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 8,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::fixed64, std::shared_ptr<ComplexMessage>>;
     SimpleFixed64ComplexMessageMapMessage();
     ~SimpleFixed64ComplexMessageMapMessage() override;
@@ -3093,6 +3518,11 @@ class  SimpleSFixed32ComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 9,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed32, std::shared_ptr<ComplexMessage>>;
     SimpleSFixed32ComplexMessageMapMessage();
     ~SimpleSFixed32ComplexMessageMapMessage() override;
@@ -3127,6 +3557,11 @@ class  SimpleSFixed64ComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 10,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QtProtobuf::sfixed64, std::shared_ptr<ComplexMessage>>;
     SimpleSFixed64ComplexMessageMapMessage();
     ~SimpleSFixed64ComplexMessageMapMessage() override;
@@ -3161,6 +3596,11 @@ class  SimpleStringComplexMessageMapMessage : public QProtobufMessage
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        MapFieldProtoFieldNumber = 13,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     using MapFieldEntry = QHash<QString, std::shared_ptr<ComplexMessage>>;
     SimpleStringComplexMessageMapMessage();
     ~SimpleStringComplexMessageMapMessage() override;

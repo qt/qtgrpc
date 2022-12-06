@@ -53,6 +53,11 @@ class  SimpleStringMessage : public QProtobufMessage
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldStringProtoFieldNumber = 6,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     SimpleStringMessage();
     ~SimpleStringMessage() override;
     SimpleStringMessage(const SimpleStringMessage &other);
@@ -83,6 +88,12 @@ class  ComplexMessage : public QProtobufMessage
     Q_PROPERTY(MyTopLevelNamespace::qtprotobufnamespace::tests::SimpleStringMessage *testComplexField READ testComplexField_p WRITE setTestComplexField_p)
 
 public:
+    enum QtProtobufFieldEnum {
+        TestFieldIntProtoFieldNumber = 1,
+        TestComplexFieldProtoFieldNumber = 2,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
     ComplexMessage();
     ~ComplexMessage() override;
     ComplexMessage(const ComplexMessage &other);
