@@ -13,5 +13,5 @@ find_package(Qt6 COMPONENTS Protobuf)
 qt_add_protobuf(tst_manual_protobuf_annotation
     PROTO_FILES
         proto/annotation.proto
-    COMMENTS
+    COPY_COMMENTS
 )

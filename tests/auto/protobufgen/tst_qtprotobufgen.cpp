@@ -285,28 +285,28 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
     for (const auto extension : extensions) {
         QTest::addRow("basicmessages%s", extension.data())
                 << "basicmessages"
-                << "FOLDER"
+                << "GENERATE_PACKAGE_SUBFOLDERS"
                 << "/folder/"
                 << QString(extension)
                 << "qtprotobufnamespace/tests/";
 
         QTest::addRow("mapmessages%s", extension.data())
                 << "mapmessages"
-                << "FOLDER"
+                << "GENERATE_PACKAGE_SUBFOLDERS"
                 << "/folder/"
                 << QString(extension)
                 << "qtprotobufnamespace/tests/";
 
         QTest::addRow("repeatedmessages%s", extension.data())
                 << "repeatedmessages"
-                << "FOLDER"
+                << "GENERATE_PACKAGE_SUBFOLDERS"
                 << "/folder/"
                 << QString(extension)
                 << "qtprotobufnamespace/tests/";
 
         QTest::addRow("annotation%s", extension.data())
                 << "annotation"
-                << "COMMENTS"
+                << "COPY_COMMENTS"
                 << "/comments/"
                 << QString(extension)
                 << "";

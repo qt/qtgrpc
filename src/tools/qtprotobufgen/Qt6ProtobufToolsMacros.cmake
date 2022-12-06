@@ -10,13 +10,13 @@ set(__qt_protobuf_macros_module_base_dir "${CMAKE_CURRENT_LIST_DIR}" CACHE INTER
 # This function is currently in Technical Preview
 # Its signature and behavior might change.
 function(qt6_add_protobuf target)
-    set(options COMMENTS FOLDER)
+    set(options COPY_COMMENTS GENERATE_PACKAGE_SUBFOLDERS)
     set(oneValueArgs
         OUTPUT_DIRECTORY
         EXTRA_NAMESPACE
         PROTO_FILES_BASE_DIR
-        OUT_GENERATED_HEADERS
-        OUT_GENERATED_TARGETS
+        OUTPUT_HEADERS
+        OUTPUT_TARGETS
     )
     set(multiValueArgs PROTO_FILES PROTO_INCLUDES)
     cmake_parse_arguments(arg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -34,12 +34,12 @@ function(qt6_add_protobuf target)
     endforeach()
     list(REMOVE_DUPLICATES proto_files)
 
-    if(DEFINED arg_OUT_GENERATED_TARGETS)
-        set(${arg_OUT_GENERATED_TARGETS} "")
+    if(DEFINED arg_OUTPUT_TARGETS)
+        set(${arg_OUTPUT_TARGETS} "")
     endif()
 
-    if(DEFINED arg_OUT_GENERATED_HEADERS)
-        set(${arg_OUT_GENERATED_HEADERS} "")
+    if(DEFINED arg_OUTPUT_HEADERS)
+        set(${arg_OUTPUT_HEADERS} "")
     endif()
 
     if("${proto_files}" STREQUAL "")
@@ -51,13 +51,13 @@ function(qt6_add_protobuf target)
     set(generation_options "")
     set(extra_pre_parse_options "")
 
-    if(arg_COMMENTS)
-        list(APPEND generation_options "COMMENTS")
+    if(arg_COPY_COMMENTS)
+        list(APPEND generation_options "COPY_COMMENTS")
     endif()
 
-    if(arg_FOLDER)
-        list(APPEND generation_options "FOLDER")
-        list(APPEND extra_pre_parse_options "FOLDER")
+    if(arg_GENERATE_PACKAGE_SUBFOLDERS)
+        list(APPEND generation_options "GENERATE_PACKAGE_SUBFOLDERS")
+        list(APPEND extra_pre_parse_options "GENERATE_PACKAGE_SUBFOLDERS")
     endif()
 
     if(arg_EXTRA_NAMESPACE)
@@ -171,8 +171,8 @@ function(qt6_add_protobuf target)
     if(TARGET ${target})
         target_sources(${target} PRIVATE ${generated_headers} ${generated_sources})
     else()
-        if(DEFINED arg_OUT_GENERATED_TARGETS)
-            list(APPEND arg_OUT_GENERATED_TARGETS "${target}")
+        if(DEFINED arg_OUTPUT_TARGETS)
+            list(APPEND arg_OUTPUT_TARGETS "${target}")
         endif()
         _qt_internal_add_library(${target} ${generated_headers} ${generated_sources})
     endif()
@@ -224,8 +224,8 @@ function(qt6_add_protobuf target)
                     PRIVATE "/Zc:__cplusplus" "/permissive-" "/bigobj")
             endif()
         endif()
-        if(DEFINED arg_OUT_GENERATED_TARGETS)
-            list(APPEND ${arg_OUT_GENERATED_TARGETS}
+        if(DEFINED arg_OUTPUT_TARGETS)
+            list(APPEND ${arg_OUTPUT_TARGETS}
                 "${target}_protobuf_registration")
         endif()
     else()
@@ -234,12 +234,12 @@ function(qt6_add_protobuf target)
 
     target_include_directories(${target} PUBLIC "$<BUILD_INTERFACE:${out_dir}>")
 
-    if(DEFINED arg_OUT_GENERATED_HEADERS)
-        set(${arg_OUT_GENERATED_HEADERS} "${generated_headers}" PARENT_SCOPE)
+    if(DEFINED arg_OUTPUT_HEADERS)
+        set(${arg_OUTPUT_HEADERS} "${generated_headers}" PARENT_SCOPE)
     endif()
 
-    if(DEFINED arg_OUT_GENERATED_TARGETS)
-        set(${arg_OUT_GENERATED_TARGETS} "${${arg_OUT_GENERATED_TARGETS}}" PARENT_SCOPE)
+    if(DEFINED arg_OUTPUT_TARGETS)
+        set(${arg_OUTPUT_TARGETS} "${${arg_OUTPUT_TARGETS}}" PARENT_SCOPE)
     endif()
 endfunction()
 
@@ -255,7 +255,7 @@ if(NOT QT_NO_CREATE_VERSIONLESS_FUNCTIONS)
 endif()
 
 function(_qt_internal_preparse_proto_file out_generated_files proto_file)
-    cmake_parse_arguments(arg "FOLDER" "" "" ${ARGN})
+    cmake_parse_arguments(arg "GENERATE_PACKAGE_SUBFOLDERS" "" "" ${ARGN})
 
     if(NOT proto_file OR NOT EXISTS "${proto_file}")
         message(FATAL_ERROR "Unable to scan '${proto_file}': file doesn't exist.")
@@ -307,7 +307,7 @@ function(_qt_internal_preparse_proto_file out_generated_files proto_file)
     get_filename_component(basename "${proto_file}" NAME_WLE)
 
     set(folder_path "")
-    if(arg_FOLDER)
+    if(arg_GENERATE_PACKAGE_SUBFOLDERS)
         set(folder_path "${package_full_path}/")
     endif()
     if(proto_messages OR proto_enums)

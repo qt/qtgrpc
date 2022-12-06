@@ -9,8 +9,8 @@
 using namespace ::QtProtobuf::generator;
 
 static const char QmlPluginOption[] = "QML";
-static const char CommentsGenerationOption[] = "COMMENTS";
-static const char FolderGenerationOption[] = "FOLDER";
+static const char CommentsGenerationOption[] = "COPY_COMMENTS";
+static const char FolderGenerationOption[] = "GENERATE_PACKAGE_SUBFOLDERS";
 static const char FieldEnumGenerationOption[] = "FIELD_ENUM";
 static const char ExtraNamespaceGenerationOption[] = "EXTRA_NAMESPACE";
 static const char ExportMacroGenerationOption[] = "EXPORT_MACRO";

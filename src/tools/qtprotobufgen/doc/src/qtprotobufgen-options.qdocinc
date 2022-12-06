@@ -1,9 +1,9 @@
-\li \c{COMMENTS} Copies comments from \c{.proto} files. If provided in the
-parameter list, comments related to messages and fields are copied to
+\li \c{COPY_COMMENTS} Copies comments from \c{.proto} files. If provided in
+the parameter list, comments related to messages and fields are copied to
 generated header files.
-\li \c{FOLDER} generates a folder structure for the generated files matching
-the \c{.proto} file's package name. For example \c{package io.qt.test;}
-would put the generated files into \c{io/qt/test/}.
+\li \c{GENERATE_PACKAGE_SUBFOLDERS} generates a folder structure for the
+generated files matching the \c{.proto} file's package name. For example
+\c{package io.qt.test;} would put the generated files into \c{io/qt/test/}.
 \li \c{EXTRA_NAMESPACE} is an optional namespace that will be used for the
 generated classes. The classes are always generated in a namespace whose
 name is the same as the package name specified in the \c{.proto} file.

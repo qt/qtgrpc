@@ -50,7 +50,7 @@ argument, \c{--qtprotobuf_opt}.
 You also can pass the corresponding keys as the \c{QT_PROTOBUF_OPTIONS}
 environment variable. Keys need to be presented as a semicolon-separated list:
 \badcode
-    export QT_PROTOBUF_OPTIONS="COMMENTS;FOLDER;EXTRA_NAMESPACE=MyTopLevelNamespace"
+    export QT_PROTOBUF_OPTIONS="COPY_COMMENTS;GENERATE_PACKAGE_SUBFOLDERS;EXTRA_NAMESPACE=MyTopLevelNamespace"
 \endcode
 
 \section2 Options

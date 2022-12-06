@@ -14,7 +14,7 @@ qt_internal_add_test(tst_qtprotobufgen
 qt_add_protobuf(tst_qtprotobufgen
     PROTO_FILES
         ../shared/data/proto/annotation.proto
-    COMMENTS
+    COPY_COMMENTS
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/comments"
 )
 
@@ -37,7 +37,7 @@ qt_add_protobuf(tst_qtprotobufgen
         ../shared/data/proto/basicmessages.proto
         ../shared/data/proto/mapmessages.proto
         ../shared/data/proto/repeatedmessages.proto
-    FOLDER
+    GENERATE_PACKAGE_SUBFOLDERS
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/folder"
 )
 
