@@ -39,7 +39,7 @@ struct HandlersRegistry
         QtProtobufPrivate::SerializationHandler handler;
         QReadLocker locker(&m_lock);
         auto it = m_registry.constFind(type);
-        if (it != m_registry.end())
+        if (it != m_registry.constEnd())
             handler = it.value();
         return handler;
     }
