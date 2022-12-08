@@ -897,10 +897,14 @@ void QtProtobufTypesSerializationTest::ComplexTypeSerializeTest()
     stringMsg.setTestFieldString("qwerty");
 
     ComplexMessage test;
+    QByteArray result = test.serialize(m_serializer.get());
+    QEXPECT_FAIL("", "The result of serialization can be either an empty message or a message containing empty fields.", Continue);
+    QCOMPARE(result.toHex(), "");
+
     test.setTestFieldInt(42);
     test.setTestComplexField(stringMsg);
 
-    QByteArray result = test.serialize(m_serializer.get());
+    result = test.serialize(m_serializer.get());
     QVERIFY(result == QByteArray::fromHex("12083206717765727479082a")
                 || result == QByteArray::fromHex("082a12083206717765727479"));
 
