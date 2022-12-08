@@ -13,15 +13,10 @@ namespace google {
 namespace protobuf {
 class ServiceDescriptor;
 class Message;
-}
-}
+} // namespace protobuf
+} // namespace google
 
 namespace QtProtobuf::generator {
-/*!
- * \ingroup generator
- * \private
- * \brief The ClientDeclarationprinter class
- */
 class ClientDeclarationPrinter : public DescriptorPrinterBase<::google::protobuf::ServiceDescriptor>
 {
 public:

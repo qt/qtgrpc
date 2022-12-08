@@ -12,6 +12,14 @@
 using namespace ::QtProtobuf::generator;
 using namespace ::google::protobuf;
 
+/*!
+    \class ServerDeclarationPrinter
+    \inmodule qtprotobufgen
+    \private
+
+    \brief Generates gRPC server class declaration.
+*/
+
 ServerDeclarationPrinter::ServerDeclarationPrinter(
         const ::google::protobuf::ServiceDescriptor *service,
         const std::shared_ptr<::google::protobuf::io::Printer> &printer)

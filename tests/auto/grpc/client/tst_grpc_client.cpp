@@ -36,9 +36,11 @@ using namespace qtgrpc::tests;
 static std::shared_ptr<TestService::Client> createHttp2Client()
 {
     auto client = std::make_shared<TestService::Client>();
-    client->attachChannel(std::make_shared<QGrpcHttp2Channel>(
-            QUrl("http://localhost:50051", QUrl::StrictMode),
-            QGrpcInsecureChannelCredentials() | QGrpcInsecureCallCredentials()));
+    auto channel = std::make_shared<QGrpcHttp2Channel>(QUrl("http://localhost:50051",
+                                                            QUrl::StrictMode),
+                                                       QGrpcInsecureChannelCredentials()
+                                                               | QGrpcInsecureCallCredentials());
+    client->attachChannel(std::move(channel));
     return client;
 }
 
@@ -47,16 +49,18 @@ static std::shared_ptr<TestService::Client> createHttp2Client()
 static std::shared_ptr<TestService::Client> createGrpcSocketClient()
 {
     auto client = std::make_shared<TestService::Client>();
-    client->attachChannel(std::make_shared<QGrpcChannel>(QString("unix:///tmp/test.sock"),
-                                                         QGrpcChannel::InsecureChannelCredentials));
+    auto channel = std::make_shared<QGrpcChannel>(QString("unix:///tmp/test.sock"),
+                                                  QGrpcChannel::InsecureChannelCredentials);
+    client->attachChannel(std::move(channel));
     return client;
 }
 #  endif
 static std::shared_ptr<TestService::Client> createGrpcHttpClient()
 {
     auto client = std::make_shared<TestService::Client>();
-    client->attachChannel(std::make_shared<QGrpcChannel>(QString("localhost:50051"),
-                                                         QGrpcChannel::InsecureChannelCredentials));
+    auto channel = std::make_shared<QGrpcChannel>(QString("localhost:50051"),
+                                                  QGrpcChannel::InsecureChannelCredentials);
+    client->attachChannel(std::move(channel));
     return client;
 }
 #endif
@@ -258,7 +262,6 @@ void QtGrpcClientTest::StreamStringTest()
     QSignalSpy streamErrorSpy(stream.get(), &QGrpcStream::errorOccurred);
     QVERIFY(streamErrorSpy.isValid());
 
-
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcStream::finished);
     QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream]() {
         SimpleStringMessage ret = stream->read<SimpleStringMessage>();
@@ -266,7 +269,7 @@ void QtGrpcClientTest::StreamStringTest()
     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
-                              MessageLatencyWithThreshold * ExpectedMessageCount);
+                                 MessageLatencyWithThreshold * ExpectedMessageCount);
     QCOMPARE(streamErrorSpy.count(), 0);
 
     QCOMPARE(messageReceivedSpy.count(), ExpectedMessageCount);
@@ -296,9 +299,8 @@ void QtGrpcClientTest::StreamStringAndAbortTest()
             stream->abort();
     });
 
-
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
-                              MessageLatencyWithThreshold * ExpectedMessageCount);
+                                 MessageLatencyWithThreshold * ExpectedMessageCount);
     QCOMPARE(streamErrorSpy.count(), 0);
     QCOMPARE(i, 2);
     QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2");
@@ -332,7 +334,7 @@ void QtGrpcClientTest::StreamStringAndDeferredAbortTest()
     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
-                              MessageLatencyWithThreshold * ExpectedMessageCount);
+                                 MessageLatencyWithThreshold * ExpectedMessageCount);
     QCOMPARE(streamErrorSpy.count(), 0);
     QCOMPARE(messageReceivedSpy.count(), ExpectedMessageCount);
 
@@ -609,8 +611,7 @@ void QtGrpcClientTest::CallStringThreadTest()
     QVERIFY(result->testFieldString().isEmpty());
     QVERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
                     .message()
-                    .startsWith("QAbstractGrpcClient::call is called from different "
-                                "thread."));
+                    .startsWith("QAbstractGrpcClient::call is called from a different thread."));
 }
 
 void QtGrpcClientTest::StringAsyncThreadTest()
@@ -636,10 +637,11 @@ void QtGrpcClientTest::StringAsyncThreadTest()
     thread->start();
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
     QTRY_VERIFY(result.testFieldString().isEmpty());
-    QTRY_VERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
-                        .message()
-                        .startsWith("QAbstractGrpcClient::call is called from different "
-                                    "thread."));
+    QTRY_VERIFY(
+            qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
+                    .message()
+                    .startsWith("QAbstractGrpcClient::call is called from a different thread."));
+    ;
 }
 
 void QtGrpcClientTest::StreamStringThreadTest()
@@ -671,10 +673,10 @@ void QtGrpcClientTest::StreamStringThreadTest()
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
     QTRY_VERIFY(result.testFieldString().isEmpty());
-    QTRY_VERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
-                        .message()
-                        .startsWith("QAbstractGrpcClient::stream is called from different "
-                                    "thread."));
+    QTRY_VERIFY(
+            qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
+                    .message()
+                    .startsWith("QAbstractGrpcClient::stream is called from a different thread."));
 }
 
 void QtGrpcClientTest::StreamCancelWhileErrorTimeoutTest()

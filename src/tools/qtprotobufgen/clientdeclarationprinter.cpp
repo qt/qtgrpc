@@ -20,6 +20,15 @@
 using namespace ::QtProtobuf::generator;
 using namespace ::google::protobuf;
 using namespace ::google::protobuf::compiler;
+
+/*!
+   \class ClientDeclarationPrinter
+   \inmodule qtprotobufgen
+   \private
+
+   \brief Generates gRPC client class declaration.
+*/
+
 ClientDeclarationPrinter::ClientDeclarationPrinter(
         const ::google::protobuf::ServiceDescriptor *service,
         const std::shared_ptr<::google::protobuf::io::Printer> &printer)

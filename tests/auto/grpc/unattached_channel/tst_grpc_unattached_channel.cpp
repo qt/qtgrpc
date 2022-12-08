@@ -52,7 +52,7 @@ void QtGrpcUnattachedChannelClientTest::ClientSyncTestUnattachedChannel()
     QGrpcStatus status = client.testMethodStatusMessage(request, result.get());
 
     QCOMPARE_EQ(status.code(), QGrpcStatus::Unknown);
-    QCOMPARE_EQ("Serializing failed. Serializer is not ready", status.message());
+    QCOMPARE_EQ("Serializing failed. Serializer is not ready.", status.message());
 }
 
 void QtGrpcUnattachedChannelClientTest::ClientSyncTestUnattachedChannelSignal()
@@ -70,7 +70,7 @@ void QtGrpcUnattachedChannelClientTest::ClientSyncTestUnattachedChannelSignal()
     QTRY_COMPARE_EQ(clientErrorSpy.count(), 1);
     QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(), QGrpcStatus::Unknown);
     QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).message(),
-             "Serializing failed. Serializer is not ready");
+             "Serializing failed. Serializer is not ready.");
 }
 
 void QtGrpcUnattachedChannelClientTest::AttachChannelThreadTest()
@@ -96,7 +96,7 @@ void QtGrpcUnattachedChannelClientTest::AttachChannelThreadTest()
     QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(), QGrpcStatus::Unknown);
     QVERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
                     .message()
-                    .startsWith("QAbstractGrpcClient::attachChannel is called from different "
+                    .startsWith("QAbstractGrpcClient::attachChannel is called from a different "
                                 "thread."));
 }
 

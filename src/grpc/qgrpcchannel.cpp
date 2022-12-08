@@ -34,13 +34,12 @@ QT_BEGIN_NAMESPACE
     \inmodule QtGrpc
 
     \brief The QGrpcChannel class is a gRPC-cpp native api implementation of
-   QAbstractGrpcChannel interface.
+    QAbstractGrpcChannel interface.
 
     QGrpcChannel accepts the same grpc::ChannelCredentials type that is required
     by native-api grpc::CreateChannel.
-    See \l{gRPC Channel
-   Credentials}[https://grpc.github.io/grpc/cpp/classgrpc__impl_1_1_channel_credentials.html].
- */
+    \sa{https://grpc.github.io/grpc/cpp/classgrpc__impl_1_1_channel_credentials.html}{gRPC ChannelCredentials}.
+*/
 
 static inline grpc::Status parseByteBuffer(const grpc::ByteBuffer &buffer, QByteArray &data)
 {
@@ -187,7 +186,7 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QUrl &url,
         m_credentials = grpc::GoogleDefaultCredentials();
         m_channel = grpc::CreateChannel(url.toString().toStdString(), m_credentials);
         break;
-    case QGrpcChannel::SslDefaultCredentials: {
+    case QGrpcChannel::SslDefaultCredentials:
         if (credentialsList.size() < 3) {
             m_credentials = grpc::SslCredentials(grpc::SslCredentialsOptions());
         } else {
@@ -198,7 +197,7 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QUrl &url,
             m_credentials = grpc::SslCredentials(options);
         }
         m_channel = grpc::CreateChannel(url.toString().toStdString(), m_credentials);
-    } break;
+        break;
     }
 }
 
@@ -286,9 +285,9 @@ void QGrpcChannelPrivate::stream(QGrpcStream *stream, const QString &service,
                                        QObject::disconnect(*abortConnection);
                                        QObject::disconnect(*clientConnection);
 
-                                       if (sub->status.code() != QGrpcStatus::Ok) {
+                                       if (sub->status.code() != QGrpcStatus::Ok)
                                            stream->errorOccurred(sub->status);
-                                       }
+
                                        stream->finished();
                                    });
 
@@ -322,9 +321,9 @@ void QGrpcChannelPrivate::stream(QGrpcStream *stream, const QString &service,
 }
 
 /*!
-    QGrpcChannel constructs QGrpcChannel with \a url, \a credentialsType and \a credentialsList
-    object.
- */
+    QGrpcChannel constructs QGrpcChannel with \a url, \a credentialsType
+    and \a credentialsList object.
+*/
 QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credentialsType,
                            const QStringList &credentialsList)
     : QAbstractGrpcChannel(),

@@ -42,8 +42,8 @@ protected:
     QGrpcStatus call(const QString &method, const QProtobufMessage &arg, ReturnType *ret)
     {
         if (ret == nullptr) {
-            const auto errorString = QLatin1StringView("Unable to call method: %1. Pointer to "
-                                                       "return data is null")
+            const auto errorString = QLatin1StringView("Unable to call method: %1. "
+                                                       "Pointer to return data is null.")
                                              .arg(method);
             QGrpcStatus status{ QGrpcStatus::InvalidArgument, errorString };
             errorOccurred(status);
@@ -51,12 +51,12 @@ protected:
             return status;
         }
         QGrpcStatus status{ QGrpcStatus::Unknown,
-                            QLatin1StringView("Serializing failed. Serializer is not "
-                                              "ready") };
+                            QLatin1StringView("Serializing failed. "
+                                              "Serializer is not ready.") };
 
-        QByteArray retData;
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (argData) {
+            QByteArray retData;
             status = call(method, *argData, retData);
             if (status == QGrpcStatus::StatusCode::Ok)
                 status = tryDeserialize(ret, retData);
@@ -88,16 +88,16 @@ protected:
     {
         if (ret.isNull()) {
             const auto nullPointerError = QLatin1StringView("Unable to stream method: %1. "
-                                                            "Pointer to return data is null")
+                                                            "Pointer to return data is null.")
                                                   .arg(method);
             errorOccurred({ QGrpcStatus::InvalidArgument, nullPointerError });
             logError(nullPointerError);
-            return nullptr;
-        }
-        std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
-        if (!argData) {
             return {};
         }
+        std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
+        if (!argData)
+            return {};
+
         return stream(method, *argData, [ret, this](const QByteArray &data) {
             if (auto retVal = ret.lock()) {
                 auto status = tryDeserialize(retVal.get(), data);
@@ -141,7 +141,7 @@ private:
         auto _serializer = serializer();
         if (_serializer == nullptr) {
             errorOccurred({ QGrpcStatus::Unknown,
-                            QLatin1StringView("Serializing failed. Serializer is not ready") });
+                            QLatin1StringView("Serializing failed. Serializer is not ready.") });
             return std::nullopt;
         }
         return _serializer->serialize<ParamType>(&arg);

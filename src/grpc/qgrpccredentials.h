@@ -28,8 +28,8 @@ public:
 
 template <typename Call, typename Channel,
           typename std::enable_if_t<
-                  std::is_base_of<QGrpcCallCredentials, Call>::value
-                          && std::is_base_of<QGrpcChannelCredentials, Channel>::value,
+                  std::conjunction_v<std::is_base_of<QGrpcCallCredentials, Call>,
+                                     std::is_base_of<QGrpcChannelCredentials, Channel>>,
                   int> = 0>
 class QGrpcCredentials final : public QAbstractGrpcCredentials
 {
@@ -54,8 +54,8 @@ extern Q_GRPC_EXPORT const char *SslConfigCredential;
 
 template <typename Call, typename Channel,
           typename std::enable_if_t<
-                  std::is_base_of<QGrpcCallCredentials, Call>::value
-                          && std::is_base_of<QGrpcChannelCredentials, Channel>::value,
+                  std::conjunction_v<std::is_base_of<QGrpcCallCredentials, Call>,
+                                     std::is_base_of<QGrpcChannelCredentials, Channel>>,
                   int> = 0>
 std::unique_ptr<QAbstractGrpcCredentials> operator|(const Call &call, const Channel &channel)
 {
@@ -64,8 +64,8 @@ std::unique_ptr<QAbstractGrpcCredentials> operator|(const Call &call, const Chan
 
 template <typename Call, typename Channel,
           typename std::enable_if_t<
-                  std::is_base_of<QGrpcCallCredentials, Call>::value
-                          && std::is_base_of<QGrpcChannelCredentials, Channel>::value,
+                  std::conjunction_v<std::is_base_of<QGrpcCallCredentials, Call>,
+                                     std::is_base_of<QGrpcChannelCredentials, Channel>>,
                   int> = 0>
 std::unique_ptr<QAbstractGrpcCredentials> operator|(const Channel &channel, const Call &call)
 {

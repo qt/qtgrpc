@@ -13,27 +13,34 @@ QT_BEGIN_NAMESPACE
     \inmodule QtGrpc
     \brief The QGrpcOperation class implements common logic to
            handle communication in Grpc channel.
- */
+*/
 
 /*!
-    \fn template <typename T> T read();
+    \fn template <typename T> T QGrpcOperation::read();
 
-    Reads message from raw byte array stored in QGrpcCallReply. Returns copy of deserialized
-    message or non-initialized message in case of exceptional situation.
- */
+    Reads message from raw byte array stored in QGrpcCallReply.
 
-/*!
-    \fn void finished();
-    The signal indicates the end of communication for this call.
-    If signal emitted by stream this means that stream is successfully closed either by client
-    or server.
- */
+    Returns a copy of the deserialized message or, on failure,
+    a default-constructed message.
+*/
 
 /*!
-    \fn void errorOccurred(const QGrpcStatus &status);
+    \fn void QGrpcOperation::finished();
 
-    The signal is emitted when error with \a status occurs in channel or during serialization.
- */
+    This signal indicates the end of communication for this call.
+
+    If signal emitted by stream this means that stream is successfully
+    closed either by client or server.
+*/
+
+/*!
+    \fn void QGrpcOperation::errorOccurred(const QGrpcStatus &status);
+
+    This signal indicates the error occurred during serialization.
+
+    This signal is emitted when error with \a status occurs in channel
+    or during serialization.
+*/
 
 QGrpcOperation::QGrpcOperation(QAbstractGrpcClient *parent) : QObject(parent)
 {
@@ -44,9 +51,11 @@ QGrpcOperation::~QGrpcOperation()
 }
 
 /*!
-    Interface for implementation of QAbstractGrpcChannel. Should be used to write raw data from
-   channel to reply \a data Raw data received from channel.
- */
+    Interface for implementation of QAbstractGrpcChannel.
+
+    Should be used to write raw data from channel to reply \a data raw data
+    received from channel.
+*/
 void QGrpcOperation::setData(const QByteArray &data)
 {
     m_data = data;

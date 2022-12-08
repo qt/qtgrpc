@@ -7,12 +7,6 @@
 #include "descriptorprinterbase.h"
 
 namespace QtProtobuf::generator {
-
-/*!
- * \ingroup generator
- * \private
- * \brief The ClientDefinitionPrinter class
- */
 class ClientDefinitionPrinter : public DescriptorPrinterBase<google::protobuf::ServiceDescriptor>
 {
 public:
@@ -26,8 +20,8 @@ public:
         printCloseNamespace();
     }
     void printOpenNamespace();
-    void printMethods();
     void printConstructor();
+    void printMethods();
     void printCloseNamespace();
 };
 

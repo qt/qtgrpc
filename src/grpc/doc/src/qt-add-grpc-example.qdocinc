@@ -21,7 +21,7 @@ target_link_libraries(MyApp PRIVATE MyMessages)
 \endcode
 
 In the example above we generate a library called \c{MyMessages}
-by calling \l{qt_add_protobuf.html}{qt_add_protobuf()} cmake function.
+by calling the \l{qt_add_protobuf.html}{qt_add_protobuf()} CMake function.
 Then we are linking generated library with \c{Qt6::Grpc} library.
 
 We then create a target for an executable called \c{MyApp} which we link

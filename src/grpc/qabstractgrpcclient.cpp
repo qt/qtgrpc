@@ -16,11 +16,10 @@ QT_BEGIN_NAMESPACE
 namespace {
 static QString threadSafetyWarning(QLatin1StringView methodName)
 {
-    return QLatin1StringView("%1 is called from different thread.\n"
-                             "QtGrpc doesn't guarantee thread safety on channel level.\n"
+    return QLatin1StringView("%1 is called from a different thread.\n"
+                             "QtGrpc doesn't guarantee thread safety on the channel level.\n"
                              "You have to be confident that channel routines are working in "
-                             "the same thread "
-                             "as QAbstractGrpcClient")
+                             "the same thread as QAbstractGrpcClient.")
             .arg(methodName);
 }
 } // namespace
@@ -28,50 +27,59 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 /*!
     \class QAbstractGrpcClient
     \inmodule QtGrpc
-    \brief The QAbstractGrpcClient class is bridge between gRPC clients and channels.
+    \brief The QAbstractGrpcClient class is bridge between gRPC clients
+    and channels.
 
-    QAbstractGrpcClient provides set of bridge functions for client classes generated out of
-    protobuf services.
-    QAbstractGrpcClient provides threads safety for stream and call methods of generated clients.
- */
-
-/*!
-    \fn template <typename ParamType> QGrpcStatus call(const QString &method, const QProtobufMessage
-   &arg);
-   \internal
-
-    Calls \a method with \a arg argument of service client synchronously.
- */
+    QAbstractGrpcClient provides a set of functions for client classes
+    generated out of protobuf services.
+    QAbstractGrpcClient enforces thread safety for stream() and call() methods
+    of generated clients.
+*/
 
 /*!
-    \fn template <typename ParamType, typename ReturnType> QGrpcStatus call(const QString
-   &method, const QProtobufMessage &arg, QWeakPointer<ReturnType> ret);
-   \internal
+    \fn template <typename ParamType> QGrpcStatus QAbstractGrpcClient::call(const QString &method,
+    const QProtobufMessage &arg);
+    \internal
 
-    Calls \a method with \a arg argument of service client synchronously and fills \a ret
-    with gRPC reply.
- */
-
-/*!
-    \fn template <typename ParamType> QSharedPointer<QGrpcStream> stream(const QString &method,
-   const QProtobufMessage &arg);
-   \internal
-
-    Streams to message notifications from server-stream \a method with message argument \a arg.
- */
+    Synchronously calls the given \a method of this service client,
+    with argument \a arg.
+*/
 
 /*!
-    \fn template <typename ParamType, typename ReturnType> QSharedPointer<QGrpcStream> stream(const
-   QString &method, const QProtobufMessage &arg, QWeakPointer<ReturnType> ret);
-   \internal
+    \fn template <typename ParamType, typename ReturnType> QGrpcStatus
+    QAbstractGrpcClient::call(const QString &method, const QProtobufMessage &arg,
+    QWeakPointer<ReturnType> ret);
+    \internal
 
-    Streams to message notifications from server-stream \a method with message argument \a arg.
+    Synchronously calls the given \a method of this service client,
+    with argument \a arg and fills \a ret with gRPC reply.
+*/
 
-    Makes \a ret argument point to allocated return-message structure. The return-message structure
-    will be updated each time a message is received from the server-stream.
+/*!
+    \fn template <typename ParamType> QSharedPointer<QGrpcStream> QAbstractGrpcClient::stream(const
+    QString &method, const QProtobufMessage &arg);
+    \internal
 
-    \note If \a ret is used as property-fields in other object, property NOTIFY signal won't
-   be called in case of updated message received from server-stream.
+    Streams messages from the server stream \a method with the message
+    argument \a arg to the attached channel.
+*/
+
+/*!
+    \fn template <typename ParamType, typename ReturnType> QSharedPointer<QGrpcStream>
+    QAbstractGrpcClient::stream(const QString &method, const QProtobufMessage &arg,
+    QWeakPointer<ReturnType> ret);
+    \internal
+
+    Streams messages from the server stream \a method with the message
+    argument \a arg to the attached channel.
+
+    Makes \a ret argument point to allocated return-message structure.
+    The return-message structure will be updated each time a message
+    is received from the server-stream.
+
+    \note If \a ret is used as property-fields in other object,
+    property NOTIFY signal won't be called in case of updated
+    message received from server-stream.
 */
 
 class QAbstractGrpcClientPrivate final
@@ -95,10 +103,13 @@ QAbstractGrpcClient::~QAbstractGrpcClient()
 
 /*!
     Attaches \a channel to client as transport layer for gRPC.
-    Parameters and return values will be serialized to supported by channel format.
+
+    Parameters and return values will be serialized to the channel
+    in a format it supports.
 
     \note \b Warning: QtGrpc doesn't guarantee thread safety on channel level.
-    You have to invoke the channel-related functions on the same thread as QAbstractGrpcClient.
+    You have to invoke the channel-related functions on the same thread as
+    QAbstractGrpcClient.
 */
 void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel)
 {
@@ -109,13 +120,12 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
         errorOccurred({ QGrpcStatus::Unknown, status });
         return;
     }
-    for (auto &stream : dPtr->activeStreams) {
+    for (auto &stream : dPtr->activeStreams)
         stream->abort();
-    }
+
     dPtr->channel = channel;
-    for (auto &stream : dPtr->activeStreams) {
+    for (auto &stream : dPtr->activeStreams)
         stream->abort();
-    }
 }
 
 QGrpcStatus QAbstractGrpcClient::call(const QString &method, const QByteArray &arg, QByteArray &ret)
@@ -167,9 +177,10 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(const QString &method,
 
         *finishedConnection = connect(reply.get(), &QGrpcCallReply::finished,
                                       [this, reply, errorConnection, finishedConnection]() mutable {
-                                          // the usage of 'QObject::disconnect' requires the
-                                          // compiler to capture 'this' but the current default
-                                          // capture mode does not allow it
+                                          // The usage of 'QObject::disconnect' requires the
+                                          // compiler to capture 'this', but some compilers
+                                          // think that 'this' is unused. That's why we use
+                                          // explicit call to disconnect().
                                           this->disconnect(*finishedConnection);
                                           this->disconnect(*errorConnection);
                                           reply.reset();
@@ -212,7 +223,7 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::stream(const QString &method,
             // perspective each stream request supposed to create a new connection with own scope.
             // Caching and reusing streams lead potential security risks, since we cannot
             // guarantee that the stream sharing is intentional.
-            // This feature should have the explicit switch that controls its usage.
+            // This feature should have an explicit switch that controls its usage.
             (*it)->addHandler(handler);
             return *it; // If stream already exists return it for handling
         }
@@ -233,9 +244,9 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::stream(const QString &method,
                                                dPtr->channel->stream(stream.get(), dPtr->service,
                                                                      this);
                                            } else {
-                                               qGrpcDebug() << "Stream for " << dPtr->service
+                                               qGrpcDebug() << "Stream for" << dPtr->service
                                                             << "method" << method
-                                                            << " will not be restored by timeout.";
+                                                            << "will not be restored by timeout.";
                                            }
                                        });
                 });
@@ -244,16 +255,16 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::stream(const QString &method,
         *finishedConnection = connect(
                 grpcStream.get(), &QGrpcStream::finished, this,
                 [this, grpcStream, errorConnection, finishedConnection]() mutable {
-                    qGrpcWarning()
-                            << grpcStream->method() << "call" << dPtr->service << "stream finished";
+                    qGrpcWarning() << grpcStream->method() << "call" << dPtr->service
+                                   << "stream finished.";
                     auto it = std::find_if(dPtr->activeStreams.begin(), dPtr->activeStreams.end(),
                                            [grpcStream](std::shared_ptr<QGrpcStream> activeStream) {
                                                return *activeStream == *grpcStream;
                                            });
 
-                    if (it != dPtr->activeStreams.end()) {
+                    if (it != dPtr->activeStreams.end())
                         dPtr->activeStreams.erase(it);
-                    }
+
                     QObject::disconnect(*errorConnection);
                     QObject::disconnect(*finishedConnection);
                     grpcStream.reset();
@@ -272,12 +283,12 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::stream(const QString &method,
 
     Serializer provides assigned to client serializer.
     Returns pointer to serializerowned by QProtobufSerializerRegistry.
- */
+*/
 std::shared_ptr<QAbstractProtobufSerializer> QAbstractGrpcClient::serializer() const
 {
-    if (dPtr->channel == nullptr || dPtr->channel->serializer() == nullptr)
-        return nullptr;
-    return dPtr->channel->serializer();
+    if (const auto &c = dPtr->channel)
+        return c->serializer();
+    return nullptr;
 }
 
 void QAbstractGrpcClient::logError(const QString &str) const
@@ -291,19 +302,19 @@ QGrpcStatus QAbstractGrpcClient::handleDeserializationError(
     QGrpcStatus status{ QGrpcStatus::Ok };
     switch (err) {
     case QAbstractProtobufSerializer::InvalidHeaderError: {
-        const QLatin1StringView errStr("Response deserialization failed invalid field found");
+        const QLatin1StringView errStr("Response deserialization failed: invalid field found.");
         status = { QGrpcStatus::InvalidArgument, errStr };
         logError(errStr);
         errorOccurred(status);
     } break;
     case QAbstractProtobufSerializer::NoDeserializerError: {
-        const QLatin1StringView errStr("No deserializer was found for a given type");
+        const QLatin1StringView errStr("No deserializer was found for a given type.");
         status = { QGrpcStatus::InvalidArgument, errStr };
         logError(errStr);
         errorOccurred(status);
     } break;
     case QAbstractProtobufSerializer::UnexpectedEndOfStreamError: {
-        const QLatin1StringView errStr("Invalid size of received buffer");
+        const QLatin1StringView errStr("Invalid size of received buffer.");
         status = { QGrpcStatus::OutOfRange, errStr };
         logError(errStr);
         errorOccurred(status);

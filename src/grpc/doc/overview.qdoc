@@ -10,7 +10,7 @@ QtGrpc provides support for comunicating with gRPC services.
 
 QtGrpc together with QtProtobuf allows users to define data and messages in \c proto files,
 and then use the code generators, which generates code allowing accessors for fields
-and gRPC services in the Qt framework.
+and gRPC (Google Remote Procedure Calls) services in the Qt framework.
 Such code allows users to send calls or stream messages to the server.
 
 */
