@@ -12,32 +12,36 @@ QT_BEGIN_NAMESPACE
 
     \brief The QGrpcCallCredentials is the base class for gRPC call credentials.
 
-    You may inherrit this class to create your own credentials implementation, that will be used
-    for each method call. Classes inheriting of QGrpcCallCredentials must reimplement
-    \c{QGrpcCredentialMap operator()} method and return a credentials map for the call.
- */
+    You may inherrit this class to create your own credentials implementation,
+    that will be used for each method call.
+    Classes inheriting from QGrpcCallCredentials must reimplement
+    \c{QGrpcCredentialMap operator()} and return a credentials map
+    for the call.
+*/
 
 /*!
     \class QGrpcChannelCredentials
     \inmodule QtGrpc
 
-    \brief The QGrpcChannelCredentials is the base class for gRPC channel credentials.
+    \brief The QGrpcChannelCredentials is the base class for gRPC
+    channel credentials.
 
-    Channel credentials are used by the channel when establishing initial connection.
+    Channel credentials are used by the channel when establishing
+    an initial connection.
     For example Ssl credentials or some session tokens.
     Classes inheriting this class should reimplement
-    \c{QGrpcCredentialMap channelCredentials() const} method, that returns session parameters
-    for the specific channel.
- */
+    \c{QGrpcCredentialMap channelCredentials() const},
+    that returns session parameters for the specific channel.
+*/
 
 /*!
     \class QGrpcCredentials
     \inmodule QtGrpc
 
-    \brief The QGrpcCredentials class is a combination of call and channel credentials
-    that is used by gRPC channels to communicate with the services with given
-    authentications parameters.
- */
+    \brief The QGrpcCredentials class is a combination of call
+    and channel credentials that is used by gRPC channels to communicate
+    with services, using the given authentication parameters.
+*/
 
 const char *SslConfigCredential = "sslConfig";
 

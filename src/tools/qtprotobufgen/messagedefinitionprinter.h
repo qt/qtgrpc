@@ -11,12 +11,6 @@
 
 namespace QtProtobuf::generator {
 
-/*!
- \ingroup generator
- \private
- \brief The MessageDefinitionPrinter class
- */
-
 class MessageDefinitionPrinter final : public DescriptorPrinterBase<google::protobuf::Descriptor>
 {
 public:

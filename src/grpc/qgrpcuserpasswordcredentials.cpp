@@ -15,17 +15,14 @@ constexpr char defaultPasswordFieldName[] = "user-password";
     \class QGrpcUserPasswordCredentials
     \inmodule QtGrpc
 
-    \brief The QGrpcUserPasswordCredentials class is reference
+    \brief The QGrpcUserPasswordCredentials class is a reference
     implementation of simple user-password call authentication.
 
     You may manually specify UserFieldName and PasswordFieldName in
     class template parameters to change header keys.
-    Default values for:
-    \code
-    constexpr char defaultUserFieldName[] = "user-name";
-    constexpr char defaultPasswordFieldName[] = "user-password";
-    \endcode
- */
+    The \c userNameField defaults to \c{"user-name"},
+    the \c passwordField defaults to \c{"user-password"}.
+*/
 
 QGrpcUserPasswordCredentials::QGrpcUserPasswordCredentials(const QString &userName,
                                                            const QString &password)

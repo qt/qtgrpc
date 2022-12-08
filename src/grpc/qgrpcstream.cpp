@@ -15,13 +15,13 @@ QT_BEGIN_NAMESPACE
     \brief The QGrpcStream class.
 
     TODO: Fill this out with more detail later
- */
+*/
 
 /*!
     \fn void messageReceived();
 
-    The signal is emitted when stream received updated value from server
- */
+    The signal is emitted when the stream receives an updated value from server.
+*/
 
 QGrpcStream::QGrpcStream(const QString &method, const QByteArray &arg, const StreamHandler &handler,
                          QAbstractGrpcClient *parent)
@@ -38,8 +38,9 @@ void QGrpcStream::addHandler(const StreamHandler &handler)
 }
 
 /*!
-    Cancels this stream and try to abort call in channel
- */
+    Cancel this stream and try to abort any call active on any channel
+    in the stream.
+*/
 void QGrpcStream::abort()
 {
     if (thread() != QThread::currentThread())
@@ -49,27 +50,27 @@ void QGrpcStream::abort()
 }
 
 /*!
-    Returns method for this stream
- */
+    Returns the method for this stream.
+*/
 QString QGrpcStream::method() const
 {
     return m_method;
 }
 
 /*!
-    Returns serialized arguments for this stream
- */
+    Returns serialized arguments for this stream.
+*/
 QByteArray QGrpcStream::arg() const
 {
     return m_arg;
 }
 
 /*!
-    Invokes handler method assigned to this stream with \a data
+    Invokes all handler methods assigned to this stream with \a data.
 
     Should be used by QAbstractGrpcChannel implementations,
-    to update data in stream and notify clients about stream updates.
- */
+    to update data in a stream and notify clients about stream updates.
+*/
 void QGrpcStream::handler(const QByteArray &data)
 {
     setData(data);

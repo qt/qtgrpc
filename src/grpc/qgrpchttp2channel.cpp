@@ -26,15 +26,17 @@ QT_BEGIN_NAMESPACE
     \class QGrpcHttp2Channel
     \inmodule QtGrpc
 
-    \brief The QGrpcHttp2Channel class is HTTP/2 implementation of QAbstractGrpcChannel interface.
+    \brief The QGrpcHttp2Channel class is an HTTP/2 implementation of
+    QAbstractGrpcChannel interface.
 
-    For QGrpcHttp2Channel utilizes channel and call credentials.
-    For channel credential QGrpcHttp2Channel supports SslConfigCredential key.
-    When HTTPS is used, this key has to be explicitly specified and provide QSslConfiguration and value.
-    Provided QSslConfiguration will be used to establish HTTP/2 secured connection.
-    All keys passed as QGrpcCallCredentials will be used as HTTP/2 headers with related
+    QGrpcHttp2Channel utilizes channel and call credentials.
+    Channel credential QGrpcHttp2Channel supports SslConfigCredential key.
+    When HTTPS is used, this key has to be explicitly specified and provide
+    QSslConfiguration and value. The QSslConfiguration provided will be used
+    to establish HTTP/2 secured connection. All keys passed as
+    QGrpcCallCredentials will be used as HTTP/2 headers with related
     values assigned.
- */
+*/
 
 // This QNetworkReply::NetworkError -> QGrpcStatus::StatusCode mapping should be kept in sync
 // with original https://github.com/grpc/grpc/blob/master/doc/statuscodes.md
@@ -105,7 +107,7 @@ struct QGrpcHttp2ChannelPrivate
         QUrl callUrl = url;
         callUrl.setPath(QLatin1StringView("/%1/%2").arg(service, method));
 
-        qGrpcDebug() << "Service call url: " << callUrl;
+        qGrpcDebug() << "Service call url:" << callUrl;
         QNetworkRequest request(callUrl);
         request.setHeader(QNetworkRequest::ContentTypeHeader,
                           QVariant(QLatin1StringView("application/grpc")));
@@ -115,9 +117,8 @@ struct QGrpcHttp2ChannelPrivate
 #if QT_CONFIG(ssl)
         request.setSslConfiguration(sslConfig);
 #endif
-        for (const auto &[key, value] : credentials->callCredentials().toStdMap()) {
+        for (const auto &[key, value] : credentials->callCredentials().toStdMap())
             request.setRawHeader(key, value.toString().toUtf8());
-        }
 
         request.setAttribute(QNetworkRequest::Http2DirectAttribute, true);
 
@@ -125,7 +126,7 @@ struct QGrpcHttp2ChannelPrivate
         // Args must be 4-byte unsigned int to fit into 4-byte big endian
         qToBigEndian(static_cast<quint32>(args.size()), msg.data() + 1);
         msg += args;
-        qGrpcDebug() << "SEND msg with size: " << msg.size();
+        qGrpcDebug() << "SEND msg with size:" << msg.size();
 
         QNetworkReply *networkReply = nm.post(request, msg);
 #if QT_CONFIG(ssl)
@@ -133,7 +134,8 @@ struct QGrpcHttp2ChannelPrivate
                          [networkReply](const QList<QSslError> &errors) {
                              qGrpcCritical() << errors;
                              // TODO: filter out noncritical SSL handshake errors
-                             // FIXME: error due to ssl failure is not transferred to the client: last error will be Operation canceled
+                             // FIXME: error due to ssl failure is not transferred to the client:
+                             // last error will be Operation canceled
                              QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
                          });
 #endif
@@ -148,11 +150,10 @@ struct QGrpcHttp2ChannelPrivate
 
     static void abortNetworkReply(QNetworkReply *networkReply)
     {
-        if (networkReply->isRunning()) {
+        if (networkReply->isRunning())
             networkReply->abort();
-        } else {
+        else
             networkReply->deleteLater();
-        }
     }
 
     static QByteArray processReply(QNetworkReply *networkReply, QGrpcStatus::StatusCode &statusCode)
@@ -166,9 +167,8 @@ struct QGrpcHttp2ChannelPrivate
         // Check if server answer with error
         statusCode = static_cast<QGrpcStatus::StatusCode>(
                 networkReply->rawHeader(GrpcStatusHeader).toInt());
-        if (statusCode != QGrpcStatus::StatusCode::Ok) {
+        if (statusCode != QGrpcStatus::StatusCode::Ok)
             return {};
-        }
 
         // Message size doesn't matter for now
         return networkReply->readAll().mid(GrpcMessageSizeHeaderSize);
@@ -201,9 +201,9 @@ struct QGrpcHttp2ChannelPrivate
 };
 
 /*!
-    QGrpcHttp2Channel constructs QGrpcHttp2Channel with \a url used to establish
-    channel connections and \a credentials.
- */
+    QGrpcHttp2Channel constructs QGrpcHttp2Channel with \a url used to
+    establish channel connections and \a credentials.
+*/
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &url,
                                      std::unique_ptr<QAbstractGrpcCredentials> credentials)
     : QAbstractGrpcChannel(),
@@ -229,7 +229,7 @@ QGrpcStatus QGrpcHttp2Channel::call(const QString &method, const QString &servic
     ret = dPtr->processReply(networkReply, grpcStatus);
 
     networkReply->deleteLater();
-    qGrpcDebug() << __func__ << "RECV: " << ret.toHex() << "grpcStatus" << grpcStatus;
+    qGrpcDebug() << __func__ << "RECV:" << ret.toHex() << "grpcStatus" << grpcStatus;
     return { grpcStatus, QString::fromUtf8(networkReply->rawHeader(GrpcStatusMessage)) };
 }
 
@@ -252,7 +252,7 @@ void QGrpcHttp2Channel::call(const QString &method, const QString &service, cons
                 if (*abortConnection)
                     QObject::disconnect(*abortConnection);
 
-                qGrpcDebug() << "RECV: " << data;
+                qGrpcDebug() << "RECV:" << data;
                 if (QGrpcStatus::StatusCode::Ok == grpcStatus) {
                     reply->setData(data);
                     reply->finished();
@@ -296,13 +296,13 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
                 auto replyIt = dPtr->activeStreamReplies.find(networkReply);
 
                 const QByteArray data = networkReply->readAll();
-                qGrpcDebug() << "RECV data size: " << data.size();
+                qGrpcDebug() << "RECV data size:" << data.size();
 
                 if (replyIt == dPtr->activeStreamReplies.end()) {
                     qGrpcDebug() << data.toHex();
                     int expectedDataSize = QGrpcHttp2ChannelPrivate::getExpectedDataSize(data);
-                    qGrpcDebug() << "First chunk received: " << data.size()
-                                 << " expectedDataSize: " << expectedDataSize;
+                    qGrpcDebug() << "First chunk received:" << data.size()
+                                 << "expectedDataSize:" << expectedDataSize;
 
                     if (expectedDataSize == 0) {
                         grpcStream->handler(QByteArray());
@@ -318,14 +318,14 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
                 QGrpcHttp2ChannelPrivate::ExpectedData &dataContainer = replyIt->second;
                 dataContainer.container.append(data);
 
-                qGrpcDebug() << "Proceed chunk: " << data.size()
-                             << " dataContainer: " << dataContainer.container.size()
-                             << " capacity: " << dataContainer.expectedSize;
+                qGrpcDebug() << "Processeded chunk:" << data.size()
+                             << "dataContainer:" << dataContainer.container.size()
+                             << "capacity:" << dataContainer.expectedSize;
                 while (dataContainer.container.size() >= dataContainer.expectedSize
                        && !networkReply->isFinished()) {
-                    qGrpcDebug() << "Full data received: " << data.size()
-                                 << " dataContainer: " << dataContainer.container.size()
-                                 << " capacity: " << dataContainer.expectedSize;
+                    qGrpcDebug() << "Full data received:" << data.size()
+                                 << "dataContainer:" << dataContainer.container.size()
+                                 << "capacity:" << dataContainer.expectedSize;
                     grpcStream->handler(dataContainer.container.mid(
                             GrpcMessageSizeHeaderSize,
                             dataContainer.expectedSize - GrpcMessageSizeHeaderSize));
@@ -334,8 +334,8 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
                         dataContainer.expectedSize = QGrpcHttp2ChannelPrivate::getExpectedDataSize(
                                 dataContainer.container);
                     } else if (dataContainer.container.size() > 0) {
-                        qGrpcWarning() << "Invalid container size received, size header is less "
-                                          "than 5 bytes";
+                        qGrpcWarning("Invalid container size received, size header is less than 5 "
+                                     "bytes");
                     }
                 }
 
@@ -374,10 +374,10 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
                 QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
                 networkReply->deleteLater();
                 qGrpcWarning() << grpcStream->method() << "call" << service
-                               << "stream finished: " << errorString;
+                               << "stream finished:" << errorString;
                 switch (networkError) {
                 case QNetworkReply::RemoteHostClosedError:
-                    qGrpcDebug() << "Remote server closed connection. Reconnect silently";
+                    qGrpcDebug() << "Remote server closed connection. Reconnect silently.";
                     stream(grpcStream, service, client);
                     break;
                 case QNetworkReply::NoError: {
@@ -397,10 +397,8 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
                 default:
                     grpcStream->errorOccurred(QGrpcStatus{
                             StatusCodeMap.at(networkError),
-                            QLatin1StringView("%1 call %2 stream failed: %3")
-                                    .arg(service)
-                                    .arg(grpcStream->method())
-                                    .arg(errorString) });
+                            QLatin1StringView("%1 call %2 stream failed: %3.")
+                                    .arg(service, grpcStream->method(), errorString) });
                     break;
                 }
             });

@@ -8,19 +8,19 @@
     \class QGrpcInsecureCallCredentials
     \inmodule QtGrpc
 
-    \brief The QGrpcInsecureCallCredentials class is a dummy implementation of
-    QGrpcCallCredentials.
+    \brief The QGrpcInsecureCallCredentials class is a dummy implementation
+    of QGrpcCallCredentials.
 
     It doesn't provide any extra information to the channel.
     Use it when you don't need any call credentials.
- */
+*/
 
 /*!
     \class QGrpcInsecureChannelCredentials
     \inmodule QtGrpc
 
-    \brief The QGrpcInsecureChannelCredentials class is a dummy implementation of
-    QGrpcChannelCredentials.
+    \brief The QGrpcInsecureChannelCredentials class is a dummy implementation
+    of QGrpcChannelCredentials.
 
     It doesn't provide any extra information to the channel.
     Use it when you don't need any channel credentials.

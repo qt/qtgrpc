@@ -11,4 +11,4 @@
     \brief The QGrpcSslCredentials class.
 
     TODO: Fill this out with more detail later
- */
+*/
