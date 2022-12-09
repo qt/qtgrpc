@@ -40,9 +40,9 @@ class QGrpcChannelStream : public QObject
     Q_OBJECT
 
 public:
-    QGrpcChannelStream(grpc::Channel *channel, const QString &method, const QByteArray &data,
-                       QObject *parent = nullptr);
-    ~QGrpcChannelStream();
+    explicit QGrpcChannelStream(grpc::Channel *channel, const QString &method,
+                                const QByteArray &data, QObject *parent = nullptr);
+    ~QGrpcChannelStream() override;
 
     void cancel();
     void start();
@@ -65,9 +65,9 @@ class QGrpcChannelCall : public QObject
     Q_OBJECT
 
 public:
-    QGrpcChannelCall(grpc::Channel *channel, const QString &method, const QByteArray &data,
-                     QObject *parent = nullptr);
-    ~QGrpcChannelCall();
+    explicit QGrpcChannelCall(grpc::Channel *channel, const QString &method, const QByteArray &data,
+                              QObject *parent = nullptr);
+    ~QGrpcChannelCall() override;
 
     void cancel();
     void start();
@@ -90,8 +90,9 @@ struct QGrpcChannelPrivate
     std::shared_ptr<grpc::Channel> m_channel;
     std::shared_ptr<grpc::ChannelCredentials> m_credentials;
 
-    QGrpcChannelPrivate(const QUrl &url, QGrpcChannel::NativeGrpcChannelCredentials credentialsType,
-                        const QStringList &credentialsList);
+    explicit QGrpcChannelPrivate(const QUrl &url,
+                                 QGrpcChannel::NativeGrpcChannelCredentials credentialsType,
+                                 const QStringList &credentialsList);
     ~QGrpcChannelPrivate();
 
     void call(const QString &method, const QString &service, const QByteArray &args,

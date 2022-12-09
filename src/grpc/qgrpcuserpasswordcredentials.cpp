@@ -42,4 +42,11 @@ QGrpcUserPasswordCredentials::QGrpcUserPasswordCredentials(const QByteArray &use
 
 QGrpcUserPasswordCredentials::QGrpcUserPasswordCredentials() = default;
 
+QGrpcUserPasswordCredentials::~QGrpcUserPasswordCredentials() = default;
+
+QGrpcCredentialMap QGrpcUserPasswordCredentials::operator()() const
+{
+    return m_map;
+}
+
 QT_END_NAMESPACE

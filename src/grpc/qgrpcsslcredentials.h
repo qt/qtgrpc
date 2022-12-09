@@ -16,17 +16,13 @@ QT_BEGIN_NAMESPACE
 class Q_GRPC_EXPORT QGrpcSslCredentials final : public QGrpcChannelCredentials
 {
 public:
-    QGrpcSslCredentials(const QSslConfiguration &configuation)
-        : m_map(QGrpcCredentialMap{ { QByteArray(SslConfigCredential),
-                                      QVariant::fromValue<QSslConfiguration>(configuation) } })
-    {
-    }
-    ~QGrpcSslCredentials() override = default;
+    explicit QGrpcSslCredentials(const QSslConfiguration &configuation);
+    ~QGrpcSslCredentials() override;
 
-    QGrpcCredentialMap channelCredentials() const override { return m_map; }
+    QGrpcCredentialMap channelCredentials() const override;
 
 private:
-    QGrpcSslCredentials() = default;
+    QGrpcSslCredentials();
     QGrpcCredentialMap m_map;
 };
 

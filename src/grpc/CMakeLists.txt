@@ -10,7 +10,7 @@ qt_internal_add_module(Grpc
         qabstractgrpcchannel.h qabstractgrpcchannel.cpp
         qgrpchttp2channel.h qgrpchttp2channel.cpp
         qabstractgrpcclient.h qabstractgrpcclient.cpp
-        qabstractgrpccredentials.h
+        qabstractgrpccredentials.h qabstractgrpccredentials.cpp
         qgrpccredentials.h qgrpccredentials.cpp
         qgrpcinsecurecredentials.h qgrpcinsecurecredentials.cpp
         qgrpcuserpasswordcredentials.h qgrpcuserpasswordcredentials.cpp

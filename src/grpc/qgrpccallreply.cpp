@@ -2,11 +2,12 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
+#include "qgrpccallreply.h"
 #include <QtCore/QThread>
 
-#include "qgrpccallreply.h"
-
 QT_BEGIN_NAMESPACE
+
+using namespace Qt::StringLiterals;
 
 /*!
     \class QGrpcCallReply
@@ -22,7 +23,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn template <typename Func1, typename Func2> inline void subscribe(QObject *receiver,
+    \fn template <typename Func1, typename Func2> void subscribe(QObject *receiver,
     Func1 finishCallback, Func2 errorCallback, Qt::ConnectionType type = Qt::AutoConnection);
 
     Convenience function to connect the \a finishCallback and
@@ -37,7 +38,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn template <typename Func1> inline void subscribe(QObject *receiver,
+    \fn template <typename Func1> void subscribe(QObject *receiver,
     Func1 finishCallback, Qt::ConnectionType type = Qt::AutoConnection);
 
     Convenience function to connect the \a finishCallback of \a receiver to
@@ -49,19 +50,27 @@ QT_BEGIN_NAMESPACE
     \endcode
 */
 
+QGrpcCallReply::QGrpcCallReply(QAbstractGrpcClient *parent) : QGrpcOperation(parent)
+{
+}
+
+QGrpcCallReply::~QGrpcCallReply() = default;
+
 /*!
     Aborts this reply and try to abort call in channel.
 */
 void QGrpcCallReply::abort()
 {
-    auto abortFunc = [this]() {
-        this->setData({});
-        errorOccurred({ QGrpcStatus::StatusCode::Aborted,
-                        QLatin1StringView("Call aborted by user or timeout") });
+    auto abortFunc = [&] {
+        setData({});
+        errorOccurred({ QGrpcStatus::StatusCode::Aborted, "Call aborted by user or timeout"_L1 });
     };
     if (thread() != QThread::currentThread())
         QMetaObject::invokeMethod(this, abortFunc, Qt::BlockingQueuedConnection);
     else
         abortFunc();
 }
+
 QT_END_NAMESPACE
+
+#include "moc_qgrpccallreply.cpp"

@@ -20,15 +20,16 @@ struct QGrpcChannelPrivate;
 class Q_GRPC_EXPORT QGrpcChannel final : public QAbstractGrpcChannel
 {
 public:
-    enum NativeGrpcChannelCredentials {
+    enum NativeGrpcChannelCredentials : uint8_t {
         InsecureChannelCredentials = 0,
         GoogleDefaultCredentials,
-        SslDefaultCredentials
+        SslDefaultCredentials,
     };
 
-    QGrpcChannel(const QUrl &name, NativeGrpcChannelCredentials credentialsType,
-                 const QStringList &credentialsList = QStringList());
-    ~QGrpcChannel();
+    explicit QGrpcChannel(const QUrl &name, NativeGrpcChannelCredentials credentialsType,
+                          const QStringList &credentialsList);
+    explicit QGrpcChannel(const QUrl &name, NativeGrpcChannelCredentials credentialsType);
+    ~QGrpcChannel() override;
 
     QGrpcStatus call(const QString &method, const QString &service, const QByteArray &args,
                      QByteArray &ret) override;

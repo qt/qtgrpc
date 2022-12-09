@@ -31,6 +31,8 @@ QGrpcStream::QGrpcStream(const QString &method, const QByteArray &arg, const Str
         m_handlers.push_back(handler);
 }
 
+QGrpcStream::~QGrpcStream() = default;
+
 void QGrpcStream::addHandler(const StreamHandler &handler)
 {
     if (handler)
@@ -73,10 +75,12 @@ QByteArray QGrpcStream::arg() const
 */
 void QGrpcStream::handler(const QByteArray &data)
 {
-    setData(data);
+    setData(QByteArray(data));
     for (auto &handler : m_handlers)
         handler(data);
     emit messageReceived();
 }
 
 QT_END_NAMESPACE
+
+#include "moc_qgrpcstream.cpp"

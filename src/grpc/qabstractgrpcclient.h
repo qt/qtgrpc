@@ -35,8 +35,8 @@ Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status) const;
 
 protected:
-    QAbstractGrpcClient(const QString &service, QObject *parent = nullptr);
-    virtual ~QAbstractGrpcClient();
+    explicit QAbstractGrpcClient(const QString &service, QObject *parent = nullptr);
+    ~QAbstractGrpcClient() override;
 
     template <typename ParamType, typename ReturnType>
     QGrpcStatus call(const QString &method, const QProtobufMessage &arg, ReturnType *ret)

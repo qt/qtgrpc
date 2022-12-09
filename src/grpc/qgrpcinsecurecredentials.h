@@ -13,15 +13,15 @@ QT_BEGIN_NAMESPACE
 class Q_GRPC_EXPORT QGrpcInsecureCallCredentials final : public QGrpcCallCredentials
 {
 public:
-    ~QGrpcInsecureCallCredentials() override = default;
-    QGrpcCredentialMap operator()() const override { return QGrpcCredentialMap{}; }
+    ~QGrpcInsecureCallCredentials() override;
+    QGrpcCredentialMap operator()() const override;
 };
 
 class Q_GRPC_EXPORT QGrpcInsecureChannelCredentials final : public QGrpcChannelCredentials
 {
 public:
-    ~QGrpcInsecureChannelCredentials() override = default;
-    QGrpcCredentialMap channelCredentials() const override { return QGrpcCredentialMap{}; }
+    ~QGrpcInsecureChannelCredentials() override;
+    QGrpcCredentialMap channelCredentials() const override;
 };
 
 QT_END_NAMESPACE

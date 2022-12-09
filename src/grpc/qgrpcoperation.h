@@ -15,9 +15,10 @@ QT_BEGIN_NAMESPACE
 class Q_GRPC_EXPORT QGrpcOperation : public QObject
 {
     Q_OBJECT
+
 public:
-    template<typename T>
-    T read()
+    template <typename T>
+    T read() const
     {
         T value;
         auto client = qobject_cast<QAbstractGrpcClient *>(parent());
@@ -27,6 +28,7 @@ public:
     }
 
     void setData(const QByteArray &data);
+    void setData(QByteArray &&data);
 
     virtual void abort() = 0;
 
@@ -35,8 +37,8 @@ Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status);
 
 protected:
-    QGrpcOperation(QAbstractGrpcClient *parent);
-    virtual ~QGrpcOperation();
+    explicit QGrpcOperation(QAbstractGrpcClient *parent);
+    ~QGrpcOperation() override;
 
 private:
     QGrpcOperation();

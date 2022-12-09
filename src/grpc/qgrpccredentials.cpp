@@ -45,4 +45,8 @@ QT_BEGIN_NAMESPACE
 
 const char *SslConfigCredential = "sslConfig";
 
+QGrpcCallCredentials::~QGrpcCallCredentials() = default;
+
+QGrpcChannelCredentials::~QGrpcChannelCredentials() = default;
+
 QT_END_NAMESPACE

@@ -26,8 +26,6 @@ QAbstractGrpcService::QAbstractGrpcService(QObject *parent)
 {
 }
 
-QAbstractGrpcService::~QAbstractGrpcService()
-{
-}
+QAbstractGrpcService::~QAbstractGrpcService() = default;
 
 QT_END_NAMESPACE

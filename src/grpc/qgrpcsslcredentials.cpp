@@ -12,3 +12,17 @@
 
     TODO: Fill this out with more detail later
 */
+
+QGrpcSslCredentials::QGrpcSslCredentials(const QSslConfiguration &configuation)
+    : m_map(QGrpcCredentialMap{ { QByteArray(SslConfigCredential),
+                                  QVariant::fromValue<QSslConfiguration>(configuation) } })
+{
+}
+QGrpcSslCredentials::~QGrpcSslCredentials() = default;
+
+QGrpcCredentialMap QGrpcSslCredentials::channelCredentials() const
+{
+    return m_map;
+}
+
+QGrpcSslCredentials::QGrpcSslCredentials() = default;

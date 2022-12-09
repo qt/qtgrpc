@@ -18,8 +18,9 @@ struct QGrpcHttp2ChannelPrivate;
 class Q_GRPC_EXPORT QGrpcHttp2Channel final : public QAbstractGrpcChannel
 {
 public:
-    QGrpcHttp2Channel(const QUrl &url, std::unique_ptr<QAbstractGrpcCredentials> credentials);
-    ~QGrpcHttp2Channel();
+    explicit QGrpcHttp2Channel(const QUrl &url,
+                               std::unique_ptr<QAbstractGrpcCredentials> credentials);
+    ~QGrpcHttp2Channel() override;
 
     QGrpcStatus call(const QString &method, const QString &service, const QByteArray &args,
                      QByteArray &ret) override;

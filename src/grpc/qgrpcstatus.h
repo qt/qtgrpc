@@ -21,8 +21,9 @@ class Q_GRPC_EXPORT QGrpcStatus final
     Q_GADGET
     Q_PROPERTY(StatusCode code READ code CONSTANT)
     Q_PROPERTY(QString message READ message CONSTANT)
+
 public:
-    enum StatusCode {
+    enum StatusCode : uint8_t {
         Ok = 0,
         Cancelled = 1,
         Unknown = 2,
