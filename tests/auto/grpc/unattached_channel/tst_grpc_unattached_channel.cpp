@@ -33,13 +33,13 @@ void QtGrpcUnattachedChannelClientTest::CheckMethodsGeneration()
 {
     // Dummy compile time check of functions generation and interface compatibility
     TestService::Client client;
-    client.attachChannel(QSharedPointer<QGrpcHttp2Channel>::create(
+    client.attachChannel(std::make_shared<QGrpcHttp2Channel>(
             QUrl(), QGrpcInsecureChannelCredentials() | QGrpcInsecureCallCredentials()));
     SimpleStringMessage request;
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
     client.testMethod(request, result.get());
     client.testMethod(request);
-    client.testMethod(request, &client, [](QSharedPointer<QGrpcCallReply>) {});
+    client.testMethod(request, &client, [](std::shared_ptr<QGrpcCallReply>) {});
 }
 
 void QtGrpcUnattachedChannelClientTest::ClientSyncTestUnattachedChannel()
@@ -47,7 +47,7 @@ void QtGrpcUnattachedChannelClientTest::ClientSyncTestUnattachedChannel()
     TestService::Client client;
     SimpleStringMessage request;
     request.setTestFieldString("Some status message");
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
 
     QGrpcStatus status = client.testMethodStatusMessage(request, result.get());
 
@@ -60,7 +60,7 @@ void QtGrpcUnattachedChannelClientTest::ClientSyncTestUnattachedChannelSignal()
     TestService::Client client;
     SimpleStringMessage request;
     request.setTestFieldString("Some status message");
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
 
     QSignalSpy clientErrorSpy(&client, &TestService::Client::errorOccurred);
     QVERIFY(clientErrorSpy.isValid());
@@ -75,11 +75,12 @@ void QtGrpcUnattachedChannelClientTest::ClientSyncTestUnattachedChannelSignal()
 
 void QtGrpcUnattachedChannelClientTest::AttachChannelThreadTest()
 {
-    QSharedPointer<QGrpcHttp2Channel> channel;
-    QSharedPointer<QThread> thread(QThread::create([&]() {
-        channel = QSharedPointer<QGrpcHttp2Channel>::create(
-                QUrl("http://localhost:50051", QUrl::StrictMode),
-                QGrpcInsecureCallCredentials() | QGrpcInsecureChannelCredentials());
+    std::shared_ptr<QGrpcHttp2Channel> channel;
+    std::shared_ptr<QThread> thread(QThread::create([&] {
+        const QUrl url("http://localhost:50051", QUrl::StrictMode);
+        channel = std::make_shared<QGrpcHttp2Channel>(url,
+                                                      QGrpcInsecureCallCredentials()
+                                                              | QGrpcInsecureChannelCredentials());
     }));
     thread->start();
     thread->wait();

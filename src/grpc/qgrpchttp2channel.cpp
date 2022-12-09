@@ -239,8 +239,8 @@ void QGrpcHttp2Channel::call(const QString &method, const QString &service, cons
     Q_ASSERT(reply != nullptr);
     QNetworkReply *networkReply = dPtr->post(method, service, args);
 
-    auto connection = QSharedPointer<QMetaObject::Connection>::create();
-    auto abortConnection = QSharedPointer<QMetaObject::Connection>::create();
+    auto connection = std::make_shared<QMetaObject::Connection>();
+    auto abortConnection = std::make_shared<QMetaObject::Connection>();
 
     *connection = QObject::connect(
             networkReply, &QNetworkReply::finished, reply,
@@ -286,9 +286,9 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
     QNetworkReply *networkReply = dPtr->post(grpcStream->method(), service, grpcStream->arg(),
                                              true);
 
-    auto finishConnection = QSharedPointer<QMetaObject::Connection>::create();
-    auto abortConnection = QSharedPointer<QMetaObject::Connection>::create();
-    auto readConnection = QSharedPointer<QMetaObject::Connection>::create();
+    auto finishConnection = std::make_shared<QMetaObject::Connection>();
+    auto abortConnection = std::make_shared<QMetaObject::Connection>();
+    auto readConnection = std::make_shared<QMetaObject::Connection>();
 
     *readConnection = QObject::connect(
             networkReply, &QNetworkReply::readyRead, grpcStream,
@@ -420,10 +420,10 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
             });
 }
 
-QSharedPointer<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const
+std::shared_ptr<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const
 {
     // TODO: make selection based on credentials or channel settings
-    return QSharedPointer<QProtobufSerializer>::create();
+    return std::make_shared<QProtobufSerializer>();
 }
 
 QT_END_NAMESPACE

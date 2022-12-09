@@ -33,10 +33,10 @@ constexpr int FailTimeout = QT_GRPC_TEST_MESSAGE_LATENCY * 5;
 
 using namespace qtgrpc::tests;
 
-static QSharedPointer<TestService::Client> createHttp2Client()
+static std::shared_ptr<TestService::Client> createHttp2Client()
 {
-    auto client = QSharedPointer<TestService::Client>::create();
-    client->attachChannel(QSharedPointer<QGrpcHttp2Channel>::create(
+    auto client = std::make_shared<TestService::Client>();
+    client->attachChannel(std::make_shared<QGrpcHttp2Channel>(
             QUrl("http://localhost:50051", QUrl::StrictMode),
             QGrpcInsecureChannelCredentials() | QGrpcInsecureCallCredentials()));
     return client;
@@ -44,19 +44,19 @@ static QSharedPointer<TestService::Client> createHttp2Client()
 
 #if QT_CONFIG(native_grpc)
 #  ifndef Q_OS_WINDOWS
-static QSharedPointer<TestService::Client> createGrpcSocketClient()
+static std::shared_ptr<TestService::Client> createGrpcSocketClient()
 {
-    auto client = QSharedPointer<TestService::Client>::create();
-    client->attachChannel(QSharedPointer<QGrpcChannel>::create(QString("unix:///tmp/test.sock"),
-                                                               QGrpcChannel::InsecureChannelCredentials));
+    auto client = std::make_shared<TestService::Client>();
+    client->attachChannel(std::make_shared<QGrpcChannel>(QString("unix:///tmp/test.sock"),
+                                                         QGrpcChannel::InsecureChannelCredentials));
     return client;
 }
 #  endif
-static QSharedPointer<TestService::Client> createGrpcHttpClient()
+static std::shared_ptr<TestService::Client> createGrpcHttpClient()
 {
-    auto client = QSharedPointer<TestService::Client>::create();
-    client->attachChannel(QSharedPointer<QGrpcChannel>::create(QString("localhost:50051"),
-                                                               QGrpcChannel::InsecureChannelCredentials));
+    auto client = std::make_shared<TestService::Client>();
+    client->attachChannel(std::make_shared<QGrpcChannel>(QString("localhost:50051"),
+                                                         QGrpcChannel::InsecureChannelCredentials));
     return client;
 }
 #endif
@@ -70,7 +70,7 @@ public:
 private slots:
     void initTestCase_data()
     {
-        QTest::addColumn<QSharedPointer<TestService::Client>>("client");
+        QTest::addColumn<std::shared_ptr<TestService::Client>>("client");
 
         QTest::newRow("Http2Client") << createHttp2Client();
 #if QT_CONFIG(native_grpc)
@@ -97,7 +97,7 @@ private slots:
 
     void init()
     {
-        QFETCH_GLOBAL(QSharedPointer<TestService::Client>, client);
+        QFETCH_GLOBAL(std::shared_ptr<TestService::Client>, client);
         _client = std::move(client);
 
         if (serverProc->state() != QProcess::ProcessState::Running) {
@@ -144,13 +144,13 @@ private:
     }
 
     std::unique_ptr<QProcess> serverProc;
-    QSharedPointer<TestService::Client> _client;
+    std::shared_ptr<TestService::Client> _client;
 };
 
 void QtGrpcClientTest::CallAndRecieveStringTest()
 {
     SimpleStringMessage request;
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
     request.setTestFieldString("Hello Qt!");
     QCOMPARE_EQ(_client->testMethod(request, result.get()), QGrpcStatus::Ok);
     QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
@@ -163,7 +163,7 @@ void QtGrpcClientTest::CallAndAsyncRecieveWithSubscribeStringTest()
     request.setTestFieldString("Hello Qt!");
     QEventLoop waiter;
 
-    QSharedPointer<QGrpcCallReply> reply = _client->testMethod(request);
+    std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
     reply->subscribe(this, [reply, &result, &waiter]() {
         result = reply->read<SimpleStringMessage>();
         reply->deleteLater();
@@ -180,7 +180,7 @@ void QtGrpcClientTest::CallAndAsyncRecieveWithLambdaStringTest()
     SimpleStringMessage request;
     request.setTestFieldString("Hello Qt!");
     QEventLoop waiter;
-    _client->testMethod(request, this, [&result, &waiter](QSharedPointer<QGrpcCallReply> reply) {
+    _client->testMethod(request, this, [&result, &waiter](std::shared_ptr<QGrpcCallReply> reply) {
         result = reply->read<SimpleStringMessage>();
         waiter.quit();
     });
@@ -195,7 +195,7 @@ void QtGrpcClientTest::CallAndAsyncImmediateAbortStringTest()
     SimpleStringMessage request;
     request.setTestFieldString("sleep");
 
-    QSharedPointer<QGrpcCallReply> reply = _client->testMethod(request);
+    std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
 
     result.setTestFieldString("Result not changed by echo");
     QObject::connect(reply.get(), &QGrpcCallReply::finished, this, [&result, reply]() {
@@ -229,7 +229,7 @@ void QtGrpcClientTest::CallAndAsyncDeferredAbortStringTest()
 
     SimpleStringMessage result;
     result.setTestFieldString("Result not changed by echo");
-    QSharedPointer<QGrpcCallReply> reply = _client->testMethod(request);
+    std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
 
     QObject::connect(reply.get(), &QGrpcCallReply::finished, this,
                      [reply, &result]() { result = reply->read<SimpleStringMessage>(); });
@@ -346,7 +346,7 @@ void QtGrpcClientTest::StreamStringAndGetChangedSignalsTests
     SimpleStringMessage request;
     request.setTestFieldString("Stream");
 
-    auto result = QSharedPointer<SimpleStringMessage>(new SimpleStringMessage);
+    auto result = std::make_shared<SimpleStringMessage>();
 
     QSignalSpy testFieldChangedSpy(result, &SimpleStringMessage::testFieldStringChanged);
     QVERIFY(testFieldChangedSpy.isValid());
@@ -394,7 +394,7 @@ void QtGrpcClientTest::CallMessageAsyncTest()
     SimpleStringMessage request;
     request.setTestFieldString("Some status message");
 
-    QSharedPointer<QGrpcCallReply> reply = _client->testMethodStatusMessage(request);
+    std::shared_ptr<QGrpcCallReply> reply = _client->testMethodStatusMessage(request);
 
     QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
     QVERIFY(replyErrorSpy.isValid());
@@ -424,7 +424,7 @@ void QtGrpcClientTest::CallMessageClientTest()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Some status message");
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
 
     QSignalSpy clientErrorSpy(_client.get(), &TestService::Client::errorOccurred);
     QVERIFY(clientErrorSpy.isValid());
@@ -441,7 +441,7 @@ void QtGrpcClientTest::StatusMessageClientTest()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Some status message");
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
 
     QGrpcStatus status = _client->testMethodStatusMessage(request, result.get());
 
@@ -582,7 +582,7 @@ void QtGrpcClientTest::CallNonCompatibleArgRetTest()
 
     SimpleIntMessage request;
     request.setTestField(TestValue);
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
     QCOMPARE_EQ(_client->testMethodNonCompatibleArgRet(request, result.get()), QGrpcStatus::Ok);
     QCOMPARE_EQ(result->testFieldString(), TestValueString);
 }
@@ -590,7 +590,7 @@ void QtGrpcClientTest::CallNonCompatibleArgRetTest()
 void QtGrpcClientTest::CallStringThreadTest()
 {
     SimpleStringMessage request;
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
 
     request.setTestFieldString("Hello Qt from thread!");
 
@@ -624,7 +624,7 @@ void QtGrpcClientTest::StringAsyncThreadTest()
 
     QSharedPointer<QThread> thread(QThread::create([&]() {
         QEventLoop waiter;
-        QSharedPointer<QGrpcCallReply> reply = _client->testMethod(request);
+        std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
         QObject::connect(reply.get(), &QGrpcCallReply::finished, &waiter,
                          [reply, &result, &waiter]() {
                              result = reply->read<SimpleStringMessage>();

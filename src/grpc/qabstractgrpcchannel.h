@@ -5,13 +5,14 @@
 #ifndef QABSTRACTGRPCCHANNEL_H
 #define QABSTRACTGRPCCHANNEL_H
 
-#include <QtCore/QSharedPointer>
 #include <QtCore/QString>
 #include <QtCore/QThread>
 #include <QtCore/qbytearray.h>
 #include <QtGrpc/qgrpccredentials.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
+
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 
@@ -30,7 +31,7 @@ public:
                       QGrpcCallReply *ret) = 0;
     virtual void stream(QGrpcStream *stream, const QString &service,
                         QAbstractGrpcClient *client) = 0;
-    virtual QSharedPointer<QAbstractProtobufSerializer> serializer() const = 0;
+    virtual std::shared_ptr<QAbstractProtobufSerializer> serializer() const = 0;
 
     const QThread *thread() const;
 

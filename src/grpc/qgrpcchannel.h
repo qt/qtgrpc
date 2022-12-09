@@ -35,7 +35,7 @@ public:
     void call(const QString &method, const QString &service, const QByteArray &args,
               QGrpcCallReply *reply) override;
     void stream(QGrpcStream *stream, const QString &service, QAbstractGrpcClient *client) override;
-    QSharedPointer<QAbstractProtobufSerializer> serializer() const override;
+    std::shared_ptr<QAbstractProtobufSerializer> serializer() const override;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcChannel)

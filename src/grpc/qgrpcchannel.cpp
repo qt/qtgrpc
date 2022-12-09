@@ -214,8 +214,8 @@ void QGrpcChannelPrivate::call(const QString &method, const QString &service,
     QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(m_channel.get(), rpcName, args,
                                                                reply),
                                           &QGrpcChannelCall::deleteLater);
-    auto connection = QSharedPointer<QMetaObject::Connection>::create();
-    auto abortConnection = QSharedPointer<QMetaObject::Connection>::create();
+    auto connection = std::make_shared<QMetaObject::Connection>();
+    auto abortConnection = std::make_shared<QMetaObject::Connection>();
 
     *connection = QObject::connect(call.get(), &QGrpcChannelCall::finished, reply,
                                    [call, reply, connection, abortConnection]() {
@@ -267,10 +267,10 @@ void QGrpcChannelPrivate::stream(QGrpcStream *stream, const QString &service,
                                                                   stream->arg(), stream),
                                            &QGrpcChannelStream::deleteLater);
 
-    auto abortConnection = QSharedPointer<QMetaObject::Connection>::create();
-    auto readConnection = QSharedPointer<QMetaObject::Connection>::create();
-    auto clientConnection = QSharedPointer<QMetaObject::Connection>::create();
-    auto connection = QSharedPointer<QMetaObject::Connection>::create();
+    auto abortConnection = std::make_shared<QMetaObject::Connection>();
+    auto readConnection = std::make_shared<QMetaObject::Connection>();
+    auto clientConnection = std::make_shared<QMetaObject::Connection>();
+    auto connection = std::make_shared<QMetaObject::Connection>();
 
     *readConnection = QObject::connect(sub.get(), &QGrpcChannelStream::dataReady, stream,
                                        [stream](const QByteArray &data) { stream->handler(data); });
@@ -351,10 +351,10 @@ void QGrpcChannel::stream(QGrpcStream *stream, const QString &service, QAbstract
     dPtr->stream(stream, service, client);
 }
 
-QSharedPointer<QAbstractProtobufSerializer> QGrpcChannel::serializer() const
+std::shared_ptr<QAbstractProtobufSerializer> QGrpcChannel::serializer() const
 {
     // TODO: make selection based on credentials or channel settings
-    return QSharedPointer<QProtobufSerializer>::create();
+    return std::make_shared<QProtobufSerializer>();
 }
 
 QT_END_NAMESPACE

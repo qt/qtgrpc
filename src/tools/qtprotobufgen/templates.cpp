@@ -739,14 +739,14 @@ const char *Templates::ClientMethodDeclarationSyncTemplate()
 
 const char *Templates::ClientMethodDeclarationAsyncTemplate()
 {
-    return "QSharedPointer<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$);\n";
+    return "std::shared_ptr<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$);\n";
 }
 
 const char *Templates::ClientMethodDeclarationAsync2Template()
 {
     return "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$, const QObject "
            "*context, "
-           "const std::function<void(QSharedPointer<QGrpcCallReply>)> &callback);\n";
+           "const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback);\n";
 }
 
 const char *Templates::ClientMethodDeclarationQmlTemplate()
@@ -786,7 +786,7 @@ const char *Templates::ClientMethodDefinitionSyncTemplate()
 
 const char *Templates::ClientMethodDefinitionAsyncTemplate()
 {
-    return "\nQSharedPointer<QGrpcCallReply> $classname$::$method_name$(const $param_type$ "
+    return "\nstd::shared_ptr<QGrpcCallReply> $classname$::$method_name$(const $param_type$ "
            "&$param_name$)\n"
            "{\n"
            "    return call<$param_type$>(\"$method_name$\", $param_name$);\n"
@@ -796,9 +796,9 @@ const char *Templates::ClientMethodDefinitionAsyncTemplate()
 const char *Templates::ClientMethodDefinitionAsync2Template()
 {
     return "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$, const QObject "
-           "*context, const std::function<void(QSharedPointer<QGrpcCallReply>)> &callback)\n"
+           "*context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback)\n"
            "{\n"
-           "    QSharedPointer<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
+           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
            "$param_name$);\n"
            "    QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, "
            "callback]() "
@@ -831,7 +831,7 @@ const char *Templates::ClientMethodDefinitionQmlTemplate()
            "from JS engine context\";\n"
            "        return;\n"
            "    }\n\n"
-           "    QSharedPointer<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
+           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
            "*$param_name$);\n"
            "    reply->subscribe(jsEngine, [this, reply, callback, jsEngine]() {\n"
            "        auto result = new $return_type$(reply->read<$return_type$>());\n"
@@ -867,7 +867,7 @@ const char *Templates::ClientMethodDefinitionQml2Template()
            "from JS engine context\";\n"
            "        return;\n"
            "    }\n\n"
-           "    QSharedPointer<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
+           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
            "*$param_name$);\n"
            "    reply->subscribe(jsEngine, [this, reply, jsEngine, safeReturn]() {\n"
            "        if (safeReturn.isNull()) {\n"
@@ -883,27 +883,27 @@ const char *Templates::ClientMethodDefinitionQml2Template()
 
 const char *Templates::ClientMethodServerStreamDeclarationTemplate()
 {
-    return "QSharedPointer<QGrpcStream> stream$method_name_upper$(const $param_type$ "
+    return "std::shared_ptr<QGrpcStream> stream$method_name_upper$(const $param_type$ "
            "&$param_name$);\n";
 }
 
 const char *Templates::ClientMethodServerStream2DeclarationTemplate()
 {
-    return "QSharedPointer<QGrpcStream> stream$method_name_upper$(const $param_type$ "
+    return "std::shared_ptr<QGrpcStream> stream$method_name_upper$(const $param_type$ "
            "&$param_name$, const "
            "QWeakPointer<$return_type$> &$return_name$);\n";
 }
 
 const char *Templates::ClientMethodServerStreamQmlDeclarationTemplate()
 {
-    return "Q_INVOKABLE QSharedPointer<QGrpcStream> qmlStream$method_name_upper$_p($param_type$ "
+    return "Q_INVOKABLE std::shared_ptr<QGrpcStream> qmlStream$method_name_upper$_p($param_type$ "
            "*$param_name$, "
            "$return_type$ *$return_name$);\n";
 }
 
 const char *Templates::ClientMethodServerStreamDefinitionTemplate()
 {
-    return "QSharedPointer<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
+    return "std::shared_ptr<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
            "&$param_name$)\n"
            "{\n"
            "    return stream<$param_type$>(\"$method_name$\", $param_name$);\n"
@@ -912,7 +912,7 @@ const char *Templates::ClientMethodServerStreamDefinitionTemplate()
 
 const char *Templates::ClientMethodServerStream2DefinitionTemplate()
 {
-    return "QSharedPointer<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
+    return "std::shared_ptr<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
            "&$param_name$, const QWeakPointer<$return_type$> &$return_name$)\n"
            "{\n"
            "    return stream<$param_type$>(\"$method_name$\", $param_name$, $return_name$);\n"
@@ -921,7 +921,7 @@ const char *Templates::ClientMethodServerStream2DefinitionTemplate()
 
 const char *Templates::ClientMethodServerStreamQmlDefinitionTemplate()
 {
-    return "QSharedPointer<QGrpcStream> $classname$::qmlStream$method_name_upper$_p($param_type$ "
+    return "std::shared_ptr<QGrpcStream> $classname$::qmlStream$method_name_upper$_p($param_type$ "
            "*$param_name$, "
            "$return_type$ *$return_name$)\n"
            "{\n"

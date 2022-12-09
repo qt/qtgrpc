@@ -90,13 +90,13 @@ void QtGrpcSslClientTest::Http2ChannelIncorrectSecureCredentialsTest()
     //  conf.setCaCertificates({QSslCertificate(cert)});
 
     TestService::Client testClient;
-    testClient.attachChannel(QSharedPointer<QGrpcHttp2Channel>::create(
+    testClient.attachChannel(std::make_shared<QGrpcHttp2Channel>(
             QUrl("https://localhost:60051", QUrl::StrictMode),
             QGrpcInsecureCallCredentials() | QGrpcSslCredentials(conf)));
 
     SimpleStringMessage expected;
     expected.setTestFieldString("Hello Qt!");
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
     QVERIFY(testClient.testMethod(expected, result.get()) != QGrpcStatus::Ok);
 }
 
@@ -109,12 +109,13 @@ void QtGrpcSslClientTest::GrpcHttpChannelIncorrectSecureCredentialsTest()
     optionsList.append(QString::fromStdString(options.pem_root_certs));
     optionsList.append(QString::fromStdString(options.pem_private_key));
     optionsList.append(QString::fromStdString(options.pem_cert_chain));
-    testClient.attachChannel(QSharedPointer<QGrpcChannel>::create(
-            QUrl("localhost:60051"), QGrpcChannel::SslDefaultCredentials, optionsList));
+    testClient.attachChannel(std::make_shared<QGrpcChannel>(QUrl("localhost:60051"),
+                                                            QGrpcChannel::SslDefaultCredentials,
+                                                            optionsList));
 
     SimpleStringMessage expected;
     expected.setTestFieldString("Hello Qt!");
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
     QVERIFY(testClient.testMethod(expected, result.get()) != QGrpcStatus::Ok);
 }
 
@@ -122,12 +123,12 @@ void QtGrpcSslClientTest::GrpcHttpChannelIncorrectSecureCredentialsTest()
 void QtGrpcSslClientTest::GrpcSocketChannelIncorrectSecureCredentialsTest()
 {
     TestService::Client testClient;
-    testClient.attachChannel(QSharedPointer<QGrpcChannel>::create(
-            QUrl("unix:///tmp/test.sock"), QGrpcChannel::SslDefaultCredentials));
+    testClient.attachChannel(std::make_shared<QGrpcChannel>(QUrl("unix:///tmp/test.sock"),
+                                                            QGrpcChannel::SslDefaultCredentials));
 
     SimpleStringMessage expected;
     expected.setTestFieldString("Hello Qt!");
-    auto result = QSharedPointer<SimpleStringMessage>::create();
+    auto result = std::make_shared<SimpleStringMessage>();
     QVERIFY(testClient.testMethod(expected, result.get()) != QGrpcStatus::Ok);
 }
 #  endif
