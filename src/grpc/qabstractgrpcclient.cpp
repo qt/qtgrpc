@@ -97,9 +97,7 @@ QAbstractGrpcClient::QAbstractGrpcClient(const QString &service, QObject *parent
 {
 }
 
-QAbstractGrpcClient::~QAbstractGrpcClient()
-{
-}
+QAbstractGrpcClient::~QAbstractGrpcClient() = default;
 
 /*!
     Attaches \a channel to client as transport layer for gRPC.
@@ -331,3 +329,5 @@ QGrpcStatus QAbstractGrpcClient::handleDeserializationError(
 }
 
 QT_END_NAMESPACE
+
+#include "moc_qabstractgrpcclient.cpp"

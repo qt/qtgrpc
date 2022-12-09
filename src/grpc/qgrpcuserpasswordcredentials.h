@@ -13,12 +13,12 @@ QT_BEGIN_NAMESPACE
 class QGrpcUserPasswordCredentials final : public QGrpcCallCredentials
 {
 public:
-    QGrpcUserPasswordCredentials(const QString &userName, const QString &password);
-    QGrpcUserPasswordCredentials(const QByteArray &userNameField, const QString &userName,
-                                 const QByteArray &passwordField, const QString &password);
+    explicit QGrpcUserPasswordCredentials(const QString &userName, const QString &password);
+    explicit QGrpcUserPasswordCredentials(const QByteArray &userNameField, const QString &userName,
+                                          const QByteArray &passwordField, const QString &password);
 
-    ~QGrpcUserPasswordCredentials() override = default;
-    QGrpcCredentialMap operator()() const override { return m_map; }
+    ~QGrpcUserPasswordCredentials() override;
+    QGrpcCredentialMap operator()() const override;
 
 private:
     QGrpcUserPasswordCredentials();

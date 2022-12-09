@@ -81,7 +81,7 @@ constexpr char GrpcAcceptEncodingHeader[] = "grpc-accept-encoding";
 constexpr char AcceptEncodingHeader[] = "accept-encoding";
 constexpr char TEHeader[] = "te";
 constexpr char GrpcStatusHeader[] = "grpc-status";
-constexpr char GrpcStatusMessage[] = "grpc-message";
+constexpr char GrpcStatusMessageHeader[] = "grpc-message";
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
 
 struct QGrpcHttp2ChannelPrivate
@@ -141,7 +141,7 @@ struct QGrpcHttp2ChannelPrivate
 #endif
         if (!stream) {
             // TODO: Add configurable timeout logic
-            QTimer::singleShot(6000, networkReply, [networkReply]() {
+            QTimer::singleShot(6000, networkReply, [networkReply] {
                 QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
             });
         }
@@ -195,7 +195,7 @@ struct QGrpcHttp2ChannelPrivate
 
     static int getExpectedDataSize(const QByteArray &container)
     {
-        return qFromBigEndian(*reinterpret_cast<const int *>(container.data() + 1))
+        return qFromBigEndian(*reinterpret_cast<const quint32 *>(container.data() + 1))
                 + GrpcMessageSizeHeaderSize;
     }
 };
@@ -230,7 +230,7 @@ QGrpcStatus QGrpcHttp2Channel::call(const QString &method, const QString &servic
 
     networkReply->deleteLater();
     qGrpcDebug() << __func__ << "RECV:" << ret.toHex() << "grpcStatus" << grpcStatus;
-    return { grpcStatus, QString::fromUtf8(networkReply->rawHeader(GrpcStatusMessage)) };
+    return { grpcStatus, QString::fromUtf8(networkReply->rawHeader(GrpcStatusMessageHeader)) };
 }
 
 void QGrpcHttp2Channel::call(const QString &method, const QString &service, const QByteArray &args,
@@ -244,13 +244,11 @@ void QGrpcHttp2Channel::call(const QString &method, const QString &service, cons
 
     *connection = QObject::connect(
             networkReply, &QNetworkReply::finished, reply,
-            [reply, networkReply, connection, abortConnection]() {
+            [reply, networkReply, connection, abortConnection] {
                 QGrpcStatus::StatusCode grpcStatus = QGrpcStatus::StatusCode::Unknown;
                 QByteArray data = QGrpcHttp2ChannelPrivate::processReply(networkReply, grpcStatus);
-                if (*connection)
-                    QObject::disconnect(*connection);
-                if (*abortConnection)
-                    QObject::disconnect(*abortConnection);
+                QObject::disconnect(*connection);
+                QObject::disconnect(*abortConnection);
 
                 qGrpcDebug() << "RECV:" << data;
                 if (QGrpcStatus::StatusCode::Ok == grpcStatus) {
@@ -258,9 +256,9 @@ void QGrpcHttp2Channel::call(const QString &method, const QString &service, cons
                     reply->finished();
                 } else {
                     reply->setData({});
-                    reply->errorOccurred(
-                            { grpcStatus,
-                              QLatin1StringView(networkReply->rawHeader(GrpcStatusMessage)) });
+                    reply->errorOccurred({ grpcStatus,
+                                           QLatin1StringView(networkReply->rawHeader(
+                                                   GrpcStatusMessageHeader)) });
                 }
                 networkReply->deleteLater();
             });
@@ -269,10 +267,8 @@ void QGrpcHttp2Channel::call(const QString &method, const QString &service, cons
                                         [networkReply, connection,
                                          abortConnection](const QGrpcStatus &status) {
                                             if (status.code() == QGrpcStatus::Aborted) {
-                                                if (*connection)
-                                                    QObject::disconnect(*connection);
-                                                if (*abortConnection)
-                                                    QObject::disconnect(*abortConnection);
+                                                QObject::disconnect(*connection);
+                                                QObject::disconnect(*abortConnection);
 
                                                 networkReply->deleteLater();
                                             }
@@ -291,8 +287,7 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
     auto readConnection = std::make_shared<QMetaObject::Connection>();
 
     *readConnection = QObject::connect(
-            networkReply, &QNetworkReply::readyRead, grpcStream,
-            [networkReply, grpcStream, this]() {
+            networkReply, &QNetworkReply::readyRead, grpcStream, [networkReply, grpcStream, this] {
                 auto replyIt = dPtr->activeStreamReplies.find(networkReply);
 
                 const QByteArray data = networkReply->readAll();
@@ -346,13 +341,10 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
             });
 
     QObject::connect(client, &QAbstractGrpcClient::destroyed, networkReply,
-                     [networkReply, finishConnection, abortConnection, readConnection, this]() {
-                         if (*readConnection)
-                             QObject::disconnect(*readConnection);
-                         if (*abortConnection)
-                             QObject::disconnect(*abortConnection);
-                         if (*finishConnection)
-                             QObject::disconnect(*finishConnection);
+                     [networkReply, finishConnection, abortConnection, readConnection, this] {
+                         QObject::disconnect(*readConnection);
+                         QObject::disconnect(*abortConnection);
+                         QObject::disconnect(*finishConnection);
 
                          dPtr->activeStreamReplies.erase(networkReply);
                          QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
@@ -365,10 +357,8 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
              client, this]() {
                 const QString errorString = networkReply->errorString();
                 const QNetworkReply::NetworkError networkError = networkReply->error();
-                if (*readConnection)
-                    QObject::disconnect(*readConnection);
-                if (*abortConnection)
-                    QObject::disconnect(*abortConnection);
+                QObject::disconnect(*readConnection);
+                QObject::disconnect(*abortConnection);
 
                 dPtr->activeStreamReplies.erase(networkReply);
                 QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
@@ -389,7 +379,8 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
                     if (grpcStatus != QGrpcStatus::StatusCode::Ok) {
                         grpcStream->errorOccurred(QGrpcStatus{
                                 grpcStatus,
-                                QLatin1StringView(networkReply->rawHeader(GrpcStatusMessage)) });
+                                QLatin1StringView(
+                                        networkReply->rawHeader(GrpcStatusMessageHeader)) });
                     }
                     grpcStream->finished();
                     break;
@@ -406,12 +397,9 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
     *abortConnection = QObject::connect(
             grpcStream, &QGrpcStream::finished, networkReply,
             [networkReply, finishConnection, abortConnection, readConnection] {
-                if (*finishConnection)
-                    QObject::disconnect(*finishConnection);
-                if (*readConnection)
-                    QObject::disconnect(*readConnection);
-                if (*abortConnection)
-                    QObject::disconnect(*abortConnection);
+                QObject::disconnect(*finishConnection);
+                QObject::disconnect(*readConnection);
+                QObject::disconnect(*abortConnection);
 
                 QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
                 networkReply->deleteLater();

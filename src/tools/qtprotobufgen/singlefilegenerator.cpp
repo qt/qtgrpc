@@ -204,8 +204,8 @@ bool SingleFileGenerator::GenerateServices(const FileDescriptor *file,
 
     std::set<std::string> internalIncludes;
 
-    const auto filename = utils::extractFileBasename(file->name());
-    const std::string basename = generateBaseName(file, filename);
+    const auto fileBasename = utils::extractFileBasename(file->name());
+    const std::string basename = generateBaseName(file, fileBasename);
     std::unique_ptr<io::ZeroCopyOutputStream> clientHeaderStream(generatorContext->Open(
             basename + Templates::GrpcClientFileSuffix() + Templates::ProtoFileSuffix() + ".h"));
     std::unique_ptr<io::ZeroCopyOutputStream> clientSourceStream(generatorContext->Open(
@@ -220,11 +220,11 @@ bool SingleFileGenerator::GenerateServices(const FileDescriptor *file,
             new ::google::protobuf::io::Printer(serviceHeaderStream.get(), '$'));
 
     printDisclaimer(clientHeaderPrinter.get());
-    clientHeaderPrinter->Print({ { "filename", filename + "_client" } },
+    clientHeaderPrinter->Print({ { "filename", fileBasename + "_client" } },
                                Templates::PreambleTemplate());
 
     printDisclaimer(serviceHeaderPrinter.get());
-    serviceHeaderPrinter->Print({ { "filename", filename + "_service" } },
+    serviceHeaderPrinter->Print({ { "filename", fileBasename + "_service" } },
                                 Templates::PreambleTemplate());
 
     clientHeaderPrinter->Print(Templates::DefaultProtobufIncludesTemplate());
@@ -345,9 +345,9 @@ bool SingleFileGenerator::GenerateServices(const FileDescriptor *file,
     closeNamespaces(clientSourcePrinter);
     closeNamespaces(serviceHeaderPrinter);
 
-    clientHeaderPrinter->Print({ { "filename", filename + "_client" } },
+    clientHeaderPrinter->Print({ { "filename", fileBasename + "_client" } },
                                Templates::FooterTemplate());
-    serviceHeaderPrinter->Print({ { "filename", filename + "_service" } },
+    serviceHeaderPrinter->Print({ { "filename", fileBasename + "_service" } },
                                 Templates::FooterTemplate());
     return true;
 }

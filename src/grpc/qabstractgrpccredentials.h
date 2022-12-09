@@ -17,9 +17,9 @@ using QGrpcCredentialMap = QMap<QByteArray, QVariant>;
 class Q_GRPC_EXPORT QAbstractGrpcCredentials
 {
 public:
-    virtual ~QAbstractGrpcCredentials() = default;
-    virtual QGrpcCredentialMap callCredentials() = 0;
-    virtual QGrpcCredentialMap channelCredentials() = 0;
+    virtual ~QAbstractGrpcCredentials();
+    virtual QGrpcCredentialMap callCredentials() const = 0;
+    virtual QGrpcCredentialMap channelCredentials() const = 0;
 };
 
 QT_END_NAMESPACE

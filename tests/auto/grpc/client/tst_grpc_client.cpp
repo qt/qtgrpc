@@ -168,7 +168,7 @@ void QtGrpcClientTest::CallAndAsyncRecieveWithSubscribeStringTest()
     QEventLoop waiter;
 
     std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
-    reply->subscribe(this, [reply, &result, &waiter]() {
+    reply->subscribe(this, [reply, &result, &waiter] {
         result = reply->read<SimpleStringMessage>();
         reply->deleteLater();
         waiter.quit();
@@ -202,7 +202,7 @@ void QtGrpcClientTest::CallAndAsyncImmediateAbortStringTest()
     std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
 
     result.setTestFieldString("Result not changed by echo");
-    QObject::connect(reply.get(), &QGrpcCallReply::finished, this, [&result, reply]() {
+    QObject::connect(reply.get(), &QGrpcCallReply::finished, this, [&result, reply] {
         result = reply->read<SimpleStringMessage>();
         reply->deleteLater();
     });
@@ -236,7 +236,7 @@ void QtGrpcClientTest::CallAndAsyncDeferredAbortStringTest()
     std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
 
     QObject::connect(reply.get(), &QGrpcCallReply::finished, this,
-                     [reply, &result]() { result = reply->read<SimpleStringMessage>(); });
+                     [reply, &result] { result = reply->read<SimpleStringMessage>(); });
 
     QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
     QVERIFY(replyErrorSpy.isValid());
@@ -263,7 +263,7 @@ void QtGrpcClientTest::StreamStringTest()
     QVERIFY(streamErrorSpy.isValid());
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcStream::finished);
-    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream]() {
+    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream] {
         SimpleStringMessage ret = stream->read<SimpleStringMessage>();
         result.setTestFieldString(result.testFieldString() + ret.testFieldString());
     });
@@ -292,7 +292,7 @@ void QtGrpcClientTest::StreamStringAndAbortTest()
     QVERIFY(streamErrorSpy.isValid());
 
     int i = 0;
-    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, &i, stream]() {
+    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, &i, stream] {
         SimpleStringMessage ret = stream->read<SimpleStringMessage>();
         result.setTestFieldString(result.testFieldString() + ret.testFieldString());
         if (++i == ExpectedMessageCount)
@@ -326,7 +326,7 @@ void QtGrpcClientTest::StreamStringAndDeferredAbortTest()
     QVERIFY(messageReceivedSpy.isValid());
 
     int i = 0;
-    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream, &i]() {
+    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream, &i] {
         SimpleStringMessage ret = stream->read<SimpleStringMessage>();
         result.setTestFieldString(result.testFieldString() + ret.testFieldString());
         if (++i == ExpectedMessageCount)
@@ -377,7 +377,7 @@ void QtGrpcClientTest::StreamBlobTest()
     QSignalSpy streamErrorSpy(stream.get(), &QGrpcStream::errorOccurred);
     QVERIFY(streamErrorSpy.isValid());
 
-    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream]() {
+    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream] {
         BlobMessage ret = stream->read<BlobMessage>();
         result.setTestBytes(ret.testBytes());
     });
@@ -460,7 +460,7 @@ void QtGrpcClientTest::StreamAndGetAsyncReplyTest()
     auto reply = _client->testMethodStatusMessage(request);
 
     reply->subscribe(
-            this, []() { QVERIFY(false); },
+            this, [] { QVERIFY(false); },
             [&asyncStatus, &statusMessage](const QGrpcStatus &status) {
                 asyncStatus = status.code();
                 statusMessage = status.message();
@@ -473,7 +473,7 @@ void QtGrpcClientTest::StreamAndGetAsyncReplyTest()
     request.setTestFieldString("Hello Qt!");
 
     reply = _client->testMethod(request);
-    reply->subscribe(this, [reply, &result]() { result = reply->read<SimpleStringMessage>(); });
+    reply->subscribe(this, [reply, &result] { result = reply->read<SimpleStringMessage>(); });
 
     QTRY_COMPARE_WITH_TIMEOUT(result.testFieldString(), request.testFieldString(),
                               MessageLatencyWithThreshold);
@@ -483,8 +483,8 @@ void QtGrpcClientTest::StreamAndGetAsyncReplyTest()
 
     reply = _client->testMethod(request);
     reply->subscribe(
-            this, [reply, &result]() { result = reply->read<SimpleStringMessage>(); },
-            []() { QVERIFY(false); });
+            this, [reply, &result] { result = reply->read<SimpleStringMessage>(); },
+            [] { QVERIFY(false); });
 
     QTRY_COMPARE_WITH_TIMEOUT(result.testFieldString(), request.testFieldString(),
                               MessageLatencyWithThreshold);
@@ -509,7 +509,7 @@ void QtGrpcClientTest::MultipleStreamsTest()
     QSignalSpy steamMessageRecievedSpy(stream.get(), &QGrpcStream::messageReceived);
     QVERIFY(steamMessageRecievedSpy.isValid());
 
-    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream]() {
+    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream] {
         SimpleStringMessage ret = stream->read<SimpleStringMessage>();
         result.setTestFieldString(result.testFieldString() + ret.testFieldString());
     });
@@ -600,7 +600,7 @@ void QtGrpcClientTest::CallStringThreadTest()
     QVERIFY(clientErrorSpy.isValid());
 
     bool ok = false;
-    QSharedPointer<QThread> thread(QThread::create([&]() {
+    QSharedPointer<QThread> thread(QThread::create([&] {
         ok = _client->testMethod(request, result.get()) == QGrpcStatus::Ok;
     }));
 
@@ -623,11 +623,11 @@ void QtGrpcClientTest::StringAsyncThreadTest()
     QSignalSpy clientErrorSpy(_client.get(), &TestService::Client::errorOccurred);
     QVERIFY(clientErrorSpy.isValid());
 
-    QSharedPointer<QThread> thread(QThread::create([&]() {
+    QSharedPointer<QThread> thread(QThread::create([&] {
         QEventLoop waiter;
         std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
         QObject::connect(reply.get(), &QGrpcCallReply::finished, &waiter,
-                         [reply, &result, &waiter]() {
+                         [reply, &result, &waiter] {
                              result = reply->read<SimpleStringMessage>();
                              waiter.quit();
                          });
@@ -654,11 +654,11 @@ void QtGrpcClientTest::StreamStringThreadTest()
     QVERIFY(clientErrorSpy.isValid());
 
     int i = 0;
-    QSharedPointer<QThread> thread(QThread::create([&]() {
+    QSharedPointer<QThread> thread(QThread::create([&] {
         QEventLoop waiter;
         auto stream = _client->streamTestMethodServerStream(request);
         QObject::connect(stream.get(), &QGrpcStream::messageReceived, &waiter,
-                         [&result, &i, &waiter, stream]() {
+                         [&result, &i, &waiter, stream] {
                              SimpleStringMessage ret = stream->read<SimpleStringMessage>();
                              result.setTestFieldString(result.testFieldString()
                                                        + ret.testFieldString());

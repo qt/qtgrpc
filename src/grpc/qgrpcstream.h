@@ -35,15 +35,15 @@ Q_SIGNALS:
     void messageReceived();
 
 protected:
-    QGrpcStream(const QString &method, const QByteArray &arg, const StreamHandler &handler,
-                QAbstractGrpcClient *parent);
-    virtual ~QGrpcStream() = default;
+    explicit QGrpcStream(const QString &method, const QByteArray &arg, const StreamHandler &handler,
+                         QAbstractGrpcClient *parent);
+    ~QGrpcStream() override;
 
     void addHandler(const StreamHandler &handler);
 
     bool operator==(const QGrpcStream &other) const
     {
-        return other.method() == this->method() && other.arg() == this->arg();
+        return other.method() == method() && other.arg() == arg();
     }
 
 private:

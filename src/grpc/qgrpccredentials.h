@@ -15,14 +15,14 @@ QT_BEGIN_NAMESPACE
 class Q_GRPC_EXPORT QGrpcCallCredentials
 {
 public:
-    virtual ~QGrpcCallCredentials() = default;
+    virtual ~QGrpcCallCredentials();
     virtual QGrpcCredentialMap operator()() const = 0;
 };
 
 class Q_GRPC_EXPORT QGrpcChannelCredentials
 {
 public:
-    virtual ~QGrpcChannelCredentials() = default;
+    virtual ~QGrpcChannelCredentials();
     virtual QGrpcCredentialMap channelCredentials() const = 0;
 };
 
@@ -34,14 +34,17 @@ template <typename Call, typename Channel,
 class QGrpcCredentials final : public QAbstractGrpcCredentials
 {
 public:
-    QGrpcCredentials(const Call &call, const Channel &channel) : mCall(call), mChannel(channel) { }
-    QGrpcCredentials(const Call &call) : mCall(call) { }
-    QGrpcCredentials(const Channel &channel) : mChannel(channel) { }
-    virtual ~QGrpcCredentials() override = default;
+    explicit QGrpcCredentials(const Call &call, const Channel &channel)
+        : mCall(call), mChannel(channel)
+    {
+    }
+    explicit QGrpcCredentials(const Call &call) : mCall(call) { }
+    explicit QGrpcCredentials(const Channel &channel) : mChannel(channel) { }
+    ~QGrpcCredentials() override = default;
 
-    QGrpcCredentialMap callCredentials() override { return mCall(); }
+    QGrpcCredentialMap callCredentials() const override { return mCall(); }
 
-    QGrpcCredentialMap channelCredentials() override { return mChannel.channelCredentials(); }
+    QGrpcCredentialMap channelCredentials() const override { return mChannel.channelCredentials(); }
 
 private:
     QGrpcCredentials() = default;

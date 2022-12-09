@@ -25,3 +25,17 @@
     It doesn't provide any extra information to the channel.
     Use it when you don't need any channel credentials.
 */
+
+QGrpcInsecureCallCredentials::~QGrpcInsecureCallCredentials() = default;
+
+QGrpcCredentialMap QGrpcInsecureCallCredentials::operator()() const
+{
+    return QGrpcCredentialMap{};
+}
+
+QGrpcInsecureChannelCredentials::~QGrpcInsecureChannelCredentials() = default;
+
+QGrpcCredentialMap QGrpcInsecureChannelCredentials::channelCredentials() const
+{
+    return QGrpcCredentialMap{};
+}

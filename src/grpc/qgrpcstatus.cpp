@@ -163,3 +163,5 @@ QString QGrpcStatus::message() const
 }
 
 QT_END_NAMESPACE
+
+#include "moc_qgrpcstatus.cpp"

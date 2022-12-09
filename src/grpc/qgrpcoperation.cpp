@@ -16,7 +16,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn template <typename T> T QGrpcOperation::read();
+    \fn template <typename T> T QGrpcOperation::read() const;
 
     Reads message from raw byte array stored in QGrpcCallReply.
 
@@ -46,8 +46,17 @@ QGrpcOperation::QGrpcOperation(QAbstractGrpcClient *parent) : QObject(parent)
 {
 }
 
-QGrpcOperation::~QGrpcOperation()
+QGrpcOperation::~QGrpcOperation() = default;
+
+/*!
+    Interface for implementation of QAbstractGrpcChannel.
+
+    Should be used to write raw data from channel to reply \a data raw data
+    received from channel.
+ */
+void QGrpcOperation::setData(const QByteArray &data)
 {
+    m_data = data;
 }
 
 /*!
@@ -56,9 +65,11 @@ QGrpcOperation::~QGrpcOperation()
     Should be used to write raw data from channel to reply \a data raw data
     received from channel.
 */
-void QGrpcOperation::setData(const QByteArray &data)
+void QGrpcOperation::setData(QByteArray &&data)
 {
-    m_data = data;
+    m_data = std::move(data);
 }
 
 QT_END_NAMESPACE
+
+#include "moc_qgrpcoperation.cpp"

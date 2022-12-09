@@ -41,7 +41,7 @@ QT_BEGIN_NAMESPACE
     \sa{https://grpc.github.io/grpc/cpp/classgrpc__impl_1_1_channel_credentials.html}{gRPC ChannelCredentials}.
 */
 
-static inline grpc::Status parseByteBuffer(const grpc::ByteBuffer &buffer, QByteArray &data)
+static grpc::Status parseByteBuffer(const grpc::ByteBuffer &buffer, QByteArray &data)
 {
     std::vector<grpc::Slice> slices;
     auto status = buffer.Dump(&slices);
@@ -49,14 +49,13 @@ static inline grpc::Status parseByteBuffer(const grpc::ByteBuffer &buffer, QByte
     if (!status.ok())
         return status;
 
-    for (const auto &slice : slices) {
-        data.append(QByteArray((const char *)slice.begin(), slice.size()));
-    }
+    for (const auto &slice : slices)
+        data.append((const char *)slice.begin(), slice.size());
 
     return grpc::Status::OK;
 }
 
-static inline grpc::ByteBuffer parseQByteArray(const QByteArray &bytearray)
+static grpc::ByteBuffer parseQByteArray(QByteArrayView bytearray)
 {
     grpc::ByteBuffer buffer;
     grpc::Slice slice(bytearray.data(), bytearray.size());
@@ -77,25 +76,25 @@ QGrpcChannelStream::QGrpcChannelStream(grpc::Channel *channel, const QString &me
                                       grpc::internal::RpcMethod::SERVER_STREAMING),
             &context, request);
 
-    thread = QThread::create([this]() {
+    thread = QThread::create([this] {
         grpc::ByteBuffer response;
-        grpc::Status status;
+        grpc::Status parseStatus;
 
         while (reader->Read(&response)) {
             QByteArray data;
-            status = parseByteBuffer(response, data);
-            if (!status.ok()) {
-                this->status = { static_cast<QGrpcStatus::StatusCode>(status.error_code()),
-                                 QString::fromStdString(status.error_message()) };
+            parseStatus = parseByteBuffer(response, data);
+            if (!parseStatus.ok()) {
+                status = { static_cast<QGrpcStatus::StatusCode>(parseStatus.error_code()),
+                           QString::fromStdString(parseStatus.error_message()) };
                 return; // exit thread
             }
 
-            emit this->dataReady(data);
+            emit dataReady(data);
         }
 
-        status = reader->Finish();
-        this->status = { static_cast<QGrpcStatus::StatusCode>(status.error_code()),
-                         QString::fromStdString(status.error_message()) };
+        parseStatus = reader->Finish();
+        status = { static_cast<QGrpcStatus::StatusCode>(parseStatus.error_code()),
+                   QString::fromStdString(parseStatus.error_message()) };
     });
 
     connect(thread, &QThread::finished, this, &QGrpcChannelStream::finished);
@@ -126,25 +125,25 @@ QGrpcChannelCall::QGrpcChannelCall(grpc::Channel *channel, const QString &method
 {
     grpc::ByteBuffer request = parseQByteArray(data);
 
-    thread = QThread::create([this, request, channel, method]() {
-        grpc::ByteBuffer response;
+    thread = QThread::create([this, request, channel, method] {
+        grpc::ByteBuffer callResponse;
         QByteArray data;
-        grpc::Status status;
+        grpc::Status callStatus;
 
-        status = grpc::internal::BlockingUnaryCall(
+        callStatus = grpc::internal::BlockingUnaryCall(
                 channel,
                 grpc::internal::RpcMethod(method.toStdString().c_str(),
                                           grpc::internal::RpcMethod::NORMAL_RPC),
-                &context, request, &response);
-        if (!status.ok()) {
-            this->status = { static_cast<QGrpcStatus::StatusCode>(status.error_code()),
-                             QString::fromStdString(status.error_message()) };
+                &context, request, &callResponse);
+        if (!callStatus.ok()) {
+            status = { static_cast<QGrpcStatus::StatusCode>(callStatus.error_code()),
+                       QString::fromStdString(callStatus.error_message()) };
             return; // exit thread
         }
 
-        status = parseByteBuffer(response, this->response);
-        this->status = { static_cast<QGrpcStatus::StatusCode>(status.error_code()),
-                         QString::fromStdString(status.error_message()) };
+        callStatus = parseByteBuffer(callResponse, response);
+        status = { static_cast<QGrpcStatus::StatusCode>(callStatus.error_code()),
+                   QString::fromStdString(callStatus.error_message()) };
     });
 
     connect(thread, &QThread::finished, this, &QGrpcChannelCall::finished);
@@ -201,9 +200,7 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QUrl &url,
     }
 }
 
-QGrpcChannelPrivate::~QGrpcChannelPrivate()
-{
-}
+QGrpcChannelPrivate::~QGrpcChannelPrivate() = default;
 
 void QGrpcChannelPrivate::call(const QString &method, const QString &service,
                                const QByteArray &args, QGrpcCallReply *reply)
@@ -217,7 +214,7 @@ void QGrpcChannelPrivate::call(const QString &method, const QString &service,
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
 
     *connection = QObject::connect(call.get(), &QGrpcChannelCall::finished, reply,
-                                   [call, reply, connection, abortConnection]() {
+                                   [call, reply, connection, abortConnection] {
                                        if (call->status.code() == QGrpcStatus::Ok) {
                                            reply->setData(call->response);
                                            reply->finished();
@@ -271,49 +268,41 @@ void QGrpcChannelPrivate::stream(QGrpcStream *stream, const QString &service,
     auto clientConnection = std::make_shared<QMetaObject::Connection>();
     auto connection = std::make_shared<QMetaObject::Connection>();
 
+    auto disconnectAllConnections = [abortConnection, readConnection, clientConnection,
+                                     connection]() {
+        QObject::disconnect(*connection);
+        QObject::disconnect(*readConnection);
+        QObject::disconnect(*abortConnection);
+        QObject::disconnect(*clientConnection);
+    };
+
     *readConnection = QObject::connect(sub.get(), &QGrpcChannelStream::dataReady, stream,
-                                       [stream](const QByteArray &data) { stream->handler(data); });
+                                       [stream](QByteArrayView data) {
+                                           stream->handler(data.toByteArray());
+                                       });
 
     *connection = QObject::connect(sub.get(), &QGrpcChannelStream::finished, stream,
-                                   [sub, stream, readConnection, abortConnection, service,
-                                    connection, clientConnection]() {
+                                   [disconnectAllConnections, sub, stream] {
                                        qGrpcDebug()
                                                << "Stream ended with server closing connection";
-
-                                       QObject::disconnect(*connection);
-                                       QObject::disconnect(*readConnection);
-                                       QObject::disconnect(*abortConnection);
-                                       QObject::disconnect(*clientConnection);
+                                       disconnectAllConnections();
 
                                        if (sub->status.code() != QGrpcStatus::Ok)
                                            stream->errorOccurred(sub->status);
-
                                        stream->finished();
                                    });
 
     *abortConnection = QObject::connect(stream, &QGrpcStream::finished, sub.get(),
-                                        [connection, abortConnection, readConnection, sub,
-                                         clientConnection] {
+                                        [disconnectAllConnections, sub] {
                                             qGrpcDebug() << "Stream client was finished";
-
-                                            QObject::disconnect(*connection);
-                                            QObject::disconnect(*readConnection);
-                                            QObject::disconnect(*abortConnection);
-                                            QObject::disconnect(*clientConnection);
-
+                                            disconnectAllConnections();
                                             sub->cancel();
                                         });
 
     *clientConnection = QObject::connect(client, &QAbstractGrpcClient::destroyed, sub.get(),
-                                         [readConnection, connection, abortConnection, sub,
-                                          clientConnection]() {
+                                         [disconnectAllConnections, sub] {
                                              qGrpcDebug() << "Grpc client was destroyed";
-
-                                             QObject::disconnect(*connection);
-                                             QObject::disconnect(*readConnection);
-                                             QObject::disconnect(*abortConnection);
-                                             QObject::disconnect(*clientConnection);
-
+                                             disconnectAllConnections();
                                              sub->cancel();
                                          });
 
@@ -328,6 +317,11 @@ QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credent
                            const QStringList &credentialsList)
     : QAbstractGrpcChannel(),
       dPtr(std::make_unique<QGrpcChannelPrivate>(url, credentialsType, credentialsList))
+{
+}
+
+QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credentialsType)
+    : QGrpcChannel(url, credentialsType, QStringList())
 {
 }
 

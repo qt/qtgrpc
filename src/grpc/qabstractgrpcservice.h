@@ -16,8 +16,8 @@ class Q_GRPC_EXPORT QAbstractGrpcService : public QObject
     Q_OBJECT
 
 protected:
-    QAbstractGrpcService(QObject *parent = nullptr);
-    virtual ~QAbstractGrpcService();
+    explicit QAbstractGrpcService(QObject *parent = nullptr);
+    ~QAbstractGrpcService() override;
 
 private:
     Q_DISABLE_COPY_MOVE(QAbstractGrpcService)

@@ -15,27 +15,31 @@ QT_BEGIN_NAMESPACE
 class Q_GRPC_EXPORT QGrpcCallReply final : public QGrpcOperation
 {
     Q_OBJECT
+
 public:
     void abort() override;
 
     template <typename Func1, typename Func2>
-    inline void subscribe(QObject *receiver, Func1 finishCallback, Func2 errorCallback,
-                          Qt::ConnectionType type = Qt::AutoConnection)
+    void subscribe(QObject *receiver, Func1 finishCallback, Func2 errorCallback,
+                   Qt::ConnectionType type = Qt::AutoConnection)
     {
-        QObject::connect(this, &QGrpcCallReply::finished, receiver, finishCallback, type);
-        QObject::connect(this, &QGrpcCallReply::errorOccurred, receiver, errorCallback, type);
+        QObject::connect(this, &QGrpcCallReply::finished, receiver, std::move(finishCallback),
+                         type);
+        QObject::connect(this, &QGrpcCallReply::errorOccurred, receiver, std::move(errorCallback),
+                         type);
     }
 
     template <typename Func1>
-    inline void subscribe(QObject *receiver, Func1 finishCallback,
-                          Qt::ConnectionType type = Qt::AutoConnection)
+    void subscribe(QObject *receiver, Func1 finishCallback,
+                   Qt::ConnectionType type = Qt::AutoConnection)
     {
-        QObject::connect(this, &QGrpcCallReply::finished, receiver, finishCallback, type);
+        QObject::connect(this, &QGrpcCallReply::finished, receiver, std::move(finishCallback),
+                         type);
     }
 
 protected:
-    QGrpcCallReply(QAbstractGrpcClient *parent) : QGrpcOperation(parent) { }
-    ~QGrpcCallReply() = default;
+    explicit QGrpcCallReply(QAbstractGrpcClient *parent);
+    ~QGrpcCallReply() override;
 
 private:
     QGrpcCallReply();
