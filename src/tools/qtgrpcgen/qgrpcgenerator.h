@@ -29,16 +29,20 @@ public:
                   ::google::protobuf::compiler::GeneratorContext *generatorContext,
                   std::string *error) const override;
 private:
-    bool GenerateServices(const ::google::protobuf::FileDescriptor *file,
-                          ::google::protobuf::compiler::GeneratorContext *generatorContext) const;
+    bool GenerateClientServices(
+            const ::google::protobuf::FileDescriptor *file,
+            ::google::protobuf::compiler::GeneratorContext *generatorContext) const;
 
-    void SetInternalIncludes(const ::google::protobuf::FileDescriptor *file,
-                             std::set<std::string> &internalIncludes) const;
+    [[maybe_unused]] bool GenerateServerServices(
+            const ::google::protobuf::FileDescriptor *file,
+            ::google::protobuf::compiler::GeneratorContext *generatorContext) const;
 
-    void RunPrinters(const ::google::protobuf::FileDescriptor *file,
-                     std::shared_ptr<::google::protobuf::io::Printer> clientHeaderPrinter,
-                     std::shared_ptr<::google::protobuf::io::Printer> clientSourcePrinter,
-                     std::shared_ptr<::google::protobuf::io::Printer> serviceHeaderPrinter) const;
+    static std::set<std::string> GetInternalIncludes(
+            const ::google::protobuf::FileDescriptor *file);
+
+    template <typename ServicePrinterT>
+    static void RunPrinter(const ::google::protobuf::FileDescriptor *file,
+                           std::shared_ptr<::google::protobuf::io::Printer> printer);
 };
 } // namespace QtGrpc
 

@@ -32,7 +32,6 @@ qt_internal_extend_target(Grpc CONDITION QT_FEATURE_ssl
 qt_internal_extend_target(Grpc CONDITION QT_FEATURE_native_grpc
     SOURCES
         qgrpcchannel.h qgrpcchannel_p.h qgrpcchannel.cpp
-        qabstractgrpcservice.h qabstractgrpcservice.cpp
     PUBLIC_LIBRARIES
         WrapgRPC::WrapLibgRPC
 )
