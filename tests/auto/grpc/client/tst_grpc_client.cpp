@@ -291,9 +291,8 @@ void QtGrpcClientTest::StreamStringAndAbortTest()
     int i = 0;
     QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, &i, stream]() {
         SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        ++i;
         result.setTestFieldString(result.testFieldString() + ret.testFieldString());
-        if (i == ExpectedMessageCount)
+        if (++i == ExpectedMessageCount)
             stream->abort();
     });
 
@@ -578,11 +577,14 @@ void QtGrpcClientTest::MultipleStreamsCancelTest()
 
 void QtGrpcClientTest::CallNonCompatibleArgRetTest()
 {
+    const QtProtobuf::sint32 TestValue = 2048;
+    const QString TestValueString = QString::number(TestValue);
+
     SimpleIntMessage request;
-    request.setTestField(2048);
+    request.setTestField(TestValue);
     auto result = QSharedPointer<SimpleStringMessage>::create();
     QCOMPARE_EQ(_client->testMethodNonCompatibleArgRet(request, result.get()), QGrpcStatus::Ok);
-    QCOMPARE_EQ(result->testFieldString(), "2048");
+    QCOMPARE_EQ(result->testFieldString(), TestValueString);
 }
 
 void QtGrpcClientTest::CallStringThreadTest()
@@ -658,10 +660,8 @@ void QtGrpcClientTest::StreamStringThreadTest()
                              SimpleStringMessage ret = stream->read<SimpleStringMessage>();
                              result.setTestFieldString(result.testFieldString()
                                                        + ret.testFieldString());
-                             ++i;
-                             if (i == 4) {
+                             if (++i == 4)
                                  waiter.quit();
-                             }
                          });
 
         waiter.exec();
