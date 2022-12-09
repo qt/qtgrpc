@@ -79,9 +79,9 @@ class QAbstractGrpcClientPrivate final
 public:
     QAbstractGrpcClientPrivate(const QString &service) : service(service) { }
 
-    QSharedPointer<QAbstractGrpcChannel> channel;
+    std::shared_ptr<QAbstractGrpcChannel> channel;
     const QString service;
-    QList<QSharedPointer<QGrpcStream>> activeStreams;
+    std::vector<std::shared_ptr<QGrpcStream>> activeStreams;
 };
 
 QAbstractGrpcClient::QAbstractGrpcClient(const QString &service, QObject *parent)
@@ -100,7 +100,7 @@ QAbstractGrpcClient::~QAbstractGrpcClient()
     \note \b Warning: QtGrpc doesn't guarantee thread safety on channel level.
     You have to invoke the channel-related functions on the same thread as QAbstractGrpcClient.
 */
-void QAbstractGrpcClient::attachChannel(const QSharedPointer<QAbstractGrpcChannel> &channel)
+void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel)
 {
     if (channel->thread() != QThread::currentThread()) {
         const QString status = threadSafetyWarning(
@@ -139,10 +139,10 @@ QGrpcStatus QAbstractGrpcClient::call(const QString &method, const QByteArray &a
     return callStatus;
 }
 
-QSharedPointer<QGrpcCallReply> QAbstractGrpcClient::call(const QString &method,
-                                                         const QByteArray &arg)
+std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(const QString &method,
+                                                          const QByteArray &arg)
 {
-    QSharedPointer<QGrpcCallReply> reply;
+    std::shared_ptr<QGrpcCallReply> reply;
     if (thread() != QThread::currentThread()) {
         const QGrpcStatus status(
                 { QGrpcStatus::Unknown,
@@ -154,8 +154,8 @@ QSharedPointer<QGrpcCallReply> QAbstractGrpcClient::call(const QString &method,
     if (dPtr->channel) {
         reply.reset(new QGrpcCallReply(this), [](QGrpcCallReply *reply) { reply->deleteLater(); });
 
-        auto errorConnection = QSharedPointer<QMetaObject::Connection>::create();
-        auto finishedConnection = QSharedPointer<QMetaObject::Connection>::create();
+        auto errorConnection = std::make_shared<QMetaObject::Connection>();
+        auto finishedConnection = std::make_shared<QMetaObject::Connection>();
         *errorConnection = connect(reply.get(), &QGrpcCallReply::errorOccurred, this,
                                    [this, reply, errorConnection,
                                     finishedConnection](const QGrpcStatus &status) mutable {
@@ -183,11 +183,11 @@ QSharedPointer<QGrpcCallReply> QAbstractGrpcClient::call(const QString &method,
     return reply;
 }
 
-QSharedPointer<QGrpcStream> QAbstractGrpcClient::stream(const QString &method,
-                                                        const QByteArray &arg,
-                                                        const StreamHandler &handler)
+std::shared_ptr<QGrpcStream> QAbstractGrpcClient::stream(const QString &method,
+                                                         const QByteArray &arg,
+                                                         const StreamHandler &handler)
 {
-    QSharedPointer<QGrpcStream> grpcStream;
+    std::shared_ptr<QGrpcStream> grpcStream;
 
     if (thread() != QThread::currentThread()) {
         const QGrpcStatus status(
@@ -202,7 +202,7 @@ QSharedPointer<QGrpcStream> QAbstractGrpcClient::stream(const QString &method,
                          [](QGrpcStream *stream) { stream->deleteLater(); });
 
         auto it = std::find_if(dPtr->activeStreams.begin(), dPtr->activeStreams.end(),
-                               [grpcStream](const QSharedPointer<QGrpcStream> &activeStream) {
+                               [grpcStream](const std::shared_ptr<QGrpcStream> &activeStream) {
                                    return *activeStream == *grpcStream;
                                });
 
@@ -217,14 +217,14 @@ QSharedPointer<QGrpcStream> QAbstractGrpcClient::stream(const QString &method,
             return *it; // If stream already exists return it for handling
         }
 
-        auto errorConnection = QSharedPointer<QMetaObject::Connection>::create();
+        auto errorConnection = std::make_shared<QMetaObject::Connection>();
         *errorConnection = connect(
                 grpcStream.get(), &QGrpcStream::errorOccurred, this,
                 [this, grpcStream](const QGrpcStatus &status) {
                     qGrpcWarning() << grpcStream->method() << "call" << dPtr->service
                                    << "stream error: " << status.message();
                     errorOccurred(status);
-                    QWeakPointer<QGrpcStream> weakStream(grpcStream);
+                    std::weak_ptr<QGrpcStream> weakStream(grpcStream);
                     // TODO: Make timeout configurable from channel settings
                     QTimer::singleShot(1000, this,
                                        [this, weakStream, method = grpcStream->method()] {
@@ -240,14 +240,14 @@ QSharedPointer<QGrpcStream> QAbstractGrpcClient::stream(const QString &method,
                                        });
                 });
 
-        auto finishedConnection = QSharedPointer<QMetaObject::Connection>::create();
+        auto finishedConnection = std::make_shared<QMetaObject::Connection>();
         *finishedConnection = connect(
                 grpcStream.get(), &QGrpcStream::finished, this,
                 [this, grpcStream, errorConnection, finishedConnection]() mutable {
                     qGrpcWarning()
                             << grpcStream->method() << "call" << dPtr->service << "stream finished";
                     auto it = std::find_if(dPtr->activeStreams.begin(), dPtr->activeStreams.end(),
-                                           [grpcStream](QSharedPointer<QGrpcStream> activeStream) {
+                                           [grpcStream](std::shared_ptr<QGrpcStream> activeStream) {
                                                return *activeStream == *grpcStream;
                                            });
 
@@ -273,7 +273,7 @@ QSharedPointer<QGrpcStream> QAbstractGrpcClient::stream(const QString &method,
     Serializer provides assigned to client serializer.
     Returns pointer to serializerowned by QProtobufSerializerRegistry.
  */
-QSharedPointer<QAbstractProtobufSerializer> QAbstractGrpcClient::serializer() const
+std::shared_ptr<QAbstractProtobufSerializer> QAbstractGrpcClient::serializer() const
 {
     if (dPtr->channel == nullptr || dPtr->channel->serializer() == nullptr)
         return nullptr;

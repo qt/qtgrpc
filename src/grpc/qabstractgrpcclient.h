@@ -29,7 +29,7 @@ class Q_GRPC_EXPORT QAbstractGrpcClient : public QObject
     using StreamHandler = std::function<void(const QByteArray &)>;
 
 public:
-    void attachChannel(const QSharedPointer<QAbstractGrpcChannel> &channel);
+    void attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel);
 
 Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status) const;
@@ -65,26 +65,26 @@ protected:
     }
 
     template <typename ParamType>
-    QSharedPointer<QGrpcCallReply> call(const QString &method, const QProtobufMessage &arg)
+    std::shared_ptr<QGrpcCallReply> call(const QString &method, const QProtobufMessage &arg)
     {
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData)
-            return QSharedPointer<QGrpcCallReply>();
+            return {};
         return call(method, *argData);
     }
 
     template <typename ParamType>
-    QSharedPointer<QGrpcStream> stream(const QString &method, const QProtobufMessage &arg)
+    std::shared_ptr<QGrpcStream> stream(const QString &method, const QProtobufMessage &arg)
     {
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData)
-            return QSharedPointer<QGrpcStream>();
+            return {};
         return stream(method, *argData);
     }
 
     template <typename ParamType, typename ReturnType>
-    QSharedPointer<QGrpcStream> stream(const QString &method, const QProtobufMessage &arg,
-                                       const QWeakPointer<ReturnType> ret)
+    std::shared_ptr<QGrpcStream> stream(const QString &method, const QProtobufMessage &arg,
+                                        const QWeakPointer<ReturnType> ret)
     {
         if (ret.isNull()) {
             const auto nullPointerError = QLatin1StringView("Unable to stream method: %1. "
@@ -96,7 +96,7 @@ protected:
         }
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData) {
-            return QSharedPointer<QGrpcStream>();
+            return {};
         }
         return stream(method, *argData, [ret, this](const QByteArray &data) {
             if (auto retVal = ret.lock()) {
@@ -119,10 +119,10 @@ protected:
 private:
     QGrpcStatus call(const QString &method, const QByteArray &arg, QByteArray &ret);
 
-    QSharedPointer<QGrpcCallReply> call(const QString &method, const QByteArray &arg);
+    std::shared_ptr<QGrpcCallReply> call(const QString &method, const QByteArray &arg);
 
-    QSharedPointer<QGrpcStream> stream(const QString &method, const QByteArray &arg,
-                                       const StreamHandler &handler = {});
+    std::shared_ptr<QGrpcStream> stream(const QString &method, const QByteArray &arg,
+                                        const StreamHandler &handler = {});
 
     template <typename ReturnType>
     QGrpcStatus tryDeserialize(ReturnType *ret, QByteArrayView retData)
@@ -147,7 +147,7 @@ private:
         return _serializer->serialize<ParamType>(&arg);
     }
 
-    QSharedPointer<QAbstractProtobufSerializer> serializer() const;
+    std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 
     void logError(const QString &str) const;
     QGrpcStatus handleDeserializationError(
