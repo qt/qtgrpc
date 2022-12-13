@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.16)
 include(.cmake.conf)
 project(QtGrpc
     VERSION "${QT_REPO_MODULE_VERSION}"
-    DESCRIPTION "Qt gRPC and Protobuf generator and bindings."
+    DESCRIPTION "Qt GRPC and Protobuf generator and bindings."
     HOMEPAGE_URL "https://qt.io"
     LANGUAGES CXX C
 )

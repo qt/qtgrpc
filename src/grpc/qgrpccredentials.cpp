@@ -8,7 +8,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QGrpcCallCredentials
-    \inmodule QtGrpc
+    \inmodule QtGRPC
 
     \brief The QGrpcCallCredentials is the base class for gRPC call credentials.
 
@@ -21,7 +21,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QGrpcChannelCredentials
-    \inmodule QtGrpc
+    \inmodule QtGRPC
 
     \brief The QGrpcChannelCredentials is the base class for gRPC
     channel credentials.
@@ -36,7 +36,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QGrpcCredentials
-    \inmodule QtGrpc
+    \inmodule QtGRPC
 
     \brief The QGrpcCredentials class is a combination of call
     and channel credentials that is used by gRPC channels to communicate

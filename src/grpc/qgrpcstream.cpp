@@ -10,7 +10,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QGrpcStream
-    \inmodule QtGrpc
+    \inmodule QtGRPC
 
     \brief The QGrpcStream class.
 

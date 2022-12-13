@@ -6,7 +6,7 @@
 
 /*!
     \class QGrpcInsecureCallCredentials
-    \inmodule QtGrpc
+    \inmodule QtGRPC
 
     \brief The QGrpcInsecureCallCredentials class is a dummy implementation
     of QGrpcCallCredentials.
@@ -17,7 +17,7 @@
 
 /*!
     \class QGrpcInsecureChannelCredentials
-    \inmodule QtGrpc
+    \inmodule QtGRPC
 
     \brief The QGrpcInsecureChannelCredentials class is a dummy implementation
     of QGrpcChannelCredentials.

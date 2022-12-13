@@ -11,12 +11,12 @@ qt_find_package(WrapProtoc PROVIDED_TARGETS WrapProtoc::WrapProtoc MODULE_NAME g
 
 qt_feature("qtprotobufgen" PRIVATE
     SECTION "Utilities"
-    LABEL "Qt protobuf generator"
+    LABEL "Qt Protobuf generator"
     PURPOSE "Provides support for generating Qt-based classes for use with Protocol Buffers."
     CONDITION (TARGET WrapProtobuf::WrapLibProtoc AND TARGET WrapProtobuf::WrapLibProtobuf AND
         TARGET WrapProtoc::WrapProtoc) OR (CMAKE_CROSSCOMPILING AND NOT QT_FORCE_BUILD_TOOLS)
 )
 
-qt_configure_add_summary_section(NAME "QtProtobuf tools")
+qt_configure_add_summary_section(NAME "Qt Protobuf tools")
 qt_configure_add_summary_entry(ARGS "qtprotobufgen")
 qt_configure_end_summary_section()

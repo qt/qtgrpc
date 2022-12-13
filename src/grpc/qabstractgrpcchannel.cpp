@@ -8,7 +8,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QAbstractGrpcChannel
-    \inmodule QtGrpc
+    \inmodule QtGRPC
     \brief The QAbstractGrpcChannel class is interface that represents common
     gRPC channel functionality.
 

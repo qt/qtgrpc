@@ -24,7 +24,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QGrpcHttp2Channel
-    \inmodule QtGrpc
+    \inmodule QtGRPC
 
     \brief The QGrpcHttp2Channel class is an HTTP/2 implementation of
     QAbstractGrpcChannel interface.

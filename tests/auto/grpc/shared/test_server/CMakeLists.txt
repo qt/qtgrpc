@@ -6,7 +6,7 @@ find_package(WrapProtobuf)
 find_package(WrapgRPC)
 
 if(NOT WrapgRPCPlugin_FOUND OR NOT WrapProtobuf_FOUND OR NOT WrapgRPC_FOUND)
-    message(WARNING "Dependencies of QtGrpc test server not found. Skipping.")
+    message(WARNING "Dependencies of Qt GRPC test server not found. Skipping.")
     return()
 endif()
 
