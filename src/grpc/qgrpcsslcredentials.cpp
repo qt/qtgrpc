@@ -6,7 +6,7 @@
 
 /*!
     \class QGrpcSslCredentials
-    \inmodule QtGrpc
+    \inmodule QtGRPC
 
     \brief The QGrpcSslCredentials class.
 

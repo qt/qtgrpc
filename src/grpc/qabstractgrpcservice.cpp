@@ -10,7 +10,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QAbstractGrpcService
-    \inmodule QtGrpc
+    \inmodule QtGRPC
     \brief The QAbstractGrpcService class is a bridge between gRPC service.
 
     QAbstractGrpcService provides set of bridge functions for server classes

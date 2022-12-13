@@ -31,7 +31,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QGrpcChannel
-    \inmodule QtGrpc
+    \inmodule QtGRPC
 
     \brief The QGrpcChannel class is a gRPC-cpp native api implementation of
     QAbstractGrpcChannel interface.

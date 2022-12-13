@@ -17,7 +17,7 @@ qt_feature("native_grpc" PUBLIC
     CONDITION TARGET WrapgRPC::WrapLibgRPC
 )
 
-qt_configure_add_summary_section(NAME "QtGrpc")
+qt_configure_add_summary_section(NAME "Qt GRPC")
 qt_configure_add_summary_entry(ARGS "grpc")
 qt_configure_add_summary_entry(ARGS "native_grpc")
 qt_configure_end_summary_section()

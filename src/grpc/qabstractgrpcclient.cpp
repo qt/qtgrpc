@@ -19,7 +19,7 @@ namespace {
 static QString threadSafetyWarning(QLatin1StringView methodName)
 {
     return QLatin1StringView("%1 is called from a different thread.\n"
-                             "QtGrpc doesn't guarantee thread safety on the channel level.\n"
+                             "Qt GRPC doesn't guarantee thread safety on the channel level.\n"
                              "You have to be confident that channel routines are working in "
                              "the same thread as QAbstractGrpcClient.")
             .arg(methodName);
@@ -28,7 +28,7 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 
 /*!
     \class QAbstractGrpcClient
-    \inmodule QtGrpc
+    \inmodule QtGRPC
     \brief The QAbstractGrpcClient class is bridge between gRPC clients
     and channels.
 
@@ -108,7 +108,7 @@ QAbstractGrpcClient::~QAbstractGrpcClient() = default;
     Parameters and return values will be serialized to the channel
     in a format it supports.
 
-    \note \b Warning: QtGrpc doesn't guarantee thread safety on channel level.
+    \note \b Warning: Qt GRPC doesn't guarantee thread safety on the channel level.
     You have to invoke the channel-related functions on the same thread as
     QAbstractGrpcClient.
 */

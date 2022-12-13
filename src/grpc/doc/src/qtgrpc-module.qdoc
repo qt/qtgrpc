@@ -1,11 +1,13 @@
 // Copyright (C) 2022 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
 /*!
-    \module QtGrpc
+    \module QtGRPC
     \modulestate Technical Preview
-    \title Qt gRPC C++ Classes
+    \title Qt GRPC C++ Classes
+    \ingroup frameworks-technologies
     \qtcmakepackage Grpc
+    \qtvariable grpc
     \since 6.5
 
-    \brief Provides gRPC support for Qt.
+    \brief The Qt GRPC module provides support for communicating with gRPC services.
 */

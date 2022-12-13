@@ -3,7 +3,7 @@
 
 qt_get_tool_target_name(target_name qtprotobufgen)
 qt_internal_add_tool(${target_name}
-    TARGET_DESCRIPTION "Qt protobuf generator"
+    TARGET_DESCRIPTION "Qt Protobuf generator"
     INSTALL_DIR "${INSTALL_LIBEXECDIR}"
     TOOLS_TARGET Protobuf
     CORE_LIBRARY None

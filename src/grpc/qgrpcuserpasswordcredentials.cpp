@@ -13,7 +13,7 @@ constexpr char defaultPasswordFieldName[] = "user-password";
 
 /*!
     \class QGrpcUserPasswordCredentials
-    \inmodule QtGrpc
+    \inmodule QtGRPC
 
     \brief The QGrpcUserPasswordCredentials class is a reference
     implementation of simple user-password call authentication.
