@@ -1,9 +1,13 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
-find_package(WrapgRPCPlugin REQUIRED)
-find_package(WrapProtobuf REQUIRED)
-find_package(WrapgRPC REQUIRED)
+find_package(WrapgRPCPlugin)
+find_package(WrapProtobuf)
+find_package(WrapgRPC)
+
+if(NOT WrapgRPCPlugin_Found OR NOT WrapProtobuf_Found OR NOT WrapgRPC_Found)
+    return()
+endif()
 
 set(proto_files "${CMAKE_CURRENT_LIST_DIR}/../proto/testservice.proto")
 set(out_dir ${CMAKE_CURRENT_BINARY_DIR})
