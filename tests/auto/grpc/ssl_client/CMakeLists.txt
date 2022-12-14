@@ -1,6 +1,10 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
+if(NOT TARGET securetestserver)
+    return()
+endif()
+
 qt6_add_protobuf(tst_grpc_ssl_client_qtgrpc_gen
     OUTPUT_DIRECTORY
         "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated"
