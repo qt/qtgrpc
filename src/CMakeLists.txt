@@ -14,4 +14,5 @@ add_subdirectory(tools)
 
 if(TARGET Qt6::qtprotobufgen AND TARGET WrapProtobuf::WrapLibProtobuf)
     add_subdirectory(wellknown)
+    add_subdirectory(protobufqttypes)
 endif()

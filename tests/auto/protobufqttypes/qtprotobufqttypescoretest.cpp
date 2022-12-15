@@ -1,0 +1,322 @@
+// Copyright (C) 2023 The Qt Company Ltd.
+// Copyright (C) 2020 Alexey Edelev <semlanik@gmail.com>
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
+
+#include "qtcoretypes.qpb.h"
+
+#include <qtprotobuftestscommon.h>
+#include <QProtobufSerializer>
+
+#include <QObject>
+#include <QtTest/QtTest>
+
+const QTime testTime = QTime(7, 30, 18, 321);
+const QDate testDate = QDate(1856, 6, 10);
+
+class QtProtobufQtTypesQtCoreTest : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void initTestCase();
+    void qUrl();
+    void qChar();
+    void qUuid();
+    void qTime();
+    void qDate();
+    void qDateTime();
+    void qSize();
+    void qPoint();
+    void qPointF();
+    void qSizeF();
+    void qRect();
+    void qRectF();
+    void qVersionNumber();
+
+private:
+    QProtobufSerializer serializer;
+};
+
+void QtProtobufQtTypesQtCoreTest::initTestCase()
+{
+    QtProtobuf::qRegisterProtobufQtCoreTypes();
+}
+
+using namespace qtprotobufnamespace::qttypes::tests;
+
+void QtProtobufQtTypesQtCoreTest::qUrl()
+{
+    qProtobufAssertMessagePropertyRegistered<QUrlMessage, QUrl>(1, "QUrl", "testField");
+
+    QUrlMessage msg;
+    const char *qtUrl = "https://www.qt.io/product/framework";
+    const char *hexUrlValue
+            = "0a250a2368747470733a2f2f7777772e71742e696f2f70726f647563742f6672616d65776f726b";
+    msg.setTestField(QUrl(qtUrl));
+
+    QCOMPARE(QByteArray::fromHex(hexUrlValue), msg.serialize(&serializer));
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(hexUrlValue));
+
+    QCOMPARE(QString::fromLatin1(qtUrl), msg.testField().url());
+}
+
+void QtProtobufQtTypesQtCoreTest::qChar()
+{
+    qProtobufAssertMessagePropertyRegistered<QCharMessage, QChar>(1, "QChar", "testField");
+
+    QCharMessage msg;
+    msg.setTestField(QChar('q'));
+    QCOMPARE(QByteArray::fromHex("0a020871"), msg.serialize(&serializer));
+
+    msg.setTestField({});
+    msg.setTestField({QChar(8364)});
+
+    msg.deserialize(&serializer, QByteArray::fromHex("0a0308ac41"));
+    QCOMPARE(QChar(8364), msg.testField());
+}
+
+void QtProtobufQtTypesQtCoreTest::qUuid()
+{
+    qProtobufAssertMessagePropertyRegistered<QUuidMessage, QUuid>(1, "QUuid", "testField");
+
+    const char *hexUuidValue = "0a120a104bcbcdc3c5b34d3497feaf78c825cc7d";
+    const char *uuidValue = "{4bcbcdc3-c5b3-4d34-97fe-af78c825cc7d}";
+
+    QUuidMessage msg;
+    msg.setTestField(QUuid(uuidValue));
+    QCOMPARE(QByteArray::fromHex(hexUuidValue), msg.serialize(&serializer));
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(hexUuidValue));
+
+    QCOMPARE(QUuid(uuidValue), msg.testField());
+}
+
+void QtProtobufQtTypesQtCoreTest::qTime()
+{
+    qProtobufAssertMessagePropertyRegistered<QTimeMessage, QTime>(1, "QTime", "testField");
+    QTimeMessage msg;
+    msg.setTestField(QTime(5, 30, 48, 123));
+    QByteArray result = msg.serialize(&serializer);
+
+    QCOMPARE(QByteArray::fromHex("0a0508bbb7bb09"), result);
+
+    msg.deserialize(&serializer, QByteArray::fromHex("0a0508d188f10c"));
+    QCOMPARE(msg.testField().hour(), testTime.hour());
+    QCOMPARE(msg.testField().minute(), testTime.minute());
+    QCOMPARE(msg.testField().second(), testTime.second());
+    QCOMPARE(msg.testField().msec(), testTime.msec());
+}
+
+void QtProtobufQtTypesQtCoreTest::qDate()
+{
+    qProtobufAssertMessagePropertyRegistered<QDateMessage, QDate>(1, "QDate", "testField");
+    QDateMessage msg;
+    msg.setTestField(testDate);
+    QByteArray result = msg.serialize(&serializer);
+
+    QCOMPARE(QByteArray::fromHex("0a050887b79201"), result);
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex("0a0508aeab9301"));
+    QCOMPARE(msg.testField().year(), 1897);
+}
+
+void QtProtobufQtTypesQtCoreTest::qDateTime()
+{
+    qProtobufAssertMessagePropertyRegistered<QDateTimeMessage, QDateTime>(1,
+                                                                          "QDateTime",
+                                                                          "testField");
+    QDateTimeMessage msg;
+
+    const QDate checkingDate = QDate(1897, 3, 14);
+    msg.setTestField({checkingDate, testTime, QTimeZone::UTC});
+
+    QByteArray result = msg.serialize(&serializer);
+
+    const char *hexValue = "0a0b08d1f8d1da91bdffffff01";
+    QCOMPARE(QByteArray::fromHex(hexValue), result);
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(hexValue));
+    QCOMPARE(msg.testField(), QDateTime(checkingDate, testTime, QTimeZone::UTC));
+
+    msg.setTestField({});
+    msg.setTestField(QDateTime(testDate, testTime, QTimeZone::UTC));
+    msg.deserialize(&serializer, QByteArray::fromHex("0a0b08d1f0918dda97ffffff01"));
+
+    QCOMPARE(msg.testField(), QDateTime(testDate, testTime, QTimeZone::UTC));
+}
+
+void QtProtobufQtTypesQtCoreTest::qSize()
+{
+    qProtobufAssertMessagePropertyRegistered<QSizeMessage, QSize>(1, "QSize", "testField");
+    QSizeMessage msg;
+    const QSize size({1024, 768});
+    msg.setTestField(size);
+
+    QByteArray result = msg.serialize(&serializer);
+    const char *hexValue = "0a06088008108006";
+
+    QCOMPARE(QByteArray::fromHex(hexValue), result);
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(hexValue));
+    QCOMPARE(msg.testField().width(), size.width());
+    QCOMPARE(msg.testField().height(), size.height());
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex("0a06088006108008"));
+    QCOMPARE(msg.testField().width(), size.height());
+    QCOMPARE(msg.testField().height(), size.width());
+}
+
+void QtProtobufQtTypesQtCoreTest::qSizeF()
+{
+    qProtobufAssertMessagePropertyRegistered<QSizeFMessage, QSizeF>(1, "QSizeF", "testField");
+    QSizeFMessage msg;
+
+    const QSizeF sizeF = {1024.0, 768.0};
+    msg.setTestField(sizeF);
+
+    QByteArray result = msg.serialize(&serializer);
+    const char *hexValue = "0a12090000000000009040110000000000008840";
+    QCOMPARE(QByteArray::fromHex(hexValue), result);
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(hexValue));
+    QCOMPARE(msg.testField().width(), sizeF.width());
+    QCOMPARE(msg.testField().height(), sizeF.height());
+
+    msg.deserialize(&serializer,
+                    QByteArray::fromHex("0a12090000000000008840110000000000009040"));
+    QCOMPARE(msg.testField().width(), sizeF.height());
+    QCOMPARE(msg.testField().height(), sizeF.width());
+}
+
+void QtProtobufQtTypesQtCoreTest::qPoint()
+{
+    qProtobufAssertMessagePropertyRegistered<QPointMessage, QPoint>(1, "QPoint", "testField");
+    QPointMessage msg;
+    const QPoint point = {1024, 768};
+    msg.setTestField(point);
+
+    QByteArray result = msg.serialize(&serializer);
+    QCOMPARE(QByteArray::fromHex("0a0608801010800c"), result);
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex("0a0608801010800c"));
+    QCOMPARE(msg.testField().x(), point.x());
+    QCOMPARE(msg.testField().y(), point.y());
+
+    msg.deserialize(&serializer, QByteArray::fromHex("0a0608800c108010"));
+    QCOMPARE(msg.testField().x(), point.y());
+    QCOMPARE(msg.testField().y(), point.x());
+}
+
+void QtProtobufQtTypesQtCoreTest::qPointF()
+{
+    qProtobufAssertMessagePropertyRegistered<QPointFMessage, QPointF>(1, "QPointF", "testField");
+    QPointFMessage msg;
+
+    const QPointF pointF = {1024.0, 768.0};
+    msg.setTestField(pointF);
+
+    QByteArray result = msg.serialize(&serializer);
+    const char *hexValue = "0a12090000000000009040110000000000008840";
+    QCOMPARE(QByteArray::fromHex(hexValue), result);
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(hexValue));
+    QCOMPARE(msg.testField().x(), pointF.x());
+    QCOMPARE(msg.testField().y(), pointF.y());
+
+    msg.deserialize(&serializer,
+                    QByteArray::fromHex("0a12090000000000008840110000000000009040"));
+    QCOMPARE(msg.testField().x(), pointF.y());
+    QCOMPARE(msg.testField().y(), pointF.x());
+}
+
+void QtProtobufQtTypesQtCoreTest::qRect()
+{
+    qProtobufAssertMessagePropertyRegistered<QRectMessage, QRect>(1, "QRect", "testField");
+    QRectMessage msg;
+    QPoint point(768, 768);
+    QSize size(500, 1212);
+    msg.setTestField({point, size});
+
+    QByteArray result = msg.serialize(&serializer);
+
+    const char *hexValue = "0a0c08800c10800c18f40320bc09";
+    QCOMPARE(QByteArray::fromHex(hexValue), result);
+
+    msg.setTestField({});
+
+    msg.deserialize(&serializer, QByteArray::fromHex(hexValue));
+    QCOMPARE(msg.testField().x(), point.x());
+    QCOMPARE(msg.testField().y(), point.y());
+    QCOMPARE(msg.testField().width(), size.width());
+    QCOMPARE(msg.testField().height(), size.height());
+
+    msg.setTestField({});
+
+    msg.deserialize(&serializer, QByteArray::fromHex("0a06188008208006"));
+    QCOMPARE(msg.testField().x(), 0);
+    QCOMPARE(msg.testField().y(), 0);
+    QCOMPARE(msg.testField().width(), 1024);
+    QCOMPARE(msg.testField().height(), 768);
+}
+
+void QtProtobufQtTypesQtCoreTest::qRectF()
+{
+    qProtobufAssertMessagePropertyRegistered<QRectFMessage, QRectF>(1, "QRectF", "testField");
+    QRectFMessage msg;
+    QPointF pointF(768.0, 768.0);
+    QSizeF sizeF(1024.0, 1024.0);
+    msg.setTestField({pointF.x(), pointF.y(), sizeF.width(), sizeF.height()});
+
+    QByteArray result = msg.serialize(&serializer);
+
+    const char *hexValue
+            = "0a24090000000000008840110000000000008840190000000000009040210000000000009040";
+    QCOMPARE(QByteArray::fromHex(hexValue), result);
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(hexValue));
+    QCOMPARE(msg.testField().x(), pointF.x());
+    QCOMPARE(msg.testField().y(), pointF.y());
+    QCOMPARE(msg.testField().width(), sizeF.width());
+    QCOMPARE(msg.testField().height(),sizeF.height());
+
+    msg.setTestField({QPointF(0.0, 0.0), QSizeF(1024.0, 768.0)});
+    msg.deserialize(&serializer,
+                    QByteArray::fromHex("0a24090000000000000000110000000000000"
+                                        "000190000000000009040210000000000008840"));
+    QCOMPARE(msg.testField().x(), 0.0);
+    QCOMPARE(msg.testField().y(), 0.0);
+    QCOMPARE(msg.testField().width(), 1024.0);
+    QCOMPARE(msg.testField().height(), 768.0);
+}
+
+void QtProtobufQtTypesQtCoreTest::qVersionNumber()
+{
+    qProtobufAssertMessagePropertyRegistered<QVersionNumberFMessage,
+            QVersionNumber>(1, "QVersionNumber", "testField");
+    QVersionNumberFMessage msg;
+    QVersionNumber version(1, 1, 0);
+    msg.setTestField({version});
+
+    QByteArray result = msg.serialize(&serializer);
+    const char *hexValue = "0a050a03010100";
+    QCOMPARE(QByteArray::fromHex(hexValue), result);
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(hexValue));
+    QCOMPARE(msg.testField(), version);
+}
+
+QTEST_MAIN(QtProtobufQtTypesQtCoreTest)
+#include "qtprotobufqttypescoretest.moc"
+

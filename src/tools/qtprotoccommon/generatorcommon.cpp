@@ -60,6 +60,8 @@ std::string common::getFullNamespace(std::string_view fullDescriptorName,
         return output;
     std::string namespacesStr =
             utils::replace(fullDescriptorName.substr(0, nameIndex), ".", separator);
+    if (namespacesStr == "QtCore" || namespacesStr == "QtGui")
+        namespacesStr = "QtProtobufPrivate" + std::string(separator) + namespacesStr;
     if (!output.empty() && !namespacesStr.empty())
         output += separator;
     output += namespacesStr;
@@ -393,9 +395,10 @@ TypeMap common::produceClientTypeMap(const ServiceDescriptor *service, const Des
 
 bool common::isQtType(const FieldDescriptor *field)
 {
-    return utils::startsWith(field->message_type()->full_name(), "QtProtobuf.")
-            && field->file()->package() != "QtProtobuf"; // Used for qttypes library to avoid types
-                                                         // conversion inside library
+    const auto fullName = field->message_type()->full_name();
+    const auto package = field->file()->package();
+    return (utils::startsWith(fullName, "QtCore.") || utils::startsWith(fullName, "QtGui."))
+            && package != "QtCore" && package != "QtGui";
 }
 
 bool common::isOverridden(const FieldDescriptor *field)

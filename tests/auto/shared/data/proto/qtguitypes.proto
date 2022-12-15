@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package qtprotobufnamespace.qttypes.tests;
+import "QtGui/QtGui.proto";
+
+message QMatrix4x4Message {
+    QtGui.QMatrix4x4 testField = 1;
+}
+
+message QVector2DMessage {
+    QtGui.QVector2D testField = 1;
+}
+
+message QVector3DMessage {
+    QtGui.QVector3D testField = 1;
+}
+
+message QVector4DMessage {
+    QtGui.QVector4D testField = 1;
+}
+
+message QTransformMessage {
+    QtGui.QTransform testField = 1;
+}
+
+message QQuaternionMessage {
+    QtGui.QQuaternion testField = 1;
+}
+
+message QImageMessage {
+    QtGui.QImage testField = 1;
+}

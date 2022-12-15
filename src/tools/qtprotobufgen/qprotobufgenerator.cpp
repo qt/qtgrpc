@@ -135,16 +135,16 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     externalIncludes.insert("QByteArray");
     externalIncludes.insert("QString");
 
-    bool hasQtTypes = false;
     bool hasOneofFields = false;
+    std::unordered_set<std::string> qtTypesSet;
     common::iterateMessages(
-            file, [&externalIncludes, &hasQtTypes, &hasOneofFields](const Descriptor *message) {
+            file, [&](const Descriptor *message) {
                 for (int i = 0; i < message->field_count(); ++i) {
                     const auto *field = message->field(i);
                     if (field->type() == FieldDescriptor::TYPE_MESSAGE && !field->is_map()
                         && !field->is_repeated() && common::isQtType(field)) {
                         externalIncludes.insert(field->message_type()->name());
-                        hasQtTypes = true;
+                        qtTypesSet.insert(field->message_type()->file()->package());
                     }
                 }
 
@@ -162,13 +162,13 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     if (hasOneofFields)
         externalIncludes.insert("QProtobufOneof");
 
-    if (hasQtTypes) {
-        externalIncludes.insert("QtProtobufQtTypes");
+    for (const auto &qtTypeInclude: qtTypesSet) {
+        externalIncludes.insert("QtProtobuf" + qtTypeInclude + "Types");
     }
 
     for (int i = 0; i < file->dependency_count(); ++i) {
-        if (file->dependency(i)->name() == "QtProtobuf/QtCore.proto"
-                || file->dependency(i)->name() == "QtProtobuf/QtGui.proto") {
+        if (file->dependency(i)->name() == "QtCore/QtCore.proto"
+                || file->dependency(i)->name() == "QtGui/QtGui.proto") {
             continue;
         }
         // Override the any.proto include with our own specific support

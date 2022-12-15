@@ -53,12 +53,13 @@ void GeneratorBase::OpenFileNamespaces(
         google::protobuf::io::Printer *printer) const
 {
     assert(printer != nullptr);
+    assert(file != nullptr);
     const bool hasQtNamespace = (Options::instance().extraNamespace() == "QT_NAMESPACE");
     const std::string scopeNamespaces = file->message_type_count() > 0
             ? common::getFullNamespace(file->message_type(0), "::")
             : common::getFullNamespace(file->enum_type(0), "::");
     printer->Print("\n");
-    if (hasQtNamespace)
+    if (hasQtNamespace || file->package() == "QtCore" || file->package() == "QtGui")
         printer->PrintRaw("QT_BEGIN_NAMESPACE\n");
     if (!scopeNamespaces.empty()) {
         printer->Print({ { "scope_namespaces", scopeNamespaces } },
@@ -79,7 +80,7 @@ void GeneratorBase::CloseFileNamespaces(
         printer->Print({ { "scope_namespaces", scopeNamespaces } },
                        CommonTemplates::NamespaceClosingTemplate());
     }
-    if (hasQtNamespace)
+    if (hasQtNamespace || file->package() == "QtCore" || file->package() == "QtGui")
         printer->PrintRaw("QT_END_NAMESPACE\n");
     printer->Print("\n");
 }
