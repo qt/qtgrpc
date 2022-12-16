@@ -3,7 +3,7 @@
 
 qt_internal_add_module(Grpc
     SOURCES
-        qgrpcasyncoperation.h qgrpcasyncoperation.cpp
+        qgrpcoperation.h qgrpcoperation.cpp
         qgrpccallreply.h qgrpccallreply.cpp
         qgrpcstream.h qgrpcstream.cpp
         qgrpcstatus.h qgrpcstatus.cpp

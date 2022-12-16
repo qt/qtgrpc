@@ -2,8 +2,8 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#ifndef QGRPCASYNCOPERATIONBASE_H
-#define QGRPCASYNCOPERATIONBASE_H
+#ifndef QGRPCOPERATION_H
+#define QGRPCOPERATION_H
 
 #include <QtCore/QMutex>
 #include <QtCore/QObject>
@@ -12,7 +12,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class Q_GRPC_EXPORT QGrpcAsyncOperation : public QObject
+class Q_GRPC_EXPORT QGrpcOperation : public QObject
 {
     Q_OBJECT
 public:
@@ -35,12 +35,12 @@ Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status);
 
 protected:
-    QGrpcAsyncOperation(QAbstractGrpcClient *parent);
-    virtual ~QGrpcAsyncOperation();
+    QGrpcOperation(QAbstractGrpcClient *parent);
+    virtual ~QGrpcOperation();
 
 private:
-    QGrpcAsyncOperation();
-    Q_DISABLE_COPY_MOVE(QGrpcAsyncOperation)
+    QGrpcOperation();
+    Q_DISABLE_COPY_MOVE(QGrpcOperation)
 
     friend class QAbstractGrpcClient;
 
@@ -49,4 +49,4 @@ private:
 
 QT_END_NAMESPACE
 
-#endif // QGRPCASYNCOPERATIONBASE_H
+#endif // QGRPCOPERATION_H

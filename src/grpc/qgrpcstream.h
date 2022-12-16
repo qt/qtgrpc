@@ -10,7 +10,7 @@
 #include <QtCore/QMutex>
 #include <QtCore/QString>
 #include <QtGrpc/qabstractgrpcclient.h>
-#include <QtGrpc/qgrpcasyncoperation.h>
+#include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 #include <functional>
@@ -19,7 +19,7 @@ QT_BEGIN_NAMESPACE
 
 class QAbstractGrpcClient;
 
-class Q_GRPC_EXPORT QGrpcStream final : public QGrpcAsyncOperation
+class Q_GRPC_EXPORT QGrpcStream final : public QGrpcOperation
 {
     Q_OBJECT
     using StreamHandler = std::function<void(const QByteArray &)>;

@@ -7,12 +7,12 @@
 
 #include <QtCore/QMutex>
 #include <QtGrpc/qabstractgrpcclient.h>
-#include <QtGrpc/qgrpcasyncoperation.h>
+#include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 QT_BEGIN_NAMESPACE
 
-class Q_GRPC_EXPORT QGrpcCallReply final : public QGrpcAsyncOperation
+class Q_GRPC_EXPORT QGrpcCallReply final : public QGrpcOperation
 {
     Q_OBJECT
 public:
@@ -34,7 +34,7 @@ public:
     }
 
 protected:
-    QGrpcCallReply(QAbstractGrpcClient *parent) : QGrpcAsyncOperation(parent) { }
+    QGrpcCallReply(QAbstractGrpcClient *parent) : QGrpcOperation(parent) { }
     ~QGrpcCallReply() = default;
 
 private:
