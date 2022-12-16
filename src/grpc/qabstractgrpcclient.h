@@ -19,7 +19,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class QGrpcAsyncOperation;
+class QGrpcOperation;
 class QAbstractGrpcChannel;
 class QAbstractGrpcClientPrivate;
 
@@ -114,7 +114,7 @@ protected:
         });
     }
 
-    friend class QGrpcAsyncOperation;
+    friend class QGrpcOperation;
 
 private:
     QGrpcStatus call(const QString &method, const QByteArray &arg, QByteArray &ret);

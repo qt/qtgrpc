@@ -25,7 +25,7 @@ QT_BEGIN_NAMESPACE
 
 QGrpcStream::QGrpcStream(const QString &method, const QByteArray &arg, const StreamHandler &handler,
                          QAbstractGrpcClient *parent)
-    : QGrpcAsyncOperation(parent), m_method(method), m_arg(arg)
+    : QGrpcOperation(parent), m_method(method), m_arg(arg)
 {
     if (handler)
         m_handlers.push_back(handler);

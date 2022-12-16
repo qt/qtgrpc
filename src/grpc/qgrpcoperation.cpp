@@ -4,14 +4,14 @@
 
 #include <qtgrpcglobal_p.h>
 
-#include "qgrpcasyncoperation.h"
+#include "qgrpcoperation.h"
 
 QT_BEGIN_NAMESPACE
 
 /*!
-    \class QGrpcAsyncOperation
+    \class QGrpcOperation
     \inmodule QtGrpc
-    \brief The QGrpcAsyncOperation class implements common logic to
+    \brief The QGrpcOperation class implements common logic to
            handle communication in Grpc channel.
  */
 
@@ -35,11 +35,11 @@ QT_BEGIN_NAMESPACE
     The signal is emitted when error with \a status occurs in channel or during serialization.
  */
 
-QGrpcAsyncOperation::QGrpcAsyncOperation(QAbstractGrpcClient *parent) : QObject(parent)
+QGrpcOperation::QGrpcOperation(QAbstractGrpcClient *parent) : QObject(parent)
 {
 }
 
-QGrpcAsyncOperation::~QGrpcAsyncOperation()
+QGrpcOperation::~QGrpcOperation()
 {
 }
 
@@ -47,7 +47,7 @@ QGrpcAsyncOperation::~QGrpcAsyncOperation()
     Interface for implementation of QAbstractGrpcChannel. Should be used to write raw data from
    channel to reply \a data Raw data received from channel.
  */
-void QGrpcAsyncOperation::setData(const QByteArray &data)
+void QGrpcOperation::setData(const QByteArray &data)
 {
     m_data = data;
 }
