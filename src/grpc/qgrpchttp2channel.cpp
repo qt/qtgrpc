@@ -101,7 +101,7 @@ struct QGrpcHttp2ChannelPrivate
     std::unordered_map<QNetworkReply *, ExpectedData> activeStreamReplies;
     QObject lambdaContext;
 
-    QNetworkReply *post(const QString &method, const QString &service, const QByteArray &args,
+    QNetworkReply *post(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
                         bool stream = false)
     {
         QUrl callUrl = url;
@@ -193,7 +193,7 @@ struct QGrpcHttp2ChannelPrivate
 #endif
     }
 
-    static int getExpectedDataSize(const QByteArray &container)
+    static int getExpectedDataSize(QByteArrayView container)
     {
         return qFromBigEndian(*reinterpret_cast<const quint32 *>(container.data() + 1))
                 + GrpcMessageSizeHeaderSize;
@@ -213,8 +213,8 @@ QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &url,
 
 QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
 
-QGrpcStatus QGrpcHttp2Channel::call(const QString &method, const QString &service,
-                                    const QByteArray &args, QByteArray &ret)
+QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView service,
+                                    QByteArrayView args, QByteArray &ret)
 {
     QEventLoop loop;
 
@@ -233,8 +233,8 @@ QGrpcStatus QGrpcHttp2Channel::call(const QString &method, const QString &servic
     return { grpcStatus, QString::fromUtf8(networkReply->rawHeader(GrpcStatusMessageHeader)) };
 }
 
-void QGrpcHttp2Channel::call(const QString &method, const QString &service, const QByteArray &args,
-                             QGrpcCallReply *reply)
+void QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView service,
+                             QByteArrayView args, QGrpcCallReply *reply)
 {
     Q_ASSERT(reply != nullptr);
     QNetworkReply *networkReply = dPtr->post(method, service, args);
@@ -275,7 +275,7 @@ void QGrpcHttp2Channel::call(const QString &method, const QString &service, cons
                                         });
 }
 
-void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service)
+void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, QLatin1StringView service)
 {
     Q_ASSERT(grpcStream != nullptr);
     QNetworkReply *networkReply = dPtr->post(grpcStream->method(), service, grpcStream->arg(),

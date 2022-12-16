@@ -26,15 +26,15 @@ class Q_GRPC_EXPORT QGrpcStream final : public QGrpcOperation
 public:
     void abort() override;
 
-    QString method() const;
-    QByteArray arg() const;
+    QLatin1StringView method() const;
+    QByteArrayView arg() const;
     void handler(const QByteArray &data);
 
 Q_SIGNALS:
     void messageReceived();
 
 protected:
-    explicit QGrpcStream(const QString &method, const QByteArray &arg, const StreamHandler &handler,
+    explicit QGrpcStream(QLatin1StringView method, QByteArrayView arg, const StreamHandler &handler,
                          QAbstractGrpcClient *parent);
     ~QGrpcStream() override;
 
@@ -47,7 +47,7 @@ protected:
 
 private:
     friend class QAbstractGrpcClient;
-    QString m_method;
+    std::string m_method;
     QByteArray m_arg;
     QList<StreamHandler> m_handlers;
 };

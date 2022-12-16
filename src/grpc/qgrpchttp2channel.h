@@ -22,11 +22,11 @@ public:
                                std::unique_ptr<QAbstractGrpcCredentials> credentials);
     ~QGrpcHttp2Channel() override;
 
-    QGrpcStatus call(const QString &method, const QString &service, const QByteArray &args,
+    QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
                      QByteArray &ret) override;
-    void call(const QString &method, const QString &service, const QByteArray &args,
+    void call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
               QGrpcCallReply *reply) override;
-    void stream(QGrpcStream *stream, const QString &service) override;
+    void stream(QGrpcStream *stream, QLatin1StringView service) override;
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const override;
 
 private:

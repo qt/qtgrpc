@@ -244,6 +244,11 @@ const char *CommonTemplates::EmptyConstructorTemplate()
     return "$classname$() {}\n";
 }
 
+const char *CommonTemplates::UseNamespace()
+{
+    return "using namespace $namespace$;\n";
+}
+
 const char *CommonTemplates::QObjectConstructorMessageDeclarationTemplate()
 {
     return "explicit $classname$(QObject *parent = nullptr);\n";
