@@ -22,6 +22,8 @@
 
 QT_BEGIN_NAMESPACE
 
+using namespace Qt::StringLiterals;
+
 /*!
     \class QGrpcHttp2Channel
     \inmodule QtGRPC
@@ -105,12 +107,11 @@ struct QGrpcHttp2ChannelPrivate
                         bool stream = false)
     {
         QUrl callUrl = url;
-        callUrl.setPath(QLatin1StringView("/%1/%2").arg(service, method));
+        callUrl.setPath("/%1/%2"_L1.arg(service, method));
 
         qGrpcDebug() << "Service call url:" << callUrl;
         QNetworkRequest request(callUrl);
-        request.setHeader(QNetworkRequest::ContentTypeHeader,
-                          QVariant(QLatin1StringView("application/grpc")));
+        request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/grpc"_L1));
         request.setRawHeader(GrpcAcceptEncodingHeader, "identity,deflate,gzip");
         request.setRawHeader(AcceptEncodingHeader, "identity,gzip");
         request.setRawHeader(TEHeader, "trailers");
@@ -179,17 +180,17 @@ struct QGrpcHttp2ChannelPrivate
         : url(_url), credentials(std::move(_credentials))
     {
 #if QT_CONFIG(ssl)
-        if (url.scheme() == QLatin1StringView("https")) {
+        if (url.scheme() == "https"_L1) {
             // HTTPS connection requested but not ssl configuration provided.
             Q_ASSERT(credentials->channelCredentials().contains(SslConfigCredential));
             sslConfig = credentials->channelCredentials()
                                 .value(SslConfigCredential)
                                 .value<QSslConfiguration>();
         } else if (url.scheme().isEmpty()) {
-            url.setScheme(QLatin1StringView("http"));
+            url.setScheme("http"_L1);
         }
 #else
-        url.setScheme(QLatin1StringView("http"));
+        url.setScheme("http"_L1);
 #endif
     }
 
@@ -376,8 +377,8 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, QLatin1StringView servic
                 default:
                     grpcStream->errorOccurred(QGrpcStatus{
                             StatusCodeMap.at(networkError),
-                            QLatin1StringView("%1 call %2 stream failed: %3.")
-                                    .arg(service, grpcStream->method(), errorString) });
+                            "%1 call %2 stream failed: %3"_L1.arg(service, grpcStream->method(),
+                                                                  errorString) });
                     break;
                 }
             });

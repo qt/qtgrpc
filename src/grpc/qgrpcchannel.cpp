@@ -29,6 +29,8 @@
 
 QT_BEGIN_NAMESPACE
 
+using namespace Qt::StringLiterals;
+
 /*!
     \class QGrpcChannel
     \inmodule QtGRPC
@@ -208,7 +210,7 @@ QGrpcChannelPrivate::~QGrpcChannelPrivate() = default;
 void QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView service,
                                QByteArrayView args, QGrpcCallReply *reply)
 {
-    const QByteArray rpcName(QLatin1StringView("/%1/%2").arg(service, method).toLatin1());
+    const QByteArray rpcName("/%1/%2"_L1.arg(service, method).toLatin1());
     QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(m_channel.get(),
                                                                QLatin1StringView(rpcName), args,
                                                                reply),
@@ -245,7 +247,7 @@ void QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView servi
 QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView service,
                                       QByteArrayView args, QByteArray &ret)
 {
-    const QByteArray rpcName(QLatin1StringView("/%1/%2").arg(service, method).toLatin1());
+    const QByteArray rpcName("/%1/%2"_L1.arg(service, method).toLatin1());
     QGrpcChannelCall call(m_channel.get(), QLatin1StringView(rpcName), args);
 
     call.start();
@@ -259,7 +261,7 @@ void QGrpcChannelPrivate::stream(QGrpcStream *stream, QLatin1StringView service)
 {
     Q_ASSERT(stream != nullptr);
 
-    const QByteArray rpcName(QLatin1StringView("/%1/%2").arg(service, stream->method()).toLatin1());
+    const QByteArray rpcName("/%1/%2"_L1.arg(service, stream->method()).toLatin1());
 
     QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(),
                                                                   QLatin1StringView(rpcName),

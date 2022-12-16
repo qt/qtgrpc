@@ -41,18 +41,17 @@ protected:
     template <typename ParamType, typename ReturnType>
     QGrpcStatus call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType *ret)
     {
+        using namespace Qt::StringLiterals;
         if (ret == nullptr) {
-            const auto errorString = QLatin1StringView("Unable to call method: %1. "
-                                                       "Pointer to return data is null.")
-                                             .arg(method);
+            const auto errorString = "Unable to call method: %1. "
+                                     "Pointer to return data is null."_L1.arg(method);
             QGrpcStatus status{ QGrpcStatus::InvalidArgument, errorString };
             errorOccurred(status);
             logError(errorString);
             return status;
         }
         QGrpcStatus status{ QGrpcStatus::Unknown,
-                            QLatin1StringView("Serializing failed. "
-                                              "Serializer is not ready.") };
+                            "Serializing failed. Serializer is not ready."_L1 };
 
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (argData) {
@@ -86,10 +85,10 @@ protected:
     std::shared_ptr<QGrpcStream> stream(QLatin1StringView method, const QProtobufMessage &arg,
                                         const QWeakPointer<ReturnType> ret)
     {
+        using namespace Qt::StringLiterals;
         if (ret.isNull()) {
-            const auto nullPointerError = QLatin1StringView("Unable to stream method: %1. "
-                                                            "Pointer to return data is null.")
-                                                  .arg(method);
+            const auto nullPointerError = "Unable to stream method: %1. "
+                                          "Pointer to return data is null."_L1.arg(method);
             errorOccurred({ QGrpcStatus::InvalidArgument, nullPointerError });
             logError(nullPointerError);
             return {};
@@ -138,10 +137,11 @@ private:
     template <typename ParamType>
     std::optional<QByteArray> trySerialize(const QProtobufMessage &arg)
     {
+        using namespace Qt::StringLiterals;
         auto _serializer = serializer();
         if (_serializer == nullptr) {
             errorOccurred({ QGrpcStatus::Unknown,
-                            QLatin1StringView("Serializing failed. Serializer is not ready.") });
+                            "Serializing failed. Serializer is not ready."_L1 });
             return std::nullopt;
         }
         return _serializer->serialize<ParamType>(&arg);

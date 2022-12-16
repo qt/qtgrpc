@@ -15,14 +15,15 @@
 
 QT_BEGIN_NAMESPACE
 
+using namespace Qt::StringLiterals;
+
 namespace {
 static QString threadSafetyWarning(QLatin1StringView methodName)
 {
-    return QLatin1StringView("%1 is called from a different thread.\n"
-                             "Qt GRPC doesn't guarantee thread safety on the channel level.\n"
-                             "You have to be confident that channel routines are working in "
-                             "the same thread as QAbstractGrpcClient.")
-            .arg(methodName);
+    return "%1 is called from a different thread.\n"
+           "Qt GRPC doesn't guarantee thread safety on the channel level.\n"
+           "You have to be confident that channel routines are working in "
+           "the same thread as QAbstractGrpcClient."_L1.arg(methodName);
 }
 } // namespace
 
@@ -86,7 +87,9 @@ class QAbstractGrpcClientPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QAbstractGrpcClient)
 public:
-    QAbstractGrpcClientPrivate(QLatin1StringView service) : service(service.data(), service.size()) { }
+    QAbstractGrpcClientPrivate(QLatin1StringView service) : service(service.data(), service.size())
+    {
+    }
 
     std::shared_ptr<QAbstractGrpcChannel> channel;
     const std::string service;
@@ -113,8 +116,7 @@ QAbstractGrpcClient::~QAbstractGrpcClient() = default;
 void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel)
 {
     if (channel->thread() != QThread::currentThread()) {
-        const QString status = threadSafetyWarning(
-                QLatin1StringView("QAbstractGrpcClient::attachChannel"));
+        const QString status = threadSafetyWarning("QAbstractGrpcClient::attachChannel"_L1);
         logError(status);
         errorOccurred({ QGrpcStatus::Unknown, status });
         return;
@@ -132,18 +134,16 @@ QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, QByteArrayView a
 {
     QGrpcStatus callStatus{ QGrpcStatus::Unknown };
     if (thread() != QThread::currentThread()) {
-        const QGrpcStatus status(
-                { QGrpcStatus::Unknown,
-                  threadSafetyWarning(QLatin1StringView("QAbstractGrpcClient::call")) });
+        const QGrpcStatus status({ QGrpcStatus::Unknown,
+                                   threadSafetyWarning("QAbstractGrpcClient::call"_L1) });
         logError(status.message());
         errorOccurred(status);
         return status;
     }
     Q_D(QAbstractGrpcClient);
 
-    callStatus = d->channel
-            ? d->channel->call(method, QLatin1StringView(d->service), arg, ret)
-            : QGrpcStatus{ QGrpcStatus::Unknown, QLatin1StringView("No channel(s) attached.") };
+    callStatus = d->channel ? d->channel->call(method, QLatin1StringView(d->service), arg, ret)
+                            : QGrpcStatus{ QGrpcStatus::Unknown, "No channel(s) attached."_L1 };
 
     if (callStatus != QGrpcStatus::Ok)
         errorOccurred(callStatus);
@@ -156,9 +156,8 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
 {
     std::shared_ptr<QGrpcCallReply> reply;
     if (thread() != QThread::currentThread()) {
-        const QGrpcStatus status(
-                { QGrpcStatus::Unknown,
-                  threadSafetyWarning(QLatin1StringView("QAbstractGrpcClient::call")) });
+        const QGrpcStatus status({ QGrpcStatus::Unknown,
+                                   threadSafetyWarning("QAbstractGrpcClient::call"_L1) });
         logError(status.message());
         errorOccurred(status);
         return reply;
@@ -192,7 +191,7 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
 
         d->channel->call(method, QLatin1StringView(d->service), arg, reply.get());
     } else {
-        errorOccurred({ QGrpcStatus::Unknown, QLatin1StringView("No channel(s) attached.") });
+        errorOccurred({ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
     }
 
     return reply;
@@ -205,9 +204,8 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::stream(QLatin1StringView metho
     std::shared_ptr<QGrpcStream> grpcStream;
 
     if (thread() != QThread::currentThread()) {
-        const QGrpcStatus status(
-                { QGrpcStatus::Unknown,
-                  threadSafetyWarning(QLatin1StringView("QAbstractGrpcClient::stream")) });
+        const QGrpcStatus status({ QGrpcStatus::Unknown,
+                                   threadSafetyWarning("QAbstractGrpcClient::stream"_L1) });
         logError(status.message());
         errorOccurred(status);
         return grpcStream;
@@ -282,7 +280,7 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::stream(QLatin1StringView metho
         d->channel->stream(grpcStream.get(), QLatin1StringView(d->service));
         d->activeStreams.push_back(grpcStream);
     } else {
-        errorOccurred({ QGrpcStatus::Unknown, QLatin1StringView("No channel(s) attached.") });
+        errorOccurred({ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
     }
     return grpcStream;
 }
