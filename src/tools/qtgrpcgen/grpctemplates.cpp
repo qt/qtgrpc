@@ -49,7 +49,7 @@ const char *GrpcTemplates::ServerMethodDeclarationTemplate()
 
 const char *GrpcTemplates::ClientConstructorDefinitionTemplate()
 {
-    return "\n$classname$::$classname$(QObject *parent) : $parent_class$(\"$service_name$\", "
+    return "\n$classname$::$classname$(QObject *parent) : $parent_class$(\"$service_name$\"_L1, "
            "parent)\n"
            "{\n"
            "}\n";
@@ -60,7 +60,7 @@ const char *GrpcTemplates::ClientMethodDefinitionSyncTemplate()
     return "\nQGrpcStatus $classname$::$method_name$(const $param_type$ &$param_name$, "
            "$return_type$ *$return_name$)\n"
            "{\n"
-           "    return call<$param_type$>(\"$method_name$\", $param_name$, $return_name$);\n"
+           "    return call<$param_type$>(\"$method_name$\"_L1, $param_name$, $return_name$);\n"
            "}\n";
 }
 
@@ -69,7 +69,7 @@ const char *GrpcTemplates::ClientMethodDefinitionAsyncTemplate()
     return "\nstd::shared_ptr<QGrpcCallReply> $classname$::$method_name$(const $param_type$ "
            "&$param_name$)\n"
            "{\n"
-           "    return call<$param_type$>(\"$method_name$\", $param_name$);\n"
+           "    return call<$param_type$>(\"$method_name$\"_L1, $param_name$);\n"
            "}\n";
 }
 
@@ -78,7 +78,7 @@ const char *GrpcTemplates::ClientMethodDefinitionAsync2Template()
     return "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$, const QObject "
            "*context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback)\n"
            "{\n"
-           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
+           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\"_L1, "
            "$param_name$);\n"
            "    QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, "
            "callback]() "
@@ -111,7 +111,7 @@ const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
            "from JS engine context\";\n"
            "        return;\n"
            "    }\n\n"
-           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
+           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\"_L1, "
            "*$param_name$);\n"
            "    reply->subscribe(jsEngine, [this, reply, callback, jsEngine]() {\n"
            "        auto result = new $return_type$(reply->read<$return_type$>());\n"
@@ -147,7 +147,7 @@ const char *GrpcTemplates::ClientMethodDefinitionQml2Template()
            "from JS engine context\";\n"
            "        return;\n"
            "    }\n\n"
-           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\", "
+           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\"_L1, "
            "*$param_name$);\n"
            "    reply->subscribe(jsEngine, [this, reply, jsEngine, safeReturn]() {\n"
            "        if (safeReturn.isNull()) {\n"
@@ -186,7 +186,7 @@ const char *GrpcTemplates::ClientMethodServerStreamDefinitionTemplate()
     return "std::shared_ptr<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
            "&$param_name$)\n"
            "{\n"
-           "    return stream<$param_type$>(\"$method_name$\", $param_name$);\n"
+           "    return stream<$param_type$>(\"$method_name$\"_L1, $param_name$);\n"
            "}\n";
 }
 
@@ -195,7 +195,7 @@ const char *GrpcTemplates::ClientMethodServerStream2DefinitionTemplate()
     return "std::shared_ptr<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
            "&$param_name$, const QWeakPointer<$return_type$> &$return_name$)\n"
            "{\n"
-           "    return stream<$param_type$>(\"$method_name$\", $param_name$, $return_name$);\n"
+           "    return stream<$param_type$>(\"$method_name$\"_L1, $param_name$, $return_name$);\n"
            "}\n";
 }
 
@@ -215,7 +215,7 @@ const char *GrpcTemplates::ClientMethodServerStreamQmlDefinitionTemplate()
            "*$param_name$, "
            "$return_type$ *$return_name$)\n"
            "{\n"
-           "    return stream<$param_type$>(\"$method_name$\", *$param_name$, "
+           "    return stream<$param_type$>(\"$method_name$\"_L1, *$param_name$, "
            "QWeakPointer<$return_type$>($return_name$));\n"
            "}\n";
 }

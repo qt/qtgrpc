@@ -40,8 +40,8 @@ class QGrpcChannelStream : public QObject
     Q_OBJECT
 
 public:
-    explicit QGrpcChannelStream(grpc::Channel *channel, const QString &method,
-                                const QByteArray &data, QObject *parent = nullptr);
+    explicit QGrpcChannelStream(grpc::Channel *channel, QLatin1StringView method,
+                                QByteArrayView data, QObject *parent = nullptr);
     ~QGrpcChannelStream() override;
 
     void cancel();
@@ -65,7 +65,7 @@ class QGrpcChannelCall : public QObject
     Q_OBJECT
 
 public:
-    explicit QGrpcChannelCall(grpc::Channel *channel, const QString &method, const QByteArray &data,
+    explicit QGrpcChannelCall(grpc::Channel *channel, QLatin1StringView method, QByteArrayView data,
                               QObject *parent = nullptr);
     ~QGrpcChannelCall() override;
 
@@ -95,11 +95,11 @@ struct QGrpcChannelPrivate
                                  const QStringList &credentialsList);
     ~QGrpcChannelPrivate();
 
-    void call(const QString &method, const QString &service, const QByteArray &args,
+    void call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
               QGrpcCallReply *reply);
-    QGrpcStatus call(const QString &method, const QString &service, const QByteArray &args,
+    QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
                      QByteArray &ret);
-    void stream(QGrpcStream *stream, const QString &service);
+    void stream(QGrpcStream *stream, QLatin1StringView service);
 };
 
 QT_END_NAMESPACE

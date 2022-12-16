@@ -35,11 +35,11 @@ Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status) const;
 
 protected:
-    explicit QAbstractGrpcClient(const QString &service, QObject *parent = nullptr);
+    explicit QAbstractGrpcClient(QLatin1StringView service, QObject *parent = nullptr);
     ~QAbstractGrpcClient() override;
 
     template <typename ParamType, typename ReturnType>
-    QGrpcStatus call(const QString &method, const QProtobufMessage &arg, ReturnType *ret)
+    QGrpcStatus call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType *ret)
     {
         if (ret == nullptr) {
             const auto errorString = QLatin1StringView("Unable to call method: %1. "
@@ -65,7 +65,7 @@ protected:
     }
 
     template <typename ParamType>
-    std::shared_ptr<QGrpcCallReply> call(const QString &method, const QProtobufMessage &arg)
+    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg)
     {
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData)
@@ -74,7 +74,7 @@ protected:
     }
 
     template <typename ParamType>
-    std::shared_ptr<QGrpcStream> stream(const QString &method, const QProtobufMessage &arg)
+    std::shared_ptr<QGrpcStream> stream(QLatin1StringView method, const QProtobufMessage &arg)
     {
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData)
@@ -83,7 +83,7 @@ protected:
     }
 
     template <typename ParamType, typename ReturnType>
-    std::shared_ptr<QGrpcStream> stream(const QString &method, const QProtobufMessage &arg,
+    std::shared_ptr<QGrpcStream> stream(QLatin1StringView method, const QProtobufMessage &arg,
                                         const QWeakPointer<ReturnType> ret)
     {
         if (ret.isNull()) {
@@ -98,7 +98,7 @@ protected:
         if (!argData)
             return {};
 
-        return stream(method, *argData, [ret, this](const QByteArray &data) {
+        return stream(method, *argData, [ret, this](QByteArrayView data) {
             if (auto retVal = ret.lock()) {
                 auto status = tryDeserialize(retVal.get(), data);
                 if (status != QGrpcStatus::Ok) {
@@ -117,11 +117,11 @@ protected:
     friend class QGrpcOperation;
 
 private:
-    QGrpcStatus call(const QString &method, const QByteArray &arg, QByteArray &ret);
+    QGrpcStatus call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret);
 
-    std::shared_ptr<QGrpcCallReply> call(const QString &method, const QByteArray &arg);
+    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg);
 
-    std::shared_ptr<QGrpcStream> stream(const QString &method, const QByteArray &arg,
+    std::shared_ptr<QGrpcStream> stream(QLatin1StringView method, QByteArrayView arg,
                                         const StreamHandler &handler = {});
 
     template <typename ReturnType>

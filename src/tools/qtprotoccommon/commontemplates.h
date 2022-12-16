@@ -40,6 +40,7 @@ public:
     static const char *ClassMessageForwardDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplate();
     static const char *EmptyConstructorTemplate();
+    static const char *UseNamespace();
 
     static const char *PropertyTemplate();
     static const char *PropertyRepeatedTemplate();

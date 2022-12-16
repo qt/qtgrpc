@@ -23,9 +23,9 @@ QT_BEGIN_NAMESPACE
     The signal is emitted when the stream receives an updated value from server.
 */
 
-QGrpcStream::QGrpcStream(const QString &method, const QByteArray &arg, const StreamHandler &handler,
+QGrpcStream::QGrpcStream(QLatin1StringView method, QByteArrayView arg, const StreamHandler &handler,
                          QAbstractGrpcClient *parent)
-    : QGrpcOperation(parent), m_method(method), m_arg(arg)
+    : QGrpcOperation(parent), m_method(method.data(), method.size()), m_arg(arg.toByteArray())
 {
     if (handler)
         m_handlers.push_back(handler);
@@ -54,15 +54,15 @@ void QGrpcStream::abort()
 /*!
     Returns the method for this stream.
 */
-QString QGrpcStream::method() const
+QLatin1StringView QGrpcStream::method() const
 {
-    return m_method;
+    return QLatin1StringView(m_method);
 }
 
 /*!
     Returns serialized arguments for this stream.
 */
-QByteArray QGrpcStream::arg() const
+QByteArrayView QGrpcStream::arg() const
 {
     return m_arg;
 }

@@ -64,15 +64,20 @@ static grpc::ByteBuffer parseQByteArray(QByteArrayView bytearray)
     return buffer;
 }
 
-QGrpcChannelStream::QGrpcChannelStream(grpc::Channel *channel, const QString &method,
-                                       const QByteArray &data, QObject *parent)
+static std::string toStdString(QLatin1StringView view)
+{
+    return std::string(view.data(), view.size());
+}
+
+QGrpcChannelStream::QGrpcChannelStream(grpc::Channel *channel, QLatin1StringView method,
+                                       QByteArrayView data, QObject *parent)
     : QObject(parent)
 {
     grpc::ByteBuffer request = parseQByteArray(data);
 
     reader = grpc::internal::ClientReaderFactory<grpc::ByteBuffer>::Create(
             channel,
-            grpc::internal::RpcMethod(method.toStdString().c_str(),
+            grpc::internal::RpcMethod(toStdString(method).c_str(),
                                       grpc::internal::RpcMethod::SERVER_STREAMING),
             &context, request);
 
@@ -119,21 +124,19 @@ void QGrpcChannelStream::cancel()
     context.TryCancel();
 }
 
-QGrpcChannelCall::QGrpcChannelCall(grpc::Channel *channel, const QString &method,
-                                   const QByteArray &data, QObject *parent)
+QGrpcChannelCall::QGrpcChannelCall(grpc::Channel *channel, QLatin1StringView method,
+                                   QByteArrayView data, QObject *parent)
     : QObject(parent)
 {
     grpc::ByteBuffer request = parseQByteArray(data);
-
-    thread = QThread::create([this, request, channel, method] {
+    thread = QThread::create([this, request, channel, method = toStdString(method)] {
         grpc::ByteBuffer callResponse;
         QByteArray data;
         grpc::Status callStatus;
 
         callStatus = grpc::internal::BlockingUnaryCall(
                 channel,
-                grpc::internal::RpcMethod(method.toStdString().c_str(),
-                                          grpc::internal::RpcMethod::NORMAL_RPC),
+                grpc::internal::RpcMethod(method.c_str(), grpc::internal::RpcMethod::NORMAL_RPC),
                 &context, request, &callResponse);
         if (!callStatus.ok()) {
             status = { static_cast<QGrpcStatus::StatusCode>(callStatus.error_code()),
@@ -202,12 +205,12 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QUrl &url,
 
 QGrpcChannelPrivate::~QGrpcChannelPrivate() = default;
 
-void QGrpcChannelPrivate::call(const QString &method, const QString &service,
-                               const QByteArray &args, QGrpcCallReply *reply)
+void QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView service,
+                               QByteArrayView args, QGrpcCallReply *reply)
 {
-    const QString rpcName = QLatin1StringView("/%1/%2").arg(service, method);
-
-    QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(m_channel.get(), rpcName, args,
+    const QByteArray rpcName(QLatin1StringView("/%1/%2").arg(service, method).toLatin1());
+    QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(m_channel.get(),
+                                                               QLatin1StringView(rpcName), args,
                                                                reply),
                                           &QGrpcChannelCall::deleteLater);
     auto connection = std::make_shared<QMetaObject::Connection>();
@@ -239,11 +242,11 @@ void QGrpcChannelPrivate::call(const QString &method, const QString &service,
     call->start();
 }
 
-QGrpcStatus QGrpcChannelPrivate::call(const QString &method, const QString &service,
-                                      const QByteArray &args, QByteArray &ret)
+QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView service,
+                                      QByteArrayView args, QByteArray &ret)
 {
-    const QString rpcName = QLatin1StringView("/%1/%2").arg(service, method);
-    QGrpcChannelCall call(m_channel.get(), rpcName, args);
+    const QByteArray rpcName(QLatin1StringView("/%1/%2").arg(service, method).toLatin1());
+    QGrpcChannelCall call(m_channel.get(), QLatin1StringView(rpcName), args);
 
     call.start();
     call.waitForFinished();
@@ -252,13 +255,14 @@ QGrpcStatus QGrpcChannelPrivate::call(const QString &method, const QString &serv
     return call.status;
 }
 
-void QGrpcChannelPrivate::stream(QGrpcStream *stream, const QString &service)
+void QGrpcChannelPrivate::stream(QGrpcStream *stream, QLatin1StringView service)
 {
     Q_ASSERT(stream != nullptr);
 
-    const QString rpcName = QLatin1StringView("/%1/%2").arg(service, stream->method());
+    const QByteArray rpcName(QLatin1StringView("/%1/%2").arg(service, stream->method()).toLatin1());
 
-    QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(), rpcName,
+    QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(),
+                                                                  QLatin1StringView(rpcName),
                                                                   stream->arg(), stream),
                                            &QGrpcChannelStream::deleteLater);
 
@@ -316,19 +320,19 @@ QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credent
 
 QGrpcChannel::~QGrpcChannel() = default;
 
-QGrpcStatus QGrpcChannel::call(const QString &method, const QString &service,
-                               const QByteArray &args, QByteArray &ret)
+QGrpcStatus QGrpcChannel::call(QLatin1StringView method, QLatin1StringView service,
+                               QByteArrayView args, QByteArray &ret)
 {
     return dPtr->call(method, service, args, ret);
 }
 
-void QGrpcChannel::call(const QString &method, const QString &service, const QByteArray &args,
+void QGrpcChannel::call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
                         QGrpcCallReply *reply)
 {
     dPtr->call(method, service, args, reply);
 }
 
-void QGrpcChannel::stream(QGrpcStream *stream, const QString &service)
+void QGrpcChannel::stream(QGrpcStream *stream, QLatin1StringView service)
 {
     dPtr->stream(stream, service);
 }
