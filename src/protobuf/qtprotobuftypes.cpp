@@ -305,7 +305,6 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed32, QtProtobuf_sfixed32)
 QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
 
 /*!
-    \inmodule QtProtobuf
     \enum QtProtobuf::WireTypes
     \brief The WireTypes enumeration reflects protobuf default wiretypes.
 
@@ -324,8 +323,8 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
 */
 
 /*!
-    \inmodule QtProtobuf
     \class QProtobufPropertyOrderingInfo
+    \inmodule QtProtobuf
     \internal
     \brief Holds a property's index in the property system, and the json_name.
 
@@ -352,8 +351,10 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
 */
 
 /*!
-    \class template<typename T, int = 0> struct QtProtobuf::transparent
-    \internal Only used to create new, unique types for numeric types.
+    \struct QtProtobuf::transparent
+    \inmodule QtProtobuf
+    \internal
+    \brief Only used to create new, unique types for numeric types.
 */
 
 /*!

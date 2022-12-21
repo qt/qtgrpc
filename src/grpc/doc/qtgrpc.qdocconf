@@ -27,19 +27,17 @@ qhp.QtGrpc.subprojects.classes.indexTitle = Qt gRPC C++ Classes
 qhp.QtGrpc.subprojects.classes.selectors  = class doc:headerfile
 qhp.QtGrpc.subprojects.classes.sortPages  = true
 
-depends += qtcore qtnetwork
+depends += qtdoc qtcore qtnetwork qtcmake
 
-headerdirs  += ..
-
-sourcedirs  += ..
+{headerdirs,sourcedirs}  += ..
 
 exampledirs +=  ../../../examples/grpc
 
 imagedirs   += images
 
 navigation.landingpage = "Qt gRPC"
-navigation.qmltypespage = "Qt gRPC QML Types"
 navigation.cppclassespage = "Qt gRPC C++ Classes"
+#navigation.qmltypespage = "Qt gRPC QML Types"
 
 tagfile                 = qtgrpc.tags
 
