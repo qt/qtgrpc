@@ -27,21 +27,18 @@ qhp.QtProtobuf.subprojects.classes.indexTitle = Qt Protobuf C++ Classes
 qhp.QtProtobuf.subprojects.classes.selectors  = class doc:headerfile
 qhp.QtProtobuf.subprojects.classes.sortPages  = true
 
-depends += qtcore
+depends += qtdoc qtcore qtcmake
 
-headerdirs  += ..
-
-sourcedirs  += src \
-               .. \
-               ../../tools/qtprotobufgen/doc/src
+{headerdirs,sourcedirs} += ..
+sourcedirs += ../../tools/qtprotobufgen/doc/src
 
 exampledirs +=  ../../../examples/protobuf
 
 imagedirs   += images
 
 navigation.landingpage = "Qt Protobuf"
-navigation.qmltypespage = "Qt Protobuf QML Types"
 navigation.cppclassespage = "Qt Protobuf C++ Classes"
+#navigation.qmltypespage = "Qt Protobuf QML Types"
 
 tagfile                 = qtprotobuf.tags
 
