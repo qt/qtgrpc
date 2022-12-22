@@ -20,6 +20,8 @@
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
 
+#include <memory>
+
 #if QT_CONFIG(native_grpc)
 #  include <grpcpp/security/credentials.h>
 #endif
@@ -600,7 +602,7 @@ void QtGrpcClientTest::CallStringThreadTest()
     QVERIFY(clientErrorSpy.isValid());
 
     bool ok = false;
-    QSharedPointer<QThread> thread(QThread::create([&] {
+    const std::unique_ptr<QThread> thread(QThread::create([&] {
         ok = _client->testMethod(request, result.get()) == QGrpcStatus::Ok;
     }));
 
@@ -623,7 +625,7 @@ void QtGrpcClientTest::StringAsyncThreadTest()
     QSignalSpy clientErrorSpy(_client.get(), &TestService::Client::errorOccurred);
     QVERIFY(clientErrorSpy.isValid());
 
-    QSharedPointer<QThread> thread(QThread::create([&] {
+    const std::unique_ptr<QThread> thread(QThread::create([&] {
         QEventLoop waiter;
         std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
         QObject::connect(reply.get(), &QGrpcCallReply::finished, &waiter,
@@ -654,7 +656,7 @@ void QtGrpcClientTest::StreamStringThreadTest()
     QVERIFY(clientErrorSpy.isValid());
 
     int i = 0;
-    QSharedPointer<QThread> thread(QThread::create([&] {
+    const std::unique_ptr<QThread> thread(QThread::create([&] {
         QEventLoop waiter;
         auto stream = _client->streamTestMethodServerStream(request);
         QObject::connect(stream.get(), &QGrpcStream::messageReceived, &waiter,
