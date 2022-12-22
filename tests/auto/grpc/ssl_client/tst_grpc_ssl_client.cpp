@@ -19,7 +19,6 @@
 #include <QProcess>
 #include <QSignalSpy>
 #include <QTest>
-#include <QtCore/QSharedPointer>
 #include <QtCore/QTimer>
 #include <QtNetwork/QSslConfiguration>
 
