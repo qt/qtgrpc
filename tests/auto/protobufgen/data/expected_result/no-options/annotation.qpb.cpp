@@ -52,9 +52,9 @@ AnnotatedMessage1::AnnotatedMessage1() : QProtobufMessage(&AnnotatedMessage1::st
     m_testField(0)
 {
 }
-AnnotatedMessage1::AnnotatedMessage1(const AnnotatedMessage1 &other) : QProtobufMessage(other)
+AnnotatedMessage1::AnnotatedMessage1(const AnnotatedMessage1 &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 AnnotatedMessage1 &AnnotatedMessage1::operator =(const AnnotatedMessage1 &other)
 {
@@ -130,9 +130,9 @@ AnnotatedMessage2::AnnotatedMessage2() : QProtobufMessage(&AnnotatedMessage2::st
     m_testField(0)
 {
 }
-AnnotatedMessage2::AnnotatedMessage2(const AnnotatedMessage2 &other) : QProtobufMessage(other)
+AnnotatedMessage2::AnnotatedMessage2(const AnnotatedMessage2 &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 AnnotatedMessage2 &AnnotatedMessage2::operator =(const AnnotatedMessage2 &other)
 {
@@ -208,9 +208,9 @@ AnnotatedMessage3::AnnotatedMessage3() : QProtobufMessage(&AnnotatedMessage3::st
     m_testField(0)
 {
 }
-AnnotatedMessage3::AnnotatedMessage3(const AnnotatedMessage3 &other) : QProtobufMessage(other)
+AnnotatedMessage3::AnnotatedMessage3(const AnnotatedMessage3 &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 AnnotatedMessage3 &AnnotatedMessage3::operator =(const AnnotatedMessage3 &other)
 {
@@ -286,9 +286,9 @@ AnnotatedMessage4::AnnotatedMessage4() : QProtobufMessage(&AnnotatedMessage4::st
     m_testField(0)
 {
 }
-AnnotatedMessage4::AnnotatedMessage4(const AnnotatedMessage4 &other) : QProtobufMessage(other)
+AnnotatedMessage4::AnnotatedMessage4(const AnnotatedMessage4 &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 AnnotatedMessage4 &AnnotatedMessage4::operator =(const AnnotatedMessage4 &other)
 {
@@ -364,9 +364,9 @@ AnnotatedMessage5::AnnotatedMessage5() : QProtobufMessage(&AnnotatedMessage5::st
     m_testField(0)
 {
 }
-AnnotatedMessage5::AnnotatedMessage5(const AnnotatedMessage5 &other) : QProtobufMessage(other)
+AnnotatedMessage5::AnnotatedMessage5(const AnnotatedMessage5 &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 AnnotatedMessage5 &AnnotatedMessage5::operator =(const AnnotatedMessage5 &other)
 {
@@ -442,9 +442,9 @@ AnnotatedMessage6::AnnotatedMessage6() : QProtobufMessage(&AnnotatedMessage6::st
     m_testField(0)
 {
 }
-AnnotatedMessage6::AnnotatedMessage6(const AnnotatedMessage6 &other) : QProtobufMessage(other)
+AnnotatedMessage6::AnnotatedMessage6(const AnnotatedMessage6 &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 AnnotatedMessage6 &AnnotatedMessage6::operator =(const AnnotatedMessage6 &other)
 {
@@ -520,9 +520,9 @@ AnnotatedMessage7::AnnotatedMessage7() : QProtobufMessage(&AnnotatedMessage7::st
     m_testField(0)
 {
 }
-AnnotatedMessage7::AnnotatedMessage7(const AnnotatedMessage7 &other) : QProtobufMessage(other)
+AnnotatedMessage7::AnnotatedMessage7(const AnnotatedMessage7 &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 AnnotatedMessage7 &AnnotatedMessage7::operator =(const AnnotatedMessage7 &other)
 {
@@ -598,9 +598,9 @@ AnnotatedMessage8::AnnotatedMessage8() : QProtobufMessage(&AnnotatedMessage8::st
     m_testField(0)
 {
 }
-AnnotatedMessage8::AnnotatedMessage8(const AnnotatedMessage8 &other) : QProtobufMessage(other)
+AnnotatedMessage8::AnnotatedMessage8(const AnnotatedMessage8 &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 AnnotatedMessage8 &AnnotatedMessage8::operator =(const AnnotatedMessage8 &other)
 {
@@ -676,9 +676,9 @@ AnnotatedMessage9::AnnotatedMessage9() : QProtobufMessage(&AnnotatedMessage9::st
     m_testField(0)
 {
 }
-AnnotatedMessage9::AnnotatedMessage9(const AnnotatedMessage9 &other) : QProtobufMessage(other)
+AnnotatedMessage9::AnnotatedMessage9(const AnnotatedMessage9 &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 AnnotatedMessage9 &AnnotatedMessage9::operator =(const AnnotatedMessage9 &other)
 {

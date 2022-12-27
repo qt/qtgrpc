@@ -288,24 +288,26 @@ void MessageDefinitionPrinter::printCopyFunctionality()
 {
     assert(m_descriptor != nullptr);
     m_printer->Print(m_typeMap, CommonTemplates::CopyConstructorDefinitionTemplate());
+    Indent();
     common::iterateMessageFields(
-                m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-        if (common::isPureMessage(field)) {
-            m_printer->Print(",\n");
-            m_printer->Print(propertyMap,
-                             CommonTemplates::InitializerMemberMessageTemplate());
-        }
-    });
+            m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
+                m_printer->Print(",\n");
+                m_printer->Print(propertyMap,
+                                 common::isPureMessage(field)
+                                         ? CommonTemplates::InitializerMemberMessageTemplate()
+                                         : CommonTemplates::CopyInitializerMemberTemplate());
+            });
+    Outdent();
+
     m_printer->Print("\n{\n");
 
     Indent();
     common::iterateMessageFields(
-                m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-        m_printer->Print(propertyMap,
-                         common::isPureMessage(field) ?
-                             CommonTemplates::CopyMemberMessageTemplate() :
-                             CommonTemplates::CopyMemberTemplate());
-    });
+            m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
+                if (common::isPureMessage(field)) {
+                    m_printer->Print(propertyMap, CommonTemplates::CopyMemberMessageTemplate());
+                }
+            });
     Outdent();
     m_printer->Print(CommonTemplates::SimpleBlockEnclosureTemplate());
 

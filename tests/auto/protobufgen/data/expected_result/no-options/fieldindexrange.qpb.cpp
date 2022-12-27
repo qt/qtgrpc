@@ -52,9 +52,9 @@ FieldIndexTest1Message::FieldIndexTest1Message() : QProtobufMessage(&FieldIndexT
     m_testField(0)
 {
 }
-FieldIndexTest1Message::FieldIndexTest1Message(const FieldIndexTest1Message &other) : QProtobufMessage(other)
+FieldIndexTest1Message::FieldIndexTest1Message(const FieldIndexTest1Message &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 FieldIndexTest1Message &FieldIndexTest1Message::operator =(const FieldIndexTest1Message &other)
 {
@@ -130,9 +130,9 @@ FieldIndexTest2Message::FieldIndexTest2Message() : QProtobufMessage(&FieldIndexT
     m_testField(0)
 {
 }
-FieldIndexTest2Message::FieldIndexTest2Message(const FieldIndexTest2Message &other) : QProtobufMessage(other)
+FieldIndexTest2Message::FieldIndexTest2Message(const FieldIndexTest2Message &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 FieldIndexTest2Message &FieldIndexTest2Message::operator =(const FieldIndexTest2Message &other)
 {
@@ -208,9 +208,9 @@ FieldIndexTest3Message::FieldIndexTest3Message() : QProtobufMessage(&FieldIndexT
     m_testField(0)
 {
 }
-FieldIndexTest3Message::FieldIndexTest3Message(const FieldIndexTest3Message &other) : QProtobufMessage(other)
+FieldIndexTest3Message::FieldIndexTest3Message(const FieldIndexTest3Message &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 FieldIndexTest3Message &FieldIndexTest3Message::operator =(const FieldIndexTest3Message &other)
 {
@@ -286,9 +286,9 @@ FieldIndexTest4Message::FieldIndexTest4Message() : QProtobufMessage(&FieldIndexT
     m_testField(0)
 {
 }
-FieldIndexTest4Message::FieldIndexTest4Message(const FieldIndexTest4Message &other) : QProtobufMessage(other)
+FieldIndexTest4Message::FieldIndexTest4Message(const FieldIndexTest4Message &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 FieldIndexTest4Message &FieldIndexTest4Message::operator =(const FieldIndexTest4Message &other)
 {

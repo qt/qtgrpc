@@ -570,6 +570,10 @@ const char *CommonTemplates::InitializerMemberMessageTemplate()
 {
     return "m_$property_name$(nullptr)";
 }
+const char *CommonTemplates::CopyInitializerMemberTemplate()
+{
+    return "m_$property_name$(other.m_$property_name$)";
+}
 const char *CommonTemplates::EmptyBracesTemplate()
 {
     return "\n{\n}\n";

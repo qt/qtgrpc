@@ -119,9 +119,9 @@ void SimpleStringMessage::registerTypes()
 SimpleStringMessage::SimpleStringMessage() : QProtobufMessage(&SimpleStringMessage::staticMetaObject)
 {
 }
-SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other) : QProtobufMessage(other)
+SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other) : QProtobufMessage(other),
+    m_testFieldString(other.m_testFieldString)
 {
-    setTestFieldString(other.m_testFieldString);
 }
 SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &other)
 {
@@ -210,9 +210,9 @@ ComplexMessage::ComplexMessage() : QProtobufMessage(&ComplexMessage::staticMetaO
 {
 }
 ComplexMessage::ComplexMessage(const ComplexMessage &other) : QProtobufMessage(other),
-m_testComplexField(nullptr)
+    m_testFieldInt(other.m_testFieldInt),
+    m_testComplexField(nullptr)
 {
-    setTestFieldInt(other.m_testFieldInt);
     if (m_testComplexField != other.m_testComplexField) {
         *m_testComplexField = *other.m_testComplexField;
     }
