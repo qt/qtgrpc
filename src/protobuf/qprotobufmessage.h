@@ -17,6 +17,10 @@ struct QProtobufMessageDeleter {
 };
 using QProtobufMessagePointer = std::unique_ptr<QProtobufMessage, QProtobufMessageDeleter>;
 
+namespace QtProtobufPrivate {
+struct QProtobufPropertyOrderingInfo;
+}
+
 class QProtobufMessagePrivate;
 class QProtobufMessage
 {
@@ -42,6 +46,10 @@ protected:
 
     Q_PROTOBUF_EXPORT
     static bool isEqual(const QProtobufMessage &lhs, const QProtobufMessage &rhs) noexcept;
+
+    QVariant property(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
+    bool setProperty(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
+                     const QVariant &value);
 
 private:
     const QMetaObject *metaObject() const;

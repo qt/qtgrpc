@@ -136,21 +136,31 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     externalIncludes.insert("QString");
 
     bool hasQtTypes = false;
-    common::iterateMessages(file, [&externalIncludes, &hasQtTypes](const Descriptor *message) {
-        for (int i = 0; i < message->field_count(); ++i) {
-            const auto *field = message->field(i);
-            if (field->type() == FieldDescriptor::TYPE_MESSAGE && !field->is_map()
-                    && !field->is_repeated() && common::isQtType(field)) {
-                externalIncludes.insert(field->message_type()->name());
-                hasQtTypes = true;
-            }
-        }
-        if (message->full_name() == "google.protobuf.Timestamp") {
-            externalIncludes.insert("QDateTime");
-        }
-        if (message->full_name() == "google.protobuf.Any")
-            externalIncludes.insert("QtProtobufWellKnownTypes/qprotobufanysupport.h");
-    });
+    bool hasOneofFields = false;
+    common::iterateMessages(
+            file, [&externalIncludes, &hasQtTypes, &hasOneofFields](const Descriptor *message) {
+                for (int i = 0; i < message->field_count(); ++i) {
+                    const auto *field = message->field(i);
+                    if (field->type() == FieldDescriptor::TYPE_MESSAGE && !field->is_map()
+                        && !field->is_repeated() && common::isQtType(field)) {
+                        externalIncludes.insert(field->message_type()->name());
+                        hasQtTypes = true;
+                    }
+                }
+
+                if (message->oneof_decl_count() > 0)
+                    hasOneofFields = true;
+
+                if (message->full_name() == "google.protobuf.Timestamp") {
+                    externalIncludes.insert("QDateTime");
+                }
+                if (message->full_name() == "google.protobuf.Any")
+                    externalIncludes.insert("QtProtobufWellKnownTypes/qprotobufanysupport.h");
+
+            });
+
+    if (hasOneofFields)
+        externalIncludes.insert("QProtobufOneof");
 
     if (hasQtTypes) {
         externalIncludes.insert("QtProtobufQtTypes");

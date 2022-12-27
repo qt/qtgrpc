@@ -35,6 +35,10 @@ private slots:
     void BoolDeserializeTest();
     void RedundantFieldIsIgnoredAtDeserializationTest();
     void FieldIndexRangeTest();
+    void OneofMessageTest();
+    void OneofMessageEmptyTest();
+    void OneofMessageMultipleFieldsTest();
+
 private:
     std::unique_ptr<QProtobufSerializer> serializer;
 };
@@ -541,6 +545,105 @@ void QtProtobufTypesDeserializationTest::FieldIndexRangeTest()
     FieldIndexTest4Message msg4;
     msg4.deserialize(serializer.get(), QByteArray::fromHex("f8ffffff0f02"));
     QCOMPARE(msg4.testField(), 1);
+}
+
+void QtProtobufTypesDeserializationTest::OneofMessageTest()
+{
+    ComplexMessage complexField;
+    SimpleStringMessage stringField;
+    stringField.setTestFieldString("qwerty");
+    complexField.setTestFieldInt(42);
+    complexField.setTestComplexField(stringField);
+
+    OneofMessage test;
+
+    test.deserialize(serializer.get(),
+                     QByteArray::fromHex("08d3ffffffffffffffff01"
+                                         "1a0c082a12083206717765727479"));
+    QVERIFY(test.hasTestOneofComplexField());
+    QVERIFY(!test.hasTestOneofFieldInt());
+    QCOMPARE(test.testOneofComplexField(), complexField);
+    QCOMPARE(test.testFieldInt(), -45);
+
+    test.deserialize(serializer.get(),
+                     QByteArray::fromHex("08d3ffffffffffffffff01"
+                                         "d002d3ffffffffffffffff01"));
+    QVERIFY(!test.hasTestOneofComplexField());
+    QVERIFY(test.hasTestOneofFieldInt());
+    QCOMPARE(test.testOneofFieldInt(), -45);
+    QCOMPARE(test.testFieldInt(), -45);
+
+    test.deserialize(serializer.get(), QByteArray::fromHex("08d3ffffffffffffffff01"));
+    QVERIFY(!test.hasTestOneofComplexField());
+    QVERIFY(!test.hasTestOneofFieldInt());
+    QCOMPARE(test.testFieldInt(), -45);
+
+    test.setTestFieldInt(-45);
+    test.setTestOneofFieldInt(-42);
+    test.deserialize(serializer.get(), QByteArray::fromHex(""));
+    QVERIFY(!test.hasTestOneofComplexField());
+    QVERIFY(!test.hasTestOneofFieldInt());
+    QCOMPARE(test.testFieldInt(), 0);
+}
+
+void QtProtobufTypesDeserializationTest::OneofMessageEmptyTest()
+{
+    ComplexMessage complexField;
+    SimpleStringMessage stringField;
+    stringField.setTestFieldString("qwerty");
+    complexField.setTestFieldInt(42);
+    complexField.setTestComplexField(stringField);
+
+    OneofMessage test;
+    test.deserialize(serializer.get(), QByteArray::fromHex("08d3ffffffffffffffff01"));
+    QVERIFY(!test.hasTestOneofComplexField());
+    QVERIFY(!test.hasTestOneofFieldInt());
+    QVERIFY(!test.hasSecondComplexField());
+    QVERIFY(!test.hasSecondFieldInt());
+    QCOMPARE(test.testFieldInt(), -45);
+
+    test.setTestFieldInt(-45);
+    test.setTestOneofFieldInt(-42);
+    test.deserialize(serializer.get(), QByteArray::fromHex(""));
+    QVERIFY(!test.hasTestOneofComplexField());
+    QVERIFY(!test.hasTestOneofFieldInt());
+    QVERIFY(!test.hasSecondComplexField());
+    QVERIFY(!test.hasSecondFieldInt());
+    QCOMPARE(test.testFieldInt(), 0);
+}
+
+void QtProtobufTypesDeserializationTest::OneofMessageMultipleFieldsTest()
+{
+    ComplexMessage complexField;
+    SimpleStringMessage stringField;
+    stringField.setTestFieldString("qwerty");
+    complexField.setTestFieldInt(42);
+    complexField.setTestComplexField(stringField);
+
+    OneofMessage test;
+
+    // Message BLOB contains more than one oneof field. So deserializer should set only the last
+    // one.
+    test.deserialize(serializer.get(),
+                     QByteArray::fromHex("08d3ffffffffffffffff01"
+                                         "d002d3ffffffffffffffff01"
+                                         "1a0c082a12083206717765727479"));
+    QVERIFY(test.hasTestOneofComplexField());
+    QVERIFY(!test.hasSecondComplexField());
+    QVERIFY(!test.hasTestOneofFieldInt());
+    QVERIFY(!test.hasSecondFieldInt());
+    QCOMPARE(test.testOneofComplexField(), complexField);
+    QCOMPARE(test.testFieldInt(), -45);
+
+    // Check the empty initialized 'oneof' fileds
+    test.deserialize(serializer.get(),
+                     QByteArray::fromHex("1a002a00"));
+    QVERIFY(test.hasTestOneofComplexField());
+    QVERIFY(test.hasSecondComplexField());
+    QVERIFY(!test.hasTestOneofFieldInt());
+    QVERIFY(!test.hasSecondFieldInt());
+    QCOMPARE(test.testOneofComplexField(), ComplexMessage());
+    QCOMPARE(test.secondComplexField(), ComplexMessage());
 }
 
 QTEST_MAIN(QtProtobufTypesDeserializationTest)

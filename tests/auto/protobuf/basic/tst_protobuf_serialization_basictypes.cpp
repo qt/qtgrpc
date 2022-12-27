@@ -37,6 +37,11 @@ private slots:
     void EmptyBytesMessageTest();
     void EmptyStringMessageTest();
     void FieldIndexRangeTest();
+    void OneofMessageEmptyTest();
+    void OneofMessageClearTest();
+    void OneofMessageIntTest();
+    void OneofMessageComplexTest();
+
 private:
     std::unique_ptr<QProtobufSerializer> m_serializer;
 };
@@ -1032,6 +1037,73 @@ void QtProtobufTypesSerializationTest::FieldIndexRangeTest()
     msg4.setTestField(1);
     result = msg4.serialize(m_serializer.get());
     QCOMPARE(QLatin1StringView(result.toHex()), "f8ffffff0f02"_L1);
+}
+
+void QtProtobufTypesSerializationTest::OneofMessageEmptyTest()
+{
+    OneofMessage test;
+    QByteArray result = test.serialize(m_serializer.get());
+    QCOMPARE(result.toHex(), "");
+}
+
+void QtProtobufTypesSerializationTest::OneofMessageIntTest()
+{
+    OneofMessage test;
+    test.setTestFieldInt(-45);
+    test.setTestOneofFieldInt(-45);
+    QByteArray result = test.serialize(m_serializer.get());
+    QCOMPARE(result.toHex(),
+             "08d3ffffffffffffffff01"
+             "d002d3ffffffffffffffff01");
+
+    test.setTestFieldInt(0);
+    test.setTestOneofFieldInt(0);
+    result = test.serialize(m_serializer.get());
+    QCOMPARE(result.toHex(), "d00200");
+}
+
+void QtProtobufTypesSerializationTest::OneofMessageClearTest()
+{
+    OneofMessage test;
+    test.setTestFieldInt(-45);
+    test.setTestOneofFieldInt(-45);
+
+    test.clearTestOneof();
+    QByteArray result = test.serialize(m_serializer.get());
+    QCOMPARE(result.toHex(), "08d3ffffffffffffffff01");
+}
+
+void QtProtobufTypesSerializationTest::OneofMessageComplexTest()
+{
+    ComplexMessage complexField;
+    SimpleStringMessage stringField;
+    stringField.setTestFieldString("qwerty");
+    complexField.setTestFieldInt(42);
+    complexField.setTestComplexField(stringField);
+
+    OneofMessage test;
+    test.setTestOneofComplexField(complexField);
+    QByteArray result = test.serialize(m_serializer.get());
+    QCOMPARE(result.toHex(), "1a0c082a12083206717765727479");
+
+    test.clearTestOneof();
+
+    test.setTestOneofComplexField({});
+    result = test.serialize(m_serializer.get());
+    QCOMPARE(result.toHex(), "1a00");
+
+    test.setSecondComplexField({});
+    result = test.serialize(m_serializer.get());
+    QCOMPARE(result.toHex(), "1a002a00");
+
+    // Check that partially intialized complex field doesn't apply its 'oneof'
+    // peculiarity to the child fields.
+    complexField.setTestComplexField({});
+    complexField.setTestFieldInt(42);
+    test.setTestOneofComplexField(complexField);
+    test.setSecondComplexField({});
+    result = test.serialize(m_serializer.get());
+    QCOMPARE(result.toHex(), "1a02082a2a00");
 }
 
 QTEST_MAIN(QtProtobufTypesSerializationTest)

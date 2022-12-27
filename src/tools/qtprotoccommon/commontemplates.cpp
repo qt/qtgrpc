@@ -21,7 +21,7 @@
 // Message   - for any general protobuf message that is represented as the pointer with lazy
 //             initialization
 // Enum      - any enum types.
-// Optional  - any field that behaves like optional field.
+// Oneof     - fields that are part of oneof union.
 //
 // Map and Repeated can be combined with one of Complex, Message or Enum keywords, that indicates
 // the specialization of the template.
@@ -190,6 +190,22 @@ const char *CommonTemplates::PropertyMessageTemplate()
     return "Q_PROPERTY($property_type$ *$property_name$ READ $property_name$_p WRITE "
            "set$property_name_cap$_p)\n";
 }
+const char *CommonTemplates::PropertyOneofTemplate()
+{
+    return "Q_PROPERTY($property_type$ $property_name$ "
+           "READ $property_name$_p WRITE set$property_name_cap$_p)\n";
+}
+const char *CommonTemplates::PropertyOneofMessageTemplate()
+{
+    return "Q_PROPERTY($property_type$ *$property_name$ "
+           "READ $property_name$_p WRITE set$property_name_cap$_p)\n";
+}
+const char *CommonTemplates::PropertyHasOneofTemplate()
+{
+    return "Q_PROPERTY(bool has$property_name_cap$ "
+           "READ has$property_name_cap$)\n";
+}
+
 const char *CommonTemplates::PropertyQmlListTemplate()
 {
     return "Q_PROPERTY(QQmlListProperty<$property_type$> $property_name$ READ $property_name$_l)\n";
@@ -208,6 +224,10 @@ const char *CommonTemplates::DestructorMessageDeclarationTemplate()
 const char *CommonTemplates::MemberTemplate()
 {
     return "$scope_type$ m_$property_name$;\n";
+}
+const char *CommonTemplates::MemberOneofTemplate()
+{
+    return "QtProtobufPrivate::QProtobufOneof m_$optional_property_name$;\n";
 }
 const char *CommonTemplates::MemberRepeatedTemplate()
 {
@@ -284,6 +304,10 @@ const char *CommonTemplates::CopyMemberTemplate()
 {
     return "set$property_name_cap$(other.m_$property_name$);\n";
 }
+const char *CommonTemplates::CopyMemberOneofTemplate()
+{
+    return "m_$optional_property_name$ = other.m_$optional_property_name$;\n";
+}
 const char *CommonTemplates::CopyMemberMessageTemplate()
 {
     return "if (m_$property_name$ != other.m_$property_name$) {\n"
@@ -295,6 +319,12 @@ const char *CommonTemplates::AssignMemberMessageTemplate()
     return "if (m_$property_name$ != other.m_$property_name$)\n"
            "    *m_$property_name$ = *other.m_$property_name$;\n";
 }
+
+const char *CommonTemplates::AssignMemberOneofTemplate()
+{
+    return "set$property_name_cap$_p(other.m_$optional_property_name$);\n";
+}
+
 const char *CommonTemplates::MoveMemberMessageTemplate()
 {
     return "if (m_$property_name$ != other.m_$property_name$) {\n"
@@ -306,6 +336,12 @@ const char *CommonTemplates::MoveAssignMemberMessageTemplate()
     return "if (m_$property_name$ != other.m_$property_name$)\n"
            "    *m_$property_name$ = std::move(*other.m_$property_name$);\n";
 }
+
+const char *CommonTemplates::MoveAssignMemberOneofTemplate()
+{
+    return "m_$optional_property_name$ = std::move(other.m_$optional_property_name$);\n";
+}
+
 const char *CommonTemplates::MoveAssignMemberComplexTemplate()
 {
     return "if (m_$property_name$ != other.m_$property_name$)\n"
@@ -374,6 +410,10 @@ const char *CommonTemplates::EqualOperatorMemberRepeatedTemplate()
 {
     return "QtProtobuf::repeatedValueCompare(m_$property_name$, other.m_$property_name$)";
 }
+const char *CommonTemplates::EqualOperatorMemberOneofTemplate()
+{
+    return "m_$optional_property_name$ == other.m_$optional_property_name$\n";
+}
 
 const char *CommonTemplates::NotEqualOperatorDeclarationTemplate()
 {
@@ -405,6 +445,74 @@ const char *CommonTemplates::GetterMessageDefinitionTemplate()
 {
     return "$getter_type$ &$classname$::$property_name$() const\n{\n"
            "    return *m_$property_name$;\n"
+           "}\n\n";
+}
+
+const char *CommonTemplates::PrivateGetterOneofDeclarationTemplate()
+{
+    return "$getter_type$ $property_name$_p() const;\n";
+}
+const char *CommonTemplates::PrivateGetterOneofDefinitionTemplate()
+{
+    return "$getter_type$ $classname$::$property_name$_p() const\n{\n"
+           "    return m_$optional_property_name$.holdsField($number$) ?\n"
+           "        m_$optional_property_name$.value<$getter_type$>() : "
+           "$getter_type$($initializer$);\n"
+           "}\n\n";
+}
+
+const char *CommonTemplates::PrivateGetterOneofMessageDeclarationTemplate()
+{
+    return "$getter_type$ *$property_name$_p() const;\n";
+}
+const char *CommonTemplates::PrivateGetterOneofMessageDefinitionTemplate()
+{
+    return "$getter_type$ *$classname$::$property_name$_p() const\n{\n"
+           "    return m_$optional_property_name$.holdsField($number$) ?\n"
+           "        m_$optional_property_name$.value<$getter_type$>() : nullptr;\n"
+           "}\n\n";
+}
+
+const char *CommonTemplates::GetterOneofFieldNumberDeclarationTemplate()
+{
+    return "int $optional_property_name$Field() const;\n";
+}
+const char *CommonTemplates::GetterOneofFieldNumberDefinitionTemplate()
+{
+    return "int $classname$::$optional_property_name$Field() const\n{\n"
+           "    return m_$optional_property_name$.fieldNumber();\n"
+           "}\n";
+}
+
+const char *CommonTemplates::GetterOneofDeclarationTemplate()
+{
+    return "bool has$property_name_cap$() const;\n"
+           "$getter_type$ $property_name$() const;\n";
+}
+const char *CommonTemplates::GetterOneofDefinitionTemplate()
+{
+    return "bool $classname$::has$property_name_cap$() const\n{\n"
+           "    return m_$optional_property_name$.holdsField($number$);\n"
+           "}\n"
+           "$getter_type$ $classname$::$property_name$() const\n{\n"
+           "    Q_ASSERT(m_$optional_property_name$.holdsField($number$));\n"
+           "    return m_$optional_property_name$.value<$getter_type$>();\n"
+           "}\n\n";
+}
+
+const char *CommonTemplates::GetterOneofMessageDeclarationTemplate()
+{
+    return "bool has$property_name_cap$() const;\n"
+           "$getter_type$ &$property_name$() const;\n";
+}
+const char *CommonTemplates::GetterOneofMessageDefinitionTemplate()
+{
+    return "bool $classname$::has$property_name_cap$() const\n{\n"
+           "    return m_$optional_property_name$.holdsField($number$);\n"
+           "}\n"
+           "$getter_type$ &$classname$::$property_name$() const\n{\n"
+           "    Q_ASSERT(m_$optional_property_name$.holdsField($number$));\n"
+           "    return *(m_$optional_property_name$.value<$getter_type$>());\n"
            "}\n\n";
 }
 
@@ -473,6 +581,55 @@ const char *CommonTemplates::SetterComplexDefinitionTemplate()
     return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n{\n"
            "    if (m_$property_name$ != $property_name$)\n"
            "        m_$property_name$ = $property_name$;\n"
+           "}\n\n";
+}
+
+const char *CommonTemplates::PrivateSetterOneofMessageDeclarationTemplate()
+{
+    return "void set$property_name_cap$_p($setter_type$ *$property_name$);\n";
+}
+const char *CommonTemplates::PrivateSetterOneofMessageDefinitionTemplate()
+{
+    return "void $classname$::set$property_name_cap$_p($setter_type$ *$property_name$)\n{\n"
+           "    const $setter_type$ &value = *$property_name$;"
+           "    if (!m_$optional_property_name$.isEqual(value, $number$))\n"
+           "        m_$optional_property_name$.setValue(value, $number$);\n"
+           "}\n\n";
+}
+
+const char *CommonTemplates::PrivateSetterOneofDeclarationTemplate()
+{
+    return "void set$property_name_cap$_p($setter_type$ $property_name$);\n";
+}
+const char *CommonTemplates::PrivateSetterOneofDefinitionTemplate()
+{
+    return "void $classname$::set$property_name_cap$_p($setter_type$ $property_name$)\n{\n"
+           "    if (!m_$optional_property_name$.isEqual($property_name$, $number$))\n"
+           "        m_$optional_property_name$.setValue($property_name$, $number$);\n"
+           "}\n\n";
+}
+
+const char *CommonTemplates::ClearOneofDeclarationTemplate()
+{
+    return "void clear$optional_property_name_cap$();\n";
+}
+const char *CommonTemplates::ClearOneofDefinitionTemplate()
+{
+    return "void $classname$::clear$optional_property_name_cap$()\n{\n"
+           "    m_$optional_property_name$ = QtProtobufPrivate::QProtobufOneof();\n"
+           "}\n";
+}
+
+const char *CommonTemplates::SetterOneofDeclarationTemplate()
+{
+    return "void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
+}
+const char *CommonTemplates::SetterOneofDefinitionTemplate()
+{
+    return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n{\n"
+           "    if (!m_$optional_property_name$.isEqual($property_name$, $number$)) {\n"
+           "        m_$optional_property_name$.setValue($property_name$, $number$);\n"
+           "    }\n"
            "}\n\n";
 }
 
@@ -579,6 +736,15 @@ const char *CommonTemplates::CopyInitializerMemberTemplate()
 {
     return "m_$property_name$(other.m_$property_name$)";
 }
+const char *CommonTemplates::CopyInitializerMemberOneofTemplate()
+{
+    return "m_$optional_property_name$(other.m_$optional_property_name$)";
+}
+const char *CommonTemplates::MoveInitializerMemberOneofTemplate()
+{
+    return "    m_$optional_property_name$(std::move(other.m_$optional_property_name$))\n";
+}
+
 const char *CommonTemplates::EmptyBracesTemplate()
 {
     return "\n{\n}\n";

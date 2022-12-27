@@ -49,6 +49,9 @@ public:
     static const char *PropertyNonScriptableAliasTemplate();
     static const char *PropertyMessageTemplate();
     static const char *PropertyQmlListTemplate();
+    static const char *PropertyOneofTemplate();
+    static const char *PropertyOneofMessageTemplate();
+    static const char *PropertyHasOneofTemplate();
 
     static const char *ConstructorMessageDeclarationTemplate();
     static const char *DestructorMessageDeclarationTemplate();
@@ -58,6 +61,7 @@ public:
     static const char *MemberTemplate();
     static const char *MemberRepeatedTemplate();
     static const char *MemberMessageTemplate();
+    static const char *MemberOneofTemplate();
     static const char *PublicBlockTemplate();
     static const char *PrivateBlockTemplate();
     static const char *EnumDefinitionTemplate();
@@ -71,8 +75,11 @@ public:
     static const char *CopyMemberTemplate();
     static const char *CopyMemberMessageTemplate();
     static const char *AssignMemberMessageTemplate();
+    static const char *CopyMemberOneofTemplate();
+    static const char *AssignMemberOneofTemplate();
     static const char *MoveMemberMessageTemplate();
     static const char *MoveAssignMemberMessageTemplate();
+    static const char *MoveAssignMemberOneofTemplate();
     static const char *MoveAssignMemberComplexTemplate();
     static const char *MoveConstructorMemberComplexTemplate();
     static const char *MoveMemberTemplate();
@@ -87,12 +94,23 @@ public:
     static const char *EqualOperatorMemberTemplate();
     static const char *EqualOperatorMemberMessageTemplate();
     static const char *EqualOperatorMemberRepeatedTemplate();
+    static const char *EqualOperatorMemberOneofTemplate();
     static const char *NotEqualOperatorDeclarationTemplate();
     static const char *NotEqualOperatorDefinitionTemplate();
     static const char *PrivateGetterMessageDeclarationTemplate();
     static const char *PrivateGetterMessageDefinitionTemplate();
     static const char *GetterMessageDeclarationTemplate();
     static const char *GetterMessageDefinitionTemplate();
+    static const char *PrivateGetterOneofDeclarationTemplate();
+    static const char *PrivateGetterOneofDefinitionTemplate();
+    static const char *PrivateGetterOneofMessageDeclarationTemplate();
+    static const char *PrivateGetterOneofMessageDefinitionTemplate();
+    static const char *GetterOneofFieldNumberDeclarationTemplate();
+    static const char *GetterOneofFieldNumberDefinitionTemplate();
+    static const char *GetterOneofDeclarationTemplate();
+    static const char *GetterOneofDefinitionTemplate();
+    static const char *GetterOneofMessageDeclarationTemplate();
+    static const char *GetterOneofMessageDefinitionTemplate();
     static const char *GetterTemplate();
     static const char *GetterNonScriptableTemplate();
     static const char *GetterComplexTemplate();
@@ -106,6 +124,15 @@ public:
     static const char *SetterComplexDefinitionTemplate();
     static const char *SetterTemplate();
     static const char *SetterNonScriptableTemplate();
+    static const char *SetterOneofDeclarationTemplate();
+    static const char *SetterOneofDefinitionTemplate();
+    static const char *SetterOneofMessageDefinitionTemplate();
+    static const char *PrivateSetterOneofDeclarationTemplate();
+    static const char *PrivateSetterOneofDefinitionTemplate();
+    static const char *PrivateSetterOneofMessageDeclarationTemplate();
+    static const char *PrivateSetterOneofMessageDefinitionTemplate();
+    static const char *ClearOneofDeclarationTemplate();
+    static const char *ClearOneofDefinitionTemplate();
     static const char *SignalsBlockTemplate();
     static const char *SignalTemplate();
     static const char *MetaDataUintDataEntryTemplate();
@@ -122,6 +149,8 @@ public:
     static const char *InitializerMemberTemplate();
     static const char *InitializerMemberMessageTemplate();
     static const char *CopyInitializerMemberTemplate();
+    static const char *CopyInitializerMemberOneofTemplate();
+    static const char *MoveInitializerMemberOneofTemplate();
     static const char *EmptyBracesTemplate();
     static const char *DeclareMetaTypeTemplate();
     static const char *DeclareMetaTypeMapTemplate();

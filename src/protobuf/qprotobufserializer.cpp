@@ -60,7 +60,7 @@ Q_REQUIRED_RESULT QByteArray serializeLengthDelimitedListType(const L &listValue
                 outFieldIndex);
 
     if (listValue.isEmpty()) {
-        outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+        outFieldIndex = QtProtobuf::InvalidFieldNumber;
         return QByteArray();
     }
 
@@ -81,7 +81,7 @@ Q_REQUIRED_RESULT QByteArray serializeLengthDelimitedListType(const L &listValue
                     QProtobufSerializerPrivate::serializeLengthDelimited(value, false));
     }
 
-    outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+    outFieldIndex = QtProtobuf::InvalidFieldNumber;
     return serializedList;
 }
 
@@ -102,6 +102,20 @@ Q_REQUIRED_RESULT bool deserializeLengthDelimitedListType(QProtobufSelfcheckIter
         return true;
     }
     return false;
+}
+
+inline bool isRepeatedField(QtProtobuf::WireTypes type,
+                            const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+{
+    return type == QtProtobuf::WireTypes::LengthDelimited
+            || fieldInfo.getFieldFlags() & QtProtobufPrivate::NonPacked;
+}
+
+inline bool isOneofField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+{
+    // TODO: Add the check for the optional flag once the functionality is
+    // implemented.
+    return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof;
 }
 
 } // namespace
@@ -360,14 +374,11 @@ QByteArray QProtobufSerializer::serializeMessage(
 {
     QByteArray result;
     for (int index = 0; index < ordering.fieldCount(); ++index) {
-        int propertyIndex =
-                ordering.getPropertyIndex(index) + message->metaObject()->propertyOffset();
         int fieldIndex = ordering.getFieldNumber(index);
         Q_ASSERT_X(fieldIndex < 536870912 && fieldIndex > 0, "", "fieldIndex is out of range");
-        QMetaProperty metaProperty = message->metaObject()->property(propertyIndex);
-        QVariant propertyValue = metaProperty.readOnGadget(message);
-        result.append(d_ptr->serializeProperty(propertyValue,
-                                               QProtobufPropertyOrderingInfo(ordering, index)));
+        QProtobufPropertyOrderingInfo fieldInfo(ordering, index);
+        QVariant propertyValue = message->property(fieldInfo);
+        result.append(d_ptr->serializeProperty(propertyValue, fieldInfo));
     }
 
     // Restore any unknown fields we have stored away:
@@ -401,7 +412,7 @@ bool QProtobufSerializer::deserializeMessage(
         QByteArrayView data) const
 {
     d_ptr->clearError();
-    QProtobufSelfcheckIterator it = QProtobufSelfcheckIterator::fromView(data);
+    auto it = QProtobufSelfcheckIterator::fromView(data);
     while (it.isValid() && it != data.end()) {
         if (!d_ptr->deserializeProperty(message, ordering, it))
             return false;
@@ -424,6 +435,8 @@ QProtobufSerializer::serializeObject(const QProtobufMessage *message,
 {
     QByteArray result = QProtobufSerializerPrivate::prependLengthDelimitedSize(
             serializeMessage(message, ordering));
+    if (result.isEmpty() && isOneofField(fieldInfo))
+        result.append(char(0));
     if (!result.isEmpty())
         result.prepend(QProtobufSerializerPrivate::encodeHeader(
                 fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited));
@@ -523,7 +536,7 @@ QByteArray QProtobufSerializer::serializeEnum(QtProtobuf::int64 value,
     QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Varint;
     int fieldIndex = fieldInfo.getFieldNumber();
     QByteArray result = QProtobufSerializerPrivate::serializeBasic<QtProtobuf::int64>(value, fieldIndex);
-    if (fieldIndex != QtProtobufPrivate::NotUsedFieldIndex)
+    if (fieldIndex != QtProtobuf::InvalidFieldNumber)
         result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
     return result;
 }
@@ -542,7 +555,7 @@ QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
     int fieldIndex = fieldInfo.getFieldNumber();
     QByteArray result =
             QProtobufSerializerPrivate::serializeListType<QtProtobuf::int64>(value, fieldIndex);
-    if (fieldIndex != QtProtobufPrivate::NotUsedFieldIndex)
+    if (fieldIndex != QtProtobuf::InvalidFieldNumber)
         result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
     return result;
 }
@@ -633,31 +646,49 @@ QByteArray
 QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
                                               const QProtobufPropertyOrderingInfo &fieldInfo)
 {
-    qProtoDebug() << "propertyValue" << propertyValue << "fieldIndex"
-                  << fieldInfo.getFieldNumber() << propertyValue.metaType().name();
-
-    QByteArray result;
     QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Unknown;
-
     QMetaType metaType = propertyValue.metaType();
 
+    qProtoDebug() << "propertyValue" << propertyValue << "fieldIndex" << fieldInfo.getFieldNumber()
+                  << "metaType" << metaType.name();
+
+    if (metaType.id() == QMetaType::UnknownType || propertyValue.isNull()) {
+        // Empty value
+        return {};
+    }
+
+    QByteArray result;
     //TODO: replace with some common function
     auto basicHandler = findIntegratedTypeHandler(
             metaType, fieldInfo.getFieldFlags() & QtProtobufPrivate::NonPacked);
     if (basicHandler) {
         type = basicHandler->wireType;
         int fieldIndex = fieldInfo.getFieldNumber();
-        QByteArray serializedField = basicHandler->serializer(propertyValue, fieldIndex);
-        result.append(serializedField);
-        if (fieldIndex != QtProtobufPrivate::NotUsedFieldIndex
-            && type != QtProtobuf::WireTypes::Unknown && !serializedField.isEmpty()) {
+        result = basicHandler->serializer(propertyValue, fieldIndex);
+
+        // QtProtobuf::InvalidFieldNumber indicates that serialized value either
+        // contains 'zero', or the length-delimited value that handles the
+        // header encoding it's own way. For the non-repeated values protobuf
+        // assumes that 'zero' should be skipped, unless the field is 'optional'
+        // or 'oneof'. 'Optional' or 'oneof' fields should be serialized when
+        // set by user even if they contain a 'zero' value.
+        if (fieldIndex != QtProtobuf::InvalidFieldNumber && !result.isEmpty()) {
             result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
+        } else if (!isRepeatedField(type, fieldInfo)) {
+            if (isOneofField(fieldInfo)) {
+                if (result.isEmpty())
+                    result.append(char(0));
+                result.prepend(
+                        QProtobufSerializerPrivate::encodeHeader(fieldInfo.getFieldNumber(), type));
+            } else {
+                result.clear();
+            }
         }
     } else {
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (!handler.serializer) {
             qProtoWarning() << "No serializer for type" << propertyValue.typeName();
-            return result;
+            return {};
         }
         handler.serializer(q_ptr, propertyValue, fieldInfo, result);
     }
@@ -671,7 +702,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(
 {
     Q_ASSERT(it.isValid() && it.bytesLeft() > 0);
     //Each iteration we expect iterator is setup to beginning of next chunk
-    int fieldNumber = QtProtobufPrivate::NotUsedFieldIndex;
+    int fieldNumber = QtProtobuf::InvalidFieldNumber;
     QtProtobuf::WireTypes wireType = QtProtobuf::WireTypes::Unknown;
     const QProtobufSelfcheckIterator itBeforeHeader = it; // copy this, we may need it later
     if (!QProtobufSerializerPrivate::decodeHeader(it, fieldNumber, wireType)) {
@@ -701,15 +732,12 @@ bool QProtobufSerializerPrivate::deserializeProperty(
         return true;
     }
 
-    int propertyIndex = ordering.getPropertyIndex(index) + message->metaObject()->propertyOffset();
-    QMetaProperty metaProperty = message->metaObject()->property(propertyIndex);
+    QProtobufPropertyOrderingInfo fieldInfo(ordering, index);
+    QVariant newPropertyValue = message->property(fieldInfo);
+    QMetaType metaType = newPropertyValue.metaType();
 
-    qProtoDebug() << "wireType:" << wireType << "metaProperty:" << metaProperty.typeName()
+    qProtoDebug() << "wireType:" << wireType << "metaType:" << metaType.name()
                   << "currentByte:" << QString::number((*it), 16);
-
-    QVariant newPropertyValue;
-    newPropertyValue = metaProperty.readOnGadget(message);
-    QMetaType metaType = metaProperty.metaType();
 
     //TODO: replace with some common function
     auto basicHandler = findIntegratedTypeHandler(
@@ -719,7 +747,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(
     } else {
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (!handler.deserializer) {
-            qProtoWarning() << "No deserializer for type" << metaProperty.typeName();
+            qProtoWarning() << "No deserializer for type" << metaType.name();
             setDeserializationError(
                     QAbstractProtobufSerializer::NoDeserializerError,
                     QCoreApplication::translate("QtProtobuf",
@@ -729,8 +757,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(
         handler.deserializer(q_ptr, it, newPropertyValue);
     }
 
-    metaProperty.writeOnGadget(message, newPropertyValue);
-    return true;
+    return message->setProperty(fieldInfo, newPropertyValue);
 }
 
 bool QProtobufSerializerPrivate::deserializeMapPair(QVariant &key, QVariant &value, QProtobufSelfcheckIterator &it)

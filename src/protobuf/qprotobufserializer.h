@@ -82,8 +82,6 @@ private:
 };
 
 namespace QtProtobufPrivate {
-//! \private
-[[maybe_unused]] constexpr int NotUsedFieldIndex = -1;
 
 using Serializer = void (*)(const QProtobufSerializer *, const QVariant &,
                             const QProtobufPropertyOrderingInfo &, QByteArray &);

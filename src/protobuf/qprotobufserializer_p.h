@@ -142,7 +142,7 @@ public:
     static QByteArray serializeVarintCommon(const V &value)
     {
         qProtoDebug() << "value" << value;
-        V varint = value;
+        quint64 varint = value;
         QByteArray result;
 
         while (varint != 0) {
@@ -246,25 +246,10 @@ public:
     static QByteArray serializeBasic(const V &value, int &outFieldIndex)
     {
         qProtoDebug() << "value" << value;
-        quint64 varint = quint64(value);
-        QByteArray result;
+        if (value == 0)
+            outFieldIndex = QtProtobuf::InvalidFieldNumber;
 
-        while (varint != 0) {
-            // Put 7 bits to result buffer and mark as "not last" (0b10000000)
-            result.append((varint & 0b01111111) | 0b10000000);
-            // Divide values to chunks of 7 bits and move to next chunk
-            varint >>= 7;
-        }
-
-        // Invalidate field index in case if serialized result is empty
-        // NOTE: the field will not be sent if its index is equal to NotUsedFieldIndex
-        if (result.size() == 0) {
-            outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
-        } else {
-            // Mark last chunk as last by clearing last bit
-            result.data()[result.size() - 1] &= ~0b10000000;
-        }
-        return result;
+        return serializeVarintCommon(value);
     }
 
     //------------------QString and QByteArray types serializers-----------------
@@ -288,11 +273,11 @@ public:
                     outFieldIndex);
 
         if (listValue.count() <= 0) {
-            outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+            outFieldIndex = QtProtobuf::InvalidFieldNumber;
             return QByteArray();
         }
 
-        int empty = QtProtobufPrivate::NotUsedFieldIndex;
+        int empty = QtProtobuf::InvalidFieldNumber;
         QByteArray serializedList;
         for (auto &value : listValue) {
             QByteArray element = serializeBasic<V>(value, empty);
@@ -313,7 +298,7 @@ public:
         qProtoDebug("listValue.count %" PRIdQSIZETYPE " outFieldIndex %d", listValue.count(),
                     outFieldIndex);
         QByteArray header = QProtobufSerializerPrivate::encodeHeader(outFieldIndex, W);
-        outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+        outFieldIndex = QtProtobuf::InvalidFieldNumber;
         QByteArray serializedList;
         for (auto &value : listValue) {
             serializedList.append(header);
@@ -529,7 +514,7 @@ public:
     static QByteArray serializeWrapper(const QVariant &variantValue, int &fieldIndex)
     {
         if (variantValue.isNull()) {
-            fieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+            fieldIndex = QtProtobuf::InvalidFieldNumber;
             return QByteArray();
         }
         return s(variantValue.value<T>(), fieldIndex);

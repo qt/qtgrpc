@@ -62,7 +62,7 @@ void Options::setFromString(const std::string &options)
             instance.m_isFolder = true;
         } else if (option == FieldEnumGenerationOption) {
             // TODO: Opt in this option by default since it's required for
-            // OneOf fields.
+            // Oneof fields.
             // QT_PROTOBUF_DEBUG("set m_generateFieldEnum: true");
             // instance.m_generateFieldEnum = true;
         } else if (option.find(ExtraNamespaceGenerationOption) == 0) {

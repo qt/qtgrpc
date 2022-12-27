@@ -23,7 +23,7 @@ QT_BEGIN_NAMESPACE
 
 namespace QtProtobufPrivate {
 
-enum FieldFlag : uint { NoFlags = 0x0, NonPacked = 0x1 };
+enum FieldFlag : uint { NoFlags = 0x0, NonPacked = 0x1, Oneof = 0x02 };
 
 struct QProtobufPropertyOrdering
 {
@@ -97,7 +97,10 @@ template<typename T>
 namespace QtProtobuf {
 Q_NAMESPACE_EXPORT(Q_PROTOBUF_EXPORT)
 
-enum class WireTypes {
+[[maybe_unused]] constexpr int InvalidFieldNumber = 0;
+
+enum class WireTypes
+{
     Unknown = -1,
     Varint = 0,
     Fixed64 = 1,

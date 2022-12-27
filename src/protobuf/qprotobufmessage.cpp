@@ -3,7 +3,9 @@
 
 #include "qprotobufmessage_p.h"
 #include "qprotobufmessage.h"
+#include "qprotobufoneof.h"
 
+#include <QtCore/qassert.h>
 #include <QtCore/qmetaobject.h>
 
 QT_BEGIN_NAMESPACE
@@ -185,6 +187,40 @@ void QProtobufMessageDeleter::operator()(QProtobufMessage *ptr) noexcept
     const QMetaObject *mobj = ptr->metaObject();
     QMetaType type = mobj->metaType();
     type.destroy(ptr);
+}
+
+QVariant
+QProtobufMessage::property(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+{
+    int propertyIndex = fieldInfo.getPropertyIndex() + metaObject()->propertyOffset();
+    QMetaProperty metaProperty = metaObject()->property(propertyIndex);
+
+    if (!metaProperty.isValid())
+        return {};
+
+    if (fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof) {
+        int hasPropertyIndex = propertyIndex + 1;
+        QMetaProperty hasProperty = metaObject()->property(hasPropertyIndex);
+        Q_ASSERT_X(hasProperty.isValid() && hasProperty.metaType().id() == QMetaType::Bool,
+                   "QProtobufMessage", "The 'oneof' field doesn't have the follow 'has' property.");
+        if (!hasProperty.readOnGadget(this).toBool())
+            return QVariant(metaProperty.metaType());
+    }
+
+    QVariant propertyValue = metaProperty.readOnGadget(this);
+    return propertyValue;
+}
+
+bool QProtobufMessage::setProperty(
+        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo, const QVariant &value)
+{
+    int propertyIndex = fieldInfo.getPropertyIndex() + metaObject()->propertyOffset();
+    QMetaProperty metaProperty = metaObject()->property(propertyIndex);
+
+    if (!metaProperty.isValid())
+        return false;
+
+    return metaProperty.writeOnGadget(this, value);
 }
 
 QT_END_NAMESPACE

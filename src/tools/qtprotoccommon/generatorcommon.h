@@ -25,6 +25,7 @@ struct common {
     using FieldDescriptor = ::google::protobuf::FieldDescriptor;
     using EnumDescriptor = ::google::protobuf::EnumDescriptor;
     using FileDescriptor = ::google::protobuf::FileDescriptor;
+    using OneofDescriptor = ::google::protobuf::OneofDescriptor;
     using MethodDescriptor = ::google::protobuf::MethodDescriptor;
     using ServiceDescriptor = ::google::protobuf::ServiceDescriptor;
 
@@ -61,10 +62,12 @@ struct common {
     static TypeMap produceSimpleTypeMap(FieldDescriptor::Type type);
     static TypeMap produceTypeMap(const FieldDescriptor *field, const Descriptor *scope);
     static PropertyMap producePropertyMap(const FieldDescriptor *field, const Descriptor *scope);
+    static PropertyMap producePropertyMap(const OneofDescriptor *oneof, const Descriptor *scope);
     static MethodMap produceMethodMap(const MethodDescriptor *method, const std::string &scope);
     static TypeMap produceServiceTypeMap(const ServiceDescriptor *service, const Descriptor *scope);
     static TypeMap produceClientTypeMap(const ServiceDescriptor *service, const Descriptor *scope);
     static std::string qualifiedName(const std::string &name);
+    static bool isOneofField(const FieldDescriptor *field);
     static bool isLocalEnum(const EnumDescriptor *type, const google::protobuf::Descriptor *scope);
     static EnumVisibility enumVisibility(const EnumDescriptor *type, const Descriptor *scope);
     static bool hasQmlAlias(const FieldDescriptor *field);
@@ -74,6 +77,9 @@ struct common {
 
     using IterateMessageLogic = std::function<void(const FieldDescriptor *, PropertyMap &)>;
     static void iterateMessageFields(const Descriptor *message, const IterateMessageLogic &callback);
+
+    using IterateOneofCallback = std::function<void(const OneofDescriptor *, PropertyMap &)>;
+    static void iterateOneofFields(const Descriptor *message, const IterateOneofCallback &callback);
 
     static void iterateMessages(const FileDescriptor *file,
                                 const std::function<void(const Descriptor *)> &callback);

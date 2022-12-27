@@ -9,10 +9,42 @@
 
 #include <cassert>
 #include <algorithm>
+#include <string_view>
 
 using namespace ::google::protobuf;
 using namespace ::google::protobuf::io;
 using namespace ::qtprotoccommon;
+
+namespace {
+/*
+    Returns the default initializer string for the corresponding field type.
+*/
+std::string_view getInitializerByFieldType(FieldDescriptor::Type type)
+{
+    static constexpr std::string_view FloatingPointInitializer = "0.0";
+    static constexpr std::string_view IntegerInitializer = "0";
+    static constexpr std::string_view BoolInitializer = "false";
+    switch (type) {
+    case FieldDescriptor::TYPE_DOUBLE:
+    case FieldDescriptor::TYPE_FLOAT:
+        return FloatingPointInitializer;
+    case FieldDescriptor::TYPE_FIXED32:
+    case FieldDescriptor::TYPE_FIXED64:
+    case FieldDescriptor::TYPE_INT32:
+    case FieldDescriptor::TYPE_INT64:
+    case FieldDescriptor::TYPE_SINT32:
+    case FieldDescriptor::TYPE_SINT64:
+    case FieldDescriptor::TYPE_UINT32:
+    case FieldDescriptor::TYPE_UINT64:
+        return IntegerInitializer;
+    case FieldDescriptor::TYPE_BOOL:
+        return BoolInitializer;
+    default:
+        break;
+    }
+    return {};
+}
+} // namespace
 
 /*
     Constructs a C++ namespace from the full protobuf descriptor name. E.g. for
@@ -178,22 +210,22 @@ TypeMap common::produceMessageTypeMap(const Descriptor *type, const Descriptor *
     std::string exportMacro = Options::instance().exportMacro();
     exportMacro = common::buildExportMacro(exportMacro);
 
-    return {
-        { "classname", name },
-        { "type", name },
-        { "full_type", fullName },
-        { "scope_type", scopeName },
-        { "list_type", listName },
-        { "full_list_type", fullListName },
-        { "scope_list_type", scopeListName },
-        { "scope_namespaces", scopeNamespaces },
-        { "qml_package", qmlPackage },
-        { "property_type", fullName },
-        { "property_list_type", fullListName },
-        { "getter_type", scopeName },
-        { "setter_type", scopeName },
-        { "export_macro", exportMacro },
-    };
+    const std::string initializer = "nullptr";
+    return { { "classname", name },
+             { "type", name },
+             { "full_type", fullName },
+             { "scope_type", scopeName },
+             { "list_type", listName },
+             { "full_list_type", fullListName },
+             { "scope_list_type", scopeListName },
+             { "scope_namespaces", scopeNamespaces },
+             { "qml_package", qmlPackage },
+             { "property_type", fullName },
+             { "property_list_type", fullListName },
+             { "getter_type", scopeName },
+             { "setter_type", scopeName },
+             { "export_macro", exportMacro },
+             { "initializer", initializer } };
 }
 
 TypeMap common::produceEnumTypeMap(const EnumDescriptor *type, const Descriptor *scope)
@@ -230,23 +262,23 @@ TypeMap common::produceEnumTypeMap(const EnumDescriptor *type, const Descriptor 
     std::string exportMacro = Options::instance().exportMacro();
     exportMacro = common::buildExportMacro(exportMacro);
 
-    return {
-        { "classname", enumGadget },
-        { "type", name },
-        { "full_type", fullName },
-        { "scope_type", scopeName },
-        { "list_type", listName },
-        { "full_list_type", fullListName },
-        { "scope_list_type", scopeListName },
-        { "scope_namespaces", scopeNamespaces },
-        { "qml_package", qmlPackage },
-        { "property_type", propertyType },
-        { "property_list_type", fullListName },
-        { "getter_type", scopeName },
-        { "setter_type", scopeName },
-        { "enum_gadget", enumGadget },
-        { "export_macro", exportMacro },
-    };
+    std::string initializer = scopeName + "::" + type->value(0)->name();
+    return { { "classname", enumGadget },
+             { "type", name },
+             { "full_type", fullName },
+             { "scope_type", scopeName },
+             { "list_type", listName },
+             { "full_list_type", fullListName },
+             { "scope_list_type", scopeListName },
+             { "scope_namespaces", scopeNamespaces },
+             { "qml_package", qmlPackage },
+             { "property_type", propertyType },
+             { "property_list_type", fullListName },
+             { "getter_type", scopeName },
+             { "setter_type", scopeName },
+             { "enum_gadget", enumGadget },
+             { "export_macro", exportMacro },
+             { "initializer", initializer } };
 }
 
 TypeMap common::produceSimpleTypeMap(FieldDescriptor::Type type)
@@ -289,6 +321,7 @@ TypeMap common::produceSimpleTypeMap(FieldDescriptor::Type type)
         break;
     }
 
+    const std::string initializer(getInitializerByFieldType(type));
     return { { "type", name },
              { "full_type", fullName },
              { "scope_type", fullName },
@@ -301,7 +334,8 @@ TypeMap common::produceSimpleTypeMap(FieldDescriptor::Type type)
              { "qml_alias_type", qmlAliasType },
              { "property_list_type", fullListName },
              { "getter_type", fullName },
-             { "setter_type", fullName } };
+             { "setter_type", fullName },
+             { "initializer", initializer } };
 }
 
 MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::string &scope)
@@ -386,6 +420,16 @@ void common::iterateMessageFields(const Descriptor *message, const IterateMessag
     }
 }
 
+void common::iterateOneofFields(const Descriptor *message, const IterateOneofCallback &callback)
+{
+    int numFields = message->oneof_decl_count();
+    for (int i = 0; i < numFields; ++i) {
+        const OneofDescriptor *field = message->oneof_decl(i);
+        auto propertyMap = common::producePropertyMap(field, message);
+        callback(field, propertyMap);
+    }
+}
+
 TypeMap common::produceTypeMap(const FieldDescriptor *field, const Descriptor *scope)
 {
     assert(field != nullptr);
@@ -404,6 +448,19 @@ TypeMap common::produceTypeMap(const FieldDescriptor *field, const Descriptor *s
     }
 
     return produceSimpleTypeMap(field->type());
+}
+
+PropertyMap common::producePropertyMap(const OneofDescriptor *oneof, const Descriptor *scope)
+{
+    assert(oneof != nullptr);
+
+    PropertyMap propertyMap;
+    propertyMap["optional_property_name"] = oneof->name();
+    propertyMap["optional_property_name_cap"] = utils::capitalizeAsciiName(oneof->name());
+    auto scopeTypeMap = produceMessageTypeMap(scope, nullptr);
+    propertyMap["classname"] = scope != nullptr ? scopeTypeMap["classname"] : "";
+
+    return propertyMap;
 }
 
 PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descriptor *scope)
@@ -434,6 +491,12 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
     propertyMap["classname"] = scope != nullptr ? scopeTypeMap["classname"] : "";
     propertyMap["number"] = std::to_string(field->number());
 
+    if (common::isOneofField(field)) {
+        propertyMap["optional_property_name"] = field->containing_oneof()->name();
+        propertyMap["optional_property_name_cap"] =
+                utils::capitalizeAsciiName(field->containing_oneof()->name());
+    }
+
     if (field->is_map()) {
         const Descriptor *type = field->message_type();
         auto keyMap = common::producePropertyMap(type->field(0), scope);
@@ -457,6 +520,11 @@ std::string common::qualifiedName(const std::string &name)
     if (utils::contains(searchExceptions, fieldName))
         return fieldName.append(CommonTemplates::ProtoSuffix());
     return fieldName;
+}
+
+bool common::isOneofField(const FieldDescriptor *field)
+{
+    return field->containing_oneof() != nullptr;
 }
 
 bool common::isLocalEnum(const EnumDescriptor *type, const Descriptor *scope)
@@ -608,6 +676,9 @@ std::string common::collectFieldFlags(const FieldDescriptor *field)
         && !field->is_packed()) {
         writeFlag("NonPacked");
     }
+
+    if (common::isOneofField(field))
+        writeFlag("Oneof");
 
     if (flags.empty())
         writeFlag("NoFlags");

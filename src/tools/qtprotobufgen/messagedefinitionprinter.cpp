@@ -169,15 +169,21 @@ void MessageDefinitionPrinter::printUintData(const char *templateString)
     // JSon data starts where string metadata ends
     size_t jsonOffset = metaCharDataSize() + NullTerminator;
     const int numFields = m_descriptor->field_count();
-    for (int i = 0; i < numFields; ++i) {
+    for (int i = 0, propertyIndex = 0; i < numFields; ++i, ++propertyIndex) {
         const FieldDescriptor *field = m_descriptor->field(i);
         const std::map<std::string, std::string> variables = {
             { "json_name_offset", std::to_string(jsonOffset) },
             { "field_number", std::to_string(field->number()) },
-            { "property_index", std::to_string(i) },
+            { "property_index", std::to_string(propertyIndex) },
             { "field_flags", common::collectFieldFlags(field) },
             { "json_name", field->json_name() },
         };
+
+        // Oneof properties generate additional has<OneofField> property next to the field property
+        // one.
+        if (common::isOneofField(field))
+            ++propertyIndex;
+
         m_printer->Print(variables, templateString);
 
         const size_t length = field->json_name().length();
@@ -242,50 +248,17 @@ void MessageDefinitionPrinter::printConstructors()
 
 void MessageDefinitionPrinter::printInitializationList()
 {
-    const auto numFields = m_descriptor->field_count();
     Indent();
-    for (int i = 0; i < numFields; ++i) {
-        const FieldDescriptor *field = m_descriptor->field(i);
-        auto propertyMap = common::producePropertyMap(field, m_descriptor);
-        if (!field->is_repeated() && !field->is_map()) {
-            switch (field->type()) {
-            case FieldDescriptor::TYPE_DOUBLE:
-            case FieldDescriptor::TYPE_FLOAT:
-                propertyMap["initializer"] = "0.0";
-                break;
-            case FieldDescriptor::TYPE_FIXED32:
-            case FieldDescriptor::TYPE_FIXED64:
-            case FieldDescriptor::TYPE_INT32:
-            case FieldDescriptor::TYPE_INT64:
-            case FieldDescriptor::TYPE_SINT32:
-            case FieldDescriptor::TYPE_SINT64:
-            case FieldDescriptor::TYPE_UINT32:
-            case FieldDescriptor::TYPE_UINT64:
-                propertyMap["initializer"] = "0";
-                break;
-            case FieldDescriptor::TYPE_BOOL:
-                propertyMap["initializer"] = "false";
-                break;
-            case FieldDescriptor::TYPE_ENUM:
-                propertyMap["initializer"] = propertyMap["scope_type"]
-                        + "::" + field->enum_type()->value(0)->name();
-                break;
-            default:
-                propertyMap["initializer"] = "";
-                break;
-            }
-        }
+    common::iterateMessageFields(
+            m_descriptor, [&](const FieldDescriptor *field, PropertyMap propertyMap) {
+                if (field->is_repeated() || common::isOneofField(field))
+                    return;
 
-        if (common::isPureMessage(field)) {
-            m_printer->Print(",\n");
-            m_printer->Print(propertyMap, CommonTemplates::InitializerMemberMessageTemplate());
-        } else {
-            if (!propertyMap["initializer"].empty()) {
-                m_printer->Print(",\n");
-                m_printer->Print(propertyMap, CommonTemplates::InitializerMemberTemplate());
-            }
-        }
-    }
+                if (!propertyMap["initializer"].empty()) {
+                    m_printer->Print(",\n");
+                    m_printer->Print(propertyMap, CommonTemplates::InitializerMemberTemplate());
+                }
+            });
     Outdent();
 }
 
@@ -296,11 +269,20 @@ void MessageDefinitionPrinter::printCopyFunctionality()
     Indent();
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
+                if (common::isOneofField(field))
+                    return;
+
                 m_printer->Print(",\n");
                 m_printer->Print(propertyMap,
                                  common::isPureMessage(field)
                                          ? CommonTemplates::InitializerMemberMessageTemplate()
                                          : CommonTemplates::CopyInitializerMemberTemplate());
+            });
+    common::iterateOneofFields(
+            m_descriptor, [&](const OneofDescriptor *, const PropertyMap &propertyMap) {
+                m_printer->Print(",\n");
+                m_printer->Print(propertyMap,
+                                 CommonTemplates::CopyInitializerMemberOneofTemplate());
             });
     Outdent();
 
@@ -309,6 +291,8 @@ void MessageDefinitionPrinter::printCopyFunctionality()
     Indent();
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
+                if (common::isOneofField(field))
+                    return;
                 if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap, CommonTemplates::CopyMemberMessageTemplate());
                 }
@@ -319,12 +303,18 @@ void MessageDefinitionPrinter::printCopyFunctionality()
     m_printer->Print(m_typeMap, CommonTemplates::AssignmentOperatorDefinitionTemplate());
     Indent();
     common::iterateMessageFields(
-                m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-        m_printer->Print(propertyMap,
-                         common::isPureMessage(field) ?
-                             CommonTemplates::AssignMemberMessageTemplate() :
-                             CommonTemplates::CopyMemberTemplate());
-    });
+            m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
+                if (common::isOneofField(field))
+                    return;
+                m_printer->Print(propertyMap,
+                                 common::isPureMessage(field)
+                                         ? CommonTemplates::AssignMemberMessageTemplate()
+                                         : CommonTemplates::CopyMemberTemplate());
+            });
+    common::iterateOneofFields(
+            m_descriptor, [&](const OneofDescriptor *, const PropertyMap &propertyMap) {
+                m_printer->Print(propertyMap, CommonTemplates::CopyMemberOneofTemplate());
+            });
     m_printer->Print(CommonTemplates::AssignmentOperatorReturnTemplate());
     Outdent();
     m_printer->Print(CommonTemplates::SimpleBlockEnclosureTemplate());
@@ -335,53 +325,70 @@ void MessageDefinitionPrinter::printMoveSemantic()
     assert(m_descriptor != nullptr);
     m_printer->Print(m_typeMap, CommonTemplates::MoveConstructorDefinitionTemplate());
     common::iterateMessageFields(
-                m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-        if (common::isPureMessage(field)) {
-            m_printer->Print(",\n");
-            m_printer->Print(propertyMap,
-                             CommonTemplates::InitializerMemberMessageTemplate());
-        }
-    });
+            m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
+                if (common::isOneofField(field))
+                    return;
+                if (common::isPureMessage(field)) {
+                    m_printer->Print(",\n");
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::InitializerMemberMessageTemplate());
+                }
+            });
+    common::iterateOneofFields(
+            m_descriptor, [&](const OneofDescriptor *, const PropertyMap &propertyMap) {
+                m_printer->Print(",\n");
+                m_printer->Print(propertyMap,
+                                 CommonTemplates::MoveInitializerMemberOneofTemplate());
+            });
     m_printer->Print("\n{\n");
 
     Indent();
     common::iterateMessageFields(
-                m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-        if (field->type() == FieldDescriptor::TYPE_MESSAGE
-                || field->type() == FieldDescriptor::TYPE_STRING
-                || field->type() == FieldDescriptor::TYPE_BYTES || field->is_repeated()) {
-            m_printer->Print(propertyMap,
-                             common::isPureMessage(field) ?
-                                 CommonTemplates::MoveMemberMessageTemplate() :
-                                 CommonTemplates::MoveConstructorMemberComplexTemplate());
-        } else {
-            m_printer->Print(propertyMap,
-                             (field->type() != FieldDescriptor::TYPE_ENUM) ?
-                                 CommonTemplates::MoveMemberTemplate() :
-                                 CommonTemplates::MoveMemberEnumTemplate());
-        }
-    });
+            m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
+                if (common::isOneofField(field))
+                    return;
+                if (field->type() == FieldDescriptor::TYPE_MESSAGE
+                    || field->type() == FieldDescriptor::TYPE_STRING
+                    || field->type() == FieldDescriptor::TYPE_BYTES || field->is_repeated()) {
+                    m_printer->Print(
+                            propertyMap,
+                            common::isPureMessage(field)
+                                    ? CommonTemplates::MoveMemberMessageTemplate()
+                                    : CommonTemplates::MoveConstructorMemberComplexTemplate());
+                } else {
+                    m_printer->Print(propertyMap,
+                                     (field->type() != FieldDescriptor::TYPE_ENUM)
+                                             ? CommonTemplates::MoveMemberTemplate()
+                                             : CommonTemplates::MoveMemberEnumTemplate());
+                }
+            });
     Outdent();
     m_printer->Print(CommonTemplates::SimpleBlockEnclosureTemplate());
 
     m_printer->Print(m_typeMap, CommonTemplates::MoveAssignmentOperatorDefinitionTemplate());
     Indent();
     common::iterateMessageFields(
-                m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-        if (field->type() == FieldDescriptor::TYPE_MESSAGE
-                || field->type() == FieldDescriptor::TYPE_STRING
-                || field->type() == FieldDescriptor::TYPE_BYTES || field->is_repeated()) {
-            m_printer->Print(propertyMap,
-                             common::isPureMessage(field) ?
-                                 CommonTemplates::MoveAssignMemberMessageTemplate() :
-                                 CommonTemplates::MoveAssignMemberComplexTemplate());
-        } else {
-            m_printer->Print(propertyMap,
-                             (field->type() != FieldDescriptor::TYPE_ENUM) ?
-                                 CommonTemplates::MoveMemberTemplate() :
-                                 CommonTemplates::MoveMemberEnumTemplate());
-        }
-    });
+            m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
+                if (common::isOneofField(field))
+                    return;
+                if (field->type() == FieldDescriptor::TYPE_MESSAGE
+                    || field->type() == FieldDescriptor::TYPE_STRING
+                    || field->type() == FieldDescriptor::TYPE_BYTES || field->is_repeated()) {
+                    m_printer->Print(propertyMap,
+                                     common::isPureMessage(field)
+                                             ? CommonTemplates::MoveAssignMemberMessageTemplate()
+                                             : CommonTemplates::MoveAssignMemberComplexTemplate());
+                } else {
+                    m_printer->Print(propertyMap,
+                                     (field->type() != FieldDescriptor::TYPE_ENUM)
+                                             ? CommonTemplates::MoveMemberTemplate()
+                                             : CommonTemplates::MoveMemberEnumTemplate());
+                }
+            });
+    common::iterateOneofFields(
+            m_descriptor, [&](const OneofDescriptor *, const PropertyMap &propertyMap) {
+                m_printer->Print(propertyMap, CommonTemplates::MoveAssignMemberOneofTemplate());
+            });
     m_printer->Print(CommonTemplates::AssignmentOperatorReturnTemplate());
     Outdent();
     m_printer->Print(CommonTemplates::SimpleBlockEnclosureTemplate());
@@ -397,6 +404,8 @@ void MessageDefinitionPrinter::printComparisonOperators()
     Indent();
     common::iterateMessageFields(
                 m_descriptor, [&](const FieldDescriptor *field, PropertyMap &propertyMap) {
+        if (field->containing_oneof())
+            return;
         m_printer->Print("\n&& ");
         if (common::isPureMessage(field)) {
             m_printer->Print(propertyMap,
@@ -410,6 +419,13 @@ void MessageDefinitionPrinter::printComparisonOperators()
                              CommonTemplates::EqualOperatorMemberTemplate());
         }
     });
+
+    common::iterateOneofFields(
+            m_descriptor, [&](const OneofDescriptor *, const PropertyMap &propertyMap) {
+                m_printer->Print("\n&& ");
+                m_printer->Print(propertyMap, CommonTemplates::EqualOperatorMemberOneofTemplate());
+            });
+
     Outdent();
     Outdent();
 
@@ -422,45 +438,76 @@ void MessageDefinitionPrinter::printComparisonOperators()
 void MessageDefinitionPrinter::printGetters()
 {
     common::iterateMessageFields(
-                m_descriptor, [&](const FieldDescriptor *field, PropertyMap &propertyMap) {
-        if (common::isPureMessage(field)) {
-            m_printer->Print(propertyMap,
-                             CommonTemplates::PrivateGetterMessageDefinitionTemplate());
-            m_printer->Print(propertyMap,
-                             CommonTemplates::GetterMessageDefinitionTemplate());
-        }
-        if (field->is_repeated()) {
-            if (field->type() == FieldDescriptor::TYPE_MESSAGE && !field->is_map()
-                    && !common::isQtType(field) && Options::instance().hasQml()) {
-                m_printer->Print(propertyMap,
-                                 CommonTemplates::GetterQmlListDefinitionTemplate());
-            }
-        }
-    });
+            m_descriptor, [&](const FieldDescriptor *field, PropertyMap &propertyMap) {
+                if (common::isOneofField(field)) {
+                    if (common::isPureMessage(field)) {
+                        m_printer->Print(
+                                propertyMap,
+                                CommonTemplates::PrivateGetterOneofMessageDefinitionTemplate());
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::GetterOneofMessageDefinitionTemplate());
+                    } else {
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::PrivateGetterOneofDefinitionTemplate());
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::GetterOneofDefinitionTemplate());
+                    }
+                    return;
+                }
+
+                if (common::isPureMessage(field)) {
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::PrivateGetterMessageDefinitionTemplate());
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::GetterMessageDefinitionTemplate());
+                }
+                if (field->is_repeated()) {
+                    if (field->type() == FieldDescriptor::TYPE_MESSAGE && !field->is_map()
+                        && !common::isQtType(field) && Options::instance().hasQml()) {
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::GetterQmlListDefinitionTemplate());
+                    }
+                }
+            });
 
     common::iterateMessageFields(
-                m_descriptor, [&](const FieldDescriptor *field, PropertyMap &propertyMap) {
-        switch (field->type()) {
-        case FieldDescriptor::TYPE_MESSAGE:
-            if (common::isPureMessage(field)) {
+            m_descriptor, [&](const FieldDescriptor *field, PropertyMap &propertyMap) {
+                if (common::isOneofField(field)) {
+                    m_printer->Print(propertyMap, CommonTemplates::SetterOneofDefinitionTemplate());
+                    m_printer->Print(
+                            propertyMap,
+                            common::isPureMessage(field)
+                                    ? CommonTemplates::PrivateSetterOneofMessageDefinitionTemplate()
+                                    : CommonTemplates::PrivateSetterOneofDefinitionTemplate());
+                    return;
+                }
+                switch (field->type()) {
+                case FieldDescriptor::TYPE_MESSAGE:
+                    if (common::isPureMessage(field)) {
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::PrivateSetterMessageDefinitionTemplate());
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::SetterMessageDefinitionTemplate());
+                    } else {
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::SetterComplexDefinitionTemplate());
+                    }
+                    break;
+                case FieldDescriptor::FieldDescriptor::TYPE_STRING:
+                case FieldDescriptor::FieldDescriptor::TYPE_BYTES:
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::SetterComplexDefinitionTemplate());
+                    break;
+                default:
+                    break;
+                }
+            });
+    common::iterateOneofFields(
+            m_descriptor, [&](const OneofDescriptor *, const PropertyMap &propertyMap) {
                 m_printer->Print(propertyMap,
-                                 CommonTemplates::PrivateSetterMessageDefinitionTemplate());
-                m_printer->Print(propertyMap,
-                                 CommonTemplates::SetterMessageDefinitionTemplate());
-            } else {
-                m_printer->Print(propertyMap,
-                                 CommonTemplates::SetterComplexDefinitionTemplate());
-            }
-            break;
-        case FieldDescriptor::FieldDescriptor::TYPE_STRING:
-        case FieldDescriptor::FieldDescriptor::TYPE_BYTES:
-            m_printer->Print(propertyMap,
-                             CommonTemplates::SetterComplexDefinitionTemplate());
-            break;
-        default:
-            break;
-        }
-    });
+                                 CommonTemplates::GetterOneofFieldNumberDefinitionTemplate());
+                m_printer->Print(propertyMap, CommonTemplates::ClearOneofDefinitionTemplate());
+            });
 }
 
 void MessageDefinitionPrinter::printDestructor()
