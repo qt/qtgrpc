@@ -51,9 +51,9 @@ void RepeatedNonPackedIntMessage::registerTypes()
 RepeatedNonPackedIntMessage::RepeatedNonPackedIntMessage() : QProtobufMessage(&RepeatedNonPackedIntMessage::staticMetaObject)
 {
 }
-RepeatedNonPackedIntMessage::RepeatedNonPackedIntMessage(const RepeatedNonPackedIntMessage &other) : QProtobufMessage(other)
+RepeatedNonPackedIntMessage::RepeatedNonPackedIntMessage(const RepeatedNonPackedIntMessage &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
 }
 RepeatedNonPackedIntMessage &RepeatedNonPackedIntMessage::operator =(const RepeatedNonPackedIntMessage &other)
 {
@@ -129,9 +129,9 @@ void RepeatedNonPackedSIntMessage::registerTypes()
 RepeatedNonPackedSIntMessage::RepeatedNonPackedSIntMessage() : QProtobufMessage(&RepeatedNonPackedSIntMessage::staticMetaObject)
 {
 }
-RepeatedNonPackedSIntMessage::RepeatedNonPackedSIntMessage(const RepeatedNonPackedSIntMessage &other) : QProtobufMessage(other)
+RepeatedNonPackedSIntMessage::RepeatedNonPackedSIntMessage(const RepeatedNonPackedSIntMessage &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
 }
 RepeatedNonPackedSIntMessage &RepeatedNonPackedSIntMessage::operator =(const RepeatedNonPackedSIntMessage &other)
 {
@@ -207,9 +207,9 @@ void RepeatedNonPackedUIntMessage::registerTypes()
 RepeatedNonPackedUIntMessage::RepeatedNonPackedUIntMessage() : QProtobufMessage(&RepeatedNonPackedUIntMessage::staticMetaObject)
 {
 }
-RepeatedNonPackedUIntMessage::RepeatedNonPackedUIntMessage(const RepeatedNonPackedUIntMessage &other) : QProtobufMessage(other)
+RepeatedNonPackedUIntMessage::RepeatedNonPackedUIntMessage(const RepeatedNonPackedUIntMessage &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
 }
 RepeatedNonPackedUIntMessage &RepeatedNonPackedUIntMessage::operator =(const RepeatedNonPackedUIntMessage &other)
 {
@@ -285,9 +285,9 @@ void RepeatedNonPackedInt64Message::registerTypes()
 RepeatedNonPackedInt64Message::RepeatedNonPackedInt64Message() : QProtobufMessage(&RepeatedNonPackedInt64Message::staticMetaObject)
 {
 }
-RepeatedNonPackedInt64Message::RepeatedNonPackedInt64Message(const RepeatedNonPackedInt64Message &other) : QProtobufMessage(other)
+RepeatedNonPackedInt64Message::RepeatedNonPackedInt64Message(const RepeatedNonPackedInt64Message &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
 }
 RepeatedNonPackedInt64Message &RepeatedNonPackedInt64Message::operator =(const RepeatedNonPackedInt64Message &other)
 {
@@ -363,9 +363,9 @@ void RepeatedNonPackedSInt64Message::registerTypes()
 RepeatedNonPackedSInt64Message::RepeatedNonPackedSInt64Message() : QProtobufMessage(&RepeatedNonPackedSInt64Message::staticMetaObject)
 {
 }
-RepeatedNonPackedSInt64Message::RepeatedNonPackedSInt64Message(const RepeatedNonPackedSInt64Message &other) : QProtobufMessage(other)
+RepeatedNonPackedSInt64Message::RepeatedNonPackedSInt64Message(const RepeatedNonPackedSInt64Message &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
 }
 RepeatedNonPackedSInt64Message &RepeatedNonPackedSInt64Message::operator =(const RepeatedNonPackedSInt64Message &other)
 {
@@ -441,9 +441,9 @@ void RepeatedNonPackedUInt64Message::registerTypes()
 RepeatedNonPackedUInt64Message::RepeatedNonPackedUInt64Message() : QProtobufMessage(&RepeatedNonPackedUInt64Message::staticMetaObject)
 {
 }
-RepeatedNonPackedUInt64Message::RepeatedNonPackedUInt64Message(const RepeatedNonPackedUInt64Message &other) : QProtobufMessage(other)
+RepeatedNonPackedUInt64Message::RepeatedNonPackedUInt64Message(const RepeatedNonPackedUInt64Message &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
 }
 RepeatedNonPackedUInt64Message &RepeatedNonPackedUInt64Message::operator =(const RepeatedNonPackedUInt64Message &other)
 {
@@ -519,9 +519,9 @@ void RepeatedNonPackedFixedIntMessage::registerTypes()
 RepeatedNonPackedFixedIntMessage::RepeatedNonPackedFixedIntMessage() : QProtobufMessage(&RepeatedNonPackedFixedIntMessage::staticMetaObject)
 {
 }
-RepeatedNonPackedFixedIntMessage::RepeatedNonPackedFixedIntMessage(const RepeatedNonPackedFixedIntMessage &other) : QProtobufMessage(other)
+RepeatedNonPackedFixedIntMessage::RepeatedNonPackedFixedIntMessage(const RepeatedNonPackedFixedIntMessage &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
 }
 RepeatedNonPackedFixedIntMessage &RepeatedNonPackedFixedIntMessage::operator =(const RepeatedNonPackedFixedIntMessage &other)
 {
@@ -597,9 +597,9 @@ void RepeatedNonPackedSFixedIntMessage::registerTypes()
 RepeatedNonPackedSFixedIntMessage::RepeatedNonPackedSFixedIntMessage() : QProtobufMessage(&RepeatedNonPackedSFixedIntMessage::staticMetaObject)
 {
 }
-RepeatedNonPackedSFixedIntMessage::RepeatedNonPackedSFixedIntMessage(const RepeatedNonPackedSFixedIntMessage &other) : QProtobufMessage(other)
+RepeatedNonPackedSFixedIntMessage::RepeatedNonPackedSFixedIntMessage(const RepeatedNonPackedSFixedIntMessage &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
 }
 RepeatedNonPackedSFixedIntMessage &RepeatedNonPackedSFixedIntMessage::operator =(const RepeatedNonPackedSFixedIntMessage &other)
 {
@@ -675,9 +675,9 @@ void RepeatedNonPackedFixedInt64Message::registerTypes()
 RepeatedNonPackedFixedInt64Message::RepeatedNonPackedFixedInt64Message() : QProtobufMessage(&RepeatedNonPackedFixedInt64Message::staticMetaObject)
 {
 }
-RepeatedNonPackedFixedInt64Message::RepeatedNonPackedFixedInt64Message(const RepeatedNonPackedFixedInt64Message &other) : QProtobufMessage(other)
+RepeatedNonPackedFixedInt64Message::RepeatedNonPackedFixedInt64Message(const RepeatedNonPackedFixedInt64Message &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
 }
 RepeatedNonPackedFixedInt64Message &RepeatedNonPackedFixedInt64Message::operator =(const RepeatedNonPackedFixedInt64Message &other)
 {
@@ -753,9 +753,9 @@ void RepeatedNonPackedSFixedInt64Message::registerTypes()
 RepeatedNonPackedSFixedInt64Message::RepeatedNonPackedSFixedInt64Message() : QProtobufMessage(&RepeatedNonPackedSFixedInt64Message::staticMetaObject)
 {
 }
-RepeatedNonPackedSFixedInt64Message::RepeatedNonPackedSFixedInt64Message(const RepeatedNonPackedSFixedInt64Message &other) : QProtobufMessage(other)
+RepeatedNonPackedSFixedInt64Message::RepeatedNonPackedSFixedInt64Message(const RepeatedNonPackedSFixedInt64Message &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
 }
 RepeatedNonPackedSFixedInt64Message &RepeatedNonPackedSFixedInt64Message::operator =(const RepeatedNonPackedSFixedInt64Message &other)
 {
@@ -831,9 +831,9 @@ void RepeatedNonPackedBoolMessage::registerTypes()
 RepeatedNonPackedBoolMessage::RepeatedNonPackedBoolMessage() : QProtobufMessage(&RepeatedNonPackedBoolMessage::staticMetaObject)
 {
 }
-RepeatedNonPackedBoolMessage::RepeatedNonPackedBoolMessage(const RepeatedNonPackedBoolMessage &other) : QProtobufMessage(other)
+RepeatedNonPackedBoolMessage::RepeatedNonPackedBoolMessage(const RepeatedNonPackedBoolMessage &other) : QProtobufMessage(other),
+    m_testRepeatedBool(other.m_testRepeatedBool)
 {
-    setTestRepeatedBool(other.m_testRepeatedBool);
 }
 RepeatedNonPackedBoolMessage &RepeatedNonPackedBoolMessage::operator =(const RepeatedNonPackedBoolMessage &other)
 {
@@ -909,9 +909,9 @@ void RepeatedNonPackedDoubleMessage::registerTypes()
 RepeatedNonPackedDoubleMessage::RepeatedNonPackedDoubleMessage() : QProtobufMessage(&RepeatedNonPackedDoubleMessage::staticMetaObject)
 {
 }
-RepeatedNonPackedDoubleMessage::RepeatedNonPackedDoubleMessage(const RepeatedNonPackedDoubleMessage &other) : QProtobufMessage(other)
+RepeatedNonPackedDoubleMessage::RepeatedNonPackedDoubleMessage(const RepeatedNonPackedDoubleMessage &other) : QProtobufMessage(other),
+    m_testRepeatedDouble(other.m_testRepeatedDouble)
 {
-    setTestRepeatedDouble(other.m_testRepeatedDouble);
 }
 RepeatedNonPackedDoubleMessage &RepeatedNonPackedDoubleMessage::operator =(const RepeatedNonPackedDoubleMessage &other)
 {
@@ -987,9 +987,9 @@ void RepeatedNonPackedFloatMessage::registerTypes()
 RepeatedNonPackedFloatMessage::RepeatedNonPackedFloatMessage() : QProtobufMessage(&RepeatedNonPackedFloatMessage::staticMetaObject)
 {
 }
-RepeatedNonPackedFloatMessage::RepeatedNonPackedFloatMessage(const RepeatedNonPackedFloatMessage &other) : QProtobufMessage(other)
+RepeatedNonPackedFloatMessage::RepeatedNonPackedFloatMessage(const RepeatedNonPackedFloatMessage &other) : QProtobufMessage(other),
+    m_testRepeatedFloat(other.m_testRepeatedFloat)
 {
-    setTestRepeatedFloat(other.m_testRepeatedFloat);
 }
 RepeatedNonPackedFloatMessage &RepeatedNonPackedFloatMessage::operator =(const RepeatedNonPackedFloatMessage &other)
 {
@@ -1069,10 +1069,10 @@ void NonPackedIntMessageWithExtraMember::registerTypes()
 NonPackedIntMessageWithExtraMember::NonPackedIntMessageWithExtraMember() : QProtobufMessage(&NonPackedIntMessageWithExtraMember::staticMetaObject)
 {
 }
-NonPackedIntMessageWithExtraMember::NonPackedIntMessageWithExtraMember(const NonPackedIntMessageWithExtraMember &other) : QProtobufMessage(other)
+NonPackedIntMessageWithExtraMember::NonPackedIntMessageWithExtraMember(const NonPackedIntMessageWithExtraMember &other) : QProtobufMessage(other),
+    m_testRepeatedInt(other.m_testRepeatedInt),
+    m_extra(other.m_extra)
 {
-    setTestRepeatedInt(other.m_testRepeatedInt);
-    setExtra(other.m_extra);
 }
 NonPackedIntMessageWithExtraMember &NonPackedIntMessageWithExtraMember::operator =(const NonPackedIntMessageWithExtraMember &other)
 {

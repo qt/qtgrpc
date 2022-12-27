@@ -120,9 +120,9 @@ SimpleBoolMessage::SimpleBoolMessage() : QProtobufMessage(&SimpleBoolMessage::st
     m_testFieldBool(false)
 {
 }
-SimpleBoolMessage::SimpleBoolMessage(const SimpleBoolMessage &other) : QProtobufMessage(other)
+SimpleBoolMessage::SimpleBoolMessage(const SimpleBoolMessage &other) : QProtobufMessage(other),
+    m_testFieldBool(other.m_testFieldBool)
 {
-    setTestFieldBool(other.m_testFieldBool);
 }
 SimpleBoolMessage &SimpleBoolMessage::operator =(const SimpleBoolMessage &other)
 {
@@ -198,9 +198,9 @@ SimpleIntMessage::SimpleIntMessage() : QProtobufMessage(&SimpleIntMessage::stati
     m_testFieldInt(0)
 {
 }
-SimpleIntMessage::SimpleIntMessage(const SimpleIntMessage &other) : QProtobufMessage(other)
+SimpleIntMessage::SimpleIntMessage(const SimpleIntMessage &other) : QProtobufMessage(other),
+    m_testFieldInt(other.m_testFieldInt)
 {
-    setTestFieldInt(other.m_testFieldInt);
 }
 SimpleIntMessage &SimpleIntMessage::operator =(const SimpleIntMessage &other)
 {
@@ -276,9 +276,9 @@ SimpleSIntMessage::SimpleSIntMessage() : QProtobufMessage(&SimpleSIntMessage::st
     m_testFieldInt(0)
 {
 }
-SimpleSIntMessage::SimpleSIntMessage(const SimpleSIntMessage &other) : QProtobufMessage(other)
+SimpleSIntMessage::SimpleSIntMessage(const SimpleSIntMessage &other) : QProtobufMessage(other),
+    m_testFieldInt(other.m_testFieldInt)
 {
-    setTestFieldInt(other.m_testFieldInt);
 }
 SimpleSIntMessage &SimpleSIntMessage::operator =(const SimpleSIntMessage &other)
 {
@@ -354,9 +354,9 @@ SimpleUIntMessage::SimpleUIntMessage() : QProtobufMessage(&SimpleUIntMessage::st
     m_testFieldInt(0)
 {
 }
-SimpleUIntMessage::SimpleUIntMessage(const SimpleUIntMessage &other) : QProtobufMessage(other)
+SimpleUIntMessage::SimpleUIntMessage(const SimpleUIntMessage &other) : QProtobufMessage(other),
+    m_testFieldInt(other.m_testFieldInt)
 {
-    setTestFieldInt(other.m_testFieldInt);
 }
 SimpleUIntMessage &SimpleUIntMessage::operator =(const SimpleUIntMessage &other)
 {
@@ -432,9 +432,9 @@ SimpleInt64Message::SimpleInt64Message() : QProtobufMessage(&SimpleInt64Message:
     m_testFieldInt(0)
 {
 }
-SimpleInt64Message::SimpleInt64Message(const SimpleInt64Message &other) : QProtobufMessage(other)
+SimpleInt64Message::SimpleInt64Message(const SimpleInt64Message &other) : QProtobufMessage(other),
+    m_testFieldInt(other.m_testFieldInt)
 {
-    setTestFieldInt(other.m_testFieldInt);
 }
 SimpleInt64Message &SimpleInt64Message::operator =(const SimpleInt64Message &other)
 {
@@ -510,9 +510,9 @@ SimpleSInt64Message::SimpleSInt64Message() : QProtobufMessage(&SimpleSInt64Messa
     m_testFieldInt(0)
 {
 }
-SimpleSInt64Message::SimpleSInt64Message(const SimpleSInt64Message &other) : QProtobufMessage(other)
+SimpleSInt64Message::SimpleSInt64Message(const SimpleSInt64Message &other) : QProtobufMessage(other),
+    m_testFieldInt(other.m_testFieldInt)
 {
-    setTestFieldInt(other.m_testFieldInt);
 }
 SimpleSInt64Message &SimpleSInt64Message::operator =(const SimpleSInt64Message &other)
 {
@@ -588,9 +588,9 @@ SimpleUInt64Message::SimpleUInt64Message() : QProtobufMessage(&SimpleUInt64Messa
     m_testFieldInt(0)
 {
 }
-SimpleUInt64Message::SimpleUInt64Message(const SimpleUInt64Message &other) : QProtobufMessage(other)
+SimpleUInt64Message::SimpleUInt64Message(const SimpleUInt64Message &other) : QProtobufMessage(other),
+    m_testFieldInt(other.m_testFieldInt)
 {
-    setTestFieldInt(other.m_testFieldInt);
 }
 SimpleUInt64Message &SimpleUInt64Message::operator =(const SimpleUInt64Message &other)
 {
@@ -665,9 +665,9 @@ void SimpleStringMessage::registerTypes()
 SimpleStringMessage::SimpleStringMessage() : QProtobufMessage(&SimpleStringMessage::staticMetaObject)
 {
 }
-SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other) : QProtobufMessage(other)
+SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other) : QProtobufMessage(other),
+    m_testFieldString(other.m_testFieldString)
 {
-    setTestFieldString(other.m_testFieldString);
 }
 SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &other)
 {
@@ -750,9 +750,9 @@ SimpleFloatMessage::SimpleFloatMessage() : QProtobufMessage(&SimpleFloatMessage:
     m_testFieldFloat(0.0)
 {
 }
-SimpleFloatMessage::SimpleFloatMessage(const SimpleFloatMessage &other) : QProtobufMessage(other)
+SimpleFloatMessage::SimpleFloatMessage(const SimpleFloatMessage &other) : QProtobufMessage(other),
+    m_testFieldFloat(other.m_testFieldFloat)
 {
-    setTestFieldFloat(other.m_testFieldFloat);
 }
 SimpleFloatMessage &SimpleFloatMessage::operator =(const SimpleFloatMessage &other)
 {
@@ -828,9 +828,9 @@ SimpleDoubleMessage::SimpleDoubleMessage() : QProtobufMessage(&SimpleDoubleMessa
     m_testFieldDouble(0.0)
 {
 }
-SimpleDoubleMessage::SimpleDoubleMessage(const SimpleDoubleMessage &other) : QProtobufMessage(other)
+SimpleDoubleMessage::SimpleDoubleMessage(const SimpleDoubleMessage &other) : QProtobufMessage(other),
+    m_testFieldDouble(other.m_testFieldDouble)
 {
-    setTestFieldDouble(other.m_testFieldDouble);
 }
 SimpleDoubleMessage &SimpleDoubleMessage::operator =(const SimpleDoubleMessage &other)
 {
@@ -905,9 +905,9 @@ void SimpleBytesMessage::registerTypes()
 SimpleBytesMessage::SimpleBytesMessage() : QProtobufMessage(&SimpleBytesMessage::staticMetaObject)
 {
 }
-SimpleBytesMessage::SimpleBytesMessage(const SimpleBytesMessage &other) : QProtobufMessage(other)
+SimpleBytesMessage::SimpleBytesMessage(const SimpleBytesMessage &other) : QProtobufMessage(other),
+    m_testFieldBytes(other.m_testFieldBytes)
 {
-    setTestFieldBytes(other.m_testFieldBytes);
 }
 SimpleBytesMessage &SimpleBytesMessage::operator =(const SimpleBytesMessage &other)
 {
@@ -990,9 +990,9 @@ SimpleFixedInt32Message::SimpleFixedInt32Message() : QProtobufMessage(&SimpleFix
     m_testFieldFixedInt32(0)
 {
 }
-SimpleFixedInt32Message::SimpleFixedInt32Message(const SimpleFixedInt32Message &other) : QProtobufMessage(other)
+SimpleFixedInt32Message::SimpleFixedInt32Message(const SimpleFixedInt32Message &other) : QProtobufMessage(other),
+    m_testFieldFixedInt32(other.m_testFieldFixedInt32)
 {
-    setTestFieldFixedInt32(other.m_testFieldFixedInt32);
 }
 SimpleFixedInt32Message &SimpleFixedInt32Message::operator =(const SimpleFixedInt32Message &other)
 {
@@ -1068,9 +1068,9 @@ SimpleFixedInt64Message::SimpleFixedInt64Message() : QProtobufMessage(&SimpleFix
     m_testFieldFixedInt64(0)
 {
 }
-SimpleFixedInt64Message::SimpleFixedInt64Message(const SimpleFixedInt64Message &other) : QProtobufMessage(other)
+SimpleFixedInt64Message::SimpleFixedInt64Message(const SimpleFixedInt64Message &other) : QProtobufMessage(other),
+    m_testFieldFixedInt64(other.m_testFieldFixedInt64)
 {
-    setTestFieldFixedInt64(other.m_testFieldFixedInt64);
 }
 SimpleFixedInt64Message &SimpleFixedInt64Message::operator =(const SimpleFixedInt64Message &other)
 {
@@ -1145,9 +1145,9 @@ void SimpleSFixedInt32Message::registerTypes()
 SimpleSFixedInt32Message::SimpleSFixedInt32Message() : QProtobufMessage(&SimpleSFixedInt32Message::staticMetaObject)
 {
 }
-SimpleSFixedInt32Message::SimpleSFixedInt32Message(const SimpleSFixedInt32Message &other) : QProtobufMessage(other)
+SimpleSFixedInt32Message::SimpleSFixedInt32Message(const SimpleSFixedInt32Message &other) : QProtobufMessage(other),
+    m_testFieldFixedInt32(other.m_testFieldFixedInt32)
 {
-    setTestFieldFixedInt32(other.m_testFieldFixedInt32);
 }
 SimpleSFixedInt32Message &SimpleSFixedInt32Message::operator =(const SimpleSFixedInt32Message &other)
 {
@@ -1222,9 +1222,9 @@ void SimpleSFixedInt64Message::registerTypes()
 SimpleSFixedInt64Message::SimpleSFixedInt64Message() : QProtobufMessage(&SimpleSFixedInt64Message::staticMetaObject)
 {
 }
-SimpleSFixedInt64Message::SimpleSFixedInt64Message(const SimpleSFixedInt64Message &other) : QProtobufMessage(other)
+SimpleSFixedInt64Message::SimpleSFixedInt64Message(const SimpleSFixedInt64Message &other) : QProtobufMessage(other),
+    m_testFieldFixedInt64(other.m_testFieldFixedInt64)
 {
-    setTestFieldFixedInt64(other.m_testFieldFixedInt64);
 }
 SimpleSFixedInt64Message &SimpleSFixedInt64Message::operator =(const SimpleSFixedInt64Message &other)
 {
@@ -1306,9 +1306,9 @@ ComplexMessage::ComplexMessage() : QProtobufMessage(&ComplexMessage::staticMetaO
 {
 }
 ComplexMessage::ComplexMessage(const ComplexMessage &other) : QProtobufMessage(other),
-m_testComplexField(nullptr)
+    m_testFieldInt(other.m_testFieldInt),
+    m_testComplexField(nullptr)
 {
-    setTestFieldInt(other.m_testFieldInt);
     if (m_testComplexField != other.m_testComplexField) {
         *m_testComplexField = *other.m_testComplexField;
     }

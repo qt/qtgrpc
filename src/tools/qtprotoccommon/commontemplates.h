@@ -120,6 +120,7 @@ public:
     static const char *SemicolonBlockEnclosureTemplate();
     static const char *InitializerMemberTemplate();
     static const char *InitializerMemberMessageTemplate();
+    static const char *CopyInitializerMemberTemplate();
     static const char *EmptyBracesTemplate();
     static const char *DeclareMetaTypeTemplate();
     static const char *DeclareMetaTypeMapTemplate();
