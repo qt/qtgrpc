@@ -18,6 +18,10 @@ class QtProtobufTypesGenerationTest : public QObject
 {
     Q_OBJECT
 private slots:
+    void initTestCase()
+    {
+        qRegisterProtobufTypes();
+    }
     void EmptyMessageTest();
     void BoolMessageTest();
     void IntMessageTest();
