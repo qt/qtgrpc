@@ -16,6 +16,8 @@ qt_internal_add_module(Grpc
         qgrpcuserpasswordcredentials.h qgrpcuserpasswordcredentials.cpp
         qtgrpcglobal.h qtgrpcglobal_p.h  qtgrpcglobal.cpp
     GENERATE_CPP_EXPORTS
+    LIBRARIES
+        Qt6::CorePrivate
     PUBLIC_LIBRARIES
         Qt6::Core
         Qt6::Protobuf

@@ -21,8 +21,7 @@ protected:
 
 private:
     Q_DISABLE_COPY_MOVE(QAbstractGrpcService)
-
-    std::unique_ptr<QAbstractGrpcServicePrivate> dPtr;
+    Q_DECLARE_PRIVATE(QAbstractGrpcService)
 };
 
 QT_END_NAMESPACE

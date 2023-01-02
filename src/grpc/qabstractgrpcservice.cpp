@@ -4,6 +4,8 @@
 #include "qabstractgrpcservice.h"
 #include <qtgrpcglobal_p.h>
 
+#include <private/qobject_p.h>
+
 QT_BEGIN_NAMESPACE
 
 /*!
@@ -15,14 +17,15 @@ QT_BEGIN_NAMESPACE
     generated out of protobuf services.
 */
 
-class QAbstractGrpcServicePrivate final
+class QAbstractGrpcServicePrivate : public QObjectPrivate
 {
+    Q_DECLARE_PUBLIC(QAbstractGrpcService)
 public:
     QAbstractGrpcServicePrivate() = default;
 };
 
 QAbstractGrpcService::QAbstractGrpcService(QObject *parent)
-    : QObject(parent), dPtr(std::make_unique<QAbstractGrpcServicePrivate>())
+    : QObject(*new QAbstractGrpcServicePrivate, parent)
 {
 }
 
