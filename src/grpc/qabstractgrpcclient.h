@@ -154,8 +154,7 @@ private:
             const QAbstractProtobufSerializer::DeserializationError &err) const;
 
     Q_DISABLE_COPY_MOVE(QAbstractGrpcClient)
-
-    std::unique_ptr<QAbstractGrpcClientPrivate> dPtr;
+    Q_DECLARE_PRIVATE(QAbstractGrpcClient)
 };
 
 QT_END_NAMESPACE
