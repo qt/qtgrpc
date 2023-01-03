@@ -29,8 +29,7 @@ public:
                              QByteArray &ret) = 0;
     virtual void call(const QString &method, const QString &service, const QByteArray &args,
                       QGrpcCallReply *ret) = 0;
-    virtual void stream(QGrpcStream *stream, const QString &service,
-                        QAbstractGrpcClient *client) = 0;
+    virtual void stream(QGrpcStream *stream, const QString &service) = 0;
     virtual std::shared_ptr<QAbstractProtobufSerializer> serializer() const = 0;
 
     const QThread *thread() const;
