@@ -14,8 +14,8 @@ project(QtGrpc
 find_package(Qt6 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS BuildInternals Core)
 find_package(Qt6 ${PROJECT_VERSION} CONFIG OPTIONAL_COMPONENTS Network)
 
-include("${CMAKE_CURRENT_LIST_DIR}/cmake/QtProtobufBuildInternals.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/src/tools/qtprotobufgen/Qt6ProtobufToolsMacros.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/src/tools/qtgrpcgen/Qt6GrpcToolsMacros.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/src/protobuf/Qt6ProtobufBuildInternals.cmake")
 
 qt_build_repo()
