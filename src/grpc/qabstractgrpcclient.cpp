@@ -173,7 +173,7 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(const QString &method,
                                        reply.reset();
                                    });
 
-        *finishedConnection = connect(reply.get(), &QGrpcCallReply::finished,
+        *finishedConnection = connect(reply.get(), &QGrpcCallReply::finished, this,
                                       [this, reply, errorConnection, finishedConnection]() mutable {
                                           // The usage of 'QObject::disconnect' requires the
                                           // compiler to capture 'this', but some compilers
