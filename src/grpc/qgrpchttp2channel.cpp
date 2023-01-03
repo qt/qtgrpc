@@ -130,7 +130,7 @@ struct QGrpcHttp2ChannelPrivate
 
         QNetworkReply *networkReply = nm.post(request, msg);
 #if QT_CONFIG(ssl)
-        QObject::connect(networkReply, &QNetworkReply::sslErrors,
+        QObject::connect(networkReply, &QNetworkReply::sslErrors, networkReply,
                          [networkReply](const QList<QSslError> &errors) {
                              qGrpcCritical() << errors;
                              // TODO: filter out noncritical SSL handshake errors
