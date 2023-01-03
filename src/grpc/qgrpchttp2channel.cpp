@@ -275,8 +275,7 @@ void QGrpcHttp2Channel::call(const QString &method, const QString &service, cons
                                         });
 }
 
-void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
-                               QAbstractGrpcClient *client)
+void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service)
 {
     Q_ASSERT(grpcStream != nullptr);
     QNetworkReply *networkReply = dPtr->post(grpcStream->method(), service, grpcStream->arg(),
@@ -340,21 +339,10 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
                 }
             });
 
-    QObject::connect(client, &QAbstractGrpcClient::destroyed, networkReply,
-                     [networkReply, finishConnection, abortConnection, readConnection, this] {
-                         QObject::disconnect(*readConnection);
-                         QObject::disconnect(*abortConnection);
-                         QObject::disconnect(*finishConnection);
-
-                         dPtr->activeStreamReplies.erase(networkReply);
-                         QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
-                         networkReply->deleteLater();
-                     });
-
     *finishConnection = QObject::connect(
             networkReply, &QNetworkReply::finished, grpcStream,
             [grpcStream, service, networkReply, abortConnection, readConnection, finishConnection,
-             client, this]() {
+             this]() {
                 const QString errorString = networkReply->errorString();
                 const QNetworkReply::NetworkError networkError = networkReply->error();
                 QObject::disconnect(*readConnection);
@@ -368,7 +356,7 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, const QString &service,
                 switch (networkError) {
                 case QNetworkReply::RemoteHostClosedError:
                     qGrpcDebug() << "Remote server closed connection. Reconnect silently.";
-                    stream(grpcStream, service, client);
+                    stream(grpcStream, service);
                     break;
                 case QNetworkReply::NoError: {
                     // Reply is closed without network error, but may contain an unhandled data

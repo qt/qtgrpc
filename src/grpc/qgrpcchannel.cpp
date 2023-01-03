@@ -252,8 +252,7 @@ QGrpcStatus QGrpcChannelPrivate::call(const QString &method, const QString &serv
     return call.status;
 }
 
-void QGrpcChannelPrivate::stream(QGrpcStream *stream, const QString &service,
-                                 QAbstractGrpcClient *client)
+void QGrpcChannelPrivate::stream(QGrpcStream *stream, const QString &service)
 {
     Q_ASSERT(stream != nullptr);
 
@@ -265,15 +264,12 @@ void QGrpcChannelPrivate::stream(QGrpcStream *stream, const QString &service,
 
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
     auto readConnection = std::make_shared<QMetaObject::Connection>();
-    auto clientConnection = std::make_shared<QMetaObject::Connection>();
     auto connection = std::make_shared<QMetaObject::Connection>();
 
-    auto disconnectAllConnections = [abortConnection, readConnection, clientConnection,
-                                     connection]() {
+    auto disconnectAllConnections = [abortConnection, readConnection, connection]() {
         QObject::disconnect(*connection);
         QObject::disconnect(*readConnection);
         QObject::disconnect(*abortConnection);
-        QObject::disconnect(*clientConnection);
     };
 
     *readConnection = QObject::connect(sub.get(), &QGrpcChannelStream::dataReady, stream,
@@ -298,13 +294,6 @@ void QGrpcChannelPrivate::stream(QGrpcStream *stream, const QString &service,
                                             disconnectAllConnections();
                                             sub->cancel();
                                         });
-
-    *clientConnection = QObject::connect(client, &QAbstractGrpcClient::destroyed, sub.get(),
-                                         [disconnectAllConnections, sub] {
-                                             qGrpcDebug() << "Grpc client was destroyed";
-                                             disconnectAllConnections();
-                                             sub->cancel();
-                                         });
 
     sub->start();
 }
@@ -339,9 +328,9 @@ void QGrpcChannel::call(const QString &method, const QString &service, const QBy
     dPtr->call(method, service, args, reply);
 }
 
-void QGrpcChannel::stream(QGrpcStream *stream, const QString &service, QAbstractGrpcClient *client)
+void QGrpcChannel::stream(QGrpcStream *stream, const QString &service)
 {
-    dPtr->stream(stream, service, client);
+    dPtr->stream(stream, service);
 }
 
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcChannel::serializer() const

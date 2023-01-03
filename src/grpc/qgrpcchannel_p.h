@@ -99,7 +99,7 @@ struct QGrpcChannelPrivate
               QGrpcCallReply *reply);
     QGrpcStatus call(const QString &method, const QString &service, const QByteArray &args,
                      QByteArray &ret);
-    void stream(QGrpcStream *stream, const QString &service, QAbstractGrpcClient *client);
+    void stream(QGrpcStream *stream, const QString &service);
 };
 
 QT_END_NAMESPACE

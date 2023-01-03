@@ -35,7 +35,7 @@ public:
                      QByteArray &ret) override;
     void call(const QString &method, const QString &service, const QByteArray &args,
               QGrpcCallReply *reply) override;
-    void stream(QGrpcStream *stream, const QString &service, QAbstractGrpcClient *client) override;
+    void stream(QGrpcStream *stream, const QString &service) override;
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const override;
 
 private:
