@@ -71,6 +71,11 @@ static std::string toStdString(QLatin1StringView view)
     return std::string(view.data(), view.size());
 }
 
+static QByteArray buildRpcName(QLatin1StringView service, QLatin1StringView method)
+{
+    return '/' % QByteArrayView(service) % '/' % QByteArrayView(method);
+}
+
 QGrpcChannelStream::QGrpcChannelStream(grpc::Channel *channel, QLatin1StringView method,
                                        QByteArrayView data, QObject *parent)
     : QObject(parent)
@@ -210,7 +215,7 @@ QGrpcChannelPrivate::~QGrpcChannelPrivate() = default;
 void QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView service,
                                QByteArrayView args, QGrpcCallReply *reply)
 {
-    const QByteArray rpcName("/%1/%2"_L1.arg(service, method).toLatin1());
+    const QByteArray rpcName = buildRpcName(service, method);
     QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(m_channel.get(),
                                                                QLatin1StringView(rpcName), args,
                                                                reply),
@@ -247,7 +252,7 @@ void QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView servi
 QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView service,
                                       QByteArrayView args, QByteArray &ret)
 {
-    const QByteArray rpcName("/%1/%2"_L1.arg(service, method).toLatin1());
+    const QByteArray rpcName = buildRpcName(service, method);
     QGrpcChannelCall call(m_channel.get(), QLatin1StringView(rpcName), args);
 
     call.start();
@@ -260,8 +265,7 @@ QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringVie
 void QGrpcChannelPrivate::stream(QGrpcStream *stream, QLatin1StringView service)
 {
     Q_ASSERT(stream != nullptr);
-
-    const QByteArray rpcName("/%1/%2"_L1.arg(service, stream->method()).toLatin1());
+    const QByteArray rpcName = buildRpcName(service, stream->method());
 
     QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(),
                                                                   QLatin1StringView(rpcName),
