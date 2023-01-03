@@ -13,6 +13,8 @@ qt_internal_add_module(Protobuf
         qtprotobuflogging.cpp qtprotobuflogging_p.h
         qtprotobuftypes.cpp qtprotobuftypes.h
     GENERATE_CPP_EXPORTS
+    EXTRA_CMAKE_FILES
+        "${CMAKE_CURRENT_SOURCE_DIR}/QtProtobufProperties.cmake.in"
     PUBLIC_LIBRARIES
         Qt::Core
     LIBRARIES
