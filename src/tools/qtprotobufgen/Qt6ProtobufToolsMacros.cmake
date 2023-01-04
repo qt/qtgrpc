@@ -76,7 +76,13 @@ function(_qt_internal_protoc_generate target generator output_directory)
     endif()
 
     get_filename_component(output_directory "${output_directory}" REALPATH)
-    file(MAKE_DIRECTORY ${output_directory})
+    get_target_property(is_generator_imported ${QT_CMAKE_EXPORT_NAMESPACE}::${generator} IMPORTED)
+    if(QT_INTERNAL_AVOID_USING_PROTOBUF_TMP_OUTPUT_DIR OR is_generator_imported)
+        set(tmp_output_directory "${output_directory}")
+    else()
+        set(tmp_output_directory "${output_directory}/.tmp")
+    endif()
+    file(MAKE_DIRECTORY ${tmp_output_directory})
 
     unset(num_deps)
     if(TARGET ${target})
@@ -99,11 +105,29 @@ function(_qt_internal_protoc_generate target generator output_directory)
     list(JOIN generation_options "\\\\$<SEMICOLON>" generation_options_string)
     string(JOIN "\\$<SEMICOLON>" protoc_arguments
         "--plugin=protoc-gen-${generator}=${generator_file}"
-        "--${generator}_out=${output_directory}"
+        "--${generator}_out=${tmp_output_directory}"
         "--${generator}_opt=${generation_options_string}"
         "${proto_files_string}"
         "${proto_includes_string}"
     )
+
+    unset(extra_copy_commands)
+    if(NOT tmp_output_directory STREQUAL output_directory)
+        foreach(f IN LISTS generated_files)
+            get_filename_component(filename "${f}" NAME)
+            if(IS_ABSOLUTE "${f}")
+                file(RELATIVE_PATH f_rel "${output_directory}" "${f}")
+            else()
+                message(AUTHOR_WARNING
+                    "Path to the generated file ${f} should be absolute, when \
+                    calling _qt_internal_protoc_generate"
+                )
+            endif()
+            list(APPEND extra_copy_commands COMMAND
+                ${CMAKE_COMMAND} -E copy_if_different "${tmp_output_directory}/${f_rel}" "${f}")
+        endforeach()
+    endif()
+
     add_custom_command(OUTPUT ${generated_files}
         COMMAND ${CMAKE_COMMAND}
             -DPROTOC_EXECUTABLE=$<TARGET_FILE:WrapProtoc::WrapProtoc>
@@ -112,6 +136,7 @@ function(_qt_internal_protoc_generate target generator output_directory)
             -DGENERATOR_NAME=${generator}
             -P
             ${__qt_protobuf_macros_module_base_dir}/QtProtocCommandWrapper.cmake
+        ${extra_copy_commands}
         WORKING_DIRECTORY ${output_directory}
         DEPENDS
             ${QT_CMAKE_EXPORT_NAMESPACE}::${generator}
