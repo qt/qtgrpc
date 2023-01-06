@@ -17,11 +17,11 @@ qt_internal_add_module(Grpc
         qtgrpcglobal.h qtgrpcglobal_p.h  qtgrpcglobal.cpp
     GENERATE_CPP_EXPORTS
     LIBRARIES
-        Qt6::CorePrivate
+        Qt::CorePrivate
     PUBLIC_LIBRARIES
-        Qt6::Core
-        Qt6::Protobuf
-        Qt6::Network
+        Qt::Core
+        Qt::Protobuf
+        Qt::Network
 )
 
 qt_internal_extend_target(Grpc CONDITION QT_FEATURE_ssl
