@@ -32,9 +32,12 @@ depends += qtdoc qtcore qtcmake
 {headerdirs,sourcedirs} += ..
 sourcedirs += ../../tools/doc/src
 
+url.examples = "https://code.qt.io/cgit/qt/qtgrpc.git/tree/examples/\1?h=$QT_VER"
+
 exampledirs +=  ../../../examples/protobuf
 
-imagedirs   += images
+imagedirs   += images \
+    ../../../examples/protobuf/sensors/doc/images
 
 navigation.landingpage = "Qt Protobuf"
 navigation.cppclassespage = "Qt Protobuf C++ Classes"
