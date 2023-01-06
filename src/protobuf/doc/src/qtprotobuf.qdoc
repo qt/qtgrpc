@@ -21,6 +21,12 @@
     \list
         \l {Qt Protobuf C++ Classes}{C++ Classes}
     \endlist
+
+    \section1 Examples
+
+    \list
+        \li \l {Qt Protobuf Examples}
+    \endlist
 */
 
 /*!
@@ -31,4 +37,15 @@
     \qtvariable protobuf
     \since 6.5
     \brief Provides protocol buffers support in Qt.
+*/
+
+/*!
+    \group qtprotobuf-examples
+    \ingroup all-examples
+    \keyword Qt Protobuf Examples
+    \title Qt Protobuf Examples
+    \brief A collection of examples for \l {Qt Protobuf}
+
+    These examples demonstrate how to generate code using the protobuf schema
+    and use it in your projects.
 */
