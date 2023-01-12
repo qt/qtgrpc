@@ -27,12 +27,12 @@ function(qt_internal_add_protobuf_module target)
     set(single_args ${module_single_args} ${protobuf_module_single_args})
     set(multi_args ${module_multi_args} ${protobuf_module_multi_args})
 
-    qt_parse_all_arguments(arg "qt_internal_add_protobuf_module"
+    cmake_parse_arguments(PARSE_ARGV 1 arg
         "${option_args}"
         "${single_args}"
         "${multi_args}"
-        ${ARGN}
     )
+    _qt_internal_validate_all_args_are_parsed(arg)
 
     qt_remove_args(module_args
         ARGS_TO_REMOVE
