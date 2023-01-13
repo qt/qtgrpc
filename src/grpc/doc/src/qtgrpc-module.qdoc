@@ -10,3 +10,14 @@
 
     \brief The Qt GRPC module provides support for communicating with gRPC services.
 */
+
+/*!
+    \group qtgrpc-examples
+    \ingroup all-examples
+    \keyword Qt GRPC Examples
+    \title Qt GRPC Examples
+    \brief A collection of examples for \l {Qt GRPC C++ Classes}
+
+    These examples demonstrate how to generate code using the protobuf and gRPC schemas,
+    and use it in your projects.
+*/

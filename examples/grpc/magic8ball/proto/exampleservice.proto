@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package qtgrpc.examples;
+
+message AnswerRequest {
+  string message = 1;
+}
+
+message AnswerResponse {
+  string message = 1;
+}
+
+service ExampleService {
+  rpc answerMethod(AnswerRequest) returns (AnswerResponse) {}
+}
