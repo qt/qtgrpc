@@ -5,4 +5,7 @@ qt_examples_build_begin(EXTERNAL_BUILD)
 
 add_subdirectory(protobuf)
 
+if(TARGET Qt6::Grpc)
+    add_subdirectory(grpc)
+endif()
 qt_examples_build_end()
