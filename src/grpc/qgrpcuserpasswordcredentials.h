@@ -10,7 +10,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class QGrpcUserPasswordCredentials final : public QGrpcCallCredentials
+class Q_GRPC_EXPORT QGrpcUserPasswordCredentials final : public QGrpcCallCredentials
 {
 public:
     explicit QGrpcUserPasswordCredentials(const QString &userName, const QString &password);
