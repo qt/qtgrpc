@@ -33,8 +33,8 @@ public:
 
     QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
                      QByteArray &ret) override;
-    void call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-              QGrpcCallReply *reply) override;
+    std::shared_ptr<QGrpcCallReply> call(QAbstractGrpcClient *client, QLatin1StringView method,
+                                         QLatin1StringView service, QByteArrayView args) override;
     void stream(QGrpcStream *stream, QLatin1StringView service) override;
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const override;
 

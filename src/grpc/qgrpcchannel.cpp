@@ -212,18 +212,22 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QUrl &url,
 
 QGrpcChannelPrivate::~QGrpcChannelPrivate() = default;
 
-void QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView service,
-                               QByteArrayView args, QGrpcCallReply *reply)
+std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(QAbstractGrpcClient *client,
+                                                          QLatin1StringView method,
+                                                          QLatin1StringView service,
+                                                          QByteArrayView args)
 {
     const QByteArray rpcName = buildRpcName(service, method);
+    std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(client),
+                                          [](QGrpcCallReply *reply) { reply->deleteLater(); });
     QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(m_channel.get(),
                                                                QLatin1StringView(rpcName), args,
-                                                               reply),
+                                                               reply.get()),
                                           &QGrpcChannelCall::deleteLater);
     auto connection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
 
-    *connection = QObject::connect(call.get(), &QGrpcChannelCall::finished, reply,
+    *connection = QObject::connect(call.get(), &QGrpcChannelCall::finished, reply.get(),
                                    [call, reply, connection, abortConnection] {
                                        if (call->status.code() == QGrpcStatus::Ok) {
                                            reply->setData(call->response);
@@ -237,7 +241,7 @@ void QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView servi
                                        QObject::disconnect(*abortConnection);
                                    });
 
-    *abortConnection = QObject::connect(reply, &QGrpcCallReply::errorOccurred, call.get(),
+    *abortConnection = QObject::connect(reply.get(), &QGrpcCallReply::errorOccurred, call.get(),
                                         [call, connection,
                                          abortConnection](const QGrpcStatus &status) {
                                             if (status.code() == QGrpcStatus::Aborted) {
@@ -245,8 +249,8 @@ void QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView servi
                                                 QObject::disconnect(*abortConnection);
                                             }
                                         });
-
     call->start();
+    return reply;
 }
 
 QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView service,
@@ -320,7 +324,7 @@ QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credent
 }
 
 QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credentialsType)
-    : QGrpcChannel(url, credentialsType, QStringList())
+    : QGrpcChannel(std::move(url), credentialsType, QStringList())
 {
 }
 
@@ -332,10 +336,11 @@ QGrpcStatus QGrpcChannel::call(QLatin1StringView method, QLatin1StringView servi
     return dPtr->call(method, service, args, ret);
 }
 
-void QGrpcChannel::call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-                        QGrpcCallReply *reply)
+std::shared_ptr<QGrpcCallReply> QGrpcChannel::call(QAbstractGrpcClient *client,
+                                                   QLatin1StringView method,
+                                                   QLatin1StringView service, QByteArrayView args)
 {
-    dPtr->call(method, service, args, reply);
+    return dPtr->call(client, method, service, args);
 }
 
 void QGrpcChannel::stream(QGrpcStream *stream, QLatin1StringView service)

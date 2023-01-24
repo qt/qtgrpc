@@ -95,8 +95,8 @@ struct QGrpcChannelPrivate
                                  const QStringList &credentialsList);
     ~QGrpcChannelPrivate();
 
-    void call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-              QGrpcCallReply *reply);
+    std::shared_ptr<QGrpcCallReply> call(QAbstractGrpcClient *client, QLatin1StringView method,
+                                         QLatin1StringView service, QByteArrayView args);
     QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
                      QByteArray &ret);
     void stream(QGrpcStream *stream, QLatin1StringView service);

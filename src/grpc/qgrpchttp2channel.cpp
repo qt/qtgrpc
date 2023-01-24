@@ -234,17 +234,21 @@ QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView 
     return { grpcStatus, QString::fromUtf8(networkReply->rawHeader(GrpcStatusMessageHeader)) };
 }
 
-void QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView service,
-                             QByteArrayView args, QGrpcCallReply *reply)
+std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QAbstractGrpcClient *client,
+                                                        QLatin1StringView method,
+                                                        QLatin1StringView service,
+                                                        QByteArrayView args)
 {
-    Q_ASSERT(reply != nullptr);
+    std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(client),
+                                          [](QGrpcCallReply *reply) { reply->deleteLater(); });
+
     QNetworkReply *networkReply = dPtr->post(method, service, args);
 
     auto connection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
 
     *connection = QObject::connect(
-            networkReply, &QNetworkReply::finished, reply,
+            networkReply, &QNetworkReply::finished, reply.get(),
             [reply, networkReply, connection, abortConnection] {
                 QGrpcStatus::StatusCode grpcStatus = QGrpcStatus::StatusCode::Unknown;
                 QByteArray data = QGrpcHttp2ChannelPrivate::processReply(networkReply, grpcStatus);
@@ -264,7 +268,7 @@ void QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView service
                 networkReply->deleteLater();
             });
 
-    *abortConnection = QObject::connect(reply, &QGrpcCallReply::errorOccurred, networkReply,
+    *abortConnection = QObject::connect(reply.get(), &QGrpcCallReply::errorOccurred, networkReply,
                                         [networkReply, connection,
                                          abortConnection](const QGrpcStatus &status) {
                                             if (status.code() == QGrpcStatus::Aborted) {
@@ -274,6 +278,7 @@ void QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView service
                                                 networkReply->deleteLater();
                                             }
                                         });
+    return reply;
 }
 
 void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, QLatin1StringView service)

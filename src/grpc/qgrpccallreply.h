@@ -16,6 +16,9 @@ class Q_GRPC_EXPORT QGrpcCallReply final : public QGrpcOperation
     Q_OBJECT
 
 public:
+    explicit QGrpcCallReply(QAbstractGrpcClient *parent);
+    ~QGrpcCallReply() override;
+
     void abort() override;
 
     template<typename Func1, typename Func2>
@@ -36,15 +39,8 @@ public:
                          std::forward<Func1>(finishCallback), type);
     }
 
-protected:
-    explicit QGrpcCallReply(QAbstractGrpcClient *parent);
-    ~QGrpcCallReply() override;
-
 private:
-    QGrpcCallReply();
     Q_DISABLE_COPY_MOVE(QGrpcCallReply)
-
-    friend class QAbstractGrpcClient;
 };
 
 QT_END_NAMESPACE
