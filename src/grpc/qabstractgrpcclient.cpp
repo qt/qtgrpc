@@ -167,31 +167,11 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
     Q_D(QAbstractGrpcClient);
 
     if (d->channel) {
-        reply.reset(new QGrpcCallReply(this), [](QGrpcCallReply *reply) { reply->deleteLater(); });
+        reply = d->channel->call(this, method, QLatin1StringView(d->service), arg);
 
         auto errorConnection = std::make_shared<QMetaObject::Connection>();
-        auto finishedConnection = std::make_shared<QMetaObject::Connection>();
         *errorConnection = connect(reply.get(), &QGrpcCallReply::errorOccurred, this,
-                                   [this, reply, errorConnection,
-                                    finishedConnection](const QGrpcStatus &status) mutable {
-                                       errorOccurred(status);
-                                       QObject::disconnect(*finishedConnection);
-                                       QObject::disconnect(*errorConnection);
-                                       reply.reset();
-                                   });
-
-        *finishedConnection = connect(reply.get(), &QGrpcCallReply::finished, this,
-                                      [this, reply, errorConnection, finishedConnection]() mutable {
-                                          // The usage of 'QObject::disconnect' requires the
-                                          // compiler to capture 'this', but some compilers
-                                          // think that 'this' is unused. That's why we use
-                                          // explicit call to disconnect().
-                                          this->disconnect(*finishedConnection);
-                                          this->disconnect(*errorConnection);
-                                          reply.reset();
-                                      });
-
-        d->channel->call(method, QLatin1StringView(d->service), arg, reply.get());
+                                   [this](const QGrpcStatus &status) { errorOccurred(status); });
     } else {
         errorOccurred({ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
     }

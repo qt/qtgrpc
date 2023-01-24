@@ -40,10 +40,7 @@ protected:
     ~QGrpcOperation() override;
 
 private:
-    QGrpcOperation();
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
-
-    friend class QAbstractGrpcClient;
 
     QByteArray m_data;
 };
