@@ -5,7 +5,6 @@
 #ifndef QGRPCCALLREPLY_H
 #define QGRPCCALLREPLY_H
 
-#include <QtCore/QMutex>
 #include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
