@@ -21,7 +21,7 @@ QT_BEGIN_NAMESPACE
 
 namespace QtProtobufPrivate {
 class QProtobufSelfcheckIterator;
-} // QtProtobufPrivate
+} // namespace QtProtobufPrivate
 
 class QProtobufSerializerPrivate;
 class Q_PROTOBUF_EXPORT QProtobufSerializer : public QAbstractProtobufSerializer
@@ -34,25 +34,48 @@ public:
     QProtobufSerializer::DeserializationError deserializationError() const override;
     QString deserializationErrorString() const override;
 
-    QByteArray serializeMessage(const QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const override;
-    bool deserializeMessage(QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QByteArrayView data) const override;
+    QByteArray
+    serializeMessage(const QProtobufMessage *message,
+                     const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const override;
+    bool deserializeMessage(QProtobufMessage *message,
+                            const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                            QByteArrayView data) const override;
 
-    QByteArray serializeObject(const QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
-    bool deserializeObject(QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
+    QByteArray
+    serializeObject(const QProtobufMessage *message,
+                    const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                    const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
+    bool deserializeObject(QProtobufMessage *message,
+                           const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                           QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
 
-    QByteArray serializeListObject(const QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
-    bool deserializeListObject(QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
+    QByteArray
+    serializeListObject(const QProtobufMessage *message,
+                        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
+    bool deserializeListObject(QProtobufMessage *message,
+                               const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                               QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
 
-    QByteArray serializeMapPair(const QVariant &key, const QVariant &value, const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
-    bool deserializeMapPair(QVariant &key, QVariant &value, QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
+    QByteArray
+    serializeMapPair(const QVariant &key, const QVariant &value,
+                     const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
+    bool deserializeMapPair(QVariant &key, QVariant &value,
+                            QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
 
-    QByteArray serializeEnum(QtProtobuf::int64 value, const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
-    QByteArray serializeEnumList(const QList<QtProtobuf::int64> &value, const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
+    QByteArray
+    serializeEnum(QtProtobuf::int64 value,
+                  const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
+    QByteArray
+    serializeEnumList(const QList<QtProtobuf::int64> &value,
+                      const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
 
     Q_REQUIRED_RESULT
-    bool deserializeEnum(QtProtobuf::int64 &value, QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
+    bool deserializeEnum(QtProtobuf::int64 &value,
+                         QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
     Q_REQUIRED_RESULT
-    bool deserializeEnumList(QList<QtProtobuf::int64> &value, QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
+    bool deserializeEnumList(QList<QtProtobuf::int64> &value,
+                             QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
 
 private:
     std::unique_ptr<QProtobufSerializerPrivate> d_ptr;
@@ -60,8 +83,7 @@ private:
 
 namespace QtProtobufPrivate {
 //! \private
-[[maybe_unused]]
-constexpr int NotUsedFieldIndex = -1;
+[[maybe_unused]] constexpr int NotUsedFieldIndex = -1;
 
 using Serializer = void (*)(const QProtobufSerializer *, const QVariant &,
                             const QProtobufPropertyOrderingInfo &, QByteArray &);
@@ -70,9 +92,11 @@ using Deserializer = void (*)(const QProtobufSerializer *, QProtobufSelfcheckIte
 
 /*!
  \private
- \brief SerializationHandlers contains set of objects that required for class serialization/deserialization
+ \brief SerializationHandlers contains set of objects that required for class
+ serialization/deserialization
  */
-struct SerializationHandler {
+struct SerializationHandler
+{
     Serializer serializer = nullptr; /*!< serializer assigned to class */
     Deserializer deserializer = nullptr; /*!< deserializer assigned to class */
 };
@@ -84,9 +108,11 @@ extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, const Serializatio
  \private
  \brief default serializer template for type T that inherits from QProtobufMessage
  */
-template <typename T,
-          typename std::enable_if_t<std::is_base_of<QProtobufMessage, T>::value, int> = 0>
-void serializeObject(const QProtobufSerializer *serializer, const QVariant &value, const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer) {
+template<typename T,
+         typename std::enable_if_t<std::is_base_of<QProtobufMessage, T>::value, int> = 0>
+void serializeObject(const QProtobufSerializer *serializer, const QVariant &value,
+                     const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     buffer.append(serializer->serializeObject(value.value<T *>(), T::propertyOrdering, fieldInfo));
 }
@@ -97,7 +123,9 @@ void serializeObject(const QProtobufSerializer *serializer, const QVariant &valu
  */
 template<typename V,
          typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void serializeList(const QProtobufSerializer *serializer, const QVariant &listValue, const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer) {
+void serializeList(const QProtobufSerializer *serializer, const QVariant &listValue,
+                   const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     QList<std::shared_ptr<V>> list = listValue.value<QList<std::shared_ptr<V>>>();
 
@@ -115,23 +143,27 @@ void serializeList(const QProtobufSerializer *serializer, const QVariant &listVa
  */
 template<typename K, typename V,
          typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void serializeMap(const QProtobufSerializer *serializer, const QVariant &value, const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer) {
+void serializeMap(const QProtobufSerializer *serializer, const QVariant &value,
+                  const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
-    QHash<K,V> mapValue = value.value<QHash<K,V>>();
+    QHash<K, V> mapValue = value.value<QHash<K, V>>();
     for (auto it = mapValue.constBegin(); it != mapValue.constEnd(); it++) {
         buffer.append(serializer->serializeMapPair(QVariant::fromValue<K>(it.key()),
-                                                   QVariant::fromValue<V>(it.value()),
-                                                   fieldInfo));
+                                                   QVariant::fromValue<V>(it.value()), fieldInfo));
     }
 }
 
 /*!
  \private
- \brief default serializer template for map of type key K, value V. Specialization for V that inherits from QProtobufMessage
+ \brief default serializer template for map of type key K, value V. Specialization for V that
+ inherits from QProtobufMessage
  */
 template<typename K, typename V,
          typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void serializeMap(const QProtobufSerializer *serializer, const QVariant &value, const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer) {
+void serializeMap(const QProtobufSerializer *serializer, const QVariant &value,
+                  const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     QHash<K, std::shared_ptr<V>> mapValue = value.value<QHash<K, std::shared_ptr<V>>>();
     for (auto it = mapValue.constBegin(); it != mapValue.constEnd(); it++) {
@@ -147,9 +179,10 @@ void serializeMap(const QProtobufSerializer *serializer, const QVariant &value, 
  \private
  \brief default serializer template for enum types
  */
-template<typename T,
-         typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void serializeEnum(const QProtobufSerializer *serializer, const QVariant &value, const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer) {
+template<typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
+void serializeEnum(const QProtobufSerializer *serializer, const QVariant &value,
+                   const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     buffer.append(serializer->serializeEnum(QtProtobuf::int64(value.value<T>()), fieldInfo));
 }
@@ -158,9 +191,10 @@ void serializeEnum(const QProtobufSerializer *serializer, const QVariant &value,
  \private
  \brief default serializer template for enum list types
  */
-template<typename T,
-         typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void serializeEnumList(const QProtobufSerializer *serializer, const QVariant &value, const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer) {
+template<typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
+void serializeEnumList(const QProtobufSerializer *serializer, const QVariant &value,
+                       const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     QList<QtProtobuf::int64> intList;
     for (auto enumValue : value.value<QList<T>>()) {
@@ -173,9 +207,11 @@ void serializeEnumList(const QProtobufSerializer *serializer, const QVariant &va
  \private
  \brief default deserializer template for type T that inherits from QProtobufMessage
  */
-template <typename T,
-          typename std::enable_if_t<std::is_base_of<QProtobufMessage, T>::value, int> = 0>
-void deserializeObject(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it, QVariant &to) {
+template<typename T,
+         typename std::enable_if_t<std::is_base_of<QProtobufMessage, T>::value, int> = 0>
+void deserializeObject(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it,
+                       QVariant &to)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     auto value = std::make_unique<T>();
     if (serializer->deserializeObject(value.get(), T::propertyOrdering, it))
@@ -186,9 +222,11 @@ void deserializeObject(const QProtobufSerializer *serializer, QProtobufSelfcheck
  \private
  \brief default deserializer template for list of type T objects that inherits from QProtobufMessage
  */
-template <typename V,
-          typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void deserializeList(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it, QVariant &previous) {
+template<typename V,
+         typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
+void deserializeList(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it,
+                     QVariant &previous)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
 
     auto newValue = std::make_shared<V>();
@@ -204,9 +242,11 @@ void deserializeList(const QProtobufSerializer *serializer, QProtobufSelfcheckIt
  *
  \brief default deserializer template for map of key K, value V
  */
-template <typename K, typename V,
-          typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void deserializeMap(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it, QVariant &previous) {
+template<typename K, typename V,
+         typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
+void deserializeMap(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it,
+                    QVariant &previous)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
 
     QHash<K, V> out = previous.value<QHash<K, V>>();
@@ -225,9 +265,11 @@ void deserializeMap(const QProtobufSerializer *serializer, QProtobufSelfcheckIte
  \brief default deserializer template for map of type key K, value V. Specialization for V
         that inherits from QProtobufMessage
  */
-template <typename K, typename V,
-          typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void deserializeMap(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it, QVariant &previous) {
+template<typename K, typename V,
+         typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
+void deserializeMap(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it,
+                    QVariant &previous)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
 
     auto out = previous.value<QHash<K, std::shared_ptr<V>>>();
@@ -245,9 +287,10 @@ void deserializeMap(const QProtobufSerializer *serializer, QProtobufSelfcheckIte
  *
  \brief default deserializer template for enum type T
  */
-template <typename T,
-          typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void deserializeEnum(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it, QVariant &to) {
+template<typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
+void deserializeEnum(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it,
+                     QVariant &to)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     QtProtobuf::int64 intValue;
     if (serializer->deserializeEnum(intValue, it))
@@ -259,9 +302,10 @@ void deserializeEnum(const QProtobufSerializer *serializer, QProtobufSelfcheckIt
  *
  \brief default deserializer template for enumList type T
  */
-template <typename T,
-          typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void deserializeEnumList(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it, QVariant &previous) {
+template<typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
+void deserializeEnumList(const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it,
+                         QVariant &previous)
+{
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     QList<QtProtobuf::int64> intList;
     if (!serializer->deserializeEnumList(intList, it))
@@ -271,16 +315,19 @@ void deserializeEnumList(const QProtobufSerializer *serializer, QProtobufSelfche
         enumList.append(static_cast<T>(intValue._t));
     previous = QVariant::fromValue<QList<T>>(enumList);
 }
-}// namespace QtProtobufPrivate
+} // namespace QtProtobufPrivate
 
 template<typename T>
-inline void qRegisterProtobufType() {
+inline void qRegisterProtobufType()
+{
     T::registerTypes();
     QtProtobufPrivate::registerOrdering(QMetaType::fromType<T>(), T::propertyOrdering);
-    QtProtobufPrivate::registerHandler(QMetaType::fromType<T *>(), { QtProtobufPrivate::serializeObject<T>,
-            QtProtobufPrivate::deserializeObject<T> });
-    QtProtobufPrivate::registerHandler(QMetaType::fromType<QList<std::shared_ptr<T>>>(), { QtProtobufPrivate::serializeList<T>,
-            QtProtobufPrivate::deserializeList<T> });
+    QtProtobufPrivate::registerHandler(
+            QMetaType::fromType<T *>(),
+            { QtProtobufPrivate::serializeObject<T>, QtProtobufPrivate::deserializeObject<T> });
+    QtProtobufPrivate::registerHandler(
+            QMetaType::fromType<QList<std::shared_ptr<T>>>(),
+            { QtProtobufPrivate::serializeList<T>, QtProtobufPrivate::deserializeList<T> });
 }
 
 #ifdef Q_QDOC
@@ -289,9 +336,11 @@ inline void qRegisterProtobufMapType();
 #else // !Q_QDOC
 template<typename K, typename V,
          typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-inline void qRegisterProtobufMapType() {
-    QtProtobufPrivate::registerHandler(QMetaType::fromType<QHash<K, V>>(), { QtProtobufPrivate::serializeMap<K, V>,
-    QtProtobufPrivate::deserializeMap<K, V> });
+inline void qRegisterProtobufMapType()
+{
+    QtProtobufPrivate::registerHandler(
+            QMetaType::fromType<QHash<K, V>>(),
+            { QtProtobufPrivate::serializeMap<K, V>, QtProtobufPrivate::deserializeMap<K, V> });
 }
 #endif // Q_QDOC
 
@@ -301,23 +350,27 @@ inline void qRegisterProtobufMapType();
 #else // !Q_QDOC
 template<typename K, typename V,
          typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-inline void qRegisterProtobufMapType() {
-    QtProtobufPrivate::registerHandler(QMetaType::fromType<QHash<K, std::shared_ptr<V>>>(), { QtProtobufPrivate::serializeMap<K, V>,
-    QtProtobufPrivate::deserializeMap<K, V> });
+inline void qRegisterProtobufMapType()
+{
+    QtProtobufPrivate::registerHandler(
+            QMetaType::fromType<QHash<K, std::shared_ptr<V>>>(),
+            { QtProtobufPrivate::serializeMap<K, V>, QtProtobufPrivate::deserializeMap<K, V> });
 }
 #endif // Q_QDOC
-
 
 #ifdef Q_QDOC
 template<typename T>
 inline void qRegisterProtobufEnumType();
 #else // !Q_QDOC
 template<typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-inline void qRegisterProtobufEnumType() {
-    QtProtobufPrivate::registerHandler(QMetaType::fromType<T>(), { QtProtobufPrivate::serializeEnum<T>,
-                                                           QtProtobufPrivate::deserializeEnum<T> });
-    QtProtobufPrivate::registerHandler(QMetaType::fromType<QList<T>>(), { QtProtobufPrivate::serializeEnumList<T>,
-                                                           QtProtobufPrivate::deserializeEnumList<T> });
+inline void qRegisterProtobufEnumType()
+{
+    QtProtobufPrivate::registerHandler(
+            QMetaType::fromType<T>(),
+            { QtProtobufPrivate::serializeEnum<T>, QtProtobufPrivate::deserializeEnum<T> });
+    QtProtobufPrivate::registerHandler(
+            QMetaType::fromType<QList<T>>(),
+            { QtProtobufPrivate::serializeEnumList<T>, QtProtobufPrivate::deserializeEnumList<T> });
 }
 #endif // Q_QDOC
 

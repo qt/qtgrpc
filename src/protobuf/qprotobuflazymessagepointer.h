@@ -22,21 +22,19 @@ protected:
     QProtobufLazyMessagePointerBase() = default;
     explicit QProtobufLazyMessagePointerBase(QProtobufMessage *ptr) : m_ptr(ptr) { }
     QProtobufLazyMessagePointerBase(QProtobufLazyMessagePointerBase &&other) noexcept = default;
-    QProtobufLazyMessagePointerBase &operator=(QProtobufLazyMessagePointerBase &&other) noexcept = default;
+    QProtobufLazyMessagePointerBase &
+    operator=(QProtobufLazyMessagePointerBase &&other) noexcept = default;
 
     QProtobufMessage *message() const { return m_ptr; }
     void setMessage(QProtobufMessage *msg) const { m_ptr = msg; }
 
-    ~QProtobufLazyMessagePointerBase()
-    {
-        delete m_ptr;
-    }
+    ~QProtobufLazyMessagePointerBase() { delete m_ptr; }
 
     void swap(QProtobufLazyMessagePointerBase &other) noexcept { qt_ptr_swap(m_ptr, other.m_ptr); }
     explicit operator bool() const noexcept { return message() != nullptr; }
 };
 
-template <typename T>
+template<typename T>
 class QProtobufLazyMessagePointer : private QProtobufLazyMessagePointerBase
 {
     T *messageAsT() const { return static_cast<T *>(message()); }
@@ -52,7 +50,8 @@ public:
     T *operator->() const { return get(); }
     T *get() const
     {
-        if (!*this) setMessage(new T);
+        if (!*this)
+            setMessage(new T);
         return messageAsT();
     }
 

@@ -68,8 +68,7 @@ class QProtobufSerializerPrivate
     // Tests if V is a Varint-compatible integer type.
     // int32 | int64 | uint32 | uint64 | sint32 | sint64
     template<typename V>
-    struct IsInt
-        : std::integral_constant<bool, std::is_integral<V>::value || IsSignedInt<V>::value>
+    struct IsInt : std::integral_constant<bool, std::is_integral<V>::value || IsSignedInt<V>::value>
     {};
 
     // Tests if V is a 32-bit integer without the need for encoding.
@@ -118,14 +117,15 @@ class QProtobufSerializerPrivate
     {};
 
 public:
-
     // Serializer is interface function for serialize method
-    using Serializer = QByteArray(*)(const QVariant &, int &);
+    using Serializer = QByteArray (*)(const QVariant &, int &);
     // Deserializer is interface function for deserialize method
-    using Deserializer = bool(*)(QProtobufSelfcheckIterator &, QVariant &);
+    using Deserializer = bool (*)(QProtobufSelfcheckIterator &, QVariant &);
 
-    // SerializationHandlers contains set of objects that required for class serializaion/deserialization
-    struct ProtobufSerializationHandler {
+    // SerializationHandlers contains set of objects that required for class
+    // serializaion/deserialization
+    struct ProtobufSerializationHandler
+    {
         QMetaType metaType;
         Serializer serializer; // serializer assigned to class
         Deserializer deserializer; // deserializer assigned to class
@@ -134,9 +134,9 @@ public:
 
     explicit QProtobufSerializerPrivate(QProtobufSerializer *q);
     ~QProtobufSerializerPrivate() = default;
-    //###########################################################################
-    //                               Serializers
-    //###########################################################################
+    // ###########################################################################
+    //                                Serializers
+    // ###########################################################################
 
     template<typename V, typename std::enable_if_t<IsUnsignedInt<V>::value, int> = 0>
     static QByteArray serializeVarintCommon(const V &value)
@@ -146,9 +146,9 @@ public:
         QByteArray result;
 
         while (varint != 0) {
-            //Put 7 bits to result buffer and mark as "not last" (0b10000000)
+            // Put 7 bits to result buffer and mark as "not last" (0b10000000)
             result.append((varint & 0b01111111) | 0b10000000);
-            //Divide values to chunks of 7 bits and move to next chunk
+            // Divide values to chunks of 7 bits and move to next chunk
             varint >>= 7;
         }
 
@@ -163,18 +163,19 @@ public:
     /*
      Serialization of fixed-length primitive types
 
-     Natural layout of bits is used: value is encoded in a byte array same way as it is located in memory
+     Natural layout of bits is used: value is encoded in a byte array same way as it is located in
+     memory
 
      value: Value to serialize
      outFieldIndex: Index of the value in parent structure (ignored)
      returns a byte array with 'value' encoded
     */
-    template <typename V,
-              typename std::enable_if_t<std::is_floating_point<V>::value, int> = 0>
-    static QByteArray serializeBasic(const V &value, int &/*outFieldIndex*/) {
+    template<typename V, typename std::enable_if_t<std::is_floating_point<V>::value, int> = 0>
+    static QByteArray serializeBasic(const V &value, int & /*outFieldIndex*/)
+    {
         qProtoDebug() << "value" << value;
 
-        //Reserve required number of bytes
+        // Reserve required number of bytes
         QByteArray result(sizeof(V), Qt::Uninitialized);
         qToUnaligned(qToLittleEndian(value), result.data());
         return result;
@@ -192,7 +193,7 @@ public:
     {
         qProtoDebug() << "value" << value;
 
-        //Reserve required number of bytes
+        // Reserve required number of bytes
         QByteArray result(sizeof(V), Qt::Uninitialized);
         qToUnaligned(qToLittleEndian(value), result.data());
         return result;
@@ -215,7 +216,7 @@ public:
         using UV = std::make_unsigned_t<V>;
         UV uValue = 0;
 
-        //Use ZigZag convertion first and apply unsigned variant next
+        // Use ZigZag convertion first and apply unsigned variant next
         V zigZagValue = (value << 1) ^ (value >> (sizeof(UV) * 8 - 1));
         uValue = static_cast<UV>(zigZagValue);
         return serializeBasic(uValue, outFieldIndex);
@@ -251,9 +252,9 @@ public:
         QByteArray result;
 
         while (varint != 0) {
-            //Put 7 bits to result buffer and mark as "not last" (0b10000000)
+            // Put 7 bits to result buffer and mark as "not last" (0b10000000)
             result.append((varint & 0b01111111) | 0b10000000);
-            //Divide values to chunks of 7 bits and move to next chunk
+            // Divide values to chunks of 7 bits and move to next chunk
             varint >>= 7;
         }
 
@@ -262,22 +263,22 @@ public:
         if (result.size() == 0) {
             outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
         } else {
-            //Mark last chunk as last by clearing last bit
+            // Mark last chunk as last by clearing last bit
             result.data()[result.size() - 1] &= ~0b10000000;
         }
         return result;
     }
 
     //------------------QString and QByteArray types serializers-----------------
-    template <typename V,
-              typename std::enable_if_t<std::is_same<V, QString>::value, int> = 0>
-    static QByteArray serializeBasic(const V &value, int &/*outFieldIndex*/) {
+    template<typename V, typename std::enable_if_t<std::is_same<V, QString>::value, int> = 0>
+    static QByteArray serializeBasic(const V &value, int & /*outFieldIndex*/)
+    {
         return serializeLengthDelimited(value.toUtf8());
     }
 
-    template <typename V,
-              typename std::enable_if_t<std::is_same<V, QByteArray>::value, int> = 0>
-    static QByteArray serializeBasic(const V &value, int &/*outFieldIndex*/) {
+    template<typename V, typename std::enable_if_t<std::is_same<V, QByteArray>::value, int> = 0>
+    static QByteArray serializeBasic(const V &value, int & /*outFieldIndex*/)
+    {
         return serializeLengthDelimited(value);
     }
 
@@ -301,14 +302,14 @@ public:
                 element.append('\0');
             serializedList.append(element);
         }
-        //If internal field type is not LengthDelimited, exact amount of fields to be specified
+        // If internal field type is not LengthDelimited, exact amount of fields to be specified
         serializedList = prependLengthDelimitedSize(serializedList);
         return serializedList;
     }
 
-    template<typename V,
-             typename std::enable_if_t<std::is_same<V, QString>::value, int> = 0>
-    static QByteArray serializeListType(const QStringList &listValue, int &outFieldIndex) {
+    template<typename V, typename std::enable_if_t<std::is_same<V, QString>::value, int> = 0>
+    static QByteArray serializeListType(const QStringList &listValue, int &outFieldIndex)
+    {
         qProtoDebug("listValue.count %" PRIdQSIZETYPE " outFieldIndex %d", listValue.count(),
                     outFieldIndex);
 
@@ -348,9 +349,9 @@ public:
         return serializedList;
     }
 
-    //###########################################################################
-    //                               Deserializers
-    //###########################################################################
+    // ###########################################################################
+    //                                Deserializers
+    // ###########################################################################
     template<typename V, typename std::enable_if_t<IsUnsignedInt<V>::value, int> = 0>
     Q_REQUIRED_RESULT static std::optional<V>
     deserializeVarintCommon(QProtobufSelfcheckIterator &it)
@@ -433,8 +434,8 @@ public:
 
     //-----------------QString and QByteArray types deserializers----------------
     template<typename V, typename std::enable_if_t<std::is_same<QByteArray, V>::value, int> = 0>
-    Q_REQUIRED_RESULT
-    static bool deserializeBasic(QProtobufSelfcheckIterator &it, QVariant &variantValue)
+    Q_REQUIRED_RESULT static bool deserializeBasic(QProtobufSelfcheckIterator &it,
+                                                   QVariant &variantValue)
     {
         std::optional<QByteArray> result = deserializeLengthDelimited(it);
         if (!result) {
@@ -446,8 +447,8 @@ public:
     }
 
     template<typename V, typename std::enable_if_t<std::is_same<QString, V>::value, int> = 0>
-    Q_REQUIRED_RESULT
-    static bool deserializeBasic(QProtobufSelfcheckIterator &it, QVariant &variantValue)
+    Q_REQUIRED_RESULT static bool deserializeBasic(QProtobufSelfcheckIterator &it,
+                                                   QVariant &variantValue)
     {
         std::optional<QByteArray> result = deserializeLengthDelimited(it);
         if (!result) {
@@ -500,9 +501,9 @@ public:
         return false;
     }
 
-    //###########################################################################
-    //                             Common functions
-    //###########################################################################
+    // ###########################################################################
+    //                              Common functions
+    // ###########################################################################
     static std::optional<QByteArray> deserializeLengthDelimited(QProtobufSelfcheckIterator &it)
     {
         if (it.bytesLeft() == 0)
@@ -517,7 +518,7 @@ public:
             return std::nullopt;
         QByteArray result(it.data(), qsizetype(length));
         it += length;
-        return {result};
+        return { result };
     }
 
     static QByteArray serializeLengthDelimited(const QByteArray &data, bool optional = true)
@@ -527,7 +528,7 @@ public:
             return {};
 
         QByteArray result(data);
-        //Varint serialize field size and apply result as starting point
+        // Varint serialize field size and apply result as starting point
         result = prependLengthDelimitedSize(result);
         return result;
     }
@@ -565,9 +566,8 @@ public:
     static void skipVarint(QProtobufSelfcheckIterator &it);
     static void skipLengthDelimited(QProtobufSelfcheckIterator &it);
 
-    QByteArray
-    serializeProperty(const QVariant &propertyValue,
-                      const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo);
+    QByteArray serializeProperty(const QVariant &propertyValue,
+                                 const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo);
     Q_REQUIRED_RESULT
     bool deserializeProperty(QProtobufMessage *message,
                              const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
@@ -581,8 +581,8 @@ public:
     Q_REQUIRED_RESULT
     bool deserializeMapPair(QVariant &key, QVariant &value, QProtobufSelfcheckIterator &it);
 
-    QAbstractProtobufSerializer::DeserializationError deserializationError
-        = QAbstractProtobufSerializer::NoDeserializerError;
+    QAbstractProtobufSerializer::DeserializationError deserializationError =
+            QAbstractProtobufSerializer::NoDeserializerError;
     QString deserializationErrorString;
 
 private:
@@ -590,9 +590,9 @@ private:
     QProtobufSerializer *q_ptr;
 };
 
-//###########################################################################
-//                             Common functions
-//###########################################################################
+// ###########################################################################
+//                              Common functions
+// ###########################################################################
 
 /*!
     Encode a property field index and its type into output bytes.
@@ -638,10 +638,10 @@ inline bool QProtobufSerializerPrivate::decodeHeader(QProtobufSelfcheckIterator 
 
     constexpr int maxFieldIndex = (1 << 29) - 1;
     return fieldIndex <= maxFieldIndex && fieldIndex > 0
-           && (wireType == QtProtobuf::WireTypes::Varint
-               || wireType == QtProtobuf::WireTypes::Fixed64
-               || wireType == QtProtobuf::WireTypes::Fixed32
-               || wireType == QtProtobuf::WireTypes::LengthDelimited);
+            && (wireType == QtProtobuf::WireTypes::Varint
+                || wireType == QtProtobuf::WireTypes::Fixed64
+                || wireType == QtProtobuf::WireTypes::Fixed32
+                || wireType == QtProtobuf::WireTypes::LengthDelimited);
 }
 
 QT_END_NAMESPACE
