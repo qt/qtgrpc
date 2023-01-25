@@ -35,6 +35,7 @@ protected:
     }
 
     static bool isEqual(const QProtobufMessage &lhs, const QProtobufMessage &rhs) noexcept;
+
 private:
     const QMetaObject *metaObject() const;
 

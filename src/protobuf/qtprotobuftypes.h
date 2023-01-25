@@ -27,7 +27,8 @@ enum FieldFlag : uint { NoFlags = 0x0, NonPacked = 0x1 };
 
 struct QProtobufPropertyOrdering
 {
-    const struct Data {
+    const struct Data
+    {
         uint version;
         uint numFields;
         uint fieldNumberOffset;
@@ -43,6 +44,7 @@ struct QProtobufPropertyOrdering
     Q_PROTOBUF_EXPORT uint getFieldFlags(int index) const;
     Q_PROTOBUF_EXPORT int indexOfFieldNumber(int fieldNumber) const;
     inline int fieldCount() const { return int(data->numFields); }
+
 private:
     const uint *uint_data() const;
     const char *char_data() const;
@@ -86,18 +88,16 @@ private:
 template<typename>
 using sfinae = void;
 template<typename T, typename = void>
-[[maybe_unused]]
-static constexpr bool HasProtobufPropertyOrdering = false;
+[[maybe_unused]] static constexpr bool HasProtobufPropertyOrdering = false;
 template<typename T>
-[[maybe_unused]]
-static constexpr bool HasProtobufPropertyOrdering<T, sfinae<decltype(T::propertyOrdering)>> = true;
+[[maybe_unused]] static constexpr bool
+        HasProtobufPropertyOrdering<T, sfinae<decltype(T::propertyOrdering)>> = true;
 } // namespace QtProtobufPrivate
 
 namespace QtProtobuf {
 Q_NAMESPACE_EXPORT(Q_PROTOBUF_EXPORT)
 
-enum class WireTypes
-{
+enum class WireTypes {
     Unknown = -1,
     Varint = 0,
     Fixed64 = 1,
@@ -110,12 +110,17 @@ Q_ENUM_NS(WireTypes)
 
 // The 'tag' template param exists only create a unique type
 template<typename T, typename tag>
-struct TransparentWrapper {
-    TransparentWrapper(T t = T()) : _t(t) {}
+struct TransparentWrapper
+{
+    TransparentWrapper(T t = T()) : _t(t) { }
     T _t;
     operator T &() { return _t; }
     operator T() const { return _t; }
-    TransparentWrapper &operator =(const T &t) { _t = t; return *this; }
+    TransparentWrapper &operator=(const T &t)
+    {
+        _t = t;
+        return *this;
+    }
 
     static T toType(TransparentWrapper t) { return t._t; }
     static TransparentWrapper fromType(T _t) { return TransparentWrapper(_t); }
@@ -154,7 +159,7 @@ using floatList = QList<float>;
 using doubleList = QList<double>;
 using boolList = QList<bool>;
 
-using RegisterFunction = void(*)();
+using RegisterFunction = void (*)();
 // This struct is used for type registrations in generated code
 struct ProtoTypeRegistrar
 {
@@ -192,26 +197,30 @@ bool repeatedValueCompare(const QHash<K, std::shared_ptr<V>> &a,
     return true;
 }
 
-template <typename T>
-struct qMakeUnsignedImpl {
+template<typename T>
+struct qMakeUnsignedImpl
+{
     using type = std::make_unsigned_t<T>;
 };
 template<typename T>
-struct qMakeUnsignedImpl<TransparentWrapper<T, struct fixed_tag>> {
+struct qMakeUnsignedImpl<TransparentWrapper<T, struct fixed_tag>>
+{
     using type = TransparentWrapper<std::make_unsigned_t<T>, fixed_tag>;
 };
 template<>
-struct qMakeUnsignedImpl<int32> {
+struct qMakeUnsignedImpl<int32>
+{
     using type = uint32_t;
 };
 template<>
-struct qMakeUnsignedImpl<int64> {
+struct qMakeUnsignedImpl<int64>
+{
     using type = uint64_t;
 };
-template <typename T>
+template<typename T>
 using qMakeUnsigned = typename qMakeUnsignedImpl<T>::type;
 
-} //namespace QtProtobuf
+} // namespace QtProtobuf
 
 Q_PROTOBUF_EXPORT void qRegisterProtobufTypes();
 
