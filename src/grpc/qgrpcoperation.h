@@ -5,7 +5,6 @@
 #ifndef QGRPCOPERATION_H
 #define QGRPCOPERATION_H
 
-#include <QtCore/QMutex>
 #include <QtCore/QObject>
 #include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qtgrpcglobal.h>
