@@ -24,11 +24,11 @@ using namespace Qt::StringLiterals;
 
 /*!
     \fn template <typename Func1, typename Func2> void subscribe(QObject *receiver,
-    Func1 finishCallback, Func2 errorCallback, Qt::ConnectionType type = Qt::AutoConnection);
+    Func1 &&finishCallback, Func2 &&errorCallback, Qt::ConnectionType type = Qt::AutoConnection);
 
     Convenience function to connect the \a finishCallback and
     \a errorCallback of \a receiver to the QGrpcCallReply::finished and
-    the QGrpcCallReply::erroOccurred signals with the given connection \a type.
+    the QGrpcCallReply::errorOccurred signals with the given connection \a type.
 
     Calling this function is equivalent to the following:
     \code
@@ -39,7 +39,7 @@ using namespace Qt::StringLiterals;
 
 /*!
     \fn template <typename Func1> void subscribe(QObject *receiver,
-    Func1 finishCallback, Qt::ConnectionType type = Qt::AutoConnection);
+    Func1 &&finishCallback, Qt::ConnectionType type = Qt::AutoConnection);
 
     Convenience function to connect the \a finishCallback of \a receiver to
     the QGrpcCallReply::finished signal with given connection \a type.
