@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "qabstractgrpcchannel.h"
+#include "qabstractgrpcchannel_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -15,20 +16,9 @@ QT_BEGIN_NAMESPACE
     You may implement this interface to create own channels for gRPC transport.
 */
 
-struct QAbstractGrpcChannelPrivate
-{
-    QAbstractGrpcChannelPrivate() : thread(QThread::currentThread()) { }
-    const QThread *thread;
-};
-
 QAbstractGrpcChannel::QAbstractGrpcChannel() : dPtr(std::make_unique<QAbstractGrpcChannelPrivate>())
 {
 }
 QAbstractGrpcChannel::~QAbstractGrpcChannel() = default;
-
-const QThread *QAbstractGrpcChannel::thread() const
-{
-    return dPtr->thread;
-}
 
 QT_END_NAMESPACE

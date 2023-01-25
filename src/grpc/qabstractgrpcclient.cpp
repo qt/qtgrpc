@@ -7,6 +7,8 @@
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcstream.h>
 #include <QtProtobuf/qprotobufserializer.h>
+#include <QtGrpc/private/qabstractgrpcchannel_p.h>
+
 #include <qtgrpcglobal_p.h>
 
 #include <private/qobject_p.h>
@@ -115,7 +117,7 @@ QAbstractGrpcClient::~QAbstractGrpcClient() = default;
 */
 void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel)
 {
-    if (channel->thread() != QThread::currentThread()) {
+    if (channel->dPtr->threadId != QThread::currentThreadId()) {
         const QString status = threadSafetyWarning("QAbstractGrpcClient::attachChannel"_L1);
         logError(status);
         errorOccurred({ QGrpcStatus::Unknown, status });

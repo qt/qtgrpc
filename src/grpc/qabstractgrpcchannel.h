@@ -32,9 +32,8 @@ public:
     virtual void stream(QGrpcStream *stream, QLatin1StringView service) = 0;
     virtual std::shared_ptr<QAbstractProtobufSerializer> serializer() const = 0;
 
-    const QThread *thread() const;
-
 protected:
+    friend class QAbstractGrpcClient;
     QAbstractGrpcChannel();
     virtual ~QAbstractGrpcChannel();
 
