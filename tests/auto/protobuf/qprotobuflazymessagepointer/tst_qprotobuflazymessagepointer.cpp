@@ -39,7 +39,8 @@ void tst_QProtobufLazyMessagePointer::ctor()
     TestStruct *obj = new TestStruct;
     QtProtobufPrivate::QProtobufLazyMessagePointer<TestStruct> ptr3(obj);
     QVERIFY(ptr3);
-
+    QtProtobufPrivate::QProtobufLazyMessagePointer<TestStruct> ptr4 = std::move(ptr3);
+    QVERIFY(ptr4);
 }
 
 void tst_QProtobufLazyMessagePointer::reset()

@@ -21,9 +21,15 @@ class QProtobufLazyMessagePointerBase
 protected:
     QProtobufLazyMessagePointerBase() = default;
     explicit QProtobufLazyMessagePointerBase(QProtobufMessage *ptr) : m_ptr(ptr) { }
-    QProtobufLazyMessagePointerBase(QProtobufLazyMessagePointerBase &&other) noexcept = default;
-    QProtobufLazyMessagePointerBase &
-    operator=(QProtobufLazyMessagePointerBase &&other) noexcept = default;
+    QProtobufLazyMessagePointerBase(QProtobufLazyMessagePointerBase &&other) noexcept
+        : m_ptr(std::exchange(other.m_ptr, nullptr))
+    {
+    }
+    QProtobufLazyMessagePointerBase &operator=(QProtobufLazyMessagePointerBase &&other) noexcept
+    {
+        qt_ptr_swap(m_ptr, other.m_ptr);
+        return *this;
+    }
 
     QProtobufMessage *message() const { return m_ptr; }
     void setMessage(QProtobufMessage *msg) const { m_ptr = msg; }
