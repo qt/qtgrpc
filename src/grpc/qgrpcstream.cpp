@@ -18,7 +18,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void messageReceived();
+    \fn void QGrpcStream::messageReceived()
 
     The signal is emitted when the stream receives an updated value from server.
 */

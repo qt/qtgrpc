@@ -25,7 +25,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QGrpcOperation::finished();
+    \fn void QGrpcOperation::finished()
 
     This signal indicates the end of communication for this call.
 
@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QGrpcOperation::errorOccurred(const QGrpcStatus &status);
+    \fn void QGrpcOperation::errorOccurred(const QGrpcStatus &status)
 
     This signal indicates the error occurred during serialization.
 
