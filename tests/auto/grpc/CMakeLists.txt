@@ -1,10 +1,6 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
-if(NOT QT_FEATURE_qtprotobufgen)
-    return()
-endif()
-
 if(NOT QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC)
     set(QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC 300)
 endif()
