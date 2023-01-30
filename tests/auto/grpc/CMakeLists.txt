@@ -5,8 +5,6 @@ if(NOT QT_FEATURE_qtprotobufgen)
     return()
 endif()
 
-include("${PROJECT_SOURCE_DIR}/src/tools/qtprotobufgen/Qt6ProtobufToolsMacros.cmake")
-
 if(NOT QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC)
     set(QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC 300)
 endif()
