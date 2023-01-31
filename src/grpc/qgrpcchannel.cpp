@@ -38,7 +38,7 @@ QT_BEGIN_NAMESPACE
 
     QGrpcChannel accepts the same grpc::ChannelCredentials type that is required
     by native-api grpc::CreateChannel.
-    \sa{https://grpc.github.io/grpc/cpp/classgrpc__impl_1_1_channel_credentials.html}{gRPC ChannelCredentials}.
+    \sa{https://grpc.github.io/grpc/cpp/classgrpc_1_1_channel_credentials.html}{gRPC ChannelCredentials}.
 */
 
 static grpc::Status parseByteBuffer(const grpc::ByteBuffer &buffer, QByteArray &data)
