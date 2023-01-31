@@ -27,7 +27,8 @@
     \module QtProtobuf
     \modulestate Technical Preview
     \title Qt Protobuf C++ Classes
-    \qtcmakepackage protobuf
+    \qtcmakepackage Protobuf
+    \qtvariable protobuf
     \since 6.5
     \brief Provides protocol buffers support in Qt.
 */
