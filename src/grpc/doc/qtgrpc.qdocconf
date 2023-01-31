@@ -35,7 +35,7 @@ exampledirs +=  ../../../examples/grpc
 
 imagedirs   += images
 
-navigation.landingpage = "Qt GRPC Overview"
+navigation.landingpage = "Qt GRPC"
 navigation.cppclassespage = "Qt GRPC C++ Classes"
 navigation.qmltypespage = "Qt GRPC QML Types"
 
