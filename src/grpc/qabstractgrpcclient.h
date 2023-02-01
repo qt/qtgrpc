@@ -73,17 +73,17 @@ protected:
     }
 
     template <typename ParamType>
-    std::shared_ptr<QGrpcStream> stream(QLatin1StringView method, const QProtobufMessage &arg)
+    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, const QProtobufMessage &arg)
     {
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData)
             return {};
-        return stream(method, *argData);
+        return startStream(method, *argData);
     }
 
     template <typename ParamType, typename ReturnType>
-    std::shared_ptr<QGrpcStream> stream(QLatin1StringView method, const QProtobufMessage &arg,
-                                        const QWeakPointer<ReturnType> ret)
+    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, const QProtobufMessage &arg,
+                                             const QWeakPointer<ReturnType> ret)
     {
         using namespace Qt::StringLiterals;
         if (ret.isNull()) {
@@ -97,7 +97,7 @@ protected:
         if (!argData)
             return {};
 
-        return stream(method, *argData, [ret, this](QByteArrayView data) {
+        return startStream(method, *argData, [ret, this](QByteArrayView data) {
             if (auto retVal = ret.lock()) {
                 auto status = tryDeserialize(retVal.get(), data);
                 if (status != QGrpcStatus::Ok) {
@@ -120,8 +120,8 @@ private:
 
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg);
 
-    std::shared_ptr<QGrpcStream> stream(QLatin1StringView method, QByteArrayView arg,
-                                        const StreamHandler &handler = {});
+    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QByteArrayView arg,
+                                             const StreamHandler &handler = {});
 
     template <typename ReturnType>
     QGrpcStatus tryDeserialize(ReturnType *ret, QByteArrayView retData)

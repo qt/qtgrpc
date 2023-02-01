@@ -37,7 +37,7 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 
     QAbstractGrpcClient provides a set of functions for client classes
     generated out of protobuf services.
-    QAbstractGrpcClient enforces thread safety for stream() and call() methods
+    QAbstractGrpcClient enforces thread safety for startStream() and call() methods
     of generated clients.
 */
 
@@ -60,7 +60,7 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 */
 
 /*!
-    \fn template <typename ParamType> QSharedPointer<QGrpcStream> QAbstractGrpcClient::stream(
+    \fn template <typename ParamType> QSharedPointer<QGrpcStream> QAbstractGrpcClient::startStream(
     QLatin1StringView method, const QProtobufMessage &arg);
     \internal
 
@@ -69,7 +69,7 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 */
 
 /*!
-    \fn template <typename ParamType, typename ReturnType> QSharedPointer<QGrpcStream> QAbstractGrpcClient::stream(
+    \fn template <typename ParamType, typename ReturnType> QSharedPointer<QGrpcStream> QAbstractGrpcClient::startStream(
     QLatin1StringView method, const QProtobufMessage &arg, const QWeakPointer<ReturnType> ret);
     \internal
 
@@ -179,9 +179,9 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
     return reply;
 }
 
-std::shared_ptr<QGrpcStream> QAbstractGrpcClient::stream(QLatin1StringView method,
-                                                         QByteArrayView arg,
-                                                         const StreamHandler &handler)
+std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView method,
+                                                              QByteArrayView arg,
+                                                              const StreamHandler &handler)
 {
     std::shared_ptr<QGrpcStream> grpcStream;
 
