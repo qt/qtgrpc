@@ -281,7 +281,7 @@ std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QAbstractGrpcClient *cli
     return reply;
 }
 
-void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, QLatin1StringView service)
+void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView service)
 {
     Q_ASSERT(grpcStream != nullptr);
     QNetworkReply *networkReply = dPtr->post(grpcStream->method(), service, grpcStream->arg(),
@@ -362,7 +362,7 @@ void QGrpcHttp2Channel::stream(QGrpcStream *grpcStream, QLatin1StringView servic
                 switch (networkError) {
                 case QNetworkReply::RemoteHostClosedError:
                     qGrpcDebug() << "Remote server closed connection. Reconnect silently.";
-                    stream(grpcStream, service);
+                    startStream(grpcStream, service);
                     break;
                 case QNetworkReply::NoError: {
                     // Reply is closed without network error, but may contain an unhandled data
