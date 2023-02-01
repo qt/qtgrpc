@@ -229,8 +229,8 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::stream(QLatin1StringView metho
                                            Q_D(QAbstractGrpcClient);
                                            auto stream = weakStream.lock();
                                            if (stream) {
-                                               d->channel->stream(stream.get(),
-                                                                  QLatin1StringView(d->service));
+                                               d->channel->startStream(
+                                                       stream.get(), QLatin1StringView(d->service));
                                            } else {
                                                qGrpcDebug() << "Stream for" << d->service
                                                             << "method" << method
@@ -259,7 +259,7 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::stream(QLatin1StringView metho
                     grpcStream.reset();
                 });
 
-        d->channel->stream(grpcStream.get(), QLatin1StringView(d->service));
+        d->channel->startStream(grpcStream.get(), QLatin1StringView(d->service));
         d->activeStreams.push_back(grpcStream);
     } else {
         errorOccurred({ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });

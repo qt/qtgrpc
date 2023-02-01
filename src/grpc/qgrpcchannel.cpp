@@ -261,7 +261,7 @@ QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringVie
     return call.status;
 }
 
-void QGrpcChannelPrivate::stream(QGrpcStream *stream, QLatin1StringView service)
+void QGrpcChannelPrivate::startStream(QGrpcStream *stream, QLatin1StringView service)
 {
     Q_ASSERT(stream != nullptr);
     const QByteArray rpcName = buildRpcName(service, stream->method());
@@ -336,9 +336,9 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannel::call(QAbstractGrpcClient *client,
     return dPtr->call(client, method, service, args);
 }
 
-void QGrpcChannel::stream(QGrpcStream *stream, QLatin1StringView service)
+void QGrpcChannel::startStream(QGrpcStream *stream, QLatin1StringView service)
 {
-    dPtr->stream(stream, service);
+    dPtr->startStream(stream, service);
 }
 
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcChannel::serializer() const
