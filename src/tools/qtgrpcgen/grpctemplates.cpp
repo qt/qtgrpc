@@ -186,7 +186,7 @@ const char *GrpcTemplates::ClientMethodServerStreamDefinitionTemplate()
     return "std::shared_ptr<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
            "&$param_name$)\n"
            "{\n"
-           "    return stream<$param_type$>(\"$method_name$\"_L1, $param_name$);\n"
+           "    return startStream<$param_type$>(\"$method_name$\"_L1, $param_name$);\n"
            "}\n";
 }
 
@@ -195,7 +195,8 @@ const char *GrpcTemplates::ClientMethodServerStream2DefinitionTemplate()
     return "std::shared_ptr<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
            "&$param_name$, const QWeakPointer<$return_type$> &$return_name$)\n"
            "{\n"
-           "    return stream<$param_type$>(\"$method_name$\"_L1, $param_name$, $return_name$);\n"
+           "    return startStream<$param_type$>(\"$method_name$\"_L1, $param_name$, "
+           "$return_name$);\n"
            "}\n";
 }
 
@@ -215,7 +216,7 @@ const char *GrpcTemplates::ClientMethodServerStreamQmlDefinitionTemplate()
            "*$param_name$, "
            "$return_type$ *$return_name$)\n"
            "{\n"
-           "    return stream<$param_type$>(\"$method_name$\"_L1, *$param_name$, "
+           "    return startStream<$param_type$>(\"$method_name$\"_L1, *$param_name$, "
            "QWeakPointer<$return_type$>($return_name$));\n"
            "}\n";
 }

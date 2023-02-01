@@ -29,11 +29,11 @@ void Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QOb
 }
 std::shared_ptr<QGrpcStream> Client::streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg)
 {
-    return stream<qtgrpc::tests::SimpleStringMessage>("testMethodServerStream"_L1, arg);
+    return startStream<qtgrpc::tests::SimpleStringMessage>("testMethodServerStream"_L1, arg);
 }
 std::shared_ptr<QGrpcStream> Client::streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QWeakPointer<qtgrpc::tests::SimpleStringMessage> &ret)
 {
-    return stream<qtgrpc::tests::SimpleStringMessage>("testMethodServerStream"_L1, arg, ret);
+    return startStream<qtgrpc::tests::SimpleStringMessage>("testMethodServerStream"_L1, arg, ret);
 }
 
 QGrpcStatus Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, qtgrpc::tests::SimpleStringMessage *ret)
@@ -55,11 +55,11 @@ void Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &ar
 }
 std::shared_ptr<QGrpcStream> Client::streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg)
 {
-    return stream<qtgrpc::tests::SimpleStringMessage>("testMethodBiStream"_L1, arg);
+    return startStream<qtgrpc::tests::SimpleStringMessage>("testMethodBiStream"_L1, arg);
 }
 std::shared_ptr<QGrpcStream> Client::streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QWeakPointer<qtgrpc::tests::SimpleStringMessage> &ret)
 {
-    return stream<qtgrpc::tests::SimpleStringMessage>("testMethodBiStream"_L1, arg, ret);
+    return startStream<qtgrpc::tests::SimpleStringMessage>("testMethodBiStream"_L1, arg, ret);
 }
 } // namespace TestService
 } // namespace qtgrpc::tests
