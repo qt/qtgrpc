@@ -220,8 +220,8 @@ QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
 /*!
     Synchronously calls the RPC method and writes the result to the output parameter \a ret.
 
-    The RPC method name is concatenated from the \a method and \a service parameters
-    with the given \a args.
+    The RPC method name is constructed by concatenating the \a method
+    and \a service parameters and called with the \a args argument.
 */
 QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView service,
                                     QByteArrayView args, QByteArray &ret)
@@ -246,8 +246,8 @@ QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView 
 /*!
     Asynchronously calls the RPC method.
 
-    The RPC method name is concatenated from the \a method and \a service parameters
-    with the given \a args.
+    The RPC method name is constructed by concatenating the \a method
+    and \a service parameters and called with the \a args argument.
     The method can emit QGrpcCallReply::finished() and QGrpcCallReply::errorOccurred()
     signals on a QGrpcCallReply returned object.
 */
@@ -299,24 +299,31 @@ std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QAbstractGrpcClient *cli
 }
 
 /*!
-    Starts a stream on \a grpcStream using QGrpcStream::method() and
-    \a service to get the name of the RPC method.
+    Creates and starts a stream to the RPC method.
+
+    The RPC method name is constructed by concatenating the \a method
+    and \a service parameters and called with the \a arg argument.
+    Returns a shared pointer to the QGrpcStream, which was created with the \a client
+    object.
 
     Calls QGrpcStream::handler() when the stream receives data from the server.
     The method may emit QGrpcStream::errorOccurred() when the stream has terminated with an error.
 */
-void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView service)
+std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QAbstractGrpcClient *client,
+                                                            QLatin1StringView method,
+                                                            QLatin1StringView service,
+                                                            QByteArrayView arg)
 {
-    Q_ASSERT(grpcStream != nullptr);
-    QNetworkReply *networkReply = dPtr->post(grpcStream->method(), service, grpcStream->arg(),
-                                             true);
+    QNetworkReply *networkReply = dPtr->post(method, service, arg, true);
 
+    std::shared_ptr<QGrpcStream> grpcStream(new QGrpcStream(method, arg, client));
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
     auto readConnection = std::make_shared<QMetaObject::Connection>();
 
     *readConnection = QObject::connect(
-            networkReply, &QNetworkReply::readyRead, grpcStream, [networkReply, grpcStream, this] {
+            networkReply, &QNetworkReply::readyRead, grpcStream.get(),
+            [networkReply, grpcStream, this] {
                 auto replyIt = dPtr->activeStreamReplies.find(networkReply);
 
                 const QByteArray data = networkReply->readAll();
@@ -369,10 +376,11 @@ void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView s
                 }
             });
 
+    std::weak_ptr<QGrpcStream> weakGrpcStream(grpcStream);
     *finishConnection = QObject::connect(
-            networkReply, &QNetworkReply::finished, grpcStream,
-            [grpcStream, service, networkReply, abortConnection, readConnection, finishConnection,
-             this]() {
+            networkReply, &QNetworkReply::finished, grpcStream.get(),
+            [weakGrpcStream, service, networkReply, abortConnection, readConnection,
+             finishConnection, client, this]() {
                 const QString errorString = networkReply->errorString();
                 const QNetworkReply::NetworkError networkError = networkReply->error();
                 QObject::disconnect(*readConnection);
@@ -381,12 +389,19 @@ void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView s
                 dPtr->activeStreamReplies.erase(networkReply);
                 QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
                 networkReply->deleteLater();
+
+                auto grpcStream = weakGrpcStream.lock();
+                if (!grpcStream) {
+                    qGrpcWarning() << "Could not lock gRPC stream pointer.";
+                    return;
+                }
                 qGrpcWarning() << grpcStream->method() << "call" << service
                                << "stream finished:" << errorString;
                 switch (networkError) {
                 case QNetworkReply::RemoteHostClosedError:
                     qGrpcDebug() << "Remote server closed connection. Reconnect silently.";
-                    startStream(grpcStream, service);
+
+                    this->startStream(client, grpcStream->method(), service, grpcStream->arg());
                     break;
                 case QNetworkReply::NoError: {
                     // Reply is closed without network error, but may contain an unhandled data
@@ -413,7 +428,7 @@ void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView s
             });
 
     *abortConnection = QObject::connect(
-            grpcStream, &QGrpcStream::finished, networkReply,
+            grpcStream.get(), &QGrpcStream::finished, networkReply,
             [networkReply, finishConnection, abortConnection, readConnection] {
                 QObject::disconnect(*finishConnection);
                 QObject::disconnect(*readConnection);
@@ -422,6 +437,8 @@ void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView s
                 QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
                 networkReply->deleteLater();
             });
+
+    return grpcStream;
 }
 
 /*!

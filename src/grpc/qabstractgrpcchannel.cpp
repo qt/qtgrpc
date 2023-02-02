@@ -48,10 +48,17 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual void QAbstractGrpcChannel::startStream(QGrpcStream *stream, QLatin1StringView service) = 0
+    \fn virtual std::shared_ptr<QGrpcStream> QAbstractGrpcChannel::startStream(QAbstractGrpcClient *client,
+                                                     QLatin1StringView method,
+                                                     QLatin1StringView service,
+                                                     QByteArrayView arg) = 0
 
-    This pure virtual function starts a stream on a \a stream using
-    QGrpcStream::method() and the \a service to get the name of the RPC method.
+    This pure virtual function creates and starts a stream to the RPC method.
+
+    The RPC method name is constructed by concatenating the \a method
+    and \a service parameters and called with the \a arg argument.
+    Returns a shared pointer to the QGrpcStream, which was created with the \a client
+    object.
 
     You may reimplement this function in a subclass to define your own stream
     mechanism behavior. QGrpcChannel or QGrpcHttp2Channel, which are full

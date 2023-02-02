@@ -22,28 +22,15 @@ QT_BEGIN_NAMESPACE
     The signal is emitted when the stream receives an updated value from server.
 */
 
-QGrpcStream::QGrpcStream(QLatin1StringView method, QByteArrayView arg, const StreamHandler &handler,
-                         QAbstractGrpcClient *client)
+QGrpcStream::QGrpcStream(QLatin1StringView method, QByteArrayView arg, QAbstractGrpcClient *client)
     : QGrpcOperation(client), m_method(method.data(), method.size()), m_arg(arg.toByteArray())
 {
-    if (handler)
-        m_handlers.push_back(handler);
 }
 
 /*!
     Destroys the QGrpcStream object.
 */
 QGrpcStream::~QGrpcStream() = default;
-
-/*!
-    \internal
-    Adds \a handler to a list of handlers that are invoked on the QGrpcStream::handler() call.
-*/
-void QGrpcStream::addHandler(const StreamHandler &handler)
-{
-    if (handler)
-        m_handlers.push_back(handler);
-}
 
 /*!
     Cancel this stream and try to abort any call active on any channel
@@ -73,8 +60,12 @@ QByteArrayView QGrpcStream::arg() const
     return m_arg;
 }
 
+void QGrpcStream::setHandler(const StreamHandler &handler)
+{
+    m_handler = handler;
+}
 /*!
-    Invokes all handler methods assigned to this stream with \a data.
+    Invokes the handler method assigned to this stream with \a data.
 
     Should be used by QAbstractGrpcChannel implementations,
     to update data in a stream and notify clients about stream updates.
@@ -82,8 +73,8 @@ QByteArrayView QGrpcStream::arg() const
 void QGrpcStream::handler(const QByteArray &data)
 {
     setData(QByteArray(data));
-    for (auto &handler : m_handlers)
-        handler(data);
+    if (m_handler)
+        m_handler(data);
     emit messageReceived();
 }
 

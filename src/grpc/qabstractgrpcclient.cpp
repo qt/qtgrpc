@@ -4,10 +4,10 @@
 
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
+#include <QtGrpc/private/qabstractgrpcchannel_p.h>
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcstream.h>
 #include <QtProtobuf/qprotobufserializer.h>
-#include <QtGrpc/private/qabstractgrpcchannel_p.h>
 
 #include <qtgrpcglobal_p.h>
 
@@ -179,8 +179,7 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
 }
 
 std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView method,
-                                                              QByteArrayView arg,
-                                                              const StreamHandler &handler)
+                                                              QByteArrayView arg)
 {
     std::shared_ptr<QGrpcStream> grpcStream;
 
@@ -194,49 +193,23 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
     Q_D(QAbstractGrpcClient);
 
     if (d->channel) {
-        grpcStream.reset(new QGrpcStream(method, arg, handler, this),
-                         [](QGrpcStream *stream) { stream->deleteLater(); });
-
-        auto it = std::find_if(d->activeStreams.begin(), d->activeStreams.end(),
-                               [grpcStream](const std::shared_ptr<QGrpcStream> &activeStream) {
-                                   return *activeStream == *grpcStream;
-                               });
-
-        if (it != d->activeStreams.end()) {
-            // TODO:
-            // This mechanism is not something that is specified by gRPC standard. From the server
-            // perspective each stream request supposed to create a new connection with own scope.
-            // Caching and reusing streams lead potential security risks, since we cannot
-            // guarantee that the stream sharing is intentional.
-            // This feature should have an explicit switch that controls its usage.
-            (*it)->addHandler(handler);
-            return *it; // If stream already exists return it for handling
-        }
+        grpcStream = d->channel->startStream(this, method, QLatin1StringView(d->service), arg);
 
         auto errorConnection = std::make_shared<QMetaObject::Connection>();
-        *errorConnection = connect(
-                grpcStream.get(), &QGrpcStream::errorOccurred, this,
-                [this, grpcStream](const QGrpcStatus &status) {
-                    Q_D(QAbstractGrpcClient);
-                    qGrpcWarning() << grpcStream->method() << "call" << d->service
-                                   << "stream error: " << status.message();
-                    emit errorOccurred(status);
-                    std::weak_ptr<QGrpcStream> weakStream(grpcStream);
-                    // TODO: Make timeout configurable from channel settings
-                    QTimer::singleShot(1000, this,
-                                       [this, weakStream, method = grpcStream->method()] {
-                                           Q_D(QAbstractGrpcClient);
-                                           auto stream = weakStream.lock();
-                                           if (stream) {
-                                               d->channel->startStream(
-                                                       stream.get(), QLatin1StringView(d->service));
-                                           } else {
-                                               qGrpcDebug() << "Stream for" << d->service
-                                                            << "method" << method
-                                                            << "will not be restored by timeout.";
-                                           }
-                                       });
-                });
+        *errorConnection = connect(grpcStream.get(), &QGrpcStream::errorOccurred, this,
+                                   [this, grpcStream](const QGrpcStatus &status) {
+                                       Q_D(QAbstractGrpcClient);
+                                       qGrpcWarning()
+                                               << grpcStream->method() << "call" << d->service
+                                               << "stream error: " << status.message();
+                                       errorOccurred(status);
+                                       // TODO: Make timeout configurable from channel settings
+                                       QTimer::singleShot(1000, this,
+                                                          [this, method = grpcStream->method(),
+                                                           arg = grpcStream->arg()] {
+                                                              this->startStream(method, arg);
+                                                          });
+                                   });
 
         auto finishedConnection = std::make_shared<QMetaObject::Connection>();
         *finishedConnection = connect(
@@ -258,12 +231,22 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
                     grpcStream.reset();
                 });
 
-        d->channel->startStream(grpcStream.get(), QLatin1StringView(d->service));
         d->activeStreams.push_back(grpcStream);
     } else {
         emit errorOccurred({ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
     }
     return grpcStream;
+}
+
+std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(
+        QLatin1StringView method, QByteArrayView arg,
+        const std::function<void(const QByteArray &)> &handler)
+{
+    auto stream = startStream(method, arg);
+    if (stream) {
+        stream->setHandler(handler);
+    }
+    return stream;
 }
 
 /*!

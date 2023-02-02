@@ -261,9 +261,12 @@ QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringVie
     return call.status;
 }
 
-void QGrpcChannelPrivate::startStream(QGrpcStream *stream, QLatin1StringView service)
+std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(QAbstractGrpcClient *client,
+                                                              QLatin1StringView method,
+                                                              QLatin1StringView service,
+                                                              QByteArrayView arg)
 {
-    Q_ASSERT(stream != nullptr);
+    std::shared_ptr<QGrpcStream> stream(new QGrpcStream(method, arg, client));
     const QByteArray rpcName = buildRpcName(service, stream->method());
 
     QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(),
@@ -280,12 +283,12 @@ void QGrpcChannelPrivate::startStream(QGrpcStream *stream, QLatin1StringView ser
         QObject::disconnect(*abortConnection);
     };
 
-    *readConnection = QObject::connect(sub.get(), &QGrpcChannelStream::dataReady, stream,
+    *readConnection = QObject::connect(sub.get(), &QGrpcChannelStream::dataReady, stream.get(),
                                        [stream](QByteArrayView data) {
                                            stream->handler(data.toByteArray());
                                        });
 
-    *connection = QObject::connect(sub.get(), &QGrpcChannelStream::finished, stream,
+    *connection = QObject::connect(sub.get(), &QGrpcChannelStream::finished, stream.get(),
                                    [disconnectAllConnections, sub, stream] {
                                        qGrpcDebug()
                                                << "Stream ended with server closing connection";
@@ -296,7 +299,7 @@ void QGrpcChannelPrivate::startStream(QGrpcStream *stream, QLatin1StringView ser
                                        emit stream->finished();
                                    });
 
-    *abortConnection = QObject::connect(stream, &QGrpcStream::finished, sub.get(),
+    *abortConnection = QObject::connect(stream.get(), &QGrpcStream::finished, sub.get(),
                                         [disconnectAllConnections, sub] {
                                             qGrpcDebug() << "Stream client was finished";
                                             disconnectAllConnections();
@@ -304,6 +307,7 @@ void QGrpcChannelPrivate::startStream(QGrpcStream *stream, QLatin1StringView ser
                                         });
 
     sub->start();
+    return stream;
 }
 
 /*!
@@ -334,8 +338,8 @@ QGrpcChannel::~QGrpcChannel() = default;
 /*!
     Synchronously calls the RPC method and writes the result to the output parameter \a ret.
 
-    The RPC method name is concatenated from the \a method and \a service parameters
-    with the given \a args.
+    The RPC method name is constructed by concatenating the \a method
+    and \a service parameters and called with the \a args argument.
 */
 QGrpcStatus QGrpcChannel::call(QLatin1StringView method, QLatin1StringView service,
                                QByteArrayView args, QByteArray &ret)
@@ -346,8 +350,8 @@ QGrpcStatus QGrpcChannel::call(QLatin1StringView method, QLatin1StringView servi
 /*!
     Asynchronously calls the RPC method.
 
-    The RPC method name is concatenated from the \a method and \a service parameters
-    with the given \a args.
+    The RPC method name is constructed by concatenating the \a method
+    and \a service parameters and called with the \a args argument.
     The method can emit QGrpcCallReply::finished() and QGrpcCallReply::errorOccurred()
     signals on a QGrpcCallReply returned object.
 */
@@ -359,15 +363,22 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannel::call(QAbstractGrpcClient *client,
 }
 
 /*!
-    Starts a stream on a \a stream using QGrpcStream::method() and the
-    \a service to get the name of the RPC method.
+    Creates and starts a stream to the RPC method.
+
+    The RPC method name is constructed by concatenating the \a method
+    and \a service parameters and called with the \a arg argument.
+    Returns a shared pointer to the QGrpcStream, which was created with the \a client
+    object.
 
     Calls QGrpcStream::handler() when the stream receives data from the server.
     The method may emit QGrpcStream::errorOccurred() when the stream has terminated with an error.
 */
-void QGrpcChannel::startStream(QGrpcStream *stream, QLatin1StringView service)
+std::shared_ptr<QGrpcStream> QGrpcChannel::startStream(QAbstractGrpcClient *client,
+                                                       QLatin1StringView method,
+                                                       QLatin1StringView service,
+                                                       QByteArrayView arg)
 {
-    dPtr->startStream(stream, service);
+    return dPtr->startStream(client, method, service, arg);
 }
 
 /*!

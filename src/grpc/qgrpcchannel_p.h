@@ -99,7 +99,8 @@ struct QGrpcChannelPrivate
                                          QLatin1StringView service, QByteArrayView args);
     QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
                      QByteArray &ret);
-    void startStream(QGrpcStream *stream, QLatin1StringView service);
+    std::shared_ptr<QGrpcStream> startStream(QAbstractGrpcClient *client, QLatin1StringView method,
+                                             QLatin1StringView service, QByteArrayView arg);
 };
 
 QT_END_NAMESPACE

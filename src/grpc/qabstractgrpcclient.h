@@ -26,7 +26,6 @@ class QAbstractGrpcClientPrivate;
 class Q_GRPC_EXPORT QAbstractGrpcClient : public QObject
 {
     Q_OBJECT
-    using StreamHandler = std::function<void(const QByteArray &)>;
 
 public:
     void attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel);
@@ -120,8 +119,11 @@ private:
 
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg);
 
-    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QByteArrayView arg,
-                                             const StreamHandler &handler = {});
+    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QByteArrayView arg);
+
+    std::shared_ptr<QGrpcStream> startStream(
+            QLatin1StringView method, QByteArrayView arg,
+            const std::function<void(const QByteArray &)> &handler);
 
     template <typename ReturnType>
     QGrpcStatus tryDeserialize(ReturnType *ret, QByteArrayView retData)

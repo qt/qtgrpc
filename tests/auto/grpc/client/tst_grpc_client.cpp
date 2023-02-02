@@ -502,7 +502,8 @@ void QtGrpcClientTest::MultipleStreamsTest()
     request.setTestFieldString("Stream");
 
     auto stream = _client->streamTestMethodServerStream(request);
-    QCOMPARE_EQ(stream, _client->streamTestMethodServerStream(request));
+    // Ensure we're not reusing streams
+    QCOMPARE_NE(stream, _client->streamTestMethodServerStream(request));
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
@@ -535,7 +536,7 @@ void QtGrpcClientTest::MultipleStreamsCancelTest()
     auto stream = _client->streamTestMethodServerStream(request);
     auto streamNext = _client->streamTestMethodServerStream(request);
 
-    QCOMPARE_EQ(stream, streamNext);
+    QCOMPARE_NE(stream, streamNext);
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
@@ -549,7 +550,7 @@ void QtGrpcClientTest::MultipleStreamsCancelTest()
 
     streamNext->abort();
 
-    QCOMPARE(streamFinishedSpy.count(), 1);
+    QCOMPARE(streamFinishedSpy.count(), 0);
     QCOMPARE(streamErrorSpy.count(), 0);
 
     QCOMPARE(streamNextFinishedSpy.count(), 1);
@@ -560,7 +561,7 @@ void QtGrpcClientTest::MultipleStreamsCancelTest()
 
     streamNext = _client->streamTestMethodServerStream(request);
 
-    QCOMPARE_EQ(stream, streamNext);
+    QCOMPARE_NE(stream, streamNext);
 
     QSignalSpy otherStreamFinishedSpy(stream.get(), &QGrpcStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
@@ -577,7 +578,7 @@ void QtGrpcClientTest::MultipleStreamsCancelTest()
     QCOMPARE(otherStreamFinishedSpy.count(), 1);
     QCOMPARE_EQ(otherStreamErrorSpy.count(), 0);
 
-    QCOMPARE(otherStreamNextFinishedSpy.count(), 1);
+    QCOMPARE(otherStreamNextFinishedSpy.count(), 0);
     QCOMPARE_EQ(otherStreamNextErrorSpy.count(), 0);
 }
 

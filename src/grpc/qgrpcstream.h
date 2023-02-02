@@ -8,7 +8,6 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QList>
 #include <QtCore/QString>
-#include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
@@ -21,9 +20,11 @@ class QAbstractGrpcClient;
 class Q_GRPC_EXPORT QGrpcStream final : public QGrpcOperation
 {
     Q_OBJECT
-    using StreamHandler = std::function<void(const QByteArray &)>;
 
 public:
+    using StreamHandler = std::function<void(const QByteArray &)>;
+
+    explicit QGrpcStream(QLatin1StringView method, QByteArrayView arg, QAbstractGrpcClient *client);
     ~QGrpcStream() override;
 
     void abort() override;
@@ -31,26 +32,20 @@ public:
     QLatin1StringView method() const;
     QByteArrayView arg() const;
     void handler(const QByteArray &data);
-
-Q_SIGNALS:
-    void messageReceived();
-
-protected:
-    explicit QGrpcStream(QLatin1StringView method, QByteArrayView arg, const StreamHandler &handler,
-                         QAbstractGrpcClient *client);
-
-    void addHandler(const StreamHandler &handler);
+    void setHandler(const StreamHandler &handler);
 
     bool operator==(const QGrpcStream &other) const
     {
         return other.method() == method() && other.arg() == arg();
     }
 
+Q_SIGNALS:
+    void messageReceived();
+
 private:
-    friend class QAbstractGrpcClient;
-    std::string m_method;
-    QByteArray m_arg;
-    QList<StreamHandler> m_handlers;
+    const std::string m_method;
+    const QByteArray m_arg;
+    StreamHandler m_handler;
 };
 
 QT_END_NAMESPACE

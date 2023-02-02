@@ -31,7 +31,10 @@ public:
                                                  QLatin1StringView method,
                                                  QLatin1StringView service,
                                                  QByteArrayView args) = 0;
-    virtual void startStream(QGrpcStream *stream, QLatin1StringView service) = 0;
+    virtual std::shared_ptr<QGrpcStream> startStream(QAbstractGrpcClient *client,
+                                                     QLatin1StringView method,
+                                                     QLatin1StringView service,
+                                                     QByteArrayView arg) = 0;
     virtual std::shared_ptr<QAbstractProtobufSerializer> serializer() const = 0;
 
 protected:
