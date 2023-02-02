@@ -332,7 +332,6 @@ function(qt6_add_protobuf target)
     if(is_static OR is_shared)
         set_target_properties(${target}
             PROPERTIES
-                PUBLIC_HEADER "${generated_headers}"
                 AUTOMOC ON
         )
     endif()
