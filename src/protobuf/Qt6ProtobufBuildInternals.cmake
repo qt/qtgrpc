@@ -52,12 +52,14 @@ function(qt_internal_add_protobuf_module target)
         set(arg_EXTRA_CMAKE_INCLUDES "")
     endif()
 
-    set(module_extra_properties_filename
-        "${INSTALL_CMAKE_NAMESPACE}${target}ProtobufProperties.cmake")
+    if(arg_PROTO_FILES)
+        set(module_extra_properties_filename
+            "${INSTALL_CMAKE_NAMESPACE}${target}ProtobufProperties.cmake")
+    endif()
 
     qt_internal_add_module(${target}
         EXTRA_CMAKE_INCLUDES
-            "${module_extra_properties_filename}"
+            ${module_extra_properties_filename}
             ${arg_EXTRA_CMAKE_INCLUDES}
         ${module_args}
     )
