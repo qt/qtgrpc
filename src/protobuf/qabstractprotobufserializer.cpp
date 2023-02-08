@@ -21,7 +21,7 @@ QT_BEGIN_NAMESPACE
     classes are generated automatically, based on a .proto file, using the cmake
     build macro qt6_add_protobuf or by running qtprotobufgen directly.
 
-    This class should be used as base for specific serializers. The handlers
+    This class should be used as a base for specific serializers. The handlers
     property contains all message-specific serializers and should be used while
     serialization/deserialization. Inherited classes should reimplement scope of
     virtual methods that used by registered message

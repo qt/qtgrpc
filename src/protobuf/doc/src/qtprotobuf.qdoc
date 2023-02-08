@@ -7,16 +7,65 @@
     \title Qt Protobuf
     \ingroup frameworks-technologies
 
-    Qt provides a generator which can be used to generate Qt-based classes
-    from \c{.proto} files. These generated classes can then be used to serialize
-    and deserialize their associated protobuf messages.
+    The Qt Protobuf component provides a \l {The qtprotobufgen Tool}
+    {generator plugin} that can be used to generate Qt-based classes
+    from \c{.proto} files. These generated classes can then be used
+    to serialize and deserialize their associated protobuf messages.
 
+    \section1 Overview
+    \section2 What are protocol buffers?
+    Protocol buffers are a language-neutral, platform-neutral, and extensible
+    mechanism for serializing structured data, which is compact and easy
+    to use:
+    \list
+        \li A user defines the structure of data in \c{.proto} files.
+        \li Proto compiler is invoked at build time on \c{.proto} files to
+            generate code in various programming languages.
+    \endlist
+    The provided format is suitable for network traffic or long-term data
+    storage.
+    \section2 What Problems do Protocol Buffers Solve?
+    Protocol buffers provide a serialization format for packets of typed and
+    structured data that are up to a few megabytes in size. Moreover, it can
+    be extended with new information without invalidating existing data or
+    requiring code to be updated (for more details
+    \l{https://developers.google.com/protocol-buffers}
+    {Protocol Buffers Overview}).
+    \section2 What are the Benefits of Using Qt Protobuf?
+    The Qt Protobuf component lets the user introduce
+    a Protocol buffers mechanism to any qt-based project:
+    \list
+        \li No need to call a protocol buffer compiler explicitly.
+        \li No need to integrate generated code into project tree manually.
+        \li Convenient serialization/deserialization API.
+        \li Integrated properties mechanism for generated protobuf messages.
+        \li Integrated gRPC-client support (see \l {Qt GRPC}{QtGrpc module}).
+    \endlist
+    \section2 Incoming features:
+    \list
+        \li Enabling using Qt Core/Gui types as a part of *.proto schema.
+        \li Enabling gRPC-server support.
+        \li Enabling QML-types support for generated protobuf messages.
+    \endlist
+    \section1 Using the Qt Protobuf
+    Google protocol buffers provide a generator called protoc that
+    supports extensions. \l {The qtprotobufgen Tool} is an extension
+    for protoc and requires protoc installed on your host system.
+    In the following link, you can find installation details
+    \l {https://grpc.io/docs/protoc-installation/}{Protoc Installation}.
+
+    Example of installation for Linux, using \e {apt}:
+    \badcode
+    apt install -y protobuf-compiler
+    protoc --version  # Ensure compiler version is 3+
+    \endcode
+    For more details of component API usage see \e {CMake API} section below.
     \section1 CMake API
     \list
         \li \l{CMake Commands in Qt6 Protobuf}
     \endlist
 
-    \section1 Reference Documentation
+    \section1 Class Documentation
 
     \list
         \l {Qt Protobuf C++ Classes}{C++ Classes}

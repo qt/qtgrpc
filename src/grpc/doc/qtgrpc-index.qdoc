@@ -12,6 +12,22 @@
     Such code allows users to communicate with the server by sending calls
     or stream messages.
 
+    \section1 Overview
+
+    \section1 Using the Module
+
+
+
+    \section1 Class Documentation
+    \list
+    \li \l{Qt GRPC C++ Classes}{C++ Classes}
+    \endlist
+
+    \section1 CMake API
+    \list
+        \li \l{CMake Commands in Qt6 GRPC}
+    \endlist
+
     \section1 Licenses and Trademarks
 
     Qt GRPC is available under commercial licenses from \l{The Qt Company}.
@@ -21,13 +37,7 @@
     gRPC\reg is a registered trademark of The Linux Foundation.
     Please see \l https://grpc.io/ for more information.
 
-    \section1 Reference Documentation
-    \list
-    \li \l{Qt GRPC C++ Classes}{C++ Classes}
-    \endlist
+    \section1 Examples
 
-    \section1 CMake API
-    \list
-        \li \l{CMake Commands in Qt6 GRPC}
-    \endlist
+
 */
