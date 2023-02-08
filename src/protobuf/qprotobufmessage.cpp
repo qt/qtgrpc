@@ -62,7 +62,7 @@ void QProtobufMessagePrivate::storeUnknownEntry(QByteArrayView entry)
 /*!
     Set the property \a propertyName to the value stored in \a value.
 
-    If the \a propertyName isn't part of the known fields then the value will
+    If the \a propertyName isn't a part of the known fields then the value will
     not be written and the function returns \c false.
 
     Returns \c false if it failed to store the \a value on the property.

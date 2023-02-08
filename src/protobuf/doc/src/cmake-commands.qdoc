@@ -5,12 +5,19 @@
 \group cmake-commands-qtprotobuf
 \title CMake Commands in Qt6 Protobuf
 
-The following CMake commands are defined when Qt6::Protobuf is loaded, for
-instance with
-
-\code
+You should call the following CMake commands to use the Qt6::Protobuf
+module in your project:
+\badcode
 find_package(Qt6 REQUIRED COMPONENTS Protobuf)
+
+target_link_libraries(mytarget PRIVATE Qt6::Protobuf)
 \endcode
+
+You can use \e {qt-add-protobuf} CMake macros.
+The macros implicitly calls Protobuf code generation for qt-project.
+
+The macros usage example:
+\include qt-add-protobuf-example.qdocinc
 
 \sa{CMake Command Reference}
 */
