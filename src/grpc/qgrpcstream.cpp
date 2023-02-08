@@ -24,8 +24,8 @@ QT_BEGIN_NAMESPACE
 */
 
 QGrpcStream::QGrpcStream(QLatin1StringView method, QByteArrayView arg, const StreamHandler &handler,
-                         QAbstractGrpcClient *parent)
-    : QGrpcOperation(parent), m_method(method.data(), method.size()), m_arg(arg.toByteArray())
+                         QAbstractGrpcClient *client)
+    : QGrpcOperation(client), m_method(method.data(), method.size()), m_arg(arg.toByteArray())
 {
     if (handler)
         m_handlers.push_back(handler);

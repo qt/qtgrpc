@@ -24,6 +24,8 @@ class Q_GRPC_EXPORT QGrpcStream final : public QGrpcOperation
     using StreamHandler = std::function<void(const QByteArray &)>;
 
 public:
+    ~QGrpcStream() override;
+
     void abort() override;
 
     QLatin1StringView method() const;
@@ -35,8 +37,7 @@ Q_SIGNALS:
 
 protected:
     explicit QGrpcStream(QLatin1StringView method, QByteArrayView arg, const StreamHandler &handler,
-                         QAbstractGrpcClient *parent);
-    ~QGrpcStream() override;
+                         QAbstractGrpcClient *client);
 
     void addHandler(const StreamHandler &handler);
 

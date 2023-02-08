@@ -11,6 +11,7 @@
 
 QT_BEGIN_NAMESPACE
 
+class QGrpcOperationPrivate;
 class Q_GRPC_EXPORT QGrpcOperation : public QObject
 {
     Q_OBJECT
@@ -20,9 +21,8 @@ public:
     T read() const
     {
         T value;
-        auto client = qobject_cast<QAbstractGrpcClient *>(parent());
-        if (client)
-            client->tryDeserialize(&value, m_data);
+        if (client())
+            client()->tryDeserialize(&value, data());
         return value;
     }
 
@@ -36,13 +36,18 @@ Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status);
 
 protected:
-    explicit QGrpcOperation(QAbstractGrpcClient *parent);
+    explicit QGrpcOperation(QAbstractGrpcClient *client);
     ~QGrpcOperation() override;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
 
-    QByteArray m_data;
+    friend class QAbstractGrpcClient;
+
+    QByteArray data() const;
+    QAbstractGrpcClient *client() const;
+
+    Q_DECLARE_PRIVATE(QGrpcOperation)
 };
 
 QT_END_NAMESPACE

@@ -50,9 +50,7 @@ using namespace Qt::StringLiterals;
     \endcode
 */
 
-QGrpcCallReply::QGrpcCallReply(QAbstractGrpcClient *parent) : QGrpcOperation(parent)
-{
-}
+QGrpcCallReply::QGrpcCallReply(QAbstractGrpcClient *client) : QGrpcOperation(client) { }
 
 QGrpcCallReply::~QGrpcCallReply() = default;
 
