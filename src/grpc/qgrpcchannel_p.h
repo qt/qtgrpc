@@ -41,7 +41,7 @@ class QGrpcChannelStream : public QObject
 
 public:
     explicit QGrpcChannelStream(grpc::Channel *channel, QLatin1StringView method,
-                                QByteArrayView data, QObject *parent = nullptr);
+                                QByteArrayView data);
     ~QGrpcChannelStream() override;
 
     void cancel();
@@ -65,8 +65,8 @@ class QGrpcChannelCall : public QObject
     Q_OBJECT
 
 public:
-    explicit QGrpcChannelCall(grpc::Channel *channel, QLatin1StringView method, QByteArrayView data,
-                              QObject *parent = nullptr);
+    explicit QGrpcChannelCall(grpc::Channel *channel, QLatin1StringView method,
+                              QByteArrayView data);
     ~QGrpcChannelCall() override;
 
     void cancel();

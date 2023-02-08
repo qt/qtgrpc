@@ -77,8 +77,7 @@ static QByteArray buildRpcName(QLatin1StringView service, QLatin1StringView meth
 }
 
 QGrpcChannelStream::QGrpcChannelStream(grpc::Channel *channel, QLatin1StringView method,
-                                       QByteArrayView data, QObject *parent)
-    : QObject(parent)
+                                       QByteArrayView data)
 {
     grpc::ByteBuffer request = parseQByteArray(data);
 
@@ -132,8 +131,7 @@ void QGrpcChannelStream::cancel()
 }
 
 QGrpcChannelCall::QGrpcChannelCall(grpc::Channel *channel, QLatin1StringView method,
-                                   QByteArrayView data, QObject *parent)
-    : QObject(parent)
+                                   QByteArrayView data)
 {
     grpc::ByteBuffer request = parseQByteArray(data);
     thread = QThread::create([this, request, channel, method = toStdString(method)] {
@@ -218,12 +216,9 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(QAbstractGrpcClient *c
                                                           QByteArrayView args)
 {
     const QByteArray rpcName = buildRpcName(service, method);
-    std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(client),
-                                          [](QGrpcCallReply *reply) { reply->deleteLater(); });
+    std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(client));
     QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(m_channel.get(),
-                                                               QLatin1StringView(rpcName), args,
-                                                               reply.get()),
-                                          &QGrpcChannelCall::deleteLater);
+                                                               QLatin1StringView(rpcName), args));
     auto connection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
 
@@ -271,10 +266,8 @@ void QGrpcChannelPrivate::stream(QGrpcStream *stream, QLatin1StringView service)
     Q_ASSERT(stream != nullptr);
     const QByteArray rpcName = buildRpcName(service, stream->method());
 
-    QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(),
-                                                                  QLatin1StringView(rpcName),
-                                                                  stream->arg(), stream),
-                                           &QGrpcChannelStream::deleteLater);
+    QSharedPointer<QGrpcChannelStream> sub(
+            new QGrpcChannelStream(m_channel.get(), QLatin1StringView(rpcName), stream->arg()));
 
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
     auto readConnection = std::make_shared<QMetaObject::Connection>();

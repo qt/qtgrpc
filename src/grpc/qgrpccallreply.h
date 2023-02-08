@@ -16,7 +16,7 @@ class Q_GRPC_EXPORT QGrpcCallReply final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcCallReply(QAbstractGrpcClient *parent);
+    explicit QGrpcCallReply(QAbstractGrpcClient *client);
     ~QGrpcCallReply() override;
 
     void abort() override;
@@ -40,7 +40,10 @@ public:
     }
 
 private:
+    QGrpcCallReply();
     Q_DISABLE_COPY_MOVE(QGrpcCallReply)
+
+    friend class QAbstractGrpcClient;
 };
 
 QT_END_NAMESPACE

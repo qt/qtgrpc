@@ -172,7 +172,6 @@ void QtGrpcClientTest::CallAndAsyncRecieveWithSubscribeStringTest()
     std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
     reply->subscribe(this, [reply, &result, &waiter] {
         result = reply->read<SimpleStringMessage>();
-        reply->deleteLater();
         waiter.quit();
     });
 
@@ -204,10 +203,8 @@ void QtGrpcClientTest::CallAndAsyncImmediateAbortStringTest()
     std::shared_ptr<QGrpcCallReply> reply = _client->testMethod(request);
 
     result.setTestFieldString("Result not changed by echo");
-    QObject::connect(reply.get(), &QGrpcCallReply::finished, this, [&result, reply] {
-        result = reply->read<SimpleStringMessage>();
-        reply->deleteLater();
-    });
+    QObject::connect(reply.get(), &QGrpcCallReply::finished, this,
+                     [&result, reply] { result = reply->read<SimpleStringMessage>(); });
 
     QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
     QSignalSpy clientErrorSpy(_client.get(), &TestService::Client::errorOccurred);

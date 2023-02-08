@@ -4,6 +4,9 @@
 
 #include <qtgrpcglobal_p.h>
 
+#include <QtCore/qpointer.h>
+#include <QtCore/private/qobject_p.h>
+
 #include "qgrpcoperation.h"
 
 QT_BEGIN_NAMESPACE
@@ -42,7 +45,17 @@ QT_BEGIN_NAMESPACE
     or during serialization.
 */
 
-QGrpcOperation::QGrpcOperation(QAbstractGrpcClient *parent) : QObject(parent)
+class QGrpcOperationPrivate : public QObjectPrivate
+{
+    Q_DECLARE_PUBLIC(QGrpcOperation)
+public:
+    QGrpcOperationPrivate(QAbstractGrpcClient *_client) : client(_client) { }
+    QPointer<QAbstractGrpcClient> client;
+    QByteArray data;
+};
+
+QGrpcOperation::QGrpcOperation(QAbstractGrpcClient *client)
+    : QObject(*new QGrpcOperationPrivate(client))
 {
 }
 
@@ -56,7 +69,8 @@ QGrpcOperation::~QGrpcOperation() = default;
  */
 void QGrpcOperation::setData(const QByteArray &data)
 {
-    m_data = data;
+    Q_D(QGrpcOperation);
+    d->data = data;
 }
 
 /*!
@@ -67,7 +81,27 @@ void QGrpcOperation::setData(const QByteArray &data)
 */
 void QGrpcOperation::setData(QByteArray &&data)
 {
-    m_data = std::move(data);
+    Q_D(QGrpcOperation);
+    d->data = std::move(data);
+}
+
+/*!
+    \internal
+    Getter of the data received from the channel.
+*/
+QByteArray QGrpcOperation::data() const
+{
+    return d_func()->data;
+}
+
+/*!
+    \internal
+    Allows access to the client that is the formal owner of this
+    QGrpcOperation.
+*/
+QAbstractGrpcClient *QGrpcOperation::client() const
+{
+    return d_func()->client.get();
 }
 
 QT_END_NAMESPACE
