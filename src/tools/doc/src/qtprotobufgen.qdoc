@@ -22,6 +22,9 @@ When using CMake as a build tool you should prefer using the Qt CMake API. For
 build systems other than CMake, adapt the commands described in
 \l{Running manually}.
 
+\c {Note}, there is no explicit support of building gRPC and Protobuf
+applications using the Qt GRPC module with \e qmake.
+
 \section2 CMake
 The following CMake commands integrate a protobuf schema into a Qt project.
 

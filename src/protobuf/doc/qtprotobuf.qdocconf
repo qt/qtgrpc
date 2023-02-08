@@ -28,7 +28,7 @@ qhp.QtProtobuf.subprojects.classes.indexTitle = Qt Protobuf C++ Classes
 qhp.QtProtobuf.subprojects.classes.selectors  = class doc:headerfile
 qhp.QtProtobuf.subprojects.classes.sortPages  = true
 
-depends += qtdoc qtcore qtcmake
+depends += qtdoc qtcore qtcmake qtgrpc
 
 {headerdirs,sourcedirs} += ..
 sourcedirs += ../../tools/doc/src
