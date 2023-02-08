@@ -10,6 +10,7 @@
 #include <QProtobufSerializer>
 
 using namespace qtprotobufnamespace::tests::nested;
+using namespace Qt::Literals::StringLiterals;
 
 class QtProtobufNestedTest : public QObject
 {
@@ -32,13 +33,13 @@ private:
 
 void QtProtobufNestedTest::NestedMessageTest()
 {
-    qProtobufAssertMessagePropertyRegistered<NestedFieldMessage::NestedMessage, QtProtobuf::sint32>(1, "QtProtobuf::sint32", "testFieldInt");
+    qProtobufAssertMessagePropertyRegistered<NestedFieldMessage::NestedMessage,
+            QtProtobuf::sint32>(1, "QtProtobuf::sint32", "testFieldInt");
 }
 
 void QtProtobufNestedTest::SimpleTest()
 {
     const char *propertyName = "nested";
-
     qProtobufAssertMessagePropertyRegistered<NestedFieldMessage, NestedFieldMessage::NestedMessage*>(2, "qtprotobufnamespace::tests::nested::NestedFieldMessage::NestedMessage*", "nested");
 
     NestedFieldMessage::NestedMessage nestedMsg;
@@ -128,8 +129,8 @@ void QtProtobufNestedTest::SerializationTest()
     test.setNested(nested);
 
     result = test.serialize(m_serializer.get());
-    QVERIFY(result == QByteArray::fromHex("1202081e0814")
-                || result == QByteArray::fromHex("08141202081e"));
+
+    QCOMPARE(QLatin1StringView(result.toHex()), "08141202081e"_L1);
 
     NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2 level2;
     level2.setTestFieldInt(10);
@@ -145,8 +146,7 @@ void QtProtobufNestedTest::SerializationTest()
     level2.setTestFieldInt(15);
     test2.setNested2(level2);
     result = test2.serialize(m_serializer.get());
-    QVERIFY(result == QByteArray::fromHex("1a02081e12040a020814")
-                || result == QByteArray::fromHex("12040a0208141a02081e"));
+    QCOMPARE(QLatin1StringView(result.toHex()), "12040a0208141a02081e"_L1);
 
     NeighborNested neigbor;
     nested.setTestFieldInt(15);
@@ -154,8 +154,7 @@ void QtProtobufNestedTest::SerializationTest()
     neigbor.setNeighborNested(nested);
     neigbor.setNeighborNested2(level2);
     result = neigbor.serialize(m_serializer.get());
-    QVERIFY(result == QByteArray::fromHex("120208280a02081e")
-                || result == QByteArray::fromHex("0a02081e12020828"));
+    QCOMPARE(QLatin1StringView(result.toHex()), "0a02081e12020828"_L1);
 }
 
 void QtProtobufNestedTest::DeserializationTest()
