@@ -32,7 +32,7 @@ class  EmptyMessage : public QProtobufMessage
 
 public:
     EmptyMessage();
-    ~EmptyMessage() override;
+    ~EmptyMessage();
     EmptyMessage(const EmptyMessage &other);
     EmptyMessage &operator =(const EmptyMessage &other);
     EmptyMessage(EmptyMessage &&other) noexcept;
@@ -59,7 +59,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleStringMessage();
-    ~SimpleStringMessage() override;
+    ~SimpleStringMessage();
     SimpleStringMessage(const SimpleStringMessage &other);
     SimpleStringMessage &operator =(const SimpleStringMessage &other);
     SimpleStringMessage(SimpleStringMessage &&other) noexcept;
@@ -95,7 +95,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     ComplexMessage();
-    ~ComplexMessage() override;
+    ~ComplexMessage();
     ComplexMessage(const ComplexMessage &other);
     ComplexMessage &operator =(const ComplexMessage &other);
     ComplexMessage(ComplexMessage &&other) noexcept;

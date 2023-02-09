@@ -51,7 +51,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     AnnotatedMessage1();
-    ~AnnotatedMessage1() override;
+    ~AnnotatedMessage1();
     AnnotatedMessage1(const AnnotatedMessage1 &other);
     AnnotatedMessage1 &operator =(const AnnotatedMessage1 &other);
     AnnotatedMessage1(AnnotatedMessage1 &&other) noexcept;
@@ -93,7 +93,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     AnnotatedMessage2();
-    ~AnnotatedMessage2() override;
+    ~AnnotatedMessage2();
     AnnotatedMessage2(const AnnotatedMessage2 &other);
     AnnotatedMessage2 &operator =(const AnnotatedMessage2 &other);
     AnnotatedMessage2(AnnotatedMessage2 &&other) noexcept;
@@ -135,7 +135,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     AnnotatedMessage3();
-    ~AnnotatedMessage3() override;
+    ~AnnotatedMessage3();
     AnnotatedMessage3(const AnnotatedMessage3 &other);
     AnnotatedMessage3 &operator =(const AnnotatedMessage3 &other);
     AnnotatedMessage3(AnnotatedMessage3 &&other) noexcept;
@@ -178,7 +178,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     AnnotatedMessage4();
-    ~AnnotatedMessage4() override;
+    ~AnnotatedMessage4();
     AnnotatedMessage4(const AnnotatedMessage4 &other);
     AnnotatedMessage4 &operator =(const AnnotatedMessage4 &other);
     AnnotatedMessage4(AnnotatedMessage4 &&other) noexcept;
@@ -217,7 +217,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     AnnotatedMessage5();
-    ~AnnotatedMessage5() override;
+    ~AnnotatedMessage5();
     AnnotatedMessage5(const AnnotatedMessage5 &other);
     AnnotatedMessage5 &operator =(const AnnotatedMessage5 &other);
     AnnotatedMessage5(AnnotatedMessage5 &&other) noexcept;
@@ -257,7 +257,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     AnnotatedMessage6();
-    ~AnnotatedMessage6() override;
+    ~AnnotatedMessage6();
     AnnotatedMessage6(const AnnotatedMessage6 &other);
     AnnotatedMessage6 &operator =(const AnnotatedMessage6 &other);
     AnnotatedMessage6(AnnotatedMessage6 &&other) noexcept;
@@ -299,7 +299,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     AnnotatedMessage7();
-    ~AnnotatedMessage7() override;
+    ~AnnotatedMessage7();
     AnnotatedMessage7(const AnnotatedMessage7 &other);
     AnnotatedMessage7 &operator =(const AnnotatedMessage7 &other);
     AnnotatedMessage7(AnnotatedMessage7 &&other) noexcept;
@@ -341,7 +341,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     AnnotatedMessage8();
-    ~AnnotatedMessage8() override;
+    ~AnnotatedMessage8();
     AnnotatedMessage8(const AnnotatedMessage8 &other);
     AnnotatedMessage8 &operator =(const AnnotatedMessage8 &other);
     AnnotatedMessage8(AnnotatedMessage8 &&other) noexcept;
@@ -384,7 +384,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     AnnotatedMessage9();
-    ~AnnotatedMessage9() override;
+    ~AnnotatedMessage9();
     AnnotatedMessage9(const AnnotatedMessage9 &other);
     AnnotatedMessage9 &operator =(const AnnotatedMessage9 &other);
     AnnotatedMessage9(AnnotatedMessage9 &&other) noexcept;

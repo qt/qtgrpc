@@ -60,7 +60,7 @@ class  EmptyMessage : public QProtobufMessage
 
 public:
     EmptyMessage();
-    ~EmptyMessage() override;
+    ~EmptyMessage();
     EmptyMessage(const EmptyMessage &other);
     EmptyMessage &operator =(const EmptyMessage &other);
     EmptyMessage(EmptyMessage &&other) noexcept;
@@ -87,7 +87,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleBoolMessage();
-    ~SimpleBoolMessage() override;
+    ~SimpleBoolMessage();
     SimpleBoolMessage(const SimpleBoolMessage &other);
     SimpleBoolMessage &operator =(const SimpleBoolMessage &other);
     SimpleBoolMessage(SimpleBoolMessage &&other) noexcept;
@@ -125,7 +125,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleIntMessage();
-    ~SimpleIntMessage() override;
+    ~SimpleIntMessage();
     SimpleIntMessage(const SimpleIntMessage &other);
     SimpleIntMessage &operator =(const SimpleIntMessage &other);
     SimpleIntMessage(SimpleIntMessage &&other) noexcept;
@@ -163,7 +163,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleSIntMessage();
-    ~SimpleSIntMessage() override;
+    ~SimpleSIntMessage();
     SimpleSIntMessage(const SimpleSIntMessage &other);
     SimpleSIntMessage &operator =(const SimpleSIntMessage &other);
     SimpleSIntMessage(SimpleSIntMessage &&other) noexcept;
@@ -201,7 +201,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleUIntMessage();
-    ~SimpleUIntMessage() override;
+    ~SimpleUIntMessage();
     SimpleUIntMessage(const SimpleUIntMessage &other);
     SimpleUIntMessage &operator =(const SimpleUIntMessage &other);
     SimpleUIntMessage(SimpleUIntMessage &&other) noexcept;
@@ -239,7 +239,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleInt64Message();
-    ~SimpleInt64Message() override;
+    ~SimpleInt64Message();
     SimpleInt64Message(const SimpleInt64Message &other);
     SimpleInt64Message &operator =(const SimpleInt64Message &other);
     SimpleInt64Message(SimpleInt64Message &&other) noexcept;
@@ -277,7 +277,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleSInt64Message();
-    ~SimpleSInt64Message() override;
+    ~SimpleSInt64Message();
     SimpleSInt64Message(const SimpleSInt64Message &other);
     SimpleSInt64Message &operator =(const SimpleSInt64Message &other);
     SimpleSInt64Message(SimpleSInt64Message &&other) noexcept;
@@ -315,7 +315,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleUInt64Message();
-    ~SimpleUInt64Message() override;
+    ~SimpleUInt64Message();
     SimpleUInt64Message(const SimpleUInt64Message &other);
     SimpleUInt64Message &operator =(const SimpleUInt64Message &other);
     SimpleUInt64Message(SimpleUInt64Message &&other) noexcept;
@@ -353,7 +353,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleStringMessage();
-    ~SimpleStringMessage() override;
+    ~SimpleStringMessage();
     SimpleStringMessage(const SimpleStringMessage &other);
     SimpleStringMessage &operator =(const SimpleStringMessage &other);
     SimpleStringMessage(SimpleStringMessage &&other) noexcept;
@@ -387,7 +387,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleFloatMessage();
-    ~SimpleFloatMessage() override;
+    ~SimpleFloatMessage();
     SimpleFloatMessage(const SimpleFloatMessage &other);
     SimpleFloatMessage &operator =(const SimpleFloatMessage &other);
     SimpleFloatMessage(SimpleFloatMessage &&other) noexcept;
@@ -425,7 +425,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleDoubleMessage();
-    ~SimpleDoubleMessage() override;
+    ~SimpleDoubleMessage();
     SimpleDoubleMessage(const SimpleDoubleMessage &other);
     SimpleDoubleMessage &operator =(const SimpleDoubleMessage &other);
     SimpleDoubleMessage(SimpleDoubleMessage &&other) noexcept;
@@ -463,7 +463,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleBytesMessage();
-    ~SimpleBytesMessage() override;
+    ~SimpleBytesMessage();
     SimpleBytesMessage(const SimpleBytesMessage &other);
     SimpleBytesMessage &operator =(const SimpleBytesMessage &other);
     SimpleBytesMessage(SimpleBytesMessage &&other) noexcept;
@@ -497,7 +497,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleFixedInt32Message();
-    ~SimpleFixedInt32Message() override;
+    ~SimpleFixedInt32Message();
     SimpleFixedInt32Message(const SimpleFixedInt32Message &other);
     SimpleFixedInt32Message &operator =(const SimpleFixedInt32Message &other);
     SimpleFixedInt32Message(SimpleFixedInt32Message &&other) noexcept;
@@ -535,7 +535,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleFixedInt64Message();
-    ~SimpleFixedInt64Message() override;
+    ~SimpleFixedInt64Message();
     SimpleFixedInt64Message(const SimpleFixedInt64Message &other);
     SimpleFixedInt64Message &operator =(const SimpleFixedInt64Message &other);
     SimpleFixedInt64Message(SimpleFixedInt64Message &&other) noexcept;
@@ -573,7 +573,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleSFixedInt32Message();
-    ~SimpleSFixedInt32Message() override;
+    ~SimpleSFixedInt32Message();
     SimpleSFixedInt32Message(const SimpleSFixedInt32Message &other);
     SimpleSFixedInt32Message &operator =(const SimpleSFixedInt32Message &other);
     SimpleSFixedInt32Message(SimpleSFixedInt32Message &&other) noexcept;
@@ -611,7 +611,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleSFixedInt64Message();
-    ~SimpleSFixedInt64Message() override;
+    ~SimpleSFixedInt64Message();
     SimpleSFixedInt64Message(const SimpleSFixedInt64Message &other);
     SimpleSFixedInt64Message &operator =(const SimpleSFixedInt64Message &other);
     SimpleSFixedInt64Message(SimpleSFixedInt64Message &&other) noexcept;
@@ -651,7 +651,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     ComplexMessage();
-    ~ComplexMessage() override;
+    ~ComplexMessage();
     ComplexMessage(const ComplexMessage &other);
     ComplexMessage &operator =(const ComplexMessage &other);
     ComplexMessage(ComplexMessage &&other) noexcept;

@@ -60,7 +60,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedIntMessage();
-    ~RepeatedNonPackedIntMessage() override;
+    ~RepeatedNonPackedIntMessage();
     RepeatedNonPackedIntMessage(const RepeatedNonPackedIntMessage &other);
     RepeatedNonPackedIntMessage &operator =(const RepeatedNonPackedIntMessage &other);
     RepeatedNonPackedIntMessage(RepeatedNonPackedIntMessage &&other) noexcept;
@@ -102,7 +102,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedSIntMessage();
-    ~RepeatedNonPackedSIntMessage() override;
+    ~RepeatedNonPackedSIntMessage();
     RepeatedNonPackedSIntMessage(const RepeatedNonPackedSIntMessage &other);
     RepeatedNonPackedSIntMessage &operator =(const RepeatedNonPackedSIntMessage &other);
     RepeatedNonPackedSIntMessage(RepeatedNonPackedSIntMessage &&other) noexcept;
@@ -144,7 +144,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedUIntMessage();
-    ~RepeatedNonPackedUIntMessage() override;
+    ~RepeatedNonPackedUIntMessage();
     RepeatedNonPackedUIntMessage(const RepeatedNonPackedUIntMessage &other);
     RepeatedNonPackedUIntMessage &operator =(const RepeatedNonPackedUIntMessage &other);
     RepeatedNonPackedUIntMessage(RepeatedNonPackedUIntMessage &&other) noexcept;
@@ -186,7 +186,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedInt64Message();
-    ~RepeatedNonPackedInt64Message() override;
+    ~RepeatedNonPackedInt64Message();
     RepeatedNonPackedInt64Message(const RepeatedNonPackedInt64Message &other);
     RepeatedNonPackedInt64Message &operator =(const RepeatedNonPackedInt64Message &other);
     RepeatedNonPackedInt64Message(RepeatedNonPackedInt64Message &&other) noexcept;
@@ -228,7 +228,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedSInt64Message();
-    ~RepeatedNonPackedSInt64Message() override;
+    ~RepeatedNonPackedSInt64Message();
     RepeatedNonPackedSInt64Message(const RepeatedNonPackedSInt64Message &other);
     RepeatedNonPackedSInt64Message &operator =(const RepeatedNonPackedSInt64Message &other);
     RepeatedNonPackedSInt64Message(RepeatedNonPackedSInt64Message &&other) noexcept;
@@ -270,7 +270,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedUInt64Message();
-    ~RepeatedNonPackedUInt64Message() override;
+    ~RepeatedNonPackedUInt64Message();
     RepeatedNonPackedUInt64Message(const RepeatedNonPackedUInt64Message &other);
     RepeatedNonPackedUInt64Message &operator =(const RepeatedNonPackedUInt64Message &other);
     RepeatedNonPackedUInt64Message(RepeatedNonPackedUInt64Message &&other) noexcept;
@@ -312,7 +312,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedFixedIntMessage();
-    ~RepeatedNonPackedFixedIntMessage() override;
+    ~RepeatedNonPackedFixedIntMessage();
     RepeatedNonPackedFixedIntMessage(const RepeatedNonPackedFixedIntMessage &other);
     RepeatedNonPackedFixedIntMessage &operator =(const RepeatedNonPackedFixedIntMessage &other);
     RepeatedNonPackedFixedIntMessage(RepeatedNonPackedFixedIntMessage &&other) noexcept;
@@ -354,7 +354,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedSFixedIntMessage();
-    ~RepeatedNonPackedSFixedIntMessage() override;
+    ~RepeatedNonPackedSFixedIntMessage();
     RepeatedNonPackedSFixedIntMessage(const RepeatedNonPackedSFixedIntMessage &other);
     RepeatedNonPackedSFixedIntMessage &operator =(const RepeatedNonPackedSFixedIntMessage &other);
     RepeatedNonPackedSFixedIntMessage(RepeatedNonPackedSFixedIntMessage &&other) noexcept;
@@ -396,7 +396,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedFixedInt64Message();
-    ~RepeatedNonPackedFixedInt64Message() override;
+    ~RepeatedNonPackedFixedInt64Message();
     RepeatedNonPackedFixedInt64Message(const RepeatedNonPackedFixedInt64Message &other);
     RepeatedNonPackedFixedInt64Message &operator =(const RepeatedNonPackedFixedInt64Message &other);
     RepeatedNonPackedFixedInt64Message(RepeatedNonPackedFixedInt64Message &&other) noexcept;
@@ -438,7 +438,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedSFixedInt64Message();
-    ~RepeatedNonPackedSFixedInt64Message() override;
+    ~RepeatedNonPackedSFixedInt64Message();
     RepeatedNonPackedSFixedInt64Message(const RepeatedNonPackedSFixedInt64Message &other);
     RepeatedNonPackedSFixedInt64Message &operator =(const RepeatedNonPackedSFixedInt64Message &other);
     RepeatedNonPackedSFixedInt64Message(RepeatedNonPackedSFixedInt64Message &&other) noexcept;
@@ -480,7 +480,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedBoolMessage();
-    ~RepeatedNonPackedBoolMessage() override;
+    ~RepeatedNonPackedBoolMessage();
     RepeatedNonPackedBoolMessage(const RepeatedNonPackedBoolMessage &other);
     RepeatedNonPackedBoolMessage &operator =(const RepeatedNonPackedBoolMessage &other);
     RepeatedNonPackedBoolMessage(RepeatedNonPackedBoolMessage &&other) noexcept;
@@ -522,7 +522,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedDoubleMessage();
-    ~RepeatedNonPackedDoubleMessage() override;
+    ~RepeatedNonPackedDoubleMessage();
     RepeatedNonPackedDoubleMessage(const RepeatedNonPackedDoubleMessage &other);
     RepeatedNonPackedDoubleMessage &operator =(const RepeatedNonPackedDoubleMessage &other);
     RepeatedNonPackedDoubleMessage(RepeatedNonPackedDoubleMessage &&other) noexcept;
@@ -564,7 +564,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedNonPackedFloatMessage();
-    ~RepeatedNonPackedFloatMessage() override;
+    ~RepeatedNonPackedFloatMessage();
     RepeatedNonPackedFloatMessage(const RepeatedNonPackedFloatMessage &other);
     RepeatedNonPackedFloatMessage &operator =(const RepeatedNonPackedFloatMessage &other);
     RepeatedNonPackedFloatMessage(RepeatedNonPackedFloatMessage &&other) noexcept;
@@ -608,7 +608,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     NonPackedIntMessageWithExtraMember();
-    ~NonPackedIntMessageWithExtraMember() override;
+    ~NonPackedIntMessageWithExtraMember();
     NonPackedIntMessageWithExtraMember(const NonPackedIntMessageWithExtraMember &other);
     NonPackedIntMessageWithExtraMember &operator =(const NonPackedIntMessageWithExtraMember &other);
     NonPackedIntMessageWithExtraMember(NonPackedIntMessageWithExtraMember &&other) noexcept;

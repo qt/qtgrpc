@@ -11,22 +11,28 @@
 
 QT_BEGIN_NAMESPACE
 
+class QProtobufMessage;
+struct QProtobufMessageDeleter {
+    Q_PROTOBUF_EXPORT void operator()(QProtobufMessage *ptr) noexcept;
+};
+using QProtobufMessagePointer = std::unique_ptr<QProtobufMessage, QProtobufMessageDeleter>;
+
 class QProtobufMessagePrivate;
-class Q_PROTOBUF_EXPORT QProtobufMessage
+class QProtobufMessage
 {
-    Q_GADGET
+    Q_GADGET_EXPORT(Q_PROTOBUF_EXPORT)
 public:
-    virtual ~QProtobufMessage();
+    Q_PROTOBUF_EXPORT QVariant property(QAnyStringView propertyName) const;
+    Q_PROTOBUF_EXPORT bool setProperty(QAnyStringView propertyName, const QVariant &value);
 
-    QVariant property(QAnyStringView propertyName) const;
-    bool setProperty(QAnyStringView propertyName, const QVariant &value);
-
-    Q_REQUIRED_RESULT static QProtobufMessage *constructByName(const QString &messageType);
+    Q_REQUIRED_RESULT
+    Q_PROTOBUF_EXPORT static QProtobufMessagePointer constructByName(const QString &messageType);
 
 protected:
-    explicit QProtobufMessage(const QMetaObject *metaObject);
-    QProtobufMessage(const QProtobufMessage &other);
-    QProtobufMessage &operator=(const QProtobufMessage &other);
+    Q_PROTOBUF_EXPORT explicit QProtobufMessage(const QMetaObject *metaObject);
+    Q_PROTOBUF_EXPORT ~QProtobufMessage();
+    Q_PROTOBUF_EXPORT QProtobufMessage(const QProtobufMessage &other);
+    Q_PROTOBUF_EXPORT QProtobufMessage &operator=(const QProtobufMessage &other);
     QProtobufMessage(QProtobufMessage &&other) noexcept : d_ptr(std::exchange(other.d_ptr, {})) { }
     QProtobufMessage &operator=(QProtobufMessage &&other) noexcept
     {
@@ -34,6 +40,7 @@ protected:
         return *this;
     }
 
+    Q_PROTOBUF_EXPORT
     static bool isEqual(const QProtobufMessage &lhs, const QProtobufMessage &rhs) noexcept;
 
 private:
@@ -43,6 +50,7 @@ private:
     friend class QAbstractProtobufSerializer;
     friend class QProtobufSerializerPrivate;
     friend class QAbstractProtobufSerializer;
+    friend struct QProtobufMessageDeleter;
 
     QProtobufMessagePrivate *d_ptr;
     Q_DECLARE_PRIVATE(QProtobufMessage)

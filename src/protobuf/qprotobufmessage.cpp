@@ -133,7 +133,7 @@ namespace QtProtobufPrivate {
 /*!
     \internal
 */
-extern QProtobufMessage *constructMessageByName(const QString &messageType);
+extern QProtobufMessagePointer constructMessageByName(const QString &messageType);
 }
 
 /*!
@@ -145,9 +145,46 @@ extern QProtobufMessage *constructMessageByName(const QString &messageType);
     function returns \nullptr.
     Ownership of the constructed message is given to the function caller.
 */
-QProtobufMessage *QProtobufMessage::constructByName(const QString &messageType)
+QProtobufMessagePointer QProtobufMessage::constructByName(const QString &messageType)
 {
     return QtProtobufPrivate::constructMessageByName(messageType);
+}
+
+/*!
+    \typedef QProtobufMessagePointer
+    \relates QProtobufMessage
+    \inmodule QtProtobuf
+
+    Synonym for std::unique_ptr<QProtobufMessage, QProtobufMessageDeleter>.
+    Use this to manage the lifetime of dynamically allocated QProtobufMessages,
+    such as those created by calling QProtobufMessage::constructByName.
+*/
+
+/*!
+    \class QProtobufMessageDeleter
+    \inmodule QtProtobuf
+    \brief Calls the destructor of the child class of a QProtobufMessage.
+
+    This class calls the destructor of a protobuf message using the meta-type
+    system. This class is intended to be used with smart pointers, such as
+    std::unique_ptr.
+
+    \sa QProtobufMessagePointer
+*/
+
+/*!
+    Destroys the message pointed to by \a ptr.
+    This is intended for use with smart pointers.
+
+    \sa QProtobufMessagePointer
+*/
+void QProtobufMessageDeleter::operator()(QProtobufMessage *ptr) noexcept
+{
+    if (!ptr)
+        return;
+    const QMetaObject *mobj = ptr->metaObject();
+    QMetaType type = mobj->metaType();
+    type.destroy(ptr);
 }
 
 QT_END_NAMESPACE

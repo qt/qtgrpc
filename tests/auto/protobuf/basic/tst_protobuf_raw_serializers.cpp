@@ -27,27 +27,25 @@ class NonMessageQObject : public QObject
 
 void QtProtobufRawSerializersTest::ComplexMessageSerializeTest()
 {
-    QProtobufMessage *rawMessage =
+    QProtobufMessagePointer rawMessage =
             QProtobufMessage::constructByName("qtprotobufnamespace.tests.ComplexMessage");
     m_serializer->deserializeRawMessage(
-                rawMessage, QByteArray::fromHex("1208320671776572747908d3ffffffffffffffff01"));
-    auto *message = reinterpret_cast<qtprotobufnamespace::tests::ComplexMessage *>(rawMessage);
+                rawMessage.get(), QByteArray::fromHex("1208320671776572747908d3ffffffffffffffff01"));
+    auto *message = reinterpret_cast<qtprotobufnamespace::tests::ComplexMessage *>(rawMessage.get());
     QCOMPARE(message->testFieldInt(), -45);
     QCOMPARE(message->testComplexField().testFieldString(), QLatin1String("qwerty"));
-    delete rawMessage;
 }
 
 void QtProtobufRawSerializersTest::ComplexMessageDeserializeTest()
 {
-    QProtobufMessage *rawMessage =
+    QProtobufMessagePointer rawMessage =
             QProtobufMessage::constructByName("qtprotobufnamespace.tests.ComplexMessage");
-    auto *message = reinterpret_cast<qtprotobufnamespace::tests::ComplexMessage *>(rawMessage);
+    auto *message = reinterpret_cast<qtprotobufnamespace::tests::ComplexMessage *>(rawMessage.get());
     message->setTestFieldInt(-45);
     message->testComplexField().setTestFieldString(QLatin1String("qwerty"));
 
-    QByteArray buffer = m_serializer->serializeRawMessage(rawMessage);
+    QByteArray buffer = m_serializer->serializeRawMessage(rawMessage.get());
     QCOMPARE(buffer.toHex(), "08d3ffffffffffffffff0112083206717765727479");
-    delete rawMessage;
 }
 
 QTEST_MAIN(QtProtobufRawSerializersTest)

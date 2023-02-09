@@ -40,7 +40,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     FieldIndexTest1Message();
-    ~FieldIndexTest1Message() override;
+    ~FieldIndexTest1Message();
     FieldIndexTest1Message(const FieldIndexTest1Message &other);
     FieldIndexTest1Message &operator =(const FieldIndexTest1Message &other);
     FieldIndexTest1Message(FieldIndexTest1Message &&other) noexcept;
@@ -78,7 +78,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     FieldIndexTest2Message();
-    ~FieldIndexTest2Message() override;
+    ~FieldIndexTest2Message();
     FieldIndexTest2Message(const FieldIndexTest2Message &other);
     FieldIndexTest2Message &operator =(const FieldIndexTest2Message &other);
     FieldIndexTest2Message(FieldIndexTest2Message &&other) noexcept;
@@ -116,7 +116,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     FieldIndexTest3Message();
-    ~FieldIndexTest3Message() override;
+    ~FieldIndexTest3Message();
     FieldIndexTest3Message(const FieldIndexTest3Message &other);
     FieldIndexTest3Message &operator =(const FieldIndexTest3Message &other);
     FieldIndexTest3Message(FieldIndexTest3Message &&other) noexcept;
@@ -154,7 +154,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     FieldIndexTest4Message();
-    ~FieldIndexTest4Message() override;
+    ~FieldIndexTest4Message();
     FieldIndexTest4Message(const FieldIndexTest4Message &other);
     FieldIndexTest4Message &operator =(const FieldIndexTest4Message &other);
     FieldIndexTest4Message(FieldIndexTest4Message &&other) noexcept;

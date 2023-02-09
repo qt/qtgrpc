@@ -50,7 +50,7 @@ void QtProtobufTypesGenerationTest::EmptyMessageTest()
     QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.EmptyMessage");
 
-    std::unique_ptr<QProtobufMessage> rawMessage(
+    QProtobufMessagePointer rawMessage(
             QProtobufMessage::constructByName("qtprotobufnamespace.tests.EmptyMessage"));
     QVERIFY(reinterpret_cast<qtprotobufnamespace::tests::EmptyMessage*>(rawMessage.get()) != nullptr);
 }
@@ -293,7 +293,7 @@ void QtProtobufTypesGenerationTest::ComplexMessageTest()
              stringMsg);
     QCOMPARE(test.testComplexField(), stringMsg);
 
-    std::unique_ptr<QProtobufMessage> rawObject(
+    QProtobufMessagePointer rawObject(
             QProtobufMessage::constructByName("qtprotobufnamespace.tests.ComplexMessage"));
     auto *rawMessage = reinterpret_cast<qtprotobufnamespace::tests::ComplexMessage*>(rawObject.get());
     QVERIFY(rawMessage);
@@ -369,7 +369,7 @@ void QtProtobufTypesGenerationTest::AccessMessageFieldsFromGetter()
 
 void QtProtobufTypesGenerationTest::InvalidMessageConstructorTest()
 {
-    std::unique_ptr<QProtobufMessage> message(QProtobufMessage::constructByName(
+    QProtobufMessagePointer message(QProtobufMessage::constructByName(
             "qtprotobufnamespace.tests.InvalidMessageConstructorTestNotExists"));
     QCOMPARE(message, nullptr);
 }

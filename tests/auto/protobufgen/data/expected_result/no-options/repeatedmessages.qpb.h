@@ -65,7 +65,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedStringMessage();
-    ~RepeatedStringMessage() override;
+    ~RepeatedStringMessage();
     RepeatedStringMessage(const RepeatedStringMessage &other);
     RepeatedStringMessage &operator =(const RepeatedStringMessage &other);
     RepeatedStringMessage(RepeatedStringMessage &&other) noexcept;
@@ -103,7 +103,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedDoubleMessage();
-    ~RepeatedDoubleMessage() override;
+    ~RepeatedDoubleMessage();
     RepeatedDoubleMessage(const RepeatedDoubleMessage &other);
     RepeatedDoubleMessage &operator =(const RepeatedDoubleMessage &other);
     RepeatedDoubleMessage(RepeatedDoubleMessage &&other) noexcept;
@@ -145,7 +145,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedBytesMessage();
-    ~RepeatedBytesMessage() override;
+    ~RepeatedBytesMessage();
     RepeatedBytesMessage(const RepeatedBytesMessage &other);
     RepeatedBytesMessage &operator =(const RepeatedBytesMessage &other);
     RepeatedBytesMessage(RepeatedBytesMessage &&other) noexcept;
@@ -183,7 +183,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedFloatMessage();
-    ~RepeatedFloatMessage() override;
+    ~RepeatedFloatMessage();
     RepeatedFloatMessage(const RepeatedFloatMessage &other);
     RepeatedFloatMessage &operator =(const RepeatedFloatMessage &other);
     RepeatedFloatMessage(RepeatedFloatMessage &&other) noexcept;
@@ -225,7 +225,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedComplexMessage();
-    ~RepeatedComplexMessage() override;
+    ~RepeatedComplexMessage();
     RepeatedComplexMessage(const RepeatedComplexMessage &other);
     RepeatedComplexMessage &operator =(const RepeatedComplexMessage &other);
     RepeatedComplexMessage(RepeatedComplexMessage &&other) noexcept;
@@ -263,7 +263,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedSIntMessage();
-    ~RepeatedSIntMessage() override;
+    ~RepeatedSIntMessage();
     RepeatedSIntMessage(const RepeatedSIntMessage &other);
     RepeatedSIntMessage &operator =(const RepeatedSIntMessage &other);
     RepeatedSIntMessage(RepeatedSIntMessage &&other) noexcept;
@@ -305,7 +305,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedIntMessage();
-    ~RepeatedIntMessage() override;
+    ~RepeatedIntMessage();
     RepeatedIntMessage(const RepeatedIntMessage &other);
     RepeatedIntMessage &operator =(const RepeatedIntMessage &other);
     RepeatedIntMessage(RepeatedIntMessage &&other) noexcept;
@@ -347,7 +347,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedUIntMessage();
-    ~RepeatedUIntMessage() override;
+    ~RepeatedUIntMessage();
     RepeatedUIntMessage(const RepeatedUIntMessage &other);
     RepeatedUIntMessage &operator =(const RepeatedUIntMessage &other);
     RepeatedUIntMessage(RepeatedUIntMessage &&other) noexcept;
@@ -389,7 +389,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedSInt64Message();
-    ~RepeatedSInt64Message() override;
+    ~RepeatedSInt64Message();
     RepeatedSInt64Message(const RepeatedSInt64Message &other);
     RepeatedSInt64Message &operator =(const RepeatedSInt64Message &other);
     RepeatedSInt64Message(RepeatedSInt64Message &&other) noexcept;
@@ -431,7 +431,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedInt64Message();
-    ~RepeatedInt64Message() override;
+    ~RepeatedInt64Message();
     RepeatedInt64Message(const RepeatedInt64Message &other);
     RepeatedInt64Message &operator =(const RepeatedInt64Message &other);
     RepeatedInt64Message(RepeatedInt64Message &&other) noexcept;
@@ -473,7 +473,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedUInt64Message();
-    ~RepeatedUInt64Message() override;
+    ~RepeatedUInt64Message();
     RepeatedUInt64Message(const RepeatedUInt64Message &other);
     RepeatedUInt64Message &operator =(const RepeatedUInt64Message &other);
     RepeatedUInt64Message(RepeatedUInt64Message &&other) noexcept;
@@ -515,7 +515,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedFixedIntMessage();
-    ~RepeatedFixedIntMessage() override;
+    ~RepeatedFixedIntMessage();
     RepeatedFixedIntMessage(const RepeatedFixedIntMessage &other);
     RepeatedFixedIntMessage &operator =(const RepeatedFixedIntMessage &other);
     RepeatedFixedIntMessage(RepeatedFixedIntMessage &&other) noexcept;
@@ -557,7 +557,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedSFixedIntMessage();
-    ~RepeatedSFixedIntMessage() override;
+    ~RepeatedSFixedIntMessage();
     RepeatedSFixedIntMessage(const RepeatedSFixedIntMessage &other);
     RepeatedSFixedIntMessage &operator =(const RepeatedSFixedIntMessage &other);
     RepeatedSFixedIntMessage(RepeatedSFixedIntMessage &&other) noexcept;
@@ -599,7 +599,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedFixedInt64Message();
-    ~RepeatedFixedInt64Message() override;
+    ~RepeatedFixedInt64Message();
     RepeatedFixedInt64Message(const RepeatedFixedInt64Message &other);
     RepeatedFixedInt64Message &operator =(const RepeatedFixedInt64Message &other);
     RepeatedFixedInt64Message(RepeatedFixedInt64Message &&other) noexcept;
@@ -641,7 +641,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedSFixedInt64Message();
-    ~RepeatedSFixedInt64Message() override;
+    ~RepeatedSFixedInt64Message();
     RepeatedSFixedInt64Message(const RepeatedSFixedInt64Message &other);
     RepeatedSFixedInt64Message &operator =(const RepeatedSFixedInt64Message &other);
     RepeatedSFixedInt64Message(RepeatedSFixedInt64Message &&other) noexcept;
@@ -683,7 +683,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     RepeatedBoolMessage();
-    ~RepeatedBoolMessage() override;
+    ~RepeatedBoolMessage();
     RepeatedBoolMessage(const RepeatedBoolMessage &other);
     RepeatedBoolMessage &operator =(const RepeatedBoolMessage &other);
     RepeatedBoolMessage(RepeatedBoolMessage &&other) noexcept;
