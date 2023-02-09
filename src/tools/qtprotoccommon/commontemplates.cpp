@@ -202,7 +202,7 @@ const char *CommonTemplates::ConstructorMessageDeclarationTemplate()
 
 const char *CommonTemplates::DestructorMessageDeclarationTemplate()
 {
-    return "~$classname$() override;\n";
+    return "~$classname$();\n";
 }
 
 const char *CommonTemplates::MemberTemplate()

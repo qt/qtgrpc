@@ -28,7 +28,7 @@ public:
     static void registerTypes();
 
     Any();
-    ~Any() override;
+    ~Any();
     Any(const Any &other);
     Any &operator=(const Any &other);
     Any(Any &&other) noexcept

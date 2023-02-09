@@ -177,19 +177,21 @@ namespace QtProtobufPrivate {
         return orderingRegistry->getOrdering(type);
     }
 
-    QProtobufMessage *constructMessageByName(const QString &messageType)
+    QProtobufMessagePointer constructMessageByName(const QString &messageType)
     {
         qRegisterProtobufTypes();
         ProtobufOrderingRegistry::ProtobufOrderingRegistryRecord messageOrderingRecord =
                 orderingRegistry->findMessageByName(messageType);
         QMetaType type = messageOrderingRecord.first;
+        QProtobufMessagePointer pointer;
         if (type.id() != QMetaType::UnknownType) {
             void *msg = type.create();
-            return reinterpret_cast<QProtobufMessage *>(msg);
+            pointer.reset(reinterpret_cast<QProtobufMessage *>(msg));
+            return pointer;
         }
         qProtoWarning() << "Unable to find protobuf message with name" << messageType
                         << ". Message is not registered.";
-        return nullptr;
+        return pointer;
     }
 }
 

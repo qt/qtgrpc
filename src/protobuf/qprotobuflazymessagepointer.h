@@ -34,7 +34,7 @@ protected:
     QProtobufMessage *message() const { return m_ptr; }
     void setMessage(QProtobufMessage *msg) const { m_ptr = msg; }
 
-    ~QProtobufLazyMessagePointerBase() { delete m_ptr; }
+    ~QProtobufLazyMessagePointerBase() { QProtobufMessageDeleter()(m_ptr); }
 
     void swap(QProtobufLazyMessagePointerBase &other) noexcept { qt_ptr_swap(m_ptr, other.m_ptr); }
     explicit operator bool() const noexcept { return message() != nullptr; }
