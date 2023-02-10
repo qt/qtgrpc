@@ -152,10 +152,8 @@ public:
             varint >>= 7;
         }
 
-        if (result.isEmpty())
-            result.append('\0');
-
-        result.data()[result.size() - 1] &= ~0b10000000;
+        if (!result.isEmpty())
+            result.data()[result.size() - 1] &= ~0b10000000;
         return result;
     }
 
@@ -283,7 +281,7 @@ public:
     }
 
     //--------------------------List types serializers---------------------------
-    template<typename V, typename std::enable_if_t<!std::is_same<V, QString>::value, int> = 0>
+    template<typename V>
     static QByteArray serializeListType(const QList<V> &listValue, int &outFieldIndex)
     {
         qProtoDebug("listValue.count %" PRIdQSIZETYPE " outFieldIndex %d", listValue.count(),
@@ -304,28 +302,6 @@ public:
         }
         // If internal field type is not LengthDelimited, exact amount of fields to be specified
         serializedList = prependLengthDelimitedSize(serializedList);
-        return serializedList;
-    }
-
-    template<typename V, typename std::enable_if_t<std::is_same<V, QString>::value, int> = 0>
-    static QByteArray serializeListType(const QStringList &listValue, int &outFieldIndex)
-    {
-        qProtoDebug("listValue.count %" PRIdQSIZETYPE " outFieldIndex %d", listValue.count(),
-                    outFieldIndex);
-
-        if (listValue.count() <= 0) {
-            outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
-            return QByteArray();
-        }
-
-        QByteArray serializedList;
-        for (const QString &value : listValue) {
-            serializedList.append(QProtobufSerializerPrivate::encodeHeader(
-                    outFieldIndex, QtProtobuf::WireTypes::LengthDelimited));
-            serializedList.append(serializeLengthDelimited(value.toUtf8(), false));
-        }
-
-        outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
         return serializedList;
     }
 

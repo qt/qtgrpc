@@ -928,13 +928,19 @@ void QtProtobufTypesSerializationTest::ComplexTypeSerializeTest()
 
     ComplexMessage test;
     QByteArray result = test.serialize(m_serializer.get());
-    QEXPECT_FAIL("", "The result of serialization can be either "
-                     "an empty message or a message containing empty fields.", Continue);
     QCOMPARE(result.toHex(), "");
 
     test.setTestFieldInt(42);
-    test.setTestComplexField(stringMsg);
+    result = test.serialize(m_serializer.get());
+    QCOMPARE(QLatin1StringView(result.toHex()), "082a"_L1);
 
+    test.setTestFieldInt(0);
+    test.setTestComplexField(stringMsg);
+    result = test.serialize(m_serializer.get());
+    QCOMPARE(QLatin1StringView(result.toHex()), "12083206717765727479"_L1);
+
+    test.setTestFieldInt(42);
+    test.setTestComplexField(stringMsg);
     result = test.serialize(m_serializer.get());
     QCOMPARE(QLatin1StringView(result.toHex()), "082a12083206717765727479"_L1);
 
@@ -994,8 +1000,6 @@ void QtProtobufTypesSerializationTest::EmptyBytesMessageTest()
     SimpleBytesMessage msg;
 
     QByteArray result = msg.serialize(m_serializer.get());
-    QEXPECT_FAIL("", "The result of serialization can be either an empty "
-                     "message or a message of size zero.", Continue);
     QVERIFY(result.isEmpty());
 }
 
@@ -1004,8 +1008,6 @@ void QtProtobufTypesSerializationTest::EmptyStringMessageTest()
     SimpleStringMessage msg;
 
     QByteArray result = msg.serialize(m_serializer.get());
-    QEXPECT_FAIL("", "The result of serialization can be either an empty "
-                     "message or a message of size zero.", Continue);
     QVERIFY(result.isEmpty());
 }
 

@@ -49,6 +49,61 @@ private:
     QHash<QMetaType, QtProtobufPrivate::SerializationHandler> m_registry;
 };
 Q_GLOBAL_STATIC(HandlersRegistry, handlersRegistry)
+
+template<typename V, typename L,
+         typename std::enable_if_t<
+                 std::is_same<V, QString>::value || std::is_same<V, QByteArray>::value, int> = 0>
+Q_REQUIRED_RESULT QByteArray serializeLengthDelimitedListType(const L &listValue,
+                                                              int &outFieldIndex)
+{
+    qProtoDebug("listValue.count %" PRIdQSIZETYPE " outFieldIndex %d", listValue.count(),
+                outFieldIndex);
+
+    if (listValue.isEmpty()) {
+        outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+        return QByteArray();
+    }
+
+    QByteArray serializedList;
+    for (const V &value : listValue) {
+        serializedList.append(QProtobufSerializerPrivate::encodeHeader(
+                outFieldIndex, QtProtobuf::WireTypes::LengthDelimited));
+        if (value.isEmpty()) {
+            serializedList.append('\0'); // Append the LengthDelimited value of size 0
+            continue;
+        }
+
+        if constexpr (std::is_same<V, QString>::value)
+            serializedList.append(
+                    QProtobufSerializerPrivate::serializeLengthDelimited(value.toUtf8(), false));
+        else
+            serializedList.append(
+                    QProtobufSerializerPrivate::serializeLengthDelimited(value, false));
+    }
+
+    outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+    return serializedList;
+}
+
+template<typename V, typename L,
+         typename std::enable_if_t<
+                 std::is_same<V, QString>::value || std::is_same<V, QByteArray>::value, int> = 0>
+Q_REQUIRED_RESULT bool deserializeLengthDelimitedListType(QProtobufSelfcheckIterator &it,
+                                                          QVariant &previousValue)
+{
+    std::optional<QByteArray> result = QProtobufSerializerPrivate::deserializeLengthDelimited(it);
+    if (result) {
+        L list = previousValue.value<L>();
+        if constexpr (std::is_same<V, QString>::value)
+            list.append(QString::fromUtf8(*result));
+        else
+            list.append(std::move(*result));
+        previousValue.setValue(list);
+        return true;
+    }
+    return false;
+}
+
 } // namespace
 
 void QtProtobufPrivate::registerHandler(QMetaType type,
@@ -119,58 +174,31 @@ using namespace Qt::StringLiterals;
 using namespace QtProtobufPrivate;
 
 template<>
-Q_REQUIRED_RESULT
-QByteArray QProtobufSerializerPrivate::serializeListType<QByteArray>(const QByteArrayList &listValue, int &outFieldIndex)
+Q_REQUIRED_RESULT QByteArray QProtobufSerializerPrivate::serializeListType<QString>(
+        const QStringList &listValue, int &outFieldIndex)
 {
-    qProtoDebug("listValue.count %" PRIdQSIZETYPE " outFieldIndex %d", listValue.count(),
-                outFieldIndex);
+    return serializeLengthDelimitedListType<QString, QStringList>(listValue, outFieldIndex);
+}
 
-    if (listValue.isEmpty()) {
-        outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
-        return QByteArray();
-    }
-
-    QByteArray serializedList;
-    for (const QByteArray &value : listValue) {
-        serializedList.append(QProtobufSerializerPrivate::encodeHeader(
-                outFieldIndex, QtProtobuf::WireTypes::LengthDelimited));
-        serializedList.append(serializeLengthDelimited(value, false));
-    }
-
-    outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
-    return serializedList;
+template<>
+Q_REQUIRED_RESULT QByteArray QProtobufSerializerPrivate::serializeListType<QByteArray>(
+        const QByteArrayList &listValue, int &outFieldIndex)
+{
+    return serializeLengthDelimitedListType<QByteArray, QByteArrayList>(listValue, outFieldIndex);
 }
 
 template<>
 Q_REQUIRED_RESULT
 bool QProtobufSerializerPrivate::deserializeList<QByteArray>(QProtobufSelfcheckIterator &it, QVariant &previousValue)
 {
-    qProtoDebug("currentByte: 0x%x", *it);
-
-    std::optional<QByteArray> result = deserializeLengthDelimited(it);
-    if (result) {
-        QByteArrayList list = previousValue.value<QByteArrayList>();
-        list.append(std::move(*result));
-        previousValue.setValue(list);
-        return true;
-    }
-    return false;
+    return deserializeLengthDelimitedListType<QByteArray, QByteArrayList>(it, previousValue);
 }
 
 template<>
 Q_REQUIRED_RESULT
 bool QProtobufSerializerPrivate::deserializeList<QString>(QProtobufSelfcheckIterator &it, QVariant &previousValue)
 {
-    qProtoDebug("currentByte: 0x%x", *it);
-
-    std::optional<QByteArray> result = deserializeLengthDelimited(it);
-    if (result) {
-        QStringList list = previousValue.value<QStringList>();
-        list.append(QString::fromUtf8(*result));
-        previousValue.setValue(list);
-        return true;
-    }
-    return false;
+    return deserializeLengthDelimitedListType<QString, QStringList>(it, previousValue);
 }
 
 template<std::size_t N>
@@ -394,10 +422,11 @@ QProtobufSerializer::serializeObject(const QProtobufMessage *message,
                                      const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                                      const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
-    QByteArray result = QProtobufSerializerPrivate::encodeHeader(
-            fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited);
-    result.append(QProtobufSerializerPrivate::prependLengthDelimitedSize(
-            serializeMessage(message, ordering)));
+    QByteArray result = QProtobufSerializerPrivate::prependLengthDelimitedSize(
+            serializeMessage(message, ordering));
+    if (!result.isEmpty())
+        result.prepend(QProtobufSerializerPrivate::encodeHeader(
+                fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited));
     return result;
 }
 
@@ -618,9 +647,10 @@ QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
     if (basicHandler) {
         type = basicHandler->wireType;
         int fieldIndex = fieldInfo.getFieldNumber();
-        result.append(basicHandler->serializer(propertyValue, fieldIndex));
+        QByteArray serializedField = basicHandler->serializer(propertyValue, fieldIndex);
+        result.append(serializedField);
         if (fieldIndex != QtProtobufPrivate::NotUsedFieldIndex
-                && type != QtProtobuf::WireTypes::Unknown) {
+            && type != QtProtobuf::WireTypes::Unknown && !serializedField.isEmpty()) {
             result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
         }
     } else {
