@@ -64,7 +64,7 @@ function(_qt_internal_protoc_generate target generator output_directory)
         message(FATAL_ERROR "PROTO_FILES list is empty.")
     endif()
 
-    unset(proto_includes)
+    set(proto_includes "")
     if(arg_PROTO_INCLUDES)
         set(proto_includes "${arg_PROTO_INCLUDES}")
     endif()
@@ -96,10 +96,16 @@ function(_qt_internal_protoc_generate target generator output_directory)
 
     set(generator_file $<TARGET_FILE:${QT_CMAKE_EXPORT_NAMESPACE}::${generator}>)
 
-    unset(proto_includes_string)
+    set(proto_includes_string "")
     if(proto_includes)
-        list(JOIN proto_includes ">\\$<SEMICOLON>-I$<GENEX_EVAL:" proto_includes_string)
-        set(proto_includes_string "-I$<GENEX_EVAL:${proto_includes_string}>")
+        list(JOIN proto_includes "$<SEMICOLON>" proto_includes)
+        set(proto_includes_genex "$<GENEX_EVAL:${proto_includes}>")
+        set(proto_includes_condition "$<BOOL:${proto_includes_genex}>")
+        string(JOIN "" proto_includes_string
+            "$<${proto_includes_condition}:"
+                "-I$<JOIN:${proto_includes_genex},\\$<SEMICOLON>-I>"
+            ">"
+        )
     endif()
     list(JOIN arg_PROTO_FILES "\\$<SEMICOLON>"  proto_files_string)
     list(JOIN generation_options "\\\\$<SEMICOLON>" generation_options_string)
