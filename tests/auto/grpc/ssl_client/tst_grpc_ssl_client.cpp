@@ -20,6 +20,7 @@
 #include <QSignalSpy>
 #include <QTest>
 #include <QtCore/QTimer>
+#include <QtCore/qsysinfo.h>
 #include <QtNetwork/QSslConfiguration>
 
 #include "testservice_client.grpc.qpb.h"
@@ -46,6 +47,10 @@ private slots:
 
     void init()
     {
+        if (QSysInfo::productVersion() == "8.6" && QSysInfo::productType().contains("rhel")) {
+            QSKIP("Test case disabled on RHEL due to QTBUG-111098");
+        }
+
         if (serverProc->state() != QProcess::ProcessState::Running) {
             qInfo() << "Restarting server";
             startServer();

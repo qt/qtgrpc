@@ -19,6 +19,7 @@
 #include <QTest>
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
+#include <QtCore/qsysinfo.h>
 
 #include <memory>
 
@@ -103,6 +104,10 @@ private slots:
 
     void init()
     {
+        if (QSysInfo::productVersion() == "8.6" && QSysInfo::productType().contains("rhel")) {
+            QSKIP("Test case disabled on RHEL due to QTBUG-111098");
+        }
+
         QFETCH_GLOBAL(std::shared_ptr<TestService::Client>, client);
         _client = std::move(client);
 
