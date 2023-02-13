@@ -26,11 +26,15 @@ public:
     virtual QGrpcCredentialMap channelCredentials() const = 0;
 };
 
+#ifdef Q_QDOC
+template <typename Call, typename Channel>
+#else
 template <typename Call, typename Channel,
           typename std::enable_if_t<
                   std::conjunction_v<std::is_base_of<QGrpcCallCredentials, Call>,
                                      std::is_base_of<QGrpcChannelCredentials, Channel>>,
                   int> = 0>
+#endif
 class QGrpcCredentials final : public QAbstractGrpcCredentials
 {
 public:
