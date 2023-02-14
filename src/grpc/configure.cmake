@@ -1,8 +1,11 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
-qt_find_package(WrapgRPC PROVIDED_TARGETS WrapgRPC::WrapLibgRPC MODULE_NAME
-                global)
+qt_find_package(WrapgRPC
+    PROVIDED_TARGETS WrapgRPC::WrapLibgRPC
+    MODULE_NAME global
+    NO_CMAKE_PACKAGE_REGISTRY
+)
 
 qt_feature("grpc" PUBLIC
     SECTION "Utilities"
