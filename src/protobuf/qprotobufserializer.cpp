@@ -373,7 +373,7 @@ bool QProtobufSerializer::deserializeMessage(
         QByteArrayView data) const
 {
     d_ptr->clearError();
-    QProtobufSelfcheckIterator it(data);
+    QProtobufSelfcheckIterator it = QProtobufSelfcheckIterator::fromView(data);
     while (it.isValid() && it != data.end()) {
         if (!d_ptr->deserializeProperty(message, ordering, it))
             return false;
