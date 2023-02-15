@@ -24,13 +24,14 @@ public:
     using pointer = QByteArray::pointer;
     using reference = QByteArray::reference;
 
-    explicit QProtobufSelfcheckIterator(QByteArrayView container)
-        : m_containerBegin(container.begin()),
-          m_containerEnd(container.end()),
-          m_it(container.begin())
+    static QProtobufSelfcheckIterator fromView(QByteArrayView container)
     {
+        QProtobufSelfcheckIterator iter(container);
+        return iter;
     }
+
     QProtobufSelfcheckIterator(const QProtobufSelfcheckIterator &other) = default;
+    QProtobufSelfcheckIterator &operator=(const QProtobufSelfcheckIterator &other) = default;
 
     explicit operator QByteArray::const_iterator &() { return m_it; }
     explicit operator QByteArray::const_iterator() const { return m_it; }
@@ -98,12 +99,17 @@ public:
         return *this;
     }
 
-    // QProtobufSelfcheckIterator &operator=(const QProtobufSelfcheckIterator &other) = default;
-
     const char *data() const { return m_it; }
     qsizetype bytesLeft() const { return isValid() ? std::distance(m_it, m_containerEnd) : 0; }
 
 private:
+    explicit QProtobufSelfcheckIterator(QByteArrayView container)
+        : m_containerBegin(container.begin()),
+          m_containerEnd(container.end()),
+          m_it(container.begin())
+    {
+    }
+
     friend bool operator==(const QProtobufSelfcheckIterator &lhs,
                            const QProtobufSelfcheckIterator &rhs) noexcept
     {
@@ -138,8 +144,8 @@ private:
         return lhs.m_it - rhs.m_it;
     }
 
-    const QByteArrayView::const_iterator m_containerBegin;
-    const QByteArrayView::const_iterator m_containerEnd;
+    QByteArrayView::const_iterator m_containerBegin;
+    QByteArrayView::const_iterator m_containerEnd;
     QByteArrayView::const_iterator m_it;
 };
 
