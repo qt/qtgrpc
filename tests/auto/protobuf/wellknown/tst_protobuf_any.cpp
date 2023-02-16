@@ -31,7 +31,6 @@ void tst_protobuf_any::defaultConstructed()
     AnyMessage message;
     // Serialize default-constructed message...
     QByteArray serialized = message.serialize(&serializer);
-    QEXPECT_FAIL("", "QTBUG-109291: All-default entries should return 0 bytes", Continue);
     QCOMPARE_EQ(serialized, QByteArray());
 
     AnyMessage message2;

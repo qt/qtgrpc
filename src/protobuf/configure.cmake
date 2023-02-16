@@ -6,7 +6,6 @@ qt_find_package(WrapProtobuf
         WrapProtobuf::WrapLibProtoc
         WrapProtobuf::WrapLibProtobuf
     MODULE_NAME global
-    NO_CMAKE_PACKAGE_REGISTRY
 )
 
 # WrapProtoc::WrapProtoc could come from top-level CMakeLists.txt so avoid promoting it to GLOBAL
@@ -17,7 +16,6 @@ endif()
 qt_find_package(WrapProtoc
     PROVIDED_TARGETS WrapProtoc::WrapProtoc
     MODULE_NAME global
-    NO_CMAKE_PACKAGE_REGISTRY
 )
 
 qt_feature("qtprotobufgen" PRIVATE
