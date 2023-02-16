@@ -4,7 +4,6 @@
 qt_find_package(WrapgRPC
     PROVIDED_TARGETS WrapgRPC::WrapLibgRPC
     MODULE_NAME global
-    NO_CMAKE_PACKAGE_REGISTRY
 )
 
 qt_feature("grpc" PUBLIC
