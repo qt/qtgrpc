@@ -6,7 +6,6 @@
     \title Qt GRPC C++ Classes
     \ingroup frameworks-technologies
     \qtcmakepackage Grpc
-    \qtvariable grpc
     \since 6.5
 
     \brief The Qt GRPC module provides support for communicating with gRPC services.
