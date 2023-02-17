@@ -34,7 +34,6 @@
     \modulestate Technical Preview
     \title Qt Protobuf C++ Classes
     \qtcmakepackage Protobuf
-    \qtvariable protobuf
     \since 6.5
     \brief Provides protocol buffers support in Qt.
 */
