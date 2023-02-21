@@ -212,8 +212,17 @@ QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &url,
 {
 }
 
+/*!
+    Destroys the QGrpcHttp2Channel object.
+*/
 QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
 
+/*!
+    Synchronously calls the RPC method and writes the result to the output parameter \a ret.
+
+    The RPC method name is concatenated from the \a method and \a service parameters
+    with the given \a args.
+*/
 QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView service,
                                     QByteArrayView args, QByteArray &ret)
 {
@@ -234,6 +243,14 @@ QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView 
     return { grpcStatus, QString::fromUtf8(networkReply->rawHeader(GrpcStatusMessageHeader)) };
 }
 
+/*!
+    Asynchronously calls the RPC method.
+
+    The RPC method name is concatenated from the \a method and \a service parameters
+    with the given \a args.
+    The method can emit QGrpcCallReply::finished() and QGrpcCallReply::errorOccurred()
+    signals on a QGrpcCallReply returned object.
+*/
 std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QAbstractGrpcClient *client,
                                                         QLatin1StringView method,
                                                         QLatin1StringView service,
@@ -281,6 +298,13 @@ std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QAbstractGrpcClient *cli
     return reply;
 }
 
+/*!
+    Starts a stream on \a grpcStream using QGrpcStream::method() and
+    \a service to get the name of the RPC method.
+
+    Calls QGrpcStream::handler() when the stream receives data from the server.
+    The method may emit QGrpcStream::errorOccurred() when the stream has terminated with an error.
+*/
 void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView service)
 {
     Q_ASSERT(grpcStream != nullptr);
@@ -400,6 +424,9 @@ void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView s
             });
 }
 
+/*!
+    Returns the newly created QProtobufSerializer shared pointer.
+*/
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const
 {
     // TODO: make selection based on credentials or channel settings
