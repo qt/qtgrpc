@@ -16,7 +16,7 @@ QT_BEGIN_NAMESPACE
 class Q_GRPC_EXPORT QGrpcSslCredentials final : public QGrpcChannelCredentials
 {
 public:
-    explicit QGrpcSslCredentials(const QSslConfiguration &configuation);
+    explicit QGrpcSslCredentials(const QSslConfiguration &configuration);
     ~QGrpcSslCredentials() override;
 
     QGrpcCredentialMap channelCredentials() const override;

@@ -17,13 +17,14 @@ constexpr char defaultPasswordFieldName[] = "user-password";
 
     \brief The QGrpcUserPasswordCredentials class is a reference
     implementation of simple user-password call authentication.
+*/
 
-    You may manually specify UserFieldName and PasswordFieldName in
-    class template parameters to change header keys.
+/*!
+    QGrpcUserPasswordCredentials constructs QGrpcUserPasswordCredentials with \a userName
+    and \a password with default UserFieldName and PasswordFieldName header keys.
     The \c userNameField defaults to \c{"user-name"},
     the \c passwordField defaults to \c{"user-password"}.
 */
-
 QGrpcUserPasswordCredentials::QGrpcUserPasswordCredentials(const QString &userName,
                                                            const QString &password)
     : QGrpcUserPasswordCredentials(defaultUserFieldName, userName, defaultPasswordFieldName,
@@ -31,6 +32,10 @@ QGrpcUserPasswordCredentials::QGrpcUserPasswordCredentials(const QString &userNa
 {
 }
 
+/*!
+    QGrpcUserPasswordCredentials constructs QGrpcUserPasswordCredentials with \a userName and \a password
+    credentials with manually specified \a userNameField and \a passwordField header keys.
+*/
 QGrpcUserPasswordCredentials::QGrpcUserPasswordCredentials(const QByteArray &userNameField,
                                                            const QString &userName,
                                                            const QByteArray &passwordField,
@@ -42,8 +47,14 @@ QGrpcUserPasswordCredentials::QGrpcUserPasswordCredentials(const QByteArray &use
 
 QGrpcUserPasswordCredentials::QGrpcUserPasswordCredentials() = default;
 
+/*!
+    Destroys the QGrpcUserPasswordCredentials object.
+*/
 QGrpcUserPasswordCredentials::~QGrpcUserPasswordCredentials() = default;
 
+/*!
+    Returns the stored credentials map.
+*/
 QGrpcCredentialMap QGrpcUserPasswordCredentials::operator()() const
 {
     return m_map;

@@ -20,6 +20,14 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
+    \fn virtual QGrpcCredentialMap QGrpcCallCredentials::operator()() const = 0
+
+    This pure virtual operator returns a key-value map of the credentials for RPC calls.
+
+    This operator is called to obtain the QGrpcCredentialMap for the call.
+*/
+
+/*!
     \class QGrpcChannelCredentials
     \inmodule QtGRPC
 
@@ -35,12 +43,64 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
+    \fn virtual QGrpcCredentialMap QGrpcChannelCredentials::channelCredentials() const = 0
+
+    This pure virtual function shall return a key-value map of session parameters
+    for the specific channel.
+
+    This function is called to obtain the QGrpcCredentialMap for the channel.
+*/
+
+/*!
     \class QGrpcCredentials
     \inmodule QtGRPC
 
     \brief The QGrpcCredentials class is a combination of call
     and channel credentials that is used by gRPC channels to communicate
     with services, using the given authentication parameters.
+*/
+
+/*!
+    \fn template <typename Call, typename Channel> QGrpcCredentials<Call, Channel>::QGrpcCredentials(const Call &call,
+    const Channel &channel)
+
+    Constructs QGrpcCredentials with \a call and \a channel credentials.
+    The Call type must be the base of QGrpcCallCredentials and
+    the Channel type must be the base of QGrpcChannelCredentials.
+*/
+
+/*!
+    \fn template <typename Call, typename Channel> QGrpcCredentials<Call, Channel>::QGrpcCredentials(const Call &call)
+
+    Constructs QGrpcCredentials with \a call credentials.
+    The Call type must be the base of QGrpcCallCredentials.
+*/
+
+/*!
+    \fn template <typename Call, typename Channel> QGrpcCredentials<Call, Channel>::QGrpcCredentials(const Channel &channel)
+
+    Constructs QGrpcCredentials with \a channel credentials.
+    The Channel type must be the base of QGrpcChannelCredentials.
+*/
+
+/*!
+    \fn template <typename Call, typename Channel> QGrpcCredentials<Call, Channel>::~QGrpcCredentials()
+
+    Destroys the QGrpcCredentials object.
+*/
+
+/*!
+    \fn template <typename Call, typename Channel> QGrpcCredentialMap QGrpcCredentials<Call, Channel>::callCredentials() const
+
+    Returns a map of call credentials by calling QGrpcCallCredentials::operator()
+    on a stored Call object.
+*/
+
+/*!
+    \fn template <typename Call, typename Channel> QGrpcCredentialMap QGrpcCredentials<Call, Channel>::channelCredentials() const
+
+    Returns a map of channel credentials by calling QGrpcChannelCredentials::channelCredentials()
+    on a stored Channel object.
 */
 
 const char *SslConfigCredential = "sslConfig";
