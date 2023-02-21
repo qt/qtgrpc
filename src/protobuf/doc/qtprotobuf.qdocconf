@@ -3,6 +3,7 @@ include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
 project                 = QtProtobuf
 description             = Qt Protobuf Reference Documentation
 version                 = $QT_VERSION
+moduleheader            = QtProtobufDoc
 
 examplesinstallpath     = protobuf
 
