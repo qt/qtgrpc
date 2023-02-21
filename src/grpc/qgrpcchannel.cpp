@@ -266,8 +266,9 @@ void QGrpcChannelPrivate::startStream(QGrpcStream *stream, QLatin1StringView ser
     Q_ASSERT(stream != nullptr);
     const QByteArray rpcName = buildRpcName(service, stream->method());
 
-    QSharedPointer<QGrpcChannelStream> sub(
-            new QGrpcChannelStream(m_channel.get(), QLatin1StringView(rpcName), stream->arg()));
+    QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(),
+                                                                  QLatin1StringView(rpcName),
+                                                                  stream->arg()));
 
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
     auto readConnection = std::make_shared<QMetaObject::Connection>();
@@ -306,7 +307,7 @@ void QGrpcChannelPrivate::startStream(QGrpcStream *stream, QLatin1StringView ser
 }
 
 /*!
-    QGrpcChannel constructs QGrpcChannel with \a url, \a credentialsType
+    Constructs a gRPC channel, with \a url, \a credentialsType,
     and \a credentialsList object.
 */
 QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credentialsType,
@@ -316,19 +317,40 @@ QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credent
 {
 }
 
+/*!
+    Constructs a gRPC channel, with \a url, \a credentialsType and
+    an empty credentials list.
+*/
 QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credentialsType)
     : QGrpcChannel(std::move(url), credentialsType, QStringList())
 {
 }
 
+/*!
+    Destroys the QGrpcChannel object.
+*/
 QGrpcChannel::~QGrpcChannel() = default;
 
+/*!
+    Synchronously calls the RPC method and writes the result to the output parameter \a ret.
+
+    The RPC method name is concatenated from the \a method and \a service parameters
+    with the given \a args.
+*/
 QGrpcStatus QGrpcChannel::call(QLatin1StringView method, QLatin1StringView service,
                                QByteArrayView args, QByteArray &ret)
 {
     return dPtr->call(method, service, args, ret);
 }
 
+/*!
+    Asynchronously calls the RPC method.
+
+    The RPC method name is concatenated from the \a method and \a service parameters
+    with the given \a args.
+    The method can emit QGrpcCallReply::finished() and QGrpcCallReply::errorOccurred()
+    signals on a QGrpcCallReply returned object.
+*/
 std::shared_ptr<QGrpcCallReply> QGrpcChannel::call(QAbstractGrpcClient *client,
                                                    QLatin1StringView method,
                                                    QLatin1StringView service, QByteArrayView args)
@@ -336,11 +358,21 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannel::call(QAbstractGrpcClient *client,
     return dPtr->call(client, method, service, args);
 }
 
+/*!
+    Starts a stream on a \a stream using QGrpcStream::method() and the
+    \a service to get the name of the RPC method.
+
+    Calls QGrpcStream::handler() when the stream receives data from the server.
+    The method may emit QGrpcStream::errorOccurred() when the stream has terminated with an error.
+*/
 void QGrpcChannel::startStream(QGrpcStream *stream, QLatin1StringView service)
 {
     dPtr->startStream(stream, service);
 }
 
+/*!
+    Returns the newly created QProtobufSerializer shared pointer.
+*/
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcChannel::serializer() const
 {
     // TODO: make selection based on credentials or channel settings
