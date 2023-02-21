@@ -26,15 +26,27 @@
     Use it when you don't need any channel credentials.
 */
 
+/*!
+    Destroys the QGrpcInsecureCallCredentials object.
+*/
 QGrpcInsecureCallCredentials::~QGrpcInsecureCallCredentials() = default;
 
+/*!
+    Returns an empty QGrpcCredentialMap.
+*/
 QGrpcCredentialMap QGrpcInsecureCallCredentials::operator()() const
 {
     return QGrpcCredentialMap{};
 }
 
+/*!
+    Destroys the QGrpcInsecureChannelCredentials object.
+*/
 QGrpcInsecureChannelCredentials::~QGrpcInsecureChannelCredentials() = default;
 
+/*!
+    Returns an empty QGrpcCredentialMap.
+*/
 QGrpcCredentialMap QGrpcInsecureChannelCredentials::channelCredentials() const
 {
     return QGrpcCredentialMap{};
