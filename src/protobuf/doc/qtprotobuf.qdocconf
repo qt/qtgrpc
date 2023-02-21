@@ -32,7 +32,8 @@ depends += qtdoc qtcore qtcmake qtgrpc
 {headerdirs,sourcedirs} += ..
 sourcedirs += ../../tools/doc/src
 
-exampledirs +=  ../../../examples/protobuf
+exampledirs +=  ../../../examples/protobuf \
+                ../../tools/doc/src/snippets
 
 imagedirs   += images \
     ../../../examples/protobuf/sensors/doc/images

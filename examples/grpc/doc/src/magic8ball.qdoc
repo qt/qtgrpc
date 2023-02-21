@@ -3,8 +3,9 @@
 
 /*!
     \example magic8ball
-    \meta category {Networking}
     \ingroup qtgrpc-examples
+    \meta category {Networking}
+    \meta tag {network,protobuf,grpc}
     \title Magic 8 Ball
 
     \brief Creating a HTTP2 connection between a Qt GRPC client and
@@ -17,12 +18,15 @@
     \list
     \li \c magic8ball Qt GRPC client application that includes
         the \l {qt_add_protobuf}{qt_add_protobuf()} and
-        \l {cmake-commands-qtgrpc}{qt_add_grpc()}
+        \l {qt_add_grpc}{qt_add_grpc()}
         CMake functions for message and service Qt code generation.
     \li \c SimpleGrpcServer application that calls C++ gRPC plugin
         for generating server code and implementing simple server
         logic.
     \endlist
+
+    \note you need the C++ gRPC plugin installed.
+    Find details here: \l {Module prerequisites}
 
     Both components use generated messages from the protobuf schema
     described in the \c {exampleservice.proto} file:
@@ -53,4 +57,3 @@
     After receiving a response the client application shows the answer.
 
 */
-
