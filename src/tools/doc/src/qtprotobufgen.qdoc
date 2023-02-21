@@ -7,7 +7,7 @@
 \title The qtprotobufgen Tool
 \inmodule QtProtobuf
 
-The qtprotobufgen tool can be used to generate QtProtobuf classes from a
+The \c qtprotobufgen tool can be used to generate QtProtobuf classes from a
 protobuf schema. The tool is provided by the CMake \c {Qt6::ProtobufTools}
 package. It works as an extension to Google's \c protoc tool.
 
@@ -17,12 +17,12 @@ package. It works as an extension to Google's \c protoc tool.
 
 \section1 Usage
 
-Qt provides CMake functions that ease the use of the qtprotobufgen tool.
-When using CMake as a build tool you should prefer using the Qt CMake API. For
-build systems other than CMake, adapt the commands described in
+Qt provides CMake functions that ease the use of the \c qtprotobufgen tool.
+When using CMake as a build tool you should prefer using the Qt CMake API.
+For build systems other than CMake, adapt the commands described in
 \l{Running manually}.
 
-\c {Note}, there is no explicit support of building gRPC and Protobuf
+\note there is no explicit support for building gRPC and Protobuf
 applications using the Qt GRPC module with \e qmake.
 
 \section2 CMake
@@ -31,7 +31,7 @@ The following CMake commands integrate a protobuf schema into a Qt project.
 \target cmake-commands-qtprotobuf
 \annotatedlist cmake-commands-qtprotobuf
 
-Usually qtprotobufgen would be invoked through cmake using the
+Usually \c qtprotobufgen would be invoked through CMake using the
 \c{qt_add_protobuf} macro, as shown in the following example:
 
 \include qt-add-protobuf-example.qdocinc
@@ -46,11 +46,11 @@ Usually qtprotobufgen would be invoked through cmake using the
         <protofile>.proto
 \endcode
 
-The \c{options} argument is a semicolon-separated list of \l{Options}.
-It can be passed in \e{two} different ways. Either by prepending to the options
+The \c options argument is a semicolon-separated list of \l{Options}.
+It can be passed in \e two different ways. Either by prepending to the options
 to the output_dir argument, delimited by a colon. Or through a separate
 argument, \c{--qtprotobuf_opt}.
-You also can pass the corresponding keys as the \c{QT_PROTOBUF_OPTIONS}
+You also can pass the corresponding keys as the \c QT_PROTOBUF_OPTIONS
 environment variable. Keys need to be presented as a semicolon-separated list:
 \badcode
     export QT_PROTOBUF_OPTIONS="COPY_COMMENTS;GENERATE_PACKAGE_SUBFOLDERS;EXTRA_NAMESPACE=MyTopLevelNamespace"
@@ -62,6 +62,6 @@ Options have direct aliases in the \l{qt_add_protobuf} function. The following
 options are supported:
 
 \list
-\include qtprotobufgen-options.qdocinc
+    \include qtprotogen-options.qdocinc
 \endlist
 */

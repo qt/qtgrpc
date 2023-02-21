@@ -29,9 +29,11 @@ qhp.QtGrpc.subprojects.classes.sortPages  = true
 
 depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake
 
-{headerdirs,sourcedirs}  += ..
+{headerdirs,sourcedirs}  += .. \
+                            ../../tools/doc/src
 
-exampledirs +=  ../../../examples/grpc
+exampledirs +=  ../../tools/doc/src/snippets \
+                ../../../examples/grpc
 
 imagedirs   += images \
                ../../../examples/grpc/doc/images
