@@ -4,8 +4,8 @@
 /*!
     \example chat
     \ingroup qtgrpc-examples
-    \meta tag {network,protobuf,grpc,serialization,tcp}
     \meta category {Networking}
+    \meta tag {network,protobuf,grpc,serialization,tcp}
     \title Chat
 
     \brief Using the Qt GRPC client API in the user applications.
