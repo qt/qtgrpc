@@ -42,12 +42,10 @@ add_library(ServerRunner_grpc_gen STATIC ${generated_files})
 target_include_directories(ServerRunner_grpc_gen
     PRIVATE
     ${out_dir}
-    WrapgRPC_INCLUDE_PATH
 )
 
 target_link_libraries(ServerRunner_grpc_gen
     PRIVATE
-    WrapProtobuf::WrapLibProtobuf
     WrapgRPC::WrapLibgRPC
 )
 
