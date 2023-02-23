@@ -12,9 +12,8 @@ QT_BEGIN_NAMESPACE
     \class QGrpcStream
     \inmodule QtGRPC
 
-    \brief The QGrpcStream class.
-
-    TODO: Fill this out with more detail later
+    \brief The QGrpcStream class implements logic to handle stream communication
+    in the Grpc channel.
 */
 
 /*!
@@ -31,8 +30,15 @@ QGrpcStream::QGrpcStream(QLatin1StringView method, QByteArrayView arg, const Str
         m_handlers.push_back(handler);
 }
 
+/*!
+    Destroys the QGrpcStream object.
+*/
 QGrpcStream::~QGrpcStream() = default;
 
+/*!
+    \internal
+    Adds \a handler to a list of handlers that are invoked on the QGrpcStream::handler() call.
+*/
 void QGrpcStream::addHandler(const StreamHandler &handler)
 {
     if (handler)
