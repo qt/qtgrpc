@@ -48,6 +48,11 @@ add_executable(grpcchatserver
     main.cpp
 )
 
+# If libprotobuf is not built with -fPIE enabled we cannot link it to the executables built
+# with -fPIE.
+# TODO: Re-enable PIE once QTBUG-111485 is fixed.
+set_target_properties(grpcchatserver PROPERTIES POSITION_INDEPENDENT_CODE FALSE)
+
 target_include_directories(grpcchatserver PRIVATE ${out_dir})
 target_link_libraries(grpcchatserver PRIVATE WrapgRPC::WrapLibgRPC)
 
