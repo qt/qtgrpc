@@ -16,14 +16,14 @@ using namespace Qt::StringLiterals;
     \brief The QGrpcCallReply class contains data for asynchronous call
     of gRPC client API.
 
-    It's owned by the client class that created it.
-    QGrpcCallReply could be used by QAbstractGrpcChannel implementations
+    The QGrpcCallReply object is owned by the client object that created it.
+    QGrpcCallReply can be used by QAbstractGrpcChannel implementations
     to control call workflow and abort calls if possible in the event
     of QGrpcCallReply::abort being called by a library user.
 */
 
 /*!
-    \fn template <typename Func1, typename Func2> void subscribe(QObject *receiver,
+    \fn template <typename Func1, typename Func2> void QGrpcCallReply::subscribe(QObject *receiver,
     Func1 &&finishCallback, Func2 &&errorCallback, Qt::ConnectionType type = Qt::AutoConnection);
 
     Convenience function to connect the \a finishCallback and
@@ -32,13 +32,15 @@ using namespace Qt::StringLiterals;
 
     Calling this function is equivalent to the following:
     \code
-        QObject::connect(this, &QGrpcCallReply::finished, receiver, finishCallback, type);
-        QObject::connect(this, &QGrpcCallReply::errorOccurred, receiver, errorCallback, type);
+        QObject::connect(this, &QGrpcCallReply::finished, receiver,
+                         std::forward<Func1>(finishCallback), type);
+        QObject::connect(this, &QGrpcCallReply::errorOccurred, receiver,
+                         std::forward<Func2>(errorCallback), type);
     \endcode
 */
 
 /*!
-    \fn template <typename Func1> void subscribe(QObject *receiver,
+    \fn template <typename Func1> void QGrpcCallReply::subscribe(QObject *receiver,
     Func1 &&finishCallback, Qt::ConnectionType type = Qt::AutoConnection);
 
     Convenience function to connect the \a finishCallback of \a receiver to
@@ -46,7 +48,8 @@ using namespace Qt::StringLiterals;
 
     Calling this function is equivalent to the following:
     \code
-        QObject::connect(this, &QGrpcCallReply::finished, receiver, finishCallback, type);
+        QObject::connect(this, &QGrpcCallReply::finished, receiver,
+                         std::forward<Func1>(finishCallback), type);
     \endcode
 */
 
