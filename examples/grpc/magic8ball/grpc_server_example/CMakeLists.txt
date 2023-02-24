@@ -68,6 +68,11 @@ qt_add_executable(SimpleGrpcServer
     main.cpp
 )
 
+# If libprotobuf is not built with -fPIE enabled we cannot link it to the executables built
+# with -fPIE.
+# TODO: Re-enable PIE once QTBUG-111485 is fixed.
+set_target_properties(MagicServerRunner PROPERTIES POSITION_INDEPENDENT_CODE FALSE)
+
 target_link_libraries(SimpleGrpcServer PRIVATE
     Qt6::Core
     MagicServerRunner
