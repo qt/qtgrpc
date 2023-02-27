@@ -1,2 +1,6 @@
 set_property(TARGET ${QT_CMAKE_EXPORT_NAMESPACE}::@target@ APPEND PROPERTY
-    QT_PROTO_INCLUDES "@proto_include_dir@")
+    QT_PROTO_INCLUDES "${QT6_INSTALL_PREFIX}/@proto_include_dir@")
+if(CMAKE_STAGING_PREFIX)
+    set_property(TARGET ${QT_CMAKE_EXPORT_NAMESPACE}::@target@ APPEND PROPERTY
+        QT_PROTO_INCLUDES "${CMAKE_STAGING_PREFIX}/@proto_include_dir@")
+endif()
