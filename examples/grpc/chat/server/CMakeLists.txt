@@ -5,6 +5,9 @@ cmake_minimum_required(VERSION 3.16)
 
 project(GrpcChatServer LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Qt6::Grpc module is not used directly in this project. But this allows to find Qt6::Grpc's
 # dependencies without setting extra cmake module paths.
 find_package(Qt6 COMPONENTS Grpc)
