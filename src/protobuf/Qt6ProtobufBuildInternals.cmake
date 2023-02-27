@@ -97,7 +97,7 @@ function(qt_internal_add_protobuf_module target)
 
         set_target_properties(${target} PROPERTIES QT_PROTO_INCLUDES "${proto_files_base_dir}")
 
-        qt_path_join(proto_include_dir ${module_install_interface_include_dir})
+        set(proto_include_dirs "${module_install_interface_include_dir}")
 
         set(export_name "${INSTALL_CMAKE_NAMESPACE}${target}")
         qt_path_join(config_build_dir ${QT_CONFIG_BUILD_DIR} ${export_name})
