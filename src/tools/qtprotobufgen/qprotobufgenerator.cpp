@@ -17,6 +17,7 @@
 #include <array>
 #include <numeric>
 #include <set>
+#include <unordered_set>
 #include <google/protobuf/stubs/logging.h>
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/io/printer.h>
