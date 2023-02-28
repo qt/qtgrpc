@@ -31,7 +31,7 @@ Rectangle {
         from: 0.3
         to: 1
         duration: 1000
-        running: runAnimation
+        running: root.runAnimation
         onStopped: closing.start()
         easing.amplitude: 6.0
         easing.period: 2.5
@@ -45,7 +45,7 @@ Rectangle {
         duration: 1000
         running: false
         onStopped: {
-            if (runAnimation)
+            if (root.runAnimation)
                 openning.start()
         }
         easing.amplitude: 6.0

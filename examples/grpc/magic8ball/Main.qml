@@ -3,6 +3,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Shapes
 
 import qtgrpc.examples.magic8ball
@@ -17,6 +18,7 @@ ApplicationWindow {
 
     visible: true
     title: qsTr("Magic-8-ball Qt GRPC Example")
+    Material.theme: Material.Light
 
     property string textAnswer: ""
     property string textError: ""
@@ -75,7 +77,7 @@ ApplicationWindow {
         height: width
 
         color: "black"
-        border.width: 0.5
+        border.width: 1.5
         border.color: "#bababa"
         radius: 300
 
