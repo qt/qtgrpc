@@ -310,8 +310,6 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
     \enum QtProtobuf::WireTypes
     \brief The WireTypes enumeration reflects protobuf default wiretypes.
 
-    See https://developers.google.com/protocol-buffers/docs/encoding for details.
-
     The following table shows the values in the enumeration and their
     corresponding types:
 
@@ -322,6 +320,8 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
     \value StartGroup       groups. Deprecated in proto syntax 3. Not supported by QtProtobuf.
     \value EndGroup         groups. Deprecated in proto syntax 3. Not supported by QtProtobuf.
     \value Fixed32          fixed32, sfixed32, float
+
+    \sa {https://developers.google.com/protocol-buffers/docs/encoding} {encoding}
 */
 
 /*!
@@ -395,7 +395,7 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
     sint32 is serialized using ZigZag conversion to reduce size of negative
     numbers.
 
-    See https://developers.google.com/protocol-buffers/docs/encoding#signed-integers for details.
+    \sa {https://developers.google.com/protocol-buffers/docs/encoding#signed-integers} {signed-integers}
 */
 
 /*!
@@ -405,7 +405,7 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
     protobuf as variable size integer, an alias for WireTypes::Varint.
     sint64 is serialized using ZigZag conversion to reduce size of negative numbers.
 
-    See https://developers.google.com/protocol-buffers/docs/encoding#signed-integers for details.
+    \sa {https://developers.google.com/protocol-buffers/docs/encoding#signed-integers} {signed-integers}
 */
 
 /*!
