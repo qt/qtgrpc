@@ -32,8 +32,8 @@
     The client application binds on the \c localhost with port
     \c 50051:
     \quotefromfile magic8ball/clientservice.cpp
-    \skipto new QGrpcHttp2Channel
-    \printuntil m_client->attachChannel(channel);
+    \skipto QUrl url("http://localhost:50051", QUrl::StrictMode);
+    \printuntil | QGrpcInsecureCallCredentials()));
 
     And sends a request to the server part:
     \quotefromfile magic8ball/clientservice.cpp
