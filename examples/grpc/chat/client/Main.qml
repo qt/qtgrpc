@@ -56,12 +56,12 @@ ApplicationWindow {
                 SimpleChatEngine.login(loginField.text, passwordField.text)
             }
             onVisibleChanged: {
-                if (visible) {
+                if (loginControl.visible) {
                     loginField.forceActiveFocus()
                 }
             }
             Component.onCompleted: {
-                if (visible) {
+                if (loginControl.visible) {
                     loginField.forceActiveFocus()
                 }
             }

@@ -11,7 +11,7 @@ Rectangle {
     anchors.fill: parent
     color: "#09102b"
     onVisibleChanged: {
-        if (visible) {
+        if (root.visible) {
             _inputField.forceActiveFocus()
         }
     }
@@ -139,7 +139,7 @@ Rectangle {
                 console.log("Ctrl + V")
                 switch (SimpleChatEngine.clipBoardContentType) {
                 case SimpleChatEngine.Text:
-                    paste()
+                    _inputField.paste()
                     break
                 case SimpleChatEngine.Image:
                     SimpleChatEngine.sendImageFromClipboard()
