@@ -13,40 +13,42 @@ if(${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
     list(APPEND __WrapProtoc_find_package_args QUIET)
 endif()
 
-if(NOT TARGET Threads::Threads)
-    find_package(Threads ${__WrapProtoc_find_package_args})
-endif()
-if(TARGET Threads::Threads)
-    qt_internal_disable_find_package_global_promotion(Threads::Threads)
-endif()
+if(NOT CMAKE_CROSSCOMPILING)
+    if(NOT TARGET Threads::Threads)
+        find_package(Threads ${__WrapProtoc_find_package_args})
+    endif()
+    if(TARGET Threads::Threads)
+        qt_internal_disable_find_package_global_promotion(Threads::Threads)
+    endif()
 
-# Protobuf can be represented in the system by both modern CONFIG and old style MODULE provided by
-# CMake. The use of MODULE with new versions of protoc in PATH causes issues, so CONFIG should be
-# preferred, but we still need to support MODULE. CMAKE_FIND_PACKAGE_PREFER_CONFIG gives this
-# possibility.
-set(__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save ${CMAKE_FIND_PACKAGE_PREFER_CONFIG})
-set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
-find_package(Protobuf ${__WrapProtoc_find_package_args})
-set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save})
-unset(__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save)
+    # Protobuf can be represented in the system by both modern CONFIG and old style MODULE provided
+    # by CMake. The use of MODULE with new versions of protoc in PATH causes issues, so CONFIG
+    # should be preferred, but we still need to support MODULE. CMAKE_FIND_PACKAGE_PREFER_CONFIG
+    # gives this possibility.
+    set(__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save ${CMAKE_FIND_PACKAGE_PREFER_CONFIG})
+    set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
+    find_package(Protobuf ${__WrapProtoc_find_package_args})
+    set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save})
+    unset(__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save)
 
-if(TARGET protobuf::libprotobuf)
-    qt_internal_disable_find_package_global_promotion(protobuf::libprotobuf)
-endif()
-if(TARGET protobuf::libprotoc)
-    qt_internal_disable_find_package_global_promotion(protobuf::libprotoc)
-endif()
+    if(TARGET protobuf::libprotobuf)
+        qt_internal_disable_find_package_global_promotion(protobuf::libprotobuf)
+    endif()
+    if(TARGET protobuf::libprotoc)
+        qt_internal_disable_find_package_global_promotion(protobuf::libprotoc)
+    endif()
 
-if(Protobuf_FOUND AND TARGET protobuf::protoc)
-    get_target_property(__WrapProtoc_is_protoc_imported protobuf::protoc IMPORTED)
-    if(__WrapProtoc_is_protoc_imported)
-        foreach(config IN ITEMS _RELWITHDEBINFO "" _RELEASE _MINSIZEREL _DEBUG)
-            get_target_property(__WrapProtoc_protoc_imported_location protobuf::protoc
-                IMPORTED_LOCATION${config})
-            if(__WrapProtoc_protoc_imported_location)
-                break()
-            endif()
-        endforeach()
+    if(Protobuf_FOUND AND TARGET protobuf::protoc)
+        get_target_property(__WrapProtoc_is_protoc_imported protobuf::protoc IMPORTED)
+        if(__WrapProtoc_is_protoc_imported)
+            foreach(config IN ITEMS _RELWITHDEBINFO "" _RELEASE _MINSIZEREL _DEBUG)
+                get_target_property(__WrapProtoc_protoc_imported_location protobuf::protoc
+                    IMPORTED_LOCATION${config})
+                if(__WrapProtoc_protoc_imported_location)
+                    break()
+                endif()
+            endforeach()
+        endif()
     endif()
 endif()
 
@@ -56,7 +58,7 @@ if(NOT __WrapProtoc_protoc_imported_location)
     endif()
     find_program(__WrapProtoc_protoc_imported_location
         NAMES protoc protoc.exe
-        PATHS ${__WrapProtoc_extra_prefix_paths}
+        PATHS "${__WrapProtoc_extra_prefix_paths}" "$ENV{Protobuf_ROOT}"
         PATH_SUFFIXES bin
     )
 endif()
