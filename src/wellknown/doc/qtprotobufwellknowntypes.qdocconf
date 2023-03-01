@@ -12,17 +12,17 @@ examplesinstallpath     = protobufwellknowntypes
 
 qhp.projects            = QtProtobufWellKnownTypes
 
-qhp.QtProtobuf.file                = qtprotobufwellknowntypes.qhp
-qhp.QtProtobuf.namespace           = org.qt-project.qtprotobufwellknowntypes.$QT_VERSION_TAG
-qhp.QtProtobuf.virtualFolder       = qtprotobufwellknowntypes
-qhp.QtProtobuf.indexTitle          = Qt Protobuf Well-known Types
-qhp.QtProtobuf.indexRoot           =
+qhp.QtProtobufWellKnownTypes.file                = qtprotobufwellknowntypes.qhp
+qhp.QtProtobufWellKnownTypes.namespace           = org.qt-project.qtprotobufwellknowntypes.$QT_VERSION_TAG
+qhp.QtProtobufWellKnownTypes.virtualFolder       = qtprotobufwellknowntypes
+qhp.QtProtobufWellKnownTypes.indexTitle          = Qt Protobuf Well-known Types
+qhp.QtProtobufWellKnownTypes.indexRoot           =
 
-qhp.QtProtobuf.subprojects         = classes
-qhp.QtProtobuf.subprojects.classes.title = C++ Classes
-qhp.QtProtobuf.subprojects.classes.indexTitle = Qt Protobuf Well-known Types C++ Classes
-qhp.QtProtobuf.subprojects.classes.selectors = class fake:headerfile
-qhp.QtProtobuf.subprojects.classes.sortPages = true
+qhp.QtProtobufWellKnownTypes.subprojects         = classes
+qhp.QtProtobufWellKnownTypes.subprojects.classes.title = C++ Classes
+qhp.QtProtobufWellKnownTypes.subprojects.classes.indexTitle = Qt Protobuf Well-known Types C++ Classes
+qhp.QtProtobufWellKnownTypes.subprojects.classes.selectors = class fake:headerfile
+qhp.QtProtobufWellKnownTypes.subprojects.classes.sortPages = true
 
 tagfile                 = ../../../doc/qtprotobufwellknowntypes/qtprotobufwellknowntypes.tags
 
