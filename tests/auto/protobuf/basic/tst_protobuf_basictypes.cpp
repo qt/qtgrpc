@@ -12,6 +12,8 @@
 
 #include <qtprotobuftestscommon.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 class QtProtobufTypesGenerationTest : public QObject
 {
     Q_OBJECT
@@ -232,8 +234,8 @@ void QtProtobufTypesGenerationTest::StringMessageTest()
     QCOMPARE(SimpleStringMessage::staticMetaObject.property(propertyNumber).typeId(), QMetaType::QString);
     QCOMPARE(SimpleStringMessage::staticMetaObject.property(propertyNumber).name(), propertyName);
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue(QString("test1"))));
-    QCOMPARE(test.property(propertyName).toString(), QStringLiteral("test1"));
-    QCOMPARE(test.testFieldString(), QStringLiteral("test1"));
+    QCOMPARE(test.property(propertyName).toString(), "test1"_L1);
+    QCOMPARE(test.testFieldString(), "test1"_L1);
 
     QCOMPARE(SimpleStringMessage::TestFieldStringProtoFieldNumber, 6);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
@@ -247,7 +249,8 @@ void QtProtobufTypesGenerationTest::FloatMessageTest()
     int index = SimpleFloatMessage::propertyOrdering.indexOfFieldNumber(7);
     int propertyNumber = SimpleFloatMessage::propertyOrdering.getPropertyIndex(index); //See simpletest.proto
     QCOMPARE(SimpleFloatMessage::staticMetaObject.property(propertyNumber).typeId(), QMetaType::Float);
-    QCOMPARE(QLatin1String(SimpleFloatMessage::staticMetaObject.property(propertyNumber).name()), QStringLiteral("testFieldFloat"));
+    QCOMPARE(SimpleFloatMessage::staticMetaObject.property(propertyNumber).name(),
+             "testFieldFloat"_L1);
 
     float assignedValue = 1.55f;
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<float>(assignedValue)));

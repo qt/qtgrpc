@@ -54,7 +54,7 @@ void QtProtobufTypesSerializationTest::BoolMessageSerializeTest()
     test.setTestFieldBool(true);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("0801"));
+    QCOMPARE(result.toHex(), "0801"_ba);
 
     test.setTestFieldBool(false);
     result = test.serialize(m_serializer.get());
@@ -68,17 +68,17 @@ void QtProtobufTypesSerializationTest::IntMessageSerializeTest()
     test.setTestFieldInt(15);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("080f"));
+    QCOMPARE(result.toHex(), "080f"_ba);
 
     test.setTestFieldInt(300);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08ac02"));
+    QCOMPARE(result.toHex(), "08ac02"_ba);
 
     test.setTestFieldInt(65545);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08898004"));
+    QCOMPARE(result.toHex(), "08898004"_ba);
 
     test.setTestFieldInt(0);
     result = test.serialize(m_serializer.get());
@@ -87,59 +87,59 @@ void QtProtobufTypesSerializationTest::IntMessageSerializeTest()
     test.setTestFieldInt(std::numeric_limits<int8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("088001"));
+    QCOMPARE(result.toHex(), "088001"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08808002"));
+    QCOMPARE(result.toHex(), "08808002"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("087f"));
+    QCOMPARE(result.toHex(), "087f"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffff01"));
+    QCOMPARE(result.toHex(), "08ffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int32_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffff07"));
+    QCOMPARE(result.toHex(), "08ffffffff07"_ba);
 
     test.setTestFieldInt(-1);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffffffffffffff01"));
+    QCOMPARE(result.toHex(), "08ffffffffffffffffff01"_ba);
 
     test.setTestFieldInt(-462);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.toHex(), QStringLiteral("08b2fcffffffffffffff01"));
+    QCOMPARE(result.toHex(), "08b2fcffffffffffffff01"_ba);
 
     test.setTestFieldInt(-63585);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.toHex(), QStringLiteral("089f8ffcffffffffffff01"));
+    QCOMPARE(result.toHex(), "089f8ffcffffffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::min());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.toHex(), QStringLiteral("0880ffffffffffffffff01"));
+    QCOMPARE(result.toHex(), "0880ffffffffffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::min());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.toHex(), QStringLiteral("088080feffffffffffff01"));
+    QCOMPARE(result.toHex(), "088080feffffffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int32_t>::min());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.toHex(), QStringLiteral("0880808080f8ffffffff01"));
+    QCOMPARE(result.toHex(), "0880808080f8ffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::min() - 1);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.toHex(), QStringLiteral("08fffeffffffffffffff01"));
+    QCOMPARE(result.toHex(), "08fffeffffffffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::min() - 1);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.toHex(), QStringLiteral("08fffffdffffffffffff01"));
+    QCOMPARE(result.toHex(), "08fffffdffffffffffff01"_ba);
 }
 
 void QtProtobufTypesSerializationTest::UIntMessageSerializeTest()
@@ -148,17 +148,17 @@ void QtProtobufTypesSerializationTest::UIntMessageSerializeTest()
     test.setTestFieldInt(15);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("080f"));
+    QCOMPARE(result.toHex(), "080f"_ba);
 
     test.setTestFieldInt(300);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08ac02"));
+    QCOMPARE(result.toHex(), "08ac02"_ba);
 
     test.setTestFieldInt(65545);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08898004"));
+    QCOMPARE(result.toHex(), "08898004"_ba);
 
     test.setTestFieldInt(0);
     result = test.serialize(m_serializer.get());
@@ -167,27 +167,27 @@ void QtProtobufTypesSerializationTest::UIntMessageSerializeTest()
     test.setTestFieldInt(std::numeric_limits<uint8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("088002"));
+    QCOMPARE(result.toHex(), "088002"_ba);
 
     test.setTestFieldInt(std::numeric_limits<uint16_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08808004"));
+    QCOMPARE(result.toHex(), "08808004"_ba);
 
     test.setTestFieldInt(std::numeric_limits<uint8_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08ff01"));
+    QCOMPARE(result.toHex(), "08ff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<uint16_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffff03"));
+    QCOMPARE(result.toHex(), "08ffff03"_ba);
 
     test.setTestFieldInt(std::numeric_limits<uint32_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffff0f"));
+    QCOMPARE(result.toHex(), "08ffffffff0f"_ba);
 }
 
 void QtProtobufTypesSerializationTest::SIntMessageSerializeTest()
@@ -196,17 +196,17 @@ void QtProtobufTypesSerializationTest::SIntMessageSerializeTest()
     test.setTestFieldInt(15);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("081e"));
+    QCOMPARE(result.toHex(), "081e"_ba);
 
     test.setTestFieldInt(300);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08d804"));
+    QCOMPARE(result.toHex(), "08d804"_ba);
 
     test.setTestFieldInt(65545);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08928008"));
+    QCOMPARE(result.toHex(), "08928008"_ba);
 
     test.setTestFieldInt(0);
     result = test.serialize(m_serializer.get());
@@ -215,67 +215,67 @@ void QtProtobufTypesSerializationTest::SIntMessageSerializeTest()
     test.setTestFieldInt(std::numeric_limits<int8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("088002"));
+    QCOMPARE(result.toHex(), "088002"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08808004"));
+    QCOMPARE(result.toHex(), "08808004"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08fe01"));
+    QCOMPARE(result.toHex(), "08fe01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08feff03"));
+    QCOMPARE(result.toHex(), "08feff03"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int32_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("08feffffff0f"));
+    QCOMPARE(result.toHex(), "08feffffff0f"_ba);
 
     test.setTestFieldInt(-1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("0801"));
+    QCOMPARE(result.toHex(), "0801"_ba);
 
     test.setTestFieldInt(-462);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("089b07"));
+    QCOMPARE(result.toHex(), "089b07"_ba);
 
     test.setTestFieldInt(-63585);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08c1e107"));
+    QCOMPARE(result.toHex(), "08c1e107"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08ff01"));
+    QCOMPARE(result.toHex(), "08ff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffff03"));
+    QCOMPARE(result.toHex(), "08ffff03"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int32_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffff0f"));
+    QCOMPARE(result.toHex(), "08ffffffff0f"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("088102"));
+    QCOMPARE(result.toHex(), "088102"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08818004"));
+    QCOMPARE(result.toHex(), "08818004"_ba);
 }
 
 
@@ -285,17 +285,17 @@ void QtProtobufTypesSerializationTest::Int64MessageSerializeTest()
     test.setTestFieldInt(15);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("080f"));
+    QCOMPARE(result.toHex(), "080f"_ba);
 
     test.setTestFieldInt(300);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08ac02"));
+    QCOMPARE(result.toHex(), "08ac02"_ba);
 
     test.setTestFieldInt(65545);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08898004"));
+    QCOMPARE(result.toHex(), "08898004"_ba);
 
     test.setTestFieldInt(0);
     result = test.serialize(m_serializer.get());
@@ -304,87 +304,87 @@ void QtProtobufTypesSerializationTest::Int64MessageSerializeTest()
     test.setTestFieldInt(std::numeric_limits<int8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("088001"));
+    QCOMPARE(result.toHex(), "088001"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08808002"));
+    QCOMPARE(result.toHex(), "08808002"_ba);
 
     test.setTestFieldInt((qlonglong)(std::numeric_limits<int32_t>::max()) + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("088080808008"));
+    QCOMPARE(result.toHex(), "088080808008"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("087f"));
+    QCOMPARE(result.toHex(), "087f"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffff01"));
+    QCOMPARE(result.toHex(), "08ffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int32_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffff07"));
+    QCOMPARE(result.toHex(), "08ffffffff07"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int64_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 10);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffffffffffff7f"));
+    QCOMPARE(result.toHex(), "08ffffffffffffffff7f"_ba);
 
     test.setTestFieldInt(-1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffffffffffffff01"));
+    QCOMPARE(result.toHex(), "08ffffffffffffffffff01"_ba);
 
     test.setTestFieldInt(-462);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("08b2fcffffffffffffff01"));
+    QCOMPARE(result.toHex(), "08b2fcffffffffffffff01"_ba);
 
     test.setTestFieldInt(-63585);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("089f8ffcffffffffffff01"));
+    QCOMPARE(result.toHex(), "089f8ffcffffffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("0880ffffffffffffffff01"));
+    QCOMPARE(result.toHex(), "0880ffffffffffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("088080feffffffffffff01"));
+    QCOMPARE(result.toHex(), "088080feffffffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int32_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("0880808080f8ffffffff01"));
+    QCOMPARE(result.toHex(), "0880808080f8ffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("08fffeffffffffffffff01"));
+    QCOMPARE(result.toHex(), "08fffeffffffffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("08fffffdffffffffffff01"));
+    QCOMPARE(result.toHex(), "08fffffdffffffffffff01"_ba);
 
     test.setTestFieldInt((qlonglong)std::numeric_limits<int32_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("08fffffffff7ffffffff01"));
+    QCOMPARE(result.toHex(), "08fffffffff7ffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int64_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("0880808080808080808001"));
+    QCOMPARE(result.toHex(), "0880808080808080808001"_ba);
 }
 
 void QtProtobufTypesSerializationTest::UInt64MessageSerializeTest()
@@ -393,17 +393,17 @@ void QtProtobufTypesSerializationTest::UInt64MessageSerializeTest()
     test.setTestFieldInt(15);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("080f"));
+    QCOMPARE(result.toHex(), "080f"_ba);
 
     test.setTestFieldInt(300);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08ac02"));
+    QCOMPARE(result.toHex(), "08ac02"_ba);
 
     test.setTestFieldInt(65545);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08898004"));
+    QCOMPARE(result.toHex(), "08898004"_ba);
 
     test.setTestFieldInt(0);
     result = test.serialize(m_serializer.get());
@@ -412,37 +412,37 @@ void QtProtobufTypesSerializationTest::UInt64MessageSerializeTest()
     test.setTestFieldInt(std::numeric_limits<uint8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("088002"));
+    QCOMPARE(result.toHex(), "088002"_ba);
 
     test.setTestFieldInt(std::numeric_limits<uint16_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08808004"));
+    QCOMPARE(result.toHex(), "08808004"_ba);
 
     test.setTestFieldInt(((uint64_t)std::numeric_limits<uint32_t>::max()) + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("088080808010"));
+    QCOMPARE(result.toHex(), "088080808010"_ba);
 
     test.setTestFieldInt(std::numeric_limits<uint8_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08ff01"));
+    QCOMPARE(result.toHex(), "08ff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<uint16_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffff03"));
+    QCOMPARE(result.toHex(), "08ffff03"_ba);
 
     test.setTestFieldInt(std::numeric_limits<uint32_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffff0f"));
+    QCOMPARE(result.toHex(), "08ffffffff0f"_ba);
 
     test.setTestFieldInt(std::numeric_limits<uint64_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffffffffffffff01"));
+    QCOMPARE(result.toHex(), "08ffffffffffffffffff01"_ba);
 }
 
 void QtProtobufTypesSerializationTest::SInt64MessageSerializeTest()
@@ -451,17 +451,17 @@ void QtProtobufTypesSerializationTest::SInt64MessageSerializeTest()
     test.setTestFieldInt(15);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("081e"));
+    QCOMPARE(result.toHex(), "081e"_ba);
 
     test.setTestFieldInt(300);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08d804"));
+    QCOMPARE(result.toHex(), "08d804"_ba);
 
     test.setTestFieldInt(65545);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08928008"));
+    QCOMPARE(result.toHex(), "08928008"_ba);
 
     test.setTestFieldInt(0);
     result = test.serialize(m_serializer.get());
@@ -470,82 +470,82 @@ void QtProtobufTypesSerializationTest::SInt64MessageSerializeTest()
     test.setTestFieldInt(std::numeric_limits<int8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("088002"));
+    QCOMPARE(result.toHex(), "088002"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08808004"));
+    QCOMPARE(result.toHex(), "08808004"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08fe01"));
+    QCOMPARE(result.toHex(), "08fe01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08feff03"));
+    QCOMPARE(result.toHex(), "08feff03"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int32_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("08feffffff0f"));
+    QCOMPARE(result.toHex(), "08feffffff0f"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int64_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("08feffffffffffffffff01"));
+    QCOMPARE(result.toHex(), "08feffffffffffffffff01"_ba);
 
     test.setTestFieldInt(-1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex(), QStringLiteral("0801"));
+    QCOMPARE(result.toHex(), "0801"_ba);
 
     test.setTestFieldInt(-462);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("089b07"));
+    QCOMPARE(result.toHex(), "089b07"_ba);
 
     test.setTestFieldInt(-63585);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08c1e107"));
+    QCOMPARE(result.toHex(), "08c1e107"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("08ff01"));
+    QCOMPARE(result.toHex(), "08ff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffff03"));
+    QCOMPARE(result.toHex(), "08ffff03"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int32_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffff0f"));
+    QCOMPARE(result.toHex(), "08ffffffff0f"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int64_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 11);
-    QCOMPARE(result.toHex(), QStringLiteral("08ffffffffffffffffff01"));
+    QCOMPARE(result.toHex(), "08ffffffffffffffffff01"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int8_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 3);
-    QCOMPARE(result.toHex(), QStringLiteral("088102"));
+    QCOMPARE(result.toHex(), "088102"_ba);
 
     test.setTestFieldInt(std::numeric_limits<int16_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 4);
-    QCOMPARE(result.toHex(), QStringLiteral("08818004"));
+    QCOMPARE(result.toHex(), "08818004"_ba);
 
     test.setTestFieldInt((qlonglong)std::numeric_limits<int32_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 6);
-    QCOMPARE(result.toHex(), QStringLiteral("088180808010"));
+    QCOMPARE(result.toHex(), "088180808010"_ba);
 }
 
 void QtProtobufTypesSerializationTest::FixedInt32MessageSerializeTest()
@@ -555,47 +555,47 @@ void QtProtobufTypesSerializationTest::FixedInt32MessageSerializeTest()
     test.setTestFieldFixedInt32(15);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d0f000000"_L1);
+    QCOMPARE(result.toHex(), "0d0f000000"_ba);
 
     test.setTestFieldFixedInt32(300);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d2c010000"_L1);
+    QCOMPARE(result.toHex(), "0d2c010000"_ba);
 
     test.setTestFieldFixedInt32(65545);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d09000100"_L1);
+    QCOMPARE(result.toHex(), "0d09000100"_ba);
 
     test.setTestFieldFixedInt32(0);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d00000000"_L1);
+    QCOMPARE(result.toHex(), "0d00000000"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<uint8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d00010000"_L1);
+    QCOMPARE(result.toHex(), "0d00010000"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<uint16_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d00000100"_L1);
+    QCOMPARE(result.toHex(), "0d00000100"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<uint8_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0dff000000"_L1);
+    QCOMPARE(result.toHex(), "0dff000000"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<uint16_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0dffff0000"_L1);
+    QCOMPARE(result.toHex(), "0dffff0000"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<uint32_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0dffffffff"_L1);
+    QCOMPARE(result.toHex(), "0dffffffff"_ba);
 }
 
 void QtProtobufTypesSerializationTest::FixedInt64MessageSerializeTest()
@@ -605,57 +605,57 @@ void QtProtobufTypesSerializationTest::FixedInt64MessageSerializeTest()
     test.setTestFieldFixedInt64(15);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090f00000000000000"_L1);
+    QCOMPARE(result.toHex(), "090f00000000000000"_ba);
 
     test.setTestFieldFixedInt64(300);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "092c01000000000000"_L1);
+    QCOMPARE(result.toHex(), "092c01000000000000"_ba);
 
     test.setTestFieldFixedInt64(65545);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090900010000000000"_L1);
+    QCOMPARE(result.toHex(), "090900010000000000"_ba);
 
     test.setTestFieldFixedInt64(0);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090000000000000000"_L1);
+    QCOMPARE(result.toHex(), "090000000000000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<uint8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090001000000000000"_L1);
+    QCOMPARE(result.toHex(), "090001000000000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<uint16_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090000010000000000"_L1);
+    QCOMPARE(result.toHex(), "090000010000000000"_ba);
 
     test.setTestFieldFixedInt64((unsigned long long)(std::numeric_limits<uint32_t>::max()) + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090000000001000000"_L1);
+    QCOMPARE(result.toHex(), "090000000001000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<uint8_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "09ff00000000000000"_L1);
+    QCOMPARE(result.toHex(), "09ff00000000000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<uint16_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "09ffff000000000000"_L1);
+    QCOMPARE(result.toHex(), "09ffff000000000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<uint32_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "09ffffffff00000000"_L1);
+    QCOMPARE(result.toHex(), "09ffffffff00000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<uint64_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "09ffffffffffffffff"_L1);
+    QCOMPARE(result.toHex(), "09ffffffffffffffff"_ba);
 }
 
 void QtProtobufTypesSerializationTest::SFixedInt32MessageSerializeTest()
@@ -665,67 +665,67 @@ void QtProtobufTypesSerializationTest::SFixedInt32MessageSerializeTest()
     test.setTestFieldFixedInt32(15);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d0f000000"_L1);
+    QCOMPARE(result.toHex(), "0d0f000000"_ba);
 
     test.setTestFieldFixedInt32(300);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d2c010000"_L1);
+    QCOMPARE(result.toHex(), "0d2c010000"_ba);
 
     test.setTestFieldFixedInt32(65545);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d09000100"_L1);
+    QCOMPARE(result.toHex(), "0d09000100"_ba);
 
     test.setTestFieldFixedInt32(0);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d00000000"_L1);
+    QCOMPARE(result.toHex(), "0d00000000"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<int8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d80000000"_L1);
+    QCOMPARE(result.toHex(), "0d80000000"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<int16_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d00800000"_L1);
+    QCOMPARE(result.toHex(), "0d00800000"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<int8_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d7f000000"_L1);
+    QCOMPARE(result.toHex(), "0d7f000000"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<int16_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0dff7f0000"_L1);
+    QCOMPARE(result.toHex(), "0dff7f0000"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<int8_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d7fffffff"_L1);
+    QCOMPARE(result.toHex(), "0d7fffffff"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<int16_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0dff7fffff"_L1);
+    QCOMPARE(result.toHex(), "0dff7fffff"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<int8_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d80ffffff"_L1);
+    QCOMPARE(result.toHex(), "0d80ffffff"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<int16_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d0080ffff"_L1);
+    QCOMPARE(result.toHex(), "0d0080ffff"_ba);
 
     test.setTestFieldFixedInt32(std::numeric_limits<int32_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0d00000080"_L1);
+    QCOMPARE(result.toHex(), "0d00000080"_ba);
 }
 
 void QtProtobufTypesSerializationTest::SFixedInt64MessageSerializeTest()
@@ -735,92 +735,92 @@ void QtProtobufTypesSerializationTest::SFixedInt64MessageSerializeTest()
     test.setTestFieldFixedInt64(15);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090f00000000000000"_L1);
+    QCOMPARE(result.toHex(), "090f00000000000000"_ba);
 
     test.setTestFieldFixedInt64(300);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "092c01000000000000"_L1);
+    QCOMPARE(result.toHex(), "092c01000000000000"_ba);
 
     test.setTestFieldFixedInt64(65545);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090900010000000000"_L1);
+    QCOMPARE(result.toHex(), "090900010000000000"_ba);
 
     test.setTestFieldFixedInt64(0);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090000000000000000"_L1);
+    QCOMPARE(result.toHex(), "090000000000000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "098000000000000000"_L1);
+    QCOMPARE(result.toHex(), "098000000000000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int16_t>::max() + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090080000000000000"_L1);
+    QCOMPARE(result.toHex(), "090080000000000000"_ba);
 
     test.setTestFieldFixedInt64((unsigned long long)(std::numeric_limits<int32_t>::max()) + 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090000008000000000"_L1);
+    QCOMPARE(result.toHex(), "090000008000000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int8_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "097f00000000000000"_L1);
+    QCOMPARE(result.toHex(), "097f00000000000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int16_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "09ff7f000000000000"_L1);
+    QCOMPARE(result.toHex(), "09ff7f000000000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int32_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "09ffffff7f00000000"_L1);
+    QCOMPARE(result.toHex(), "09ffffff7f00000000"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int64_t>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "09ffffffffffffff7f"_L1);
+    QCOMPARE(result.toHex(), "09ffffffffffffff7f"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int8_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "097fffffffffffffff"_L1);
+    QCOMPARE(result.toHex(), "097fffffffffffffff"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int16_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "09ff7fffffffffffff"_L1);
+    QCOMPARE(result.toHex(), "09ff7fffffffffffff"_ba);
 
     test.setTestFieldFixedInt64((qlonglong)std::numeric_limits<int32_t>::min() - 1);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "09ffffff7fffffffff"_L1);
+    QCOMPARE(result.toHex(), "09ffffff7fffffffff"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int8_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0980ffffffffffffff"_L1);
+    QCOMPARE(result.toHex(), "0980ffffffffffffff"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int16_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090080ffffffffffff"_L1);
+    QCOMPARE(result.toHex(), "090080ffffffffffff"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int32_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "0900000080ffffffff"_L1);
+    QCOMPARE(result.toHex(), "0900000080ffffffff"_ba);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int64_t>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(QLatin1StringView(result.toHex()), "090000000000000080"_L1);
+    QCOMPARE(result.toHex(), "090000000000000080"_ba);
 }
 
 void QtProtobufTypesSerializationTest::FloatMessageSerializeTest()
@@ -830,29 +830,29 @@ void QtProtobufTypesSerializationTest::FloatMessageSerializeTest()
     test.setTestFieldFloat(0.1f);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), FloatMessageSize);
-    QCOMPARE(result.toHex(), QStringLiteral("3dcdcccc3d"));
+    QCOMPARE(result.toHex(), "3dcdcccc3d"_ba);
 
     test.setTestFieldFloat(std::numeric_limits<float>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), FloatMessageSize);
-    QCOMPARE(result.toHex(), QStringLiteral("3d00008000"));
+    QCOMPARE(result.toHex(), "3d00008000"_ba);
 
     test.setTestFieldFloat(std::numeric_limits<float>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), FloatMessageSize);
     QCOMPARE(result.at(0), 0x3d);
-    QCOMPARE(result.toHex(), QStringLiteral("3dffff7f7f"));
+    QCOMPARE(result.toHex(), "3dffff7f7f"_ba);
 
     test.setTestFieldFloat(-4.2f);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), FloatMessageSize);
     QCOMPARE(result.at(0), 0x3d);
-    QCOMPARE(result.toHex(), QStringLiteral("3d666686c0"));
+    QCOMPARE(result.toHex(), "3d666686c0"_ba);
 
     test.setTestFieldFloat(-0.0f);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), FloatMessageSize);
-    QCOMPARE(result.toHex(), QStringLiteral("3d00000080"));
+    QCOMPARE(result.toHex(), "3d00000080"_ba);
 }
 
 void QtProtobufTypesSerializationTest::DoubleMessageSerializeTest()
@@ -862,27 +862,27 @@ void QtProtobufTypesSerializationTest::DoubleMessageSerializeTest()
     test.setTestFieldDouble(0.1);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), DoubleMessageSize);
-    QCOMPARE(result.toHex(), QStringLiteral("419a9999999999b93f"));
+    QCOMPARE(result.toHex(), "419a9999999999b93f"_ba);
 
     test.setTestFieldDouble(std::numeric_limits<double>::min());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), DoubleMessageSize);
-    QCOMPARE(result.toHex(), QStringLiteral("410000000000001000"));
+    QCOMPARE(result.toHex(), "410000000000001000"_ba);
 
     test.setTestFieldDouble(std::numeric_limits<double>::max());
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), DoubleMessageSize);
-    QCOMPARE(result.toHex(), QStringLiteral("41ffffffffffffef7f"));
+    QCOMPARE(result.toHex(), "41ffffffffffffef7f"_ba);
 
     test.setTestFieldDouble(-4.2);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), DoubleMessageSize);
-    QCOMPARE(result.toHex(), QStringLiteral("41cdcccccccccc10c0"));
+    QCOMPARE(result.toHex(), "41cdcccccccccc10c0"_ba);
 
     test.setTestFieldDouble(0.0);
     result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), DoubleMessageSize);
-    QCOMPARE(result.toHex(), QStringLiteral("410000000000000000"));
+    QCOMPARE(result.toHex(), "410000000000000000"_ba);
 }
 
 void QtProtobufTypesSerializationTest::StringMessageSerializeTest()
@@ -890,7 +890,7 @@ void QtProtobufTypesSerializationTest::StringMessageSerializeTest()
     SimpleStringMessage test;
     test.setTestFieldString("qwerty");
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "3206717765727479"_L1);
+    QCOMPARE(result.toHex(), "3206717765727479"_ba);
 
     test.setTestFieldString("oepSNLIVG08UJpk2W7JtTkkBxyK06X0lQ6ML7IMd55K8XC1Tpsc1kDWym5v8z68b4FQu"
                             "p9O95QSgAvjHIA15OX6Bu68esbQFT9LPzSADJ6qSGBTYBHX5QSZg32trCdHMj80XuDHq"
@@ -901,7 +901,7 @@ void QtProtobufTypesSerializationTest::StringMessageSerializeTest()
                             "RMZ5UcXBXsXPshygzkyyXnNWTIDojFlrcsnKqSkQ1G6E85gSZbtIYBh7sqO6GDXHjOrX"
                             "VaVCVCUubjcJKThlyslt29zHuIs5JGppXxX1");
     result = test.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "3280046f6570534e4c4956473038554a706b3257374a74546"
+    QCOMPARE(result.toHex(), "3280046f6570534e4c4956473038554a706b3257374a74546"
                                                 "b6b4278794b303658306c51364d4c37494d6435354b385843"
                                                 "3154707363316b4457796d3576387a3638623446517570394"
                                                 "f393551536741766a48494131354f58364275363865736251"
@@ -922,7 +922,7 @@ void QtProtobufTypesSerializationTest::StringMessageSerializeTest()
                                                 "6c7263736e4b71536b5131473645383567535a62744959426"
                                                 "83773714f36474458486a4f72585661564356435575626a63"
                                                 "4a4b54686c79736c7432397a487549"
-                                                "73354a47707058785831"_L1);
+                                                "73354a47707058785831"_ba);
 }
 
 
@@ -937,17 +937,17 @@ void QtProtobufTypesSerializationTest::ComplexTypeSerializeTest()
 
     test.setTestFieldInt(42);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "082a"_L1);
+    QCOMPARE(result.toHex(), "082a"_ba);
 
     test.setTestFieldInt(0);
     test.setTestComplexField(stringMsg);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "12083206717765727479"_L1);
+    QCOMPARE(result.toHex(), "12083206717765727479"_ba);
 
     test.setTestFieldInt(42);
     test.setTestComplexField(stringMsg);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "082a12083206717765727479"_L1);
+    QCOMPARE(result.toHex(), "082a12083206717765727479"_ba);
 
     stringMsg.setTestFieldString("YVRfJvjxqbgvFwS1YvOZXgtj5ffGLS7AiNHz9oZIoKbm7z"
                                  "8H79xBuyPkpQXvGoO09OY9xRawx3eOAs9xjoTA1xJhrw28"
@@ -964,7 +964,7 @@ void QtProtobufTypesSerializationTest::ComplexTypeSerializeTest()
     test.setTestComplexField(stringMsg);
 
     result = test.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "082a128404328104595652664a766a78716267764"
+    QCOMPARE(result.toHex(), "082a128404328104595652664a766a78716267764"
                                                 "677533159764f5a5867746a356666474c53374169"
                                                 "4e487a396f5a496f4b626d377a384837397842757"
                                                 "9506b70515876476f4f30394f5939785261777833"
@@ -989,7 +989,7 @@ void QtProtobufTypesSerializationTest::ComplexTypeSerializeTest()
                                                 "435938587a324d736333644262354666394749535"
                                                 "06255704e6d557642644d5a4d485176714f6d544e"
                                                 "584550704e306237344d444f4d5166574a53684f6"
-                                                "f334e6b41764d6a73"_L1);
+                                                "f334e6b41764d6a73"_ba);
 
 
     stringMsg.setTestFieldString("qwerty");
@@ -997,7 +997,7 @@ void QtProtobufTypesSerializationTest::ComplexTypeSerializeTest()
     test.setTestComplexField(stringMsg);
 
     result = test.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "08d3ffffffffffffffff0112083206717765727479"_L1);
+    QCOMPARE(result.toHex(), "08d3ffffffffffffffff0112083206717765727479"_ba);
 }
 
 void QtProtobufTypesSerializationTest::EmptyBytesMessageTest()
@@ -1021,22 +1021,22 @@ void QtProtobufTypesSerializationTest::FieldIndexRangeTest()
     FieldIndexTest1Message msg1;
     msg1.setTestField(1);
     QByteArray result = msg1.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "f80102"_L1);
+    QCOMPARE(result.toHex(), "f80102"_ba);
 
     FieldIndexTest2Message msg2;
     msg2.setTestField(1);
     result = msg2.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "f8ff0302"_L1);
+    QCOMPARE(result.toHex(), "f8ff0302"_ba);
 
     FieldIndexTest3Message msg3;
     msg3.setTestField(1);
     result = msg3.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "f8ffff0702"_L1);
+    QCOMPARE(result.toHex(), "f8ffff0702"_ba);
 
     FieldIndexTest4Message msg4;
     msg4.setTestField(1);
     result = msg4.serialize(m_serializer.get());
-    QCOMPARE(QLatin1StringView(result.toHex()), "f8ffffff0f02"_L1);
+    QCOMPARE(result.toHex(), "f8ffffff0f02"_ba);
 }
 
 void QtProtobufTypesSerializationTest::OneofMessageEmptyTest()

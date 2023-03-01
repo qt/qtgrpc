@@ -11,6 +11,8 @@
 
 #include <qtprotobuftestscommon.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 class QtProtobufMapTypesGenerationTest : public QObject
 {
     Q_OBJECT
@@ -35,15 +37,15 @@ void QtProtobufMapTypesGenerationTest::SInt32StringMapMessageTest()
     test.setMapField(testMap);
     QCOMPARE(test.property(propertyName).value<SimpleSInt32StringMapMessage::MapFieldEntry>(), testMap);
     QCOMPARE(test.mapField(), testMap);
-    QCOMPARE(test.mapField()[10], QStringLiteral("Some 10"));
-    QCOMPARE(test.mapField()[0], QStringLiteral("Some 0"));
-    QCOMPARE(test.mapField()[44], QStringLiteral("Some 44"));
+    QCOMPARE(test.mapField()[10], "Some 10"_L1);
+    QCOMPARE(test.mapField()[0], "Some 0"_L1);
+    QCOMPARE(test.mapField()[44], "Some 44"_L1);
 
     test.mapField()[66] = "Some 66";
-    QCOMPARE(test.mapField()[66], QStringLiteral("Some 66"));
+    QCOMPARE(test.mapField()[66], "Some 66"_L1);
 
     test.mapField()[66] = "Some default";
-    QCOMPARE(test.mapField()[66], QStringLiteral("Some default"));
+    QCOMPARE(test.mapField()[66], "Some default"_L1);
 }
 
 void QtProtobufMapTypesGenerationTest::StringStringMapMessageTest()
@@ -58,15 +60,15 @@ void QtProtobufMapTypesGenerationTest::StringStringMapMessageTest()
     test.setMapField(testMap);
     QCOMPARE(test.property(propertyName).value<SimpleStringStringMapMessage::MapFieldEntry>(), testMap);
     QCOMPARE(test.mapField(), testMap);
-    QCOMPARE(test.mapField()["key 10"], QStringLiteral("Some 10"));
-    QCOMPARE(test.mapField()["key 0"], QStringLiteral("Some 0"));
-    QCOMPARE(test.mapField()["key 44"], QStringLiteral("Some 44"));
+    QCOMPARE(test.mapField()["key 10"], "Some 10"_L1);
+    QCOMPARE(test.mapField()["key 0"], "Some 0"_L1);
+    QCOMPARE(test.mapField()["key 44"], "Some 44"_L1);
 
     test.mapField()["key 66"] = "Some 66";
-    QCOMPARE(test.mapField()["key 66"], QStringLiteral("Some 66"));
+    QCOMPARE(test.mapField()["key 66"], "Some 66"_L1);
 
     test.mapField()["key 66"] = "Some default";
-    QCOMPARE(test.mapField()["key 66"], QStringLiteral("Some default"));
+    QCOMPARE(test.mapField()["key 66"], "Some default"_L1);
 }
 
 void QtProtobufMapTypesGenerationTest::SimpleInt32ComplexMessageMapMessageCompareTest()
