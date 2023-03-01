@@ -8,6 +8,9 @@ cmake_minimum_required(VERSION 3.16)
 if(NOT "${QT_HOST_PATH_CMAKE_DIR}" IN_LIST CMAKE_PREFIX_PATH)
     list(PREPEND CMAKE_PREFIX_PATH "${QT_HOST_PATH_CMAKE_DIR}")
 endif()
+if(NOT "${QT_HOST_PATH}" IN_LIST CMAKE_FIND_ROOT_PATH)
+    list(PREPEND CMAKE_FIND_ROOT_PATH "${QT_HOST_PATH}")
+endif()
 if(NOT "${QT_HOST_PATH}" IN_LIST CMAKE_PROGRAM_PATH)
     list(PREPEND CMAKE_PROGRAM_PATH "${QT_HOST_PATH}")
 endif()
@@ -19,7 +22,7 @@ find_package(Qt6ProtobufTools ${PROJECT_VERSION} CONFIG
         ${_qt_additional_packages_prefix_path}
         ${_qt_additional_packages_prefix_path_env}
         ${QT_HOST_PATH_CMAKE_DIR}
-    CMAKE_FIND_ROOT_PATH_BOTH
+    NO_DEFAULT_PATH
 )
 
 find_package(Qt6GrpcTools ${PROJECT_VERSION} CONFIG
@@ -27,7 +30,7 @@ find_package(Qt6GrpcTools ${PROJECT_VERSION} CONFIG
         ${_qt_additional_packages_prefix_path}
         ${_qt_additional_packages_prefix_path_env}
         ${QT_HOST_PATH_CMAKE_DIR}
-    CMAKE_FIND_ROOT_PATH_BOTH
+    NO_DEFAULT_PATH
 )
 
 # If crosscompiling promote the WrapProtoc::WrapProtoc target to global, since
