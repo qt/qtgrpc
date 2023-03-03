@@ -743,7 +743,10 @@ bool QProtobufSerializerPrivate::deserializeProperty(
     auto basicHandler = findIntegratedTypeHandler(
             metaType, ordering.getFieldFlags(index) & QtProtobufPrivate::NonPacked);
     if (basicHandler) {
-        basicHandler->deserializer(it, newPropertyValue);
+        if (!basicHandler->deserializer(it, newPropertyValue)) {
+            setUnexpectedEndOfStreamError();
+            return false;
+        }
     } else {
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (!handler.deserializer) {
