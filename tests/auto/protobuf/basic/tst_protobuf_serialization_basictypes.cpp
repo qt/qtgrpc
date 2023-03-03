@@ -562,8 +562,7 @@ void QtProtobufTypesSerializationTest::FixedInt32MessageSerializeTest()
 
     test.setTestFieldFixedInt32(0);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(result, QByteArray::fromHex("0d00000000"));
+    QCOMPARE(result.size(), 0);
 
     test.setTestFieldFixedInt32(std::numeric_limits<uint8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
@@ -612,8 +611,7 @@ void QtProtobufTypesSerializationTest::FixedInt64MessageSerializeTest()
 
     test.setTestFieldFixedInt64(0);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(result, QByteArray::fromHex("090000000000000000"));
+    QCOMPARE(result.size(), 0);
 
     test.setTestFieldFixedInt64(std::numeric_limits<uint8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
@@ -672,8 +670,7 @@ void QtProtobufTypesSerializationTest::SFixedInt32MessageSerializeTest()
 
     test.setTestFieldFixedInt32(0);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.size(), Fixed32MessageSize);
-    QCOMPARE(result, QByteArray::fromHex("0d00000000"));
+    QCOMPARE(result.size(), 0);
 
     test.setTestFieldFixedInt32(std::numeric_limits<int8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
@@ -742,8 +739,7 @@ void QtProtobufTypesSerializationTest::SFixedInt64MessageSerializeTest()
 
     test.setTestFieldFixedInt64(0);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.size(), Fixed64MessageSize);
-    QCOMPARE(result, QByteArray::fromHex("090000000000000000"));
+    QCOMPARE(result.size(), 0);
 
     test.setTestFieldFixedInt64(std::numeric_limits<int8_t>::max() + 1);
     result = test.serialize(m_serializer.get());
@@ -844,8 +840,7 @@ void QtProtobufTypesSerializationTest::FloatMessageSerializeTest()
 
     test.setTestFieldFloat(-0.0f);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.size(), FloatMessageSize);
-    QCOMPARE(result.toHex(), QStringLiteral("3d00000080"));
+    QCOMPARE(result.size(), 0);
 }
 
 void QtProtobufTypesSerializationTest::DoubleMessageSerializeTest()
@@ -874,8 +869,7 @@ void QtProtobufTypesSerializationTest::DoubleMessageSerializeTest()
 
     test.setTestFieldDouble(0.0);
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.size(), DoubleMessageSize);
-    QCOMPARE(result.toHex(), QStringLiteral("410000000000000000"));
+    QCOMPARE(result.size(), 0);
 }
 
 void QtProtobufTypesSerializationTest::StringMessageSerializeTest()
