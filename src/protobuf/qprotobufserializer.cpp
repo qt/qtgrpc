@@ -105,9 +105,11 @@ Q_REQUIRED_RESULT bool deserializeLengthDelimitedListType(QProtobufSelfcheckIter
 }
 
 inline bool isRepeatedField(QtProtobuf::WireTypes type,
-                            const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+                            const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
+                            QMetaType metaType)
 {
-    return type == QtProtobuf::WireTypes::LengthDelimited
+    return (type == QtProtobuf::WireTypes::LengthDelimited && metaType.id() != QMetaType::QByteArray
+            && metaType.id() != QMetaType::QString)
             || fieldInfo.getFieldFlags() & QtProtobufPrivate::NonPacked;
 }
 
@@ -674,7 +676,7 @@ QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
         // set by user even if they contain a 'zero' value.
         if (fieldIndex != QtProtobuf::InvalidFieldNumber && !result.isEmpty()) {
             result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
-        } else if (!isRepeatedField(type, fieldInfo)) {
+        } else if (!isRepeatedField(type, fieldInfo, metaType)) {
             if (isOneofField(fieldInfo)) {
                 if (result.isEmpty())
                     result.append(char(0));
