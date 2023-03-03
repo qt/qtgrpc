@@ -102,7 +102,7 @@ void QtProtobufQtTypesQtGuiTest::qVector4D()
     msg.setTestField(vector);
     auto result = msg.serialize(&serializer);
 
-    QCOMPARE(QByteArray::fromHex("0a140d0000c04115000030411d000028422500000000"), result);
+    QCOMPARE(QByteArray::fromHex("0a0f0d0000c04115000030411d00002842"), result);
 
     msg.setTestField({});
     msg.deserialize(&serializer, QByteArray::fromHex("0a0f0d0000c04115000030411d00002842"));
