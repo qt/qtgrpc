@@ -171,9 +171,14 @@ public:
      returns a byte array with 'value' encoded
     */
     template<typename V, typename std::enable_if_t<std::is_floating_point<V>::value, int> = 0>
-    static QByteArray serializeBasic(const V &value, int & /*outFieldIndex*/)
+    static QByteArray serializeBasic(const V &value, int &outFieldIndex)
     {
         qProtoDebug() << "value" << value;
+
+        if (value == 0 && outFieldIndex != QtProtobufPrivate::NotUsedFieldIndex) {
+            outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+            return {};
+        }
 
         // Reserve required number of bytes
         QByteArray result(sizeof(V), Qt::Uninitialized);
@@ -189,9 +194,14 @@ public:
         Returns a byte array with 'value' encoded
     */
     template<typename V, typename std::enable_if_t<IsFixedInt<V>::value, int> = 0>
-    static QByteArray serializeBasic(const V &value, int & /*outFieldIndex*/)
+    static QByteArray serializeBasic(const V &value, int &outFieldIndex)
     {
         qProtoDebug() << "value" << value;
+
+        if (value == 0 && outFieldIndex != QtProtobufPrivate::NotUsedFieldIndex) {
+            outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
+            return {};
+        }
 
         // Reserve required number of bytes
         QByteArray result(sizeof(V), Qt::Uninitialized);
