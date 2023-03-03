@@ -458,6 +458,7 @@ public:
             qProtoDebug() << out;
             out.append(variantValue.value<V>());
             previousValue.setValue(out);
+            return true;
         }
         return false;
     }
