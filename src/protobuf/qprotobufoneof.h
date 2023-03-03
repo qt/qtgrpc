@@ -38,10 +38,11 @@ class Q_PROTOBUF_EXPORT QProtobufOneof final
                     std::is_same<T, QtProtobuf::int32>, std::is_same<T, QtProtobuf::int64>,
                     std::is_same<T, QtProtobuf::sint32>, std::is_same<T, QtProtobuf::sint64>,
                     std::is_same<T, QtProtobuf::uint32>, std::is_same<T, QtProtobuf::uint64>,
-                    std::is_same<T, QtProtobuf::boolean>, std::is_same<T, QtProtobuf::fixed32>,
-                    std::is_same<T, QtProtobuf::fixed64>, std::is_same<T, QtProtobuf::sfixed32>,
-                    std::is_same<T, QtProtobuf::sfixed64>, std::is_same<T, float>,
-                    std::is_same<T, double>, std::is_same<T, QString>, std::is_same<T, QByteArray>>,
+                    std::is_same<T, QtProtobuf::fixed32>, std::is_same<T, QtProtobuf::fixed64>,
+                    std::is_same<T, QtProtobuf::sfixed32>, std::is_same<T, QtProtobuf::sfixed64>,
+                    std::is_same<T, float>, std::is_same<T, double>,
+                    std::is_same<T, QtProtobuf::boolean>, std::is_enum<T>,
+                    std::is_same<T, QString>, std::is_same<T, QByteArray>>,
             int>;
 
 public:
