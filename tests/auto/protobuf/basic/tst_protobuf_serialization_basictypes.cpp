@@ -898,7 +898,6 @@ void QtProtobufTypesSerializationTest::ComplexTypeSerializeTest()
 
     ComplexMessage test;
     QByteArray result = test.serialize(m_serializer.get());
-    QEXPECT_FAIL("", "The result of serialization can be either an empty message or a message containing empty fields.", Continue);
     QCOMPARE(result.toHex(), "");
 
     test.setTestFieldInt(42);

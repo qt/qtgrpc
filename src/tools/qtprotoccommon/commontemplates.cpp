@@ -393,7 +393,7 @@ const char *CommonTemplates::PrivateGetterMessageDeclarationTemplate()
 const char *CommonTemplates::PrivateGetterMessageDefinitionTemplate()
 {
     return "$getter_type$ *$classname$::$property_name$_p() const\n{\n"
-           "    return m_$property_name$.get();\n"
+           "    return m_$property_name$ ? m_$property_name$.get() : nullptr;\n"
            "}\n\n";
 }
 
