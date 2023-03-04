@@ -604,14 +604,18 @@ QByteArray
 QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
                                               const QProtobufPropertyOrderingInfo &fieldInfo)
 {
-    qProtoDebug() << "propertyValue" << propertyValue << "fieldIndex"
-                  << fieldInfo.getFieldNumber() << propertyValue.metaType().name();
-
-    QByteArray result;
     QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Unknown;
-
     QMetaType metaType = propertyValue.metaType();
 
+    qProtoDebug() << "propertyValue" << propertyValue << "fieldIndex" << fieldInfo.getFieldNumber()
+                  << "metaType" << metaType.name();
+
+    if (metaType.id() == QMetaType::UnknownType || propertyValue.isNull()) {
+        // Empty value
+        return {};
+    }
+
+    QByteArray result;
     //TODO: replace with some common function
     auto basicHandler = findIntegratedTypeHandler(
             metaType, fieldInfo.getFieldFlags() & QtProtobufPrivate::NonPacked);

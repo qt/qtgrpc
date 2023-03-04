@@ -1352,7 +1352,7 @@ bool ComplexMessage::operator !=(const ComplexMessage &other) const
 
 SimpleStringMessage *ComplexMessage::testComplexField_p() const
 {
-    return m_testComplexField.get();
+    return m_testComplexField ? m_testComplexField.get() : nullptr;
 }
 
 SimpleStringMessage &ComplexMessage::testComplexField() const
