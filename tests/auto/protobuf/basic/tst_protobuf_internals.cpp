@@ -38,7 +38,7 @@ void QtProtobufInternalsTest::NullPointerMessageTest()
 void QtProtobufInternalsTest::NullPointerGetterMessageTest()
 {
     ComplexMessage msg;
-    QVERIFY(msg.testComplexField_p() != nullptr);
+    QVERIFY(msg.testComplexField_p() == nullptr);
     msg.setTestComplexField_p(nullptr);
     QVERIFY(msg.testComplexField().testFieldString().isEmpty());
     QVERIFY(msg.testComplexField_p() != nullptr);
