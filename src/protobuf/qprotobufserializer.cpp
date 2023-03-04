@@ -568,7 +568,7 @@ void QProtobufSerializerPrivate::skipLengthDelimited(QProtobufSelfcheckIterator 
     //Get length of length-delimited field
     auto opt = QProtobufSerializerPrivate::deserializeVarintCommon<QtProtobuf::uint64>(it);
     if (!opt) {
-        it += it.bytesLeft();
+        it += it.bytesLeft() + 1;
         return;
     }
     QtProtobuf::uint64 length = opt.value();
