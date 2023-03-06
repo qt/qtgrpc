@@ -13,9 +13,12 @@
 #include <QtGui/qtransform.h>
 #include <QtGui/qquaternion.h>
 #include <QtGui/qimage.h>
+#include <QtGui/qimagereader.h>
 #include <QtCore/qbuffer.h>
 
 QT_BEGIN_NAMESPACE
+
+using namespace Qt::StringLiterals;
 
 QRgba64 convert(const QtProtobufPrivate::QtGui::QRgba64 &from)
 {
@@ -140,15 +143,34 @@ QImage convert(const QtProtobufPrivate::QtGui::QImage &from)
     return QImage::fromData(from.data(), from.format().toLatin1().data());
 }
 
+static bool isFloatingPointImageFormat(QImage::Format format)
+{
+    switch (format)
+    {
+    case QImage::Format_RGBX16FPx4:
+    case QImage::Format_RGBA16FPx4:
+    case QImage::Format_RGBA16FPx4_Premultiplied:
+    case QImage::Format_RGBX32FPx4:
+    case QImage::Format_RGBA32FPx4:
+    case QImage::Format_RGBA32FPx4_Premultiplied:
+        return true;
+    default:
+        return false;
+    }
+}
+
 std::optional<QtProtobufPrivate::QtGui::QImage> convert(const QImage &from)
 {
+    static bool tiffSupported = QImageReader::supportedImageFormats().contains("tiff");
+    const auto extension = (isFloatingPointImageFormat(from.format())
+                            && tiffSupported) ? "tiff"_L1 : "png"_L1;
     QByteArray data;
     QBuffer buffer(&data);
     buffer.open(QIODevice::WriteOnly);
-    if (from.save(&buffer, "PNG")) {
+    if (from.save(&buffer, extension.data())) {
         QtProtobufPrivate::QtGui::QImage image;
         image.setData(data);
-        image.setFormat(QLatin1StringView("PNG"));
+        image.setFormat(extension);
         return image;
     }
     return std::nullopt;

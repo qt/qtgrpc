@@ -77,6 +77,18 @@
         ...
     \endcode
 
+    \section2 QImage serialization
+    The ProtobufQtGuiTypes library provides possibility to work with QImage
+    class. In common case the library converts all QImages into \c {PNG}
+    extension. But if the QImage was created using
+    \l {https://doc.qt.io/qt-6/qimage.html#Format-enum} a
+    {floating point formats}, then conversion to \c {PNG} will lead
+    to data loss. To prevent data loss the library automatically converts
+    the QImage to \c {TIFF} extension, if it is supported by the system,
+    otherwise converts to \c {PNG}.
+    \note if you don't want to use \c{TIFF}, you need to convert the image
+    explicitly into a non-floating point format.
+
     All supported messages are described in special .proto files:
 
     - QtCore.proto - describes Qt types from QtCore module
