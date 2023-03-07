@@ -111,6 +111,7 @@ qt_internal_add_test(tst_protobuf_serialization_maptypes
         tst_protobuf_maptypes_gen
 )
 
+
 qt_internal_add_test(tst_protobuf_deserialization_basictypes
     SOURCES
         tst_protobuf_deserialization_basictypes.cpp
@@ -133,7 +134,16 @@ qt_internal_add_test(tst_protobuf_deserialization_repeatedtypes
 
 qt_internal_add_test(tst_protobuf_deserialization_maptypes
     SOURCES
-        tst_protobuf_deserialization_maptypes.cpp tst_protobuf_deserialization_maptypes.h
+        tst_protobuf_deserialization_maptypes.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+        tst_protobuf_maptypes_gen
+)
+
+qt_internal_add_test(tst_protobuf_deserialization_complex_maptypes
+    SOURCES
         tst_protobuf_deserialization_complex_maptypes.cpp
     LIBRARIES
         Qt::Test
