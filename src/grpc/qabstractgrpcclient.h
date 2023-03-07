@@ -32,7 +32,7 @@ public:
     void attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel);
 
 Q_SIGNALS:
-    void errorOccurred(const QGrpcStatus &status) const;
+    void errorOccurred(const QGrpcStatus &status);
 
 protected:
     explicit QAbstractGrpcClient(QLatin1StringView service, QObject *parent = nullptr);
@@ -151,7 +151,7 @@ private:
 
     void logError(const QString &str) const;
     QGrpcStatus handleDeserializationError(
-            const QAbstractProtobufSerializer::DeserializationError &err) const;
+            const QAbstractProtobufSerializer::DeserializationError &err);
 
     Q_DISABLE_COPY_MOVE(QAbstractGrpcClient)
     Q_DECLARE_PRIVATE(QAbstractGrpcClient)

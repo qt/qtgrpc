@@ -288,7 +288,7 @@ void QAbstractGrpcClient::logError(const QString &str) const
 }
 
 QGrpcStatus QAbstractGrpcClient::handleDeserializationError(
-        const QAbstractProtobufSerializer::DeserializationError &err) const
+        const QAbstractProtobufSerializer::DeserializationError &err)
 {
     QGrpcStatus status{ QGrpcStatus::Ok };
     switch (err) {
