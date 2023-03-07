@@ -226,10 +226,10 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(QAbstractGrpcClient *c
                                    [call, reply, connection, abortConnection] {
                                        if (call->status.code() == QGrpcStatus::Ok) {
                                            reply->setData(call->response);
-                                           reply->finished();
+                                           emit reply->finished();
                                        } else {
                                            reply->setData({});
-                                           reply->errorOccurred(call->status);
+                                           emit reply->errorOccurred(call->status);
                                        }
 
                                        QObject::disconnect(*connection);
@@ -292,8 +292,8 @@ void QGrpcChannelPrivate::startStream(QGrpcStream *stream, QLatin1StringView ser
                                        disconnectAllConnections();
 
                                        if (sub->status.code() != QGrpcStatus::Ok)
-                                           stream->errorOccurred(sub->status);
-                                       stream->finished();
+                                           emit stream->errorOccurred(sub->status);
+                                       emit stream->finished();
                                    });
 
     *abortConnection = QObject::connect(stream, &QGrpcStream::finished, sub.get(),

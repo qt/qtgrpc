@@ -64,7 +64,8 @@ void QGrpcCallReply::abort()
 {
     auto abortFunc = [&] {
         setData({});
-        errorOccurred({ QGrpcStatus::StatusCode::Aborted, "Call aborted by user or timeout"_L1 });
+        emit errorOccurred(
+                { QGrpcStatus::StatusCode::Aborted, "Call aborted by user or timeout"_L1 });
     };
     if (thread() != QThread::currentThread())
         QMetaObject::invokeMethod(this, abortFunc, Qt::BlockingQueuedConnection);

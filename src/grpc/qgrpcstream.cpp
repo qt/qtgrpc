@@ -54,7 +54,7 @@ void QGrpcStream::abort()
     if (thread() != QThread::currentThread())
         QMetaObject::invokeMethod(this, &QGrpcStream::finished, Qt::BlockingQueuedConnection);
     else
-        finished();
+        emit finished();
 }
 
 /*!

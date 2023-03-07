@@ -275,12 +275,12 @@ std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QAbstractGrpcClient *cli
                 qGrpcDebug() << "RECV:" << data;
                 if (QGrpcStatus::StatusCode::Ok == grpcStatus) {
                     reply->setData(data);
-                    reply->finished();
+                    emit reply->finished();
                 } else {
                     reply->setData({});
-                    reply->errorOccurred({ grpcStatus,
-                                           QLatin1StringView(networkReply->rawHeader(
-                                                   GrpcStatusMessageHeader)) });
+                    emit reply->errorOccurred({ grpcStatus,
+                                                QLatin1StringView(networkReply->rawHeader(
+                                                        GrpcStatusMessageHeader)) });
                 }
                 networkReply->deleteLater();
             });
@@ -395,19 +395,19 @@ void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView s
                     QGrpcStatus::StatusCode grpcStatus;
                     QGrpcHttp2ChannelPrivate::processReply(networkReply, grpcStatus);
                     if (grpcStatus != QGrpcStatus::StatusCode::Ok) {
-                        grpcStream->errorOccurred(QGrpcStatus{
-                                grpcStatus,
-                                QLatin1StringView(
-                                        networkReply->rawHeader(GrpcStatusMessageHeader)) });
+                        emit grpcStream->errorOccurred(
+                                QGrpcStatus{ grpcStatus,
+                                             QLatin1StringView(networkReply->rawHeader(
+                                                     GrpcStatusMessageHeader)) });
                     }
-                    grpcStream->finished();
+                    emit grpcStream->finished();
                     break;
                 }
                 default:
-                    grpcStream->errorOccurred(QGrpcStatus{
-                            StatusCodeMap.at(networkError),
-                            "%1 call %2 stream failed: %3"_L1.arg(service, grpcStream->method(),
-                                                                  errorString) });
+                    emit grpcStream->errorOccurred(
+                            QGrpcStatus{ StatusCodeMap.at(networkError),
+                                         "%1 call %2 stream failed: %3"_L1.arg(
+                                                 service, grpcStream->method(), errorString) });
                     break;
                 }
             });
