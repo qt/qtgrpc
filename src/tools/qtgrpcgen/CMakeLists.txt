@@ -25,10 +25,6 @@ qt_internal_add_tool(${target_name}
 
 qt_internal_return_unless_building_tools()
 
-# If libprotobuf is not built with -fPIE enabled we cannot link it to qtgrpcgen.
-# TODO: Re-enable PIE once QTBUG-111485 is fixed.
-set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE FALSE)
-
 qt_record_extra_package_dependency(${target_name} WrapProtoc "")
 
 if(MSVC)

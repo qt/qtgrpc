@@ -22,16 +22,12 @@ qt_feature("qtgrpcgen" PRIVATE
         TARGET WrapProtoc::WrapProtoc
 )
 
-# If CMAKE_CPP_LINK_PIE_SUPPORTED is set we build Qt libraries with -fPIE enabled. In this case
-# we need to have libgrpc++ and libprotobuf built with the -fPIE as well. Disabling the native_grpc
-# feature in this case to avoid linker issues.
-# TODO: Re-enable once QTBUG-111485 is fixed.
 qt_feature("native_grpc" PUBLIC
     SECTION "Utilities"
     LABEL "Native gRPC support"
     DISABLE NOT QT_FEATURE_grpc
     PURPOSE "Provides native implementation for gRPC channels and client and service code generation."
-    CONDITION TARGET WrapgRPC::WrapLibgRPC AND NOT CMAKE_CPP_LINK_PIE_SUPPORTED
+    CONDITION TARGET WrapgRPC::WrapLibgRPC
 )
 
 qt_configure_add_summary_section(NAME "Qt GRPC")

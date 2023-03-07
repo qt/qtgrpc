@@ -81,11 +81,6 @@ qt_internal_add_executable(testserver
     INSTALL_DIRECTORY "${INSTALL_TESTSDIR}/shared"
 )
 
-# If libprotobuf is not built with -fPIE enabled we cannot link it to the executables built
-# with -fPIE.
-# TODO: Re-enable PIE once QTBUG-111485 is fixed.
-set_target_properties(testserver PROPERTIES POSITION_INDEPENDENT_CODE FALSE)
-
 qt_internal_add_executable(securetestserver
     SOURCES
         securetestserver.cpp
@@ -94,9 +89,3 @@ qt_internal_add_executable(securetestserver
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/"
     INSTALL_DIRECTORY "${INSTALL_TESTSDIR}/shared"
 )
-
-# If libprotobuf is not built with -fPIE enabled we cannot link it to the executables built
-# with -fPIE.
-# TODO: Re-enable PIE once QTBUG-111485 is fixed.
-set_target_properties(securetestserver PROPERTIES POSITION_INDEPENDENT_CODE FALSE)
-
