@@ -1,0 +1,27 @@
+include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
+
+project                 = QtProtobufQtCoreTypes
+description             = Qt Protobuf Qt Core Types Reference Documentation
+version                 = $QT_VERSION
+qhp.projects            = QtProtobufQtCoreTypes
+
+qhp.QtProtobufQtCoreTypes.file                = qtprotobufqtcoretypes.qhp
+qhp.QtProtobufQtCoreTypes.namespace           = org.qt-project.qtprotobuf.$QT_VERSION_TAG
+qhp.QtProtobufQtCoreTypes.virtualFolder       = qtprotobufqtcoretypes
+qhp.QtProtobufQtCoreTypes.indexRoot           =
+
+qhp.QtProtobufQtCoreTypes.subprojects = classes
+qhp.QtProtobufQtCoreTypes.subprojects.classes.title      = C++ Classes
+qhp.QtProtobufQtCoreTypes.subprojects.classes.indexTitle = Protobuf Qt Core types module
+qhp.QtProtobufQtCoreTypes.subprojects.classes.selectors  = class doc:headerfile
+qhp.QtProtobufQtCoreTypes.subprojects.classes.sortPages  = true
+
+depends += qtdoc qtcore qtprotobuf
+
+{headerdirs,sourcedirs} += ..
+
+navigation.cppclassespage = "Protobuf Qt Core types module"
+
+# Fail the documentation build if there are more warnings than the limit
+warninglimit = 0
+

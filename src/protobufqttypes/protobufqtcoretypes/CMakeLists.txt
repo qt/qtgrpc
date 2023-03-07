@@ -17,3 +17,7 @@ qt_internal_add_protobuf_module(ProtobufQtCoreTypes
     PRIVATE_HEADER_FILTERS
         ".*\\.qpb\\.h"
 )
+
+qt_internal_add_docs(ProtobufQtCoreTypes
+    doc/protobufqtcoretypes.qdocconf
+)
