@@ -396,8 +396,8 @@ void QtProtobufTypesSerializationTest::ComplexTypeSerializeTest_data()
     QTest::addColumn<QString>("stringField");
     QTest::addColumn<QByteArray>("expectedData");
 
-    QTest::newRow("empty_value") << 0 << u""_s << ""_ba;
-    QTest::newRow("value_only_int") << 42 << u""_s << "082a"_ba;
+    QTest::newRow("empty_value") << 0 << u""_s << "1200"_ba;
+    QTest::newRow("value_only_int") << 42 << u""_s << "082a1200"_ba;
     QTest::newRow("value_only_string") << 0 << u"qwerty"_s << "12083206717765727479"_ba;
     QTest::newRow("int_and_string") << 42 << u"qwerty"_s << "082a12083206717765727479"_ba;
     QTest::newRow("int_and_big_string") << 42
@@ -560,7 +560,7 @@ void QtProtobufTypesSerializationTest::OneofMessageComplexTest()
     test.setTestOneofComplexField(complexField);
     test.setSecondComplexField({});
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result.toHex(), "1a02082a2a00");
+    QCOMPARE(result.toHex(), "1a04082a12002a00");
 }
 
 QTEST_MAIN(QtProtobufTypesSerializationTest)
