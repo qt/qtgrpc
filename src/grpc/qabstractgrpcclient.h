@@ -46,7 +46,7 @@ protected:
             const auto errorString = "Unable to call method: %1. "
                                      "Pointer to return data is null."_L1.arg(method);
             QGrpcStatus status{ QGrpcStatus::InvalidArgument, errorString };
-            errorOccurred(status);
+            Q_EMIT errorOccurred(status);
             logError(errorString);
             return status;
         }
@@ -89,7 +89,7 @@ protected:
         if (ret.isNull()) {
             const auto nullPointerError = "Unable to stream method: %1. "
                                           "Pointer to return data is null."_L1.arg(method);
-            errorOccurred({ QGrpcStatus::InvalidArgument, nullPointerError });
+            Q_EMIT errorOccurred({ QGrpcStatus::InvalidArgument, nullPointerError });
             logError(nullPointerError);
             return {};
         }
@@ -101,13 +101,13 @@ protected:
             if (auto retVal = ret.lock()) {
                 auto status = tryDeserialize(retVal.get(), data);
                 if (status != QGrpcStatus::Ok) {
-                    errorOccurred(status);
+                    Q_EMIT errorOccurred(status);
                     logError(status.message());
                 }
             } else {
                 static const QLatin1StringView nullPointerError("Pointer to return data is null "
                                                                 "while stream update received");
-                errorOccurred({ QGrpcStatus::InvalidArgument, nullPointerError });
+                Q_EMIT errorOccurred({ QGrpcStatus::InvalidArgument, nullPointerError });
                 logError(nullPointerError);
             }
         });
@@ -140,8 +140,8 @@ private:
         using namespace Qt::StringLiterals;
         auto _serializer = serializer();
         if (_serializer == nullptr) {
-            errorOccurred({ QGrpcStatus::Unknown,
-                            "Serializing failed. Serializer is not ready."_L1 });
+            Q_EMIT errorOccurred(
+                    { QGrpcStatus::Unknown, "Serializing failed. Serializer is not ready."_L1 });
             return std::nullopt;
         }
         return _serializer->serialize<ParamType>(&arg);
