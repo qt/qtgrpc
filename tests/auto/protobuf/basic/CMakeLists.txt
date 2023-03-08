@@ -100,7 +100,18 @@ qt_internal_add_test(tst_protobuf_serialization_repeatedtypes
 
 qt_internal_add_test(tst_protobuf_serialization_maptypes
     SOURCES
-        tst_protobuf_serialization_maptypes.cpp tst_protobuf_serialization_maptypes.h
+        tst_protobuf_serialization_maptypes.cpp
+    INCLUDE_DIRECTORIES
+        ../shared
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+        tst_protobuf_maptypes_gen
+)
+
+qt_internal_add_test(tst_protobuf_serialization_complex_maptypes
+    SOURCES
         tst_protobuf_serialization_complex_maptypes.cpp
     INCLUDE_DIRECTORIES
         ../shared
