@@ -12,6 +12,8 @@
 #define DEFSTR(x) #x
 
 using namespace Qt::StringLiterals;
+const QLatin1StringView cppProtobufGenExtension(".qpb.cpp");
+const QLatin1StringView headerProtobufGenExtension(".qpb.h");
 const QLatin1StringView cppExtension("_client.grpc.qpb.cpp");
 const QLatin1StringView headerExtension("_client.grpc.qpb.h");
 const QLatin1StringView grpcGenQtprotobufKey(" --plugin=protoc-gen-qtgrpc=");
@@ -185,7 +187,10 @@ void tst_qtgrpcgen::cmakeGeneratedFile_data()
     QTest::addColumn<QString>("folder");
     QTest::addColumn<QString>("extension");
 
-    const QLatin1StringView extensions[] = { cppExtension, headerExtension };
+    const QLatin1StringView extensions[] = { cppProtobufGenExtension,
+                                             headerProtobufGenExtension,
+                                             cppExtension,
+                                             headerExtension };
 
     for (const auto extension : extensions) {
         QTest::addRow("testservice%s", extension.data())

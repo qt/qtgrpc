@@ -38,7 +38,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleStringMessage();
-    ~SimpleStringMessage() override;
+    ~SimpleStringMessage();
     SimpleStringMessage(const SimpleStringMessage &other);
     SimpleStringMessage &operator =(const SimpleStringMessage &other);
     SimpleStringMessage(SimpleStringMessage &&other) noexcept;
@@ -72,7 +72,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     SimpleIntMessage();
-    ~SimpleIntMessage() override;
+    ~SimpleIntMessage();
     SimpleIntMessage(const SimpleIntMessage &other);
     SimpleIntMessage &operator =(const SimpleIntMessage &other);
     SimpleIntMessage(SimpleIntMessage &&other) noexcept;
@@ -110,7 +110,7 @@ public:
     Q_ENUM(QtProtobufFieldEnum)
 
     BlobMessage();
-    ~BlobMessage() override;
+    ~BlobMessage();
     BlobMessage(const BlobMessage &other);
     BlobMessage &operator =(const BlobMessage &other);
     BlobMessage(BlobMessage &&other) noexcept;
