@@ -37,17 +37,10 @@ struct SerializeData
     qsizetype size;
     QByteArray hexData;
     std::optional<QString> name = std::nullopt;
-
-    static QList<SerializeData<T>> getSerializeData(IntTypes type);
-
-private:
-    static QList<SerializeData<T>> getCommonIntValues(IntTypes type);
-    static constexpr QList<SerializeData<T>> getInt32LimitValues(IntTypes type);
-    static constexpr QList<SerializeData<T>> getInt64LimitValues(IntTypes type);
 };
 
-template <typename T>
-QList<SerializeData<T>> SerializeData<T>::getCommonIntValues(IntTypes type)
+template <typename T, IntTypes type>
+QList<SerializeData<T>> getCommonIntValues()
 {
     QList<SerializeData<T>> data{ { (T)0, 0, ""_ba, u"empty_data"_s } };
     switch (type) {
@@ -81,14 +74,14 @@ QList<SerializeData<T>> SerializeData<T>::getCommonIntValues(IntTypes type)
         break;
     }
     if constexpr (std::is_same_v<T, int64_t> || std::is_same_v<T, uint64_t>) {
-        if (type == IntTypes::Fixed || type == IntTypes::SFixed) {
+        if constexpr (type == IntTypes::Fixed || type == IntTypes::SFixed) {
             // Do not merge with 32-bit version
             data = { { (T)0, 0, ""_ba, u"empty_data"_s },
                      { (T)15, Fixed64IntSize, "090f00000000000000"_ba },
                      { (T)300, Fixed64IntSize, "092c01000000000000"_ba },
                      { (T)65545, Fixed64IntSize, "090900010000000000"_ba } };
         }
-        if (type == IntTypes::SFixed) {
+        if constexpr (type == IntTypes::SFixed) {
             data.append({ { (T)-1, Fixed64IntSize, "09ffffffffffffffff"_ba },
                           { (T)-462, Fixed64IntSize, "0932feffffffffffff"_ba },
                           { (T)-63585, Fixed64IntSize, "099f07ffffffffffff"_ba } });
@@ -97,8 +90,8 @@ QList<SerializeData<T>> SerializeData<T>::getCommonIntValues(IntTypes type)
     return data;
 }
 
-template <typename T>
-constexpr QList<SerializeData<T>> SerializeData<T>::getInt32LimitValues(IntTypes type)
+template <typename T, IntTypes type>
+constexpr QList<SerializeData<T>> getInt32LimitValues()
 {
     switch (type) {
     case IntTypes::Int:
@@ -154,57 +147,68 @@ constexpr QList<SerializeData<T>> SerializeData<T>::getInt32LimitValues(IntTypes
     return {};
 }
 
-template <typename T>
-constexpr QList<SerializeData<T>> SerializeData<T>::getInt64LimitValues(IntTypes type)
+template <typename T, IntTypes type>
+constexpr QList<SerializeData<T>> getInt64LimitValues()
 {
-    if constexpr (std::is_same_v<T, int64_t> || std::is_same_v<T, uint64_t>) {
-        switch (type) {
-        case IntTypes::Int:
-            return { { (T)INT_MAX_SDATA(int64_t, 10ll, "08ffffffffffffffff7f"_ba) },
-                     { (T)OVER_INT_MAX_SDATA(int32_t, 6ll, "088080808008"_ba) },
-                     { (T)INT_MIN_SDATA(int64_t, 11ll, "0880808080808080808001"_ba) },
-                     { (T)BELOW_INT_MAX_SDATA(int32_t, 11ll, "08fffffffff7ffffffff01"_ba) } };
-        case IntTypes::UInt:
-            return { { (T)INT_MAX_SDATA(int64_t, 10ll, "08ffffffffffffffff7f"_ba) },
-                     { (T)OVER_INT_MAX_SDATA(int32_t, 6ll, "088080808008"_ba) } };
-        case IntTypes::SInt:
-            return { { (T)INT_MAX_SDATA(int64_t, 11ll, "08feffffffffffffffff01"_ba) },
-                     { (T)OVER_INT_MAX_SDATA(int32_t, 6ll, "088080808010"_ba) },
-                     { (T)INT_MIN_SDATA(int64_t, 11ll, "08ffffffffffffffffff01"_ba) },
-                     { (T)BELOW_INT_MAX_SDATA(int32_t, 6ll, "088180808010"_ba) } };
-        case IntTypes::Fixed:
-            return { { (T)INT_MAX_SDATA(uint8_t, Fixed64IntSize, "09ff00000000000000"_ba) },
-                     { (T)INT_MAX_SDATA(uint16_t, Fixed64IntSize, "09ffff000000000000"_ba) },
-                     { (T)INT_MAX_SDATA(uint32_t, Fixed64IntSize, "09ffffffff00000000"_ba) },
-                     { (T)INT_MAX_SDATA(uint64_t, Fixed64IntSize, "09ffffffffffffffff"_ba) },
-                     { (T)OVER_INT_MAX_SDATA(uint8_t, Fixed64IntSize, "090001000000000000"_ba) },
-                     { (T)OVER_INT_MAX_SDATA(uint16_t, Fixed64IntSize, "090000010000000000"_ba) },
-                     { (T)OVER_INT_MAX_SDATA(uint32_t, Fixed64IntSize, "090000000001000000"_ba) } };
-        case IntTypes::SFixed:
-            return { { (T)INT_MAX_SDATA(int8_t, Fixed64IntSize, "097f00000000000000"_ba) },
-                     { (T)INT_MAX_SDATA(int16_t, Fixed64IntSize, "09ff7f000000000000"_ba) },
-                     { (T)INT_MAX_SDATA(int32_t, Fixed64IntSize, "09ffffff7f00000000"_ba) },
-                     { (T)INT_MAX_SDATA(int64_t, Fixed64IntSize, "09ffffffffffffff7f"_ba) },
-                     { (T)OVER_INT_MAX_SDATA(int8_t, Fixed64IntSize, "098000000000000000"_ba) },
-                     { (T)OVER_INT_MAX_SDATA(int16_t, Fixed64IntSize, "090080000000000000"_ba) },
-                     { (T)OVER_INT_MAX_SDATA(int32_t, Fixed64IntSize, "090000008000000000"_ba) },
-                     { (T)INT_MIN_SDATA(int8_t, Fixed64IntSize, "0980ffffffffffffff"_ba) },
-                     { (T)INT_MIN_SDATA(int16_t, Fixed64IntSize, "090080ffffffffffff"_ba) },
-                     { (T)INT_MIN_SDATA(int32_t, Fixed64IntSize, "0900000080ffffffff"_ba) },
-                     { (T)INT_MIN_SDATA(int64_t, Fixed64IntSize, "090000000000000080"_ba) },
-                     { (T)BELOW_INT_MAX_SDATA(int8_t, Fixed64IntSize, "097fffffffffffffff"_ba) },
-                     { (T)BELOW_INT_MAX_SDATA(int16_t, Fixed64IntSize, "09ff7fffffffffffff"_ba) },
-                     { (T)BELOW_INT_MAX_SDATA(int32_t, Fixed64IntSize, "09ffffff7fffffffff"_ba) } };
-        }
+    switch (type) {
+    case IntTypes::Int:
+        return { { (T)INT_MAX_SDATA(int64_t, 10ll, "08ffffffffffffffff7f"_ba) },
+                 { (T)OVER_INT_MAX_SDATA(int32_t, 6ll, "088080808008"_ba) },
+                 { (T)INT_MIN_SDATA(int64_t, 11ll, "0880808080808080808001"_ba) },
+                 { (T)BELOW_INT_MAX_SDATA(int32_t, 11ll, "08fffffffff7ffffffff01"_ba) } };
+    case IntTypes::UInt:
+        return { { (T)INT_MAX_SDATA(int64_t, 10ll, "08ffffffffffffffff7f"_ba) },
+                 { (T)OVER_INT_MAX_SDATA(int32_t, 6ll, "088080808008"_ba) } };
+    case IntTypes::SInt:
+        return { { (T)INT_MAX_SDATA(int64_t, 11ll, "08feffffffffffffffff01"_ba) },
+                 { (T)OVER_INT_MAX_SDATA(int32_t, 6ll, "088080808010"_ba) },
+                 { (T)INT_MIN_SDATA(int64_t, 11ll, "08ffffffffffffffffff01"_ba) },
+                 { (T)BELOW_INT_MAX_SDATA(int32_t, 6ll, "088180808010"_ba) } };
+    case IntTypes::Fixed:
+        return { { (T)INT_MAX_SDATA(uint8_t, Fixed64IntSize, "09ff00000000000000"_ba) },
+                 { (T)INT_MAX_SDATA(uint16_t, Fixed64IntSize, "09ffff000000000000"_ba) },
+                 { (T)INT_MAX_SDATA(uint32_t, Fixed64IntSize, "09ffffffff00000000"_ba) },
+                 { (T)INT_MAX_SDATA(uint64_t, Fixed64IntSize, "09ffffffffffffffff"_ba) },
+                 { (T)OVER_INT_MAX_SDATA(uint8_t, Fixed64IntSize, "090001000000000000"_ba) },
+                 { (T)OVER_INT_MAX_SDATA(uint16_t, Fixed64IntSize, "090000010000000000"_ba) },
+                 { (T)OVER_INT_MAX_SDATA(uint32_t, Fixed64IntSize, "090000000001000000"_ba) } };
+    case IntTypes::SFixed:
+        return { { (T)INT_MAX_SDATA(int8_t, Fixed64IntSize, "097f00000000000000"_ba) },
+                 { (T)INT_MAX_SDATA(int16_t, Fixed64IntSize, "09ff7f000000000000"_ba) },
+                 { (T)INT_MAX_SDATA(int32_t, Fixed64IntSize, "09ffffff7f00000000"_ba) },
+                 { (T)INT_MAX_SDATA(int64_t, Fixed64IntSize, "09ffffffffffffff7f"_ba) },
+                 { (T)OVER_INT_MAX_SDATA(int8_t, Fixed64IntSize, "098000000000000000"_ba) },
+                 { (T)OVER_INT_MAX_SDATA(int16_t, Fixed64IntSize, "090080000000000000"_ba) },
+                 { (T)OVER_INT_MAX_SDATA(int32_t, Fixed64IntSize, "090000008000000000"_ba) },
+                 { (T)INT_MIN_SDATA(int8_t, Fixed64IntSize, "0980ffffffffffffff"_ba) },
+                 { (T)INT_MIN_SDATA(int16_t, Fixed64IntSize, "090080ffffffffffff"_ba) },
+                 { (T)INT_MIN_SDATA(int32_t, Fixed64IntSize, "0900000080ffffffff"_ba) },
+                 { (T)INT_MIN_SDATA(int64_t, Fixed64IntSize, "090000000000000080"_ba) },
+                 { (T)BELOW_INT_MAX_SDATA(int8_t, Fixed64IntSize, "097fffffffffffffff"_ba) },
+                 { (T)BELOW_INT_MAX_SDATA(int16_t, Fixed64IntSize, "09ff7fffffffffffff"_ba) },
+                 { (T)BELOW_INT_MAX_SDATA(int32_t, Fixed64IntSize, "09ffffff7fffffffff"_ba) } };
     }
-    return {};
 }
 
-template <typename T>
-QList<SerializeData<T>> SerializeData<T>::getSerializeData(IntTypes type)
+template <typename T, IntTypes type, typename Enable = void>
+struct SerializeDataGenerator
 {
-    return SerializeData<T>::getCommonIntValues(type) + SerializeData<T>::getInt32LimitValues(type)
-            + SerializeData<T>::getInt64LimitValues(type);
-}
+    static QList<SerializeData<T>> getSerializeData()
+    {
+        return getCommonIntValues<T, type>() + getInt32LimitValues<T, type>();
+    };
+};
+
+template <typename T, IntTypes type>
+struct SerializeDataGenerator<
+        T, type,
+        std::enable_if_t<std::disjunction_v<std::is_same<T, int64_t>, std::is_same<T, uint64_t>>>>
+{
+    static QList<SerializeData<T>> getSerializeData()
+    {
+        return getCommonIntValues<T, type>() + getInt32LimitValues<T, type>()
+                + getInt64LimitValues<T, type>();
+    }
+};
 
 } // namespace qtprotobufnamespace::tests

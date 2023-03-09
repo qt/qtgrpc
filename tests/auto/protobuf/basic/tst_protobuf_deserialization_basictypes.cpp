@@ -55,14 +55,14 @@ using namespace qtprotobufnamespace::tests;
 
 #define EMPTY_VALUE_TEST_ROW(type) QTest::newRow("empty_data") << ""_ba << (type)0
 
-template <typename T>
-void generateTestData(IntTypes type)
+template <typename T, IntTypes type>
+void generateTestData()
 {
     QTest::addColumn<QByteArray>("hexData");
     QTest::addColumn<T>("expectedValue");
 
     EMPTY_VALUE_TEST_ROW(T);
-    const auto data = SerializeData<T>::getSerializeData(type);
+    const auto data = SerializeDataGenerator<T, type>::getSerializeData();
     for (const auto &test : data) {
         auto testName = QString("value_%1")
                                 .arg(test.name ? *(test.name) : QString::number(test.value));
@@ -72,7 +72,7 @@ void generateTestData(IntTypes type)
 
 void QtProtobufTypesDeserializationTest::FixedInt32MessageDeserializeTest_data()
 {
-    generateTestData<uint32_t>(IntTypes::Fixed);
+    generateTestData<uint32_t, IntTypes::Fixed>();
 }
 
 void QtProtobufTypesDeserializationTest::FixedInt32MessageDeserializeTest()
@@ -87,7 +87,7 @@ void QtProtobufTypesDeserializationTest::FixedInt32MessageDeserializeTest()
 
 void QtProtobufTypesDeserializationTest::FixedInt64MessageDeserializeTest_data()
 {
-    generateTestData<uint64_t>(IntTypes::Fixed);
+    generateTestData<uint64_t, IntTypes::Fixed>();
 }
 
 void QtProtobufTypesDeserializationTest::FixedInt64MessageDeserializeTest()
@@ -102,7 +102,7 @@ void QtProtobufTypesDeserializationTest::FixedInt64MessageDeserializeTest()
 
 void QtProtobufTypesDeserializationTest::SFixedInt32MessageDeserializeTest_data()
 {
-    generateTestData<int32_t>(IntTypes::SFixed);
+    generateTestData<int32_t, IntTypes::SFixed>();
 }
 
 void QtProtobufTypesDeserializationTest::SFixedInt32MessageDeserializeTest()
@@ -117,7 +117,7 @@ void QtProtobufTypesDeserializationTest::SFixedInt32MessageDeserializeTest()
 
 void QtProtobufTypesDeserializationTest::SFixedInt64MessageDeserializeTest_data()
 {
-    generateTestData<int64_t>(IntTypes::SFixed);
+    generateTestData<int64_t, IntTypes::SFixed>();
 }
 
 void QtProtobufTypesDeserializationTest::SFixedInt64MessageDeserializeTest()
@@ -180,7 +180,7 @@ void QtProtobufTypesDeserializationTest::DoubleMessageDeserializeTest()
 
 void QtProtobufTypesDeserializationTest::IntMessageDeserializeTest_data()
 {
-    generateTestData<int32_t>(IntTypes::Int);
+    generateTestData<int32_t, IntTypes::Int>();
 }
 
 void QtProtobufTypesDeserializationTest::IntMessageDeserializeTest()
@@ -311,7 +311,7 @@ void QtProtobufTypesDeserializationTest::ComplexTypeDeserializeTest()
 
 void QtProtobufTypesDeserializationTest::SIntMessageDeserializeTest_data()
 {
-    generateTestData<int32_t>(IntTypes::SInt);
+    generateTestData<int32_t, IntTypes::SInt>();
 }
 
 void QtProtobufTypesDeserializationTest::SIntMessageDeserializeTest()
@@ -326,7 +326,7 @@ void QtProtobufTypesDeserializationTest::SIntMessageDeserializeTest()
 
 void QtProtobufTypesDeserializationTest::UIntMessageDeserializeTest_data()
 {
-    generateTestData<uint32_t>(IntTypes::UInt);
+    generateTestData<uint32_t, IntTypes::UInt>();
 }
 
 void QtProtobufTypesDeserializationTest::UIntMessageDeserializeTest()
