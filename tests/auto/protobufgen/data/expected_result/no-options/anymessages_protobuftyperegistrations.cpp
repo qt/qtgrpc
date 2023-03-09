@@ -1,5 +1,4 @@
-#include <QProtobufSerializer>
-#include <array>
+#include <QtProtobuf/qprotobufserializer.h>
 #include "anymessages.qpb.h"
 
 namespace qtproto::tests {

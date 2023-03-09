@@ -41,14 +41,22 @@ const std::vector<std::string> &CommonTemplates::ListOfQmlExceptions()
 
 const char *CommonTemplates::DefaultProtobufIncludesTemplate()
 {
-    return "#include <QtCore/QMetaType>\n"
-           "#include <QtCore/QList>\n"
-           "\n"
-           "#include <QtProtobuf/qprotobufobject.h>\n"
+    return "#include <QtProtobuf/qprotobufobject.h>\n"
            "#include <QtProtobuf/qprotobuflazymessagepointer.h>\n"
-           "\n"
-           "#include <memory>\n"
-           "\n";
+            "\n";
+}
+
+const char *CommonTemplates::DefaultQtIncludesTemplate()
+{
+    return "\n"
+           "#include <QtCore/qmetatype.h>\n"
+           "#include <QtCore/qlist.h>\n";
+}
+
+const char *CommonTemplates::DefaultSystemIncludesTemplate()
+{
+    return "\n"
+           "#include <memory>\n";
 }
 
 const char *CommonTemplates::QmlProtobufIncludesTemplate()
@@ -64,14 +72,14 @@ const char *CommonTemplates::DisclaimerTemplate()
 
 const char *CommonTemplates::PreambleTemplate()
 {
-    return "#ifndef Q_PROTOBUF_$filename$_H\n"
-           "#define Q_PROTOBUF_$filename$_H\n\n"
-           "#include <QtProtobuf/QProtobufMessage>\n";
+    return "#ifndef QPROTOBUF_$filename$_H\n"
+           "#define QPROTOBUF_$filename$_H\n\n"
+           "#include <QtProtobuf/qprotobufmessage.h>\n";
 }
 
 const char *CommonTemplates::FooterTemplate()
 {
-    return "#endif // Q_PROTOBUF_$filename$_H\n";
+    return "#endif // QPROTOBUF_$filename$_H\n";
 }
 
 const char *CommonTemplates::InternalIncludeTemplate()
@@ -159,6 +167,16 @@ const char *CommonTemplates::ClassMessageBeginDeclarationTemplate()
            "    Q_PROTOBUF_OBJECT\n"
            "    Q_DECLARE_PROTOBUF_SERIALIZERS($classname$)\n";
 }
+
+const char *CommonTemplates::ClassMessageBeginDeclarationTemplateEmptyMacros()
+{
+    return "\nclass $classname$ : public QProtobufMessage\n"
+           "{\n"
+           "    Q_GADGET\n"
+           "    Q_PROTOBUF_OBJECT\n"
+           "    Q_DECLARE_PROTOBUF_SERIALIZERS($classname$)\n";
+}
+
 
 const char *CommonTemplates::PropertyTemplate()
 {
@@ -256,7 +274,8 @@ const char *CommonTemplates::EnumFieldTemplate()
 
 const char *CommonTemplates::ConstructorMessageDefinitionTemplate()
 {
-    return "$type$::$type$() : QProtobufMessage(&$type$::staticMetaObject)";
+    return "$type$::$type$()\n"
+           "    : QProtobufMessage(&$type$::staticMetaObject)";
 }
 
 const char *CommonTemplates::EmptyConstructorTemplate()
@@ -284,13 +303,13 @@ const char *CommonTemplates::MoveConstructorDeclarationTemplate()
 }
 const char *CommonTemplates::CopyConstructorDefinitionTemplate()
 {
-    return "$classname$::$classname$(const $classname$ &other) : "
-           "QProtobufMessage(other)";
+    return "$classname$::$classname$(const $classname$ &other)\n"
+           "    : QProtobufMessage(other)";
 }
 const char *CommonTemplates::MoveConstructorDefinitionTemplate()
 {
-    return "$classname$::$classname$($classname$ &&other) noexcept : "
-           "QProtobufMessage(std::move(other))";
+    return "$classname$::$classname$($classname$ &&other) noexcept\n"
+           "    : QProtobufMessage(std::move(other))";
 }
 const char *CommonTemplates::DeletedCopyConstructorTemplate()
 {
@@ -518,21 +537,21 @@ const char *CommonTemplates::GetterOneofMessageDefinitionTemplate()
 
 const char *CommonTemplates::GetterTemplate()
 {
-    return "$getter_type$ $property_name$() const {\n"
+    return "$getter_type$ $property_name$() const\n{\n"
            "    return m_$property_name$;\n"
            "}\n\n";
 }
 
 const char *CommonTemplates::GetterNonScriptableTemplate()
 {
-    return "$qml_alias_type$ $property_name$_p() const {\n"
+    return "$qml_alias_type$ $property_name$_p() const\n{\n"
            "    return m_$property_name$;\n"
            "}\n\n";
 }
 
 const char *CommonTemplates::GetterComplexTemplate()
 {
-    return "$getter_type$ &$property_name$() {\n"
+    return "$getter_type$ &$property_name$()\n{\n"
            "    return m_$property_name$;\n"
            "}\n\n";
 }
@@ -635,14 +654,14 @@ const char *CommonTemplates::SetterOneofDefinitionTemplate()
 
 const char *CommonTemplates::SetterTemplate()
 {
-    return "void set$property_name_cap$(const $setter_type$ &$property_name$) {\n"
+    return "void set$property_name_cap$(const $setter_type$ &$property_name$)\n{\n"
            "    if (m_$property_name$ != $property_name$)\n"
            "        m_$property_name$ = $property_name$;\n"
            "}\n\n";
 }
 const char *CommonTemplates::SetterNonScriptableTemplate()
 {
-    return "void set$property_name_cap$_p(const $qml_alias_type$ &$property_name$) {\n"
+    return "void set$property_name_cap$_p(const $qml_alias_type$ &$property_name$)\n{\n"
            "    if (m_$property_name$ != $property_name$)\n"
            "        m_$property_name$ = $property_name$;\n"
            "}\n\n";
@@ -718,7 +737,7 @@ const char *CommonTemplates::PropertyOrderingDefinitionTemplate()
 
 const char *CommonTemplates::SimpleBlockEnclosureTemplate()
 {
-    return "}\n";
+    return "}\n\n";
 }
 const char *CommonTemplates::SemicolonBlockEnclosureTemplate()
 {
@@ -747,7 +766,7 @@ const char *CommonTemplates::MoveInitializerMemberOneofTemplate()
 
 const char *CommonTemplates::EmptyBracesTemplate()
 {
-    return "\n{\n}\n";
+    return "\n{\n}\n\n";
 }
 
 const char *CommonTemplates::DeclareMetaTypeTemplate()

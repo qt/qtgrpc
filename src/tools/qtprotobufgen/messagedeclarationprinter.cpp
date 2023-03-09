@@ -134,7 +134,13 @@ void MessageDeclarationPrinter::printNested()
 
 void MessageDeclarationPrinter::printClassDeclarationBegin()
 {
-    m_printer->Print(m_typeMap, CommonTemplates::ClassMessageBeginDeclarationTemplate());
+    const std::string exportMacro = Options::instance().exportMacro();
+    if (exportMacro.empty()) {
+        m_printer->Print(m_typeMap,
+                         CommonTemplates::ClassMessageBeginDeclarationTemplateEmptyMacros());
+    } else {
+        m_printer->Print(m_typeMap, CommonTemplates::ClassMessageBeginDeclarationTemplate());
+    }
 }
 
 void MessageDeclarationPrinter::printMetaTypesDeclaration()

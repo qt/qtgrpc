@@ -346,7 +346,7 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
     std::string outputTypeName = method->output_type()->full_name();
     std::string methodName = method->name();
     std::string methodNameUpper = method->name();
-    methodNameUpper[0] = static_cast<char>(::toupper(methodNameUpper[0]));
+    methodNameUpper[0] = static_cast<char>(utils::toAsciiUpper(methodNameUpper[0]));
     inputTypeName = utils::replace(inputTypeName, ".", "::");
     outputTypeName = utils::replace(outputTypeName, ".", "::");
     return { { "classname", scope },          { "return_type", outputTypeName },

@@ -1,5 +1,4 @@
-#include <QProtobufSerializer>
-#include <array>
+#include <QtProtobuf/qprotobufserializer.h>
 #include "qtgrpc/tests/testservice.qpb.h"
 
 namespace qtgrpc::tests {

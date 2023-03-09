@@ -1,5 +1,4 @@
-#include <QProtobufSerializer>
-#include <array>
+#include <QtProtobuf/qprotobufserializer.h>
 #include "repeatednonpackedmessages.qpb.h"
 
 namespace qtprotobufnamespace::tests {

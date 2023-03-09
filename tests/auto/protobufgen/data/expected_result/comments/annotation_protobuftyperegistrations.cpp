@@ -1,5 +1,4 @@
-#include <QProtobufSerializer>
-#include <array>
+#include <QtProtobuf/qprotobufserializer.h>
 #include "annotation.qpb.h"
 
 namespace qtprotobufnamespace::tests {

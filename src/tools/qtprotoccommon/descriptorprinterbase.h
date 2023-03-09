@@ -27,7 +27,6 @@ public:
     void encloseClass()
     {
         m_printer->Print(CommonTemplates::SemicolonBlockEnclosureTemplate());
-        m_printer->Print("\n");
     }
 
 protected:

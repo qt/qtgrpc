@@ -256,7 +256,9 @@ void MessageDefinitionPrinter::printInitializationList()
 
                 if (!propertyMap["initializer"].empty()) {
                     m_printer->Print(",\n");
+                    m_printer->Indent();
                     m_printer->Print(propertyMap, CommonTemplates::InitializerMemberTemplate());
+                    m_printer->Outdent();
                 }
             });
     Outdent();
@@ -273,16 +275,20 @@ void MessageDefinitionPrinter::printCopyFunctionality()
                     return;
 
                 m_printer->Print(",\n");
+                m_printer->Indent();
                 m_printer->Print(propertyMap,
                                  common::isPureMessage(field)
                                          ? CommonTemplates::InitializerMemberMessageTemplate()
                                          : CommonTemplates::CopyInitializerMemberTemplate());
+                m_printer->Outdent();
             });
     common::iterateOneofFields(
             m_descriptor, [&](const OneofDescriptor *, const PropertyMap &propertyMap) {
                 m_printer->Print(",\n");
+                m_printer->Indent();
                 m_printer->Print(propertyMap,
                                  CommonTemplates::CopyInitializerMemberOneofTemplate());
+                m_printer->Outdent();
             });
     Outdent();
 

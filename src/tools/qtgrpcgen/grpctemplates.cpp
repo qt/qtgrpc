@@ -49,15 +49,16 @@ const char *GrpcTemplates::ServerMethodDeclarationTemplate()
 
 const char *GrpcTemplates::ClientConstructorDefinitionTemplate()
 {
-    return "\n$classname$::$classname$(QObject *parent) : $parent_class$(\"$service_name$\"_L1, "
+    return "\n$classname$::$classname$(QObject *parent)\n"
+           "    : $parent_class$(\"$service_name$\"_L1, "
            "parent)\n"
            "{\n"
-           "}\n";
+           "}\n\n";
 }
 
 const char *GrpcTemplates::ClientMethodDefinitionSyncTemplate()
 {
-    return "\nQGrpcStatus $classname$::$method_name$(const $param_type$ &$param_name$, "
+    return "QGrpcStatus $classname$::$method_name$(const $param_type$ &$param_name$, "
            "$return_type$ *$return_name$)\n"
            "{\n"
            "    return call<$param_type$>(\"$method_name$\"_L1, $param_name$, $return_name$);\n"
@@ -85,7 +86,7 @@ const char *GrpcTemplates::ClientMethodDefinitionAsync2Template()
            "{\n"
            "        callback(reply);\n"
            "    });\n"
-           "}\n";
+           "}\n\n";
 }
 
 const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
@@ -187,7 +188,7 @@ const char *GrpcTemplates::ClientMethodServerStreamDefinitionTemplate()
            "&$param_name$)\n"
            "{\n"
            "    return startStream<$param_type$>(\"$method_name$\"_L1, $param_name$);\n"
-           "}\n";
+           "}\n\n";
 }
 
 const char *GrpcTemplates::ClientMethodServerStream2DefinitionTemplate()
@@ -197,7 +198,7 @@ const char *GrpcTemplates::ClientMethodServerStream2DefinitionTemplate()
            "{\n"
            "    return startStream<$param_type$>(\"$method_name$\"_L1, $param_name$, "
            "$return_name$);\n"
-           "}\n";
+           "}\n\n";
 }
 
 const char *GrpcTemplates::GrpcClientFileSuffix()
@@ -218,5 +219,5 @@ const char *GrpcTemplates::ClientMethodServerStreamQmlDefinitionTemplate()
            "{\n"
            "    return startStream<$param_type$>(\"$method_name$\"_L1, *$param_name$, "
            "QWeakPointer<$return_type$>($return_name$));\n"
-           "}\n";
+           "}\n\n";
 }

@@ -17,6 +17,8 @@ public:
     static const std::vector<std::string> &ListOfQmlExceptions();
     static const char *ProtoSuffix();
     static const char *DefaultProtobufIncludesTemplate();
+    static const char *DefaultSystemIncludesTemplate();
+    static const char *DefaultQtIncludesTemplate();
     static const char *QmlProtobufIncludesTemplate();
     static const char *PreambleTemplate();
     static const char *FooterTemplate();
@@ -39,6 +41,7 @@ public:
     static const char *EnumDeclarationTemplate();
     static const char *ClassMessageForwardDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplate();
+    static const char *ClassMessageBeginDeclarationTemplateEmptyMacros();
     static const char *EmptyConstructorTemplate();
     static const char *UseNamespace();
 

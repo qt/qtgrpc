@@ -65,6 +65,27 @@ std::string join(const T &container, std::string_view separator, std::string_vie
 
 size_t count(std::string_view s, char c);
 
+// ASCI check functions
+constexpr inline bool isAsciiUpper(char32_t c) noexcept
+{
+    return c >= 'A' && c <= 'Z';
+}
+
+constexpr inline bool isAsciiLower(char32_t c) noexcept
+{
+    return c >= 'a' && c <= 'z';
+}
+
+constexpr inline char toAsciiLower(char ch) noexcept
+{
+    return isAsciiUpper(ch) ? ch - 'A' + 'a' : ch;
+}
+
+constexpr inline char toAsciiUpper(char ch) noexcept
+{
+    return isAsciiLower(ch) ? ch - 'a' + 'A' : ch;
+}
+
 } // namespace utils
 } // namespace qtprotoccommon
 #endif // QTPROTOBUFGEN_UTILS_H
