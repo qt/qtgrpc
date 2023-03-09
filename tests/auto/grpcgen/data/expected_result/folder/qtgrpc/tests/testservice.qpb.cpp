@@ -51,9 +51,9 @@ void SimpleStringMessage::registerTypes()
 SimpleStringMessage::SimpleStringMessage() : QProtobufMessage(&SimpleStringMessage::staticMetaObject)
 {
 }
-SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other) : QProtobufMessage(other)
+SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other) : QProtobufMessage(other),
+    m_testFieldString(other.m_testFieldString)
 {
-    setTestFieldString(other.m_testFieldString);
 }
 SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &other)
 {
@@ -136,9 +136,9 @@ SimpleIntMessage::SimpleIntMessage() : QProtobufMessage(&SimpleIntMessage::stati
     m_testField(0)
 {
 }
-SimpleIntMessage::SimpleIntMessage(const SimpleIntMessage &other) : QProtobufMessage(other)
+SimpleIntMessage::SimpleIntMessage(const SimpleIntMessage &other) : QProtobufMessage(other),
+    m_testField(other.m_testField)
 {
-    setTestField(other.m_testField);
 }
 SimpleIntMessage &SimpleIntMessage::operator =(const SimpleIntMessage &other)
 {
@@ -213,9 +213,9 @@ void BlobMessage::registerTypes()
 BlobMessage::BlobMessage() : QProtobufMessage(&BlobMessage::staticMetaObject)
 {
 }
-BlobMessage::BlobMessage(const BlobMessage &other) : QProtobufMessage(other)
+BlobMessage::BlobMessage(const BlobMessage &other) : QProtobufMessage(other),
+    m_testBytes(other.m_testBytes)
 {
-    setTestBytes(other.m_testBytes);
 }
 BlobMessage &BlobMessage::operator =(const BlobMessage &other)
 {
