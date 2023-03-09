@@ -21,13 +21,13 @@
 
 QT_BEGIN_NAMESPACE
 
-std::optional<QUrl> convert(const QtProtobufPrivate::QtCore::QUrl &from)
+static std::optional<QUrl> convert(const QtProtobufPrivate::QtCore::QUrl &from)
 {
     QUrl url(from.url());
     return (url.isValid() || url.isEmpty()) ? std::optional<QUrl>(url) : std::nullopt;
 }
 
-std::optional<QtProtobufPrivate::QtCore::QUrl> convert(const QUrl &from)
+static std::optional<QtProtobufPrivate::QtCore::QUrl> convert(const QUrl &from)
 {
     if (from.isValid() || from.isEmpty()) {
         QtProtobufPrivate::QtCore::QUrl url;
@@ -37,19 +37,19 @@ std::optional<QtProtobufPrivate::QtCore::QUrl> convert(const QUrl &from)
     return std::nullopt;
 }
 
-QChar convert(const QtProtobufPrivate::QtCore::QChar &from)
+static QChar convert(const QtProtobufPrivate::QtCore::QChar &from)
 {
     return QChar(from.utf16CodePoint());
 }
 
-QtProtobufPrivate::QtCore::QChar convert(const QChar &from)
+static QtProtobufPrivate::QtCore::QChar convert(const QChar &from)
 {
     QtProtobufPrivate::QtCore::QChar symbol;
     symbol.setUtf16CodePoint(from.unicode());
     return symbol;
 }
 
-std::optional<QUuid> convert(const QtProtobufPrivate::QtCore::QUuid &from)
+static std::optional<QUuid> convert(const QtProtobufPrivate::QtCore::QUuid &from)
 {
     if (from.rfc4122Uuid().size() != 16)
         return std::nullopt;
@@ -57,7 +57,7 @@ std::optional<QUuid> convert(const QtProtobufPrivate::QtCore::QUuid &from)
     return QUuid::fromRfc4122(from.rfc4122Uuid());
 }
 
-std::optional<QtProtobufPrivate::QtCore::QUuid> convert(const QUuid &from)
+static std::optional<QtProtobufPrivate::QtCore::QUuid> convert(const QUuid &from)
 {
     if (from.toRfc4122().size() != 16)
        return std::nullopt;
@@ -67,13 +67,13 @@ std::optional<QtProtobufPrivate::QtCore::QUuid> convert(const QUuid &from)
     return uuid;
 }
 
-std::optional<QTime> convert(const QtProtobufPrivate::QtCore::QTime &from)
+static std::optional<QTime> convert(const QtProtobufPrivate::QtCore::QTime &from)
 {
     QTime time = QTime::fromMSecsSinceStartOfDay(from.millisecondsSinceMidnight());
     return time.isValid() ? std::optional<QTime>(time) : std::nullopt;
 }
 
-std::optional<QtProtobufPrivate::QtCore::QTime> convert(const QTime &from)
+static std::optional<QtProtobufPrivate::QtCore::QTime> convert(const QTime &from)
 {
     if (!from.isValid())
         return std::nullopt;
@@ -83,13 +83,13 @@ std::optional<QtProtobufPrivate::QtCore::QTime> convert(const QTime &from)
     return time;
 }
 
-std::optional<QDate> convert(const QtProtobufPrivate::QtCore::QDate &from)
+static std::optional<QDate> convert(const QtProtobufPrivate::QtCore::QDate &from)
 {
     QDate date = QDate::fromJulianDay(from.julianDay());
     return date.isValid() ? std::optional<QDate>(date) : std::nullopt;
 }
 
-std::optional<QtProtobufPrivate::QtCore::QDate> convert(const QDate &from)
+static std::optional<QtProtobufPrivate::QtCore::QDate> convert(const QDate &from)
 {
     if (!from.isValid())
         return std::nullopt;
@@ -99,14 +99,14 @@ std::optional<QtProtobufPrivate::QtCore::QDate> convert(const QDate &from)
     return date;
 }
 
-std::optional<QDateTime> convert(const QtProtobufPrivate::QtCore::QDateTime &from)
+static std::optional<QDateTime> convert(const QtProtobufPrivate::QtCore::QDateTime &from)
 {
     QDateTime dateTime(QDateTime::fromMSecsSinceEpoch(from.utcMsecsSinceUnixEpoch(),
                                                       QTimeZone::UTC));
     return dateTime.isValid() ? std::optional<QDateTime>(dateTime) : std::nullopt;
 }
 
-std::optional<QtProtobufPrivate::QtCore::QDateTime> convert(const QDateTime &from)
+static std::optional<QtProtobufPrivate::QtCore::QDateTime> convert(const QDateTime &from)
 {
     if (!from.isValid())
         return std::nullopt;
@@ -116,12 +116,12 @@ std::optional<QtProtobufPrivate::QtCore::QDateTime> convert(const QDateTime &fro
     return datetime;
 }
 
-QSize convert(const QtProtobufPrivate::QtCore::QSize &from)
+static QSize convert(const QtProtobufPrivate::QtCore::QSize &from)
 {
     return QSize(from.width(), from.height());
 }
 
-QtProtobufPrivate::QtCore::QSize convert(const QSize &from)
+static QtProtobufPrivate::QtCore::QSize convert(const QSize &from)
 {
     QtProtobufPrivate::QtCore::QSize size;
     size.setWidth(from.width());
@@ -129,12 +129,12 @@ QtProtobufPrivate::QtCore::QSize convert(const QSize &from)
     return size;
 }
 
-QSizeF convert(const QtProtobufPrivate::QtCore::QSizeF &from)
+static QSizeF convert(const QtProtobufPrivate::QtCore::QSizeF &from)
 {
     return QSizeF(from.width(), from.height());
 }
 
-QtProtobufPrivate::QtCore::QSizeF convert(const QSizeF &from)
+static QtProtobufPrivate::QtCore::QSizeF convert(const QSizeF &from)
 {
     QtProtobufPrivate::QtCore::QSizeF sizeF;
     sizeF.setWidth(from.width());
@@ -142,12 +142,12 @@ QtProtobufPrivate::QtCore::QSizeF convert(const QSizeF &from)
     return sizeF;
 }
 
-QPoint convert(const QtProtobufPrivate::QtCore::QPoint &from)
+static QPoint convert(const QtProtobufPrivate::QtCore::QPoint &from)
 {
     return QPoint(from.x(), from.y());
 }
 
-QtProtobufPrivate::QtCore::QPoint convert(const QPoint &from)
+static QtProtobufPrivate::QtCore::QPoint convert(const QPoint &from)
 {
     QtProtobufPrivate::QtCore::QPoint pointT;
     pointT.setX(from.x());
@@ -155,12 +155,12 @@ QtProtobufPrivate::QtCore::QPoint convert(const QPoint &from)
     return pointT;
 }
 
-QPointF convert(const QtProtobufPrivate::QtCore::QPointF &from)
+static QPointF convert(const QtProtobufPrivate::QtCore::QPointF &from)
 {
     return QPointF(from.x(), from.y());
 }
 
-QtProtobufPrivate::QtCore::QPointF convert(const QPointF &from)
+static QtProtobufPrivate::QtCore::QPointF convert(const QPointF &from)
 {
     QtProtobufPrivate::QtCore::QPointF pointF;
     pointF.setX(from.x());
@@ -168,13 +168,13 @@ QtProtobufPrivate::QtCore::QPointF convert(const QPointF &from)
     return pointF;
 }
 
-QRect convert(const QtProtobufPrivate::QtCore::QRect &from)
+static QRect convert(const QtProtobufPrivate::QtCore::QRect &from)
 {
     return QRect(QPoint(from.x(), from.y()),
                  QSize(from.width(), from.height()));
 }
 
-QtProtobufPrivate::QtCore::QRect convert(const QRect &from)
+static QtProtobufPrivate::QtCore::QRect convert(const QRect &from)
 {
     QtProtobufPrivate::QtCore::QRect rect;
     rect.setX(from.x());
@@ -184,13 +184,13 @@ QtProtobufPrivate::QtCore::QRect convert(const QRect &from)
     return rect;
 }
 
-QRectF convert(const QtProtobufPrivate::QtCore::QRectF &from)
+static QRectF convert(const QtProtobufPrivate::QtCore::QRectF &from)
 {
     return QRectF(QPointF(from.x(), from.y()),
                   QSizeF(from.width(), from.height()));
 }
 
-QtProtobufPrivate::QtCore::QRectF convert(const QRectF &from)
+static QtProtobufPrivate::QtCore::QRectF convert(const QRectF &from)
 {
     QtProtobufPrivate::QtCore::QRectF rectF;
     rectF.setX(from.x());
@@ -200,7 +200,7 @@ QtProtobufPrivate::QtCore::QRectF convert(const QRectF &from)
     return rectF;
 }
 
-std::optional<QVersionNumber> convert(const QtProtobufPrivate::QtCore::QVersionNumber &from)
+static std::optional<QVersionNumber> convert(const QtProtobufPrivate::QtCore::QVersionNumber &from)
 {
     if (from.segments().size() == 0)
         return std::nullopt;
@@ -212,7 +212,7 @@ std::optional<QVersionNumber> convert(const QtProtobufPrivate::QtCore::QVersionN
     return QVersionNumber(versionList);
 }
 
-std::optional<QtProtobufPrivate::QtCore::QVersionNumber> convert(const QVersionNumber &from)
+static std::optional<QtProtobufPrivate::QtCore::QVersionNumber> convert(const QVersionNumber &from)
 {
     if (from.segments().size() == 0)
         return std::nullopt;

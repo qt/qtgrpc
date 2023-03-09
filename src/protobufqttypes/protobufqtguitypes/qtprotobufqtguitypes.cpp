@@ -20,19 +20,19 @@ QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
 
-QRgba64 convert(const QtProtobufPrivate::QtGui::QRgba64 &from)
+static QRgba64 convert(const QtProtobufPrivate::QtGui::QRgba64 &from)
 {
     return QRgba64::fromRgba64(from.rgba64());
 }
 
-QtProtobufPrivate::QtGui::QRgba64 convert(const QRgba64 &from)
+static QtProtobufPrivate::QtGui::QRgba64 convert(const QRgba64 &from)
 {
     QtProtobufPrivate::QtGui::QRgba64 rgba64;
     rgba64.setRgba64((quint64)from);
     return rgba64;
 }
 
-std::optional<QMatrix4x4> convert(const QtProtobufPrivate::QtGui::QMatrix4x4 &from)
+static std::optional<QMatrix4x4> convert(const QtProtobufPrivate::QtGui::QMatrix4x4 &from)
 {
     QtProtobuf::floatList list = from.m();
     if (list.size() == 16) {
@@ -47,7 +47,7 @@ std::optional<QMatrix4x4> convert(const QtProtobufPrivate::QtGui::QMatrix4x4 &fr
     return std::nullopt;
 }
 
-QtProtobufPrivate::QtGui::QMatrix4x4 convert(const QMatrix4x4 &from)
+static QtProtobufPrivate::QtGui::QMatrix4x4 convert(const QMatrix4x4 &from)
 {
     const float *matrixData = from.data();
     QtProtobufPrivate::QtGui::QMatrix4x4 matrix;
@@ -59,12 +59,12 @@ QtProtobufPrivate::QtGui::QMatrix4x4 convert(const QMatrix4x4 &from)
     return matrix;
 }
 
-QVector2D convert(const QtProtobufPrivate::QtGui::QVector2D &from)
+static QVector2D convert(const QtProtobufPrivate::QtGui::QVector2D &from)
 {
     return QVector2D(from.xPos(), from.yPos());;
 }
 
-QtProtobufPrivate::QtGui::QVector2D convert(const QVector2D &from)
+static QtProtobufPrivate::QtGui::QVector2D convert(const QVector2D &from)
 {
     QtProtobufPrivate::QtGui::QVector2D vector2D;
     vector2D.setXPos(from.x());
@@ -72,12 +72,12 @@ QtProtobufPrivate::QtGui::QVector2D convert(const QVector2D &from)
     return vector2D;
 }
 
-QVector3D convert(const QtProtobufPrivate::QtGui::QVector3D &from)
+static QVector3D convert(const QtProtobufPrivate::QtGui::QVector3D &from)
 {
     return QVector3D(from.xPos(), from.yPos(), from.zPos());
 }
 
-QtProtobufPrivate::QtGui::QVector3D convert(const QVector3D &from)
+static QtProtobufPrivate::QtGui::QVector3D convert(const QVector3D &from)
 {
     QtProtobufPrivate::QtGui::QVector3D vector3D;
     vector3D.setXPos(from.x());
@@ -86,12 +86,12 @@ QtProtobufPrivate::QtGui::QVector3D convert(const QVector3D &from)
     return vector3D;
 }
 
-QVector4D convert(const QtProtobufPrivate::QtGui::QVector4D &from)
+static QVector4D convert(const QtProtobufPrivate::QtGui::QVector4D &from)
 {
     return QVector4D(from.xPos(), from.yPos(), from.zPos(), from.wPos());
 }
 
-QtProtobufPrivate::QtGui::QVector4D convert(const QVector4D &from)
+static QtProtobufPrivate::QtGui::QVector4D convert(const QVector4D &from)
 {
     QtProtobufPrivate::QtGui::QVector4D vector4D;
     vector4D.setXPos(from.x());
@@ -101,7 +101,7 @@ QtProtobufPrivate::QtGui::QVector4D convert(const QVector4D &from)
     return vector4D;
 }
 
-std::optional<QTransform> convert(const QtProtobufPrivate::QtGui::QTransform &from)
+static std::optional<QTransform> convert(const QtProtobufPrivate::QtGui::QTransform &from)
 {
     QtProtobuf::doubleList list = from.m();
     if (list.size() == 9) {
@@ -114,7 +114,7 @@ std::optional<QTransform> convert(const QtProtobufPrivate::QtGui::QTransform &fr
     return std::nullopt;
 }
 
-QtProtobufPrivate::QtGui::QTransform convert(const QTransform &from)
+static QtProtobufPrivate::QtGui::QTransform convert(const QTransform &from)
 {
     QtProtobufPrivate::QtGui::QTransform transform;
     transform.setM({from.m11(), from.m12(), from.m13(),
@@ -123,12 +123,12 @@ QtProtobufPrivate::QtGui::QTransform convert(const QTransform &from)
     return transform;
 }
 
-QQuaternion convert(const QtProtobufPrivate::QtGui::QQuaternion &from)
+static QQuaternion convert(const QtProtobufPrivate::QtGui::QQuaternion &from)
 {
     return QQuaternion(from.scalar(), from.x(), from.y(), from.z());
 }
 
-QtProtobufPrivate::QtGui::QQuaternion convert(const QQuaternion &from)
+static QtProtobufPrivate::QtGui::QQuaternion convert(const QQuaternion &from)
 {
     QtProtobufPrivate::QtGui::QQuaternion quaternion;
     quaternion.setScalar(from.scalar());
@@ -138,7 +138,7 @@ QtProtobufPrivate::QtGui::QQuaternion convert(const QQuaternion &from)
     return quaternion;
 }
 
-QImage convert(const QtProtobufPrivate::QtGui::QImage &from)
+static QImage convert(const QtProtobufPrivate::QtGui::QImage &from)
 {
     return QImage::fromData(from.data(), from.format().toLatin1().data());
 }
@@ -159,7 +159,7 @@ static bool isFloatingPointImageFormat(QImage::Format format)
     }
 }
 
-std::optional<QtProtobufPrivate::QtGui::QImage> convert(const QImage &from)
+static std::optional<QtProtobufPrivate::QtGui::QImage> convert(const QImage &from)
 {
     static bool tiffSupported = QImageReader::supportedImageFormats().contains("tiff");
     const auto extension = (isFloatingPointImageFormat(from.format())
