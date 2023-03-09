@@ -62,19 +62,18 @@ private:
 
 using namespace qtprotobufnamespace::tests;
 
-template <typename T>
-void generateTestData(IntTypes type)
+template <typename T, IntTypes type>
+void generateTestData()
 {
     QTest::addColumn<T>("value");
     QTest::addColumn<qsizetype>("expectedSize");
     QTest::addColumn<QByteArray>("expectedData");
 
-    const auto data = SerializeData<T>::getSerializeData(type);
+    const auto data = SerializeDataGenerator<T, type>::getSerializeData();
     for (const auto &test : data) {
         auto testName = QString("value_%1")
                                 .arg(test.name ? *(test.name) : QString::number(test.value));
-        QTest::newRow(testName.toStdString().c_str())
-                << test.value << test.size << test.hexData;
+        QTest::newRow(testName.toStdString().c_str()) << test.value << test.size << test.hexData;
     }
 }
 
@@ -103,7 +102,7 @@ void QtProtobufTypesSerializationTest::BoolMessageSerializeTest()
 
 void QtProtobufTypesSerializationTest::IntMessageSerializeTest_data()
 {
-    generateTestData<int32_t>(IntTypes::Int);
+    generateTestData<int32_t, IntTypes::Int>();
 }
 
 void QtProtobufTypesSerializationTest::IntMessageSerializeTest()
@@ -121,7 +120,7 @@ void QtProtobufTypesSerializationTest::IntMessageSerializeTest()
 
 void QtProtobufTypesSerializationTest::UIntMessageSerializeTest_data()
 {
-    generateTestData<uint32_t>(IntTypes::UInt);
+    generateTestData<uint32_t, IntTypes::UInt>();
 }
 
 void QtProtobufTypesSerializationTest::UIntMessageSerializeTest()
@@ -139,7 +138,7 @@ void QtProtobufTypesSerializationTest::UIntMessageSerializeTest()
 
 void QtProtobufTypesSerializationTest::SIntMessageSerializeTest_data()
 {
-    generateTestData<int32_t>(IntTypes::SInt);
+    generateTestData<int32_t, IntTypes::SInt>();
 }
 
 void QtProtobufTypesSerializationTest::SIntMessageSerializeTest()
@@ -157,7 +156,7 @@ void QtProtobufTypesSerializationTest::SIntMessageSerializeTest()
 
 void QtProtobufTypesSerializationTest::Int64MessageSerializeTest_data()
 {
-    generateTestData<int64_t>(IntTypes::Int);
+    generateTestData<int64_t, IntTypes::Int>();
 }
 void QtProtobufTypesSerializationTest::Int64MessageSerializeTest()
 {
@@ -174,7 +173,7 @@ void QtProtobufTypesSerializationTest::Int64MessageSerializeTest()
 
 void QtProtobufTypesSerializationTest::UInt64MessageSerializeTest_data()
 {
-    generateTestData<uint64_t>(IntTypes::UInt);
+    generateTestData<uint64_t, IntTypes::UInt>();
 }
 void QtProtobufTypesSerializationTest::UInt64MessageSerializeTest()
 {
@@ -191,7 +190,7 @@ void QtProtobufTypesSerializationTest::UInt64MessageSerializeTest()
 
 void QtProtobufTypesSerializationTest::SInt64MessageSerializeTest_data()
 {
-    generateTestData<int64_t>(IntTypes::SInt);
+    generateTestData<int64_t, IntTypes::SInt>();
 }
 void QtProtobufTypesSerializationTest::SInt64MessageSerializeTest()
 {
@@ -208,7 +207,7 @@ void QtProtobufTypesSerializationTest::SInt64MessageSerializeTest()
 
 void QtProtobufTypesSerializationTest::FixedInt32MessageSerializeTest_data()
 {
-    generateTestData<uint32_t>(IntTypes::Fixed);
+    generateTestData<uint32_t, IntTypes::Fixed>();
 }
 
 void QtProtobufTypesSerializationTest::FixedInt32MessageSerializeTest()
@@ -226,7 +225,7 @@ void QtProtobufTypesSerializationTest::FixedInt32MessageSerializeTest()
 
 void QtProtobufTypesSerializationTest::FixedInt64MessageSerializeTest_data()
 {
-    generateTestData<uint64_t>(IntTypes::Fixed);
+    generateTestData<uint64_t, IntTypes::Fixed>();
 }
 
 void QtProtobufTypesSerializationTest::FixedInt64MessageSerializeTest()
@@ -244,7 +243,7 @@ void QtProtobufTypesSerializationTest::FixedInt64MessageSerializeTest()
 
 void QtProtobufTypesSerializationTest::SFixedInt32MessageSerializeTest_data()
 {
-    generateTestData<int32_t>(IntTypes::SFixed);
+    generateTestData<int32_t, IntTypes::SFixed>();
 }
 void QtProtobufTypesSerializationTest::SFixedInt32MessageSerializeTest()
 {
@@ -261,7 +260,7 @@ void QtProtobufTypesSerializationTest::SFixedInt32MessageSerializeTest()
 
 void QtProtobufTypesSerializationTest::SFixedInt64MessageSerializeTest_data()
 {
-    generateTestData<int64_t>(IntTypes::SFixed);
+    generateTestData<int64_t, IntTypes::SFixed>();
 }
 
 void QtProtobufTypesSerializationTest::SFixedInt64MessageSerializeTest()
