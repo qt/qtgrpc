@@ -33,7 +33,7 @@ using namespace Qt::StringLiterals;
 
 /*!
     \class QGrpcChannel
-    \inmodule QtGRPC
+    \inmodule QtGrpc
 
     \brief The QGrpcChannel class is a gRPC-cpp native api implementation of
     QAbstractGrpcChannel interface.

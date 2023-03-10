@@ -8,7 +8,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QGrpcStatus
-    \inmodule QtGRPC
+    \inmodule QtGrpc
 
     \brief The QGrpcStatus class contains information about last gRPC operation.
 

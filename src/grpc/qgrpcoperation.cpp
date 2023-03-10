@@ -13,7 +13,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QGrpcOperation
-    \inmodule QtGRPC
+    \inmodule QtGrpc
     \brief The QGrpcOperation class implements common logic to
            handle communication in Grpc channel.
 */

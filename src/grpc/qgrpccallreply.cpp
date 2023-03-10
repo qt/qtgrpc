@@ -11,7 +11,7 @@ using namespace Qt::StringLiterals;
 
 /*!
     \class QGrpcCallReply
-    \inmodule QtGRPC
+    \inmodule QtGrpc
 
     \brief The QGrpcCallReply class contains data for asynchronous call
     of gRPC client API.

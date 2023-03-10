@@ -6,7 +6,7 @@
 
 /*!
     \class QGrpcSslCredentials
-    \inmodule QtGRPC
+    \inmodule QtGrpc
 
     \brief The QGrpcSslCredentials class provides SSL credentials for channel.
 */
