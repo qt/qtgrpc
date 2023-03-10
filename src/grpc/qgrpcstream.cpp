@@ -10,7 +10,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QGrpcStream
-    \inmodule QtGRPC
+    \inmodule QtGrpc
 
     \brief The QGrpcStream class implements logic to handle stream communication
     in the Grpc channel.

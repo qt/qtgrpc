@@ -31,7 +31,7 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 
 /*!
     \class QAbstractGrpcClient
-    \inmodule QtGRPC
+    \inmodule QtGrpc
     \brief The QAbstractGrpcClient class is bridge between gRPC clients
     and channels.
 

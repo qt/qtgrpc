@@ -26,7 +26,7 @@ using namespace Qt::StringLiterals;
 
 /*!
     \class QGrpcHttp2Channel
-    \inmodule QtGRPC
+    \inmodule QtGrpc
 
     \brief The QGrpcHttp2Channel class is an HTTP/2 implementation of
     QAbstractGrpcChannel interface.

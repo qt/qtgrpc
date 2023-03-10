@@ -7,7 +7,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \class QAbstractGrpcCredentials
-    \inmodule QtGRPC
+    \inmodule QtGrpc
     \brief The QAbstractGrpcClient is an abstract storage class used by authentication parameters.
 
     QAbstractGrpcCredentials provides a set of functions to access the call and

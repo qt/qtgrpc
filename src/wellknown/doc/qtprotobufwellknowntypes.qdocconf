@@ -5,7 +5,6 @@ project                 = QtProtobufWellKnownTypes
 description             = Qt Protobuf Well-known Types Reference Documentation
 version                 = $QT_VERSION
 
-moduleheader            = QtProtobufWellKnownTypesDoc
 includepaths           += ./include
 
 examplesinstallpath     = protobufwellknowntypes

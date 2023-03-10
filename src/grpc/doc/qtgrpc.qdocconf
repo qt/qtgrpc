@@ -1,9 +1,8 @@
 include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
 
-project                 = QtGRPC
+project                 = QtGrpc
 description             = Qt GRPC Reference Documentation
 version                 = $QT_VERSION
-moduleheader            = QtGrpcDoc
 
 examplesinstallpath     = grpc
 
