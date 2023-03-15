@@ -16,7 +16,8 @@
     Magic 8 ball has the following components:
     \list
     \li \c magic8ball Qt GRPC client application that includes
-        the \l {qt_add_protobuf} and \l {qt_add_grpc}
+        the \l {qt_add_protobuf}{qt_add_protobuf()} and
+        \l {cmake-commands-qtgrpc}{qt_add_grpc()}
         CMake functions for message and service Qt code generation.
     \li \c SimpleGrpcServer application that calls C++ gRPC plugin
         for generating server code and implementing simple server
