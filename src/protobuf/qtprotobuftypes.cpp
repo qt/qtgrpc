@@ -321,7 +321,7 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
     \value EndGroup         groups. Deprecated in proto syntax 3. Not supported by QtProtobuf.
     \value Fixed32          fixed32, sfixed32, float
 
-    \sa {https://developers.google.com/protocol-buffers/docs/encoding} {encoding}
+    \sa {https://protobuf.dev/programming-guides/encoding} {encoding}
 */
 
 /*!
@@ -395,7 +395,7 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
     sint32 is serialized using ZigZag conversion to reduce size of negative
     numbers.
 
-    \sa {https://developers.google.com/protocol-buffers/docs/encoding#signed-integers} {signed-integers}
+    \sa {https://protobuf.dev/programming-guides/encoding/#signed-ints} {signed-integers}
 */
 
 /*!
@@ -405,7 +405,7 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
     protobuf as variable size integer, an alias for WireTypes::Varint.
     sint64 is serialized using ZigZag conversion to reduce size of negative numbers.
 
-    \sa {https://developers.google.com/protocol-buffers/docs/encoding#signed-integers} {signed-integers}
+    \sa {https://protobuf.dev/programming-guides/encoding/#signed-ints} {signed-integers}
 */
 
 /*!

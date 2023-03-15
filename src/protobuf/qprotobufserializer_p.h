@@ -40,7 +40,7 @@ class QProtobufSerializerPrivate
 {
     // The below type trait structures help to determine the required encoding method for protobuf
     // types.
-    // See https://developers.google.com/protocol-buffers/docs/encoding#cheat-sheet for details.
+    // See https://protobuf.dev/programming-guides/encoding for details.
 
     // Tests if V is a Varint-compatible unsigned integer type.
     // uint32 | uint64
@@ -213,7 +213,7 @@ public:
         Serialization of signed integral types
         Uses ZigZag encoding[0] first then apply serialization as for unsigned integral types
 
-        [0]: https://developers.google.com/protocol-buffers/docs/encoding
+        [0]: https://protobuf.dev/programming-guides/encoding
 
         value: Value to serialize
         outFieldIndex: Index of the value in parent structure
@@ -248,7 +248,7 @@ public:
         "Varints are a method of serializing integers using one or more bytes. Smaller numbers
         [regardless its type] take a smaller number of bytes."
 
-        [0]: https://developers.google.com/protocol-buffers/docs/encoding
+        [0]: https://protobuf.dev/programming-guides/encoding
 
         value: Value to serialize
         outFieldIndex: Index of the value in parent structure
