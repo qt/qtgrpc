@@ -33,8 +33,6 @@ depends += qtdoc qtcore qtcmake qtgrpc
 {headerdirs,sourcedirs} += ..
 sourcedirs += ../../tools/doc/src
 
-url.examples = "https://code.qt.io/cgit/qt/qtgrpc.git/tree/examples/\1?h=$QT_VER"
-
 exampledirs +=  ../../../examples/protobuf
 
 imagedirs   += images \
