@@ -31,8 +31,6 @@ depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake
 
 {headerdirs,sourcedirs}  += ..
 
-url.examples = "https://code.qt.io/cgit/qt/qtgrpc.git/tree/examples/\1?h=$QT_VER"
-
 exampledirs +=  ../../../examples/grpc
 
 imagedirs   += images \
