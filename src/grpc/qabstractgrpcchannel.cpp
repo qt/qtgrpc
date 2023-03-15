@@ -13,7 +13,7 @@ QT_BEGIN_NAMESPACE
     \brief The QAbstractGrpcChannel class is interface that represents common
     gRPC channel functionality.
 
-    You may implement this interface to create own channels for gRPC transport.
+    You may implement this interface to create your own channels for gRPC transport.
     QGrpcChannel or QGrpcHttp2Channel, which are full implementations of
     QAbstractGrpcChannel are recommended to use.
 */
@@ -40,7 +40,7 @@ QT_BEGIN_NAMESPACE
     This pure virtual function asynchronously calls the RPC method combined
     with the \a method and \a service parameters with the given \a args
     and returns an asynchronous response in the form of QGrpcCallReply,
-    which is owned by the \a client.
+    which uses the \a client to deserialize messages.
 
     You may reimplement this function in a subclass to define your own call
     mechanism behavior. QGrpcChannel or QGrpcHttp2Channel, which are full
