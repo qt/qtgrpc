@@ -39,3 +39,8 @@ qt_internal_extend_target(Grpc CONDITION QT_FEATURE_native_grpc
 qt_internal_add_docs(Grpc
     doc/qtgrpc.qdocconf
 )
+
+# TODO: Remove this and fix it in qtbase's qt_internal_find_tool directly
+if(QT_HOST_PATH AND Qt6::qtgrpcgen IN_LIST Qt6GrpcTools_TARGETS AND NOT QT_FORCE_BUILD_TOOLS)
+    qt_record_extra_qt_main_tools_package_dependency(Grpc GrpcTools "${PROJECT_VERSION}")
+endif()
