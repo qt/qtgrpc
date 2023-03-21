@@ -19,6 +19,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \typealias QGrpcCredentialMap
+    \relates QAbstractGrpcCredentials
 
     Alias for \c{QMap<QByteArray, QVariant>}.
     This is the key-value map of credentials, such as user-password credentials
