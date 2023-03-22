@@ -21,6 +21,7 @@
         \li QMatrix4x4
         \li QQuaternion
         \li QRgba64
+        \li QColor
         \li QTransform
         \li QVector2D
         \li QVector3D

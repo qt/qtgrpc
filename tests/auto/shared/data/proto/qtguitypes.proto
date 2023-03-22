@@ -5,6 +5,14 @@ syntax = "proto3";
 package qtprotobufnamespace.qttypes.tests;
 import "QtGui/QtGui.proto";
 
+message QRgba64Message {
+    QtGui.QRgba64 testField = 1;
+}
+
+message QColorMessage {
+    QtGui.QColor testField = 1;
+}
+
 message QMatrix4x4Message {
     QtGui.QMatrix4x4 testField = 1;
 }

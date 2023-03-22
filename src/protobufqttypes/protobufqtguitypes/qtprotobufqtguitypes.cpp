@@ -7,7 +7,9 @@
 
 #include <QtProtobufQtCoreTypes/private/qtprotobufqttypescommon_p.h>
 
+#include <QtGui/qrgb.h>
 #include <QtGui/qrgba64.h>
+#include <QtGui/qcolor.h>
 #include <QtGui/qmatrix4x4.h>
 #include <QtGui/qvector2d.h>
 #include <QtGui/qtransform.h>
@@ -30,6 +32,30 @@ static QtProtobufPrivate::QtGui::QRgba64 convert(const QRgba64 &from)
     QtProtobufPrivate::QtGui::QRgba64 rgba64;
     rgba64.setRgba64((quint64)from);
     return rgba64;
+}
+
+static std::optional<QColor> convert(const QtProtobufPrivate::QtGui::QColor &from)
+{
+    if (from.hasRgba64()) {
+        return QColor(convert(from.rgba64()));
+    } else if (from.hasRgba()) {
+        return QColor(qRgba(qRed(from.rgba()), qGreen(from.rgba()),
+                            qBlue(from.rgba()), qAlpha(from.rgba())));
+    }
+    return std::nullopt;
+}
+
+static std::optional<QtProtobufPrivate::QtGui::QColor> convert(const QColor &from)
+{
+    if (from.isValid()) {
+        QtProtobufPrivate::QtGui::QRgba64 rgba64;
+        rgba64.setRgba64((quint64)from.rgba64());
+
+        QtProtobufPrivate::QtGui::QColor color;
+        color.setRgba64(rgba64);
+        return color;
+    }
+    return std::nullopt;
 }
 
 static std::optional<QMatrix4x4> convert(const QtProtobufPrivate::QtGui::QMatrix4x4 &from)
@@ -182,6 +208,7 @@ namespace QtProtobuf {
 */
 void qRegisterProtobufQtGuiTypes() {
     QtProtobufPrivate::registerQtTypeHandler<QRgba64, QtProtobufPrivate::QtGui::QRgba64>();
+    QtProtobufPrivate::registerQtTypeHandler<QColor, QtProtobufPrivate::QtGui::QColor>();
     QtProtobufPrivate::registerQtTypeHandler<QMatrix4x4, QtProtobufPrivate::QtGui::QMatrix4x4>();
     QtProtobufPrivate::registerQtTypeHandler<QVector2D, QtProtobufPrivate::QtGui::QVector2D>();
     QtProtobufPrivate::registerQtTypeHandler<QVector3D, QtProtobufPrivate::QtGui::QVector3D>();

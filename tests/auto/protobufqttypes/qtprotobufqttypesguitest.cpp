@@ -8,10 +8,16 @@
 #include <QProtobufSerializer>
 
 #include <QObject>
+#include <QtGui/qrgb.h>
 #include <QtGui/QPainter>
+#include <QtGui/QColor>
+#include <QtGui/QRgba64>
 #include <QtTest/QtTest>
 
 #include <memory>
+
+const char *conversionErrorMessage = "Qt Proto Type conversion error.";
+const char *invalidHex = "0";
 
 class QtProtobufQtTypesQtGuiTest : public QObject
 {
@@ -22,6 +28,8 @@ private slots:
         QtProtobuf::qRegisterProtobufQtGuiTypes();
     }
 
+    void qRgba64();
+    void qColor();
     void qMatrix4x4();
     void qVector2D();
     void qVector3D();
@@ -35,6 +43,60 @@ private:
 };
 
 using namespace qtprotobufnamespace::qttypes::tests;
+
+void QtProtobufQtTypesQtGuiTest::qRgba64()
+{
+    qProtobufAssertMessagePropertyRegistered<QRgba64Message,
+            QRgba64>(1, "QRgba64", "testField");
+
+    QRgba64Message msg;
+    const QRgba64 rgba64 = QRgba64::fromRgba(128, 64, 32, 255);
+
+    msg.setTestField(rgba64);
+    auto result = msg.serialize(&serializer);
+    const char *rgba64Hex = "0a0b08808182828484c8ffff01";
+    QCOMPARE(QByteArray::fromHex(rgba64Hex), result);
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(rgba64Hex));
+    QCOMPARE(rgba64, msg.testField());
+}
+
+void QtProtobufQtTypesQtGuiTest::qColor()
+{
+    qProtobufAssertMessagePropertyRegistered<QColorMessage,
+            QColor>(1, "QColor", "testField");
+
+    QColor color64(QRgba64::fromRgba(128, 64, 32, 255));
+    const char *colorHex = "0a0d0a0b08808182828484c8ffff01";
+
+    QColorMessage msg;
+    msg.setTestField(color64);
+    QCOMPARE(QByteArray::fromHex(colorHex), msg.serialize(&serializer));
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(colorHex));
+    QCOMPARE(color64, msg.testField());
+
+    QColor color32(qRgba(128, 64, 32, 255));
+    msg.setTestField(color32);
+    QCOMPARE(QByteArray::fromHex(colorHex), msg.serialize(&serializer));
+
+    msg.setTestField({});
+    msg.deserialize(&serializer, QByteArray::fromHex(colorHex));
+    QCOMPARE(color32, msg.testField());
+
+    QColor invalidColor;
+    msg.setTestField(invalidColor);
+
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    msg.serialize(&serializer); // Error message is generated
+    QVERIFY(!msg.testField().isValid());
+
+    msg.setTestField({});
+    QVERIFY(!msg.deserialize(&serializer, QByteArray::fromHex(invalidHex)));
+    QVERIFY(!msg.testField().isValid());
+}
 
 void QtProtobufQtTypesQtGuiTest::qMatrix4x4()
 {

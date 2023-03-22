@@ -9,6 +9,13 @@ message QRgba64 {
     uint64 rgba64 = 1;
 }
 
+message QColor {
+    oneof color {
+        QRgba64 rgba64 = 1;
+        uint32  rgba   = 2;
+    }
+}
+
 message QMatrix4x4 {
     // 16 floats in row-major order
     repeated float m = 1;
