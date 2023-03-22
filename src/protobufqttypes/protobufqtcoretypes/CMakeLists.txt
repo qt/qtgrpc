@@ -19,5 +19,5 @@ qt_internal_add_protobuf_module(ProtobufQtCoreTypes
 )
 
 qt_internal_add_docs(ProtobufQtCoreTypes
-    doc/protobufqtcoretypes.qdocconf
+    doc/qtprotobufqtcoretypes.qdocconf
 )

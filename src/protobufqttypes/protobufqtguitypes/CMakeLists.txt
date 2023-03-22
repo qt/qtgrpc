@@ -20,5 +20,5 @@ qt_internal_add_protobuf_module(ProtobufQtGuiTypes
 )
 
 qt_internal_add_docs(ProtobufQtGuiTypes
-    doc/protobufqtguitypes.qdocconf
+    doc/qtprotobufqtguitypes.qdocconf
 )
