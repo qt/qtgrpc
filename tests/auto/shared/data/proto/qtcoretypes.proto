@@ -17,6 +17,10 @@ message QCharMessage {
     QtCore.QChar testField = 1;
 }
 
+message QTimeZoneMessage {
+    QtCore.QTimeZone testField = 1;
+}
+
 message QTimeMessage {
     QtCore.QTime testField = 1;
 }

@@ -17,6 +17,18 @@ message QUuid {
     bytes rfc4122_uuid = 1;
 }
 
+message QTimeZone {
+    enum TimeSpec {
+        LocalTime = 0;
+        UTC = 1;
+    }
+    oneof timeZone {
+        int32 offsetSeconds = 1;
+        bytes ianaId = 2;
+        TimeSpec timeSpec = 3;
+    }
+}
+
 message QTime {
     int32 milliseconds_since_midnight = 1;
 }
@@ -27,7 +39,7 @@ message QDate {
 
 message QDateTime {
     int64 utc_msecs_since_unix_epoch = 1;
-    // TBD: QTBUG-109658 - QTimeZone support
+    QTimeZone timeZone = 2;
 }
 
 message QSize {

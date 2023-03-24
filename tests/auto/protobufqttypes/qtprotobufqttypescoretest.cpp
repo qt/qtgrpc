@@ -10,6 +10,8 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
+constexpr char conversionErrorMessage[] = "Qt Proto Type conversion error.";
+
 const QTime testTime = QTime(7, 30, 18, 321);
 const QDate testDate = QDate(1856, 6, 10);
 
@@ -24,6 +26,9 @@ private slots:
     void qUuid();
     void qTime();
     void qDate();
+    void qTimeZone_data();
+    void qTimeZone();
+    void qDateTime_data();
     void qDateTime();
     void qSize();
     void qPoint();
@@ -124,30 +129,126 @@ void QtProtobufQtTypesQtCoreTest::qDate()
     QCOMPARE(msg.testField().year(), 1897);
 }
 
+void QtProtobufQtTypesQtCoreTest::qTimeZone_data()
+{
+    QTest::addColumn<QTimeZone>("zone");
+    QTest::addColumn<QByteArray>("zoneHex");
+    QTest::addColumn<bool>("isValid");
+#if QT_CONFIG(timezone)
+    if (QTimeZone oz("Australia/Darwin"); oz.isValid()) {
+        QTest::addRow("Oz/Darwin")
+                << oz
+                << QByteArray("0a1212104175737472616c69612f44617277696e")
+                << true;
+    }
+#endif
+    QTest::addRow("UTC")
+            << QTimeZone(QTimeZone::UTC)
+            << QByteArray("0a021801")
+            << true;
+    QTest::addRow("LocalTime")
+            << QTimeZone(QTimeZone::LocalTime)
+            << QByteArray("0a021800")
+            << true;
+    QTest::addRow("OffsetFromUTC")
+            << QTimeZone::fromSecondsAheadOfUtc(3141)
+            << QByteArray("0a0308c518")
+            << true;
+    QTest::addRow("invalid") << QTimeZone() << QByteArray() << false;
+}
+
+void QtProtobufQtTypesQtCoreTest::qTimeZone()
+{
+    QFETCH(const QTimeZone, zone);
+    QFETCH(const QByteArray, zoneHex);
+    QFETCH(const bool, isValid);
+
+    qProtobufAssertMessagePropertyRegistered<QTimeZoneMessage, QTimeZone>(1,
+                                                                          "QTimeZone",
+                                                                          "testField");
+    QTimeZoneMessage msg;
+    msg.setTestField(zone);
+
+    if (isValid) {
+        QByteArray result = msg.serialize(&serializer);
+        QCOMPARE(result.toHex(), zoneHex);
+
+        msg.setTestField({});
+        msg.deserialize(&serializer, QByteArray::fromHex(zoneHex.constData()));
+        QCOMPARE(msg.testField(), zone);
+    } else {
+        QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+        msg.serialize(&serializer); // Error message is generated
+        QVERIFY(!msg.testField().isValid());
+    }
+}
+
+void QtProtobufQtTypesQtCoreTest::qDateTime_data()
+{
+    QTest::addColumn<QTimeZone>("zone");
+    QTest::addColumn<QDate>("date");
+    QTest::addColumn<QByteArray>("zoneHex");
+    QTest::addColumn<bool>("isValid");
+#if QT_CONFIG(timezone)
+    if (QTimeZone rus("Asia/Magadan"); rus.isValid()) {
+        QTest::addRow(rus.id().constData())
+                << rus
+                << QDate(2011, 3, 14)
+                << QByteArray("0a1708d191a687eb25120e120c417369612f4d61676164616e")
+                << true;
+    }
+    if (QTimeZone oz("Australia/Darwin"); oz.isValid()) {
+        QTest::addRow(oz.id().constData())
+                << oz
+                << QDate(2011, 3, 14)
+                << QByteArray("0a1b0891ddef89eb25121212104175737472616c69612f44617277696e")
+                << true;
+    }
+#endif //QT_CONFIG(timezone)
+    QTest::addRow("UTC")
+            << QTimeZone(QTimeZone::UTC)
+            << QDate(2011, 3, 14)
+            << QByteArray("0a0b08d190979aeb2512021801")
+            << true;
+    QTest::addRow("LocalTime")
+            << QTimeZone(QTimeZone::LocalTime)
+            << QDate(2011, 3, 14)
+            << QByteArray("0a0b08d190979aeb2512021800")
+            << true;
+    QTest::addRow("OffsetFromUTC")
+            << QTimeZone::fromSecondsAheadOfUtc(3141)
+            << QDate(2011, 3, 14)
+            << QByteArray("0a0c08c9b5d798eb25120308c518")
+            << true;
+    QTest::addRow("invalid") << QTimeZone() << QDate() << QByteArray() << false;
+}
+
 void QtProtobufQtTypesQtCoreTest::qDateTime()
 {
+    QFETCH(const QTimeZone, zone);
+    QFETCH(const QDate, date);
+    QFETCH(const QByteArray, zoneHex);
+    QFETCH(const bool, isValid);
+
     qProtobufAssertMessagePropertyRegistered<QDateTimeMessage, QDateTime>(1,
                                                                           "QDateTime",
                                                                           "testField");
     QDateTimeMessage msg;
+    const QDateTime dateTime = {date, testTime, zone};
+    msg.setTestField(dateTime);
 
-    const QDate checkingDate = QDate(1897, 3, 14);
-    msg.setTestField({checkingDate, testTime, QTimeZone::UTC});
+    if (isValid) {
+        QByteArray result = msg.serialize(&serializer);
+        QCOMPARE(result.toHex(), zoneHex);
 
-    QByteArray result = msg.serialize(&serializer);
-
-    const char *hexValue = "0a0b08d1f8d1da91bdffffff01";
-    QCOMPARE(QByteArray::fromHex(hexValue), result);
-
-    msg.setTestField({});
-    msg.deserialize(&serializer, QByteArray::fromHex(hexValue));
-    QCOMPARE(msg.testField(), QDateTime(checkingDate, testTime, QTimeZone::UTC));
-
-    msg.setTestField({});
-    msg.setTestField(QDateTime(testDate, testTime, QTimeZone::UTC));
-    msg.deserialize(&serializer, QByteArray::fromHex("0a0b08d1f0918dda97ffffff01"));
-
-    QCOMPARE(msg.testField(), QDateTime(testDate, testTime, QTimeZone::UTC));
+        msg.setTestField({});
+        msg.deserialize(&serializer, QByteArray::fromHex(zoneHex));
+        QCOMPARE(msg.testField(), dateTime);
+    } else {
+        QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+        msg.serialize(&serializer); // Error message is generated
+        QVERIFY(!msg.testField().isValid());
+    }
 }
 
 void QtProtobufQtTypesQtCoreTest::qSize()

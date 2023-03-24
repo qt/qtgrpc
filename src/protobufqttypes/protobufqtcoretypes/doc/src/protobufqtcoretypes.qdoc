@@ -20,6 +20,7 @@
         \li QByteArray \note Type reflects the \e bytes protobuf type.
         \li QChar
         \li QDate
+        \li QTimeZone
         \li QDateTime
         \li QPoint
         \li QPointF

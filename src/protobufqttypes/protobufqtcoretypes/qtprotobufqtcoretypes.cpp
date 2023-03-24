@@ -60,7 +60,7 @@ static std::optional<QUuid> convert(const QtProtobufPrivate::QtCore::QUuid &from
 static std::optional<QtProtobufPrivate::QtCore::QUuid> convert(const QUuid &from)
 {
     if (from.toRfc4122().size() != 16)
-       return std::nullopt;
+        return std::nullopt;
 
     QtProtobufPrivate::QtCore::QUuid uuid;
     uuid.setRfc4122Uuid(from.toRfc4122());
@@ -99,10 +99,76 @@ static std::optional<QtProtobufPrivate::QtCore::QDate> convert(const QDate &from
     return date;
 }
 
+static QTimeZone::Initialization getTimeZoneInitialization(
+        QtProtobufPrivate::QtCore::QTimeZone::TimeSpec protoSpec)
+{
+    return protoSpec == QtProtobufPrivate::QtCore::QTimeZone::LocalTime
+            ? QTimeZone::LocalTime : QTimeZone::UTC;
+}
+
+static std::optional<QTimeZone> convert(
+        const QtProtobufPrivate::QtCore::QTimeZone &from)
+{
+    QTimeZone result;
+    switch (from.timeZoneField())
+    {
+    case QtProtobufPrivate::QtCore::QTimeZone::TimeZoneFields::IanaId:
+#if QT_CONFIG(timezone)
+        result = QTimeZone(from.ianaId());
+        break;
+#else
+        qWarning() << "No timezone support. IanaId cannot be used for conversion.";
+        return std::nullopt;
+#endif // timezone
+    case QtProtobufPrivate::QtCore::QTimeZone::TimeZoneFields::TimeSpec:
+        result = QTimeZone(getTimeZoneInitialization(from.timeSpec()));
+        break;
+    case QtProtobufPrivate::QtCore::QTimeZone::TimeZoneFields::OffsetSeconds:
+    default:
+        result = QTimeZone::fromSecondsAheadOfUtc(from.offsetSeconds());
+        break;
+    }
+    return result.isValid() ?  std::optional<QTimeZone>(result) : std::nullopt;
+}
+
+static std::optional<QtProtobufPrivate::QtCore::QTimeZone> convert(const QTimeZone &from)
+{
+    if (!from.isValid())
+        return std::nullopt;
+
+    QtProtobufPrivate::QtCore::QTimeZone result;
+    switch (from.timeSpec()) {
+    case Qt::TimeZone:
+#if QT_CONFIG(timezone)
+        result.setIanaId(from.id());
+#else
+        qInfo() << "Result will be treated like UTC.";
+        result.setTimeSpec(QtProtobufPrivate::QtCore::QTimeZone::UTC);
+#endif // QT_CONFIG(timezone)
+        break;
+    case Qt::LocalTime:
+        result.setTimeSpec(QtProtobufPrivate::QtCore::QTimeZone::LocalTime);
+        break;
+    case Qt::UTC:
+        result.setTimeSpec(QtProtobufPrivate::QtCore::QTimeZone::UTC);
+        break;
+    case Qt::OffsetFromUTC:
+        result.setOffsetSeconds(from.fixedSecondsAheadOfUtc());
+        break;
+    }
+
+    return result;
+}
+
 static std::optional<QDateTime> convert(const QtProtobufPrivate::QtCore::QDateTime &from)
 {
-    QDateTime dateTime(QDateTime::fromMSecsSinceEpoch(from.utcMsecsSinceUnixEpoch(),
-                                                      QTimeZone::UTC));
+    QDateTime dateTime;
+    std::optional<QTimeZone> zone = convert(from.timeZone());
+    if (zone)
+        dateTime = QDateTime::fromMSecsSinceEpoch(from.utcMsecsSinceUnixEpoch(), zone.value());
+    else
+        dateTime = QDateTime::fromMSecsSinceEpoch(from.utcMsecsSinceUnixEpoch());
+
     return dateTime.isValid() ? std::optional<QDateTime>(dateTime) : std::nullopt;
 }
 
@@ -113,7 +179,16 @@ static std::optional<QtProtobufPrivate::QtCore::QDateTime> convert(const QDateTi
 
     QtProtobufPrivate::QtCore::QDateTime datetime;
     datetime.setUtcMsecsSinceUnixEpoch(from.toMSecsSinceEpoch());
-    return datetime;
+
+    std::optional<QtProtobufPrivate::QtCore::QTimeZone> tZone
+            = convert(from.timeRepresentation());
+
+    if (tZone) {
+        datetime.setTimeZone(tZone.value());
+        return datetime;
+    }
+
+    return std::nullopt;
 }
 
 static QSize convert(const QtProtobufPrivate::QtCore::QSize &from)
@@ -235,6 +310,7 @@ void qRegisterProtobufQtCoreTypes() {
     QtProtobufPrivate::registerQtTypeHandler<QUuid, QtProtobufPrivate::QtCore::QUuid>();
     QtProtobufPrivate::registerQtTypeHandler<QTime, QtProtobufPrivate::QtCore::QTime>();
     QtProtobufPrivate::registerQtTypeHandler<QDate, QtProtobufPrivate::QtCore::QDate>();
+    QtProtobufPrivate::registerQtTypeHandler<QTimeZone, QtProtobufPrivate::QtCore::QTimeZone>();
     QtProtobufPrivate::registerQtTypeHandler<QDateTime, QtProtobufPrivate::QtCore::QDateTime>();
     QtProtobufPrivate::registerQtTypeHandler<QSize, QtProtobufPrivate::QtCore::QSize>();
     QtProtobufPrivate::registerQtTypeHandler<QSizeF, QtProtobufPrivate::QtCore::QSizeF>();
