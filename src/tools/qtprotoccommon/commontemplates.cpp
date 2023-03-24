@@ -267,6 +267,10 @@ const char *CommonTemplates::EnumDefinitionTemplate()
 {
     return "enum $type$ {\n";
 }
+const char *CommonTemplates::EnumClassDefinitionTemplate()
+{
+    return "enum class $type$ {\n";
+}
 const char *CommonTemplates::EnumFieldTemplate()
 {
     return "$enumvalue$ = $value$,\n";
@@ -494,12 +498,13 @@ const char *CommonTemplates::PrivateGetterOneofMessageDefinitionTemplate()
 
 const char *CommonTemplates::GetterOneofFieldNumberDeclarationTemplate()
 {
-    return "int $optional_property_name$Field() const;\n";
+    return "$type$ $optional_property_name$Field() const;\n";
 }
 const char *CommonTemplates::GetterOneofFieldNumberDefinitionTemplate()
 {
-    return "int $classname$::$optional_property_name$Field() const\n{\n"
-           "    return m_$optional_property_name$.fieldNumber();\n"
+    return "$classname$::$type$ $classname$::$optional_property_name$Field() const\n{\n"
+           "    return "
+           "static_cast<$type$>(m_$optional_property_name$.fieldNumber());\n"
            "}\n";
 }
 

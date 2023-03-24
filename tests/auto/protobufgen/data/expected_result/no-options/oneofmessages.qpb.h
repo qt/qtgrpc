@@ -41,6 +41,13 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
+    enum class TestOneofFields {
+        UninitializedField = QtProtobuf::InvalidFieldNumber,
+        TestOneofFieldInt = 1,
+        TestOneofFieldSecondInt = 2,
+    };
+    Q_ENUM(TestOneofFields)
+
     OneofSimpleMessage();
     ~OneofSimpleMessage();
     OneofSimpleMessage(const OneofSimpleMessage &other);
@@ -55,7 +62,7 @@ public:
 
     bool hasTestOneofFieldSecondInt() const;
     QtProtobuf::int32 testOneofFieldSecondInt() const;
-    int testOneofField() const;
+    TestOneofFields testOneofField() const;
     void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
     void setTestOneofFieldSecondInt(const QtProtobuf::int32 &testOneofFieldSecondInt);
     void clearTestOneof();
@@ -100,6 +107,22 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
+    enum class TestOneofFields {
+        UninitializedField = QtProtobuf::InvalidFieldNumber,
+        TestOneofFieldInt = 42,
+        TestOneofComplexField = 3,
+        TestOneofSecondComplexField = 4,
+    };
+    Q_ENUM(TestOneofFields)
+
+    enum class SecondOneofFields {
+        UninitializedField = QtProtobuf::InvalidFieldNumber,
+        SecondFieldInt = 43,
+        SecondComplexField = 5,
+        SecondSecondComplexField = 6,
+    };
+    Q_ENUM(SecondOneofFields)
+
     OneofComplexMessage();
     ~OneofComplexMessage();
     OneofComplexMessage(const OneofComplexMessage &other);
@@ -132,8 +155,8 @@ public:
 
     bool hasSecondSecondComplexField() const;
     ComplexMessage &secondSecondComplexField() const;
-    int testOneofField() const;
-    int secondOneofField() const;
+    TestOneofFields testOneofField() const;
+    SecondOneofFields secondOneofField() const;
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
     {
         if (m_testFieldInt != testFieldInt)

@@ -333,7 +333,7 @@ void QtProtobufTypesGenerationTest::OneofMessageEmptyTest()
     OneofMessage test;
     QVERIFY(!test.hasTestOneofFieldInt());
     QVERIFY(!test.hasTestOneofComplexField());
-    QCOMPARE(test.testOneofField(), QtProtobuf::InvalidFieldNumber);
+    QCOMPARE(test.testOneofField(), OneofMessage::TestOneofFields::UninitializedField);
 }
 
 void QtProtobufTypesGenerationTest::OneofMessageTest()
@@ -345,7 +345,7 @@ void QtProtobufTypesGenerationTest::OneofMessageTest()
     QVERIFY(!test.hasTestOneofComplexField());
     QVERIFY(!test.hasTestOneofSecondComplexField());
     QCOMPARE(test.testOneofFieldInt(), 10);
-    QCOMPARE(test.testOneofField(), OneofMessage::TestOneofFieldIntProtoFieldNumber);
+    QCOMPARE(test.testOneofField(), OneofMessage::TestOneofFields::TestOneofFieldInt);
 
     ComplexMessage complexField;
     SimpleStringMessage stringField;
@@ -357,7 +357,7 @@ void QtProtobufTypesGenerationTest::OneofMessageTest()
     QVERIFY(test.hasTestOneofComplexField());
     QVERIFY(!test.hasTestOneofSecondComplexField());
     QCOMPARE(test.testOneofComplexField(), complexField);
-    QCOMPARE(test.testOneofField(), OneofMessage::TestOneofComplexFieldProtoFieldNumber);
+    QCOMPARE(test.testOneofField(), OneofMessage::TestOneofFields::TestOneofComplexField);
 }
 
 void QtProtobufTypesGenerationTest::OneofMessageCopyComplexValueTest()
@@ -372,13 +372,13 @@ void QtProtobufTypesGenerationTest::OneofMessageCopyComplexValueTest()
     QVERIFY(test.hasTestOneofComplexField());
     QVERIFY(!test.hasTestOneofSecondComplexField());
     QCOMPARE(test.testOneofComplexField(), complexField);
-    QCOMPARE(test.testOneofField(), OneofMessage::TestOneofComplexFieldProtoFieldNumber);
+    QCOMPARE(test.testOneofField(), OneofMessage::TestOneofFields::TestOneofComplexField);
 
     test.setTestOneofSecondComplexField(test.testOneofComplexField());
     QVERIFY(!test.hasTestOneofComplexField());
     QVERIFY(test.hasTestOneofSecondComplexField());
     QCOMPARE(test.testOneofSecondComplexField(), complexField);
-    QCOMPARE(test.testOneofField(), OneofMessage::TestOneofSecondComplexFieldProtoFieldNumber);
+    QCOMPARE(test.testOneofField(), OneofMessage::TestOneofFields::TestOneofSecondComplexField);
 }
 
 void QtProtobufTypesGenerationTest::AssignmentOperatorTest()

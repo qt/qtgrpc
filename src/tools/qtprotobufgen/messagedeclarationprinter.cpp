@@ -335,16 +335,20 @@ void MessageDeclarationPrinter::printPrivateMethods()
     Outdent();
 }
 
+void MessageDeclarationPrinter::printEnums()
+{
+    Indent();
+    if (Options::instance().generateFieldEnum())
+        printFieldEnum();
+    if (m_descriptor->enum_type_count() > 0)
+        printQEnums();
+    if (m_descriptor->oneof_decl_count() > 0)
+        printOneofEnums();
+    Outdent();
+}
+
 void MessageDeclarationPrinter::printQEnums()
 {
-    if (Options::instance().generateFieldEnum()) {
-        printFieldEnum();
-    }
-
-    if (m_descriptor->enum_type_count() <= 0)
-        return;
-
-    Indent();
     for (int i = 0; i < m_descriptor->enum_type_count(); ++i) {
         const auto *enumDescr = m_descriptor->enum_type(i);
         auto typeMap = common::produceEnumTypeMap(enumDescr, m_descriptor);
@@ -367,7 +371,29 @@ void MessageDeclarationPrinter::printQEnums()
         auto typeMap = common::produceEnumTypeMap(enumDescr, m_descriptor);
         m_printer->Print(typeMap, CommonTemplates::UsingRepeatedEnumTemplate());
     }
-    Outdent();
+}
+
+void MessageDeclarationPrinter::printOneofEnums()
+{
+    common::iterateOneofFields(
+            m_descriptor, [this](const OneofDescriptor *oneofDescr, PropertyMap &typeMap) {
+                m_printer->Print(typeMap, CommonTemplates::EnumClassDefinitionTemplate());
+                Indent();
+                m_printer->Print({ { "enumvalue", "UninitializedField" },
+                                   { "value", "QtProtobuf::InvalidFieldNumber" } },
+                                 CommonTemplates::EnumFieldTemplate());
+                for (int j = 0; j < oneofDescr->field_count(); ++j) {
+                    const auto *valueDescr = oneofDescr->field(j);
+                    m_printer->Print({ { "enumvalue",
+                                         utils::capitalizeAsciiName(valueDescr->name()) },
+                                       { "value", std::to_string(valueDescr->number()) } },
+                                     CommonTemplates::EnumFieldTemplate());
+                }
+                Outdent();
+                m_printer->Print(CommonTemplates::SemicolonBlockEnclosureTemplate());
+                m_printer->Print(typeMap, CommonTemplates::QEnumTemplate());
+                m_printer->Print("\n");
+            });
 }
 
 void MessageDeclarationPrinter::printClassBody()
@@ -375,7 +401,7 @@ void MessageDeclarationPrinter::printClassBody()
     printProperties();
 
     printPublicBlock();
-    printQEnums();
+    printEnums();
     printNested();
     printMaps();
 
@@ -436,7 +462,6 @@ void MessageDeclarationPrinter::printDestructor()
 void MessageDeclarationPrinter::printFieldEnum()
 {
     if (m_descriptor->field_count() > 0) {
-        Indent();
         m_printer->Print(CommonTemplates::FieldEnumTemplate());
         Indent();
         common::iterateMessageFields(m_descriptor,
@@ -448,7 +473,6 @@ void MessageDeclarationPrinter::printFieldEnum()
         m_printer->Print(CommonTemplates::SemicolonBlockEnclosureTemplate());
         m_printer->Print({ { "type", CommonTemplates::QtProtobufFieldEnum() } },
                          CommonTemplates::QEnumTemplate());
-        Outdent();
         m_printer->Print("\n");
     }
 }

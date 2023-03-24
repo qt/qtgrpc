@@ -462,6 +462,7 @@ PropertyMap common::producePropertyMap(const OneofDescriptor *oneof, const Descr
     propertyMap["optional_property_name_cap"] = utils::capitalizeAsciiName(oneof->name());
     auto scopeTypeMap = produceMessageTypeMap(scope, nullptr);
     propertyMap["classname"] = scope != nullptr ? scopeTypeMap["classname"] : "";
+    propertyMap["type"] = propertyMap["optional_property_name_cap"] + "Fields";
 
     return propertyMap;
 }

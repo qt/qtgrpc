@@ -38,9 +38,11 @@ private:
     void printMaps();
     void printNested();
     void printClassDeclarationBegin();
-    void printFieldEnum();
 
+    void printEnums();
+    void printFieldEnum();
     void printQEnums();
+    void printOneofEnums();
 
     //Recursive functionality
     void printClassDeclarationPrivate();

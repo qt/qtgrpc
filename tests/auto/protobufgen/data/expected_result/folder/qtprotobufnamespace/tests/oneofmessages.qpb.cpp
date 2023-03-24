@@ -155,9 +155,9 @@ void OneofSimpleMessage::setTestOneofFieldSecondInt_p(QtProtobuf::int32 testOneo
         m_testOneof.setValue(testOneofFieldSecondInt, 2);
 }
 
-int OneofSimpleMessage::testOneofField() const
+OneofSimpleMessage::TestOneofFields OneofSimpleMessage::testOneofField() const
 {
-    return m_testOneof.fieldNumber();
+    return static_cast<TestOneofFields>(m_testOneof.fieldNumber());
 }
 void OneofSimpleMessage::clearTestOneof()
 {
@@ -464,17 +464,17 @@ void OneofComplexMessage::setSecondSecondComplexField_p(ComplexMessage *secondSe
         m_secondOneof.setValue(value, 6);
 }
 
-int OneofComplexMessage::testOneofField() const
+OneofComplexMessage::TestOneofFields OneofComplexMessage::testOneofField() const
 {
-    return m_testOneof.fieldNumber();
+    return static_cast<TestOneofFields>(m_testOneof.fieldNumber());
 }
 void OneofComplexMessage::clearTestOneof()
 {
     m_testOneof = QtProtobufPrivate::QProtobufOneof();
 }
-int OneofComplexMessage::secondOneofField() const
+OneofComplexMessage::SecondOneofFields OneofComplexMessage::secondOneofField() const
 {
-    return m_secondOneof.fieldNumber();
+    return static_cast<SecondOneofFields>(m_secondOneof.fieldNumber());
 }
 void OneofComplexMessage::clearSecondOneof()
 {
