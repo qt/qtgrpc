@@ -19,10 +19,10 @@
             Q_ASSERT_X(serializer != nullptr, "QProtobufObject", "Serializer is null");\
             return serializer->serialize<Type>(this);\
         }\
-        void deserialize(QAbstractProtobufSerializer *serializer, QByteArrayView array) {\
+        bool deserialize(QAbstractProtobufSerializer *serializer, QByteArrayView array) {\
             qRegisterProtobufTypes();\
             Q_ASSERT_X(serializer != nullptr, "QProtobufObject", "Serializer is null");\
-            serializer->deserialize<Type>(this, array);\
+            return serializer->deserialize<Type>(this, array);\
         }\
     private:
 
