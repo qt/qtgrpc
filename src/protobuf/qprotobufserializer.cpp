@@ -92,6 +92,7 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
 */
 
 /*!
+    \relates QProtobufSerializer
     \fn template<typename T> inline void qRegisterProtobufType()
 
     Registers a Protobuf type \a T.
@@ -99,6 +100,7 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
 */
 
 /*!
+    \relates QProtobufSerializer
     \fn template<typename K, typename V> inline void qRegisterProtobufMapType();
 
     Registers a Protobuf map type \c K and \c V.
@@ -107,6 +109,7 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
 */
 
 /*!
+    \relates QProtobufSerializer
     \fn template<typename T> inline void qRegisterProtobufEnumType();
 
     Registers serializers for enumeration type \c T in QtProtobuf global

@@ -277,6 +277,7 @@ static void qRegisterBaseTypes()
 }
 
 /*!
+    \relates QtProtobuf
     Calling this function registers all, currently known, protobuf types with
     the serializer registry.
 
