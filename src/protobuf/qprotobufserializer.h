@@ -167,8 +167,6 @@ void serializeMap(const QProtobufSerializer *serializer, const QVariant &value,
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     QHash<K, std::shared_ptr<V>> mapValue = value.value<QHash<K, std::shared_ptr<V>>>();
     for (auto it = mapValue.constBegin(); it != mapValue.constEnd(); it++) {
-        if (it.value() == nullptr)
-            continue;
         buffer.append(serializer->serializeMapPair(QVariant::fromValue<K>(it.key()),
                                                    QVariant::fromValue<V *>(it.value().get()),
                                                    fieldInfo));
