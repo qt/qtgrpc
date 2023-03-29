@@ -16,6 +16,7 @@
 #include <QtCore/QMetaObject>
 
 #include <functional>
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 
@@ -145,10 +146,9 @@ void serializeMap(const QProtobufSerializer *serializer, const QVariant &value,
                   const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer)
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
-    QHash<K, V> mapValue = value.value<QHash<K, V>>();
-    for (auto it = mapValue.constBegin(); it != mapValue.constEnd(); it++) {
-        buffer.append(serializer->serializeMapPair(QVariant::fromValue<K>(it.key()),
-                                                   QVariant::fromValue<V>(it.value()), fieldInfo));
+    for (const auto &[k, v] : value.value<QHash<K, V>>().asKeyValueRange()) {
+        buffer.append(serializer->serializeMapPair(QVariant::fromValue<K>(k),
+                                                   QVariant::fromValue<V>(v), fieldInfo));
     }
 }
 
@@ -163,11 +163,9 @@ void serializeMap(const QProtobufSerializer *serializer, const QVariant &value,
                   const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer)
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
-    QHash<K, std::shared_ptr<V>> mapValue = value.value<QHash<K, std::shared_ptr<V>>>();
-    for (auto it = mapValue.constBegin(); it != mapValue.constEnd(); it++) {
-        buffer.append(serializer->serializeMapPair(QVariant::fromValue<K>(it.key()),
-                                                   QVariant::fromValue<V *>(it.value().get()),
-                                                   fieldInfo));
+    for (const auto &[k, v] : value.value<QHash<K, std::shared_ptr<V>>>().asKeyValueRange()) {
+        buffer.append(serializer->serializeMapPair(QVariant::fromValue<K>(k),
+                                                   QVariant::fromValue<V *>(v.get()), fieldInfo));
     }
 }
 
