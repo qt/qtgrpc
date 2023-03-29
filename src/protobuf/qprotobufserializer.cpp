@@ -651,10 +651,34 @@ bool QProtobufSerializerPrivate::deserializeProperty(
     qProtoDebug() << "wireType:" << wireType << "metaType:" << metaType.name()
                   << "currentByte:" << QString::number((*it), 16);
 
-    //TODO: replace with some common function
-    auto basicHandler = findIntegratedTypeHandler(
-            metaType, ordering.getFieldFlags(index) & QtProtobufPrivate::NonPacked);
+    bool isNonPacked = ordering.getFieldFlags(index) & QtProtobufPrivate::NonPacked;
+    auto basicHandler = findIntegratedTypeHandler(metaType, isNonPacked);
+
     if (basicHandler) {
+        if (basicHandler->wireType != wireType) {
+            // If the handler wiretype mismatches the wiretype received from the
+            // wire that most probably means that we received the list in wrong
+            // format. This can happen because of mismatch of the field packed
+            // option in the protobuf schema on the wire ends. Invert the
+            // isNonPacked flag and try to find the handler one more time to make
+            // sure that we cover this exceptional case.
+            // See the conformance tests
+            // Required.Proto3.ProtobufInput.ValidDataRepeated.*.UnpackedInput
+            // for details.
+            basicHandler = findIntegratedTypeHandler(metaType, !isNonPacked);
+            if (!basicHandler || basicHandler->wireType != wireType) {
+                setDeserializationError(
+                        QAbstractProtobufSerializer::InvalidHeaderError,
+                        QCoreApplication::translate("QtProtobuf",
+                                                    "Message received has invalid wiretype for the "
+                                                    "field number %1. Expected %2, received %3")
+                                .arg(fieldNumber)
+                                .arg(static_cast<int>(basicHandler->wireType))
+                                .arg(static_cast<int>(wireType)));
+                return false;
+            }
+        }
+
         if (!basicHandler->deserializer(it, newPropertyValue)) {
             setUnexpectedEndOfStreamError();
             return false;
