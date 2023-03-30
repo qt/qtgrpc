@@ -36,6 +36,7 @@ qt_add_protobuf(tst_qtprotobufgen
     PROTO_FILES
         ../shared/data/proto/basicmessages.proto
         ../shared/data/proto/mapmessages.proto
+        ../shared/data/proto/oneofmessages.proto
         ../shared/data/proto/repeatedmessages.proto
     GENERATE_PACKAGE_SUBFOLDERS
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/folder"
