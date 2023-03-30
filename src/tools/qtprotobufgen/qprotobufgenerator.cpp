@@ -77,7 +77,7 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
     sourcePrinter->Print({{"include", "QtProtobuf/qprotobufserializer.h"}},
                          CommonTemplates::ExternalIncludeTemplate());
     if (Options::instance().hasQml()) {
-        sourcePrinter->Print({{"include", "QQmlEngine"}},
+        sourcePrinter->Print({{"include", "QtQml/QQmlEngine"}},
                              CommonTemplates::ExternalIncludeTemplate());
     }
 

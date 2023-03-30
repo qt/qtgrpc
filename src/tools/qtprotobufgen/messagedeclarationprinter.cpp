@@ -141,6 +141,10 @@ void MessageDeclarationPrinter::printClassDeclarationBegin()
     } else {
         m_printer->Print(m_typeMap, CommonTemplates::ClassMessageBeginDeclarationTemplate());
     }
+
+    if (Options::instance().hasQml()) {
+        m_printer->Print(m_typeMap, CommonTemplates::ClassMessageQmlBeginDeclarationTemplate());
+    }
 }
 
 void MessageDeclarationPrinter::printMetaTypesDeclaration()

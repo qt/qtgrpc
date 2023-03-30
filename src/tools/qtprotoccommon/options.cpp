@@ -51,9 +51,8 @@ void Options::setFromString(const std::string &options)
     for (const auto &option : utils::split(options, ";")) {
         QT_PROTOBUF_DEBUG("option: " << option);
         if (option == QmlPluginOption) {
-            // TODO: Disable QML until the porting is complete.
-            // QT_PROTOBUF_DEBUG("set m_hasQml: true");
-            // instance.m_hasQml = true;
+            QT_PROTOBUF_DEBUG("set m_hasQml: true");
+            instance.m_hasQml = true;
         } else if (option == CommentsGenerationOption) {
             QT_PROTOBUF_DEBUG("set m_generateComments: true");
             instance.m_generateComments = true;

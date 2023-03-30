@@ -42,6 +42,7 @@ public:
     static const char *ClassMessageForwardDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplateEmptyMacros();
+    static const char *ClassMessageQmlBeginDeclarationTemplate();
     static const char *EmptyConstructorTemplate();
     static const char *UseNamespace();
 

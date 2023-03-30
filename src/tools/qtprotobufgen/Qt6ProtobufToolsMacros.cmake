@@ -8,6 +8,7 @@ macro(_qt_internal_get_protoc_common_options option_args single_args multi_args)
     set(${option_args}
         COPY_COMMENTS
         GENERATE_PACKAGE_SUBFOLDERS
+        QML
     )
     set(${single_args}
         EXTRA_NAMESPACE

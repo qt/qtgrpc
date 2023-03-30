@@ -214,6 +214,7 @@ TypeMap common::produceMessageTypeMap(const Descriptor *type, const Descriptor *
 
     const std::string initializer = "nullptr";
     return { { "classname", name },
+             { "classname_low_case", utils::deCapitalizeAsciiName(type->name()) },
              { "type", name },
              { "full_type", fullName },
              { "scope_type", scopeName },
@@ -266,6 +267,7 @@ TypeMap common::produceEnumTypeMap(const EnumDescriptor *type, const Descriptor 
 
     std::string initializer = scopeName + "::" + type->value(0)->name();
     return { { "classname", enumGadget },
+             { "classname_low_case", utils::deCapitalizeAsciiName(enumGadget) },
              { "type", name },
              { "full_type", fullName },
              { "scope_type", scopeName },
@@ -350,6 +352,7 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
     inputTypeName = utils::replace(inputTypeName, ".", "::");
     outputTypeName = utils::replace(outputTypeName, ".", "::");
     return { { "classname", scope },          { "return_type", outputTypeName },
+             { "classname_low_case", utils::deCapitalizeAsciiName(scope) },
              { "method_name", methodName },   { "method_name_upper", methodNameUpper },
              { "param_type", inputTypeName }, { "param_name", "arg" },
              { "return_name", "ret" } };
@@ -367,6 +370,7 @@ TypeMap common::produceServiceTypeMap(const ServiceDescriptor *service, const De
                                                           getFullNamespace(scope, "::"));
 
     return { { "classname", name },
+             { "classname_low_case", utils::deCapitalizeAsciiName(name) },
              { "full_type", fullName },
              { "scope_type", scopeName },
              { "scope_namespaces", scopeNamespaces },
@@ -386,6 +390,7 @@ TypeMap common::produceClientTypeMap(const ServiceDescriptor *service, const Des
                                                           getFullNamespace(scope, "::"));
 
     return { { "classname", name },
+             { "classname_low_case", utils::deCapitalizeAsciiName(name) },
              { "full_type", fullName },
              { "scope_type", scopeName },
              { "scope_namespaces", scopeNamespaces },

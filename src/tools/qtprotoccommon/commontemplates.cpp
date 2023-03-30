@@ -61,8 +61,8 @@ const char *CommonTemplates::DefaultSystemIncludesTemplate()
 
 const char *CommonTemplates::QmlProtobufIncludesTemplate()
 {
-    return "#include <QtQml/QQmlListProperty>\n"
-           "#include <QtProtobufQuick/qtprotobufqmllistpropertyconstructor.h>\n\n";
+    return "#include <QtQml/qqmlregistration.h>\n"
+           "#include <QtQml/qqmllist.h>\n\n";
 }
 
 const char *CommonTemplates::DisclaimerTemplate()
@@ -159,6 +159,12 @@ const char *CommonTemplates::ClassMessageForwardDeclarationTemplate()
 {
     return "class $classname$;\n";
 }
+
+const char *CommonTemplates::ClassMessageQmlBeginDeclarationTemplate()
+{
+    return "    QML_VALUE_TYPE($classname_low_case$)\n";
+}
+
 const char *CommonTemplates::ClassMessageBeginDeclarationTemplate()
 {
     return "\nclass $export_macro$ $classname$ : public QProtobufMessage\n"
