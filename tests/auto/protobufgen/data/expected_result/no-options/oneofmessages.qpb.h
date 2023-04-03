@@ -94,6 +94,8 @@ class OneofComplexMessage : public QProtobufMessage
     Q_PROPERTY(bool hasSecondComplexField READ hasSecondComplexField)
     Q_PROPERTY(qtprotobufnamespace::tests::ComplexMessage *secondSecondComplexField READ secondSecondComplexField_p WRITE setSecondSecondComplexField_p)
     Q_PROPERTY(bool hasSecondSecondComplexField READ hasSecondSecondComplexField)
+    Q_PROPERTY(QtProtobuf::int32 testSnakeCaseField READ testSnakeCaseField_p WRITE setTestSnakeCaseField_p)
+    Q_PROPERTY(bool hasTestSnakeCaseField READ hasTestSnakeCaseField)
 
 public:
     enum QtProtobufFieldEnum {
@@ -104,6 +106,7 @@ public:
         SecondFieldIntProtoFieldNumber = 43,
         SecondComplexFieldProtoFieldNumber = 5,
         SecondSecondComplexFieldProtoFieldNumber = 6,
+        TestSnakeCaseFieldProtoFieldNumber = 7,
     };
     Q_ENUM(QtProtobufFieldEnum)
 
@@ -120,6 +123,7 @@ public:
         SecondFieldInt = 43,
         SecondComplexField = 5,
         SecondSecondComplexField = 6,
+        TestSnakeCaseField = 7,
     };
     Q_ENUM(SecondOneofFields)
 
@@ -155,6 +159,9 @@ public:
 
     bool hasSecondSecondComplexField() const;
     ComplexMessage &secondSecondComplexField() const;
+
+    bool hasTestSnakeCaseField() const;
+    QtProtobuf::int32 testSnakeCaseField() const;
     TestOneofFields testOneofField() const;
     SecondOneofFields secondOneofField() const;
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
@@ -169,6 +176,7 @@ public:
     void setSecondFieldInt(const QtProtobuf::int32 &secondFieldInt);
     void setSecondComplexField(const ComplexMessage &secondComplexField);
     void setSecondSecondComplexField(const ComplexMessage &secondSecondComplexField);
+    void setTestSnakeCaseField(const QtProtobuf::int32 &testSnakeCaseField);
     void clearTestOneof();
     void clearSecondOneof();
     static void registerTypes();
@@ -180,12 +188,14 @@ private:
     QtProtobuf::int32 secondFieldInt_p() const;
     ComplexMessage *secondComplexField_p() const;
     ComplexMessage *secondSecondComplexField_p() const;
+    QtProtobuf::int32 testSnakeCaseField_p() const;
     void setTestOneofFieldInt_p(QtProtobuf::int32 testOneofFieldInt);
     void setTestOneofComplexField_p(ComplexMessage *testOneofComplexField);
     void setTestOneofSecondComplexField_p(ComplexMessage *testOneofSecondComplexField);
     void setSecondFieldInt_p(QtProtobuf::int32 secondFieldInt);
     void setSecondComplexField_p(ComplexMessage *secondComplexField);
     void setSecondSecondComplexField_p(ComplexMessage *secondSecondComplexField);
+    void setTestSnakeCaseField_p(QtProtobuf::int32 testSnakeCaseField);
     QtProtobuf::int32 m_testFieldInt;
     QtProtobufPrivate::QProtobufOneof m_testOneof;
     QtProtobufPrivate::QProtobufOneof m_secondOneof;

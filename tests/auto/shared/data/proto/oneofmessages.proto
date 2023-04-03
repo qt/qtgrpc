@@ -29,5 +29,6 @@ message OneofComplexMessage
         int32 secondFieldInt = 43;
         ComplexMessage secondComplexField = 5;
         ComplexMessage secondSecondComplexField = 6;
+        int32 test_snake_case_field = 7;
     }
 }

@@ -389,7 +389,7 @@ void MessageDeclarationPrinter::printOneofEnums()
                 for (int j = 0; j < oneofDescr->field_count(); ++j) {
                     const auto *valueDescr = oneofDescr->field(j);
                     m_printer->Print({ { "enumvalue",
-                                         utils::capitalizeAsciiName(valueDescr->name()) },
+                                         utils::capitalizeAsciiName(valueDescr->camelcase_name()) },
                                        { "value", std::to_string(valueDescr->number()) } },
                                      CommonTemplates::EnumFieldTemplate());
                 }

@@ -167,16 +167,16 @@ OneofComplexMessage::~OneofComplexMessage() = default;
 
 static constexpr struct {
     QtProtobufPrivate::QProtobufPropertyOrdering::Data data;
-    const std::array<uint, 29> qt_protobuf_OneofComplexMessage_uint_data;
-    const char qt_protobuf_OneofComplexMessage_char_data[187];
+    const std::array<uint, 33> qt_protobuf_OneofComplexMessage_uint_data;
+    const char qt_protobuf_OneofComplexMessage_char_data[206];
 } qt_protobuf_OneofComplexMessage_metadata {
     // data
     {
         0, /* = version */
-        7, /* = num fields */
-        8, /* = field number offset */
-        15, /* = property index offset */
-        22, /* = field flags offset */
+        8, /* = num fields */
+        9, /* = field number offset */
+        17, /* = property index offset */
+        25, /* = field flags offset */
         45, /* = message full name length */
     },
     // uint_data
@@ -189,7 +189,8 @@ static constexpr struct {
         127, /* = secondFieldInt */
         142, /* = secondComplexField */
         161, /* = secondSecondComplexField */
-        186, /* = end-of-string-marker */
+        186, /* = testSnakeCaseField */
+        205, /* = end-of-string-marker */
         // Field numbers:
         1, /* = testFieldInt */
         42, /* = testOneofFieldInt */
@@ -198,6 +199,7 @@ static constexpr struct {
         43, /* = secondFieldInt */
         5, /* = secondComplexField */
         6, /* = secondSecondComplexField */
+        7, /* = testSnakeCaseField */
         // Property indices:
         0, /* = testFieldInt */
         1, /* = testOneofFieldInt */
@@ -206,6 +208,7 @@ static constexpr struct {
         7, /* = secondFieldInt */
         9, /* = secondComplexField */
         11, /* = secondSecondComplexField */
+        13, /* = testSnakeCaseField */
         // Field flags:
         QtProtobufPrivate::NoFlags, /* = testFieldInt */
         QtProtobufPrivate::Oneof, /* = testOneofFieldInt */
@@ -214,13 +217,14 @@ static constexpr struct {
         QtProtobufPrivate::Oneof, /* = secondFieldInt */
         QtProtobufPrivate::Oneof, /* = secondComplexField */
         QtProtobufPrivate::Oneof, /* = secondSecondComplexField */
+        QtProtobufPrivate::Oneof, /* = testSnakeCaseField */
     },
     // char_data
     /* metadata char_data: */
     "qtprotobufnamespace.tests.OneofComplexMessage\0" /* = full message name */
     /* field char_data: */
     "testFieldInt\0testOneofFieldInt\0testOneofComplexField\0testOneofSecondComplexField\0secondFieldInt\0"
-    "secondComplexField\0secondSecondComplexField\0"
+    "secondComplexField\0secondSecondComplexField\0testSnakeCaseField\0"
 };
 
 const QtProtobufPrivate::QProtobufPropertyOrdering OneofComplexMessage::propertyOrdering = {
@@ -386,6 +390,22 @@ ComplexMessage &OneofComplexMessage::secondSecondComplexField() const
     return *(m_secondOneof.value<ComplexMessage>());
 }
 
+QtProtobuf::int32 OneofComplexMessage::testSnakeCaseField_p() const
+{
+    return m_secondOneof.holdsField(7) ?
+        m_secondOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
+}
+
+bool OneofComplexMessage::hasTestSnakeCaseField() const
+{
+    return m_secondOneof.holdsField(7);
+}
+QtProtobuf::int32 OneofComplexMessage::testSnakeCaseField() const
+{
+    Q_ASSERT(m_secondOneof.holdsField(7));
+    return m_secondOneof.value<QtProtobuf::int32>();
+}
+
 void OneofComplexMessage::setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt)
 {
     if (!m_testOneof.isEqual(testOneofFieldInt, 42)) {
@@ -462,6 +482,19 @@ void OneofComplexMessage::setSecondSecondComplexField_p(ComplexMessage *secondSe
 {
     const ComplexMessage &value = *secondSecondComplexField;    if (!m_secondOneof.isEqual(value, 6))
         m_secondOneof.setValue(value, 6);
+}
+
+void OneofComplexMessage::setTestSnakeCaseField(const QtProtobuf::int32 &testSnakeCaseField)
+{
+    if (!m_secondOneof.isEqual(testSnakeCaseField, 7)) {
+        m_secondOneof.setValue(testSnakeCaseField, 7);
+    }
+}
+
+void OneofComplexMessage::setTestSnakeCaseField_p(QtProtobuf::int32 testSnakeCaseField)
+{
+    if (!m_secondOneof.isEqual(testSnakeCaseField, 7))
+        m_secondOneof.setValue(testSnakeCaseField, 7);
 }
 
 OneofComplexMessage::TestOneofFields OneofComplexMessage::testOneofField() const
