@@ -121,81 +121,38 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
 using namespace Qt::StringLiterals;
 using namespace QtProtobufPrivate;
 
-template<>
-Q_REQUIRED_RESULT
-QByteArray QProtobufSerializerPrivate::serializeListType<QByteArray>(const QByteArrayList &listValue, int &outFieldIndex)
-{
-    qProtoDebug("listValue.count %" PRIdQSIZETYPE " outFieldIndex %d", listValue.count(),
-                outFieldIndex);
-
-    if (listValue.isEmpty()) {
-        outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
-        return QByteArray();
-    }
-
-    QByteArray serializedList;
-    for (const QByteArray &value : listValue) {
-        serializedList.append(QProtobufSerializerPrivate::encodeHeader(
-                outFieldIndex, QtProtobuf::WireTypes::LengthDelimited));
-        serializedList.append(serializeLengthDelimited(value, false));
-    }
-
-    outFieldIndex = QtProtobufPrivate::NotUsedFieldIndex;
-    return serializedList;
-}
-
-template<>
-Q_REQUIRED_RESULT
-bool QProtobufSerializerPrivate::deserializeList<QByteArray>(QProtobufSelfcheckIterator &it, QVariant &previousValue)
-{
-    qProtoDebug("currentByte: 0x%x", *it);
-
-    std::optional<QByteArray> result = deserializeLengthDelimited(it);
-    if (result) {
-        QByteArrayList list = previousValue.value<QByteArrayList>();
-        list.append(std::move(*result));
-        previousValue.setValue(list);
-        return true;
-    }
-    return false;
-}
-
-template<>
-Q_REQUIRED_RESULT
-bool QProtobufSerializerPrivate::deserializeList<QString>(QProtobufSelfcheckIterator &it, QVariant &previousValue)
-{
-    qProtoDebug("currentByte: 0x%x", *it);
-
-    std::optional<QByteArray> result = deserializeLengthDelimited(it);
-    if (result) {
-        QStringList list = previousValue.value<QStringList>();
-        list.append(QString::fromUtf8(*result));
-        previousValue.setValue(list);
-        return true;
-    }
-    return false;
-}
-
 template<std::size_t N>
 using SerializerRegistryType =
         std::array<QProtobufSerializerPrivate::ProtobufSerializationHandler, N>;
 
 namespace {
-#define QT_CONSTRUCT_PROTOBUF_SERIALIZATION_HANDLER(Type, WireType)                                \
-    {                                                                                              \
-        QMetaType::fromType<Type>(),                                                               \
-                QProtobufSerializerPrivate::serializeWrapper<                                      \
-                        Type, QProtobufSerializerPrivate::serializeBasic<Type>>,                   \
-                QProtobufSerializerPrivate::deserializeBasic<Type>, WireType                       \
-    }
-#define QT_CONSTRUCT_PROTOBUF_LIST_SERIALIZATION_HANDLER(ListType, Type)                           \
-    {                                                                                              \
-        QMetaType::fromType<ListType>(),                                                           \
-                QProtobufSerializerPrivate::serializeWrapper<                                      \
-                        ListType, QProtobufSerializerPrivate::serializeListType<Type>>,            \
-                QProtobufSerializerPrivate::deserializeList<Type>,                                 \
-                QtProtobuf::WireTypes::LengthDelimited                                             \
-    }
+#define QT_CONSTRUCT_PROTOBUF_SERIALIZATION_HANDLER(Type, WireType)          \
+  {                                                                          \
+    QMetaType::fromType<Type>(),                                             \
+            QProtobufSerializerPrivate::serializeWrapper<                    \
+                    Type, QProtobufSerializerPrivate::serializeBasic<Type>>, \
+            QProtobufSerializerPrivate::deserializeBasic<Type>,              \
+            QProtobufSerializerPrivate::isPresent<Type>, WireType        \
+  }
+#define QT_CONSTRUCT_PROTOBUF_LIST_SERIALIZATION_HANDLER(ListType, Type)            \
+  {                                                                                 \
+    QMetaType::fromType<ListType>(),                                                \
+            QProtobufSerializerPrivate::serializeWrapper<                           \
+                    ListType, QProtobufSerializerPrivate::serializeListType<Type>>, \
+            QProtobufSerializerPrivate::deserializeList<Type>,                      \
+            QProtobufSerializerPrivate::isPresent<ListType>,                    \
+            QtProtobuf::WireTypes::LengthDelimited                                  \
+  }
+
+#define QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(ListType, Type, WireType) \
+{                                                                                           \
+QMetaType::fromType<ListType>(),                                                          \
+        QProtobufSerializerPrivate::serializeNonPackedWrapper<                            \
+                ListType, QProtobufSerializerPrivate::serializeNonPackedList<Type>>,      \
+        QProtobufSerializerPrivate::deserializeNonPackedList<Type>,                       \
+        QProtobufSerializerPrivate::isPresent<ListType>, WireType                     \
+}
+
 constexpr SerializerRegistryType<30> IntegratedTypesSerializers = { {
         QT_CONSTRUCT_PROTOBUF_SERIALIZATION_HANDLER(float, QtProtobuf::WireTypes::Fixed32),
         QT_CONSTRUCT_PROTOBUF_SERIALIZATION_HANDLER(double, QtProtobuf::WireTypes::Fixed64),
@@ -246,23 +203,17 @@ constexpr SerializerRegistryType<30> IntegratedTypesSerializers = { {
         QT_CONSTRUCT_PROTOBUF_LIST_SERIALIZATION_HANDLER(QtProtobuf::sfixed64List,
                                                          QtProtobuf::sfixed64),
         QT_CONSTRUCT_PROTOBUF_LIST_SERIALIZATION_HANDLER(QtProtobuf::boolList, QtProtobuf::boolean),
-        QT_CONSTRUCT_PROTOBUF_LIST_SERIALIZATION_HANDLER(QStringList, QString),
-        QT_CONSTRUCT_PROTOBUF_LIST_SERIALIZATION_HANDLER(QByteArrayList, QByteArray),
+        QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(
+                QStringList, QString, QtProtobuf::WireTypes::LengthDelimited),
+        QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(
+                QByteArrayList, QByteArray, QtProtobuf::WireTypes::LengthDelimited),
 } };
 
-#define QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(ListType, Type, WireType)      \
-  {                                                                                                \
-    QMetaType::fromType<ListType>(),                                                               \
-            QProtobufSerializerPrivate::serializeWrapper<                                          \
-                    ListType,                                                                      \
-                    QProtobufSerializerPrivate::serializeNonPackedListTypeCommon<Type, WireType>>, \
-            QProtobufSerializerPrivate::deserializeNonPackedList<Type>, WireType                   \
-  }
 constexpr SerializerRegistryType<13> IntegratedNonPackedSerializers = { {
-        QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(
-            QtProtobuf::floatList, float, QtProtobuf::WireTypes::Fixed32),
-        QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(
-            QtProtobuf::doubleList, double, QtProtobuf::WireTypes::Fixed64),
+        QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(QtProtobuf::floatList, float,
+                                                                    QtProtobuf::WireTypes::Fixed32),
+        QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(QtProtobuf::doubleList, double,
+                                                                    QtProtobuf::WireTypes::Fixed64),
         QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(
                 QtProtobuf::int32List, QtProtobuf::int32, QtProtobuf::WireTypes::Varint),
         QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(
@@ -397,10 +348,10 @@ QProtobufSerializer::serializeObject(const QProtobufMessage *message,
                                      const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                                      const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
-    QByteArray result = QProtobufSerializerPrivate::encodeHeader(
-            fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited);
-    result.append(QProtobufSerializerPrivate::prependLengthDelimitedSize(
-            serializeMessage(message, ordering)));
+    QByteArray result = QProtobufSerializerPrivate::prependLengthDelimitedSize(
+            serializeMessage(message, ordering));
+    result.prepend(QProtobufSerializerPrivate::encodeHeader(
+            fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited));
     return result;
 }
 
@@ -465,10 +416,15 @@ QByteArray
 QProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
                                       const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
+    auto keyHandler = findIntegratedTypeHandler(key.metaType(), false);
+    Q_ASSERT_X(keyHandler, "QProtobufSerializer", "Map key is not an integrated type.");
+
     QByteArray result = QProtobufSerializerPrivate::encodeHeader(
             fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited);
+
     result.append(QProtobufSerializerPrivate::prependLengthDelimitedSize(
-            d_ptr->serializeProperty(key, fieldInfo.infoForMapKey())
+            keyHandler->serializer(
+                    key, QProtobufSerializerPrivate::encodeHeader(1, keyHandler->wireType))
             + d_ptr->serializeProperty(value, fieldInfo.infoForMapValue())));
     return result;
 }
@@ -494,12 +450,13 @@ bool QProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value, QPr
 QByteArray QProtobufSerializer::serializeEnum(QtProtobuf::int64 value,
                                               const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
+    if (value == 0)
+        return {};
+
     QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Varint;
-    int fieldIndex = fieldInfo.getFieldNumber();
-    QByteArray result = QProtobufSerializerPrivate::serializeBasic<QtProtobuf::int64>(value, fieldIndex);
-    if (fieldIndex != QtProtobufPrivate::NotUsedFieldIndex)
-        result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
-    return result;
+    int fieldNumber = fieldInfo.getFieldNumber();
+    return QProtobufSerializerPrivate::encodeHeader(fieldNumber, type)
+            + QProtobufSerializerPrivate::serializeBasic<QtProtobuf::int64>(value);
 }
 
 /*!
@@ -512,13 +469,17 @@ QByteArray
 QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
                                        const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
-    QtProtobuf::WireTypes type = QtProtobuf::WireTypes::LengthDelimited;
-    int fieldIndex = fieldInfo.getFieldNumber();
-    QByteArray result =
-            QProtobufSerializerPrivate::serializeListType<QtProtobuf::int64>(value, fieldIndex);
-    if (fieldIndex != QtProtobufPrivate::NotUsedFieldIndex)
-        result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
-    return result;
+    if (value.isEmpty()) {
+        return {};
+    }
+
+    auto header = QProtobufSerializerPrivate::encodeHeader(fieldInfo.getFieldNumber(),
+                                                           QtProtobuf::WireTypes::LengthDelimited);
+
+    if (fieldInfo.getFieldFlags() & QtProtobufPrivate::NonPacked)
+        return QProtobufSerializerPrivate::serializeNonPackedList<QtProtobuf::int64>(value, header);
+
+    return header + QProtobufSerializerPrivate::serializeListType<QtProtobuf::int64>(value);
 }
 
 /*!
@@ -607,7 +568,6 @@ QByteArray
 QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
                                               const QProtobufPropertyOrderingInfo &fieldInfo)
 {
-    QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Unknown;
     QMetaType metaType = propertyValue.metaType();
 
     qProtoDebug() << "propertyValue" << propertyValue << "fieldIndex" << fieldInfo.getFieldNumber()
@@ -618,26 +578,26 @@ QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
         return {};
     }
 
-    QByteArray result;
-    //TODO: replace with some common function
     auto basicHandler = findIntegratedTypeHandler(
             metaType, fieldInfo.getFieldFlags() & QtProtobufPrivate::NonPacked);
     if (basicHandler) {
-        type = basicHandler->wireType;
-        int fieldIndex = fieldInfo.getFieldNumber();
-        result.append(basicHandler->serializer(propertyValue, fieldIndex));
-        if (fieldIndex != QtProtobufPrivate::NotUsedFieldIndex
-                && type != QtProtobuf::WireTypes::Unknown) {
-            result.prepend(QProtobufSerializerPrivate::encodeHeader(fieldIndex, type));
+        if (!basicHandler->isPresent(propertyValue)) {
+            return {};
         }
-    } else {
-        auto handler = QtProtobufPrivate::findHandler(metaType);
-        if (!handler.serializer) {
-            qProtoWarning() << "No serializer for type" << propertyValue.typeName();
-            return result;
-        }
-        handler.serializer(q_ptr, propertyValue, fieldInfo, result);
+
+        QByteArray header = QProtobufSerializerPrivate::encodeHeader(fieldInfo.getFieldNumber(),
+                                                                     basicHandler->wireType);
+        return basicHandler->serializer(propertyValue, header);
     }
+
+    auto handler = QtProtobufPrivate::findHandler(metaType);
+    if (!handler.serializer) {
+        qProtoWarning() << "No serializer for type" << propertyValue.typeName();
+        return {};
+    }
+    QByteArray result;
+    handler.serializer(q_ptr, propertyValue, fieldInfo, result);
+
     return result;
 }
 

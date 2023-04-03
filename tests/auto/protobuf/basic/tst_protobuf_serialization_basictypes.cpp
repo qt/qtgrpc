@@ -468,7 +468,6 @@ void QtProtobufTypesSerializationTest::EmptyBytesMessageTest()
     SimpleBytesMessage msg;
 
     QByteArray result = msg.serialize(m_serializer.get());
-    QEXPECT_FAIL("", "The result of serialization can be either an empty message or a message of size zero.", Continue);
     QVERIFY(result.isEmpty());
 }
 
@@ -477,7 +476,6 @@ void QtProtobufTypesSerializationTest::EmptyStringMessageTest()
     SimpleStringMessage msg;
 
     QByteArray result = msg.serialize(m_serializer.get());
-    QEXPECT_FAIL("", "The result of serialization can be either an empty message or a message of size zero.", Continue);
     QVERIFY(result.isEmpty());
 }
 
