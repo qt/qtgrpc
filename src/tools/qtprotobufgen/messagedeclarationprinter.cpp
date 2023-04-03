@@ -194,16 +194,28 @@ void MessageDeclarationPrinter::printProperties()
         m_printer->Print(common::producePropertyMap(field, m_descriptor), propertyTemplate);
     }
 
-    // Generate extra QmlListProperty that is mapped to list
-    for (int i = 0; i < numFields; ++i) {
-        const FieldDescriptor *field = m_descriptor->field(i);
-        if (field->type() == FieldDescriptor::TYPE_MESSAGE && field->is_repeated()
-            && !field->is_map() && Options::instance().hasQml()) {
-            m_printer->Print(common::producePropertyMap(field, m_descriptor),
-                            CommonTemplates::PropertyQmlListTemplate());
-        } else if (common::hasQmlAlias(field)) {
-            m_printer->Print(common::producePropertyMap(field, m_descriptor),
-                            CommonTemplates::PropertyNonScriptableAliasTemplate());
+    // Generate extra QML property, that can be used in QML context
+    if (Options::instance().hasQml()) {
+        for (int i = 0; i < numFields; ++i) {
+            const FieldDescriptor *field = m_descriptor->field(i);
+            if (common::isPureMessage(field)) {
+                m_printer->Print(common::producePropertyMap(field, m_descriptor),
+                                 CommonTemplates::PropertyQmlMessageTemplate());
+            }
+        }
+
+
+        // Generate extra QmlListProperty that is mapped to list
+        for (int i = 0; i < numFields; ++i) {
+            const FieldDescriptor *field = m_descriptor->field(i);
+            if (field->type() == FieldDescriptor::TYPE_MESSAGE && field->is_repeated()
+                && !field->is_map()) {
+                m_printer->Print(common::producePropertyMap(field, m_descriptor),
+                                 CommonTemplates::PropertyQmlListTemplate());
+            } else if (common::hasQmlAlias(field)) {
+                m_printer->Print(common::producePropertyMap(field, m_descriptor),
+                                 CommonTemplates::PropertyNonScriptableAliasTemplate());
+            }
         }
     }
 

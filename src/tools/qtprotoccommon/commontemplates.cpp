@@ -211,9 +211,15 @@ const char *CommonTemplates::PropertyNonScriptableAliasTemplate()
 }
 const char *CommonTemplates::PropertyMessageTemplate()
 {
-    return "Q_PROPERTY($property_type$ *$property_name$ READ $property_name$_p WRITE "
+    return "Q_PROPERTY($property_type$ *$property_name$_p READ $property_name$_p WRITE "
            "set$property_name_cap$_p)\n";
 }
+const char *CommonTemplates::PropertyQmlMessageTemplate()
+{
+    return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
+           "set$property_name_cap$)\n";
+}
+
 const char *CommonTemplates::PropertyOneofTemplate()
 {
     return "Q_PROPERTY($property_type$ $property_name$ "

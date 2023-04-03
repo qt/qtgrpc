@@ -84,7 +84,7 @@ void QtProtobufExternalPackageGenerationTest::ExternalComplexMessageTest()
 
 void QtProtobufExternalPackageGenerationTest::NestedMessageTest()
 {
-    qProtobufAssertMessagePropertyRegistered<NestedExternal, qtprotobufnamespace1::externaltests::NestedFieldMessage::NestedMessage*>(1, "qtprotobufnamespace1::externaltests::NestedFieldMessage::NestedMessage*", "externalNested");
+    qProtobufAssertMessagePropertyRegistered<NestedExternal, qtprotobufnamespace1::externaltests::NestedFieldMessage::NestedMessage*>(1, "qtprotobufnamespace1::externaltests::NestedFieldMessage::NestedMessage*", "externalNested_p");
 
     qtprotobufnamespace1::externaltests::NestedFieldMessage::NestedMessage nestedMsg;
     nestedMsg.setField(15);
@@ -95,7 +95,7 @@ void QtProtobufExternalPackageGenerationTest::NestedMessageTest()
 
     nestedMsg.setField(55);
 
-    const char *propertyName = "externalNested";
+    const char *propertyName = "externalNested_p";
     QVERIFY(test.setProperty(
             propertyName,
             QVariant::fromValue<

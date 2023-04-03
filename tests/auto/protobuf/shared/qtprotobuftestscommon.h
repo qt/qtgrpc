@@ -8,12 +8,6 @@
 #include <QMetaType>
 #include <QTest>
 
-#if defined(QT_QML_LIB)
-    #define QT_PROTOBUF_PROPERTY_SUFFIX "_p"
-#else
-    #define QT_PROTOBUF_PROPERTY_SUFFIX
-#endif
-
 template<typename MessageType, typename PropertyType>
 static void qProtobufAssertMessagePropertyRegistered(int fieldIndex, const char *propertyTypeName, const char *propertyName, bool skipMetatypeCheck = false)
 {

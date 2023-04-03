@@ -39,8 +39,8 @@ void QtProtobufNestedTest::NestedMessageTest()
 
 void QtProtobufNestedTest::SimpleTest()
 {
-    const char *propertyName = "nested";
-    qProtobufAssertMessagePropertyRegistered<NestedFieldMessage, NestedFieldMessage::NestedMessage*>(2, "qtprotobufnamespace::tests::nested::NestedFieldMessage::NestedMessage*", "nested");
+    const char *propertyName = "nested_p";
+    qProtobufAssertMessagePropertyRegistered<NestedFieldMessage, NestedFieldMessage::NestedMessage*>(2, "qtprotobufnamespace::tests::nested::NestedFieldMessage::NestedMessage*", "nested_p");
 
     NestedFieldMessage::NestedMessage nestedMsg;
     nestedMsg.setTestFieldInt(15);
@@ -57,7 +57,7 @@ void QtProtobufNestedTest::SimpleTest()
              nestedMsg);
     QCOMPARE(test.nested(), nestedMsg);
 
-    qProtobufAssertMessagePropertyRegistered<NestedFieldMessage2::NestedMessageLevel1, NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*>(1, "qtprotobufnamespace::tests::nested::NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*", "nested");
+    qProtobufAssertMessagePropertyRegistered<NestedFieldMessage2::NestedMessageLevel1, NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*>(1, "qtprotobufnamespace::tests::nested::NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*", "nested_p");
 
     NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2 level2;
     level2.setTestFieldInt(20);
@@ -75,7 +75,7 @@ void QtProtobufNestedTest::SimpleTest()
              level2);
     QCOMPARE(level1.nested(), level2);
 
-    qProtobufAssertMessagePropertyRegistered<NestedFieldMessage2, NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*>(3, "qtprotobufnamespace::tests::nested::NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*", "nested2");
+    qProtobufAssertMessagePropertyRegistered<NestedFieldMessage2, NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*>(3, "qtprotobufnamespace::tests::nested::NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*", "nested2_p");
 
     NestedFieldMessage2 test2;
 
@@ -92,19 +92,19 @@ void QtProtobufNestedTest::SimpleTest()
     level2.setTestFieldInt(65);
     level1.setNested(level2);
 
-    QVERIFY(test2.setProperty("nested1",
+    QVERIFY(test2.setProperty("nested1_p",
                               QVariant::fromValue<NestedFieldMessage2::NestedMessageLevel1 *>(
                                       new NestedFieldMessage2::NestedMessageLevel1(level1))));
-    QCOMPARE(*(test2.property("nested1").value<NestedFieldMessage2::NestedMessageLevel1 *>()),
+    QCOMPARE(*(test2.property("nested1_p").value<NestedFieldMessage2::NestedMessageLevel1 *>()),
              level1);
     QCOMPARE(test2.nested1(), level1);
 
     level2.setTestFieldInt(75);
     QVERIFY(test2.setProperty(
-            "nested2",
+            "nested2_p",
             QVariant::fromValue<NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2 *>(
                     new NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2(level2))));
-    QCOMPARE(*(test2.property("nested2")
+    QCOMPARE(*(test2.property("nested2_p")
                        .value<NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2 *>()),
              level2);
     QCOMPARE(test2.nested2(), level2);
@@ -186,8 +186,8 @@ void QtProtobufNestedTest::DeserializationTest()
 
 void QtProtobufNestedTest::NeighborTest()
 {
-    qProtobufAssertMessagePropertyRegistered<NeighborNested, NestedFieldMessage::NestedMessage*>(1, "qtprotobufnamespace::tests::nested::NestedFieldMessage::NestedMessage*", "neighborNested");
-    qProtobufAssertMessagePropertyRegistered<NeighborNested, NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*>(2, "qtprotobufnamespace::tests::nested::NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*", "neighborNested2");
+    qProtobufAssertMessagePropertyRegistered<NeighborNested, NestedFieldMessage::NestedMessage*>(1, "qtprotobufnamespace::tests::nested::NestedFieldMessage::NestedMessage*", "neighborNested_p");
+    qProtobufAssertMessagePropertyRegistered<NeighborNested, NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*>(2, "qtprotobufnamespace::tests::nested::NestedFieldMessage2::NestedMessageLevel1::NestedMessageLevel2*", "neighborNested2_p");
 
     NestedFieldMessage::NestedMessage nested;
     nested.setTestFieldInt(15);
@@ -201,7 +201,7 @@ void QtProtobufNestedTest::NeighborTest()
     QCOMPARE(test.neighborNested().testFieldInt(), 15);
     QCOMPARE(test.neighborNested2().testFieldInt(), 20);
 
-    const char *propertyName = "neighborNested";
+    const char *propertyName = "neighborNested_p";
 
     nested.setTestFieldInt(55);
     QVERIFY(test.setProperty(propertyName,
@@ -210,7 +210,7 @@ void QtProtobufNestedTest::NeighborTest()
     QCOMPARE(*(test.property(propertyName).value<NestedFieldMessage::NestedMessage *>()), nested);
     QCOMPARE(test.neighborNested(), nested);
 
-    propertyName = "neighborNested2";
+    propertyName = "neighborNested2_p";
 
     level2.setTestFieldInt(75);
     QVERIFY(test.setProperty(
@@ -244,8 +244,8 @@ void QtProtobufNestedTest::NestedNoFieldsTest()
 
 void QtProtobufNestedTest::NestedCyclingTest()
 {
-    qProtobufAssertMessagePropertyRegistered<NestedCyclingA::NestedCyclingB, qtprotobufnamespace::tests::nested::NestedCyclingAA::NestedCyclingBB*>(1, "qtprotobufnamespace::tests::nested::NestedCyclingAA::NestedCyclingBB*", "testField");
-    qProtobufAssertMessagePropertyRegistered<NestedCyclingAA::NestedCyclingBB, qtprotobufnamespace::tests::nested::NestedCyclingA::NestedCyclingB*>(1, "qtprotobufnamespace::tests::nested::NestedCyclingA::NestedCyclingB*", "testField");
+    qProtobufAssertMessagePropertyRegistered<NestedCyclingA::NestedCyclingB, qtprotobufnamespace::tests::nested::NestedCyclingAA::NestedCyclingBB*>(1, "qtprotobufnamespace::tests::nested::NestedCyclingAA::NestedCyclingBB*", "testField_p");
+    qProtobufAssertMessagePropertyRegistered<NestedCyclingAA::NestedCyclingBB, qtprotobufnamespace::tests::nested::NestedCyclingA::NestedCyclingB*>(1, "qtprotobufnamespace::tests::nested::NestedCyclingA::NestedCyclingB*", "testField_p");
 
     NestedCyclingA::NestedCyclingB test;
     NestedCyclingAA::NestedCyclingBB test2;

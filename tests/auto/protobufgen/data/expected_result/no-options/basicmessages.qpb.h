@@ -653,7 +653,7 @@ class ComplexMessage : public QProtobufMessage
     Q_PROTOBUF_OBJECT
     Q_DECLARE_PROTOBUF_SERIALIZERS(ComplexMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
-    Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage *testComplexField READ testComplexField_p WRITE setTestComplexField_p)
+    Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage *testComplexField_p READ testComplexField_p WRITE setTestComplexField_p)
 
 public:
     enum QtProtobufFieldEnum {

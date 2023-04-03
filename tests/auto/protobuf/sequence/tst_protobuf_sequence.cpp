@@ -23,14 +23,14 @@ using namespace qtprotobufnamespace::tests;
 
 void QtProtobufGenerationSequenceTest::SequenceTest()
 {
-    qProtobufAssertMessagePropertyRegistered<sequence::TestMessageSequence, sequence::TestMessageSequence2*>(1, "qtprotobufnamespace::tests::sequence::TestMessageSequence2*", "testField");
+    qProtobufAssertMessagePropertyRegistered<sequence::TestMessageSequence, sequence::TestMessageSequence2*>(1, "qtprotobufnamespace::tests::sequence::TestMessageSequence2*", "testField_p");
     qProtobufAssertMessagePropertyRegistered<sequence::TestMessageSequence2, bool>(1, "bool", "testField");
 }
 
 void QtProtobufGenerationSequenceTest::CyclingTest()
 {
-    qProtobufAssertMessagePropertyRegistered<sequence::CyclingFirstDependency, sequence::CyclingSecondDependency*>(1, "qtprotobufnamespace::tests::sequence::CyclingSecondDependency*", "testField");
-    qProtobufAssertMessagePropertyRegistered<sequence::CyclingSecondDependency, sequence::CyclingFirstDependency*>(1, "qtprotobufnamespace::tests::sequence::CyclingFirstDependency*", "testField");
+    qProtobufAssertMessagePropertyRegistered<sequence::CyclingFirstDependency, sequence::CyclingSecondDependency*>(1, "qtprotobufnamespace::tests::sequence::CyclingSecondDependency*", "testField_p");
+    qProtobufAssertMessagePropertyRegistered<sequence::CyclingSecondDependency, sequence::CyclingFirstDependency*>(1, "qtprotobufnamespace::tests::sequence::CyclingFirstDependency*", "testField_p");
     sequence::CyclingFirstDependency test;
     sequence::CyclingSecondDependency test2;
     test.setTestField(test2);

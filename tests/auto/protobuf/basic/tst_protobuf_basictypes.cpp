@@ -81,7 +81,7 @@ void QtProtobufTypesGenerationTest::BoolMessageTest()
 
 void QtProtobufTypesGenerationTest::IntMessageTest()
 {
-    const char *propertyName = "testFieldInt" QT_PROTOBUF_PROPERTY_SUFFIX;
+    const char *propertyName = "testFieldInt";
     qProtobufAssertMessagePropertyRegistered<qtprotobufnamespace::tests::SimpleIntMessage, QtProtobuf::int32>(1, "QtProtobuf::int32", propertyName);
 
     qtprotobufnamespace::tests::SimpleIntMessage test;
@@ -171,7 +171,7 @@ void QtProtobufTypesGenerationTest::UInt64MessageTest()
 
 void QtProtobufTypesGenerationTest::FixedInt32MessageTest()
 {
-    const char *propertyName = "testFieldFixedInt32" QT_PROTOBUF_PROPERTY_SUFFIX;
+    const char *propertyName = "testFieldFixedInt32";
     qProtobufAssertMessagePropertyRegistered<SimpleFixedInt32Message, QtProtobuf::fixed32>(1, "QtProtobuf::fixed32", propertyName);
 
     SimpleFixedInt32Message test;
@@ -201,7 +201,7 @@ void QtProtobufTypesGenerationTest::FixedInt64MessageTest()
 
 void QtProtobufTypesGenerationTest::SFixedInt32MessageTest()
 {
-    const char *propertyName = "testFieldFixedInt32" QT_PROTOBUF_PROPERTY_SUFFIX;
+    const char *propertyName = "testFieldFixedInt32";
     qProtobufAssertMessagePropertyRegistered<SimpleSFixedInt32Message, QtProtobuf::sfixed32>(1, "QtProtobuf::sfixed32", propertyName);
 
     SimpleSFixedInt32Message test;
@@ -287,7 +287,7 @@ void QtProtobufTypesGenerationTest::DoubleMessageTest()
 
 void QtProtobufTypesGenerationTest::ComplexMessageTest()
 {
-    const char *propertyName = "testComplexField";
+    const char *propertyName = "testComplexField_p";
     qProtobufAssertMessagePropertyRegistered<qtprotobufnamespace::tests::ComplexMessage, qtprotobufnamespace::tests::SimpleStringMessage*>(
                 2, "qtprotobufnamespace::tests::SimpleStringMessage*", propertyName);
 

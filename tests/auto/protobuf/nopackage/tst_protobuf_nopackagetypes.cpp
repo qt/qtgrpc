@@ -30,7 +30,7 @@ void QtProtobufNoPackageTypesGenerationTest::NoPackageEmptyMessageMessageTest()
 
 void QtProtobufNoPackageTypesGenerationTest::NoPackageSimpleIntMessageTest()
 {
-    const char *propertyName = "testFieldInt" QT_PROTOBUF_PROPERTY_SUFFIX;
+    const char *propertyName = "testFieldInt";
     qProtobufAssertMessagePropertyRegistered<::SimpleIntMessage, QtProtobuf::int32>(1, "QtProtobuf::int32", propertyName);
 
     ::SimpleIntMessage test;
@@ -68,7 +68,7 @@ void QtProtobufNoPackageTypesGenerationTest::NoPackageEnumTest()
 
 void QtProtobufNoPackageTypesGenerationTest::NoPackageExternalTest()
 {
-    const char *propertyName = "testField";
+    const char *propertyName = "testField_p";
     qProtobufAssertMessagePropertyRegistered<NoPackageExternalMessage, SimpleIntMessageExt*>(1, "SimpleIntMessageExt*", propertyName);
 
     SimpleIntMessageExt intMsg;
@@ -85,7 +85,7 @@ void QtProtobufNoPackageTypesGenerationTest::NoPackageExternalTest()
 
 void QtProtobufNoPackageTypesGenerationTest::NoPackageMessageTest()
 {
-    const char *propertyName = "testField";
+    const char *propertyName = "testField_p";
     qProtobufAssertMessagePropertyRegistered<NoPackageMessage, SimpleIntMessage*>(1, "SimpleIntMessage*", propertyName);
 
     SimpleIntMessage intMsg;

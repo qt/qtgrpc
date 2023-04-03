@@ -53,6 +53,7 @@ public:
     static const char *PropertyNonScriptableAliasTemplate();
     static const char *PropertyMessageTemplate();
     static const char *PropertyQmlListTemplate();
+    static const char *PropertyQmlMessageTemplate();
     static const char *PropertyOneofTemplate();
     static const char *PropertyOneofMessageTemplate();
     static const char *PropertyHasOneofTemplate();
@@ -124,6 +125,7 @@ public:
     static const char *PrivateSetterMessageDeclarationTemplate();
     static const char *PrivateSetterMessageDefinitionTemplate();
     static const char *SetterMessageDeclarationTemplate();
+    static const char *SetterMessageQmlDeclarationTemplate();
     static const char *SetterMessageDefinitionTemplate();
     static const char *SetterComplexDeclarationTemplate();
     static const char *SetterComplexDefinitionTemplate();

@@ -27,7 +27,7 @@ void QtProtobufExtraNamespaceTest::EmptyMessageTest()
 
 void QtProtobufExtraNamespaceTest::ComplexMessageTest()
 {
-    const char *propertyName = "testComplexField";
+    const char *propertyName = "testComplexField_p";
     qProtobufAssertMessagePropertyRegistered<ComplexMessage, SimpleStringMessage*>(
                 2, "MyTestNamespace::qtprotobufnamespace::tests::SimpleStringMessage*", propertyName);
 
