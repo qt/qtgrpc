@@ -305,16 +305,17 @@ void QtProtobufRepeatedTypesGenerationTest::MoveOperatorRepeatedTest()
     const char *propertyName = "testRepeatedInt";
     RepeatedIntMessage test;
     RepeatedIntMessage test2;
-    test2.setTestRepeatedInt({ 55, 44, 11, 33 });
-
-    RepeatedIntMessage test3(std::move(test2));
-    test2.setTestRepeatedInt({55,44,11,35});
-
     test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::int32List>({55}));
-    test.setTestRepeatedInt({44});
+
+    test2.setTestRepeatedInt({ 55, 44, 11, 33 });
     test = std::move(test2);
-    QCOMPARE(QtProtobuf::int32List({55,44,11,35}), test.testRepeatedInt());
-    QVERIFY(test2.testRepeatedInt().isEmpty());
+    QCOMPARE(QtProtobuf::int32List({ 55, 44, 11, 33 }), test.testRepeatedInt());
+
+    RepeatedIntMessage test3;
+    test3.setTestRepeatedInt({ 55, 44, 11, 35 });
+    RepeatedIntMessage test4(std::move(test3));
+
+    QCOMPARE(QtProtobuf::int32List({ 55, 44, 11, 35 }), test4.testRepeatedInt());
 }
 
 void QtProtobufRepeatedTypesGenerationTest::RepeatedComplexMessageCompareTest()

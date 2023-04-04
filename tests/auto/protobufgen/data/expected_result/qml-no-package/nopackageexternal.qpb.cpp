@@ -4,6 +4,25 @@
 #include <QtProtobuf/qprotobufserializer.h>
 #include <QtQml/qqmlengine.h>
 
+
+class SimpleIntMessageExt_QtProtobufData : public QSharedData
+{
+public:
+    SimpleIntMessageExt_QtProtobufData()
+        : QSharedData(),
+          m_testFieldInt(0)
+    {
+    }
+
+    SimpleIntMessageExt_QtProtobufData(const SimpleIntMessageExt_QtProtobufData &other)
+        : QSharedData(other),
+          m_testFieldInt(other.m_testFieldInt)
+    {
+    }
+
+    QtProtobuf::int32 m_testFieldInt;
+};
+
 SimpleIntMessageExt::~SimpleIntMessageExt() = default;
 
 static constexpr struct {
@@ -52,45 +71,67 @@ void SimpleIntMessageExt::registerTypes()
 
 SimpleIntMessageExt::SimpleIntMessageExt()
     : QProtobufMessage(&SimpleIntMessageExt::staticMetaObject),
-      m_testFieldInt(0)
+      dptr(new SimpleIntMessageExt_QtProtobufData)
 {
 }
 
 SimpleIntMessageExt::SimpleIntMessageExt(const SimpleIntMessageExt &other)
     : QProtobufMessage(other),
-      m_testFieldInt(other.m_testFieldInt)
+      dptr(other.dptr)
 {
 }
-
 SimpleIntMessageExt &SimpleIntMessageExt::operator =(const SimpleIntMessageExt &other)
 {
     QProtobufMessage::operator=(other);
-    setTestFieldInt(other.m_testFieldInt);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleIntMessageExt::SimpleIntMessageExt(SimpleIntMessageExt &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestFieldInt(std::exchange(other.m_testFieldInt, 0));
 }
-
 SimpleIntMessageExt &SimpleIntMessageExt::operator =(SimpleIntMessageExt &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestFieldInt(std::exchange(other.m_testFieldInt, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleIntMessageExt::operator ==(const SimpleIntMessageExt &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testFieldInt == other.m_testFieldInt;
+        && dptr->m_testFieldInt == other.dptr->m_testFieldInt;
 }
 
 bool SimpleIntMessageExt::operator !=(const SimpleIntMessageExt &other) const
 {
     return !this->operator ==(other);
+}
+
+int SimpleIntMessageExt::testFieldInt_p() const
+{
+    return dptr->m_testFieldInt;
+}
+
+QtProtobuf::int32 SimpleIntMessageExt::testFieldInt() const
+{
+    return dptr->m_testFieldInt;
+}
+
+void SimpleIntMessageExt::setTestFieldInt_p(const int &testFieldInt)
+{
+    if (dptr->m_testFieldInt != testFieldInt) {
+        dptr.detach();
+        dptr->m_testFieldInt = testFieldInt;
+    }
+}
+
+void SimpleIntMessageExt::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
+{
+    if (dptr->m_testFieldInt != testFieldInt) {
+        dptr.detach();
+        dptr->m_testFieldInt = testFieldInt;
+    }
 }
 
 

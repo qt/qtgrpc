@@ -13,6 +13,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -195,6 +196,7 @@ using SimpleSFixed64ComplexMessageMapMessageRepeated = QList<std::shared_ptr<Sim
 class SimpleStringComplexMessageMapMessage;
 using SimpleStringComplexMessageMapMessageRepeated = QList<std::shared_ptr<SimpleStringComplexMessageMapMessage>>;
 
+class SimpleSInt32StringMapMessage_QtProtobufData;
 class SimpleSInt32StringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -218,23 +220,16 @@ public:
     bool operator ==(const SimpleSInt32StringMapMessage &other) const;
     bool operator !=(const SimpleSInt32StringMapMessage &other) const;
 
-    SimpleSInt32StringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt32StringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt32StringMapMessage::MapFieldEntry mapField() const;
+    SimpleSInt32StringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt32StringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt32StringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt32StringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt64StringMapMessage_QtProtobufData;
 class SimpleSInt64StringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -258,23 +253,16 @@ public:
     bool operator ==(const SimpleSInt64StringMapMessage &other) const;
     bool operator !=(const SimpleSInt64StringMapMessage &other) const;
 
-    SimpleSInt64StringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt64StringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt64StringMapMessage::MapFieldEntry mapField() const;
+    SimpleSInt64StringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt64StringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt64StringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt64StringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt32StringMapMessage_QtProtobufData;
 class SimpleInt32StringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -298,23 +286,16 @@ public:
     bool operator ==(const SimpleInt32StringMapMessage &other) const;
     bool operator !=(const SimpleInt32StringMapMessage &other) const;
 
-    SimpleInt32StringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt32StringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt32StringMapMessage::MapFieldEntry mapField() const;
+    SimpleInt32StringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt32StringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt32StringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt32StringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt64StringMapMessage_QtProtobufData;
 class SimpleInt64StringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -338,23 +319,16 @@ public:
     bool operator ==(const SimpleInt64StringMapMessage &other) const;
     bool operator !=(const SimpleInt64StringMapMessage &other) const;
 
-    SimpleInt64StringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt64StringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt64StringMapMessage::MapFieldEntry mapField() const;
+    SimpleInt64StringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt64StringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt64StringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt64StringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt32StringMapMessage_QtProtobufData;
 class SimpleUInt32StringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -378,23 +352,16 @@ public:
     bool operator ==(const SimpleUInt32StringMapMessage &other) const;
     bool operator !=(const SimpleUInt32StringMapMessage &other) const;
 
-    SimpleUInt32StringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt32StringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt32StringMapMessage::MapFieldEntry mapField() const;
+    SimpleUInt32StringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt32StringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt32StringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt32StringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt64StringMapMessage_QtProtobufData;
 class SimpleUInt64StringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -418,23 +385,16 @@ public:
     bool operator ==(const SimpleUInt64StringMapMessage &other) const;
     bool operator !=(const SimpleUInt64StringMapMessage &other) const;
 
-    SimpleUInt64StringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt64StringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt64StringMapMessage::MapFieldEntry mapField() const;
+    SimpleUInt64StringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt64StringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt64StringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt64StringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed32StringMapMessage_QtProtobufData;
 class SimpleFixed32StringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -458,23 +418,16 @@ public:
     bool operator ==(const SimpleFixed32StringMapMessage &other) const;
     bool operator !=(const SimpleFixed32StringMapMessage &other) const;
 
-    SimpleFixed32StringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed32StringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed32StringMapMessage::MapFieldEntry mapField() const;
+    SimpleFixed32StringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed32StringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed32StringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed32StringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed64StringMapMessage_QtProtobufData;
 class SimpleFixed64StringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -498,23 +451,16 @@ public:
     bool operator ==(const SimpleFixed64StringMapMessage &other) const;
     bool operator !=(const SimpleFixed64StringMapMessage &other) const;
 
-    SimpleFixed64StringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed64StringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed64StringMapMessage::MapFieldEntry mapField() const;
+    SimpleFixed64StringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed64StringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed64StringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed64StringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed32StringMapMessage_QtProtobufData;
 class SimpleSFixed32StringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -538,23 +484,16 @@ public:
     bool operator ==(const SimpleSFixed32StringMapMessage &other) const;
     bool operator !=(const SimpleSFixed32StringMapMessage &other) const;
 
-    SimpleSFixed32StringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed32StringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed32StringMapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed32StringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed32StringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed32StringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed32StringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed64StringMapMessage_QtProtobufData;
 class SimpleSFixed64StringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -578,23 +517,16 @@ public:
     bool operator ==(const SimpleSFixed64StringMapMessage &other) const;
     bool operator !=(const SimpleSFixed64StringMapMessage &other) const;
 
-    SimpleSFixed64StringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed64StringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed64StringMapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed64StringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed64StringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed64StringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed64StringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleStringStringMapMessage_QtProtobufData;
 class SimpleStringStringMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -618,23 +550,16 @@ public:
     bool operator ==(const SimpleStringStringMapMessage &other) const;
     bool operator !=(const SimpleStringStringMapMessage &other) const;
 
-    SimpleStringStringMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleStringStringMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleStringStringMapMessage::MapFieldEntry mapField() const;
+    SimpleStringStringMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleStringStringMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleStringStringMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleStringStringMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt32SInt32MapMessage_QtProtobufData;
 class SimpleSInt32SInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -658,23 +583,16 @@ public:
     bool operator ==(const SimpleSInt32SInt32MapMessage &other) const;
     bool operator !=(const SimpleSInt32SInt32MapMessage &other) const;
 
-    SimpleSInt32SInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt32SInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt32SInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt32SInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt32SInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt32SInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt32SInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt64SInt32MapMessage_QtProtobufData;
 class SimpleSInt64SInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -698,23 +616,16 @@ public:
     bool operator ==(const SimpleSInt64SInt32MapMessage &other) const;
     bool operator !=(const SimpleSInt64SInt32MapMessage &other) const;
 
-    SimpleSInt64SInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt64SInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt64SInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt64SInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt64SInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt64SInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt64SInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt32SInt32MapMessage_QtProtobufData;
 class SimpleInt32SInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -738,23 +649,16 @@ public:
     bool operator ==(const SimpleInt32SInt32MapMessage &other) const;
     bool operator !=(const SimpleInt32SInt32MapMessage &other) const;
 
-    SimpleInt32SInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt32SInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt32SInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleInt32SInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt32SInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt32SInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt32SInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt64SInt32MapMessage_QtProtobufData;
 class SimpleInt64SInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -778,23 +682,16 @@ public:
     bool operator ==(const SimpleInt64SInt32MapMessage &other) const;
     bool operator !=(const SimpleInt64SInt32MapMessage &other) const;
 
-    SimpleInt64SInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt64SInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt64SInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleInt64SInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt64SInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt64SInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt64SInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt32SInt32MapMessage_QtProtobufData;
 class SimpleUInt32SInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -818,23 +715,16 @@ public:
     bool operator ==(const SimpleUInt32SInt32MapMessage &other) const;
     bool operator !=(const SimpleUInt32SInt32MapMessage &other) const;
 
-    SimpleUInt32SInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt32SInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt32SInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt32SInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt32SInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt32SInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt32SInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt64SInt32MapMessage_QtProtobufData;
 class SimpleUInt64SInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -858,23 +748,16 @@ public:
     bool operator ==(const SimpleUInt64SInt32MapMessage &other) const;
     bool operator !=(const SimpleUInt64SInt32MapMessage &other) const;
 
-    SimpleUInt64SInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt64SInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt64SInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt64SInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt64SInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt64SInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt64SInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed32SInt32MapMessage_QtProtobufData;
 class SimpleFixed32SInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -898,23 +781,16 @@ public:
     bool operator ==(const SimpleFixed32SInt32MapMessage &other) const;
     bool operator !=(const SimpleFixed32SInt32MapMessage &other) const;
 
-    SimpleFixed32SInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed32SInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed32SInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed32SInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed32SInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed32SInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed32SInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed64SInt32MapMessage_QtProtobufData;
 class SimpleFixed64SInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -938,23 +814,16 @@ public:
     bool operator ==(const SimpleFixed64SInt32MapMessage &other) const;
     bool operator !=(const SimpleFixed64SInt32MapMessage &other) const;
 
-    SimpleFixed64SInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed64SInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed64SInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed64SInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed64SInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed64SInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed64SInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed32SInt32MapMessage_QtProtobufData;
 class SimpleSFixed32SInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -978,23 +847,16 @@ public:
     bool operator ==(const SimpleSFixed32SInt32MapMessage &other) const;
     bool operator !=(const SimpleSFixed32SInt32MapMessage &other) const;
 
-    SimpleSFixed32SInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed32SInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed32SInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed32SInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed32SInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed32SInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed32SInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed64SInt32MapMessage_QtProtobufData;
 class SimpleSFixed64SInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1018,23 +880,16 @@ public:
     bool operator ==(const SimpleSFixed64SInt32MapMessage &other) const;
     bool operator !=(const SimpleSFixed64SInt32MapMessage &other) const;
 
-    SimpleSFixed64SInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed64SInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed64SInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed64SInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed64SInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed64SInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed64SInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleStringSInt32MapMessage_QtProtobufData;
 class SimpleStringSInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1058,23 +913,16 @@ public:
     bool operator ==(const SimpleStringSInt32MapMessage &other) const;
     bool operator !=(const SimpleStringSInt32MapMessage &other) const;
 
-    SimpleStringSInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleStringSInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleStringSInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleStringSInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleStringSInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleStringSInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleStringSInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt32SInt64MapMessage_QtProtobufData;
 class SimpleSInt32SInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1098,23 +946,16 @@ public:
     bool operator ==(const SimpleSInt32SInt64MapMessage &other) const;
     bool operator !=(const SimpleSInt32SInt64MapMessage &other) const;
 
-    SimpleSInt32SInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt32SInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt32SInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt32SInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt32SInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt32SInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt32SInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt64SInt64MapMessage_QtProtobufData;
 class SimpleSInt64SInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1138,23 +979,16 @@ public:
     bool operator ==(const SimpleSInt64SInt64MapMessage &other) const;
     bool operator !=(const SimpleSInt64SInt64MapMessage &other) const;
 
-    SimpleSInt64SInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt64SInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt64SInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt64SInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt64SInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt64SInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt64SInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt32SInt64MapMessage_QtProtobufData;
 class SimpleInt32SInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1178,23 +1012,16 @@ public:
     bool operator ==(const SimpleInt32SInt64MapMessage &other) const;
     bool operator !=(const SimpleInt32SInt64MapMessage &other) const;
 
-    SimpleInt32SInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt32SInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt32SInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleInt32SInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt32SInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt32SInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt32SInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt64SInt64MapMessage_QtProtobufData;
 class SimpleInt64SInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1218,23 +1045,16 @@ public:
     bool operator ==(const SimpleInt64SInt64MapMessage &other) const;
     bool operator !=(const SimpleInt64SInt64MapMessage &other) const;
 
-    SimpleInt64SInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt64SInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt64SInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleInt64SInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt64SInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt64SInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt64SInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt32SInt64MapMessage_QtProtobufData;
 class SimpleUInt32SInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1258,23 +1078,16 @@ public:
     bool operator ==(const SimpleUInt32SInt64MapMessage &other) const;
     bool operator !=(const SimpleUInt32SInt64MapMessage &other) const;
 
-    SimpleUInt32SInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt32SInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt32SInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt32SInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt32SInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt32SInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt32SInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt64SInt64MapMessage_QtProtobufData;
 class SimpleUInt64SInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1298,23 +1111,16 @@ public:
     bool operator ==(const SimpleUInt64SInt64MapMessage &other) const;
     bool operator !=(const SimpleUInt64SInt64MapMessage &other) const;
 
-    SimpleUInt64SInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt64SInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt64SInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt64SInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt64SInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt64SInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt64SInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed32SInt64MapMessage_QtProtobufData;
 class SimpleFixed32SInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1338,23 +1144,16 @@ public:
     bool operator ==(const SimpleFixed32SInt64MapMessage &other) const;
     bool operator !=(const SimpleFixed32SInt64MapMessage &other) const;
 
-    SimpleFixed32SInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed32SInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed32SInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed32SInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed32SInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed32SInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed32SInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed64SInt64MapMessage_QtProtobufData;
 class SimpleFixed64SInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1378,23 +1177,16 @@ public:
     bool operator ==(const SimpleFixed64SInt64MapMessage &other) const;
     bool operator !=(const SimpleFixed64SInt64MapMessage &other) const;
 
-    SimpleFixed64SInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed64SInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed64SInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed64SInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed64SInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed64SInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed64SInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed32SInt64MapMessage_QtProtobufData;
 class SimpleSFixed32SInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1418,23 +1210,16 @@ public:
     bool operator ==(const SimpleSFixed32SInt64MapMessage &other) const;
     bool operator !=(const SimpleSFixed32SInt64MapMessage &other) const;
 
-    SimpleSFixed32SInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed32SInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed32SInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed32SInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed32SInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed32SInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed32SInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed64SInt64MapMessage_QtProtobufData;
 class SimpleSFixed64SInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1458,23 +1243,16 @@ public:
     bool operator ==(const SimpleSFixed64SInt64MapMessage &other) const;
     bool operator !=(const SimpleSFixed64SInt64MapMessage &other) const;
 
-    SimpleSFixed64SInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed64SInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed64SInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed64SInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed64SInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed64SInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed64SInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleStringSInt64MapMessage_QtProtobufData;
 class SimpleStringSInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1498,23 +1276,16 @@ public:
     bool operator ==(const SimpleStringSInt64MapMessage &other) const;
     bool operator !=(const SimpleStringSInt64MapMessage &other) const;
 
-    SimpleStringSInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleStringSInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleStringSInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleStringSInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleStringSInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleStringSInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleStringSInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt32UInt32MapMessage_QtProtobufData;
 class SimpleSInt32UInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1538,23 +1309,16 @@ public:
     bool operator ==(const SimpleSInt32UInt32MapMessage &other) const;
     bool operator !=(const SimpleSInt32UInt32MapMessage &other) const;
 
-    SimpleSInt32UInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt32UInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt32UInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt32UInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt32UInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt32UInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt32UInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt64UInt32MapMessage_QtProtobufData;
 class SimpleSInt64UInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1578,23 +1342,16 @@ public:
     bool operator ==(const SimpleSInt64UInt32MapMessage &other) const;
     bool operator !=(const SimpleSInt64UInt32MapMessage &other) const;
 
-    SimpleSInt64UInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt64UInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt64UInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt64UInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt64UInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt64UInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt64UInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt32UInt32MapMessage_QtProtobufData;
 class SimpleInt32UInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1618,23 +1375,16 @@ public:
     bool operator ==(const SimpleInt32UInt32MapMessage &other) const;
     bool operator !=(const SimpleInt32UInt32MapMessage &other) const;
 
-    SimpleInt32UInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt32UInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt32UInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleInt32UInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt32UInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt32UInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt32UInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt64UInt32MapMessage_QtProtobufData;
 class SimpleInt64UInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1658,23 +1408,16 @@ public:
     bool operator ==(const SimpleInt64UInt32MapMessage &other) const;
     bool operator !=(const SimpleInt64UInt32MapMessage &other) const;
 
-    SimpleInt64UInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt64UInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt64UInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleInt64UInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt64UInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt64UInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt64UInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt32UInt32MapMessage_QtProtobufData;
 class SimpleUInt32UInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1698,23 +1441,16 @@ public:
     bool operator ==(const SimpleUInt32UInt32MapMessage &other) const;
     bool operator !=(const SimpleUInt32UInt32MapMessage &other) const;
 
-    SimpleUInt32UInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt32UInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt32UInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt32UInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt32UInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt32UInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt32UInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt64UInt32MapMessage_QtProtobufData;
 class SimpleUInt64UInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1738,23 +1474,16 @@ public:
     bool operator ==(const SimpleUInt64UInt32MapMessage &other) const;
     bool operator !=(const SimpleUInt64UInt32MapMessage &other) const;
 
-    SimpleUInt64UInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt64UInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt64UInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt64UInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt64UInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt64UInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt64UInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed32UInt32MapMessage_QtProtobufData;
 class SimpleFixed32UInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1778,23 +1507,16 @@ public:
     bool operator ==(const SimpleFixed32UInt32MapMessage &other) const;
     bool operator !=(const SimpleFixed32UInt32MapMessage &other) const;
 
-    SimpleFixed32UInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed32UInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed32UInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed32UInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed32UInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed32UInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed32UInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed64UInt32MapMessage_QtProtobufData;
 class SimpleFixed64UInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1818,23 +1540,16 @@ public:
     bool operator ==(const SimpleFixed64UInt32MapMessage &other) const;
     bool operator !=(const SimpleFixed64UInt32MapMessage &other) const;
 
-    SimpleFixed64UInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed64UInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed64UInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed64UInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed64UInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed64UInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed64UInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed32UInt32MapMessage_QtProtobufData;
 class SimpleSFixed32UInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1858,23 +1573,16 @@ public:
     bool operator ==(const SimpleSFixed32UInt32MapMessage &other) const;
     bool operator !=(const SimpleSFixed32UInt32MapMessage &other) const;
 
-    SimpleSFixed32UInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed32UInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed32UInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed32UInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed32UInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed32UInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed32UInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed64UInt32MapMessage_QtProtobufData;
 class SimpleSFixed64UInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1898,23 +1606,16 @@ public:
     bool operator ==(const SimpleSFixed64UInt32MapMessage &other) const;
     bool operator !=(const SimpleSFixed64UInt32MapMessage &other) const;
 
-    SimpleSFixed64UInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed64UInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed64UInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed64UInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed64UInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed64UInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed64UInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleStringUInt32MapMessage_QtProtobufData;
 class SimpleStringUInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1938,23 +1639,16 @@ public:
     bool operator ==(const SimpleStringUInt32MapMessage &other) const;
     bool operator !=(const SimpleStringUInt32MapMessage &other) const;
 
-    SimpleStringUInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleStringUInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleStringUInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleStringUInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleStringUInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleStringUInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleStringUInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt32UInt64MapMessage_QtProtobufData;
 class SimpleSInt32UInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -1978,23 +1672,16 @@ public:
     bool operator ==(const SimpleSInt32UInt64MapMessage &other) const;
     bool operator !=(const SimpleSInt32UInt64MapMessage &other) const;
 
-    SimpleSInt32UInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt32UInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt32UInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt32UInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt32UInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt32UInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt32UInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt64UInt64MapMessage_QtProtobufData;
 class SimpleSInt64UInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2018,23 +1705,16 @@ public:
     bool operator ==(const SimpleSInt64UInt64MapMessage &other) const;
     bool operator !=(const SimpleSInt64UInt64MapMessage &other) const;
 
-    SimpleSInt64UInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt64UInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt64UInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt64UInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt64UInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt64UInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt64UInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt32UInt64MapMessage_QtProtobufData;
 class SimpleInt32UInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2058,23 +1738,16 @@ public:
     bool operator ==(const SimpleInt32UInt64MapMessage &other) const;
     bool operator !=(const SimpleInt32UInt64MapMessage &other) const;
 
-    SimpleInt32UInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt32UInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt32UInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleInt32UInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt32UInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt32UInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt32UInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt64UInt64MapMessage_QtProtobufData;
 class SimpleInt64UInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2098,23 +1771,16 @@ public:
     bool operator ==(const SimpleInt64UInt64MapMessage &other) const;
     bool operator !=(const SimpleInt64UInt64MapMessage &other) const;
 
-    SimpleInt64UInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt64UInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt64UInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleInt64UInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt64UInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt64UInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt64UInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt32UInt64MapMessage_QtProtobufData;
 class SimpleUInt32UInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2138,23 +1804,16 @@ public:
     bool operator ==(const SimpleUInt32UInt64MapMessage &other) const;
     bool operator !=(const SimpleUInt32UInt64MapMessage &other) const;
 
-    SimpleUInt32UInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt32UInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt32UInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt32UInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt32UInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt32UInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt32UInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt64UInt64MapMessage_QtProtobufData;
 class SimpleUInt64UInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2178,23 +1837,16 @@ public:
     bool operator ==(const SimpleUInt64UInt64MapMessage &other) const;
     bool operator !=(const SimpleUInt64UInt64MapMessage &other) const;
 
-    SimpleUInt64UInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt64UInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt64UInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt64UInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt64UInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt64UInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt64UInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed32UInt64MapMessage_QtProtobufData;
 class SimpleFixed32UInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2218,23 +1870,16 @@ public:
     bool operator ==(const SimpleFixed32UInt64MapMessage &other) const;
     bool operator !=(const SimpleFixed32UInt64MapMessage &other) const;
 
-    SimpleFixed32UInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed32UInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed32UInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed32UInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed32UInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed32UInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed32UInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed64UInt64MapMessage_QtProtobufData;
 class SimpleFixed64UInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2258,23 +1903,16 @@ public:
     bool operator ==(const SimpleFixed64UInt64MapMessage &other) const;
     bool operator !=(const SimpleFixed64UInt64MapMessage &other) const;
 
-    SimpleFixed64UInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed64UInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed64UInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed64UInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed64UInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed64UInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed64UInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed32UInt64MapMessage_QtProtobufData;
 class SimpleSFixed32UInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2298,23 +1936,16 @@ public:
     bool operator ==(const SimpleSFixed32UInt64MapMessage &other) const;
     bool operator !=(const SimpleSFixed32UInt64MapMessage &other) const;
 
-    SimpleSFixed32UInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed32UInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed32UInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed32UInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed32UInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed32UInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed32UInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed64UInt64MapMessage_QtProtobufData;
 class SimpleSFixed64UInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2338,23 +1969,16 @@ public:
     bool operator ==(const SimpleSFixed64UInt64MapMessage &other) const;
     bool operator !=(const SimpleSFixed64UInt64MapMessage &other) const;
 
-    SimpleSFixed64UInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed64UInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed64UInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed64UInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed64UInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed64UInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed64UInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleStringUInt64MapMessage_QtProtobufData;
 class SimpleStringUInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2378,23 +2002,16 @@ public:
     bool operator ==(const SimpleStringUInt64MapMessage &other) const;
     bool operator !=(const SimpleStringUInt64MapMessage &other) const;
 
-    SimpleStringUInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleStringUInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleStringUInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleStringUInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleStringUInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleStringUInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleStringUInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt32Int32MapMessage_QtProtobufData;
 class SimpleSInt32Int32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2418,23 +2035,16 @@ public:
     bool operator ==(const SimpleSInt32Int32MapMessage &other) const;
     bool operator !=(const SimpleSInt32Int32MapMessage &other) const;
 
-    SimpleSInt32Int32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt32Int32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt32Int32MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt32Int32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt32Int32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt32Int32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt32Int32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt64Int32MapMessage_QtProtobufData;
 class SimpleSInt64Int32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2458,23 +2068,16 @@ public:
     bool operator ==(const SimpleSInt64Int32MapMessage &other) const;
     bool operator !=(const SimpleSInt64Int32MapMessage &other) const;
 
-    SimpleSInt64Int32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt64Int32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt64Int32MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt64Int32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt64Int32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt64Int32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt64Int32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt32Int32MapMessage_QtProtobufData;
 class SimpleInt32Int32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2498,23 +2101,16 @@ public:
     bool operator ==(const SimpleInt32Int32MapMessage &other) const;
     bool operator !=(const SimpleInt32Int32MapMessage &other) const;
 
-    SimpleInt32Int32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt32Int32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt32Int32MapMessage::MapFieldEntry mapField() const;
+    SimpleInt32Int32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt32Int32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt32Int32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt32Int32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt64Int32MapMessage_QtProtobufData;
 class SimpleInt64Int32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2538,23 +2134,16 @@ public:
     bool operator ==(const SimpleInt64Int32MapMessage &other) const;
     bool operator !=(const SimpleInt64Int32MapMessage &other) const;
 
-    SimpleInt64Int32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt64Int32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt64Int32MapMessage::MapFieldEntry mapField() const;
+    SimpleInt64Int32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt64Int32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt64Int32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt64Int32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt32Int32MapMessage_QtProtobufData;
 class SimpleUInt32Int32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2578,23 +2167,16 @@ public:
     bool operator ==(const SimpleUInt32Int32MapMessage &other) const;
     bool operator !=(const SimpleUInt32Int32MapMessage &other) const;
 
-    SimpleUInt32Int32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt32Int32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt32Int32MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt32Int32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt32Int32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt32Int32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt32Int32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt64Int32MapMessage_QtProtobufData;
 class SimpleUInt64Int32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2618,23 +2200,16 @@ public:
     bool operator ==(const SimpleUInt64Int32MapMessage &other) const;
     bool operator !=(const SimpleUInt64Int32MapMessage &other) const;
 
-    SimpleUInt64Int32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt64Int32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt64Int32MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt64Int32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt64Int32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt64Int32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt64Int32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed32Int32MapMessage_QtProtobufData;
 class SimpleFixed32Int32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2658,23 +2233,16 @@ public:
     bool operator ==(const SimpleFixed32Int32MapMessage &other) const;
     bool operator !=(const SimpleFixed32Int32MapMessage &other) const;
 
-    SimpleFixed32Int32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed32Int32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed32Int32MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed32Int32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed32Int32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed32Int32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed32Int32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed64Int32MapMessage_QtProtobufData;
 class SimpleFixed64Int32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2698,23 +2266,16 @@ public:
     bool operator ==(const SimpleFixed64Int32MapMessage &other) const;
     bool operator !=(const SimpleFixed64Int32MapMessage &other) const;
 
-    SimpleFixed64Int32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed64Int32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed64Int32MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed64Int32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed64Int32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed64Int32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed64Int32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed32Int32MapMessage_QtProtobufData;
 class SimpleSFixed32Int32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2738,23 +2299,16 @@ public:
     bool operator ==(const SimpleSFixed32Int32MapMessage &other) const;
     bool operator !=(const SimpleSFixed32Int32MapMessage &other) const;
 
-    SimpleSFixed32Int32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed32Int32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed32Int32MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed32Int32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed32Int32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed32Int32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed32Int32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed64Int32MapMessage_QtProtobufData;
 class SimpleSFixed64Int32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2778,23 +2332,16 @@ public:
     bool operator ==(const SimpleSFixed64Int32MapMessage &other) const;
     bool operator !=(const SimpleSFixed64Int32MapMessage &other) const;
 
-    SimpleSFixed64Int32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed64Int32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed64Int32MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed64Int32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed64Int32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed64Int32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed64Int32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleStringInt32MapMessage_QtProtobufData;
 class SimpleStringInt32MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2818,23 +2365,16 @@ public:
     bool operator ==(const SimpleStringInt32MapMessage &other) const;
     bool operator !=(const SimpleStringInt32MapMessage &other) const;
 
-    SimpleStringInt32MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleStringInt32MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleStringInt32MapMessage::MapFieldEntry mapField() const;
+    SimpleStringInt32MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleStringInt32MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleStringInt32MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleStringInt32MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt32Int64MapMessage_QtProtobufData;
 class SimpleSInt32Int64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2858,23 +2398,16 @@ public:
     bool operator ==(const SimpleSInt32Int64MapMessage &other) const;
     bool operator !=(const SimpleSInt32Int64MapMessage &other) const;
 
-    SimpleSInt32Int64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt32Int64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt32Int64MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt32Int64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt32Int64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt32Int64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt32Int64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt64Int64MapMessage_QtProtobufData;
 class SimpleSInt64Int64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2898,23 +2431,16 @@ public:
     bool operator ==(const SimpleSInt64Int64MapMessage &other) const;
     bool operator !=(const SimpleSInt64Int64MapMessage &other) const;
 
-    SimpleSInt64Int64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt64Int64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt64Int64MapMessage::MapFieldEntry mapField() const;
+    SimpleSInt64Int64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt64Int64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt64Int64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt64Int64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt32Int64MapMessage_QtProtobufData;
 class SimpleInt32Int64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2938,23 +2464,16 @@ public:
     bool operator ==(const SimpleInt32Int64MapMessage &other) const;
     bool operator !=(const SimpleInt32Int64MapMessage &other) const;
 
-    SimpleInt32Int64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt32Int64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt32Int64MapMessage::MapFieldEntry mapField() const;
+    SimpleInt32Int64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt32Int64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt32Int64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt32Int64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt64Int64MapMessage_QtProtobufData;
 class SimpleInt64Int64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -2978,23 +2497,16 @@ public:
     bool operator ==(const SimpleInt64Int64MapMessage &other) const;
     bool operator !=(const SimpleInt64Int64MapMessage &other) const;
 
-    SimpleInt64Int64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt64Int64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt64Int64MapMessage::MapFieldEntry mapField() const;
+    SimpleInt64Int64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt64Int64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt64Int64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt64Int64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt32Int64MapMessage_QtProtobufData;
 class SimpleUInt32Int64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3018,23 +2530,16 @@ public:
     bool operator ==(const SimpleUInt32Int64MapMessage &other) const;
     bool operator !=(const SimpleUInt32Int64MapMessage &other) const;
 
-    SimpleUInt32Int64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt32Int64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt32Int64MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt32Int64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt32Int64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt32Int64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt32Int64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt64Int64MapMessage_QtProtobufData;
 class SimpleUInt64Int64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3058,23 +2563,16 @@ public:
     bool operator ==(const SimpleUInt64Int64MapMessage &other) const;
     bool operator !=(const SimpleUInt64Int64MapMessage &other) const;
 
-    SimpleUInt64Int64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt64Int64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt64Int64MapMessage::MapFieldEntry mapField() const;
+    SimpleUInt64Int64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt64Int64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt64Int64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt64Int64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed32Int64MapMessage_QtProtobufData;
 class SimpleFixed32Int64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3098,23 +2596,16 @@ public:
     bool operator ==(const SimpleFixed32Int64MapMessage &other) const;
     bool operator !=(const SimpleFixed32Int64MapMessage &other) const;
 
-    SimpleFixed32Int64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed32Int64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed32Int64MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed32Int64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed32Int64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed32Int64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed32Int64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed64Int64MapMessage_QtProtobufData;
 class SimpleFixed64Int64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3138,23 +2629,16 @@ public:
     bool operator ==(const SimpleFixed64Int64MapMessage &other) const;
     bool operator !=(const SimpleFixed64Int64MapMessage &other) const;
 
-    SimpleFixed64Int64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed64Int64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed64Int64MapMessage::MapFieldEntry mapField() const;
+    SimpleFixed64Int64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed64Int64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed64Int64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed64Int64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed32Int64MapMessage_QtProtobufData;
 class SimpleSFixed32Int64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3178,23 +2662,16 @@ public:
     bool operator ==(const SimpleSFixed32Int64MapMessage &other) const;
     bool operator !=(const SimpleSFixed32Int64MapMessage &other) const;
 
-    SimpleSFixed32Int64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed32Int64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed32Int64MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed32Int64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed32Int64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed32Int64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed32Int64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed64Int64MapMessage_QtProtobufData;
 class SimpleSFixed64Int64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3218,23 +2695,16 @@ public:
     bool operator ==(const SimpleSFixed64Int64MapMessage &other) const;
     bool operator !=(const SimpleSFixed64Int64MapMessage &other) const;
 
-    SimpleSFixed64Int64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed64Int64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed64Int64MapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed64Int64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed64Int64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed64Int64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed64Int64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleStringInt64MapMessage_QtProtobufData;
 class SimpleStringInt64MapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3258,23 +2728,16 @@ public:
     bool operator ==(const SimpleStringInt64MapMessage &other) const;
     bool operator !=(const SimpleStringInt64MapMessage &other) const;
 
-    SimpleStringInt64MapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleStringInt64MapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleStringInt64MapMessage::MapFieldEntry mapField() const;
+    SimpleStringInt64MapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleStringInt64MapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleStringInt64MapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleStringInt64MapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt32ComplexMessageMapMessage_QtProtobufData;
 class SimpleSInt32ComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3298,23 +2761,16 @@ public:
     bool operator ==(const SimpleSInt32ComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleSInt32ComplexMessageMapMessage &other) const;
 
-    SimpleSInt32ComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt32ComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt32ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSInt64ComplexMessageMapMessage_QtProtobufData;
 class SimpleSInt64ComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3338,23 +2794,16 @@ public:
     bool operator ==(const SimpleSInt64ComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleSInt64ComplexMessageMapMessage &other) const;
 
-    SimpleSInt64ComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSInt64ComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSInt64ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt32ComplexMessageMapMessage_QtProtobufData;
 class SimpleInt32ComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3378,23 +2827,16 @@ public:
     bool operator ==(const SimpleInt32ComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleInt32ComplexMessageMapMessage &other) const;
 
-    SimpleInt32ComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt32ComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleInt32ComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt32ComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt32ComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt32ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt64ComplexMessageMapMessage_QtProtobufData;
 class SimpleInt64ComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3418,23 +2860,16 @@ public:
     bool operator ==(const SimpleInt64ComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleInt64ComplexMessageMapMessage &other) const;
 
-    SimpleInt64ComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleInt64ComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleInt64ComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleInt64ComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleInt64ComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleInt64ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt32ComplexMessageMapMessage_QtProtobufData;
 class SimpleUInt32ComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3458,23 +2893,16 @@ public:
     bool operator ==(const SimpleUInt32ComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleUInt32ComplexMessageMapMessage &other) const;
 
-    SimpleUInt32ComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt32ComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt32ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleUInt64ComplexMessageMapMessage_QtProtobufData;
 class SimpleUInt64ComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3498,23 +2926,16 @@ public:
     bool operator ==(const SimpleUInt64ComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleUInt64ComplexMessageMapMessage &other) const;
 
-    SimpleUInt64ComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleUInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleUInt64ComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleUInt64ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed32ComplexMessageMapMessage_QtProtobufData;
 class SimpleFixed32ComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3538,23 +2959,16 @@ public:
     bool operator ==(const SimpleFixed32ComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleFixed32ComplexMessageMapMessage &other) const;
 
-    SimpleFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed32ComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed32ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixed64ComplexMessageMapMessage_QtProtobufData;
 class SimpleFixed64ComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3578,23 +2992,16 @@ public:
     bool operator ==(const SimpleFixed64ComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleFixed64ComplexMessageMapMessage &other) const;
 
-    SimpleFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleFixed64ComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleFixed64ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed32ComplexMessageMapMessage_QtProtobufData;
 class SimpleSFixed32ComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3618,23 +3025,16 @@ public:
     bool operator ==(const SimpleSFixed32ComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleSFixed32ComplexMessageMapMessage &other) const;
 
-    SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed32ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleSFixed64ComplexMessageMapMessage_QtProtobufData;
 class SimpleSFixed64ComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3658,23 +3058,16 @@ public:
     bool operator ==(const SimpleSFixed64ComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleSFixed64ComplexMessageMapMessage &other) const;
 
-    SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleSFixed64ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 
+class SimpleStringComplexMessageMapMessage_QtProtobufData;
 class SimpleStringComplexMessageMapMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -3698,21 +3091,13 @@ public:
     bool operator ==(const SimpleStringComplexMessageMapMessage &other) const;
     bool operator !=(const SimpleStringComplexMessageMapMessage &other) const;
 
-    SimpleStringComplexMessageMapMessage::MapFieldEntry mapField() const
-    {
-        return m_mapField;
-    }
-
-    SimpleStringComplexMessageMapMessage::MapFieldEntry &mapField()
-    {
-        return m_mapField;
-    }
-
+    SimpleStringComplexMessageMapMessage::MapFieldEntry mapField() const;
+    SimpleStringComplexMessageMapMessage::MapFieldEntry &mapField();
     void setMapField(const SimpleStringComplexMessageMapMessage::MapFieldEntry &mapField);
     static void registerTypes();
 
 private:
-    SimpleStringComplexMessageMapMessage::MapFieldEntry m_mapField;
+    QExplicitlySharedDataPointer<SimpleStringComplexMessageMapMessage_QtProtobufData> dptr;
 };
 } // namespace qtprotobufnamespace::tests
 

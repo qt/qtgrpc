@@ -14,6 +14,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -24,6 +25,7 @@ using OneofSimpleMessageRepeated = QList<std::shared_ptr<OneofSimpleMessage>>;
 class OneofComplexMessage;
 using OneofComplexMessageRepeated = QList<std::shared_ptr<OneofComplexMessage>>;
 
+class OneofSimpleMessage_QtProtobufData;
 class OneofSimpleMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -73,9 +75,10 @@ private:
     QtProtobuf::int32 testOneofFieldSecondInt_p() const;
     void setTestOneofFieldInt_p(QtProtobuf::int32 testOneofFieldInt);
     void setTestOneofFieldSecondInt_p(QtProtobuf::int32 testOneofFieldSecondInt);
-    QtProtobufPrivate::QProtobufOneof m_testOneof;
+    QExplicitlySharedDataPointer<OneofSimpleMessage_QtProtobufData> dptr;
 };
 
+class OneofComplexMessage_QtProtobufData;
 class OneofComplexMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -136,11 +139,7 @@ public:
     bool operator ==(const OneofComplexMessage &other) const;
     bool operator !=(const OneofComplexMessage &other) const;
 
-    QtProtobuf::int32 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
+    QtProtobuf::int32 testFieldInt() const;
 
     bool hasTestOneofFieldInt() const;
     QtProtobuf::int32 testOneofFieldInt() const;
@@ -164,12 +163,7 @@ public:
     QtProtobuf::int32 testSnakeCaseField() const;
     TestOneofFields testOneofField() const;
     SecondOneofFields secondOneofField() const;
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
     void setTestOneofComplexField(const ComplexMessage &testOneofComplexField);
     void setTestOneofSecondComplexField(const ComplexMessage &testOneofSecondComplexField);
@@ -196,9 +190,7 @@ private:
     void setSecondComplexField_p(ComplexMessage *secondComplexField);
     void setSecondSecondComplexField_p(ComplexMessage *secondSecondComplexField);
     void setTestSnakeCaseField_p(QtProtobuf::int32 testSnakeCaseField);
-    QtProtobuf::int32 m_testFieldInt;
-    QtProtobufPrivate::QProtobufOneof m_testOneof;
-    QtProtobufPrivate::QProtobufOneof m_secondOneof;
+    QExplicitlySharedDataPointer<OneofComplexMessage_QtProtobufData> dptr;
 };
 } // namespace qtprotobufnamespace::tests
 

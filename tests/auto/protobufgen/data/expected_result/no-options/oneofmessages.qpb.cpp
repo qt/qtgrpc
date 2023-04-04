@@ -4,6 +4,24 @@
 #include <QtProtobuf/qprotobufserializer.h>
 
 namespace qtprotobufnamespace::tests {
+
+class OneofSimpleMessage_QtProtobufData : public QSharedData
+{
+public:
+    OneofSimpleMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    OneofSimpleMessage_QtProtobufData(const OneofSimpleMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testOneof(other.m_testOneof)
+    {
+    }
+
+    QtProtobufPrivate::QProtobufOneof m_testOneof;
+};
+
 OneofSimpleMessage::~OneofSimpleMessage() = default;
 
 static constexpr struct {
@@ -54,42 +72,37 @@ void OneofSimpleMessage::registerTypes()
 }
 
 OneofSimpleMessage::OneofSimpleMessage()
-    : QProtobufMessage(&OneofSimpleMessage::staticMetaObject)
+    : QProtobufMessage(&OneofSimpleMessage::staticMetaObject),
+      dptr(new OneofSimpleMessage_QtProtobufData)
 {
 }
 
 OneofSimpleMessage::OneofSimpleMessage(const OneofSimpleMessage &other)
     : QProtobufMessage(other),
-      m_testOneof(other.m_testOneof)
+      dptr(other.dptr)
 {
 }
-
 OneofSimpleMessage &OneofSimpleMessage::operator =(const OneofSimpleMessage &other)
 {
     QProtobufMessage::operator=(other);
-    m_testOneof = other.m_testOneof;
+    dptr = other.dptr;
     return *this;
 }
-
 OneofSimpleMessage::OneofSimpleMessage(OneofSimpleMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
-    m_testOneof(std::move(other.m_testOneof))
-
+      dptr(std::move(other.dptr))
 {
 }
-
 OneofSimpleMessage &OneofSimpleMessage::operator =(OneofSimpleMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    m_testOneof = std::move(other.m_testOneof);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool OneofSimpleMessage::operator ==(const OneofSimpleMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testOneof == other.m_testOneof
-;
+        && dptr->m_testOneof == other.dptr->m_testOneof;
 }
 
 bool OneofSimpleMessage::operator !=(const OneofSimpleMessage &other) const
@@ -99,70 +112,100 @@ bool OneofSimpleMessage::operator !=(const OneofSimpleMessage &other) const
 
 QtProtobuf::int32 OneofSimpleMessage::testOneofFieldInt_p() const
 {
-    return m_testOneof.holdsField(1) ?
-        m_testOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
+    return dptr->m_testOneof.holdsField(1) ?
+        dptr->m_testOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
 }
 
 bool OneofSimpleMessage::hasTestOneofFieldInt() const
 {
-    return m_testOneof.holdsField(1);
+    return dptr->m_testOneof.holdsField(1);
 }
 QtProtobuf::int32 OneofSimpleMessage::testOneofFieldInt() const
 {
-    Q_ASSERT(m_testOneof.holdsField(1));
-    return m_testOneof.value<QtProtobuf::int32>();
+    Q_ASSERT(dptr->m_testOneof.holdsField(1));
+    return dptr->m_testOneof.value<QtProtobuf::int32>();
 }
 
 QtProtobuf::int32 OneofSimpleMessage::testOneofFieldSecondInt_p() const
 {
-    return m_testOneof.holdsField(2) ?
-        m_testOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
+    return dptr->m_testOneof.holdsField(2) ?
+        dptr->m_testOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
 }
 
 bool OneofSimpleMessage::hasTestOneofFieldSecondInt() const
 {
-    return m_testOneof.holdsField(2);
+    return dptr->m_testOneof.holdsField(2);
 }
 QtProtobuf::int32 OneofSimpleMessage::testOneofFieldSecondInt() const
 {
-    Q_ASSERT(m_testOneof.holdsField(2));
-    return m_testOneof.value<QtProtobuf::int32>();
+    Q_ASSERT(dptr->m_testOneof.holdsField(2));
+    return dptr->m_testOneof.value<QtProtobuf::int32>();
 }
 
 void OneofSimpleMessage::setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt)
 {
-    if (!m_testOneof.isEqual(testOneofFieldInt, 1)) {
-        m_testOneof.setValue(testOneofFieldInt, 1);
+    if (!dptr->m_testOneof.isEqual(testOneofFieldInt, 1)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(testOneofFieldInt, 1);
     }
 }
 
 void OneofSimpleMessage::setTestOneofFieldInt_p(QtProtobuf::int32 testOneofFieldInt)
 {
-    if (!m_testOneof.isEqual(testOneofFieldInt, 1))
-        m_testOneof.setValue(testOneofFieldInt, 1);
+    if (!dptr->m_testOneof.isEqual(testOneofFieldInt, 1)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(testOneofFieldInt, 1);
+    }
 }
 
 void OneofSimpleMessage::setTestOneofFieldSecondInt(const QtProtobuf::int32 &testOneofFieldSecondInt)
 {
-    if (!m_testOneof.isEqual(testOneofFieldSecondInt, 2)) {
-        m_testOneof.setValue(testOneofFieldSecondInt, 2);
+    if (!dptr->m_testOneof.isEqual(testOneofFieldSecondInt, 2)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(testOneofFieldSecondInt, 2);
     }
 }
 
 void OneofSimpleMessage::setTestOneofFieldSecondInt_p(QtProtobuf::int32 testOneofFieldSecondInt)
 {
-    if (!m_testOneof.isEqual(testOneofFieldSecondInt, 2))
-        m_testOneof.setValue(testOneofFieldSecondInt, 2);
+    if (!dptr->m_testOneof.isEqual(testOneofFieldSecondInt, 2)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(testOneofFieldSecondInt, 2);
+    }
 }
 
 OneofSimpleMessage::TestOneofFields OneofSimpleMessage::testOneofField() const
 {
-    return static_cast<TestOneofFields>(m_testOneof.fieldNumber());
+    return static_cast<TestOneofFields>(dptr->m_testOneof.fieldNumber());
 }
 void OneofSimpleMessage::clearTestOneof()
 {
-    m_testOneof = QtProtobufPrivate::QProtobufOneof();
+    dptr.detach();
+    dptr->m_testOneof = QtProtobufPrivate::QProtobufOneof();
 }
+
+class OneofComplexMessage_QtProtobufData : public QSharedData
+{
+public:
+    OneofComplexMessage_QtProtobufData()
+        : QSharedData(),
+          m_testFieldInt(0)
+    {
+    }
+
+    OneofComplexMessage_QtProtobufData(const OneofComplexMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testFieldInt(other.m_testFieldInt),
+          m_testOneof(other.m_testOneof),
+          m_secondOneof(other.m_secondOneof)
+    {
+    }
+
+    QtProtobuf::int32 m_testFieldInt;
+    QtProtobufPrivate::QProtobufOneof m_testOneof;
+    QtProtobufPrivate::QProtobufOneof m_secondOneof;
+};
+
 OneofComplexMessage::~OneofComplexMessage() = default;
 
 static constexpr struct {
@@ -239,54 +282,38 @@ void OneofComplexMessage::registerTypes()
 
 OneofComplexMessage::OneofComplexMessage()
     : QProtobufMessage(&OneofComplexMessage::staticMetaObject),
-      m_testFieldInt(0)
+      dptr(new OneofComplexMessage_QtProtobufData)
 {
 }
 
 OneofComplexMessage::OneofComplexMessage(const OneofComplexMessage &other)
     : QProtobufMessage(other),
-      m_testFieldInt(other.m_testFieldInt),
-      m_testOneof(other.m_testOneof),
-      m_secondOneof(other.m_secondOneof)
+      dptr(other.dptr)
 {
 }
-
 OneofComplexMessage &OneofComplexMessage::operator =(const OneofComplexMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestFieldInt(other.m_testFieldInt);
-    m_testOneof = other.m_testOneof;
-    m_secondOneof = other.m_secondOneof;
+    dptr = other.dptr;
     return *this;
 }
-
 OneofComplexMessage::OneofComplexMessage(OneofComplexMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
-    m_testOneof(std::move(other.m_testOneof))
-,
-    m_secondOneof(std::move(other.m_secondOneof))
-
+      dptr(std::move(other.dptr))
 {
-    setTestFieldInt(std::exchange(other.m_testFieldInt, 0));
 }
-
 OneofComplexMessage &OneofComplexMessage::operator =(OneofComplexMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestFieldInt(std::exchange(other.m_testFieldInt, 0));
-    m_testOneof = std::move(other.m_testOneof);
-    m_secondOneof = std::move(other.m_secondOneof);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool OneofComplexMessage::operator ==(const OneofComplexMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testFieldInt == other.m_testFieldInt
-        && m_testOneof == other.m_testOneof
-
-        && m_secondOneof == other.m_secondOneof
-;
+        && dptr->m_testFieldInt == other.dptr->m_testFieldInt
+        && dptr->m_testOneof == other.dptr->m_testOneof
+        && dptr->m_secondOneof == other.dptr->m_secondOneof;
 }
 
 bool OneofComplexMessage::operator !=(const OneofComplexMessage &other) const
@@ -294,224 +321,264 @@ bool OneofComplexMessage::operator !=(const OneofComplexMessage &other) const
     return !this->operator ==(other);
 }
 
+QtProtobuf::int32 OneofComplexMessage::testFieldInt() const
+{
+    return dptr->m_testFieldInt;
+}
+
 QtProtobuf::int32 OneofComplexMessage::testOneofFieldInt_p() const
 {
-    return m_testOneof.holdsField(42) ?
-        m_testOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
+    return dptr->m_testOneof.holdsField(42) ?
+        dptr->m_testOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
 }
 
 bool OneofComplexMessage::hasTestOneofFieldInt() const
 {
-    return m_testOneof.holdsField(42);
+    return dptr->m_testOneof.holdsField(42);
 }
 QtProtobuf::int32 OneofComplexMessage::testOneofFieldInt() const
 {
-    Q_ASSERT(m_testOneof.holdsField(42));
-    return m_testOneof.value<QtProtobuf::int32>();
+    Q_ASSERT(dptr->m_testOneof.holdsField(42));
+    return dptr->m_testOneof.value<QtProtobuf::int32>();
 }
 
 ComplexMessage *OneofComplexMessage::testOneofComplexField_p() const
 {
-    return m_testOneof.holdsField(3) ?
-        m_testOneof.value<ComplexMessage>() : nullptr;
+    return dptr->m_testOneof.holdsField(3) ?
+        dptr->m_testOneof.value<ComplexMessage>() : nullptr;
 }
 
 bool OneofComplexMessage::hasTestOneofComplexField() const
 {
-    return m_testOneof.holdsField(3);
+    return dptr->m_testOneof.holdsField(3);
 }
 ComplexMessage &OneofComplexMessage::testOneofComplexField() const
 {
-    Q_ASSERT(m_testOneof.holdsField(3));
-    return *(m_testOneof.value<ComplexMessage>());
+    Q_ASSERT(dptr->m_testOneof.holdsField(3));
+    return *(dptr->m_testOneof.value<ComplexMessage>());
 }
 
 ComplexMessage *OneofComplexMessage::testOneofSecondComplexField_p() const
 {
-    return m_testOneof.holdsField(4) ?
-        m_testOneof.value<ComplexMessage>() : nullptr;
+    return dptr->m_testOneof.holdsField(4) ?
+        dptr->m_testOneof.value<ComplexMessage>() : nullptr;
 }
 
 bool OneofComplexMessage::hasTestOneofSecondComplexField() const
 {
-    return m_testOneof.holdsField(4);
+    return dptr->m_testOneof.holdsField(4);
 }
 ComplexMessage &OneofComplexMessage::testOneofSecondComplexField() const
 {
-    Q_ASSERT(m_testOneof.holdsField(4));
-    return *(m_testOneof.value<ComplexMessage>());
+    Q_ASSERT(dptr->m_testOneof.holdsField(4));
+    return *(dptr->m_testOneof.value<ComplexMessage>());
 }
 
 QtProtobuf::int32 OneofComplexMessage::secondFieldInt_p() const
 {
-    return m_secondOneof.holdsField(43) ?
-        m_secondOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
+    return dptr->m_secondOneof.holdsField(43) ?
+        dptr->m_secondOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
 }
 
 bool OneofComplexMessage::hasSecondFieldInt() const
 {
-    return m_secondOneof.holdsField(43);
+    return dptr->m_secondOneof.holdsField(43);
 }
 QtProtobuf::int32 OneofComplexMessage::secondFieldInt() const
 {
-    Q_ASSERT(m_secondOneof.holdsField(43));
-    return m_secondOneof.value<QtProtobuf::int32>();
+    Q_ASSERT(dptr->m_secondOneof.holdsField(43));
+    return dptr->m_secondOneof.value<QtProtobuf::int32>();
 }
 
 ComplexMessage *OneofComplexMessage::secondComplexField_p() const
 {
-    return m_secondOneof.holdsField(5) ?
-        m_secondOneof.value<ComplexMessage>() : nullptr;
+    return dptr->m_secondOneof.holdsField(5) ?
+        dptr->m_secondOneof.value<ComplexMessage>() : nullptr;
 }
 
 bool OneofComplexMessage::hasSecondComplexField() const
 {
-    return m_secondOneof.holdsField(5);
+    return dptr->m_secondOneof.holdsField(5);
 }
 ComplexMessage &OneofComplexMessage::secondComplexField() const
 {
-    Q_ASSERT(m_secondOneof.holdsField(5));
-    return *(m_secondOneof.value<ComplexMessage>());
+    Q_ASSERT(dptr->m_secondOneof.holdsField(5));
+    return *(dptr->m_secondOneof.value<ComplexMessage>());
 }
 
 ComplexMessage *OneofComplexMessage::secondSecondComplexField_p() const
 {
-    return m_secondOneof.holdsField(6) ?
-        m_secondOneof.value<ComplexMessage>() : nullptr;
+    return dptr->m_secondOneof.holdsField(6) ?
+        dptr->m_secondOneof.value<ComplexMessage>() : nullptr;
 }
 
 bool OneofComplexMessage::hasSecondSecondComplexField() const
 {
-    return m_secondOneof.holdsField(6);
+    return dptr->m_secondOneof.holdsField(6);
 }
 ComplexMessage &OneofComplexMessage::secondSecondComplexField() const
 {
-    Q_ASSERT(m_secondOneof.holdsField(6));
-    return *(m_secondOneof.value<ComplexMessage>());
+    Q_ASSERT(dptr->m_secondOneof.holdsField(6));
+    return *(dptr->m_secondOneof.value<ComplexMessage>());
 }
 
 QtProtobuf::int32 OneofComplexMessage::testSnakeCaseField_p() const
 {
-    return m_secondOneof.holdsField(7) ?
-        m_secondOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
+    return dptr->m_secondOneof.holdsField(7) ?
+        dptr->m_secondOneof.value<QtProtobuf::int32>() : QtProtobuf::int32(0);
 }
 
 bool OneofComplexMessage::hasTestSnakeCaseField() const
 {
-    return m_secondOneof.holdsField(7);
+    return dptr->m_secondOneof.holdsField(7);
 }
 QtProtobuf::int32 OneofComplexMessage::testSnakeCaseField() const
 {
-    Q_ASSERT(m_secondOneof.holdsField(7));
-    return m_secondOneof.value<QtProtobuf::int32>();
+    Q_ASSERT(dptr->m_secondOneof.holdsField(7));
+    return dptr->m_secondOneof.value<QtProtobuf::int32>();
+}
+
+void OneofComplexMessage::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
+{
+    if (dptr->m_testFieldInt != testFieldInt) {
+        dptr.detach();
+        dptr->m_testFieldInt = testFieldInt;
+    }
 }
 
 void OneofComplexMessage::setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt)
 {
-    if (!m_testOneof.isEqual(testOneofFieldInt, 42)) {
-        m_testOneof.setValue(testOneofFieldInt, 42);
+    if (!dptr->m_testOneof.isEqual(testOneofFieldInt, 42)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(testOneofFieldInt, 42);
     }
 }
 
 void OneofComplexMessage::setTestOneofFieldInt_p(QtProtobuf::int32 testOneofFieldInt)
 {
-    if (!m_testOneof.isEqual(testOneofFieldInt, 42))
-        m_testOneof.setValue(testOneofFieldInt, 42);
+    if (!dptr->m_testOneof.isEqual(testOneofFieldInt, 42)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(testOneofFieldInt, 42);
+    }
 }
 
 void OneofComplexMessage::setTestOneofComplexField(const ComplexMessage &testOneofComplexField)
 {
-    if (!m_testOneof.isEqual(testOneofComplexField, 3)) {
-        m_testOneof.setValue(testOneofComplexField, 3);
+    if (!dptr->m_testOneof.isEqual(testOneofComplexField, 3)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(testOneofComplexField, 3);
     }
 }
 
 void OneofComplexMessage::setTestOneofComplexField_p(ComplexMessage *testOneofComplexField)
 {
-    const ComplexMessage &value = *testOneofComplexField;    if (!m_testOneof.isEqual(value, 3))
-        m_testOneof.setValue(value, 3);
+    const ComplexMessage &value = *testOneofComplexField;
+    if (!dptr->m_testOneof.isEqual(value, 3)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(value, 3);
+    }
 }
 
 void OneofComplexMessage::setTestOneofSecondComplexField(const ComplexMessage &testOneofSecondComplexField)
 {
-    if (!m_testOneof.isEqual(testOneofSecondComplexField, 4)) {
-        m_testOneof.setValue(testOneofSecondComplexField, 4);
+    if (!dptr->m_testOneof.isEqual(testOneofSecondComplexField, 4)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(testOneofSecondComplexField, 4);
     }
 }
 
 void OneofComplexMessage::setTestOneofSecondComplexField_p(ComplexMessage *testOneofSecondComplexField)
 {
-    const ComplexMessage &value = *testOneofSecondComplexField;    if (!m_testOneof.isEqual(value, 4))
-        m_testOneof.setValue(value, 4);
+    const ComplexMessage &value = *testOneofSecondComplexField;
+    if (!dptr->m_testOneof.isEqual(value, 4)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(value, 4);
+    }
 }
 
 void OneofComplexMessage::setSecondFieldInt(const QtProtobuf::int32 &secondFieldInt)
 {
-    if (!m_secondOneof.isEqual(secondFieldInt, 43)) {
-        m_secondOneof.setValue(secondFieldInt, 43);
+    if (!dptr->m_secondOneof.isEqual(secondFieldInt, 43)) {
+        dptr.detach();
+        dptr->m_secondOneof.setValue(secondFieldInt, 43);
     }
 }
 
 void OneofComplexMessage::setSecondFieldInt_p(QtProtobuf::int32 secondFieldInt)
 {
-    if (!m_secondOneof.isEqual(secondFieldInt, 43))
-        m_secondOneof.setValue(secondFieldInt, 43);
+    if (!dptr->m_secondOneof.isEqual(secondFieldInt, 43)) {
+        dptr.detach();
+        dptr->m_secondOneof.setValue(secondFieldInt, 43);
+    }
 }
 
 void OneofComplexMessage::setSecondComplexField(const ComplexMessage &secondComplexField)
 {
-    if (!m_secondOneof.isEqual(secondComplexField, 5)) {
-        m_secondOneof.setValue(secondComplexField, 5);
+    if (!dptr->m_secondOneof.isEqual(secondComplexField, 5)) {
+        dptr.detach();
+        dptr->m_secondOneof.setValue(secondComplexField, 5);
     }
 }
 
 void OneofComplexMessage::setSecondComplexField_p(ComplexMessage *secondComplexField)
 {
-    const ComplexMessage &value = *secondComplexField;    if (!m_secondOneof.isEqual(value, 5))
-        m_secondOneof.setValue(value, 5);
+    const ComplexMessage &value = *secondComplexField;
+    if (!dptr->m_secondOneof.isEqual(value, 5)) {
+        dptr.detach();
+        dptr->m_secondOneof.setValue(value, 5);
+    }
 }
 
 void OneofComplexMessage::setSecondSecondComplexField(const ComplexMessage &secondSecondComplexField)
 {
-    if (!m_secondOneof.isEqual(secondSecondComplexField, 6)) {
-        m_secondOneof.setValue(secondSecondComplexField, 6);
+    if (!dptr->m_secondOneof.isEqual(secondSecondComplexField, 6)) {
+        dptr.detach();
+        dptr->m_secondOneof.setValue(secondSecondComplexField, 6);
     }
 }
 
 void OneofComplexMessage::setSecondSecondComplexField_p(ComplexMessage *secondSecondComplexField)
 {
-    const ComplexMessage &value = *secondSecondComplexField;    if (!m_secondOneof.isEqual(value, 6))
-        m_secondOneof.setValue(value, 6);
+    const ComplexMessage &value = *secondSecondComplexField;
+    if (!dptr->m_secondOneof.isEqual(value, 6)) {
+        dptr.detach();
+        dptr->m_secondOneof.setValue(value, 6);
+    }
 }
 
 void OneofComplexMessage::setTestSnakeCaseField(const QtProtobuf::int32 &testSnakeCaseField)
 {
-    if (!m_secondOneof.isEqual(testSnakeCaseField, 7)) {
-        m_secondOneof.setValue(testSnakeCaseField, 7);
+    if (!dptr->m_secondOneof.isEqual(testSnakeCaseField, 7)) {
+        dptr.detach();
+        dptr->m_secondOneof.setValue(testSnakeCaseField, 7);
     }
 }
 
 void OneofComplexMessage::setTestSnakeCaseField_p(QtProtobuf::int32 testSnakeCaseField)
 {
-    if (!m_secondOneof.isEqual(testSnakeCaseField, 7))
-        m_secondOneof.setValue(testSnakeCaseField, 7);
+    if (!dptr->m_secondOneof.isEqual(testSnakeCaseField, 7)) {
+        dptr.detach();
+        dptr->m_secondOneof.setValue(testSnakeCaseField, 7);
+    }
 }
 
 OneofComplexMessage::TestOneofFields OneofComplexMessage::testOneofField() const
 {
-    return static_cast<TestOneofFields>(m_testOneof.fieldNumber());
+    return static_cast<TestOneofFields>(dptr->m_testOneof.fieldNumber());
 }
 void OneofComplexMessage::clearTestOneof()
 {
-    m_testOneof = QtProtobufPrivate::QProtobufOneof();
+    dptr.detach();
+    dptr->m_testOneof = QtProtobufPrivate::QProtobufOneof();
 }
 OneofComplexMessage::SecondOneofFields OneofComplexMessage::secondOneofField() const
 {
-    return static_cast<SecondOneofFields>(m_secondOneof.fieldNumber());
+    return static_cast<SecondOneofFields>(dptr->m_secondOneof.fieldNumber());
 }
 void OneofComplexMessage::clearSecondOneof()
 {
-    m_secondOneof = QtProtobufPrivate::QProtobufOneof();
+    dptr.detach();
+    dptr->m_secondOneof = QtProtobufPrivate::QProtobufOneof();
 }
 } // namespace qtprotobufnamespace::tests
 

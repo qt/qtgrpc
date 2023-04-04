@@ -12,6 +12,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -26,6 +27,7 @@ using FieldIndexTest3MessageRepeated = QList<std::shared_ptr<FieldIndexTest3Mess
 class FieldIndexTest4Message;
 using FieldIndexTest4MessageRepeated = QList<std::shared_ptr<FieldIndexTest4Message>>;
 
+class FieldIndexTest1Message_QtProtobufData;
 class FieldIndexTest1Message : public QProtobufMessage
 {
     Q_GADGET
@@ -48,23 +50,15 @@ public:
     bool operator ==(const FieldIndexTest1Message &other) const;
     bool operator !=(const FieldIndexTest1Message &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<FieldIndexTest1Message_QtProtobufData> dptr;
 };
 
+class FieldIndexTest2Message_QtProtobufData;
 class FieldIndexTest2Message : public QProtobufMessage
 {
     Q_GADGET
@@ -87,23 +81,15 @@ public:
     bool operator ==(const FieldIndexTest2Message &other) const;
     bool operator !=(const FieldIndexTest2Message &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<FieldIndexTest2Message_QtProtobufData> dptr;
 };
 
+class FieldIndexTest3Message_QtProtobufData;
 class FieldIndexTest3Message : public QProtobufMessage
 {
     Q_GADGET
@@ -126,23 +112,15 @@ public:
     bool operator ==(const FieldIndexTest3Message &other) const;
     bool operator !=(const FieldIndexTest3Message &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<FieldIndexTest3Message_QtProtobufData> dptr;
 };
 
+class FieldIndexTest4Message_QtProtobufData;
 class FieldIndexTest4Message : public QProtobufMessage
 {
     Q_GADGET
@@ -165,21 +143,12 @@ public:
     bool operator ==(const FieldIndexTest4Message &other) const;
     bool operator !=(const FieldIndexTest4Message &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<FieldIndexTest4Message_QtProtobufData> dptr;
 };
 } // namespace qtprotobufnamespace::tests
 

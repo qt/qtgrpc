@@ -13,6 +13,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -29,6 +30,7 @@ using ExampleRepeated = QList<std::shared_ptr<Example>>;
 class SimpleMessage;
 using SimpleMessageRepeated = QList<std::shared_ptr<SimpleMessage>>;
 
+class AnyMessage_QtProtobufData;
 class AnyMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -51,18 +53,15 @@ public:
     bool operator ==(const AnyMessage &other) const;
     bool operator !=(const AnyMessage &other) const;
 
-    QtProtobuf::Any field() const
-    {
-        return m_field;
-    }
-
+    QtProtobuf::Any field() const;
     void setField(const QtProtobuf::Any &field);
     static void registerTypes();
 
 private:
-    QtProtobuf::Any m_field;
+    QExplicitlySharedDataPointer<AnyMessage_QtProtobufData> dptr;
 };
 
+class RepeatedAnyMessage_QtProtobufData;
 class RepeatedAnyMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -85,23 +84,16 @@ public:
     bool operator ==(const RepeatedAnyMessage &other) const;
     bool operator !=(const RepeatedAnyMessage &other) const;
 
-    QList<QtProtobuf::Any> anys() const
-    {
-        return m_anys;
-    }
-
-    QList<QtProtobuf::Any> &anys()
-    {
-        return m_anys;
-    }
-
+    QList<QtProtobuf::Any> anys() const;
+    QList<QtProtobuf::Any> &anys();
     void setAnys(const QList<QtProtobuf::Any> &anys);
     static void registerTypes();
 
 private:
-    QList<QtProtobuf::Any> m_anys;
+    QExplicitlySharedDataPointer<RepeatedAnyMessage_QtProtobufData> dptr;
 };
 
+class TwoAnyMessage_QtProtobufData;
 class TwoAnyMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -126,26 +118,18 @@ public:
     bool operator ==(const TwoAnyMessage &other) const;
     bool operator !=(const TwoAnyMessage &other) const;
 
-    QtProtobuf::Any one() const
-    {
-        return m_one;
-    }
+    QtProtobuf::Any one() const;
 
-
-    QtProtobuf::Any two() const
-    {
-        return m_two;
-    }
-
+    QtProtobuf::Any two() const;
     void setOne(const QtProtobuf::Any &one);
     void setTwo(const QtProtobuf::Any &two);
     static void registerTypes();
 
 private:
-    QtProtobuf::Any m_one;
-    QtProtobuf::Any m_two;
+    QExplicitlySharedDataPointer<TwoAnyMessage_QtProtobufData> dptr;
 };
 
+class Example_QtProtobufData;
 class Example : public QProtobufMessage
 {
     Q_GADGET
@@ -176,65 +160,27 @@ public:
     bool operator ==(const Example &other) const;
     bool operator !=(const Example &other) const;
 
-    QString str() const
-    {
-        return m_str;
-    }
+    QString str() const;
 
+    QtProtobuf::sint32 i() const;
 
-    QtProtobuf::sint32 i() const
-    {
-        return m_i;
-    }
+    QtProtobuf::sint32 j() const;
 
+    QtProtobuf::sint32 h() const;
 
-    QtProtobuf::sint32 j() const
-    {
-        return m_j;
-    }
-
-
-    QtProtobuf::sint32 h() const
-    {
-        return m_h;
-    }
-
-
-    QString str2() const
-    {
-        return m_str2;
-    }
-
+    QString str2() const;
     void setStr(const QString &str);
-    void setI(const QtProtobuf::sint32 &i)
-    {
-        if (m_i != i)
-            m_i = i;
-    }
-
-    void setJ(const QtProtobuf::sint32 &j)
-    {
-        if (m_j != j)
-            m_j = j;
-    }
-
-    void setH(const QtProtobuf::sint32 &h)
-    {
-        if (m_h != h)
-            m_h = h;
-    }
-
+    void setI(const QtProtobuf::sint32 &i);
+    void setJ(const QtProtobuf::sint32 &j);
+    void setH(const QtProtobuf::sint32 &h);
     void setStr2(const QString &str2);
     static void registerTypes();
 
 private:
-    QString m_str;
-    QtProtobuf::sint32 m_i;
-    QtProtobuf::sint32 m_j;
-    QtProtobuf::sint32 m_h;
-    QString m_str2;
+    QExplicitlySharedDataPointer<Example_QtProtobufData> dptr;
 };
 
+class SimpleMessage_QtProtobufData;
 class SimpleMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -257,21 +203,12 @@ public:
     bool operator ==(const SimpleMessage &other) const;
     bool operator !=(const SimpleMessage &other) const;
 
-    QtProtobuf::int32 i() const
-    {
-        return m_i;
-    }
-
-    void setI(const QtProtobuf::int32 &i)
-    {
-        if (m_i != i)
-            m_i = i;
-    }
-
+    QtProtobuf::int32 i() const;
+    void setI(const QtProtobuf::int32 &i);
     static void registerTypes();
 
 private:
-    QtProtobuf::int32 m_i;
+    QExplicitlySharedDataPointer<SimpleMessage_QtProtobufData> dptr;
 };
 } // namespace qtproto::tests
 

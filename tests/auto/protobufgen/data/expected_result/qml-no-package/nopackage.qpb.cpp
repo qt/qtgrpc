@@ -12,6 +12,22 @@ void TestEnumGadget::registerTypes()
     qRegisterProtobufEnumType<::TestEnumGadget::TestEnum>();
 }
 
+
+class EmptyMessage_QtProtobufData : public QSharedData
+{
+public:
+    EmptyMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    EmptyMessage_QtProtobufData(const EmptyMessage_QtProtobufData &other)
+        : QSharedData(other)
+    {
+    }
+
+};
+
 EmptyMessage::~EmptyMessage() = default;
 
 static constexpr struct {
@@ -55,32 +71,33 @@ void EmptyMessage::registerTypes()
 }
 
 EmptyMessage::EmptyMessage()
-    : QProtobufMessage(&EmptyMessage::staticMetaObject)
+    : QProtobufMessage(&EmptyMessage::staticMetaObject),
+      dptr(new EmptyMessage_QtProtobufData)
 {
 }
 
 EmptyMessage::EmptyMessage(const EmptyMessage &other)
-    : QProtobufMessage(other)
+    : QProtobufMessage(other),
+      dptr(other.dptr)
 {
 }
-
 EmptyMessage &EmptyMessage::operator =(const EmptyMessage &other)
 {
     QProtobufMessage::operator=(other);
+    dptr = other.dptr;
     return *this;
 }
-
 EmptyMessage::EmptyMessage(EmptyMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
 }
-
 EmptyMessage &EmptyMessage::operator =(EmptyMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool EmptyMessage::operator ==(const EmptyMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other);
@@ -90,6 +107,25 @@ bool EmptyMessage::operator !=(const EmptyMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+
+class SimpleIntMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleIntMessage_QtProtobufData()
+        : QSharedData(),
+          m_testFieldInt(0)
+    {
+    }
+
+    SimpleIntMessage_QtProtobufData(const SimpleIntMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testFieldInt(other.m_testFieldInt)
+    {
+    }
+
+    QtProtobuf::int32 m_testFieldInt;
+};
 
 SimpleIntMessage::~SimpleIntMessage() = default;
 
@@ -139,46 +175,89 @@ void SimpleIntMessage::registerTypes()
 
 SimpleIntMessage::SimpleIntMessage()
     : QProtobufMessage(&SimpleIntMessage::staticMetaObject),
-      m_testFieldInt(0)
+      dptr(new SimpleIntMessage_QtProtobufData)
 {
 }
 
 SimpleIntMessage::SimpleIntMessage(const SimpleIntMessage &other)
     : QProtobufMessage(other),
-      m_testFieldInt(other.m_testFieldInt)
+      dptr(other.dptr)
 {
 }
-
 SimpleIntMessage &SimpleIntMessage::operator =(const SimpleIntMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestFieldInt(other.m_testFieldInt);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleIntMessage::SimpleIntMessage(SimpleIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestFieldInt(std::exchange(other.m_testFieldInt, 0));
 }
-
 SimpleIntMessage &SimpleIntMessage::operator =(SimpleIntMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestFieldInt(std::exchange(other.m_testFieldInt, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleIntMessage::operator ==(const SimpleIntMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testFieldInt == other.m_testFieldInt;
+        && dptr->m_testFieldInt == other.dptr->m_testFieldInt;
 }
 
 bool SimpleIntMessage::operator !=(const SimpleIntMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+int SimpleIntMessage::testFieldInt_p() const
+{
+    return dptr->m_testFieldInt;
+}
+
+QtProtobuf::int32 SimpleIntMessage::testFieldInt() const
+{
+    return dptr->m_testFieldInt;
+}
+
+void SimpleIntMessage::setTestFieldInt_p(const int &testFieldInt)
+{
+    if (dptr->m_testFieldInt != testFieldInt) {
+        dptr.detach();
+        dptr->m_testFieldInt = testFieldInt;
+    }
+}
+
+void SimpleIntMessage::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
+{
+    if (dptr->m_testFieldInt != testFieldInt) {
+        dptr.detach();
+        dptr->m_testFieldInt = testFieldInt;
+    }
+}
+
+
+class NoPackageExternalMessage_QtProtobufData : public QSharedData
+{
+public:
+    NoPackageExternalMessage_QtProtobufData()
+        : QSharedData(),
+          m_testField(nullptr)
+    {
+    }
+
+    NoPackageExternalMessage_QtProtobufData(const NoPackageExternalMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField
+                                               ? new SimpleIntMessageExt(*other.m_testField)
+                                               : nullptr)
+    {
+    }
+
+    QtProtobufPrivate::QProtobufLazyMessagePointer<SimpleIntMessageExt> m_testField;
+};
 
 NoPackageExternalMessage::~NoPackageExternalMessage() = default;
 
@@ -228,50 +307,37 @@ void NoPackageExternalMessage::registerTypes()
 
 NoPackageExternalMessage::NoPackageExternalMessage()
     : QProtobufMessage(&NoPackageExternalMessage::staticMetaObject),
-      m_testField(nullptr)
+      dptr(new NoPackageExternalMessage_QtProtobufData)
 {
 }
 
 NoPackageExternalMessage::NoPackageExternalMessage(const NoPackageExternalMessage &other)
     : QProtobufMessage(other),
-      m_testField(nullptr)
+      dptr(other.dptr)
 {
-    if (m_testField != other.m_testField) {
-        *m_testField = *other.m_testField;
-    }
 }
-
 NoPackageExternalMessage &NoPackageExternalMessage::operator =(const NoPackageExternalMessage &other)
 {
     QProtobufMessage::operator=(other);
-    if (m_testField != other.m_testField)
-        *m_testField = *other.m_testField;
+    dptr = other.dptr;
     return *this;
 }
-
 NoPackageExternalMessage::NoPackageExternalMessage(NoPackageExternalMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
-m_testField(nullptr)
+      dptr(std::move(other.dptr))
 {
-    if (m_testField != other.m_testField) {
-        *m_testField = std::move(*other.m_testField);
-    }
 }
-
 NoPackageExternalMessage &NoPackageExternalMessage::operator =(NoPackageExternalMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testField != other.m_testField)
-        *m_testField = std::move(*other.m_testField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool NoPackageExternalMessage::operator ==(const NoPackageExternalMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && (m_testField == other.m_testField
-            || *m_testField == *other.m_testField)
-;
+        && (dptr->m_testField == other.dptr->m_testField
+            || *dptr->m_testField == *other.dptr->m_testField);
 }
 
 bool NoPackageExternalMessage::operator !=(const NoPackageExternalMessage &other) const
@@ -281,25 +347,50 @@ bool NoPackageExternalMessage::operator !=(const NoPackageExternalMessage &other
 
 SimpleIntMessageExt *NoPackageExternalMessage::testField_p() const
 {
-    return m_testField ? m_testField.get() : nullptr;
+    return dptr->m_testField ? dptr->m_testField.get() : nullptr;
 }
 
 SimpleIntMessageExt &NoPackageExternalMessage::testField() const
 {
-    return *m_testField;
+    return *dptr->m_testField;
 }
 
 void NoPackageExternalMessage::setTestField_p(SimpleIntMessageExt *testField)
 {
-    if (m_testField.get() != testField)
-        m_testField.reset(testField);
+    if (dptr->m_testField.get() != testField) {
+        dptr.detach();
+        dptr->m_testField.reset(testField);
+    }
 }
 
 void NoPackageExternalMessage::setTestField(const SimpleIntMessageExt &testField)
 {
-    if (*m_testField != testField)
-        *m_testField = testField;
+    if (*dptr->m_testField != testField) {
+        dptr.detach();
+        *dptr->m_testField = testField;
+    }
 }
+
+
+class NoPackageMessage_QtProtobufData : public QSharedData
+{
+public:
+    NoPackageMessage_QtProtobufData()
+        : QSharedData(),
+          m_testField(nullptr)
+    {
+    }
+
+    NoPackageMessage_QtProtobufData(const NoPackageMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField
+                                               ? new SimpleIntMessage(*other.m_testField)
+                                               : nullptr)
+    {
+    }
+
+    QtProtobufPrivate::QProtobufLazyMessagePointer<SimpleIntMessage> m_testField;
+};
 
 NoPackageMessage::~NoPackageMessage() = default;
 
@@ -349,50 +440,37 @@ void NoPackageMessage::registerTypes()
 
 NoPackageMessage::NoPackageMessage()
     : QProtobufMessage(&NoPackageMessage::staticMetaObject),
-      m_testField(nullptr)
+      dptr(new NoPackageMessage_QtProtobufData)
 {
 }
 
 NoPackageMessage::NoPackageMessage(const NoPackageMessage &other)
     : QProtobufMessage(other),
-      m_testField(nullptr)
+      dptr(other.dptr)
 {
-    if (m_testField != other.m_testField) {
-        *m_testField = *other.m_testField;
-    }
 }
-
 NoPackageMessage &NoPackageMessage::operator =(const NoPackageMessage &other)
 {
     QProtobufMessage::operator=(other);
-    if (m_testField != other.m_testField)
-        *m_testField = *other.m_testField;
+    dptr = other.dptr;
     return *this;
 }
-
 NoPackageMessage::NoPackageMessage(NoPackageMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
-m_testField(nullptr)
+      dptr(std::move(other.dptr))
 {
-    if (m_testField != other.m_testField) {
-        *m_testField = std::move(*other.m_testField);
-    }
 }
-
 NoPackageMessage &NoPackageMessage::operator =(NoPackageMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testField != other.m_testField)
-        *m_testField = std::move(*other.m_testField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool NoPackageMessage::operator ==(const NoPackageMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && (m_testField == other.m_testField
-            || *m_testField == *other.m_testField)
-;
+        && (dptr->m_testField == other.dptr->m_testField
+            || *dptr->m_testField == *other.dptr->m_testField);
 }
 
 bool NoPackageMessage::operator !=(const NoPackageMessage &other) const
@@ -402,24 +480,28 @@ bool NoPackageMessage::operator !=(const NoPackageMessage &other) const
 
 SimpleIntMessage *NoPackageMessage::testField_p() const
 {
-    return m_testField ? m_testField.get() : nullptr;
+    return dptr->m_testField ? dptr->m_testField.get() : nullptr;
 }
 
 SimpleIntMessage &NoPackageMessage::testField() const
 {
-    return *m_testField;
+    return *dptr->m_testField;
 }
 
 void NoPackageMessage::setTestField_p(SimpleIntMessage *testField)
 {
-    if (m_testField.get() != testField)
-        m_testField.reset(testField);
+    if (dptr->m_testField.get() != testField) {
+        dptr.detach();
+        dptr->m_testField.reset(testField);
+    }
 }
 
 void NoPackageMessage::setTestField(const SimpleIntMessage &testField)
 {
-    if (*m_testField != testField)
-        *m_testField = testField;
+    if (*dptr->m_testField != testField) {
+        dptr.detach();
+        *dptr->m_testField = testField;
+    }
 }
 
 

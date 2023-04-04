@@ -45,7 +45,11 @@ public:
     static const char *ClassMessageBeginDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplateEmptyMacros();
     static const char *ClassMessageQmlBeginDeclarationTemplate();
+    static const char *ClassMessageDataBeginDeclarationTemplate();
+    static const char *ConstructorMessageDataDefinitionTemplate();
+    static const char *CopyConstructorMessageDataDefinitionTemplate();
     static const char *EmptyConstructorTemplate();
+
     static const char *UseNamespace();
 
     static const char *PropertyTemplate();
@@ -65,6 +69,7 @@ public:
 
     static const char *ConstructorMessageDefinitionTemplate();
 
+    static const char *MemberSharedDataPointerTemplate();
     static const char *MemberTemplate();
     static const char *MemberRepeatedTemplate();
     static const char *MemberMessageTemplate();
@@ -81,7 +86,6 @@ public:
     static const char *DeletedCopyConstructorTemplate();
     static const char *DeletedMoveConstructorTemplate();
     static const char *CopyMemberTemplate();
-    static const char *CopyMemberMessageTemplate();
     static const char *AssignMemberMessageTemplate();
     static const char *CopyMemberOneofTemplate();
     static const char *AssignMemberOneofTemplate();
@@ -119,9 +123,12 @@ public:
     static const char *GetterOneofDefinitionTemplate();
     static const char *GetterOneofMessageDeclarationTemplate();
     static const char *GetterOneofMessageDefinitionTemplate();
-    static const char *GetterTemplate();
-    static const char *GetterNonScriptableTemplate();
-    static const char *GetterComplexTemplate();
+    static const char *GetterDeclarationTemplate();
+    static const char *GetterDefinitionTemplate();
+    static const char *GetterNonScriptableDeclarationTemplate();
+    static const char *GetterNonScriptableDefinitionTemplate();
+    static const char *GetterComplexDeclarationTemplate();
+    static const char *GetterComplexDefinitionTemplate();
     static const char *GetterQmlListDeclarationTemplate();
     static const char *GetterQmlListDefinitionTemplate();
     static const char *PrivateSetterMessageDeclarationTemplate();
@@ -131,8 +138,10 @@ public:
     static const char *SetterMessageDefinitionTemplate();
     static const char *SetterComplexDeclarationTemplate();
     static const char *SetterComplexDefinitionTemplate();
-    static const char *SetterTemplate();
-    static const char *SetterNonScriptableTemplate();
+    static const char *SetterDeclarationTemplate();
+    static const char *SetterDefinitionTemplate();
+    static const char *SetterNonScriptableDeclarationTemplate();
+    static const char *SetterNonScriptableDefinitionTemplate();
     static const char *SetterOneofDeclarationTemplate();
     static const char *SetterOneofDefinitionTemplate();
     static const char *SetterOneofMessageDefinitionTemplate();
@@ -158,8 +167,8 @@ public:
     static const char *InitializerMemberTemplate();
     static const char *InitializerMemberMessageTemplate();
     static const char *CopyInitializerMemberTemplate();
+    static const char *CopyInitializerMemberMessageTemplate();
     static const char *CopyInitializerMemberOneofTemplate();
-    static const char *MoveInitializerMemberOneofTemplate();
     static const char *EmptyBracesTemplate();
     static const char *DeclareMetaTypeTemplate();
     static const char *DeclareMetaTypeMapTemplate();
@@ -185,6 +194,8 @@ public:
 
     static const char *QtProtobufNamespace();
     static const char *QtProtobufNestedNamespace();
+
+    static const char *DataClassName();
 
     static const char *FieldEnumTemplate();
     static const char *FieldNumberTemplate();

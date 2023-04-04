@@ -239,12 +239,13 @@ void MessageDeclarationPrinter::printGetters()
                 }
 
                 m_printer->Print(propertyMap,
-                                 common::isPureMessage(field) ?
-                                     CommonTemplates::GetterMessageDeclarationTemplate() :
-                                     CommonTemplates::GetterTemplate());
+                                 common::isPureMessage(field)
+                                         ? CommonTemplates::GetterMessageDeclarationTemplate()
+                                         : CommonTemplates::GetterDeclarationTemplate());
 
                 if (field->is_repeated()) {
-                    m_printer->Print(propertyMap, CommonTemplates::GetterComplexTemplate());
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::GetterComplexDeclarationTemplate());
                     if (field->type() == FieldDescriptor::TYPE_MESSAGE && !field->is_map()
                         && Options::instance().hasQml()) {
                         m_printer->Print(propertyMap,
@@ -287,7 +288,7 @@ void MessageDeclarationPrinter::printSetters()
                                      CommonTemplates::SetterComplexDeclarationTemplate());
                     break;
                 default:
-                    m_printer->Print(propertyMap, CommonTemplates::SetterTemplate());
+                    m_printer->Print(propertyMap, CommonTemplates::SetterDeclarationTemplate());
                     break;
                 }
             });
@@ -313,6 +314,8 @@ void MessageDeclarationPrinter::printPrivateGetters()
                 } else if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap,
                                     CommonTemplates::PrivateGetterMessageDeclarationTemplate());
+                } else if (common::hasQmlAlias(field)) {
+                    m_printer->Print(propertyMap, CommonTemplates::GetterNonScriptableDeclarationTemplate());
                 }
             });
     Outdent();
@@ -333,19 +336,8 @@ void MessageDeclarationPrinter::printPrivateSetters()
                 } else if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap,
                                     CommonTemplates::PrivateSetterMessageDeclarationTemplate());
-                }
-            });
-    Outdent();
-}
-
-void MessageDeclarationPrinter::printPrivateMethods()
-{
-    Indent();
-    common::iterateMessageFields(
-            m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-                if (common::hasQmlAlias(field)) {
-                    m_printer->Print(propertyMap, CommonTemplates::GetterNonScriptableTemplate());
-                    m_printer->Print(propertyMap, CommonTemplates::SetterNonScriptableTemplate());
+                } else if (common::hasQmlAlias(field)) {
+                    m_printer->Print(propertyMap, CommonTemplates::SetterNonScriptableDeclarationTemplate());
                 }
             });
     Outdent();
@@ -441,32 +433,14 @@ void MessageDeclarationPrinter::printClassBody()
     printPrivateBlock();
     printPrivateGetters();
     printPrivateSetters();
-    printPrivateMethods();
 
-    printClassMembers();
+    printSharedDataPointer();
 }
 
-void MessageDeclarationPrinter::printClassMembers()
+void MessageDeclarationPrinter::printSharedDataPointer()
 {
     Indent();
-    common::iterateMessageFields(
-            m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-                if (common::isOneofField(field))
-                    return;
-
-                if (common::isPureMessage(field)) {
-                    m_printer->Print(propertyMap, CommonTemplates::MemberMessageTemplate());
-                } else if (field->is_repeated() && !field->is_map()) {
-                    m_printer->Print(propertyMap, CommonTemplates::MemberRepeatedTemplate());
-                } else {
-                    m_printer->Print(propertyMap, CommonTemplates::MemberTemplate());
-                }
-            });
-
-    common::iterateOneofFields(
-            m_descriptor, [&](const OneofDescriptor *, const PropertyMap &propertyMap) {
-                m_printer->Print(propertyMap, CommonTemplates::MemberOneofTemplate());
-            });
+    m_printer->Print(m_typeMap, CommonTemplates::MemberSharedDataPointerTemplate());
     Outdent();
 }
 

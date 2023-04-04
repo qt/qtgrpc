@@ -31,8 +31,7 @@ private:
     void printSetters();
     void printPrivateGetters();
     void printPrivateSetters();
-    void printPrivateMethods();
-    void printClassMembers();
+    void printSharedDataPointer();
     void printConstructors();
     void printDestructor();
     void printMaps();

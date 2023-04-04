@@ -12,6 +12,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -52,6 +53,7 @@ using SimpleSFixedInt64MessageRepeated = QList<std::shared_ptr<SimpleSFixedInt64
 class ComplexMessage;
 using ComplexMessageRepeated = QList<std::shared_ptr<ComplexMessage>>;
 
+class EmptyMessage_QtProtobufData;
 class EmptyMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -70,8 +72,10 @@ public:
     static void registerTypes();
 
 private:
+    QExplicitlySharedDataPointer<EmptyMessage_QtProtobufData> dptr;
 };
 
+class SimpleBoolMessage_QtProtobufData;
 class SimpleBoolMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -94,23 +98,15 @@ public:
     bool operator ==(const SimpleBoolMessage &other) const;
     bool operator !=(const SimpleBoolMessage &other) const;
 
-    bool testFieldBool() const
-    {
-        return m_testFieldBool;
-    }
-
-    void setTestFieldBool(const bool &testFieldBool)
-    {
-        if (m_testFieldBool != testFieldBool)
-            m_testFieldBool = testFieldBool;
-    }
-
+    bool testFieldBool() const;
+    void setTestFieldBool(const bool &testFieldBool);
     static void registerTypes();
 
 private:
-    bool m_testFieldBool;
+    QExplicitlySharedDataPointer<SimpleBoolMessage_QtProtobufData> dptr;
 };
 
+class SimpleIntMessage_QtProtobufData;
 class SimpleIntMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -133,23 +129,15 @@ public:
     bool operator ==(const SimpleIntMessage &other) const;
     bool operator !=(const SimpleIntMessage &other) const;
 
-    QtProtobuf::int32 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    QtProtobuf::int32 testFieldInt() const;
+    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::int32 m_testFieldInt;
+    QExplicitlySharedDataPointer<SimpleIntMessage_QtProtobufData> dptr;
 };
 
+class SimpleSIntMessage_QtProtobufData;
 class SimpleSIntMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -172,23 +160,15 @@ public:
     bool operator ==(const SimpleSIntMessage &other) const;
     bool operator !=(const SimpleSIntMessage &other) const;
 
-    QtProtobuf::sint32 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
-    void setTestFieldInt(const QtProtobuf::sint32 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    QtProtobuf::sint32 testFieldInt() const;
+    void setTestFieldInt(const QtProtobuf::sint32 &testFieldInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testFieldInt;
+    QExplicitlySharedDataPointer<SimpleSIntMessage_QtProtobufData> dptr;
 };
 
+class SimpleUIntMessage_QtProtobufData;
 class SimpleUIntMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -211,23 +191,15 @@ public:
     bool operator ==(const SimpleUIntMessage &other) const;
     bool operator !=(const SimpleUIntMessage &other) const;
 
-    QtProtobuf::uint32 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
-    void setTestFieldInt(const QtProtobuf::uint32 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    QtProtobuf::uint32 testFieldInt() const;
+    void setTestFieldInt(const QtProtobuf::uint32 &testFieldInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::uint32 m_testFieldInt;
+    QExplicitlySharedDataPointer<SimpleUIntMessage_QtProtobufData> dptr;
 };
 
+class SimpleInt64Message_QtProtobufData;
 class SimpleInt64Message : public QProtobufMessage
 {
     Q_GADGET
@@ -250,23 +222,15 @@ public:
     bool operator ==(const SimpleInt64Message &other) const;
     bool operator !=(const SimpleInt64Message &other) const;
 
-    QtProtobuf::int64 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
-    void setTestFieldInt(const QtProtobuf::int64 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    QtProtobuf::int64 testFieldInt() const;
+    void setTestFieldInt(const QtProtobuf::int64 &testFieldInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::int64 m_testFieldInt;
+    QExplicitlySharedDataPointer<SimpleInt64Message_QtProtobufData> dptr;
 };
 
+class SimpleSInt64Message_QtProtobufData;
 class SimpleSInt64Message : public QProtobufMessage
 {
     Q_GADGET
@@ -289,23 +253,15 @@ public:
     bool operator ==(const SimpleSInt64Message &other) const;
     bool operator !=(const SimpleSInt64Message &other) const;
 
-    QtProtobuf::sint64 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
-    void setTestFieldInt(const QtProtobuf::sint64 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    QtProtobuf::sint64 testFieldInt() const;
+    void setTestFieldInt(const QtProtobuf::sint64 &testFieldInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint64 m_testFieldInt;
+    QExplicitlySharedDataPointer<SimpleSInt64Message_QtProtobufData> dptr;
 };
 
+class SimpleUInt64Message_QtProtobufData;
 class SimpleUInt64Message : public QProtobufMessage
 {
     Q_GADGET
@@ -328,23 +284,15 @@ public:
     bool operator ==(const SimpleUInt64Message &other) const;
     bool operator !=(const SimpleUInt64Message &other) const;
 
-    QtProtobuf::uint64 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
-    void setTestFieldInt(const QtProtobuf::uint64 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    QtProtobuf::uint64 testFieldInt() const;
+    void setTestFieldInt(const QtProtobuf::uint64 &testFieldInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::uint64 m_testFieldInt;
+    QExplicitlySharedDataPointer<SimpleUInt64Message_QtProtobufData> dptr;
 };
 
+class SimpleStringMessage_QtProtobufData;
 class SimpleStringMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -367,18 +315,15 @@ public:
     bool operator ==(const SimpleStringMessage &other) const;
     bool operator !=(const SimpleStringMessage &other) const;
 
-    QString testFieldString() const
-    {
-        return m_testFieldString;
-    }
-
+    QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
     static void registerTypes();
 
 private:
-    QString m_testFieldString;
+    QExplicitlySharedDataPointer<SimpleStringMessage_QtProtobufData> dptr;
 };
 
+class SimpleFloatMessage_QtProtobufData;
 class SimpleFloatMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -401,23 +346,15 @@ public:
     bool operator ==(const SimpleFloatMessage &other) const;
     bool operator !=(const SimpleFloatMessage &other) const;
 
-    float testFieldFloat() const
-    {
-        return m_testFieldFloat;
-    }
-
-    void setTestFieldFloat(const float &testFieldFloat)
-    {
-        if (m_testFieldFloat != testFieldFloat)
-            m_testFieldFloat = testFieldFloat;
-    }
-
+    float testFieldFloat() const;
+    void setTestFieldFloat(const float &testFieldFloat);
     static void registerTypes();
 
 private:
-    float m_testFieldFloat;
+    QExplicitlySharedDataPointer<SimpleFloatMessage_QtProtobufData> dptr;
 };
 
+class SimpleDoubleMessage_QtProtobufData;
 class SimpleDoubleMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -440,23 +377,15 @@ public:
     bool operator ==(const SimpleDoubleMessage &other) const;
     bool operator !=(const SimpleDoubleMessage &other) const;
 
-    double testFieldDouble() const
-    {
-        return m_testFieldDouble;
-    }
-
-    void setTestFieldDouble(const double &testFieldDouble)
-    {
-        if (m_testFieldDouble != testFieldDouble)
-            m_testFieldDouble = testFieldDouble;
-    }
-
+    double testFieldDouble() const;
+    void setTestFieldDouble(const double &testFieldDouble);
     static void registerTypes();
 
 private:
-    double m_testFieldDouble;
+    QExplicitlySharedDataPointer<SimpleDoubleMessage_QtProtobufData> dptr;
 };
 
+class SimpleBytesMessage_QtProtobufData;
 class SimpleBytesMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -479,18 +408,15 @@ public:
     bool operator ==(const SimpleBytesMessage &other) const;
     bool operator !=(const SimpleBytesMessage &other) const;
 
-    QByteArray testFieldBytes() const
-    {
-        return m_testFieldBytes;
-    }
-
+    QByteArray testFieldBytes() const;
     void setTestFieldBytes(const QByteArray &testFieldBytes);
     static void registerTypes();
 
 private:
-    QByteArray m_testFieldBytes;
+    QExplicitlySharedDataPointer<SimpleBytesMessage_QtProtobufData> dptr;
 };
 
+class SimpleFixedInt32Message_QtProtobufData;
 class SimpleFixedInt32Message : public QProtobufMessage
 {
     Q_GADGET
@@ -513,23 +439,15 @@ public:
     bool operator ==(const SimpleFixedInt32Message &other) const;
     bool operator !=(const SimpleFixedInt32Message &other) const;
 
-    QtProtobuf::fixed32 testFieldFixedInt32() const
-    {
-        return m_testFieldFixedInt32;
-    }
-
-    void setTestFieldFixedInt32(const QtProtobuf::fixed32 &testFieldFixedInt32)
-    {
-        if (m_testFieldFixedInt32 != testFieldFixedInt32)
-            m_testFieldFixedInt32 = testFieldFixedInt32;
-    }
-
+    QtProtobuf::fixed32 testFieldFixedInt32() const;
+    void setTestFieldFixedInt32(const QtProtobuf::fixed32 &testFieldFixedInt32);
     static void registerTypes();
 
 private:
-    QtProtobuf::fixed32 m_testFieldFixedInt32;
+    QExplicitlySharedDataPointer<SimpleFixedInt32Message_QtProtobufData> dptr;
 };
 
+class SimpleFixedInt64Message_QtProtobufData;
 class SimpleFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
@@ -552,23 +470,15 @@ public:
     bool operator ==(const SimpleFixedInt64Message &other) const;
     bool operator !=(const SimpleFixedInt64Message &other) const;
 
-    QtProtobuf::fixed64 testFieldFixedInt64() const
-    {
-        return m_testFieldFixedInt64;
-    }
-
-    void setTestFieldFixedInt64(const QtProtobuf::fixed64 &testFieldFixedInt64)
-    {
-        if (m_testFieldFixedInt64 != testFieldFixedInt64)
-            m_testFieldFixedInt64 = testFieldFixedInt64;
-    }
-
+    QtProtobuf::fixed64 testFieldFixedInt64() const;
+    void setTestFieldFixedInt64(const QtProtobuf::fixed64 &testFieldFixedInt64);
     static void registerTypes();
 
 private:
-    QtProtobuf::fixed64 m_testFieldFixedInt64;
+    QExplicitlySharedDataPointer<SimpleFixedInt64Message_QtProtobufData> dptr;
 };
 
+class SimpleSFixedInt32Message_QtProtobufData;
 class SimpleSFixedInt32Message : public QProtobufMessage
 {
     Q_GADGET
@@ -591,23 +501,15 @@ public:
     bool operator ==(const SimpleSFixedInt32Message &other) const;
     bool operator !=(const SimpleSFixedInt32Message &other) const;
 
-    QtProtobuf::sfixed32 testFieldFixedInt32() const
-    {
-        return m_testFieldFixedInt32;
-    }
-
-    void setTestFieldFixedInt32(const QtProtobuf::sfixed32 &testFieldFixedInt32)
-    {
-        if (m_testFieldFixedInt32 != testFieldFixedInt32)
-            m_testFieldFixedInt32 = testFieldFixedInt32;
-    }
-
+    QtProtobuf::sfixed32 testFieldFixedInt32() const;
+    void setTestFieldFixedInt32(const QtProtobuf::sfixed32 &testFieldFixedInt32);
     static void registerTypes();
 
 private:
-    QtProtobuf::sfixed32 m_testFieldFixedInt32;
+    QExplicitlySharedDataPointer<SimpleSFixedInt32Message_QtProtobufData> dptr;
 };
 
+class SimpleSFixedInt64Message_QtProtobufData;
 class SimpleSFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
@@ -630,23 +532,15 @@ public:
     bool operator ==(const SimpleSFixedInt64Message &other) const;
     bool operator !=(const SimpleSFixedInt64Message &other) const;
 
-    QtProtobuf::sfixed64 testFieldFixedInt64() const
-    {
-        return m_testFieldFixedInt64;
-    }
-
-    void setTestFieldFixedInt64(const QtProtobuf::sfixed64 &testFieldFixedInt64)
-    {
-        if (m_testFieldFixedInt64 != testFieldFixedInt64)
-            m_testFieldFixedInt64 = testFieldFixedInt64;
-    }
-
+    QtProtobuf::sfixed64 testFieldFixedInt64() const;
+    void setTestFieldFixedInt64(const QtProtobuf::sfixed64 &testFieldFixedInt64);
     static void registerTypes();
 
 private:
-    QtProtobuf::sfixed64 m_testFieldFixedInt64;
+    QExplicitlySharedDataPointer<SimpleSFixedInt64Message_QtProtobufData> dptr;
 };
 
+class ComplexMessage_QtProtobufData;
 class ComplexMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -671,27 +565,17 @@ public:
     bool operator ==(const ComplexMessage &other) const;
     bool operator !=(const ComplexMessage &other) const;
 
-    QtProtobuf::int32 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
+    QtProtobuf::int32 testFieldInt() const;
 
     SimpleStringMessage &testComplexField() const;
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     void setTestComplexField(const SimpleStringMessage &testComplexField);
     static void registerTypes();
 
 private:
     SimpleStringMessage *testComplexField_p() const;
     void setTestComplexField_p(SimpleStringMessage *testComplexField);
-    QtProtobuf::int32 m_testFieldInt;
-    QtProtobufPrivate::QProtobufLazyMessagePointer<SimpleStringMessage> m_testComplexField;
+    QExplicitlySharedDataPointer<ComplexMessage_QtProtobufData> dptr;
 };
 } // namespace qtprotobufnamespace::tests
 

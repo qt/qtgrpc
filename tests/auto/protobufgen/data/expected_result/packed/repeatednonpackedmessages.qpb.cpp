@@ -4,6 +4,24 @@
 #include <QtProtobuf/qprotobufserializer.h>
 
 namespace qtprotobufnamespace::tests {
+
+class RepeatedNonPackedIntMessage_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedIntMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedIntMessage_QtProtobufData(const RepeatedNonPackedIntMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt)
+    {
+    }
+
+    QtProtobuf::int32List m_testRepeatedInt;
+};
+
 RepeatedNonPackedIntMessage::~RepeatedNonPackedIntMessage() = default;
 
 static constexpr struct {
@@ -50,47 +68,80 @@ void RepeatedNonPackedIntMessage::registerTypes()
 }
 
 RepeatedNonPackedIntMessage::RepeatedNonPackedIntMessage()
-    : QProtobufMessage(&RepeatedNonPackedIntMessage::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedIntMessage::staticMetaObject),
+      dptr(new RepeatedNonPackedIntMessage_QtProtobufData)
 {
 }
 
 RepeatedNonPackedIntMessage::RepeatedNonPackedIntMessage(const RepeatedNonPackedIntMessage &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedIntMessage &RepeatedNonPackedIntMessage::operator =(const RepeatedNonPackedIntMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedIntMessage::RepeatedNonPackedIntMessage(RepeatedNonPackedIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
 }
-
 RepeatedNonPackedIntMessage &RepeatedNonPackedIntMessage::operator =(RepeatedNonPackedIntMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedIntMessage::operator ==(const RepeatedNonPackedIntMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
 }
 
 bool RepeatedNonPackedIntMessage::operator !=(const RepeatedNonPackedIntMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::int32List RepeatedNonPackedIntMessage::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::int32List &RepeatedNonPackedIntMessage::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+void RepeatedNonPackedIntMessage::setTestRepeatedInt(const QtProtobuf::int32List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+
+class RepeatedNonPackedSIntMessage_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedSIntMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedSIntMessage_QtProtobufData(const RepeatedNonPackedSIntMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt)
+    {
+    }
+
+    QtProtobuf::sint32List m_testRepeatedInt;
+};
 
 RepeatedNonPackedSIntMessage::~RepeatedNonPackedSIntMessage() = default;
 
@@ -138,47 +189,80 @@ void RepeatedNonPackedSIntMessage::registerTypes()
 }
 
 RepeatedNonPackedSIntMessage::RepeatedNonPackedSIntMessage()
-    : QProtobufMessage(&RepeatedNonPackedSIntMessage::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedSIntMessage::staticMetaObject),
+      dptr(new RepeatedNonPackedSIntMessage_QtProtobufData)
 {
 }
 
 RepeatedNonPackedSIntMessage::RepeatedNonPackedSIntMessage(const RepeatedNonPackedSIntMessage &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedSIntMessage &RepeatedNonPackedSIntMessage::operator =(const RepeatedNonPackedSIntMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedSIntMessage::RepeatedNonPackedSIntMessage(RepeatedNonPackedSIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
 }
-
 RepeatedNonPackedSIntMessage &RepeatedNonPackedSIntMessage::operator =(RepeatedNonPackedSIntMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedSIntMessage::operator ==(const RepeatedNonPackedSIntMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
 }
 
 bool RepeatedNonPackedSIntMessage::operator !=(const RepeatedNonPackedSIntMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint32List RepeatedNonPackedSIntMessage::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::sint32List &RepeatedNonPackedSIntMessage::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+void RepeatedNonPackedSIntMessage::setTestRepeatedInt(const QtProtobuf::sint32List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+
+class RepeatedNonPackedUIntMessage_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedUIntMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedUIntMessage_QtProtobufData(const RepeatedNonPackedUIntMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt)
+    {
+    }
+
+    QtProtobuf::uint32List m_testRepeatedInt;
+};
 
 RepeatedNonPackedUIntMessage::~RepeatedNonPackedUIntMessage() = default;
 
@@ -226,47 +310,80 @@ void RepeatedNonPackedUIntMessage::registerTypes()
 }
 
 RepeatedNonPackedUIntMessage::RepeatedNonPackedUIntMessage()
-    : QProtobufMessage(&RepeatedNonPackedUIntMessage::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedUIntMessage::staticMetaObject),
+      dptr(new RepeatedNonPackedUIntMessage_QtProtobufData)
 {
 }
 
 RepeatedNonPackedUIntMessage::RepeatedNonPackedUIntMessage(const RepeatedNonPackedUIntMessage &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedUIntMessage &RepeatedNonPackedUIntMessage::operator =(const RepeatedNonPackedUIntMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedUIntMessage::RepeatedNonPackedUIntMessage(RepeatedNonPackedUIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
 }
-
 RepeatedNonPackedUIntMessage &RepeatedNonPackedUIntMessage::operator =(RepeatedNonPackedUIntMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedUIntMessage::operator ==(const RepeatedNonPackedUIntMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
 }
 
 bool RepeatedNonPackedUIntMessage::operator !=(const RepeatedNonPackedUIntMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::uint32List RepeatedNonPackedUIntMessage::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::uint32List &RepeatedNonPackedUIntMessage::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+void RepeatedNonPackedUIntMessage::setTestRepeatedInt(const QtProtobuf::uint32List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+
+class RepeatedNonPackedInt64Message_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedInt64Message_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedInt64Message_QtProtobufData(const RepeatedNonPackedInt64Message_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt)
+    {
+    }
+
+    QtProtobuf::int64List m_testRepeatedInt;
+};
 
 RepeatedNonPackedInt64Message::~RepeatedNonPackedInt64Message() = default;
 
@@ -314,47 +431,80 @@ void RepeatedNonPackedInt64Message::registerTypes()
 }
 
 RepeatedNonPackedInt64Message::RepeatedNonPackedInt64Message()
-    : QProtobufMessage(&RepeatedNonPackedInt64Message::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedInt64Message::staticMetaObject),
+      dptr(new RepeatedNonPackedInt64Message_QtProtobufData)
 {
 }
 
 RepeatedNonPackedInt64Message::RepeatedNonPackedInt64Message(const RepeatedNonPackedInt64Message &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedInt64Message &RepeatedNonPackedInt64Message::operator =(const RepeatedNonPackedInt64Message &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedInt64Message::RepeatedNonPackedInt64Message(RepeatedNonPackedInt64Message &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
 }
-
 RepeatedNonPackedInt64Message &RepeatedNonPackedInt64Message::operator =(RepeatedNonPackedInt64Message &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedInt64Message::operator ==(const RepeatedNonPackedInt64Message &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
 }
 
 bool RepeatedNonPackedInt64Message::operator !=(const RepeatedNonPackedInt64Message &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::int64List RepeatedNonPackedInt64Message::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::int64List &RepeatedNonPackedInt64Message::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+void RepeatedNonPackedInt64Message::setTestRepeatedInt(const QtProtobuf::int64List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+
+class RepeatedNonPackedSInt64Message_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedSInt64Message_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedSInt64Message_QtProtobufData(const RepeatedNonPackedSInt64Message_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt)
+    {
+    }
+
+    QtProtobuf::sint64List m_testRepeatedInt;
+};
 
 RepeatedNonPackedSInt64Message::~RepeatedNonPackedSInt64Message() = default;
 
@@ -402,47 +552,80 @@ void RepeatedNonPackedSInt64Message::registerTypes()
 }
 
 RepeatedNonPackedSInt64Message::RepeatedNonPackedSInt64Message()
-    : QProtobufMessage(&RepeatedNonPackedSInt64Message::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedSInt64Message::staticMetaObject),
+      dptr(new RepeatedNonPackedSInt64Message_QtProtobufData)
 {
 }
 
 RepeatedNonPackedSInt64Message::RepeatedNonPackedSInt64Message(const RepeatedNonPackedSInt64Message &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedSInt64Message &RepeatedNonPackedSInt64Message::operator =(const RepeatedNonPackedSInt64Message &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedSInt64Message::RepeatedNonPackedSInt64Message(RepeatedNonPackedSInt64Message &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
 }
-
 RepeatedNonPackedSInt64Message &RepeatedNonPackedSInt64Message::operator =(RepeatedNonPackedSInt64Message &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedSInt64Message::operator ==(const RepeatedNonPackedSInt64Message &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
 }
 
 bool RepeatedNonPackedSInt64Message::operator !=(const RepeatedNonPackedSInt64Message &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint64List RepeatedNonPackedSInt64Message::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::sint64List &RepeatedNonPackedSInt64Message::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+void RepeatedNonPackedSInt64Message::setTestRepeatedInt(const QtProtobuf::sint64List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+
+class RepeatedNonPackedUInt64Message_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedUInt64Message_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedUInt64Message_QtProtobufData(const RepeatedNonPackedUInt64Message_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt)
+    {
+    }
+
+    QtProtobuf::uint64List m_testRepeatedInt;
+};
 
 RepeatedNonPackedUInt64Message::~RepeatedNonPackedUInt64Message() = default;
 
@@ -490,47 +673,80 @@ void RepeatedNonPackedUInt64Message::registerTypes()
 }
 
 RepeatedNonPackedUInt64Message::RepeatedNonPackedUInt64Message()
-    : QProtobufMessage(&RepeatedNonPackedUInt64Message::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedUInt64Message::staticMetaObject),
+      dptr(new RepeatedNonPackedUInt64Message_QtProtobufData)
 {
 }
 
 RepeatedNonPackedUInt64Message::RepeatedNonPackedUInt64Message(const RepeatedNonPackedUInt64Message &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedUInt64Message &RepeatedNonPackedUInt64Message::operator =(const RepeatedNonPackedUInt64Message &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedUInt64Message::RepeatedNonPackedUInt64Message(RepeatedNonPackedUInt64Message &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
 }
-
 RepeatedNonPackedUInt64Message &RepeatedNonPackedUInt64Message::operator =(RepeatedNonPackedUInt64Message &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedUInt64Message::operator ==(const RepeatedNonPackedUInt64Message &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
 }
 
 bool RepeatedNonPackedUInt64Message::operator !=(const RepeatedNonPackedUInt64Message &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::uint64List RepeatedNonPackedUInt64Message::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::uint64List &RepeatedNonPackedUInt64Message::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+void RepeatedNonPackedUInt64Message::setTestRepeatedInt(const QtProtobuf::uint64List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+
+class RepeatedNonPackedFixedIntMessage_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedFixedIntMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedFixedIntMessage_QtProtobufData(const RepeatedNonPackedFixedIntMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt)
+    {
+    }
+
+    QtProtobuf::fixed32List m_testRepeatedInt;
+};
 
 RepeatedNonPackedFixedIntMessage::~RepeatedNonPackedFixedIntMessage() = default;
 
@@ -578,47 +794,80 @@ void RepeatedNonPackedFixedIntMessage::registerTypes()
 }
 
 RepeatedNonPackedFixedIntMessage::RepeatedNonPackedFixedIntMessage()
-    : QProtobufMessage(&RepeatedNonPackedFixedIntMessage::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedFixedIntMessage::staticMetaObject),
+      dptr(new RepeatedNonPackedFixedIntMessage_QtProtobufData)
 {
 }
 
 RepeatedNonPackedFixedIntMessage::RepeatedNonPackedFixedIntMessage(const RepeatedNonPackedFixedIntMessage &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedFixedIntMessage &RepeatedNonPackedFixedIntMessage::operator =(const RepeatedNonPackedFixedIntMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedFixedIntMessage::RepeatedNonPackedFixedIntMessage(RepeatedNonPackedFixedIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
 }
-
 RepeatedNonPackedFixedIntMessage &RepeatedNonPackedFixedIntMessage::operator =(RepeatedNonPackedFixedIntMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedFixedIntMessage::operator ==(const RepeatedNonPackedFixedIntMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
 }
 
 bool RepeatedNonPackedFixedIntMessage::operator !=(const RepeatedNonPackedFixedIntMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::fixed32List RepeatedNonPackedFixedIntMessage::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::fixed32List &RepeatedNonPackedFixedIntMessage::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+void RepeatedNonPackedFixedIntMessage::setTestRepeatedInt(const QtProtobuf::fixed32List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+
+class RepeatedNonPackedSFixedIntMessage_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedSFixedIntMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedSFixedIntMessage_QtProtobufData(const RepeatedNonPackedSFixedIntMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt)
+    {
+    }
+
+    QtProtobuf::sfixed32List m_testRepeatedInt;
+};
 
 RepeatedNonPackedSFixedIntMessage::~RepeatedNonPackedSFixedIntMessage() = default;
 
@@ -666,47 +915,80 @@ void RepeatedNonPackedSFixedIntMessage::registerTypes()
 }
 
 RepeatedNonPackedSFixedIntMessage::RepeatedNonPackedSFixedIntMessage()
-    : QProtobufMessage(&RepeatedNonPackedSFixedIntMessage::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedSFixedIntMessage::staticMetaObject),
+      dptr(new RepeatedNonPackedSFixedIntMessage_QtProtobufData)
 {
 }
 
 RepeatedNonPackedSFixedIntMessage::RepeatedNonPackedSFixedIntMessage(const RepeatedNonPackedSFixedIntMessage &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedSFixedIntMessage &RepeatedNonPackedSFixedIntMessage::operator =(const RepeatedNonPackedSFixedIntMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedSFixedIntMessage::RepeatedNonPackedSFixedIntMessage(RepeatedNonPackedSFixedIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
 }
-
 RepeatedNonPackedSFixedIntMessage &RepeatedNonPackedSFixedIntMessage::operator =(RepeatedNonPackedSFixedIntMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedSFixedIntMessage::operator ==(const RepeatedNonPackedSFixedIntMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
 }
 
 bool RepeatedNonPackedSFixedIntMessage::operator !=(const RepeatedNonPackedSFixedIntMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sfixed32List RepeatedNonPackedSFixedIntMessage::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::sfixed32List &RepeatedNonPackedSFixedIntMessage::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+void RepeatedNonPackedSFixedIntMessage::setTestRepeatedInt(const QtProtobuf::sfixed32List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+
+class RepeatedNonPackedFixedInt64Message_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedFixedInt64Message_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedFixedInt64Message_QtProtobufData(const RepeatedNonPackedFixedInt64Message_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt)
+    {
+    }
+
+    QtProtobuf::fixed64List m_testRepeatedInt;
+};
 
 RepeatedNonPackedFixedInt64Message::~RepeatedNonPackedFixedInt64Message() = default;
 
@@ -754,47 +1036,80 @@ void RepeatedNonPackedFixedInt64Message::registerTypes()
 }
 
 RepeatedNonPackedFixedInt64Message::RepeatedNonPackedFixedInt64Message()
-    : QProtobufMessage(&RepeatedNonPackedFixedInt64Message::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedFixedInt64Message::staticMetaObject),
+      dptr(new RepeatedNonPackedFixedInt64Message_QtProtobufData)
 {
 }
 
 RepeatedNonPackedFixedInt64Message::RepeatedNonPackedFixedInt64Message(const RepeatedNonPackedFixedInt64Message &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedFixedInt64Message &RepeatedNonPackedFixedInt64Message::operator =(const RepeatedNonPackedFixedInt64Message &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedFixedInt64Message::RepeatedNonPackedFixedInt64Message(RepeatedNonPackedFixedInt64Message &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
 }
-
 RepeatedNonPackedFixedInt64Message &RepeatedNonPackedFixedInt64Message::operator =(RepeatedNonPackedFixedInt64Message &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedFixedInt64Message::operator ==(const RepeatedNonPackedFixedInt64Message &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
 }
 
 bool RepeatedNonPackedFixedInt64Message::operator !=(const RepeatedNonPackedFixedInt64Message &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::fixed64List RepeatedNonPackedFixedInt64Message::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::fixed64List &RepeatedNonPackedFixedInt64Message::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+void RepeatedNonPackedFixedInt64Message::setTestRepeatedInt(const QtProtobuf::fixed64List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+
+class RepeatedNonPackedSFixedInt64Message_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedSFixedInt64Message_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedSFixedInt64Message_QtProtobufData(const RepeatedNonPackedSFixedInt64Message_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt)
+    {
+    }
+
+    QtProtobuf::sfixed64List m_testRepeatedInt;
+};
 
 RepeatedNonPackedSFixedInt64Message::~RepeatedNonPackedSFixedInt64Message() = default;
 
@@ -842,47 +1157,80 @@ void RepeatedNonPackedSFixedInt64Message::registerTypes()
 }
 
 RepeatedNonPackedSFixedInt64Message::RepeatedNonPackedSFixedInt64Message()
-    : QProtobufMessage(&RepeatedNonPackedSFixedInt64Message::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedSFixedInt64Message::staticMetaObject),
+      dptr(new RepeatedNonPackedSFixedInt64Message_QtProtobufData)
 {
 }
 
 RepeatedNonPackedSFixedInt64Message::RepeatedNonPackedSFixedInt64Message(const RepeatedNonPackedSFixedInt64Message &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedSFixedInt64Message &RepeatedNonPackedSFixedInt64Message::operator =(const RepeatedNonPackedSFixedInt64Message &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedSFixedInt64Message::RepeatedNonPackedSFixedInt64Message(RepeatedNonPackedSFixedInt64Message &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
 }
-
 RepeatedNonPackedSFixedInt64Message &RepeatedNonPackedSFixedInt64Message::operator =(RepeatedNonPackedSFixedInt64Message &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedSFixedInt64Message::operator ==(const RepeatedNonPackedSFixedInt64Message &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
 }
 
 bool RepeatedNonPackedSFixedInt64Message::operator !=(const RepeatedNonPackedSFixedInt64Message &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sfixed64List RepeatedNonPackedSFixedInt64Message::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::sfixed64List &RepeatedNonPackedSFixedInt64Message::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+void RepeatedNonPackedSFixedInt64Message::setTestRepeatedInt(const QtProtobuf::sfixed64List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+
+class RepeatedNonPackedBoolMessage_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedBoolMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedBoolMessage_QtProtobufData(const RepeatedNonPackedBoolMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedBool(other.m_testRepeatedBool)
+    {
+    }
+
+    QtProtobuf::boolList m_testRepeatedBool;
+};
 
 RepeatedNonPackedBoolMessage::~RepeatedNonPackedBoolMessage() = default;
 
@@ -930,47 +1278,80 @@ void RepeatedNonPackedBoolMessage::registerTypes()
 }
 
 RepeatedNonPackedBoolMessage::RepeatedNonPackedBoolMessage()
-    : QProtobufMessage(&RepeatedNonPackedBoolMessage::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedBoolMessage::staticMetaObject),
+      dptr(new RepeatedNonPackedBoolMessage_QtProtobufData)
 {
 }
 
 RepeatedNonPackedBoolMessage::RepeatedNonPackedBoolMessage(const RepeatedNonPackedBoolMessage &other)
     : QProtobufMessage(other),
-      m_testRepeatedBool(other.m_testRepeatedBool)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedBoolMessage &RepeatedNonPackedBoolMessage::operator =(const RepeatedNonPackedBoolMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedBool(other.m_testRepeatedBool);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedBoolMessage::RepeatedNonPackedBoolMessage(RepeatedNonPackedBoolMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedBool = std::move(other.m_testRepeatedBool);
 }
-
 RepeatedNonPackedBoolMessage &RepeatedNonPackedBoolMessage::operator =(RepeatedNonPackedBoolMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedBool != other.m_testRepeatedBool)
-        m_testRepeatedBool = std::move(other.m_testRepeatedBool);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedBoolMessage::operator ==(const RepeatedNonPackedBoolMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedBool == other.m_testRepeatedBool;
+        && dptr->m_testRepeatedBool == other.dptr->m_testRepeatedBool;
 }
 
 bool RepeatedNonPackedBoolMessage::operator !=(const RepeatedNonPackedBoolMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::boolList RepeatedNonPackedBoolMessage::testRepeatedBool() const
+{
+    return dptr->m_testRepeatedBool;
+}
+
+QtProtobuf::boolList &RepeatedNonPackedBoolMessage::testRepeatedBool()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedBool;
+}
+
+void RepeatedNonPackedBoolMessage::setTestRepeatedBool(const QtProtobuf::boolList &testRepeatedBool)
+{
+    if (dptr->m_testRepeatedBool != testRepeatedBool) {
+        dptr.detach();
+        dptr->m_testRepeatedBool = testRepeatedBool;
+    }
+}
+
+
+class RepeatedNonPackedDoubleMessage_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedDoubleMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedDoubleMessage_QtProtobufData(const RepeatedNonPackedDoubleMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedDouble(other.m_testRepeatedDouble)
+    {
+    }
+
+    QtProtobuf::doubleList m_testRepeatedDouble;
+};
 
 RepeatedNonPackedDoubleMessage::~RepeatedNonPackedDoubleMessage() = default;
 
@@ -1018,47 +1399,80 @@ void RepeatedNonPackedDoubleMessage::registerTypes()
 }
 
 RepeatedNonPackedDoubleMessage::RepeatedNonPackedDoubleMessage()
-    : QProtobufMessage(&RepeatedNonPackedDoubleMessage::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedDoubleMessage::staticMetaObject),
+      dptr(new RepeatedNonPackedDoubleMessage_QtProtobufData)
 {
 }
 
 RepeatedNonPackedDoubleMessage::RepeatedNonPackedDoubleMessage(const RepeatedNonPackedDoubleMessage &other)
     : QProtobufMessage(other),
-      m_testRepeatedDouble(other.m_testRepeatedDouble)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedDoubleMessage &RepeatedNonPackedDoubleMessage::operator =(const RepeatedNonPackedDoubleMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedDouble(other.m_testRepeatedDouble);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedDoubleMessage::RepeatedNonPackedDoubleMessage(RepeatedNonPackedDoubleMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedDouble = std::move(other.m_testRepeatedDouble);
 }
-
 RepeatedNonPackedDoubleMessage &RepeatedNonPackedDoubleMessage::operator =(RepeatedNonPackedDoubleMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedDouble != other.m_testRepeatedDouble)
-        m_testRepeatedDouble = std::move(other.m_testRepeatedDouble);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedDoubleMessage::operator ==(const RepeatedNonPackedDoubleMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedDouble == other.m_testRepeatedDouble;
+        && dptr->m_testRepeatedDouble == other.dptr->m_testRepeatedDouble;
 }
 
 bool RepeatedNonPackedDoubleMessage::operator !=(const RepeatedNonPackedDoubleMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::doubleList RepeatedNonPackedDoubleMessage::testRepeatedDouble() const
+{
+    return dptr->m_testRepeatedDouble;
+}
+
+QtProtobuf::doubleList &RepeatedNonPackedDoubleMessage::testRepeatedDouble()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedDouble;
+}
+
+void RepeatedNonPackedDoubleMessage::setTestRepeatedDouble(const QtProtobuf::doubleList &testRepeatedDouble)
+{
+    if (dptr->m_testRepeatedDouble != testRepeatedDouble) {
+        dptr.detach();
+        dptr->m_testRepeatedDouble = testRepeatedDouble;
+    }
+}
+
+
+class RepeatedNonPackedFloatMessage_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedNonPackedFloatMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedNonPackedFloatMessage_QtProtobufData(const RepeatedNonPackedFloatMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedFloat(other.m_testRepeatedFloat)
+    {
+    }
+
+    QtProtobuf::floatList m_testRepeatedFloat;
+};
 
 RepeatedNonPackedFloatMessage::~RepeatedNonPackedFloatMessage() = default;
 
@@ -1106,47 +1520,82 @@ void RepeatedNonPackedFloatMessage::registerTypes()
 }
 
 RepeatedNonPackedFloatMessage::RepeatedNonPackedFloatMessage()
-    : QProtobufMessage(&RepeatedNonPackedFloatMessage::staticMetaObject)
+    : QProtobufMessage(&RepeatedNonPackedFloatMessage::staticMetaObject),
+      dptr(new RepeatedNonPackedFloatMessage_QtProtobufData)
 {
 }
 
 RepeatedNonPackedFloatMessage::RepeatedNonPackedFloatMessage(const RepeatedNonPackedFloatMessage &other)
     : QProtobufMessage(other),
-      m_testRepeatedFloat(other.m_testRepeatedFloat)
+      dptr(other.dptr)
 {
 }
-
 RepeatedNonPackedFloatMessage &RepeatedNonPackedFloatMessage::operator =(const RepeatedNonPackedFloatMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedFloat(other.m_testRepeatedFloat);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedNonPackedFloatMessage::RepeatedNonPackedFloatMessage(RepeatedNonPackedFloatMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedFloat = std::move(other.m_testRepeatedFloat);
 }
-
 RepeatedNonPackedFloatMessage &RepeatedNonPackedFloatMessage::operator =(RepeatedNonPackedFloatMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedFloat != other.m_testRepeatedFloat)
-        m_testRepeatedFloat = std::move(other.m_testRepeatedFloat);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedNonPackedFloatMessage::operator ==(const RepeatedNonPackedFloatMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedFloat == other.m_testRepeatedFloat;
+        && dptr->m_testRepeatedFloat == other.dptr->m_testRepeatedFloat;
 }
 
 bool RepeatedNonPackedFloatMessage::operator !=(const RepeatedNonPackedFloatMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::floatList RepeatedNonPackedFloatMessage::testRepeatedFloat() const
+{
+    return dptr->m_testRepeatedFloat;
+}
+
+QtProtobuf::floatList &RepeatedNonPackedFloatMessage::testRepeatedFloat()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedFloat;
+}
+
+void RepeatedNonPackedFloatMessage::setTestRepeatedFloat(const QtProtobuf::floatList &testRepeatedFloat)
+{
+    if (dptr->m_testRepeatedFloat != testRepeatedFloat) {
+        dptr.detach();
+        dptr->m_testRepeatedFloat = testRepeatedFloat;
+    }
+}
+
+
+class NonPackedIntMessageWithExtraMember_QtProtobufData : public QSharedData
+{
+public:
+    NonPackedIntMessageWithExtraMember_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    NonPackedIntMessageWithExtraMember_QtProtobufData(const NonPackedIntMessageWithExtraMember_QtProtobufData &other)
+        : QSharedData(other),
+          m_testRepeatedInt(other.m_testRepeatedInt),
+          m_extra(other.m_extra)
+    {
+    }
+
+    QtProtobuf::int32List m_testRepeatedInt;
+    QString m_extra;
+};
 
 NonPackedIntMessageWithExtraMember::~NonPackedIntMessageWithExtraMember() = default;
 
@@ -1198,47 +1647,38 @@ void NonPackedIntMessageWithExtraMember::registerTypes()
 }
 
 NonPackedIntMessageWithExtraMember::NonPackedIntMessageWithExtraMember()
-    : QProtobufMessage(&NonPackedIntMessageWithExtraMember::staticMetaObject)
+    : QProtobufMessage(&NonPackedIntMessageWithExtraMember::staticMetaObject),
+      dptr(new NonPackedIntMessageWithExtraMember_QtProtobufData)
 {
 }
 
 NonPackedIntMessageWithExtraMember::NonPackedIntMessageWithExtraMember(const NonPackedIntMessageWithExtraMember &other)
     : QProtobufMessage(other),
-      m_testRepeatedInt(other.m_testRepeatedInt),
-      m_extra(other.m_extra)
+      dptr(other.dptr)
 {
 }
-
 NonPackedIntMessageWithExtraMember &NonPackedIntMessageWithExtraMember::operator =(const NonPackedIntMessageWithExtraMember &other)
 {
     QProtobufMessage::operator=(other);
-    setTestRepeatedInt(other.m_testRepeatedInt);
-    setExtra(other.m_extra);
+    dptr = other.dptr;
     return *this;
 }
-
 NonPackedIntMessageWithExtraMember::NonPackedIntMessageWithExtraMember(NonPackedIntMessageWithExtraMember &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testRepeatedInt = std::move(other.m_testRepeatedInt);
-    m_extra = std::move(other.m_extra);
 }
-
 NonPackedIntMessageWithExtraMember &NonPackedIntMessageWithExtraMember::operator =(NonPackedIntMessageWithExtraMember &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testRepeatedInt != other.m_testRepeatedInt)
-        m_testRepeatedInt = std::move(other.m_testRepeatedInt);
-    if (m_extra != other.m_extra)
-        m_extra = std::move(other.m_extra);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool NonPackedIntMessageWithExtraMember::operator ==(const NonPackedIntMessageWithExtraMember &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testRepeatedInt == other.m_testRepeatedInt
-        && m_extra == other.m_extra;
+        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt
+        && dptr->m_extra == other.dptr->m_extra;
 }
 
 bool NonPackedIntMessageWithExtraMember::operator !=(const NonPackedIntMessageWithExtraMember &other) const
@@ -1246,10 +1686,36 @@ bool NonPackedIntMessageWithExtraMember::operator !=(const NonPackedIntMessageWi
     return !this->operator ==(other);
 }
 
+QtProtobuf::int32List NonPackedIntMessageWithExtraMember::testRepeatedInt() const
+{
+    return dptr->m_testRepeatedInt;
+}
+
+QtProtobuf::int32List &NonPackedIntMessageWithExtraMember::testRepeatedInt()
+{
+    dptr.detach();
+    return dptr->m_testRepeatedInt;
+}
+
+QString NonPackedIntMessageWithExtraMember::extra() const
+{
+    return dptr->m_extra;
+}
+
+void NonPackedIntMessageWithExtraMember::setTestRepeatedInt(const QtProtobuf::int32List &testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
 void NonPackedIntMessageWithExtraMember::setExtra(const QString &extra)
 {
-    if (m_extra != extra)
-        m_extra = extra;
+    if (dptr->m_extra != extra) {
+        dptr.detach();
+        dptr->m_extra = extra;
+    }
 }
 
 } // namespace qtprotobufnamespace::tests

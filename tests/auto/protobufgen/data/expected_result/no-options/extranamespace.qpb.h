@@ -12,6 +12,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -24,6 +25,7 @@ using SimpleStringMessageRepeated = QList<std::shared_ptr<SimpleStringMessage>>;
 class ComplexMessage;
 using ComplexMessageRepeated = QList<std::shared_ptr<ComplexMessage>>;
 
+class EmptyMessage_QtProtobufData;
 class EmptyMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -42,8 +44,10 @@ public:
     static void registerTypes();
 
 private:
+    QExplicitlySharedDataPointer<EmptyMessage_QtProtobufData> dptr;
 };
 
+class SimpleStringMessage_QtProtobufData;
 class SimpleStringMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -66,18 +70,15 @@ public:
     bool operator ==(const SimpleStringMessage &other) const;
     bool operator !=(const SimpleStringMessage &other) const;
 
-    QString testFieldString() const
-    {
-        return m_testFieldString;
-    }
-
+    QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
     static void registerTypes();
 
 private:
-    QString m_testFieldString;
+    QExplicitlySharedDataPointer<SimpleStringMessage_QtProtobufData> dptr;
 };
 
+class ComplexMessage_QtProtobufData;
 class ComplexMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -102,27 +103,17 @@ public:
     bool operator ==(const ComplexMessage &other) const;
     bool operator !=(const ComplexMessage &other) const;
 
-    QtProtobuf::int32 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
+    QtProtobuf::int32 testFieldInt() const;
 
     SimpleStringMessage &testComplexField() const;
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     void setTestComplexField(const SimpleStringMessage &testComplexField);
     static void registerTypes();
 
 private:
     SimpleStringMessage *testComplexField_p() const;
     void setTestComplexField_p(SimpleStringMessage *testComplexField);
-    QtProtobuf::int32 m_testFieldInt;
-    QtProtobufPrivate::QProtobufLazyMessagePointer<SimpleStringMessage> m_testComplexField;
+    QExplicitlySharedDataPointer<ComplexMessage_QtProtobufData> dptr;
 };
 } // namespace qtprotobufnamespace::tests
 

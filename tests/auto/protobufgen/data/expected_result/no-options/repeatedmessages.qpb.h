@@ -13,6 +13,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -51,6 +52,7 @@ using RepeatedSFixedInt64MessageRepeated = QList<std::shared_ptr<RepeatedSFixedI
 class RepeatedBoolMessage;
 using RepeatedBoolMessageRepeated = QList<std::shared_ptr<RepeatedBoolMessage>>;
 
+class RepeatedStringMessage_QtProtobufData;
 class RepeatedStringMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -73,23 +75,16 @@ public:
     bool operator ==(const RepeatedStringMessage &other) const;
     bool operator !=(const RepeatedStringMessage &other) const;
 
-    QStringList testRepeatedString() const
-    {
-        return m_testRepeatedString;
-    }
-
-    QStringList &testRepeatedString()
-    {
-        return m_testRepeatedString;
-    }
-
+    QStringList testRepeatedString() const;
+    QStringList &testRepeatedString();
     void setTestRepeatedString(const QStringList &testRepeatedString);
     static void registerTypes();
 
 private:
-    QStringList m_testRepeatedString;
+    QExplicitlySharedDataPointer<RepeatedStringMessage_QtProtobufData> dptr;
 };
 
+class RepeatedDoubleMessage_QtProtobufData;
 class RepeatedDoubleMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -112,28 +107,16 @@ public:
     bool operator ==(const RepeatedDoubleMessage &other) const;
     bool operator !=(const RepeatedDoubleMessage &other) const;
 
-    QtProtobuf::doubleList testRepeatedDouble() const
-    {
-        return m_testRepeatedDouble;
-    }
-
-    QtProtobuf::doubleList &testRepeatedDouble()
-    {
-        return m_testRepeatedDouble;
-    }
-
-    void setTestRepeatedDouble(const QtProtobuf::doubleList &testRepeatedDouble)
-    {
-        if (m_testRepeatedDouble != testRepeatedDouble)
-            m_testRepeatedDouble = testRepeatedDouble;
-    }
-
+    QtProtobuf::doubleList testRepeatedDouble() const;
+    QtProtobuf::doubleList &testRepeatedDouble();
+    void setTestRepeatedDouble(const QtProtobuf::doubleList &testRepeatedDouble);
     static void registerTypes();
 
 private:
-    QtProtobuf::doubleList m_testRepeatedDouble;
+    QExplicitlySharedDataPointer<RepeatedDoubleMessage_QtProtobufData> dptr;
 };
 
+class RepeatedBytesMessage_QtProtobufData;
 class RepeatedBytesMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -156,23 +139,16 @@ public:
     bool operator ==(const RepeatedBytesMessage &other) const;
     bool operator !=(const RepeatedBytesMessage &other) const;
 
-    QByteArrayList testRepeatedBytes() const
-    {
-        return m_testRepeatedBytes;
-    }
-
-    QByteArrayList &testRepeatedBytes()
-    {
-        return m_testRepeatedBytes;
-    }
-
+    QByteArrayList testRepeatedBytes() const;
+    QByteArrayList &testRepeatedBytes();
     void setTestRepeatedBytes(const QByteArrayList &testRepeatedBytes);
     static void registerTypes();
 
 private:
-    QByteArrayList m_testRepeatedBytes;
+    QExplicitlySharedDataPointer<RepeatedBytesMessage_QtProtobufData> dptr;
 };
 
+class RepeatedFloatMessage_QtProtobufData;
 class RepeatedFloatMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -195,28 +171,16 @@ public:
     bool operator ==(const RepeatedFloatMessage &other) const;
     bool operator !=(const RepeatedFloatMessage &other) const;
 
-    QtProtobuf::floatList testRepeatedFloat() const
-    {
-        return m_testRepeatedFloat;
-    }
-
-    QtProtobuf::floatList &testRepeatedFloat()
-    {
-        return m_testRepeatedFloat;
-    }
-
-    void setTestRepeatedFloat(const QtProtobuf::floatList &testRepeatedFloat)
-    {
-        if (m_testRepeatedFloat != testRepeatedFloat)
-            m_testRepeatedFloat = testRepeatedFloat;
-    }
-
+    QtProtobuf::floatList testRepeatedFloat() const;
+    QtProtobuf::floatList &testRepeatedFloat();
+    void setTestRepeatedFloat(const QtProtobuf::floatList &testRepeatedFloat);
     static void registerTypes();
 
 private:
-    QtProtobuf::floatList m_testRepeatedFloat;
+    QExplicitlySharedDataPointer<RepeatedFloatMessage_QtProtobufData> dptr;
 };
 
+class RepeatedComplexMessage_QtProtobufData;
 class RepeatedComplexMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -239,23 +203,16 @@ public:
     bool operator ==(const RepeatedComplexMessage &other) const;
     bool operator !=(const RepeatedComplexMessage &other) const;
 
-    ComplexMessageRepeated testRepeatedComplex() const
-    {
-        return m_testRepeatedComplex;
-    }
-
-    ComplexMessageRepeated &testRepeatedComplex()
-    {
-        return m_testRepeatedComplex;
-    }
-
+    ComplexMessageRepeated testRepeatedComplex() const;
+    ComplexMessageRepeated &testRepeatedComplex();
     void setTestRepeatedComplex(const ComplexMessageRepeated &testRepeatedComplex);
     static void registerTypes();
 
 private:
-    ComplexMessageRepeated m_testRepeatedComplex;
+    QExplicitlySharedDataPointer<RepeatedComplexMessage_QtProtobufData> dptr;
 };
 
+class RepeatedSIntMessage_QtProtobufData;
 class RepeatedSIntMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -278,28 +235,16 @@ public:
     bool operator ==(const RepeatedSIntMessage &other) const;
     bool operator !=(const RepeatedSIntMessage &other) const;
 
-    QtProtobuf::sint32List testRepeatedInt() const
-    {
-        return m_testRepeatedInt;
-    }
-
-    QtProtobuf::sint32List &testRepeatedInt()
-    {
-        return m_testRepeatedInt;
-    }
-
-    void setTestRepeatedInt(const QtProtobuf::sint32List &testRepeatedInt)
-    {
-        if (m_testRepeatedInt != testRepeatedInt)
-            m_testRepeatedInt = testRepeatedInt;
-    }
-
+    QtProtobuf::sint32List testRepeatedInt() const;
+    QtProtobuf::sint32List &testRepeatedInt();
+    void setTestRepeatedInt(const QtProtobuf::sint32List &testRepeatedInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32List m_testRepeatedInt;
+    QExplicitlySharedDataPointer<RepeatedSIntMessage_QtProtobufData> dptr;
 };
 
+class RepeatedIntMessage_QtProtobufData;
 class RepeatedIntMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -322,28 +267,16 @@ public:
     bool operator ==(const RepeatedIntMessage &other) const;
     bool operator !=(const RepeatedIntMessage &other) const;
 
-    QtProtobuf::int32List testRepeatedInt() const
-    {
-        return m_testRepeatedInt;
-    }
-
-    QtProtobuf::int32List &testRepeatedInt()
-    {
-        return m_testRepeatedInt;
-    }
-
-    void setTestRepeatedInt(const QtProtobuf::int32List &testRepeatedInt)
-    {
-        if (m_testRepeatedInt != testRepeatedInt)
-            m_testRepeatedInt = testRepeatedInt;
-    }
-
+    QtProtobuf::int32List testRepeatedInt() const;
+    QtProtobuf::int32List &testRepeatedInt();
+    void setTestRepeatedInt(const QtProtobuf::int32List &testRepeatedInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::int32List m_testRepeatedInt;
+    QExplicitlySharedDataPointer<RepeatedIntMessage_QtProtobufData> dptr;
 };
 
+class RepeatedUIntMessage_QtProtobufData;
 class RepeatedUIntMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -366,28 +299,16 @@ public:
     bool operator ==(const RepeatedUIntMessage &other) const;
     bool operator !=(const RepeatedUIntMessage &other) const;
 
-    QtProtobuf::uint32List testRepeatedInt() const
-    {
-        return m_testRepeatedInt;
-    }
-
-    QtProtobuf::uint32List &testRepeatedInt()
-    {
-        return m_testRepeatedInt;
-    }
-
-    void setTestRepeatedInt(const QtProtobuf::uint32List &testRepeatedInt)
-    {
-        if (m_testRepeatedInt != testRepeatedInt)
-            m_testRepeatedInt = testRepeatedInt;
-    }
-
+    QtProtobuf::uint32List testRepeatedInt() const;
+    QtProtobuf::uint32List &testRepeatedInt();
+    void setTestRepeatedInt(const QtProtobuf::uint32List &testRepeatedInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::uint32List m_testRepeatedInt;
+    QExplicitlySharedDataPointer<RepeatedUIntMessage_QtProtobufData> dptr;
 };
 
+class RepeatedSInt64Message_QtProtobufData;
 class RepeatedSInt64Message : public QProtobufMessage
 {
     Q_GADGET
@@ -410,28 +331,16 @@ public:
     bool operator ==(const RepeatedSInt64Message &other) const;
     bool operator !=(const RepeatedSInt64Message &other) const;
 
-    QtProtobuf::sint64List testRepeatedInt() const
-    {
-        return m_testRepeatedInt;
-    }
-
-    QtProtobuf::sint64List &testRepeatedInt()
-    {
-        return m_testRepeatedInt;
-    }
-
-    void setTestRepeatedInt(const QtProtobuf::sint64List &testRepeatedInt)
-    {
-        if (m_testRepeatedInt != testRepeatedInt)
-            m_testRepeatedInt = testRepeatedInt;
-    }
-
+    QtProtobuf::sint64List testRepeatedInt() const;
+    QtProtobuf::sint64List &testRepeatedInt();
+    void setTestRepeatedInt(const QtProtobuf::sint64List &testRepeatedInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint64List m_testRepeatedInt;
+    QExplicitlySharedDataPointer<RepeatedSInt64Message_QtProtobufData> dptr;
 };
 
+class RepeatedInt64Message_QtProtobufData;
 class RepeatedInt64Message : public QProtobufMessage
 {
     Q_GADGET
@@ -454,28 +363,16 @@ public:
     bool operator ==(const RepeatedInt64Message &other) const;
     bool operator !=(const RepeatedInt64Message &other) const;
 
-    QtProtobuf::int64List testRepeatedInt() const
-    {
-        return m_testRepeatedInt;
-    }
-
-    QtProtobuf::int64List &testRepeatedInt()
-    {
-        return m_testRepeatedInt;
-    }
-
-    void setTestRepeatedInt(const QtProtobuf::int64List &testRepeatedInt)
-    {
-        if (m_testRepeatedInt != testRepeatedInt)
-            m_testRepeatedInt = testRepeatedInt;
-    }
-
+    QtProtobuf::int64List testRepeatedInt() const;
+    QtProtobuf::int64List &testRepeatedInt();
+    void setTestRepeatedInt(const QtProtobuf::int64List &testRepeatedInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::int64List m_testRepeatedInt;
+    QExplicitlySharedDataPointer<RepeatedInt64Message_QtProtobufData> dptr;
 };
 
+class RepeatedUInt64Message_QtProtobufData;
 class RepeatedUInt64Message : public QProtobufMessage
 {
     Q_GADGET
@@ -498,28 +395,16 @@ public:
     bool operator ==(const RepeatedUInt64Message &other) const;
     bool operator !=(const RepeatedUInt64Message &other) const;
 
-    QtProtobuf::uint64List testRepeatedInt() const
-    {
-        return m_testRepeatedInt;
-    }
-
-    QtProtobuf::uint64List &testRepeatedInt()
-    {
-        return m_testRepeatedInt;
-    }
-
-    void setTestRepeatedInt(const QtProtobuf::uint64List &testRepeatedInt)
-    {
-        if (m_testRepeatedInt != testRepeatedInt)
-            m_testRepeatedInt = testRepeatedInt;
-    }
-
+    QtProtobuf::uint64List testRepeatedInt() const;
+    QtProtobuf::uint64List &testRepeatedInt();
+    void setTestRepeatedInt(const QtProtobuf::uint64List &testRepeatedInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::uint64List m_testRepeatedInt;
+    QExplicitlySharedDataPointer<RepeatedUInt64Message_QtProtobufData> dptr;
 };
 
+class RepeatedFixedIntMessage_QtProtobufData;
 class RepeatedFixedIntMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -542,28 +427,16 @@ public:
     bool operator ==(const RepeatedFixedIntMessage &other) const;
     bool operator !=(const RepeatedFixedIntMessage &other) const;
 
-    QtProtobuf::fixed32List testRepeatedInt() const
-    {
-        return m_testRepeatedInt;
-    }
-
-    QtProtobuf::fixed32List &testRepeatedInt()
-    {
-        return m_testRepeatedInt;
-    }
-
-    void setTestRepeatedInt(const QtProtobuf::fixed32List &testRepeatedInt)
-    {
-        if (m_testRepeatedInt != testRepeatedInt)
-            m_testRepeatedInt = testRepeatedInt;
-    }
-
+    QtProtobuf::fixed32List testRepeatedInt() const;
+    QtProtobuf::fixed32List &testRepeatedInt();
+    void setTestRepeatedInt(const QtProtobuf::fixed32List &testRepeatedInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::fixed32List m_testRepeatedInt;
+    QExplicitlySharedDataPointer<RepeatedFixedIntMessage_QtProtobufData> dptr;
 };
 
+class RepeatedSFixedIntMessage_QtProtobufData;
 class RepeatedSFixedIntMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -586,28 +459,16 @@ public:
     bool operator ==(const RepeatedSFixedIntMessage &other) const;
     bool operator !=(const RepeatedSFixedIntMessage &other) const;
 
-    QtProtobuf::sfixed32List testRepeatedInt() const
-    {
-        return m_testRepeatedInt;
-    }
-
-    QtProtobuf::sfixed32List &testRepeatedInt()
-    {
-        return m_testRepeatedInt;
-    }
-
-    void setTestRepeatedInt(const QtProtobuf::sfixed32List &testRepeatedInt)
-    {
-        if (m_testRepeatedInt != testRepeatedInt)
-            m_testRepeatedInt = testRepeatedInt;
-    }
-
+    QtProtobuf::sfixed32List testRepeatedInt() const;
+    QtProtobuf::sfixed32List &testRepeatedInt();
+    void setTestRepeatedInt(const QtProtobuf::sfixed32List &testRepeatedInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::sfixed32List m_testRepeatedInt;
+    QExplicitlySharedDataPointer<RepeatedSFixedIntMessage_QtProtobufData> dptr;
 };
 
+class RepeatedFixedInt64Message_QtProtobufData;
 class RepeatedFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
@@ -630,28 +491,16 @@ public:
     bool operator ==(const RepeatedFixedInt64Message &other) const;
     bool operator !=(const RepeatedFixedInt64Message &other) const;
 
-    QtProtobuf::fixed64List testRepeatedInt() const
-    {
-        return m_testRepeatedInt;
-    }
-
-    QtProtobuf::fixed64List &testRepeatedInt()
-    {
-        return m_testRepeatedInt;
-    }
-
-    void setTestRepeatedInt(const QtProtobuf::fixed64List &testRepeatedInt)
-    {
-        if (m_testRepeatedInt != testRepeatedInt)
-            m_testRepeatedInt = testRepeatedInt;
-    }
-
+    QtProtobuf::fixed64List testRepeatedInt() const;
+    QtProtobuf::fixed64List &testRepeatedInt();
+    void setTestRepeatedInt(const QtProtobuf::fixed64List &testRepeatedInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::fixed64List m_testRepeatedInt;
+    QExplicitlySharedDataPointer<RepeatedFixedInt64Message_QtProtobufData> dptr;
 };
 
+class RepeatedSFixedInt64Message_QtProtobufData;
 class RepeatedSFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
@@ -674,28 +523,16 @@ public:
     bool operator ==(const RepeatedSFixedInt64Message &other) const;
     bool operator !=(const RepeatedSFixedInt64Message &other) const;
 
-    QtProtobuf::sfixed64List testRepeatedInt() const
-    {
-        return m_testRepeatedInt;
-    }
-
-    QtProtobuf::sfixed64List &testRepeatedInt()
-    {
-        return m_testRepeatedInt;
-    }
-
-    void setTestRepeatedInt(const QtProtobuf::sfixed64List &testRepeatedInt)
-    {
-        if (m_testRepeatedInt != testRepeatedInt)
-            m_testRepeatedInt = testRepeatedInt;
-    }
-
+    QtProtobuf::sfixed64List testRepeatedInt() const;
+    QtProtobuf::sfixed64List &testRepeatedInt();
+    void setTestRepeatedInt(const QtProtobuf::sfixed64List &testRepeatedInt);
     static void registerTypes();
 
 private:
-    QtProtobuf::sfixed64List m_testRepeatedInt;
+    QExplicitlySharedDataPointer<RepeatedSFixedInt64Message_QtProtobufData> dptr;
 };
 
+class RepeatedBoolMessage_QtProtobufData;
 class RepeatedBoolMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -718,26 +555,13 @@ public:
     bool operator ==(const RepeatedBoolMessage &other) const;
     bool operator !=(const RepeatedBoolMessage &other) const;
 
-    QtProtobuf::boolList testRepeatedBool() const
-    {
-        return m_testRepeatedBool;
-    }
-
-    QtProtobuf::boolList &testRepeatedBool()
-    {
-        return m_testRepeatedBool;
-    }
-
-    void setTestRepeatedBool(const QtProtobuf::boolList &testRepeatedBool)
-    {
-        if (m_testRepeatedBool != testRepeatedBool)
-            m_testRepeatedBool = testRepeatedBool;
-    }
-
+    QtProtobuf::boolList testRepeatedBool() const;
+    QtProtobuf::boolList &testRepeatedBool();
+    void setTestRepeatedBool(const QtProtobuf::boolList &testRepeatedBool);
     static void registerTypes();
 
 private:
-    QtProtobuf::boolList m_testRepeatedBool;
+    QExplicitlySharedDataPointer<RepeatedBoolMessage_QtProtobufData> dptr;
 };
 } // namespace qtprotobufnamespace::tests
 

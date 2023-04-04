@@ -29,6 +29,12 @@ private:
     size_t metaCharDataSize() const;
     size_t charDataSize() const;
 
+    void printDataClass();
+    void printDataClassConstructor();
+    void printDataClassCopy();
+    void printDataClassMove();
+    void printClassMembers();
+
     void printConstructors();
     void printInitializationList();
     void printCopyFunctionality();

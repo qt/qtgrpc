@@ -4,6 +4,25 @@
 #include <QtProtobuf/qprotobufserializer.h>
 
 namespace qtprotobufnamespace::tests {
+
+class AnnotatedMessage1_QtProtobufData : public QSharedData
+{
+public:
+    AnnotatedMessage1_QtProtobufData()
+        : QSharedData(),
+          m_testField(0)
+    {
+    }
+
+    AnnotatedMessage1_QtProtobufData(const AnnotatedMessage1_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField)
+    {
+    }
+
+    QtProtobuf::sint32 m_testField;
+};
+
 AnnotatedMessage1::~AnnotatedMessage1() = default;
 
 static constexpr struct {
@@ -51,46 +70,74 @@ void AnnotatedMessage1::registerTypes()
 
 AnnotatedMessage1::AnnotatedMessage1()
     : QProtobufMessage(&AnnotatedMessage1::staticMetaObject),
-      m_testField(0)
+      dptr(new AnnotatedMessage1_QtProtobufData)
 {
 }
 
 AnnotatedMessage1::AnnotatedMessage1(const AnnotatedMessage1 &other)
     : QProtobufMessage(other),
-      m_testField(other.m_testField)
+      dptr(other.dptr)
 {
 }
-
 AnnotatedMessage1 &AnnotatedMessage1::operator =(const AnnotatedMessage1 &other)
 {
     QProtobufMessage::operator=(other);
-    setTestField(other.m_testField);
+    dptr = other.dptr;
     return *this;
 }
-
 AnnotatedMessage1::AnnotatedMessage1(AnnotatedMessage1 &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestField(std::exchange(other.m_testField, 0));
 }
-
 AnnotatedMessage1 &AnnotatedMessage1::operator =(AnnotatedMessage1 &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestField(std::exchange(other.m_testField, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool AnnotatedMessage1::operator ==(const AnnotatedMessage1 &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testField == other.m_testField;
+        && dptr->m_testField == other.dptr->m_testField;
 }
 
 bool AnnotatedMessage1::operator !=(const AnnotatedMessage1 &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint32 AnnotatedMessage1::testField() const
+{
+    return dptr->m_testField;
+}
+
+void AnnotatedMessage1::setTestField(const QtProtobuf::sint32 &testField)
+{
+    if (dptr->m_testField != testField) {
+        dptr.detach();
+        dptr->m_testField = testField;
+    }
+}
+
+
+class AnnotatedMessage2_QtProtobufData : public QSharedData
+{
+public:
+    AnnotatedMessage2_QtProtobufData()
+        : QSharedData(),
+          m_testField(0)
+    {
+    }
+
+    AnnotatedMessage2_QtProtobufData(const AnnotatedMessage2_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField)
+    {
+    }
+
+    QtProtobuf::sint32 m_testField;
+};
 
 AnnotatedMessage2::~AnnotatedMessage2() = default;
 
@@ -139,46 +186,74 @@ void AnnotatedMessage2::registerTypes()
 
 AnnotatedMessage2::AnnotatedMessage2()
     : QProtobufMessage(&AnnotatedMessage2::staticMetaObject),
-      m_testField(0)
+      dptr(new AnnotatedMessage2_QtProtobufData)
 {
 }
 
 AnnotatedMessage2::AnnotatedMessage2(const AnnotatedMessage2 &other)
     : QProtobufMessage(other),
-      m_testField(other.m_testField)
+      dptr(other.dptr)
 {
 }
-
 AnnotatedMessage2 &AnnotatedMessage2::operator =(const AnnotatedMessage2 &other)
 {
     QProtobufMessage::operator=(other);
-    setTestField(other.m_testField);
+    dptr = other.dptr;
     return *this;
 }
-
 AnnotatedMessage2::AnnotatedMessage2(AnnotatedMessage2 &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestField(std::exchange(other.m_testField, 0));
 }
-
 AnnotatedMessage2 &AnnotatedMessage2::operator =(AnnotatedMessage2 &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestField(std::exchange(other.m_testField, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool AnnotatedMessage2::operator ==(const AnnotatedMessage2 &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testField == other.m_testField;
+        && dptr->m_testField == other.dptr->m_testField;
 }
 
 bool AnnotatedMessage2::operator !=(const AnnotatedMessage2 &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint32 AnnotatedMessage2::testField() const
+{
+    return dptr->m_testField;
+}
+
+void AnnotatedMessage2::setTestField(const QtProtobuf::sint32 &testField)
+{
+    if (dptr->m_testField != testField) {
+        dptr.detach();
+        dptr->m_testField = testField;
+    }
+}
+
+
+class AnnotatedMessage3_QtProtobufData : public QSharedData
+{
+public:
+    AnnotatedMessage3_QtProtobufData()
+        : QSharedData(),
+          m_testField(0)
+    {
+    }
+
+    AnnotatedMessage3_QtProtobufData(const AnnotatedMessage3_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField)
+    {
+    }
+
+    QtProtobuf::sint32 m_testField;
+};
 
 AnnotatedMessage3::~AnnotatedMessage3() = default;
 
@@ -227,46 +302,74 @@ void AnnotatedMessage3::registerTypes()
 
 AnnotatedMessage3::AnnotatedMessage3()
     : QProtobufMessage(&AnnotatedMessage3::staticMetaObject),
-      m_testField(0)
+      dptr(new AnnotatedMessage3_QtProtobufData)
 {
 }
 
 AnnotatedMessage3::AnnotatedMessage3(const AnnotatedMessage3 &other)
     : QProtobufMessage(other),
-      m_testField(other.m_testField)
+      dptr(other.dptr)
 {
 }
-
 AnnotatedMessage3 &AnnotatedMessage3::operator =(const AnnotatedMessage3 &other)
 {
     QProtobufMessage::operator=(other);
-    setTestField(other.m_testField);
+    dptr = other.dptr;
     return *this;
 }
-
 AnnotatedMessage3::AnnotatedMessage3(AnnotatedMessage3 &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestField(std::exchange(other.m_testField, 0));
 }
-
 AnnotatedMessage3 &AnnotatedMessage3::operator =(AnnotatedMessage3 &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestField(std::exchange(other.m_testField, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool AnnotatedMessage3::operator ==(const AnnotatedMessage3 &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testField == other.m_testField;
+        && dptr->m_testField == other.dptr->m_testField;
 }
 
 bool AnnotatedMessage3::operator !=(const AnnotatedMessage3 &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint32 AnnotatedMessage3::testField() const
+{
+    return dptr->m_testField;
+}
+
+void AnnotatedMessage3::setTestField(const QtProtobuf::sint32 &testField)
+{
+    if (dptr->m_testField != testField) {
+        dptr.detach();
+        dptr->m_testField = testField;
+    }
+}
+
+
+class AnnotatedMessage4_QtProtobufData : public QSharedData
+{
+public:
+    AnnotatedMessage4_QtProtobufData()
+        : QSharedData(),
+          m_testField(0)
+    {
+    }
+
+    AnnotatedMessage4_QtProtobufData(const AnnotatedMessage4_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField)
+    {
+    }
+
+    QtProtobuf::sint32 m_testField;
+};
 
 AnnotatedMessage4::~AnnotatedMessage4() = default;
 
@@ -315,46 +418,74 @@ void AnnotatedMessage4::registerTypes()
 
 AnnotatedMessage4::AnnotatedMessage4()
     : QProtobufMessage(&AnnotatedMessage4::staticMetaObject),
-      m_testField(0)
+      dptr(new AnnotatedMessage4_QtProtobufData)
 {
 }
 
 AnnotatedMessage4::AnnotatedMessage4(const AnnotatedMessage4 &other)
     : QProtobufMessage(other),
-      m_testField(other.m_testField)
+      dptr(other.dptr)
 {
 }
-
 AnnotatedMessage4 &AnnotatedMessage4::operator =(const AnnotatedMessage4 &other)
 {
     QProtobufMessage::operator=(other);
-    setTestField(other.m_testField);
+    dptr = other.dptr;
     return *this;
 }
-
 AnnotatedMessage4::AnnotatedMessage4(AnnotatedMessage4 &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestField(std::exchange(other.m_testField, 0));
 }
-
 AnnotatedMessage4 &AnnotatedMessage4::operator =(AnnotatedMessage4 &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestField(std::exchange(other.m_testField, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool AnnotatedMessage4::operator ==(const AnnotatedMessage4 &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testField == other.m_testField;
+        && dptr->m_testField == other.dptr->m_testField;
 }
 
 bool AnnotatedMessage4::operator !=(const AnnotatedMessage4 &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint32 AnnotatedMessage4::testField() const
+{
+    return dptr->m_testField;
+}
+
+void AnnotatedMessage4::setTestField(const QtProtobuf::sint32 &testField)
+{
+    if (dptr->m_testField != testField) {
+        dptr.detach();
+        dptr->m_testField = testField;
+    }
+}
+
+
+class AnnotatedMessage5_QtProtobufData : public QSharedData
+{
+public:
+    AnnotatedMessage5_QtProtobufData()
+        : QSharedData(),
+          m_testField(0)
+    {
+    }
+
+    AnnotatedMessage5_QtProtobufData(const AnnotatedMessage5_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField)
+    {
+    }
+
+    QtProtobuf::sint32 m_testField;
+};
 
 AnnotatedMessage5::~AnnotatedMessage5() = default;
 
@@ -403,46 +534,74 @@ void AnnotatedMessage5::registerTypes()
 
 AnnotatedMessage5::AnnotatedMessage5()
     : QProtobufMessage(&AnnotatedMessage5::staticMetaObject),
-      m_testField(0)
+      dptr(new AnnotatedMessage5_QtProtobufData)
 {
 }
 
 AnnotatedMessage5::AnnotatedMessage5(const AnnotatedMessage5 &other)
     : QProtobufMessage(other),
-      m_testField(other.m_testField)
+      dptr(other.dptr)
 {
 }
-
 AnnotatedMessage5 &AnnotatedMessage5::operator =(const AnnotatedMessage5 &other)
 {
     QProtobufMessage::operator=(other);
-    setTestField(other.m_testField);
+    dptr = other.dptr;
     return *this;
 }
-
 AnnotatedMessage5::AnnotatedMessage5(AnnotatedMessage5 &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestField(std::exchange(other.m_testField, 0));
 }
-
 AnnotatedMessage5 &AnnotatedMessage5::operator =(AnnotatedMessage5 &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestField(std::exchange(other.m_testField, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool AnnotatedMessage5::operator ==(const AnnotatedMessage5 &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testField == other.m_testField;
+        && dptr->m_testField == other.dptr->m_testField;
 }
 
 bool AnnotatedMessage5::operator !=(const AnnotatedMessage5 &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint32 AnnotatedMessage5::testField() const
+{
+    return dptr->m_testField;
+}
+
+void AnnotatedMessage5::setTestField(const QtProtobuf::sint32 &testField)
+{
+    if (dptr->m_testField != testField) {
+        dptr.detach();
+        dptr->m_testField = testField;
+    }
+}
+
+
+class AnnotatedMessage6_QtProtobufData : public QSharedData
+{
+public:
+    AnnotatedMessage6_QtProtobufData()
+        : QSharedData(),
+          m_testField(0)
+    {
+    }
+
+    AnnotatedMessage6_QtProtobufData(const AnnotatedMessage6_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField)
+    {
+    }
+
+    QtProtobuf::sint32 m_testField;
+};
 
 AnnotatedMessage6::~AnnotatedMessage6() = default;
 
@@ -491,46 +650,74 @@ void AnnotatedMessage6::registerTypes()
 
 AnnotatedMessage6::AnnotatedMessage6()
     : QProtobufMessage(&AnnotatedMessage6::staticMetaObject),
-      m_testField(0)
+      dptr(new AnnotatedMessage6_QtProtobufData)
 {
 }
 
 AnnotatedMessage6::AnnotatedMessage6(const AnnotatedMessage6 &other)
     : QProtobufMessage(other),
-      m_testField(other.m_testField)
+      dptr(other.dptr)
 {
 }
-
 AnnotatedMessage6 &AnnotatedMessage6::operator =(const AnnotatedMessage6 &other)
 {
     QProtobufMessage::operator=(other);
-    setTestField(other.m_testField);
+    dptr = other.dptr;
     return *this;
 }
-
 AnnotatedMessage6::AnnotatedMessage6(AnnotatedMessage6 &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestField(std::exchange(other.m_testField, 0));
 }
-
 AnnotatedMessage6 &AnnotatedMessage6::operator =(AnnotatedMessage6 &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestField(std::exchange(other.m_testField, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool AnnotatedMessage6::operator ==(const AnnotatedMessage6 &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testField == other.m_testField;
+        && dptr->m_testField == other.dptr->m_testField;
 }
 
 bool AnnotatedMessage6::operator !=(const AnnotatedMessage6 &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint32 AnnotatedMessage6::testField() const
+{
+    return dptr->m_testField;
+}
+
+void AnnotatedMessage6::setTestField(const QtProtobuf::sint32 &testField)
+{
+    if (dptr->m_testField != testField) {
+        dptr.detach();
+        dptr->m_testField = testField;
+    }
+}
+
+
+class AnnotatedMessage7_QtProtobufData : public QSharedData
+{
+public:
+    AnnotatedMessage7_QtProtobufData()
+        : QSharedData(),
+          m_testField(0)
+    {
+    }
+
+    AnnotatedMessage7_QtProtobufData(const AnnotatedMessage7_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField)
+    {
+    }
+
+    QtProtobuf::sint32 m_testField;
+};
 
 AnnotatedMessage7::~AnnotatedMessage7() = default;
 
@@ -579,46 +766,74 @@ void AnnotatedMessage7::registerTypes()
 
 AnnotatedMessage7::AnnotatedMessage7()
     : QProtobufMessage(&AnnotatedMessage7::staticMetaObject),
-      m_testField(0)
+      dptr(new AnnotatedMessage7_QtProtobufData)
 {
 }
 
 AnnotatedMessage7::AnnotatedMessage7(const AnnotatedMessage7 &other)
     : QProtobufMessage(other),
-      m_testField(other.m_testField)
+      dptr(other.dptr)
 {
 }
-
 AnnotatedMessage7 &AnnotatedMessage7::operator =(const AnnotatedMessage7 &other)
 {
     QProtobufMessage::operator=(other);
-    setTestField(other.m_testField);
+    dptr = other.dptr;
     return *this;
 }
-
 AnnotatedMessage7::AnnotatedMessage7(AnnotatedMessage7 &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestField(std::exchange(other.m_testField, 0));
 }
-
 AnnotatedMessage7 &AnnotatedMessage7::operator =(AnnotatedMessage7 &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestField(std::exchange(other.m_testField, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool AnnotatedMessage7::operator ==(const AnnotatedMessage7 &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testField == other.m_testField;
+        && dptr->m_testField == other.dptr->m_testField;
 }
 
 bool AnnotatedMessage7::operator !=(const AnnotatedMessage7 &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint32 AnnotatedMessage7::testField() const
+{
+    return dptr->m_testField;
+}
+
+void AnnotatedMessage7::setTestField(const QtProtobuf::sint32 &testField)
+{
+    if (dptr->m_testField != testField) {
+        dptr.detach();
+        dptr->m_testField = testField;
+    }
+}
+
+
+class AnnotatedMessage8_QtProtobufData : public QSharedData
+{
+public:
+    AnnotatedMessage8_QtProtobufData()
+        : QSharedData(),
+          m_testField(0)
+    {
+    }
+
+    AnnotatedMessage8_QtProtobufData(const AnnotatedMessage8_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField)
+    {
+    }
+
+    QtProtobuf::sint32 m_testField;
+};
 
 AnnotatedMessage8::~AnnotatedMessage8() = default;
 
@@ -667,46 +882,74 @@ void AnnotatedMessage8::registerTypes()
 
 AnnotatedMessage8::AnnotatedMessage8()
     : QProtobufMessage(&AnnotatedMessage8::staticMetaObject),
-      m_testField(0)
+      dptr(new AnnotatedMessage8_QtProtobufData)
 {
 }
 
 AnnotatedMessage8::AnnotatedMessage8(const AnnotatedMessage8 &other)
     : QProtobufMessage(other),
-      m_testField(other.m_testField)
+      dptr(other.dptr)
 {
 }
-
 AnnotatedMessage8 &AnnotatedMessage8::operator =(const AnnotatedMessage8 &other)
 {
     QProtobufMessage::operator=(other);
-    setTestField(other.m_testField);
+    dptr = other.dptr;
     return *this;
 }
-
 AnnotatedMessage8::AnnotatedMessage8(AnnotatedMessage8 &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestField(std::exchange(other.m_testField, 0));
 }
-
 AnnotatedMessage8 &AnnotatedMessage8::operator =(AnnotatedMessage8 &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestField(std::exchange(other.m_testField, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool AnnotatedMessage8::operator ==(const AnnotatedMessage8 &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testField == other.m_testField;
+        && dptr->m_testField == other.dptr->m_testField;
 }
 
 bool AnnotatedMessage8::operator !=(const AnnotatedMessage8 &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint32 AnnotatedMessage8::testField() const
+{
+    return dptr->m_testField;
+}
+
+void AnnotatedMessage8::setTestField(const QtProtobuf::sint32 &testField)
+{
+    if (dptr->m_testField != testField) {
+        dptr.detach();
+        dptr->m_testField = testField;
+    }
+}
+
+
+class AnnotatedMessage9_QtProtobufData : public QSharedData
+{
+public:
+    AnnotatedMessage9_QtProtobufData()
+        : QSharedData(),
+          m_testField(0)
+    {
+    }
+
+    AnnotatedMessage9_QtProtobufData(const AnnotatedMessage9_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField)
+    {
+    }
+
+    QtProtobuf::sint32 m_testField;
+};
 
 AnnotatedMessage9::~AnnotatedMessage9() = default;
 
@@ -755,45 +998,54 @@ void AnnotatedMessage9::registerTypes()
 
 AnnotatedMessage9::AnnotatedMessage9()
     : QProtobufMessage(&AnnotatedMessage9::staticMetaObject),
-      m_testField(0)
+      dptr(new AnnotatedMessage9_QtProtobufData)
 {
 }
 
 AnnotatedMessage9::AnnotatedMessage9(const AnnotatedMessage9 &other)
     : QProtobufMessage(other),
-      m_testField(other.m_testField)
+      dptr(other.dptr)
 {
 }
-
 AnnotatedMessage9 &AnnotatedMessage9::operator =(const AnnotatedMessage9 &other)
 {
     QProtobufMessage::operator=(other);
-    setTestField(other.m_testField);
+    dptr = other.dptr;
     return *this;
 }
-
 AnnotatedMessage9::AnnotatedMessage9(AnnotatedMessage9 &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestField(std::exchange(other.m_testField, 0));
 }
-
 AnnotatedMessage9 &AnnotatedMessage9::operator =(AnnotatedMessage9 &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestField(std::exchange(other.m_testField, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool AnnotatedMessage9::operator ==(const AnnotatedMessage9 &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testField == other.m_testField;
+        && dptr->m_testField == other.dptr->m_testField;
 }
 
 bool AnnotatedMessage9::operator !=(const AnnotatedMessage9 &other) const
 {
     return !this->operator ==(other);
+}
+
+QtProtobuf::sint32 AnnotatedMessage9::testField() const
+{
+    return dptr->m_testField;
+}
+
+void AnnotatedMessage9::setTestField(const QtProtobuf::sint32 &testField)
+{
+    if (dptr->m_testField != testField) {
+        dptr.detach();
+        dptr->m_testField = testField;
+    }
 }
 
 } // namespace qtprotobufnamespace::tests

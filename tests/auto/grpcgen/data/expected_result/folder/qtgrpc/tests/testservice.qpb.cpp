@@ -4,6 +4,24 @@
 #include <QtProtobuf/qprotobufserializer.h>
 
 namespace qtgrpc::tests {
+
+class SimpleStringMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleStringMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleStringMessage_QtProtobufData(const SimpleStringMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testFieldString(other.m_testFieldString)
+    {
+    }
+
+    QString m_testFieldString;
+};
+
 SimpleStringMessage::~SimpleStringMessage() = default;
 
 static constexpr struct {
@@ -50,41 +68,37 @@ void SimpleStringMessage::registerTypes()
 }
 
 SimpleStringMessage::SimpleStringMessage()
-    : QProtobufMessage(&SimpleStringMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleStringMessage::staticMetaObject),
+      dptr(new SimpleStringMessage_QtProtobufData)
 {
 }
 
 SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other)
     : QProtobufMessage(other),
-      m_testFieldString(other.m_testFieldString)
+      dptr(other.dptr)
 {
 }
-
 SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestFieldString(other.m_testFieldString);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleStringMessage::SimpleStringMessage(SimpleStringMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testFieldString = std::move(other.m_testFieldString);
 }
-
 SimpleStringMessage &SimpleStringMessage::operator =(SimpleStringMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testFieldString != other.m_testFieldString)
-        m_testFieldString = std::move(other.m_testFieldString);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleStringMessage::operator ==(const SimpleStringMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testFieldString == other.m_testFieldString;
+        && dptr->m_testFieldString == other.dptr->m_testFieldString;
 }
 
 bool SimpleStringMessage::operator !=(const SimpleStringMessage &other) const
@@ -92,11 +106,37 @@ bool SimpleStringMessage::operator !=(const SimpleStringMessage &other) const
     return !this->operator ==(other);
 }
 
+QString SimpleStringMessage::testFieldString() const
+{
+    return dptr->m_testFieldString;
+}
+
 void SimpleStringMessage::setTestFieldString(const QString &testFieldString)
 {
-    if (m_testFieldString != testFieldString)
-        m_testFieldString = testFieldString;
+    if (dptr->m_testFieldString != testFieldString) {
+        dptr.detach();
+        dptr->m_testFieldString = testFieldString;
+    }
 }
+
+
+class SimpleIntMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleIntMessage_QtProtobufData()
+        : QSharedData(),
+          m_testField(0)
+    {
+    }
+
+    SimpleIntMessage_QtProtobufData(const SimpleIntMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testField(other.m_testField)
+    {
+    }
+
+    QtProtobuf::sint32 m_testField;
+};
 
 SimpleIntMessage::~SimpleIntMessage() = default;
 
@@ -145,46 +185,73 @@ void SimpleIntMessage::registerTypes()
 
 SimpleIntMessage::SimpleIntMessage()
     : QProtobufMessage(&SimpleIntMessage::staticMetaObject),
-      m_testField(0)
+      dptr(new SimpleIntMessage_QtProtobufData)
 {
 }
 
 SimpleIntMessage::SimpleIntMessage(const SimpleIntMessage &other)
     : QProtobufMessage(other),
-      m_testField(other.m_testField)
+      dptr(other.dptr)
 {
 }
-
 SimpleIntMessage &SimpleIntMessage::operator =(const SimpleIntMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestField(other.m_testField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleIntMessage::SimpleIntMessage(SimpleIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setTestField(std::exchange(other.m_testField, 0));
 }
-
 SimpleIntMessage &SimpleIntMessage::operator =(SimpleIntMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestField(std::exchange(other.m_testField, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleIntMessage::operator ==(const SimpleIntMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testField == other.m_testField;
+        && dptr->m_testField == other.dptr->m_testField;
 }
 
 bool SimpleIntMessage::operator !=(const SimpleIntMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+QtProtobuf::sint32 SimpleIntMessage::testField() const
+{
+    return dptr->m_testField;
+}
+
+void SimpleIntMessage::setTestField(const QtProtobuf::sint32 &testField)
+{
+    if (dptr->m_testField != testField) {
+        dptr.detach();
+        dptr->m_testField = testField;
+    }
+}
+
+
+class BlobMessage_QtProtobufData : public QSharedData
+{
+public:
+    BlobMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    BlobMessage_QtProtobufData(const BlobMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testBytes(other.m_testBytes)
+    {
+    }
+
+    QByteArray m_testBytes;
+};
 
 BlobMessage::~BlobMessage() = default;
 
@@ -232,41 +299,37 @@ void BlobMessage::registerTypes()
 }
 
 BlobMessage::BlobMessage()
-    : QProtobufMessage(&BlobMessage::staticMetaObject)
+    : QProtobufMessage(&BlobMessage::staticMetaObject),
+      dptr(new BlobMessage_QtProtobufData)
 {
 }
 
 BlobMessage::BlobMessage(const BlobMessage &other)
     : QProtobufMessage(other),
-      m_testBytes(other.m_testBytes)
+      dptr(other.dptr)
 {
 }
-
 BlobMessage &BlobMessage::operator =(const BlobMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestBytes(other.m_testBytes);
+    dptr = other.dptr;
     return *this;
 }
-
 BlobMessage::BlobMessage(BlobMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testBytes = std::move(other.m_testBytes);
 }
-
 BlobMessage &BlobMessage::operator =(BlobMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testBytes != other.m_testBytes)
-        m_testBytes = std::move(other.m_testBytes);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool BlobMessage::operator ==(const BlobMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testBytes == other.m_testBytes;
+        && dptr->m_testBytes == other.dptr->m_testBytes;
 }
 
 bool BlobMessage::operator !=(const BlobMessage &other) const
@@ -274,10 +337,17 @@ bool BlobMessage::operator !=(const BlobMessage &other) const
     return !this->operator ==(other);
 }
 
+QByteArray BlobMessage::testBytes() const
+{
+    return dptr->m_testBytes;
+}
+
 void BlobMessage::setTestBytes(const QByteArray &testBytes)
 {
-    if (m_testBytes != testBytes)
-        m_testBytes = testBytes;
+    if (dptr->m_testBytes != testBytes) {
+        dptr.detach();
+        dptr->m_testBytes = testBytes;
+    }
 }
 
 } // namespace qtgrpc::tests

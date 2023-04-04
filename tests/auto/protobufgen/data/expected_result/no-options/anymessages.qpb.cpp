@@ -4,6 +4,24 @@
 #include <QtProtobuf/qprotobufserializer.h>
 
 namespace qtproto::tests {
+
+class AnyMessage_QtProtobufData : public QSharedData
+{
+public:
+    AnyMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    AnyMessage_QtProtobufData(const AnyMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_field(other.m_field)
+    {
+    }
+
+    QtProtobuf::Any m_field;
+};
+
 AnyMessage::~AnyMessage() = default;
 
 static constexpr struct {
@@ -50,41 +68,37 @@ void AnyMessage::registerTypes()
 }
 
 AnyMessage::AnyMessage()
-    : QProtobufMessage(&AnyMessage::staticMetaObject)
+    : QProtobufMessage(&AnyMessage::staticMetaObject),
+      dptr(new AnyMessage_QtProtobufData)
 {
 }
 
 AnyMessage::AnyMessage(const AnyMessage &other)
     : QProtobufMessage(other),
-      m_field(other.m_field)
+      dptr(other.dptr)
 {
 }
-
 AnyMessage &AnyMessage::operator =(const AnyMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setField(other.m_field);
+    dptr = other.dptr;
     return *this;
 }
-
 AnyMessage::AnyMessage(AnyMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_field = std::move(other.m_field);
 }
-
 AnyMessage &AnyMessage::operator =(AnyMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_field != other.m_field)
-        m_field = std::move(other.m_field);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool AnyMessage::operator ==(const AnyMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_field == other.m_field;
+        && dptr->m_field == other.dptr->m_field;
 }
 
 bool AnyMessage::operator !=(const AnyMessage &other) const
@@ -92,11 +106,36 @@ bool AnyMessage::operator !=(const AnyMessage &other) const
     return !this->operator ==(other);
 }
 
+QtProtobuf::Any AnyMessage::field() const
+{
+    return dptr->m_field;
+}
+
 void AnyMessage::setField(const QtProtobuf::Any &field)
 {
-    if (m_field != field)
-        m_field = field;
+    if (dptr->m_field != field) {
+        dptr.detach();
+        dptr->m_field = field;
+    }
 }
+
+
+class RepeatedAnyMessage_QtProtobufData : public QSharedData
+{
+public:
+    RepeatedAnyMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    RepeatedAnyMessage_QtProtobufData(const RepeatedAnyMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_anys(other.m_anys)
+    {
+    }
+
+    QList<QtProtobuf::Any> m_anys;
+};
 
 RepeatedAnyMessage::~RepeatedAnyMessage() = default;
 
@@ -144,41 +183,37 @@ void RepeatedAnyMessage::registerTypes()
 }
 
 RepeatedAnyMessage::RepeatedAnyMessage()
-    : QProtobufMessage(&RepeatedAnyMessage::staticMetaObject)
+    : QProtobufMessage(&RepeatedAnyMessage::staticMetaObject),
+      dptr(new RepeatedAnyMessage_QtProtobufData)
 {
 }
 
 RepeatedAnyMessage::RepeatedAnyMessage(const RepeatedAnyMessage &other)
     : QProtobufMessage(other),
-      m_anys(other.m_anys)
+      dptr(other.dptr)
 {
 }
-
 RepeatedAnyMessage &RepeatedAnyMessage::operator =(const RepeatedAnyMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setAnys(other.m_anys);
+    dptr = other.dptr;
     return *this;
 }
-
 RepeatedAnyMessage::RepeatedAnyMessage(RepeatedAnyMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_anys = std::move(other.m_anys);
 }
-
 RepeatedAnyMessage &RepeatedAnyMessage::operator =(RepeatedAnyMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_anys != other.m_anys)
-        m_anys = std::move(other.m_anys);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool RepeatedAnyMessage::operator ==(const RepeatedAnyMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_anys, other.m_anys);
+        && QtProtobuf::repeatedValueCompare(dptr->m_anys, other.dptr->m_anys);
 }
 
 bool RepeatedAnyMessage::operator !=(const RepeatedAnyMessage &other) const
@@ -186,11 +221,44 @@ bool RepeatedAnyMessage::operator !=(const RepeatedAnyMessage &other) const
     return !this->operator ==(other);
 }
 
+QList<QtProtobuf::Any> RepeatedAnyMessage::anys() const
+{
+    return dptr->m_anys;
+}
+
+QList<QtProtobuf::Any> &RepeatedAnyMessage::anys()
+{
+    dptr.detach();
+    return dptr->m_anys;
+}
+
 void RepeatedAnyMessage::setAnys(const QList<QtProtobuf::Any> &anys)
 {
-    if (m_anys != anys)
-        m_anys = anys;
+    if (dptr->m_anys != anys) {
+        dptr.detach();
+        dptr->m_anys = anys;
+    }
 }
+
+
+class TwoAnyMessage_QtProtobufData : public QSharedData
+{
+public:
+    TwoAnyMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    TwoAnyMessage_QtProtobufData(const TwoAnyMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_one(other.m_one),
+          m_two(other.m_two)
+    {
+    }
+
+    QtProtobuf::Any m_one;
+    QtProtobuf::Any m_two;
+};
 
 TwoAnyMessage::~TwoAnyMessage() = default;
 
@@ -242,47 +310,38 @@ void TwoAnyMessage::registerTypes()
 }
 
 TwoAnyMessage::TwoAnyMessage()
-    : QProtobufMessage(&TwoAnyMessage::staticMetaObject)
+    : QProtobufMessage(&TwoAnyMessage::staticMetaObject),
+      dptr(new TwoAnyMessage_QtProtobufData)
 {
 }
 
 TwoAnyMessage::TwoAnyMessage(const TwoAnyMessage &other)
     : QProtobufMessage(other),
-      m_one(other.m_one),
-      m_two(other.m_two)
+      dptr(other.dptr)
 {
 }
-
 TwoAnyMessage &TwoAnyMessage::operator =(const TwoAnyMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setOne(other.m_one);
-    setTwo(other.m_two);
+    dptr = other.dptr;
     return *this;
 }
-
 TwoAnyMessage::TwoAnyMessage(TwoAnyMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_one = std::move(other.m_one);
-    m_two = std::move(other.m_two);
 }
-
 TwoAnyMessage &TwoAnyMessage::operator =(TwoAnyMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_one != other.m_one)
-        m_one = std::move(other.m_one);
-    if (m_two != other.m_two)
-        m_two = std::move(other.m_two);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool TwoAnyMessage::operator ==(const TwoAnyMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_one == other.m_one
-        && m_two == other.m_two;
+        && dptr->m_one == other.dptr->m_one
+        && dptr->m_two == other.dptr->m_two;
 }
 
 bool TwoAnyMessage::operator !=(const TwoAnyMessage &other) const
@@ -290,17 +349,60 @@ bool TwoAnyMessage::operator !=(const TwoAnyMessage &other) const
     return !this->operator ==(other);
 }
 
+QtProtobuf::Any TwoAnyMessage::one() const
+{
+    return dptr->m_one;
+}
+
+QtProtobuf::Any TwoAnyMessage::two() const
+{
+    return dptr->m_two;
+}
+
 void TwoAnyMessage::setOne(const QtProtobuf::Any &one)
 {
-    if (m_one != one)
-        m_one = one;
+    if (dptr->m_one != one) {
+        dptr.detach();
+        dptr->m_one = one;
+    }
 }
 
 void TwoAnyMessage::setTwo(const QtProtobuf::Any &two)
 {
-    if (m_two != two)
-        m_two = two;
+    if (dptr->m_two != two) {
+        dptr.detach();
+        dptr->m_two = two;
+    }
 }
+
+
+class Example_QtProtobufData : public QSharedData
+{
+public:
+    Example_QtProtobufData()
+        : QSharedData(),
+          m_i(0),
+          m_j(0),
+          m_h(0)
+    {
+    }
+
+    Example_QtProtobufData(const Example_QtProtobufData &other)
+        : QSharedData(other),
+          m_str(other.m_str),
+          m_i(other.m_i),
+          m_j(other.m_j),
+          m_h(other.m_h),
+          m_str2(other.m_str2)
+    {
+    }
+
+    QString m_str;
+    QtProtobuf::sint32 m_i;
+    QtProtobuf::sint32 m_j;
+    QtProtobuf::sint32 m_h;
+    QString m_str2;
+};
 
 Example::~Example() = default;
 
@@ -365,64 +467,40 @@ void Example::registerTypes()
 
 Example::Example()
     : QProtobufMessage(&Example::staticMetaObject),
-      m_i(0),
-      m_j(0),
-      m_h(0)
+      dptr(new Example_QtProtobufData)
 {
 }
 
 Example::Example(const Example &other)
     : QProtobufMessage(other),
-      m_str(other.m_str),
-      m_i(other.m_i),
-      m_j(other.m_j),
-      m_h(other.m_h),
-      m_str2(other.m_str2)
+      dptr(other.dptr)
 {
 }
-
 Example &Example::operator =(const Example &other)
 {
     QProtobufMessage::operator=(other);
-    setStr(other.m_str);
-    setI(other.m_i);
-    setJ(other.m_j);
-    setH(other.m_h);
-    setStr2(other.m_str2);
+    dptr = other.dptr;
     return *this;
 }
-
 Example::Example(Example &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_str = std::move(other.m_str);
-    setI(std::exchange(other.m_i, 0));
-    setJ(std::exchange(other.m_j, 0));
-    setH(std::exchange(other.m_h, 0));
-    m_str2 = std::move(other.m_str2);
 }
-
 Example &Example::operator =(Example &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_str != other.m_str)
-        m_str = std::move(other.m_str);
-    setI(std::exchange(other.m_i, 0));
-    setJ(std::exchange(other.m_j, 0));
-    setH(std::exchange(other.m_h, 0));
-    if (m_str2 != other.m_str2)
-        m_str2 = std::move(other.m_str2);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool Example::operator ==(const Example &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_str == other.m_str
-        && m_i == other.m_i
-        && m_j == other.m_j
-        && m_h == other.m_h
-        && m_str2 == other.m_str2;
+        && dptr->m_str == other.dptr->m_str
+        && dptr->m_i == other.dptr->m_i
+        && dptr->m_j == other.dptr->m_j
+        && dptr->m_h == other.dptr->m_h
+        && dptr->m_str2 == other.dptr->m_str2;
 }
 
 bool Example::operator !=(const Example &other) const
@@ -430,17 +508,89 @@ bool Example::operator !=(const Example &other) const
     return !this->operator ==(other);
 }
 
+QString Example::str() const
+{
+    return dptr->m_str;
+}
+
+QtProtobuf::sint32 Example::i() const
+{
+    return dptr->m_i;
+}
+
+QtProtobuf::sint32 Example::j() const
+{
+    return dptr->m_j;
+}
+
+QtProtobuf::sint32 Example::h() const
+{
+    return dptr->m_h;
+}
+
+QString Example::str2() const
+{
+    return dptr->m_str2;
+}
+
 void Example::setStr(const QString &str)
 {
-    if (m_str != str)
-        m_str = str;
+    if (dptr->m_str != str) {
+        dptr.detach();
+        dptr->m_str = str;
+    }
+}
+
+void Example::setI(const QtProtobuf::sint32 &i)
+{
+    if (dptr->m_i != i) {
+        dptr.detach();
+        dptr->m_i = i;
+    }
+}
+
+void Example::setJ(const QtProtobuf::sint32 &j)
+{
+    if (dptr->m_j != j) {
+        dptr.detach();
+        dptr->m_j = j;
+    }
+}
+
+void Example::setH(const QtProtobuf::sint32 &h)
+{
+    if (dptr->m_h != h) {
+        dptr.detach();
+        dptr->m_h = h;
+    }
 }
 
 void Example::setStr2(const QString &str2)
 {
-    if (m_str2 != str2)
-        m_str2 = str2;
+    if (dptr->m_str2 != str2) {
+        dptr.detach();
+        dptr->m_str2 = str2;
+    }
 }
+
+
+class SimpleMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleMessage_QtProtobufData()
+        : QSharedData(),
+          m_i(0)
+    {
+    }
+
+    SimpleMessage_QtProtobufData(const SimpleMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_i(other.m_i)
+    {
+    }
+
+    QtProtobuf::int32 m_i;
+};
 
 SimpleMessage::~SimpleMessage() = default;
 
@@ -489,45 +639,54 @@ void SimpleMessage::registerTypes()
 
 SimpleMessage::SimpleMessage()
     : QProtobufMessage(&SimpleMessage::staticMetaObject),
-      m_i(0)
+      dptr(new SimpleMessage_QtProtobufData)
 {
 }
 
 SimpleMessage::SimpleMessage(const SimpleMessage &other)
     : QProtobufMessage(other),
-      m_i(other.m_i)
+      dptr(other.dptr)
 {
 }
-
 SimpleMessage &SimpleMessage::operator =(const SimpleMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setI(other.m_i);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleMessage::SimpleMessage(SimpleMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    setI(std::exchange(other.m_i, 0));
 }
-
 SimpleMessage &SimpleMessage::operator =(SimpleMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setI(std::exchange(other.m_i, 0));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleMessage::operator ==(const SimpleMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_i == other.m_i;
+        && dptr->m_i == other.dptr->m_i;
 }
 
 bool SimpleMessage::operator !=(const SimpleMessage &other) const
 {
     return !this->operator ==(other);
+}
+
+QtProtobuf::int32 SimpleMessage::i() const
+{
+    return dptr->m_i;
+}
+
+void SimpleMessage::setI(const QtProtobuf::int32 &i)
+{
+    if (dptr->m_i != i) {
+        dptr.detach();
+        dptr->m_i = i;
+    }
 }
 
 } // namespace qtproto::tests

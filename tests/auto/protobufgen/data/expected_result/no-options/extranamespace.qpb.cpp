@@ -4,6 +4,22 @@
 #include <QtProtobuf/qprotobufserializer.h>
 
 namespace qtprotobufnamespace::tests {
+
+class EmptyMessage_QtProtobufData : public QSharedData
+{
+public:
+    EmptyMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    EmptyMessage_QtProtobufData(const EmptyMessage_QtProtobufData &other)
+        : QSharedData(other)
+    {
+    }
+
+};
+
 EmptyMessage::~EmptyMessage() = default;
 
 static constexpr struct {
@@ -46,32 +62,33 @@ void EmptyMessage::registerTypes()
 }
 
 EmptyMessage::EmptyMessage()
-    : QProtobufMessage(&EmptyMessage::staticMetaObject)
+    : QProtobufMessage(&EmptyMessage::staticMetaObject),
+      dptr(new EmptyMessage_QtProtobufData)
 {
 }
 
 EmptyMessage::EmptyMessage(const EmptyMessage &other)
-    : QProtobufMessage(other)
+    : QProtobufMessage(other),
+      dptr(other.dptr)
 {
 }
-
 EmptyMessage &EmptyMessage::operator =(const EmptyMessage &other)
 {
     QProtobufMessage::operator=(other);
+    dptr = other.dptr;
     return *this;
 }
-
 EmptyMessage::EmptyMessage(EmptyMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
 }
-
 EmptyMessage &EmptyMessage::operator =(EmptyMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool EmptyMessage::operator ==(const EmptyMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other);
@@ -81,6 +98,24 @@ bool EmptyMessage::operator !=(const EmptyMessage &other) const
 {
     return !this->operator ==(other);
 }
+
+
+class SimpleStringMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleStringMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleStringMessage_QtProtobufData(const SimpleStringMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testFieldString(other.m_testFieldString)
+    {
+    }
+
+    QString m_testFieldString;
+};
 
 SimpleStringMessage::~SimpleStringMessage() = default;
 
@@ -128,41 +163,37 @@ void SimpleStringMessage::registerTypes()
 }
 
 SimpleStringMessage::SimpleStringMessage()
-    : QProtobufMessage(&SimpleStringMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleStringMessage::staticMetaObject),
+      dptr(new SimpleStringMessage_QtProtobufData)
 {
 }
 
 SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other)
     : QProtobufMessage(other),
-      m_testFieldString(other.m_testFieldString)
+      dptr(other.dptr)
 {
 }
-
 SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestFieldString(other.m_testFieldString);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleStringMessage::SimpleStringMessage(SimpleStringMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_testFieldString = std::move(other.m_testFieldString);
 }
-
 SimpleStringMessage &SimpleStringMessage::operator =(SimpleStringMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_testFieldString != other.m_testFieldString)
-        m_testFieldString = std::move(other.m_testFieldString);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleStringMessage::operator ==(const SimpleStringMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testFieldString == other.m_testFieldString;
+        && dptr->m_testFieldString == other.dptr->m_testFieldString;
 }
 
 bool SimpleStringMessage::operator !=(const SimpleStringMessage &other) const
@@ -170,11 +201,42 @@ bool SimpleStringMessage::operator !=(const SimpleStringMessage &other) const
     return !this->operator ==(other);
 }
 
+QString SimpleStringMessage::testFieldString() const
+{
+    return dptr->m_testFieldString;
+}
+
 void SimpleStringMessage::setTestFieldString(const QString &testFieldString)
 {
-    if (m_testFieldString != testFieldString)
-        m_testFieldString = testFieldString;
+    if (dptr->m_testFieldString != testFieldString) {
+        dptr.detach();
+        dptr->m_testFieldString = testFieldString;
+    }
 }
+
+
+class ComplexMessage_QtProtobufData : public QSharedData
+{
+public:
+    ComplexMessage_QtProtobufData()
+        : QSharedData(),
+          m_testFieldInt(0),
+          m_testComplexField(nullptr)
+    {
+    }
+
+    ComplexMessage_QtProtobufData(const ComplexMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_testFieldInt(other.m_testFieldInt),
+          m_testComplexField(other.m_testComplexField
+                                               ? new SimpleStringMessage(*other.m_testComplexField)
+                                               : nullptr)
+    {
+    }
+
+    QtProtobuf::int32 m_testFieldInt;
+    QtProtobufPrivate::QProtobufLazyMessagePointer<SimpleStringMessage> m_testComplexField;
+};
 
 ComplexMessage::~ComplexMessage() = default;
 
@@ -227,56 +289,38 @@ void ComplexMessage::registerTypes()
 
 ComplexMessage::ComplexMessage()
     : QProtobufMessage(&ComplexMessage::staticMetaObject),
-      m_testFieldInt(0),
-      m_testComplexField(nullptr)
+      dptr(new ComplexMessage_QtProtobufData)
 {
 }
 
 ComplexMessage::ComplexMessage(const ComplexMessage &other)
     : QProtobufMessage(other),
-      m_testFieldInt(other.m_testFieldInt),
-      m_testComplexField(nullptr)
+      dptr(other.dptr)
 {
-    if (m_testComplexField != other.m_testComplexField) {
-        *m_testComplexField = *other.m_testComplexField;
-    }
 }
-
 ComplexMessage &ComplexMessage::operator =(const ComplexMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setTestFieldInt(other.m_testFieldInt);
-    if (m_testComplexField != other.m_testComplexField)
-        *m_testComplexField = *other.m_testComplexField;
+    dptr = other.dptr;
     return *this;
 }
-
 ComplexMessage::ComplexMessage(ComplexMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
-m_testComplexField(nullptr)
+      dptr(std::move(other.dptr))
 {
-    setTestFieldInt(std::exchange(other.m_testFieldInt, 0));
-    if (m_testComplexField != other.m_testComplexField) {
-        *m_testComplexField = std::move(*other.m_testComplexField);
-    }
 }
-
 ComplexMessage &ComplexMessage::operator =(ComplexMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    setTestFieldInt(std::exchange(other.m_testFieldInt, 0));
-    if (m_testComplexField != other.m_testComplexField)
-        *m_testComplexField = std::move(*other.m_testComplexField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool ComplexMessage::operator ==(const ComplexMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && m_testFieldInt == other.m_testFieldInt
-        && (m_testComplexField == other.m_testComplexField
-            || *m_testComplexField == *other.m_testComplexField)
-;
+        && dptr->m_testFieldInt == other.dptr->m_testFieldInt
+        && (dptr->m_testComplexField == other.dptr->m_testComplexField
+            || *dptr->m_testComplexField == *other.dptr->m_testComplexField);
 }
 
 bool ComplexMessage::operator !=(const ComplexMessage &other) const
@@ -284,26 +328,43 @@ bool ComplexMessage::operator !=(const ComplexMessage &other) const
     return !this->operator ==(other);
 }
 
+QtProtobuf::int32 ComplexMessage::testFieldInt() const
+{
+    return dptr->m_testFieldInt;
+}
+
 SimpleStringMessage *ComplexMessage::testComplexField_p() const
 {
-    return m_testComplexField ? m_testComplexField.get() : nullptr;
+    return dptr->m_testComplexField ? dptr->m_testComplexField.get() : nullptr;
 }
 
 SimpleStringMessage &ComplexMessage::testComplexField() const
 {
-    return *m_testComplexField;
+    return *dptr->m_testComplexField;
+}
+
+void ComplexMessage::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
+{
+    if (dptr->m_testFieldInt != testFieldInt) {
+        dptr.detach();
+        dptr->m_testFieldInt = testFieldInt;
+    }
 }
 
 void ComplexMessage::setTestComplexField_p(SimpleStringMessage *testComplexField)
 {
-    if (m_testComplexField.get() != testComplexField)
-        m_testComplexField.reset(testComplexField);
+    if (dptr->m_testComplexField.get() != testComplexField) {
+        dptr.detach();
+        dptr->m_testComplexField.reset(testComplexField);
+    }
 }
 
 void ComplexMessage::setTestComplexField(const SimpleStringMessage &testComplexField)
 {
-    if (*m_testComplexField != testComplexField)
-        *m_testComplexField = testComplexField;
+    if (*dptr->m_testComplexField != testComplexField) {
+        dptr.detach();
+        *dptr->m_testComplexField = testComplexField;
+    }
 }
 
 } // namespace qtprotobufnamespace::tests

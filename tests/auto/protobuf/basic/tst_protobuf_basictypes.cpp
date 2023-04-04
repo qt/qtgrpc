@@ -404,16 +404,15 @@ void QtProtobufTypesGenerationTest::MoveOperatorTest()
     const char *propertyName = "testFieldInt";
     qtprotobufnamespace::tests::SimpleIntMessage test;
     qtprotobufnamespace::tests::SimpleIntMessage test2;
-    test2.setTestFieldInt(35);
-
-    qtprotobufnamespace::tests::SimpleIntMessage test3(std::move(test2));
-    test2.setTestFieldInt(35);
-
+    test2.setTestFieldInt(25);
     test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::int32>(15));
-    test.setTestFieldInt(25);
     test = std::move(test2);
-    QCOMPARE(test.testFieldInt(), 35);
-    QCOMPARE(test2.testFieldInt(), 0);
+    QCOMPARE(test.testFieldInt(), 25);
+
+    qtprotobufnamespace::tests::SimpleIntMessage test3;
+    test3.setTestFieldInt(35);
+    qtprotobufnamespace::tests::SimpleIntMessage test4(std::move(test3));
+    QCOMPARE(test4.testFieldInt(), 35);
 }
 
 void QtProtobufTypesGenerationTest::AccessMessageFieldsFromGetter()

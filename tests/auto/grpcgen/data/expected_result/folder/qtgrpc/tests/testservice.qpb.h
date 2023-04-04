@@ -12,6 +12,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -24,6 +25,7 @@ using SimpleIntMessageRepeated = QList<std::shared_ptr<SimpleIntMessage>>;
 class BlobMessage;
 using BlobMessageRepeated = QList<std::shared_ptr<BlobMessage>>;
 
+class SimpleStringMessage_QtProtobufData;
 class SimpleStringMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -46,18 +48,15 @@ public:
     bool operator ==(const SimpleStringMessage &other) const;
     bool operator !=(const SimpleStringMessage &other) const;
 
-    QString testFieldString() const
-    {
-        return m_testFieldString;
-    }
-
+    QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
     static void registerTypes();
 
 private:
-    QString m_testFieldString;
+    QExplicitlySharedDataPointer<SimpleStringMessage_QtProtobufData> dptr;
 };
 
+class SimpleIntMessage_QtProtobufData;
 class SimpleIntMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -80,23 +79,15 @@ public:
     bool operator ==(const SimpleIntMessage &other) const;
     bool operator !=(const SimpleIntMessage &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<SimpleIntMessage_QtProtobufData> dptr;
 };
 
+class BlobMessage_QtProtobufData;
 class BlobMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -119,16 +110,12 @@ public:
     bool operator ==(const BlobMessage &other) const;
     bool operator !=(const BlobMessage &other) const;
 
-    QByteArray testBytes() const
-    {
-        return m_testBytes;
-    }
-
+    QByteArray testBytes() const;
     void setTestBytes(const QByteArray &testBytes);
     static void registerTypes();
 
 private:
-    QByteArray m_testBytes;
+    QExplicitlySharedDataPointer<BlobMessage_QtProtobufData> dptr;
 };
 } // namespace qtgrpc::tests
 

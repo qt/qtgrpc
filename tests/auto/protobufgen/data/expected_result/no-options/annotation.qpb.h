@@ -12,6 +12,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -36,6 +37,7 @@ using AnnotatedMessage8Repeated = QList<std::shared_ptr<AnnotatedMessage8>>;
 class AnnotatedMessage9;
 using AnnotatedMessage9Repeated = QList<std::shared_ptr<AnnotatedMessage9>>;
 
+class AnnotatedMessage1_QtProtobufData;
 class AnnotatedMessage1 : public QProtobufMessage
 {
     Q_GADGET
@@ -58,23 +60,15 @@ public:
     bool operator ==(const AnnotatedMessage1 &other) const;
     bool operator !=(const AnnotatedMessage1 &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<AnnotatedMessage1_QtProtobufData> dptr;
 };
 
+class AnnotatedMessage2_QtProtobufData;
 class AnnotatedMessage2 : public QProtobufMessage
 {
     Q_GADGET
@@ -97,23 +91,15 @@ public:
     bool operator ==(const AnnotatedMessage2 &other) const;
     bool operator !=(const AnnotatedMessage2 &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<AnnotatedMessage2_QtProtobufData> dptr;
 };
 
+class AnnotatedMessage3_QtProtobufData;
 class AnnotatedMessage3 : public QProtobufMessage
 {
     Q_GADGET
@@ -136,23 +122,15 @@ public:
     bool operator ==(const AnnotatedMessage3 &other) const;
     bool operator !=(const AnnotatedMessage3 &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<AnnotatedMessage3_QtProtobufData> dptr;
 };
 
+class AnnotatedMessage4_QtProtobufData;
 class AnnotatedMessage4 : public QProtobufMessage
 {
     Q_GADGET
@@ -175,23 +153,15 @@ public:
     bool operator ==(const AnnotatedMessage4 &other) const;
     bool operator !=(const AnnotatedMessage4 &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<AnnotatedMessage4_QtProtobufData> dptr;
 };
 
+class AnnotatedMessage5_QtProtobufData;
 class AnnotatedMessage5 : public QProtobufMessage
 {
     Q_GADGET
@@ -214,23 +184,15 @@ public:
     bool operator ==(const AnnotatedMessage5 &other) const;
     bool operator !=(const AnnotatedMessage5 &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<AnnotatedMessage5_QtProtobufData> dptr;
 };
 
+class AnnotatedMessage6_QtProtobufData;
 class AnnotatedMessage6 : public QProtobufMessage
 {
     Q_GADGET
@@ -253,23 +215,15 @@ public:
     bool operator ==(const AnnotatedMessage6 &other) const;
     bool operator !=(const AnnotatedMessage6 &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<AnnotatedMessage6_QtProtobufData> dptr;
 };
 
+class AnnotatedMessage7_QtProtobufData;
 class AnnotatedMessage7 : public QProtobufMessage
 {
     Q_GADGET
@@ -292,23 +246,15 @@ public:
     bool operator ==(const AnnotatedMessage7 &other) const;
     bool operator !=(const AnnotatedMessage7 &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<AnnotatedMessage7_QtProtobufData> dptr;
 };
 
+class AnnotatedMessage8_QtProtobufData;
 class AnnotatedMessage8 : public QProtobufMessage
 {
     Q_GADGET
@@ -331,23 +277,15 @@ public:
     bool operator ==(const AnnotatedMessage8 &other) const;
     bool operator !=(const AnnotatedMessage8 &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<AnnotatedMessage8_QtProtobufData> dptr;
 };
 
+class AnnotatedMessage9_QtProtobufData;
 class AnnotatedMessage9 : public QProtobufMessage
 {
     Q_GADGET
@@ -370,21 +308,12 @@ public:
     bool operator ==(const AnnotatedMessage9 &other) const;
     bool operator !=(const AnnotatedMessage9 &other) const;
 
-    QtProtobuf::sint32 testField() const
-    {
-        return m_testField;
-    }
-
-    void setTestField(const QtProtobuf::sint32 &testField)
-    {
-        if (m_testField != testField)
-            m_testField = testField;
-    }
-
+    QtProtobuf::sint32 testField() const;
+    void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
-    QtProtobuf::sint32 m_testField;
+    QExplicitlySharedDataPointer<AnnotatedMessage9_QtProtobufData> dptr;
 };
 } // namespace qtprotobufnamespace::tests
 

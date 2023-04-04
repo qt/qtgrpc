@@ -16,6 +16,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -51,6 +52,7 @@ using NoPackageExternalMessageRepeated = QList<std::shared_ptr<NoPackageExternal
 class NoPackageMessage;
 using NoPackageMessageRepeated = QList<std::shared_ptr<NoPackageMessage>>;
 
+class EmptyMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT EmptyMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -70,8 +72,10 @@ public:
     static void registerTypes();
 
 private:
+    QExplicitlySharedDataPointer<EmptyMessage_QtProtobufData> dptr;
 };
 
+class SimpleIntMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT SimpleIntMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -96,34 +100,17 @@ public:
     bool operator ==(const SimpleIntMessage &other) const;
     bool operator !=(const SimpleIntMessage &other) const;
 
-    QtProtobuf::int32 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    QtProtobuf::int32 testFieldInt() const;
+    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     static void registerTypes();
 
 private:
-    int testFieldInt_p() const
-    {
-        return m_testFieldInt;
-    }
-
-    void setTestFieldInt_p(const int &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
-    QtProtobuf::int32 m_testFieldInt;
+    int testFieldInt_p() const;
+    void setTestFieldInt_p(const int &testFieldInt);
+    QExplicitlySharedDataPointer<SimpleIntMessage_QtProtobufData> dptr;
 };
 
+class NoPackageExternalMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT NoPackageExternalMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -155,9 +142,10 @@ public:
 private:
     SimpleIntMessageExt *testField_p() const;
     void setTestField_p(SimpleIntMessageExt *testField);
-    QtProtobufPrivate::QProtobufLazyMessagePointer<SimpleIntMessageExt> m_testField;
+    QExplicitlySharedDataPointer<NoPackageExternalMessage_QtProtobufData> dptr;
 };
 
+class NoPackageMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT NoPackageMessage : public QProtobufMessage
 {
     Q_GADGET
@@ -189,7 +177,7 @@ public:
 private:
     SimpleIntMessage *testField_p() const;
     void setTestField_p(SimpleIntMessage *testField);
-    QtProtobufPrivate::QProtobufLazyMessagePointer<SimpleIntMessage> m_testField;
+    QExplicitlySharedDataPointer<NoPackageMessage_QtProtobufData> dptr;
 };
 
 Q_DECLARE_METATYPE(EmptyMessage)

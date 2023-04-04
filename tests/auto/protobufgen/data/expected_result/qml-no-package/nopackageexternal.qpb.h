@@ -15,6 +15,7 @@
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qshareddata.h>
 
 #include <memory>
 
@@ -31,6 +32,7 @@
 class SimpleIntMessageExt;
 using SimpleIntMessageExtRepeated = QList<std::shared_ptr<SimpleIntMessageExt>>;
 
+class SimpleIntMessageExt_QtProtobufData;
 class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT SimpleIntMessageExt : public QProtobufMessage
 {
     Q_GADGET
@@ -55,32 +57,14 @@ public:
     bool operator ==(const SimpleIntMessageExt &other) const;
     bool operator !=(const SimpleIntMessageExt &other) const;
 
-    QtProtobuf::int32 testFieldInt() const
-    {
-        return m_testFieldInt;
-    }
-
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
+    QtProtobuf::int32 testFieldInt() const;
+    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     static void registerTypes();
 
 private:
-    int testFieldInt_p() const
-    {
-        return m_testFieldInt;
-    }
-
-    void setTestFieldInt_p(const int &testFieldInt)
-    {
-        if (m_testFieldInt != testFieldInt)
-            m_testFieldInt = testFieldInt;
-    }
-
-    QtProtobuf::int32 m_testFieldInt;
+    int testFieldInt_p() const;
+    void setTestFieldInt_p(const int &testFieldInt);
+    QExplicitlySharedDataPointer<SimpleIntMessageExt_QtProtobufData> dptr;
 };
 
 Q_DECLARE_METATYPE(SimpleIntMessageExt)

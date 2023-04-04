@@ -4,6 +4,24 @@
 #include <QtProtobuf/qprotobufserializer.h>
 
 namespace qtprotobufnamespace::tests {
+
+class SimpleSInt32StringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt32StringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt32StringMapMessage_QtProtobufData(const SimpleSInt32StringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt32StringMapMessage::MapFieldEntry m_mapField;
+};
+
 SimpleSInt32StringMapMessage::~SimpleSInt32StringMapMessage() = default;
 
 static constexpr struct {
@@ -52,41 +70,37 @@ void SimpleSInt32StringMapMessage::registerTypes()
 }
 
 SimpleSInt32StringMapMessage::SimpleSInt32StringMapMessage()
-    : QProtobufMessage(&SimpleSInt32StringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt32StringMapMessage::staticMetaObject),
+      dptr(new SimpleSInt32StringMapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt32StringMapMessage::SimpleSInt32StringMapMessage(const SimpleSInt32StringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt32StringMapMessage &SimpleSInt32StringMapMessage::operator =(const SimpleSInt32StringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt32StringMapMessage::SimpleSInt32StringMapMessage(SimpleSInt32StringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt32StringMapMessage &SimpleSInt32StringMapMessage::operator =(SimpleSInt32StringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt32StringMapMessage::operator ==(const SimpleSInt32StringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt32StringMapMessage::operator !=(const SimpleSInt32StringMapMessage &other) const
@@ -94,11 +108,42 @@ bool SimpleSInt32StringMapMessage::operator !=(const SimpleSInt32StringMapMessag
     return !this->operator ==(other);
 }
 
+SimpleSInt32StringMapMessage::MapFieldEntry SimpleSInt32StringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt32StringMapMessage::MapFieldEntry &SimpleSInt32StringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt32StringMapMessage::setMapField(const SimpleSInt32StringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt64StringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt64StringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt64StringMapMessage_QtProtobufData(const SimpleSInt64StringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt64StringMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt64StringMapMessage::~SimpleSInt64StringMapMessage() = default;
 
@@ -148,41 +193,37 @@ void SimpleSInt64StringMapMessage::registerTypes()
 }
 
 SimpleSInt64StringMapMessage::SimpleSInt64StringMapMessage()
-    : QProtobufMessage(&SimpleSInt64StringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt64StringMapMessage::staticMetaObject),
+      dptr(new SimpleSInt64StringMapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt64StringMapMessage::SimpleSInt64StringMapMessage(const SimpleSInt64StringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt64StringMapMessage &SimpleSInt64StringMapMessage::operator =(const SimpleSInt64StringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt64StringMapMessage::SimpleSInt64StringMapMessage(SimpleSInt64StringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt64StringMapMessage &SimpleSInt64StringMapMessage::operator =(SimpleSInt64StringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt64StringMapMessage::operator ==(const SimpleSInt64StringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt64StringMapMessage::operator !=(const SimpleSInt64StringMapMessage &other) const
@@ -190,11 +231,42 @@ bool SimpleSInt64StringMapMessage::operator !=(const SimpleSInt64StringMapMessag
     return !this->operator ==(other);
 }
 
+SimpleSInt64StringMapMessage::MapFieldEntry SimpleSInt64StringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt64StringMapMessage::MapFieldEntry &SimpleSInt64StringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt64StringMapMessage::setMapField(const SimpleSInt64StringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt32StringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt32StringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt32StringMapMessage_QtProtobufData(const SimpleInt32StringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt32StringMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt32StringMapMessage::~SimpleInt32StringMapMessage() = default;
 
@@ -244,41 +316,37 @@ void SimpleInt32StringMapMessage::registerTypes()
 }
 
 SimpleInt32StringMapMessage::SimpleInt32StringMapMessage()
-    : QProtobufMessage(&SimpleInt32StringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt32StringMapMessage::staticMetaObject),
+      dptr(new SimpleInt32StringMapMessage_QtProtobufData)
 {
 }
 
 SimpleInt32StringMapMessage::SimpleInt32StringMapMessage(const SimpleInt32StringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt32StringMapMessage &SimpleInt32StringMapMessage::operator =(const SimpleInt32StringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt32StringMapMessage::SimpleInt32StringMapMessage(SimpleInt32StringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt32StringMapMessage &SimpleInt32StringMapMessage::operator =(SimpleInt32StringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt32StringMapMessage::operator ==(const SimpleInt32StringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt32StringMapMessage::operator !=(const SimpleInt32StringMapMessage &other) const
@@ -286,11 +354,42 @@ bool SimpleInt32StringMapMessage::operator !=(const SimpleInt32StringMapMessage 
     return !this->operator ==(other);
 }
 
+SimpleInt32StringMapMessage::MapFieldEntry SimpleInt32StringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt32StringMapMessage::MapFieldEntry &SimpleInt32StringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt32StringMapMessage::setMapField(const SimpleInt32StringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt64StringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt64StringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt64StringMapMessage_QtProtobufData(const SimpleInt64StringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt64StringMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt64StringMapMessage::~SimpleInt64StringMapMessage() = default;
 
@@ -340,41 +439,37 @@ void SimpleInt64StringMapMessage::registerTypes()
 }
 
 SimpleInt64StringMapMessage::SimpleInt64StringMapMessage()
-    : QProtobufMessage(&SimpleInt64StringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt64StringMapMessage::staticMetaObject),
+      dptr(new SimpleInt64StringMapMessage_QtProtobufData)
 {
 }
 
 SimpleInt64StringMapMessage::SimpleInt64StringMapMessage(const SimpleInt64StringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt64StringMapMessage &SimpleInt64StringMapMessage::operator =(const SimpleInt64StringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt64StringMapMessage::SimpleInt64StringMapMessage(SimpleInt64StringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt64StringMapMessage &SimpleInt64StringMapMessage::operator =(SimpleInt64StringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt64StringMapMessage::operator ==(const SimpleInt64StringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt64StringMapMessage::operator !=(const SimpleInt64StringMapMessage &other) const
@@ -382,11 +477,42 @@ bool SimpleInt64StringMapMessage::operator !=(const SimpleInt64StringMapMessage 
     return !this->operator ==(other);
 }
 
+SimpleInt64StringMapMessage::MapFieldEntry SimpleInt64StringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt64StringMapMessage::MapFieldEntry &SimpleInt64StringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt64StringMapMessage::setMapField(const SimpleInt64StringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt32StringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt32StringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt32StringMapMessage_QtProtobufData(const SimpleUInt32StringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt32StringMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt32StringMapMessage::~SimpleUInt32StringMapMessage() = default;
 
@@ -436,41 +562,37 @@ void SimpleUInt32StringMapMessage::registerTypes()
 }
 
 SimpleUInt32StringMapMessage::SimpleUInt32StringMapMessage()
-    : QProtobufMessage(&SimpleUInt32StringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt32StringMapMessage::staticMetaObject),
+      dptr(new SimpleUInt32StringMapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt32StringMapMessage::SimpleUInt32StringMapMessage(const SimpleUInt32StringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt32StringMapMessage &SimpleUInt32StringMapMessage::operator =(const SimpleUInt32StringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt32StringMapMessage::SimpleUInt32StringMapMessage(SimpleUInt32StringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt32StringMapMessage &SimpleUInt32StringMapMessage::operator =(SimpleUInt32StringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt32StringMapMessage::operator ==(const SimpleUInt32StringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt32StringMapMessage::operator !=(const SimpleUInt32StringMapMessage &other) const
@@ -478,11 +600,42 @@ bool SimpleUInt32StringMapMessage::operator !=(const SimpleUInt32StringMapMessag
     return !this->operator ==(other);
 }
 
+SimpleUInt32StringMapMessage::MapFieldEntry SimpleUInt32StringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt32StringMapMessage::MapFieldEntry &SimpleUInt32StringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt32StringMapMessage::setMapField(const SimpleUInt32StringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt64StringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt64StringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt64StringMapMessage_QtProtobufData(const SimpleUInt64StringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt64StringMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt64StringMapMessage::~SimpleUInt64StringMapMessage() = default;
 
@@ -532,41 +685,37 @@ void SimpleUInt64StringMapMessage::registerTypes()
 }
 
 SimpleUInt64StringMapMessage::SimpleUInt64StringMapMessage()
-    : QProtobufMessage(&SimpleUInt64StringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt64StringMapMessage::staticMetaObject),
+      dptr(new SimpleUInt64StringMapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt64StringMapMessage::SimpleUInt64StringMapMessage(const SimpleUInt64StringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt64StringMapMessage &SimpleUInt64StringMapMessage::operator =(const SimpleUInt64StringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt64StringMapMessage::SimpleUInt64StringMapMessage(SimpleUInt64StringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt64StringMapMessage &SimpleUInt64StringMapMessage::operator =(SimpleUInt64StringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt64StringMapMessage::operator ==(const SimpleUInt64StringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt64StringMapMessage::operator !=(const SimpleUInt64StringMapMessage &other) const
@@ -574,11 +723,42 @@ bool SimpleUInt64StringMapMessage::operator !=(const SimpleUInt64StringMapMessag
     return !this->operator ==(other);
 }
 
+SimpleUInt64StringMapMessage::MapFieldEntry SimpleUInt64StringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt64StringMapMessage::MapFieldEntry &SimpleUInt64StringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt64StringMapMessage::setMapField(const SimpleUInt64StringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed32StringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed32StringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed32StringMapMessage_QtProtobufData(const SimpleFixed32StringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed32StringMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed32StringMapMessage::~SimpleFixed32StringMapMessage() = default;
 
@@ -628,41 +808,37 @@ void SimpleFixed32StringMapMessage::registerTypes()
 }
 
 SimpleFixed32StringMapMessage::SimpleFixed32StringMapMessage()
-    : QProtobufMessage(&SimpleFixed32StringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed32StringMapMessage::staticMetaObject),
+      dptr(new SimpleFixed32StringMapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed32StringMapMessage::SimpleFixed32StringMapMessage(const SimpleFixed32StringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed32StringMapMessage &SimpleFixed32StringMapMessage::operator =(const SimpleFixed32StringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed32StringMapMessage::SimpleFixed32StringMapMessage(SimpleFixed32StringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed32StringMapMessage &SimpleFixed32StringMapMessage::operator =(SimpleFixed32StringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed32StringMapMessage::operator ==(const SimpleFixed32StringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed32StringMapMessage::operator !=(const SimpleFixed32StringMapMessage &other) const
@@ -670,11 +846,42 @@ bool SimpleFixed32StringMapMessage::operator !=(const SimpleFixed32StringMapMess
     return !this->operator ==(other);
 }
 
+SimpleFixed32StringMapMessage::MapFieldEntry SimpleFixed32StringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed32StringMapMessage::MapFieldEntry &SimpleFixed32StringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed32StringMapMessage::setMapField(const SimpleFixed32StringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed64StringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed64StringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed64StringMapMessage_QtProtobufData(const SimpleFixed64StringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed64StringMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed64StringMapMessage::~SimpleFixed64StringMapMessage() = default;
 
@@ -724,41 +931,37 @@ void SimpleFixed64StringMapMessage::registerTypes()
 }
 
 SimpleFixed64StringMapMessage::SimpleFixed64StringMapMessage()
-    : QProtobufMessage(&SimpleFixed64StringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed64StringMapMessage::staticMetaObject),
+      dptr(new SimpleFixed64StringMapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed64StringMapMessage::SimpleFixed64StringMapMessage(const SimpleFixed64StringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed64StringMapMessage &SimpleFixed64StringMapMessage::operator =(const SimpleFixed64StringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed64StringMapMessage::SimpleFixed64StringMapMessage(SimpleFixed64StringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed64StringMapMessage &SimpleFixed64StringMapMessage::operator =(SimpleFixed64StringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed64StringMapMessage::operator ==(const SimpleFixed64StringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed64StringMapMessage::operator !=(const SimpleFixed64StringMapMessage &other) const
@@ -766,11 +969,42 @@ bool SimpleFixed64StringMapMessage::operator !=(const SimpleFixed64StringMapMess
     return !this->operator ==(other);
 }
 
+SimpleFixed64StringMapMessage::MapFieldEntry SimpleFixed64StringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed64StringMapMessage::MapFieldEntry &SimpleFixed64StringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed64StringMapMessage::setMapField(const SimpleFixed64StringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed32StringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed32StringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed32StringMapMessage_QtProtobufData(const SimpleSFixed32StringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed32StringMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed32StringMapMessage::~SimpleSFixed32StringMapMessage() = default;
 
@@ -820,41 +1054,37 @@ void SimpleSFixed32StringMapMessage::registerTypes()
 }
 
 SimpleSFixed32StringMapMessage::SimpleSFixed32StringMapMessage()
-    : QProtobufMessage(&SimpleSFixed32StringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed32StringMapMessage::staticMetaObject),
+      dptr(new SimpleSFixed32StringMapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed32StringMapMessage::SimpleSFixed32StringMapMessage(const SimpleSFixed32StringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed32StringMapMessage &SimpleSFixed32StringMapMessage::operator =(const SimpleSFixed32StringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed32StringMapMessage::SimpleSFixed32StringMapMessage(SimpleSFixed32StringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed32StringMapMessage &SimpleSFixed32StringMapMessage::operator =(SimpleSFixed32StringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed32StringMapMessage::operator ==(const SimpleSFixed32StringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed32StringMapMessage::operator !=(const SimpleSFixed32StringMapMessage &other) const
@@ -862,11 +1092,42 @@ bool SimpleSFixed32StringMapMessage::operator !=(const SimpleSFixed32StringMapMe
     return !this->operator ==(other);
 }
 
+SimpleSFixed32StringMapMessage::MapFieldEntry SimpleSFixed32StringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed32StringMapMessage::MapFieldEntry &SimpleSFixed32StringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed32StringMapMessage::setMapField(const SimpleSFixed32StringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed64StringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed64StringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed64StringMapMessage_QtProtobufData(const SimpleSFixed64StringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed64StringMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed64StringMapMessage::~SimpleSFixed64StringMapMessage() = default;
 
@@ -916,41 +1177,37 @@ void SimpleSFixed64StringMapMessage::registerTypes()
 }
 
 SimpleSFixed64StringMapMessage::SimpleSFixed64StringMapMessage()
-    : QProtobufMessage(&SimpleSFixed64StringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed64StringMapMessage::staticMetaObject),
+      dptr(new SimpleSFixed64StringMapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed64StringMapMessage::SimpleSFixed64StringMapMessage(const SimpleSFixed64StringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed64StringMapMessage &SimpleSFixed64StringMapMessage::operator =(const SimpleSFixed64StringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed64StringMapMessage::SimpleSFixed64StringMapMessage(SimpleSFixed64StringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed64StringMapMessage &SimpleSFixed64StringMapMessage::operator =(SimpleSFixed64StringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed64StringMapMessage::operator ==(const SimpleSFixed64StringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed64StringMapMessage::operator !=(const SimpleSFixed64StringMapMessage &other) const
@@ -958,11 +1215,42 @@ bool SimpleSFixed64StringMapMessage::operator !=(const SimpleSFixed64StringMapMe
     return !this->operator ==(other);
 }
 
+SimpleSFixed64StringMapMessage::MapFieldEntry SimpleSFixed64StringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed64StringMapMessage::MapFieldEntry &SimpleSFixed64StringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed64StringMapMessage::setMapField(const SimpleSFixed64StringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleStringStringMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleStringStringMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleStringStringMapMessage_QtProtobufData(const SimpleStringStringMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleStringStringMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleStringStringMapMessage::~SimpleStringStringMapMessage() = default;
 
@@ -1012,41 +1300,37 @@ void SimpleStringStringMapMessage::registerTypes()
 }
 
 SimpleStringStringMapMessage::SimpleStringStringMapMessage()
-    : QProtobufMessage(&SimpleStringStringMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleStringStringMapMessage::staticMetaObject),
+      dptr(new SimpleStringStringMapMessage_QtProtobufData)
 {
 }
 
 SimpleStringStringMapMessage::SimpleStringStringMapMessage(const SimpleStringStringMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleStringStringMapMessage &SimpleStringStringMapMessage::operator =(const SimpleStringStringMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleStringStringMapMessage::SimpleStringStringMapMessage(SimpleStringStringMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleStringStringMapMessage &SimpleStringStringMapMessage::operator =(SimpleStringStringMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleStringStringMapMessage::operator ==(const SimpleStringStringMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleStringStringMapMessage::operator !=(const SimpleStringStringMapMessage &other) const
@@ -1054,11 +1338,42 @@ bool SimpleStringStringMapMessage::operator !=(const SimpleStringStringMapMessag
     return !this->operator ==(other);
 }
 
+SimpleStringStringMapMessage::MapFieldEntry SimpleStringStringMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleStringStringMapMessage::MapFieldEntry &SimpleStringStringMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleStringStringMapMessage::setMapField(const SimpleStringStringMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt32SInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt32SInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt32SInt32MapMessage_QtProtobufData(const SimpleSInt32SInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt32SInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt32SInt32MapMessage::~SimpleSInt32SInt32MapMessage() = default;
 
@@ -1108,41 +1423,37 @@ void SimpleSInt32SInt32MapMessage::registerTypes()
 }
 
 SimpleSInt32SInt32MapMessage::SimpleSInt32SInt32MapMessage()
-    : QProtobufMessage(&SimpleSInt32SInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt32SInt32MapMessage::staticMetaObject),
+      dptr(new SimpleSInt32SInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt32SInt32MapMessage::SimpleSInt32SInt32MapMessage(const SimpleSInt32SInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt32SInt32MapMessage &SimpleSInt32SInt32MapMessage::operator =(const SimpleSInt32SInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt32SInt32MapMessage::SimpleSInt32SInt32MapMessage(SimpleSInt32SInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt32SInt32MapMessage &SimpleSInt32SInt32MapMessage::operator =(SimpleSInt32SInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt32SInt32MapMessage::operator ==(const SimpleSInt32SInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt32SInt32MapMessage::operator !=(const SimpleSInt32SInt32MapMessage &other) const
@@ -1150,11 +1461,42 @@ bool SimpleSInt32SInt32MapMessage::operator !=(const SimpleSInt32SInt32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleSInt32SInt32MapMessage::MapFieldEntry SimpleSInt32SInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt32SInt32MapMessage::MapFieldEntry &SimpleSInt32SInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt32SInt32MapMessage::setMapField(const SimpleSInt32SInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt64SInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt64SInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt64SInt32MapMessage_QtProtobufData(const SimpleSInt64SInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt64SInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt64SInt32MapMessage::~SimpleSInt64SInt32MapMessage() = default;
 
@@ -1204,41 +1546,37 @@ void SimpleSInt64SInt32MapMessage::registerTypes()
 }
 
 SimpleSInt64SInt32MapMessage::SimpleSInt64SInt32MapMessage()
-    : QProtobufMessage(&SimpleSInt64SInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt64SInt32MapMessage::staticMetaObject),
+      dptr(new SimpleSInt64SInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt64SInt32MapMessage::SimpleSInt64SInt32MapMessage(const SimpleSInt64SInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt64SInt32MapMessage &SimpleSInt64SInt32MapMessage::operator =(const SimpleSInt64SInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt64SInt32MapMessage::SimpleSInt64SInt32MapMessage(SimpleSInt64SInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt64SInt32MapMessage &SimpleSInt64SInt32MapMessage::operator =(SimpleSInt64SInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt64SInt32MapMessage::operator ==(const SimpleSInt64SInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt64SInt32MapMessage::operator !=(const SimpleSInt64SInt32MapMessage &other) const
@@ -1246,11 +1584,42 @@ bool SimpleSInt64SInt32MapMessage::operator !=(const SimpleSInt64SInt32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleSInt64SInt32MapMessage::MapFieldEntry SimpleSInt64SInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt64SInt32MapMessage::MapFieldEntry &SimpleSInt64SInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt64SInt32MapMessage::setMapField(const SimpleSInt64SInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt32SInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt32SInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt32SInt32MapMessage_QtProtobufData(const SimpleInt32SInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt32SInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt32SInt32MapMessage::~SimpleInt32SInt32MapMessage() = default;
 
@@ -1300,41 +1669,37 @@ void SimpleInt32SInt32MapMessage::registerTypes()
 }
 
 SimpleInt32SInt32MapMessage::SimpleInt32SInt32MapMessage()
-    : QProtobufMessage(&SimpleInt32SInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt32SInt32MapMessage::staticMetaObject),
+      dptr(new SimpleInt32SInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt32SInt32MapMessage::SimpleInt32SInt32MapMessage(const SimpleInt32SInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt32SInt32MapMessage &SimpleInt32SInt32MapMessage::operator =(const SimpleInt32SInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt32SInt32MapMessage::SimpleInt32SInt32MapMessage(SimpleInt32SInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt32SInt32MapMessage &SimpleInt32SInt32MapMessage::operator =(SimpleInt32SInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt32SInt32MapMessage::operator ==(const SimpleInt32SInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt32SInt32MapMessage::operator !=(const SimpleInt32SInt32MapMessage &other) const
@@ -1342,11 +1707,42 @@ bool SimpleInt32SInt32MapMessage::operator !=(const SimpleInt32SInt32MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleInt32SInt32MapMessage::MapFieldEntry SimpleInt32SInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt32SInt32MapMessage::MapFieldEntry &SimpleInt32SInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt32SInt32MapMessage::setMapField(const SimpleInt32SInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt64SInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt64SInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt64SInt32MapMessage_QtProtobufData(const SimpleInt64SInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt64SInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt64SInt32MapMessage::~SimpleInt64SInt32MapMessage() = default;
 
@@ -1396,41 +1792,37 @@ void SimpleInt64SInt32MapMessage::registerTypes()
 }
 
 SimpleInt64SInt32MapMessage::SimpleInt64SInt32MapMessage()
-    : QProtobufMessage(&SimpleInt64SInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt64SInt32MapMessage::staticMetaObject),
+      dptr(new SimpleInt64SInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt64SInt32MapMessage::SimpleInt64SInt32MapMessage(const SimpleInt64SInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt64SInt32MapMessage &SimpleInt64SInt32MapMessage::operator =(const SimpleInt64SInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt64SInt32MapMessage::SimpleInt64SInt32MapMessage(SimpleInt64SInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt64SInt32MapMessage &SimpleInt64SInt32MapMessage::operator =(SimpleInt64SInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt64SInt32MapMessage::operator ==(const SimpleInt64SInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt64SInt32MapMessage::operator !=(const SimpleInt64SInt32MapMessage &other) const
@@ -1438,11 +1830,42 @@ bool SimpleInt64SInt32MapMessage::operator !=(const SimpleInt64SInt32MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleInt64SInt32MapMessage::MapFieldEntry SimpleInt64SInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt64SInt32MapMessage::MapFieldEntry &SimpleInt64SInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt64SInt32MapMessage::setMapField(const SimpleInt64SInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt32SInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt32SInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt32SInt32MapMessage_QtProtobufData(const SimpleUInt32SInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt32SInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt32SInt32MapMessage::~SimpleUInt32SInt32MapMessage() = default;
 
@@ -1492,41 +1915,37 @@ void SimpleUInt32SInt32MapMessage::registerTypes()
 }
 
 SimpleUInt32SInt32MapMessage::SimpleUInt32SInt32MapMessage()
-    : QProtobufMessage(&SimpleUInt32SInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt32SInt32MapMessage::staticMetaObject),
+      dptr(new SimpleUInt32SInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt32SInt32MapMessage::SimpleUInt32SInt32MapMessage(const SimpleUInt32SInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt32SInt32MapMessage &SimpleUInt32SInt32MapMessage::operator =(const SimpleUInt32SInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt32SInt32MapMessage::SimpleUInt32SInt32MapMessage(SimpleUInt32SInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt32SInt32MapMessage &SimpleUInt32SInt32MapMessage::operator =(SimpleUInt32SInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt32SInt32MapMessage::operator ==(const SimpleUInt32SInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt32SInt32MapMessage::operator !=(const SimpleUInt32SInt32MapMessage &other) const
@@ -1534,11 +1953,42 @@ bool SimpleUInt32SInt32MapMessage::operator !=(const SimpleUInt32SInt32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleUInt32SInt32MapMessage::MapFieldEntry SimpleUInt32SInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt32SInt32MapMessage::MapFieldEntry &SimpleUInt32SInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt32SInt32MapMessage::setMapField(const SimpleUInt32SInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt64SInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt64SInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt64SInt32MapMessage_QtProtobufData(const SimpleUInt64SInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt64SInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt64SInt32MapMessage::~SimpleUInt64SInt32MapMessage() = default;
 
@@ -1588,41 +2038,37 @@ void SimpleUInt64SInt32MapMessage::registerTypes()
 }
 
 SimpleUInt64SInt32MapMessage::SimpleUInt64SInt32MapMessage()
-    : QProtobufMessage(&SimpleUInt64SInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt64SInt32MapMessage::staticMetaObject),
+      dptr(new SimpleUInt64SInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt64SInt32MapMessage::SimpleUInt64SInt32MapMessage(const SimpleUInt64SInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt64SInt32MapMessage &SimpleUInt64SInt32MapMessage::operator =(const SimpleUInt64SInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt64SInt32MapMessage::SimpleUInt64SInt32MapMessage(SimpleUInt64SInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt64SInt32MapMessage &SimpleUInt64SInt32MapMessage::operator =(SimpleUInt64SInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt64SInt32MapMessage::operator ==(const SimpleUInt64SInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt64SInt32MapMessage::operator !=(const SimpleUInt64SInt32MapMessage &other) const
@@ -1630,11 +2076,42 @@ bool SimpleUInt64SInt32MapMessage::operator !=(const SimpleUInt64SInt32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleUInt64SInt32MapMessage::MapFieldEntry SimpleUInt64SInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt64SInt32MapMessage::MapFieldEntry &SimpleUInt64SInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt64SInt32MapMessage::setMapField(const SimpleUInt64SInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed32SInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed32SInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed32SInt32MapMessage_QtProtobufData(const SimpleFixed32SInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed32SInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed32SInt32MapMessage::~SimpleFixed32SInt32MapMessage() = default;
 
@@ -1684,41 +2161,37 @@ void SimpleFixed32SInt32MapMessage::registerTypes()
 }
 
 SimpleFixed32SInt32MapMessage::SimpleFixed32SInt32MapMessage()
-    : QProtobufMessage(&SimpleFixed32SInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed32SInt32MapMessage::staticMetaObject),
+      dptr(new SimpleFixed32SInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed32SInt32MapMessage::SimpleFixed32SInt32MapMessage(const SimpleFixed32SInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed32SInt32MapMessage &SimpleFixed32SInt32MapMessage::operator =(const SimpleFixed32SInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed32SInt32MapMessage::SimpleFixed32SInt32MapMessage(SimpleFixed32SInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed32SInt32MapMessage &SimpleFixed32SInt32MapMessage::operator =(SimpleFixed32SInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed32SInt32MapMessage::operator ==(const SimpleFixed32SInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed32SInt32MapMessage::operator !=(const SimpleFixed32SInt32MapMessage &other) const
@@ -1726,11 +2199,42 @@ bool SimpleFixed32SInt32MapMessage::operator !=(const SimpleFixed32SInt32MapMess
     return !this->operator ==(other);
 }
 
+SimpleFixed32SInt32MapMessage::MapFieldEntry SimpleFixed32SInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed32SInt32MapMessage::MapFieldEntry &SimpleFixed32SInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed32SInt32MapMessage::setMapField(const SimpleFixed32SInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed64SInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed64SInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed64SInt32MapMessage_QtProtobufData(const SimpleFixed64SInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed64SInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed64SInt32MapMessage::~SimpleFixed64SInt32MapMessage() = default;
 
@@ -1780,41 +2284,37 @@ void SimpleFixed64SInt32MapMessage::registerTypes()
 }
 
 SimpleFixed64SInt32MapMessage::SimpleFixed64SInt32MapMessage()
-    : QProtobufMessage(&SimpleFixed64SInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed64SInt32MapMessage::staticMetaObject),
+      dptr(new SimpleFixed64SInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed64SInt32MapMessage::SimpleFixed64SInt32MapMessage(const SimpleFixed64SInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed64SInt32MapMessage &SimpleFixed64SInt32MapMessage::operator =(const SimpleFixed64SInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed64SInt32MapMessage::SimpleFixed64SInt32MapMessage(SimpleFixed64SInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed64SInt32MapMessage &SimpleFixed64SInt32MapMessage::operator =(SimpleFixed64SInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed64SInt32MapMessage::operator ==(const SimpleFixed64SInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed64SInt32MapMessage::operator !=(const SimpleFixed64SInt32MapMessage &other) const
@@ -1822,11 +2322,42 @@ bool SimpleFixed64SInt32MapMessage::operator !=(const SimpleFixed64SInt32MapMess
     return !this->operator ==(other);
 }
 
+SimpleFixed64SInt32MapMessage::MapFieldEntry SimpleFixed64SInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed64SInt32MapMessage::MapFieldEntry &SimpleFixed64SInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed64SInt32MapMessage::setMapField(const SimpleFixed64SInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed32SInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed32SInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed32SInt32MapMessage_QtProtobufData(const SimpleSFixed32SInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed32SInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed32SInt32MapMessage::~SimpleSFixed32SInt32MapMessage() = default;
 
@@ -1876,41 +2407,37 @@ void SimpleSFixed32SInt32MapMessage::registerTypes()
 }
 
 SimpleSFixed32SInt32MapMessage::SimpleSFixed32SInt32MapMessage()
-    : QProtobufMessage(&SimpleSFixed32SInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed32SInt32MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed32SInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed32SInt32MapMessage::SimpleSFixed32SInt32MapMessage(const SimpleSFixed32SInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed32SInt32MapMessage &SimpleSFixed32SInt32MapMessage::operator =(const SimpleSFixed32SInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed32SInt32MapMessage::SimpleSFixed32SInt32MapMessage(SimpleSFixed32SInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed32SInt32MapMessage &SimpleSFixed32SInt32MapMessage::operator =(SimpleSFixed32SInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed32SInt32MapMessage::operator ==(const SimpleSFixed32SInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed32SInt32MapMessage::operator !=(const SimpleSFixed32SInt32MapMessage &other) const
@@ -1918,11 +2445,42 @@ bool SimpleSFixed32SInt32MapMessage::operator !=(const SimpleSFixed32SInt32MapMe
     return !this->operator ==(other);
 }
 
+SimpleSFixed32SInt32MapMessage::MapFieldEntry SimpleSFixed32SInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed32SInt32MapMessage::MapFieldEntry &SimpleSFixed32SInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed32SInt32MapMessage::setMapField(const SimpleSFixed32SInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed64SInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed64SInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed64SInt32MapMessage_QtProtobufData(const SimpleSFixed64SInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed64SInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed64SInt32MapMessage::~SimpleSFixed64SInt32MapMessage() = default;
 
@@ -1972,41 +2530,37 @@ void SimpleSFixed64SInt32MapMessage::registerTypes()
 }
 
 SimpleSFixed64SInt32MapMessage::SimpleSFixed64SInt32MapMessage()
-    : QProtobufMessage(&SimpleSFixed64SInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed64SInt32MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed64SInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed64SInt32MapMessage::SimpleSFixed64SInt32MapMessage(const SimpleSFixed64SInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed64SInt32MapMessage &SimpleSFixed64SInt32MapMessage::operator =(const SimpleSFixed64SInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed64SInt32MapMessage::SimpleSFixed64SInt32MapMessage(SimpleSFixed64SInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed64SInt32MapMessage &SimpleSFixed64SInt32MapMessage::operator =(SimpleSFixed64SInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed64SInt32MapMessage::operator ==(const SimpleSFixed64SInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed64SInt32MapMessage::operator !=(const SimpleSFixed64SInt32MapMessage &other) const
@@ -2014,11 +2568,42 @@ bool SimpleSFixed64SInt32MapMessage::operator !=(const SimpleSFixed64SInt32MapMe
     return !this->operator ==(other);
 }
 
+SimpleSFixed64SInt32MapMessage::MapFieldEntry SimpleSFixed64SInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed64SInt32MapMessage::MapFieldEntry &SimpleSFixed64SInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed64SInt32MapMessage::setMapField(const SimpleSFixed64SInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleStringSInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleStringSInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleStringSInt32MapMessage_QtProtobufData(const SimpleStringSInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleStringSInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleStringSInt32MapMessage::~SimpleStringSInt32MapMessage() = default;
 
@@ -2068,41 +2653,37 @@ void SimpleStringSInt32MapMessage::registerTypes()
 }
 
 SimpleStringSInt32MapMessage::SimpleStringSInt32MapMessage()
-    : QProtobufMessage(&SimpleStringSInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleStringSInt32MapMessage::staticMetaObject),
+      dptr(new SimpleStringSInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleStringSInt32MapMessage::SimpleStringSInt32MapMessage(const SimpleStringSInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleStringSInt32MapMessage &SimpleStringSInt32MapMessage::operator =(const SimpleStringSInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleStringSInt32MapMessage::SimpleStringSInt32MapMessage(SimpleStringSInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleStringSInt32MapMessage &SimpleStringSInt32MapMessage::operator =(SimpleStringSInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleStringSInt32MapMessage::operator ==(const SimpleStringSInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleStringSInt32MapMessage::operator !=(const SimpleStringSInt32MapMessage &other) const
@@ -2110,11 +2691,42 @@ bool SimpleStringSInt32MapMessage::operator !=(const SimpleStringSInt32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleStringSInt32MapMessage::MapFieldEntry SimpleStringSInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleStringSInt32MapMessage::MapFieldEntry &SimpleStringSInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleStringSInt32MapMessage::setMapField(const SimpleStringSInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt32SInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt32SInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt32SInt64MapMessage_QtProtobufData(const SimpleSInt32SInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt32SInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt32SInt64MapMessage::~SimpleSInt32SInt64MapMessage() = default;
 
@@ -2164,41 +2776,37 @@ void SimpleSInt32SInt64MapMessage::registerTypes()
 }
 
 SimpleSInt32SInt64MapMessage::SimpleSInt32SInt64MapMessage()
-    : QProtobufMessage(&SimpleSInt32SInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt32SInt64MapMessage::staticMetaObject),
+      dptr(new SimpleSInt32SInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt32SInt64MapMessage::SimpleSInt32SInt64MapMessage(const SimpleSInt32SInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt32SInt64MapMessage &SimpleSInt32SInt64MapMessage::operator =(const SimpleSInt32SInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt32SInt64MapMessage::SimpleSInt32SInt64MapMessage(SimpleSInt32SInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt32SInt64MapMessage &SimpleSInt32SInt64MapMessage::operator =(SimpleSInt32SInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt32SInt64MapMessage::operator ==(const SimpleSInt32SInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt32SInt64MapMessage::operator !=(const SimpleSInt32SInt64MapMessage &other) const
@@ -2206,11 +2814,42 @@ bool SimpleSInt32SInt64MapMessage::operator !=(const SimpleSInt32SInt64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleSInt32SInt64MapMessage::MapFieldEntry SimpleSInt32SInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt32SInt64MapMessage::MapFieldEntry &SimpleSInt32SInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt32SInt64MapMessage::setMapField(const SimpleSInt32SInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt64SInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt64SInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt64SInt64MapMessage_QtProtobufData(const SimpleSInt64SInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt64SInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt64SInt64MapMessage::~SimpleSInt64SInt64MapMessage() = default;
 
@@ -2260,41 +2899,37 @@ void SimpleSInt64SInt64MapMessage::registerTypes()
 }
 
 SimpleSInt64SInt64MapMessage::SimpleSInt64SInt64MapMessage()
-    : QProtobufMessage(&SimpleSInt64SInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt64SInt64MapMessage::staticMetaObject),
+      dptr(new SimpleSInt64SInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt64SInt64MapMessage::SimpleSInt64SInt64MapMessage(const SimpleSInt64SInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt64SInt64MapMessage &SimpleSInt64SInt64MapMessage::operator =(const SimpleSInt64SInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt64SInt64MapMessage::SimpleSInt64SInt64MapMessage(SimpleSInt64SInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt64SInt64MapMessage &SimpleSInt64SInt64MapMessage::operator =(SimpleSInt64SInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt64SInt64MapMessage::operator ==(const SimpleSInt64SInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt64SInt64MapMessage::operator !=(const SimpleSInt64SInt64MapMessage &other) const
@@ -2302,11 +2937,42 @@ bool SimpleSInt64SInt64MapMessage::operator !=(const SimpleSInt64SInt64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleSInt64SInt64MapMessage::MapFieldEntry SimpleSInt64SInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt64SInt64MapMessage::MapFieldEntry &SimpleSInt64SInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt64SInt64MapMessage::setMapField(const SimpleSInt64SInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt32SInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt32SInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt32SInt64MapMessage_QtProtobufData(const SimpleInt32SInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt32SInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt32SInt64MapMessage::~SimpleInt32SInt64MapMessage() = default;
 
@@ -2356,41 +3022,37 @@ void SimpleInt32SInt64MapMessage::registerTypes()
 }
 
 SimpleInt32SInt64MapMessage::SimpleInt32SInt64MapMessage()
-    : QProtobufMessage(&SimpleInt32SInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt32SInt64MapMessage::staticMetaObject),
+      dptr(new SimpleInt32SInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt32SInt64MapMessage::SimpleInt32SInt64MapMessage(const SimpleInt32SInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt32SInt64MapMessage &SimpleInt32SInt64MapMessage::operator =(const SimpleInt32SInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt32SInt64MapMessage::SimpleInt32SInt64MapMessage(SimpleInt32SInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt32SInt64MapMessage &SimpleInt32SInt64MapMessage::operator =(SimpleInt32SInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt32SInt64MapMessage::operator ==(const SimpleInt32SInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt32SInt64MapMessage::operator !=(const SimpleInt32SInt64MapMessage &other) const
@@ -2398,11 +3060,42 @@ bool SimpleInt32SInt64MapMessage::operator !=(const SimpleInt32SInt64MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleInt32SInt64MapMessage::MapFieldEntry SimpleInt32SInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt32SInt64MapMessage::MapFieldEntry &SimpleInt32SInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt32SInt64MapMessage::setMapField(const SimpleInt32SInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt64SInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt64SInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt64SInt64MapMessage_QtProtobufData(const SimpleInt64SInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt64SInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt64SInt64MapMessage::~SimpleInt64SInt64MapMessage() = default;
 
@@ -2452,41 +3145,37 @@ void SimpleInt64SInt64MapMessage::registerTypes()
 }
 
 SimpleInt64SInt64MapMessage::SimpleInt64SInt64MapMessage()
-    : QProtobufMessage(&SimpleInt64SInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt64SInt64MapMessage::staticMetaObject),
+      dptr(new SimpleInt64SInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt64SInt64MapMessage::SimpleInt64SInt64MapMessage(const SimpleInt64SInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt64SInt64MapMessage &SimpleInt64SInt64MapMessage::operator =(const SimpleInt64SInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt64SInt64MapMessage::SimpleInt64SInt64MapMessage(SimpleInt64SInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt64SInt64MapMessage &SimpleInt64SInt64MapMessage::operator =(SimpleInt64SInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt64SInt64MapMessage::operator ==(const SimpleInt64SInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt64SInt64MapMessage::operator !=(const SimpleInt64SInt64MapMessage &other) const
@@ -2494,11 +3183,42 @@ bool SimpleInt64SInt64MapMessage::operator !=(const SimpleInt64SInt64MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleInt64SInt64MapMessage::MapFieldEntry SimpleInt64SInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt64SInt64MapMessage::MapFieldEntry &SimpleInt64SInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt64SInt64MapMessage::setMapField(const SimpleInt64SInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt32SInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt32SInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt32SInt64MapMessage_QtProtobufData(const SimpleUInt32SInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt32SInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt32SInt64MapMessage::~SimpleUInt32SInt64MapMessage() = default;
 
@@ -2548,41 +3268,37 @@ void SimpleUInt32SInt64MapMessage::registerTypes()
 }
 
 SimpleUInt32SInt64MapMessage::SimpleUInt32SInt64MapMessage()
-    : QProtobufMessage(&SimpleUInt32SInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt32SInt64MapMessage::staticMetaObject),
+      dptr(new SimpleUInt32SInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt32SInt64MapMessage::SimpleUInt32SInt64MapMessage(const SimpleUInt32SInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt32SInt64MapMessage &SimpleUInt32SInt64MapMessage::operator =(const SimpleUInt32SInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt32SInt64MapMessage::SimpleUInt32SInt64MapMessage(SimpleUInt32SInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt32SInt64MapMessage &SimpleUInt32SInt64MapMessage::operator =(SimpleUInt32SInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt32SInt64MapMessage::operator ==(const SimpleUInt32SInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt32SInt64MapMessage::operator !=(const SimpleUInt32SInt64MapMessage &other) const
@@ -2590,11 +3306,42 @@ bool SimpleUInt32SInt64MapMessage::operator !=(const SimpleUInt32SInt64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleUInt32SInt64MapMessage::MapFieldEntry SimpleUInt32SInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt32SInt64MapMessage::MapFieldEntry &SimpleUInt32SInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt32SInt64MapMessage::setMapField(const SimpleUInt32SInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt64SInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt64SInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt64SInt64MapMessage_QtProtobufData(const SimpleUInt64SInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt64SInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt64SInt64MapMessage::~SimpleUInt64SInt64MapMessage() = default;
 
@@ -2644,41 +3391,37 @@ void SimpleUInt64SInt64MapMessage::registerTypes()
 }
 
 SimpleUInt64SInt64MapMessage::SimpleUInt64SInt64MapMessage()
-    : QProtobufMessage(&SimpleUInt64SInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt64SInt64MapMessage::staticMetaObject),
+      dptr(new SimpleUInt64SInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt64SInt64MapMessage::SimpleUInt64SInt64MapMessage(const SimpleUInt64SInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt64SInt64MapMessage &SimpleUInt64SInt64MapMessage::operator =(const SimpleUInt64SInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt64SInt64MapMessage::SimpleUInt64SInt64MapMessage(SimpleUInt64SInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt64SInt64MapMessage &SimpleUInt64SInt64MapMessage::operator =(SimpleUInt64SInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt64SInt64MapMessage::operator ==(const SimpleUInt64SInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt64SInt64MapMessage::operator !=(const SimpleUInt64SInt64MapMessage &other) const
@@ -2686,11 +3429,42 @@ bool SimpleUInt64SInt64MapMessage::operator !=(const SimpleUInt64SInt64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleUInt64SInt64MapMessage::MapFieldEntry SimpleUInt64SInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt64SInt64MapMessage::MapFieldEntry &SimpleUInt64SInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt64SInt64MapMessage::setMapField(const SimpleUInt64SInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed32SInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed32SInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed32SInt64MapMessage_QtProtobufData(const SimpleFixed32SInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed32SInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed32SInt64MapMessage::~SimpleFixed32SInt64MapMessage() = default;
 
@@ -2740,41 +3514,37 @@ void SimpleFixed32SInt64MapMessage::registerTypes()
 }
 
 SimpleFixed32SInt64MapMessage::SimpleFixed32SInt64MapMessage()
-    : QProtobufMessage(&SimpleFixed32SInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed32SInt64MapMessage::staticMetaObject),
+      dptr(new SimpleFixed32SInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed32SInt64MapMessage::SimpleFixed32SInt64MapMessage(const SimpleFixed32SInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed32SInt64MapMessage &SimpleFixed32SInt64MapMessage::operator =(const SimpleFixed32SInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed32SInt64MapMessage::SimpleFixed32SInt64MapMessage(SimpleFixed32SInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed32SInt64MapMessage &SimpleFixed32SInt64MapMessage::operator =(SimpleFixed32SInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed32SInt64MapMessage::operator ==(const SimpleFixed32SInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed32SInt64MapMessage::operator !=(const SimpleFixed32SInt64MapMessage &other) const
@@ -2782,11 +3552,42 @@ bool SimpleFixed32SInt64MapMessage::operator !=(const SimpleFixed32SInt64MapMess
     return !this->operator ==(other);
 }
 
+SimpleFixed32SInt64MapMessage::MapFieldEntry SimpleFixed32SInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed32SInt64MapMessage::MapFieldEntry &SimpleFixed32SInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed32SInt64MapMessage::setMapField(const SimpleFixed32SInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed64SInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed64SInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed64SInt64MapMessage_QtProtobufData(const SimpleFixed64SInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed64SInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed64SInt64MapMessage::~SimpleFixed64SInt64MapMessage() = default;
 
@@ -2836,41 +3637,37 @@ void SimpleFixed64SInt64MapMessage::registerTypes()
 }
 
 SimpleFixed64SInt64MapMessage::SimpleFixed64SInt64MapMessage()
-    : QProtobufMessage(&SimpleFixed64SInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed64SInt64MapMessage::staticMetaObject),
+      dptr(new SimpleFixed64SInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed64SInt64MapMessage::SimpleFixed64SInt64MapMessage(const SimpleFixed64SInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed64SInt64MapMessage &SimpleFixed64SInt64MapMessage::operator =(const SimpleFixed64SInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed64SInt64MapMessage::SimpleFixed64SInt64MapMessage(SimpleFixed64SInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed64SInt64MapMessage &SimpleFixed64SInt64MapMessage::operator =(SimpleFixed64SInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed64SInt64MapMessage::operator ==(const SimpleFixed64SInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed64SInt64MapMessage::operator !=(const SimpleFixed64SInt64MapMessage &other) const
@@ -2878,11 +3675,42 @@ bool SimpleFixed64SInt64MapMessage::operator !=(const SimpleFixed64SInt64MapMess
     return !this->operator ==(other);
 }
 
+SimpleFixed64SInt64MapMessage::MapFieldEntry SimpleFixed64SInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed64SInt64MapMessage::MapFieldEntry &SimpleFixed64SInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed64SInt64MapMessage::setMapField(const SimpleFixed64SInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed32SInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed32SInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed32SInt64MapMessage_QtProtobufData(const SimpleSFixed32SInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed32SInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed32SInt64MapMessage::~SimpleSFixed32SInt64MapMessage() = default;
 
@@ -2932,41 +3760,37 @@ void SimpleSFixed32SInt64MapMessage::registerTypes()
 }
 
 SimpleSFixed32SInt64MapMessage::SimpleSFixed32SInt64MapMessage()
-    : QProtobufMessage(&SimpleSFixed32SInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed32SInt64MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed32SInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed32SInt64MapMessage::SimpleSFixed32SInt64MapMessage(const SimpleSFixed32SInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed32SInt64MapMessage &SimpleSFixed32SInt64MapMessage::operator =(const SimpleSFixed32SInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed32SInt64MapMessage::SimpleSFixed32SInt64MapMessage(SimpleSFixed32SInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed32SInt64MapMessage &SimpleSFixed32SInt64MapMessage::operator =(SimpleSFixed32SInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed32SInt64MapMessage::operator ==(const SimpleSFixed32SInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed32SInt64MapMessage::operator !=(const SimpleSFixed32SInt64MapMessage &other) const
@@ -2974,11 +3798,42 @@ bool SimpleSFixed32SInt64MapMessage::operator !=(const SimpleSFixed32SInt64MapMe
     return !this->operator ==(other);
 }
 
+SimpleSFixed32SInt64MapMessage::MapFieldEntry SimpleSFixed32SInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed32SInt64MapMessage::MapFieldEntry &SimpleSFixed32SInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed32SInt64MapMessage::setMapField(const SimpleSFixed32SInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed64SInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed64SInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed64SInt64MapMessage_QtProtobufData(const SimpleSFixed64SInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed64SInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed64SInt64MapMessage::~SimpleSFixed64SInt64MapMessage() = default;
 
@@ -3028,41 +3883,37 @@ void SimpleSFixed64SInt64MapMessage::registerTypes()
 }
 
 SimpleSFixed64SInt64MapMessage::SimpleSFixed64SInt64MapMessage()
-    : QProtobufMessage(&SimpleSFixed64SInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed64SInt64MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed64SInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed64SInt64MapMessage::SimpleSFixed64SInt64MapMessage(const SimpleSFixed64SInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed64SInt64MapMessage &SimpleSFixed64SInt64MapMessage::operator =(const SimpleSFixed64SInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed64SInt64MapMessage::SimpleSFixed64SInt64MapMessage(SimpleSFixed64SInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed64SInt64MapMessage &SimpleSFixed64SInt64MapMessage::operator =(SimpleSFixed64SInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed64SInt64MapMessage::operator ==(const SimpleSFixed64SInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed64SInt64MapMessage::operator !=(const SimpleSFixed64SInt64MapMessage &other) const
@@ -3070,11 +3921,42 @@ bool SimpleSFixed64SInt64MapMessage::operator !=(const SimpleSFixed64SInt64MapMe
     return !this->operator ==(other);
 }
 
+SimpleSFixed64SInt64MapMessage::MapFieldEntry SimpleSFixed64SInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed64SInt64MapMessage::MapFieldEntry &SimpleSFixed64SInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed64SInt64MapMessage::setMapField(const SimpleSFixed64SInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleStringSInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleStringSInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleStringSInt64MapMessage_QtProtobufData(const SimpleStringSInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleStringSInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleStringSInt64MapMessage::~SimpleStringSInt64MapMessage() = default;
 
@@ -3124,41 +4006,37 @@ void SimpleStringSInt64MapMessage::registerTypes()
 }
 
 SimpleStringSInt64MapMessage::SimpleStringSInt64MapMessage()
-    : QProtobufMessage(&SimpleStringSInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleStringSInt64MapMessage::staticMetaObject),
+      dptr(new SimpleStringSInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleStringSInt64MapMessage::SimpleStringSInt64MapMessage(const SimpleStringSInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleStringSInt64MapMessage &SimpleStringSInt64MapMessage::operator =(const SimpleStringSInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleStringSInt64MapMessage::SimpleStringSInt64MapMessage(SimpleStringSInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleStringSInt64MapMessage &SimpleStringSInt64MapMessage::operator =(SimpleStringSInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleStringSInt64MapMessage::operator ==(const SimpleStringSInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleStringSInt64MapMessage::operator !=(const SimpleStringSInt64MapMessage &other) const
@@ -3166,11 +4044,42 @@ bool SimpleStringSInt64MapMessage::operator !=(const SimpleStringSInt64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleStringSInt64MapMessage::MapFieldEntry SimpleStringSInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleStringSInt64MapMessage::MapFieldEntry &SimpleStringSInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleStringSInt64MapMessage::setMapField(const SimpleStringSInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt32UInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt32UInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt32UInt32MapMessage_QtProtobufData(const SimpleSInt32UInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt32UInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt32UInt32MapMessage::~SimpleSInt32UInt32MapMessage() = default;
 
@@ -3220,41 +4129,37 @@ void SimpleSInt32UInt32MapMessage::registerTypes()
 }
 
 SimpleSInt32UInt32MapMessage::SimpleSInt32UInt32MapMessage()
-    : QProtobufMessage(&SimpleSInt32UInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt32UInt32MapMessage::staticMetaObject),
+      dptr(new SimpleSInt32UInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt32UInt32MapMessage::SimpleSInt32UInt32MapMessage(const SimpleSInt32UInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt32UInt32MapMessage &SimpleSInt32UInt32MapMessage::operator =(const SimpleSInt32UInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt32UInt32MapMessage::SimpleSInt32UInt32MapMessage(SimpleSInt32UInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt32UInt32MapMessage &SimpleSInt32UInt32MapMessage::operator =(SimpleSInt32UInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt32UInt32MapMessage::operator ==(const SimpleSInt32UInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt32UInt32MapMessage::operator !=(const SimpleSInt32UInt32MapMessage &other) const
@@ -3262,11 +4167,42 @@ bool SimpleSInt32UInt32MapMessage::operator !=(const SimpleSInt32UInt32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleSInt32UInt32MapMessage::MapFieldEntry SimpleSInt32UInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt32UInt32MapMessage::MapFieldEntry &SimpleSInt32UInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt32UInt32MapMessage::setMapField(const SimpleSInt32UInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt64UInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt64UInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt64UInt32MapMessage_QtProtobufData(const SimpleSInt64UInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt64UInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt64UInt32MapMessage::~SimpleSInt64UInt32MapMessage() = default;
 
@@ -3316,41 +4252,37 @@ void SimpleSInt64UInt32MapMessage::registerTypes()
 }
 
 SimpleSInt64UInt32MapMessage::SimpleSInt64UInt32MapMessage()
-    : QProtobufMessage(&SimpleSInt64UInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt64UInt32MapMessage::staticMetaObject),
+      dptr(new SimpleSInt64UInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt64UInt32MapMessage::SimpleSInt64UInt32MapMessage(const SimpleSInt64UInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt64UInt32MapMessage &SimpleSInt64UInt32MapMessage::operator =(const SimpleSInt64UInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt64UInt32MapMessage::SimpleSInt64UInt32MapMessage(SimpleSInt64UInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt64UInt32MapMessage &SimpleSInt64UInt32MapMessage::operator =(SimpleSInt64UInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt64UInt32MapMessage::operator ==(const SimpleSInt64UInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt64UInt32MapMessage::operator !=(const SimpleSInt64UInt32MapMessage &other) const
@@ -3358,11 +4290,42 @@ bool SimpleSInt64UInt32MapMessage::operator !=(const SimpleSInt64UInt32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleSInt64UInt32MapMessage::MapFieldEntry SimpleSInt64UInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt64UInt32MapMessage::MapFieldEntry &SimpleSInt64UInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt64UInt32MapMessage::setMapField(const SimpleSInt64UInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt32UInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt32UInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt32UInt32MapMessage_QtProtobufData(const SimpleInt32UInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt32UInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt32UInt32MapMessage::~SimpleInt32UInt32MapMessage() = default;
 
@@ -3412,41 +4375,37 @@ void SimpleInt32UInt32MapMessage::registerTypes()
 }
 
 SimpleInt32UInt32MapMessage::SimpleInt32UInt32MapMessage()
-    : QProtobufMessage(&SimpleInt32UInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt32UInt32MapMessage::staticMetaObject),
+      dptr(new SimpleInt32UInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt32UInt32MapMessage::SimpleInt32UInt32MapMessage(const SimpleInt32UInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt32UInt32MapMessage &SimpleInt32UInt32MapMessage::operator =(const SimpleInt32UInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt32UInt32MapMessage::SimpleInt32UInt32MapMessage(SimpleInt32UInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt32UInt32MapMessage &SimpleInt32UInt32MapMessage::operator =(SimpleInt32UInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt32UInt32MapMessage::operator ==(const SimpleInt32UInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt32UInt32MapMessage::operator !=(const SimpleInt32UInt32MapMessage &other) const
@@ -3454,11 +4413,42 @@ bool SimpleInt32UInt32MapMessage::operator !=(const SimpleInt32UInt32MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleInt32UInt32MapMessage::MapFieldEntry SimpleInt32UInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt32UInt32MapMessage::MapFieldEntry &SimpleInt32UInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt32UInt32MapMessage::setMapField(const SimpleInt32UInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt64UInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt64UInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt64UInt32MapMessage_QtProtobufData(const SimpleInt64UInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt64UInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt64UInt32MapMessage::~SimpleInt64UInt32MapMessage() = default;
 
@@ -3508,41 +4498,37 @@ void SimpleInt64UInt32MapMessage::registerTypes()
 }
 
 SimpleInt64UInt32MapMessage::SimpleInt64UInt32MapMessage()
-    : QProtobufMessage(&SimpleInt64UInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt64UInt32MapMessage::staticMetaObject),
+      dptr(new SimpleInt64UInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt64UInt32MapMessage::SimpleInt64UInt32MapMessage(const SimpleInt64UInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt64UInt32MapMessage &SimpleInt64UInt32MapMessage::operator =(const SimpleInt64UInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt64UInt32MapMessage::SimpleInt64UInt32MapMessage(SimpleInt64UInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt64UInt32MapMessage &SimpleInt64UInt32MapMessage::operator =(SimpleInt64UInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt64UInt32MapMessage::operator ==(const SimpleInt64UInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt64UInt32MapMessage::operator !=(const SimpleInt64UInt32MapMessage &other) const
@@ -3550,11 +4536,42 @@ bool SimpleInt64UInt32MapMessage::operator !=(const SimpleInt64UInt32MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleInt64UInt32MapMessage::MapFieldEntry SimpleInt64UInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt64UInt32MapMessage::MapFieldEntry &SimpleInt64UInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt64UInt32MapMessage::setMapField(const SimpleInt64UInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt32UInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt32UInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt32UInt32MapMessage_QtProtobufData(const SimpleUInt32UInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt32UInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt32UInt32MapMessage::~SimpleUInt32UInt32MapMessage() = default;
 
@@ -3604,41 +4621,37 @@ void SimpleUInt32UInt32MapMessage::registerTypes()
 }
 
 SimpleUInt32UInt32MapMessage::SimpleUInt32UInt32MapMessage()
-    : QProtobufMessage(&SimpleUInt32UInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt32UInt32MapMessage::staticMetaObject),
+      dptr(new SimpleUInt32UInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt32UInt32MapMessage::SimpleUInt32UInt32MapMessage(const SimpleUInt32UInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt32UInt32MapMessage &SimpleUInt32UInt32MapMessage::operator =(const SimpleUInt32UInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt32UInt32MapMessage::SimpleUInt32UInt32MapMessage(SimpleUInt32UInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt32UInt32MapMessage &SimpleUInt32UInt32MapMessage::operator =(SimpleUInt32UInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt32UInt32MapMessage::operator ==(const SimpleUInt32UInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt32UInt32MapMessage::operator !=(const SimpleUInt32UInt32MapMessage &other) const
@@ -3646,11 +4659,42 @@ bool SimpleUInt32UInt32MapMessage::operator !=(const SimpleUInt32UInt32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleUInt32UInt32MapMessage::MapFieldEntry SimpleUInt32UInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt32UInt32MapMessage::MapFieldEntry &SimpleUInt32UInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt32UInt32MapMessage::setMapField(const SimpleUInt32UInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt64UInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt64UInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt64UInt32MapMessage_QtProtobufData(const SimpleUInt64UInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt64UInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt64UInt32MapMessage::~SimpleUInt64UInt32MapMessage() = default;
 
@@ -3700,41 +4744,37 @@ void SimpleUInt64UInt32MapMessage::registerTypes()
 }
 
 SimpleUInt64UInt32MapMessage::SimpleUInt64UInt32MapMessage()
-    : QProtobufMessage(&SimpleUInt64UInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt64UInt32MapMessage::staticMetaObject),
+      dptr(new SimpleUInt64UInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt64UInt32MapMessage::SimpleUInt64UInt32MapMessage(const SimpleUInt64UInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt64UInt32MapMessage &SimpleUInt64UInt32MapMessage::operator =(const SimpleUInt64UInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt64UInt32MapMessage::SimpleUInt64UInt32MapMessage(SimpleUInt64UInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt64UInt32MapMessage &SimpleUInt64UInt32MapMessage::operator =(SimpleUInt64UInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt64UInt32MapMessage::operator ==(const SimpleUInt64UInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt64UInt32MapMessage::operator !=(const SimpleUInt64UInt32MapMessage &other) const
@@ -3742,11 +4782,42 @@ bool SimpleUInt64UInt32MapMessage::operator !=(const SimpleUInt64UInt32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleUInt64UInt32MapMessage::MapFieldEntry SimpleUInt64UInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt64UInt32MapMessage::MapFieldEntry &SimpleUInt64UInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt64UInt32MapMessage::setMapField(const SimpleUInt64UInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed32UInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed32UInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed32UInt32MapMessage_QtProtobufData(const SimpleFixed32UInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed32UInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed32UInt32MapMessage::~SimpleFixed32UInt32MapMessage() = default;
 
@@ -3796,41 +4867,37 @@ void SimpleFixed32UInt32MapMessage::registerTypes()
 }
 
 SimpleFixed32UInt32MapMessage::SimpleFixed32UInt32MapMessage()
-    : QProtobufMessage(&SimpleFixed32UInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed32UInt32MapMessage::staticMetaObject),
+      dptr(new SimpleFixed32UInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed32UInt32MapMessage::SimpleFixed32UInt32MapMessage(const SimpleFixed32UInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed32UInt32MapMessage &SimpleFixed32UInt32MapMessage::operator =(const SimpleFixed32UInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed32UInt32MapMessage::SimpleFixed32UInt32MapMessage(SimpleFixed32UInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed32UInt32MapMessage &SimpleFixed32UInt32MapMessage::operator =(SimpleFixed32UInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed32UInt32MapMessage::operator ==(const SimpleFixed32UInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed32UInt32MapMessage::operator !=(const SimpleFixed32UInt32MapMessage &other) const
@@ -3838,11 +4905,42 @@ bool SimpleFixed32UInt32MapMessage::operator !=(const SimpleFixed32UInt32MapMess
     return !this->operator ==(other);
 }
 
+SimpleFixed32UInt32MapMessage::MapFieldEntry SimpleFixed32UInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed32UInt32MapMessage::MapFieldEntry &SimpleFixed32UInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed32UInt32MapMessage::setMapField(const SimpleFixed32UInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed64UInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed64UInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed64UInt32MapMessage_QtProtobufData(const SimpleFixed64UInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed64UInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed64UInt32MapMessage::~SimpleFixed64UInt32MapMessage() = default;
 
@@ -3892,41 +4990,37 @@ void SimpleFixed64UInt32MapMessage::registerTypes()
 }
 
 SimpleFixed64UInt32MapMessage::SimpleFixed64UInt32MapMessage()
-    : QProtobufMessage(&SimpleFixed64UInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed64UInt32MapMessage::staticMetaObject),
+      dptr(new SimpleFixed64UInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed64UInt32MapMessage::SimpleFixed64UInt32MapMessage(const SimpleFixed64UInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed64UInt32MapMessage &SimpleFixed64UInt32MapMessage::operator =(const SimpleFixed64UInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed64UInt32MapMessage::SimpleFixed64UInt32MapMessage(SimpleFixed64UInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed64UInt32MapMessage &SimpleFixed64UInt32MapMessage::operator =(SimpleFixed64UInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed64UInt32MapMessage::operator ==(const SimpleFixed64UInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed64UInt32MapMessage::operator !=(const SimpleFixed64UInt32MapMessage &other) const
@@ -3934,11 +5028,42 @@ bool SimpleFixed64UInt32MapMessage::operator !=(const SimpleFixed64UInt32MapMess
     return !this->operator ==(other);
 }
 
+SimpleFixed64UInt32MapMessage::MapFieldEntry SimpleFixed64UInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed64UInt32MapMessage::MapFieldEntry &SimpleFixed64UInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed64UInt32MapMessage::setMapField(const SimpleFixed64UInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed32UInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed32UInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed32UInt32MapMessage_QtProtobufData(const SimpleSFixed32UInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed32UInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed32UInt32MapMessage::~SimpleSFixed32UInt32MapMessage() = default;
 
@@ -3988,41 +5113,37 @@ void SimpleSFixed32UInt32MapMessage::registerTypes()
 }
 
 SimpleSFixed32UInt32MapMessage::SimpleSFixed32UInt32MapMessage()
-    : QProtobufMessage(&SimpleSFixed32UInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed32UInt32MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed32UInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed32UInt32MapMessage::SimpleSFixed32UInt32MapMessage(const SimpleSFixed32UInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed32UInt32MapMessage &SimpleSFixed32UInt32MapMessage::operator =(const SimpleSFixed32UInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed32UInt32MapMessage::SimpleSFixed32UInt32MapMessage(SimpleSFixed32UInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed32UInt32MapMessage &SimpleSFixed32UInt32MapMessage::operator =(SimpleSFixed32UInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed32UInt32MapMessage::operator ==(const SimpleSFixed32UInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed32UInt32MapMessage::operator !=(const SimpleSFixed32UInt32MapMessage &other) const
@@ -4030,11 +5151,42 @@ bool SimpleSFixed32UInt32MapMessage::operator !=(const SimpleSFixed32UInt32MapMe
     return !this->operator ==(other);
 }
 
+SimpleSFixed32UInt32MapMessage::MapFieldEntry SimpleSFixed32UInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed32UInt32MapMessage::MapFieldEntry &SimpleSFixed32UInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed32UInt32MapMessage::setMapField(const SimpleSFixed32UInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed64UInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed64UInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed64UInt32MapMessage_QtProtobufData(const SimpleSFixed64UInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed64UInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed64UInt32MapMessage::~SimpleSFixed64UInt32MapMessage() = default;
 
@@ -4084,41 +5236,37 @@ void SimpleSFixed64UInt32MapMessage::registerTypes()
 }
 
 SimpleSFixed64UInt32MapMessage::SimpleSFixed64UInt32MapMessage()
-    : QProtobufMessage(&SimpleSFixed64UInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed64UInt32MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed64UInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed64UInt32MapMessage::SimpleSFixed64UInt32MapMessage(const SimpleSFixed64UInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed64UInt32MapMessage &SimpleSFixed64UInt32MapMessage::operator =(const SimpleSFixed64UInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed64UInt32MapMessage::SimpleSFixed64UInt32MapMessage(SimpleSFixed64UInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed64UInt32MapMessage &SimpleSFixed64UInt32MapMessage::operator =(SimpleSFixed64UInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed64UInt32MapMessage::operator ==(const SimpleSFixed64UInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed64UInt32MapMessage::operator !=(const SimpleSFixed64UInt32MapMessage &other) const
@@ -4126,11 +5274,42 @@ bool SimpleSFixed64UInt32MapMessage::operator !=(const SimpleSFixed64UInt32MapMe
     return !this->operator ==(other);
 }
 
+SimpleSFixed64UInt32MapMessage::MapFieldEntry SimpleSFixed64UInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed64UInt32MapMessage::MapFieldEntry &SimpleSFixed64UInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed64UInt32MapMessage::setMapField(const SimpleSFixed64UInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleStringUInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleStringUInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleStringUInt32MapMessage_QtProtobufData(const SimpleStringUInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleStringUInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleStringUInt32MapMessage::~SimpleStringUInt32MapMessage() = default;
 
@@ -4180,41 +5359,37 @@ void SimpleStringUInt32MapMessage::registerTypes()
 }
 
 SimpleStringUInt32MapMessage::SimpleStringUInt32MapMessage()
-    : QProtobufMessage(&SimpleStringUInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleStringUInt32MapMessage::staticMetaObject),
+      dptr(new SimpleStringUInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleStringUInt32MapMessage::SimpleStringUInt32MapMessage(const SimpleStringUInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleStringUInt32MapMessage &SimpleStringUInt32MapMessage::operator =(const SimpleStringUInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleStringUInt32MapMessage::SimpleStringUInt32MapMessage(SimpleStringUInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleStringUInt32MapMessage &SimpleStringUInt32MapMessage::operator =(SimpleStringUInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleStringUInt32MapMessage::operator ==(const SimpleStringUInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleStringUInt32MapMessage::operator !=(const SimpleStringUInt32MapMessage &other) const
@@ -4222,11 +5397,42 @@ bool SimpleStringUInt32MapMessage::operator !=(const SimpleStringUInt32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleStringUInt32MapMessage::MapFieldEntry SimpleStringUInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleStringUInt32MapMessage::MapFieldEntry &SimpleStringUInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleStringUInt32MapMessage::setMapField(const SimpleStringUInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt32UInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt32UInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt32UInt64MapMessage_QtProtobufData(const SimpleSInt32UInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt32UInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt32UInt64MapMessage::~SimpleSInt32UInt64MapMessage() = default;
 
@@ -4276,41 +5482,37 @@ void SimpleSInt32UInt64MapMessage::registerTypes()
 }
 
 SimpleSInt32UInt64MapMessage::SimpleSInt32UInt64MapMessage()
-    : QProtobufMessage(&SimpleSInt32UInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt32UInt64MapMessage::staticMetaObject),
+      dptr(new SimpleSInt32UInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt32UInt64MapMessage::SimpleSInt32UInt64MapMessage(const SimpleSInt32UInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt32UInt64MapMessage &SimpleSInt32UInt64MapMessage::operator =(const SimpleSInt32UInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt32UInt64MapMessage::SimpleSInt32UInt64MapMessage(SimpleSInt32UInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt32UInt64MapMessage &SimpleSInt32UInt64MapMessage::operator =(SimpleSInt32UInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt32UInt64MapMessage::operator ==(const SimpleSInt32UInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt32UInt64MapMessage::operator !=(const SimpleSInt32UInt64MapMessage &other) const
@@ -4318,11 +5520,42 @@ bool SimpleSInt32UInt64MapMessage::operator !=(const SimpleSInt32UInt64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleSInt32UInt64MapMessage::MapFieldEntry SimpleSInt32UInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt32UInt64MapMessage::MapFieldEntry &SimpleSInt32UInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt32UInt64MapMessage::setMapField(const SimpleSInt32UInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt64UInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt64UInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt64UInt64MapMessage_QtProtobufData(const SimpleSInt64UInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt64UInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt64UInt64MapMessage::~SimpleSInt64UInt64MapMessage() = default;
 
@@ -4372,41 +5605,37 @@ void SimpleSInt64UInt64MapMessage::registerTypes()
 }
 
 SimpleSInt64UInt64MapMessage::SimpleSInt64UInt64MapMessage()
-    : QProtobufMessage(&SimpleSInt64UInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt64UInt64MapMessage::staticMetaObject),
+      dptr(new SimpleSInt64UInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt64UInt64MapMessage::SimpleSInt64UInt64MapMessage(const SimpleSInt64UInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt64UInt64MapMessage &SimpleSInt64UInt64MapMessage::operator =(const SimpleSInt64UInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt64UInt64MapMessage::SimpleSInt64UInt64MapMessage(SimpleSInt64UInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt64UInt64MapMessage &SimpleSInt64UInt64MapMessage::operator =(SimpleSInt64UInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt64UInt64MapMessage::operator ==(const SimpleSInt64UInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt64UInt64MapMessage::operator !=(const SimpleSInt64UInt64MapMessage &other) const
@@ -4414,11 +5643,42 @@ bool SimpleSInt64UInt64MapMessage::operator !=(const SimpleSInt64UInt64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleSInt64UInt64MapMessage::MapFieldEntry SimpleSInt64UInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt64UInt64MapMessage::MapFieldEntry &SimpleSInt64UInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt64UInt64MapMessage::setMapField(const SimpleSInt64UInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt32UInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt32UInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt32UInt64MapMessage_QtProtobufData(const SimpleInt32UInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt32UInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt32UInt64MapMessage::~SimpleInt32UInt64MapMessage() = default;
 
@@ -4468,41 +5728,37 @@ void SimpleInt32UInt64MapMessage::registerTypes()
 }
 
 SimpleInt32UInt64MapMessage::SimpleInt32UInt64MapMessage()
-    : QProtobufMessage(&SimpleInt32UInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt32UInt64MapMessage::staticMetaObject),
+      dptr(new SimpleInt32UInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt32UInt64MapMessage::SimpleInt32UInt64MapMessage(const SimpleInt32UInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt32UInt64MapMessage &SimpleInt32UInt64MapMessage::operator =(const SimpleInt32UInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt32UInt64MapMessage::SimpleInt32UInt64MapMessage(SimpleInt32UInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt32UInt64MapMessage &SimpleInt32UInt64MapMessage::operator =(SimpleInt32UInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt32UInt64MapMessage::operator ==(const SimpleInt32UInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt32UInt64MapMessage::operator !=(const SimpleInt32UInt64MapMessage &other) const
@@ -4510,11 +5766,42 @@ bool SimpleInt32UInt64MapMessage::operator !=(const SimpleInt32UInt64MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleInt32UInt64MapMessage::MapFieldEntry SimpleInt32UInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt32UInt64MapMessage::MapFieldEntry &SimpleInt32UInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt32UInt64MapMessage::setMapField(const SimpleInt32UInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt64UInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt64UInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt64UInt64MapMessage_QtProtobufData(const SimpleInt64UInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt64UInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt64UInt64MapMessage::~SimpleInt64UInt64MapMessage() = default;
 
@@ -4564,41 +5851,37 @@ void SimpleInt64UInt64MapMessage::registerTypes()
 }
 
 SimpleInt64UInt64MapMessage::SimpleInt64UInt64MapMessage()
-    : QProtobufMessage(&SimpleInt64UInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt64UInt64MapMessage::staticMetaObject),
+      dptr(new SimpleInt64UInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt64UInt64MapMessage::SimpleInt64UInt64MapMessage(const SimpleInt64UInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt64UInt64MapMessage &SimpleInt64UInt64MapMessage::operator =(const SimpleInt64UInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt64UInt64MapMessage::SimpleInt64UInt64MapMessage(SimpleInt64UInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt64UInt64MapMessage &SimpleInt64UInt64MapMessage::operator =(SimpleInt64UInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt64UInt64MapMessage::operator ==(const SimpleInt64UInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt64UInt64MapMessage::operator !=(const SimpleInt64UInt64MapMessage &other) const
@@ -4606,11 +5889,42 @@ bool SimpleInt64UInt64MapMessage::operator !=(const SimpleInt64UInt64MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleInt64UInt64MapMessage::MapFieldEntry SimpleInt64UInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt64UInt64MapMessage::MapFieldEntry &SimpleInt64UInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt64UInt64MapMessage::setMapField(const SimpleInt64UInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt32UInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt32UInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt32UInt64MapMessage_QtProtobufData(const SimpleUInt32UInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt32UInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt32UInt64MapMessage::~SimpleUInt32UInt64MapMessage() = default;
 
@@ -4660,41 +5974,37 @@ void SimpleUInt32UInt64MapMessage::registerTypes()
 }
 
 SimpleUInt32UInt64MapMessage::SimpleUInt32UInt64MapMessage()
-    : QProtobufMessage(&SimpleUInt32UInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt32UInt64MapMessage::staticMetaObject),
+      dptr(new SimpleUInt32UInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt32UInt64MapMessage::SimpleUInt32UInt64MapMessage(const SimpleUInt32UInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt32UInt64MapMessage &SimpleUInt32UInt64MapMessage::operator =(const SimpleUInt32UInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt32UInt64MapMessage::SimpleUInt32UInt64MapMessage(SimpleUInt32UInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt32UInt64MapMessage &SimpleUInt32UInt64MapMessage::operator =(SimpleUInt32UInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt32UInt64MapMessage::operator ==(const SimpleUInt32UInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt32UInt64MapMessage::operator !=(const SimpleUInt32UInt64MapMessage &other) const
@@ -4702,11 +6012,42 @@ bool SimpleUInt32UInt64MapMessage::operator !=(const SimpleUInt32UInt64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleUInt32UInt64MapMessage::MapFieldEntry SimpleUInt32UInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt32UInt64MapMessage::MapFieldEntry &SimpleUInt32UInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt32UInt64MapMessage::setMapField(const SimpleUInt32UInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt64UInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt64UInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt64UInt64MapMessage_QtProtobufData(const SimpleUInt64UInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt64UInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt64UInt64MapMessage::~SimpleUInt64UInt64MapMessage() = default;
 
@@ -4756,41 +6097,37 @@ void SimpleUInt64UInt64MapMessage::registerTypes()
 }
 
 SimpleUInt64UInt64MapMessage::SimpleUInt64UInt64MapMessage()
-    : QProtobufMessage(&SimpleUInt64UInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt64UInt64MapMessage::staticMetaObject),
+      dptr(new SimpleUInt64UInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt64UInt64MapMessage::SimpleUInt64UInt64MapMessage(const SimpleUInt64UInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt64UInt64MapMessage &SimpleUInt64UInt64MapMessage::operator =(const SimpleUInt64UInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt64UInt64MapMessage::SimpleUInt64UInt64MapMessage(SimpleUInt64UInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt64UInt64MapMessage &SimpleUInt64UInt64MapMessage::operator =(SimpleUInt64UInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt64UInt64MapMessage::operator ==(const SimpleUInt64UInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt64UInt64MapMessage::operator !=(const SimpleUInt64UInt64MapMessage &other) const
@@ -4798,11 +6135,42 @@ bool SimpleUInt64UInt64MapMessage::operator !=(const SimpleUInt64UInt64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleUInt64UInt64MapMessage::MapFieldEntry SimpleUInt64UInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt64UInt64MapMessage::MapFieldEntry &SimpleUInt64UInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt64UInt64MapMessage::setMapField(const SimpleUInt64UInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed32UInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed32UInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed32UInt64MapMessage_QtProtobufData(const SimpleFixed32UInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed32UInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed32UInt64MapMessage::~SimpleFixed32UInt64MapMessage() = default;
 
@@ -4852,41 +6220,37 @@ void SimpleFixed32UInt64MapMessage::registerTypes()
 }
 
 SimpleFixed32UInt64MapMessage::SimpleFixed32UInt64MapMessage()
-    : QProtobufMessage(&SimpleFixed32UInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed32UInt64MapMessage::staticMetaObject),
+      dptr(new SimpleFixed32UInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed32UInt64MapMessage::SimpleFixed32UInt64MapMessage(const SimpleFixed32UInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed32UInt64MapMessage &SimpleFixed32UInt64MapMessage::operator =(const SimpleFixed32UInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed32UInt64MapMessage::SimpleFixed32UInt64MapMessage(SimpleFixed32UInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed32UInt64MapMessage &SimpleFixed32UInt64MapMessage::operator =(SimpleFixed32UInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed32UInt64MapMessage::operator ==(const SimpleFixed32UInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed32UInt64MapMessage::operator !=(const SimpleFixed32UInt64MapMessage &other) const
@@ -4894,11 +6258,42 @@ bool SimpleFixed32UInt64MapMessage::operator !=(const SimpleFixed32UInt64MapMess
     return !this->operator ==(other);
 }
 
+SimpleFixed32UInt64MapMessage::MapFieldEntry SimpleFixed32UInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed32UInt64MapMessage::MapFieldEntry &SimpleFixed32UInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed32UInt64MapMessage::setMapField(const SimpleFixed32UInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed64UInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed64UInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed64UInt64MapMessage_QtProtobufData(const SimpleFixed64UInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed64UInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed64UInt64MapMessage::~SimpleFixed64UInt64MapMessage() = default;
 
@@ -4948,41 +6343,37 @@ void SimpleFixed64UInt64MapMessage::registerTypes()
 }
 
 SimpleFixed64UInt64MapMessage::SimpleFixed64UInt64MapMessage()
-    : QProtobufMessage(&SimpleFixed64UInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed64UInt64MapMessage::staticMetaObject),
+      dptr(new SimpleFixed64UInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed64UInt64MapMessage::SimpleFixed64UInt64MapMessage(const SimpleFixed64UInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed64UInt64MapMessage &SimpleFixed64UInt64MapMessage::operator =(const SimpleFixed64UInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed64UInt64MapMessage::SimpleFixed64UInt64MapMessage(SimpleFixed64UInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed64UInt64MapMessage &SimpleFixed64UInt64MapMessage::operator =(SimpleFixed64UInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed64UInt64MapMessage::operator ==(const SimpleFixed64UInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed64UInt64MapMessage::operator !=(const SimpleFixed64UInt64MapMessage &other) const
@@ -4990,11 +6381,42 @@ bool SimpleFixed64UInt64MapMessage::operator !=(const SimpleFixed64UInt64MapMess
     return !this->operator ==(other);
 }
 
+SimpleFixed64UInt64MapMessage::MapFieldEntry SimpleFixed64UInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed64UInt64MapMessage::MapFieldEntry &SimpleFixed64UInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed64UInt64MapMessage::setMapField(const SimpleFixed64UInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed32UInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed32UInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed32UInt64MapMessage_QtProtobufData(const SimpleSFixed32UInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed32UInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed32UInt64MapMessage::~SimpleSFixed32UInt64MapMessage() = default;
 
@@ -5044,41 +6466,37 @@ void SimpleSFixed32UInt64MapMessage::registerTypes()
 }
 
 SimpleSFixed32UInt64MapMessage::SimpleSFixed32UInt64MapMessage()
-    : QProtobufMessage(&SimpleSFixed32UInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed32UInt64MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed32UInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed32UInt64MapMessage::SimpleSFixed32UInt64MapMessage(const SimpleSFixed32UInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed32UInt64MapMessage &SimpleSFixed32UInt64MapMessage::operator =(const SimpleSFixed32UInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed32UInt64MapMessage::SimpleSFixed32UInt64MapMessage(SimpleSFixed32UInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed32UInt64MapMessage &SimpleSFixed32UInt64MapMessage::operator =(SimpleSFixed32UInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed32UInt64MapMessage::operator ==(const SimpleSFixed32UInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed32UInt64MapMessage::operator !=(const SimpleSFixed32UInt64MapMessage &other) const
@@ -5086,11 +6504,42 @@ bool SimpleSFixed32UInt64MapMessage::operator !=(const SimpleSFixed32UInt64MapMe
     return !this->operator ==(other);
 }
 
+SimpleSFixed32UInt64MapMessage::MapFieldEntry SimpleSFixed32UInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed32UInt64MapMessage::MapFieldEntry &SimpleSFixed32UInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed32UInt64MapMessage::setMapField(const SimpleSFixed32UInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed64UInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed64UInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed64UInt64MapMessage_QtProtobufData(const SimpleSFixed64UInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed64UInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed64UInt64MapMessage::~SimpleSFixed64UInt64MapMessage() = default;
 
@@ -5140,41 +6589,37 @@ void SimpleSFixed64UInt64MapMessage::registerTypes()
 }
 
 SimpleSFixed64UInt64MapMessage::SimpleSFixed64UInt64MapMessage()
-    : QProtobufMessage(&SimpleSFixed64UInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed64UInt64MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed64UInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed64UInt64MapMessage::SimpleSFixed64UInt64MapMessage(const SimpleSFixed64UInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed64UInt64MapMessage &SimpleSFixed64UInt64MapMessage::operator =(const SimpleSFixed64UInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed64UInt64MapMessage::SimpleSFixed64UInt64MapMessage(SimpleSFixed64UInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed64UInt64MapMessage &SimpleSFixed64UInt64MapMessage::operator =(SimpleSFixed64UInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed64UInt64MapMessage::operator ==(const SimpleSFixed64UInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed64UInt64MapMessage::operator !=(const SimpleSFixed64UInt64MapMessage &other) const
@@ -5182,11 +6627,42 @@ bool SimpleSFixed64UInt64MapMessage::operator !=(const SimpleSFixed64UInt64MapMe
     return !this->operator ==(other);
 }
 
+SimpleSFixed64UInt64MapMessage::MapFieldEntry SimpleSFixed64UInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed64UInt64MapMessage::MapFieldEntry &SimpleSFixed64UInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed64UInt64MapMessage::setMapField(const SimpleSFixed64UInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleStringUInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleStringUInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleStringUInt64MapMessage_QtProtobufData(const SimpleStringUInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleStringUInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleStringUInt64MapMessage::~SimpleStringUInt64MapMessage() = default;
 
@@ -5236,41 +6712,37 @@ void SimpleStringUInt64MapMessage::registerTypes()
 }
 
 SimpleStringUInt64MapMessage::SimpleStringUInt64MapMessage()
-    : QProtobufMessage(&SimpleStringUInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleStringUInt64MapMessage::staticMetaObject),
+      dptr(new SimpleStringUInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleStringUInt64MapMessage::SimpleStringUInt64MapMessage(const SimpleStringUInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleStringUInt64MapMessage &SimpleStringUInt64MapMessage::operator =(const SimpleStringUInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleStringUInt64MapMessage::SimpleStringUInt64MapMessage(SimpleStringUInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleStringUInt64MapMessage &SimpleStringUInt64MapMessage::operator =(SimpleStringUInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleStringUInt64MapMessage::operator ==(const SimpleStringUInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleStringUInt64MapMessage::operator !=(const SimpleStringUInt64MapMessage &other) const
@@ -5278,11 +6750,42 @@ bool SimpleStringUInt64MapMessage::operator !=(const SimpleStringUInt64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleStringUInt64MapMessage::MapFieldEntry SimpleStringUInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleStringUInt64MapMessage::MapFieldEntry &SimpleStringUInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleStringUInt64MapMessage::setMapField(const SimpleStringUInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt32Int32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt32Int32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt32Int32MapMessage_QtProtobufData(const SimpleSInt32Int32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt32Int32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt32Int32MapMessage::~SimpleSInt32Int32MapMessage() = default;
 
@@ -5332,41 +6835,37 @@ void SimpleSInt32Int32MapMessage::registerTypes()
 }
 
 SimpleSInt32Int32MapMessage::SimpleSInt32Int32MapMessage()
-    : QProtobufMessage(&SimpleSInt32Int32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt32Int32MapMessage::staticMetaObject),
+      dptr(new SimpleSInt32Int32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt32Int32MapMessage::SimpleSInt32Int32MapMessage(const SimpleSInt32Int32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt32Int32MapMessage &SimpleSInt32Int32MapMessage::operator =(const SimpleSInt32Int32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt32Int32MapMessage::SimpleSInt32Int32MapMessage(SimpleSInt32Int32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt32Int32MapMessage &SimpleSInt32Int32MapMessage::operator =(SimpleSInt32Int32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt32Int32MapMessage::operator ==(const SimpleSInt32Int32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt32Int32MapMessage::operator !=(const SimpleSInt32Int32MapMessage &other) const
@@ -5374,11 +6873,42 @@ bool SimpleSInt32Int32MapMessage::operator !=(const SimpleSInt32Int32MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleSInt32Int32MapMessage::MapFieldEntry SimpleSInt32Int32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt32Int32MapMessage::MapFieldEntry &SimpleSInt32Int32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt32Int32MapMessage::setMapField(const SimpleSInt32Int32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt64Int32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt64Int32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt64Int32MapMessage_QtProtobufData(const SimpleSInt64Int32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt64Int32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt64Int32MapMessage::~SimpleSInt64Int32MapMessage() = default;
 
@@ -5428,41 +6958,37 @@ void SimpleSInt64Int32MapMessage::registerTypes()
 }
 
 SimpleSInt64Int32MapMessage::SimpleSInt64Int32MapMessage()
-    : QProtobufMessage(&SimpleSInt64Int32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt64Int32MapMessage::staticMetaObject),
+      dptr(new SimpleSInt64Int32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt64Int32MapMessage::SimpleSInt64Int32MapMessage(const SimpleSInt64Int32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt64Int32MapMessage &SimpleSInt64Int32MapMessage::operator =(const SimpleSInt64Int32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt64Int32MapMessage::SimpleSInt64Int32MapMessage(SimpleSInt64Int32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt64Int32MapMessage &SimpleSInt64Int32MapMessage::operator =(SimpleSInt64Int32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt64Int32MapMessage::operator ==(const SimpleSInt64Int32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt64Int32MapMessage::operator !=(const SimpleSInt64Int32MapMessage &other) const
@@ -5470,11 +6996,42 @@ bool SimpleSInt64Int32MapMessage::operator !=(const SimpleSInt64Int32MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleSInt64Int32MapMessage::MapFieldEntry SimpleSInt64Int32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt64Int32MapMessage::MapFieldEntry &SimpleSInt64Int32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt64Int32MapMessage::setMapField(const SimpleSInt64Int32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt32Int32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt32Int32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt32Int32MapMessage_QtProtobufData(const SimpleInt32Int32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt32Int32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt32Int32MapMessage::~SimpleInt32Int32MapMessage() = default;
 
@@ -5524,41 +7081,37 @@ void SimpleInt32Int32MapMessage::registerTypes()
 }
 
 SimpleInt32Int32MapMessage::SimpleInt32Int32MapMessage()
-    : QProtobufMessage(&SimpleInt32Int32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt32Int32MapMessage::staticMetaObject),
+      dptr(new SimpleInt32Int32MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt32Int32MapMessage::SimpleInt32Int32MapMessage(const SimpleInt32Int32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt32Int32MapMessage &SimpleInt32Int32MapMessage::operator =(const SimpleInt32Int32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt32Int32MapMessage::SimpleInt32Int32MapMessage(SimpleInt32Int32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt32Int32MapMessage &SimpleInt32Int32MapMessage::operator =(SimpleInt32Int32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt32Int32MapMessage::operator ==(const SimpleInt32Int32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt32Int32MapMessage::operator !=(const SimpleInt32Int32MapMessage &other) const
@@ -5566,11 +7119,42 @@ bool SimpleInt32Int32MapMessage::operator !=(const SimpleInt32Int32MapMessage &o
     return !this->operator ==(other);
 }
 
+SimpleInt32Int32MapMessage::MapFieldEntry SimpleInt32Int32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt32Int32MapMessage::MapFieldEntry &SimpleInt32Int32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt32Int32MapMessage::setMapField(const SimpleInt32Int32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt64Int32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt64Int32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt64Int32MapMessage_QtProtobufData(const SimpleInt64Int32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt64Int32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt64Int32MapMessage::~SimpleInt64Int32MapMessage() = default;
 
@@ -5620,41 +7204,37 @@ void SimpleInt64Int32MapMessage::registerTypes()
 }
 
 SimpleInt64Int32MapMessage::SimpleInt64Int32MapMessage()
-    : QProtobufMessage(&SimpleInt64Int32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt64Int32MapMessage::staticMetaObject),
+      dptr(new SimpleInt64Int32MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt64Int32MapMessage::SimpleInt64Int32MapMessage(const SimpleInt64Int32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt64Int32MapMessage &SimpleInt64Int32MapMessage::operator =(const SimpleInt64Int32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt64Int32MapMessage::SimpleInt64Int32MapMessage(SimpleInt64Int32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt64Int32MapMessage &SimpleInt64Int32MapMessage::operator =(SimpleInt64Int32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt64Int32MapMessage::operator ==(const SimpleInt64Int32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt64Int32MapMessage::operator !=(const SimpleInt64Int32MapMessage &other) const
@@ -5662,11 +7242,42 @@ bool SimpleInt64Int32MapMessage::operator !=(const SimpleInt64Int32MapMessage &o
     return !this->operator ==(other);
 }
 
+SimpleInt64Int32MapMessage::MapFieldEntry SimpleInt64Int32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt64Int32MapMessage::MapFieldEntry &SimpleInt64Int32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt64Int32MapMessage::setMapField(const SimpleInt64Int32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt32Int32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt32Int32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt32Int32MapMessage_QtProtobufData(const SimpleUInt32Int32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt32Int32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt32Int32MapMessage::~SimpleUInt32Int32MapMessage() = default;
 
@@ -5716,41 +7327,37 @@ void SimpleUInt32Int32MapMessage::registerTypes()
 }
 
 SimpleUInt32Int32MapMessage::SimpleUInt32Int32MapMessage()
-    : QProtobufMessage(&SimpleUInt32Int32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt32Int32MapMessage::staticMetaObject),
+      dptr(new SimpleUInt32Int32MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt32Int32MapMessage::SimpleUInt32Int32MapMessage(const SimpleUInt32Int32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt32Int32MapMessage &SimpleUInt32Int32MapMessage::operator =(const SimpleUInt32Int32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt32Int32MapMessage::SimpleUInt32Int32MapMessage(SimpleUInt32Int32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt32Int32MapMessage &SimpleUInt32Int32MapMessage::operator =(SimpleUInt32Int32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt32Int32MapMessage::operator ==(const SimpleUInt32Int32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt32Int32MapMessage::operator !=(const SimpleUInt32Int32MapMessage &other) const
@@ -5758,11 +7365,42 @@ bool SimpleUInt32Int32MapMessage::operator !=(const SimpleUInt32Int32MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleUInt32Int32MapMessage::MapFieldEntry SimpleUInt32Int32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt32Int32MapMessage::MapFieldEntry &SimpleUInt32Int32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt32Int32MapMessage::setMapField(const SimpleUInt32Int32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt64Int32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt64Int32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt64Int32MapMessage_QtProtobufData(const SimpleUInt64Int32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt64Int32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt64Int32MapMessage::~SimpleUInt64Int32MapMessage() = default;
 
@@ -5812,41 +7450,37 @@ void SimpleUInt64Int32MapMessage::registerTypes()
 }
 
 SimpleUInt64Int32MapMessage::SimpleUInt64Int32MapMessage()
-    : QProtobufMessage(&SimpleUInt64Int32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt64Int32MapMessage::staticMetaObject),
+      dptr(new SimpleUInt64Int32MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt64Int32MapMessage::SimpleUInt64Int32MapMessage(const SimpleUInt64Int32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt64Int32MapMessage &SimpleUInt64Int32MapMessage::operator =(const SimpleUInt64Int32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt64Int32MapMessage::SimpleUInt64Int32MapMessage(SimpleUInt64Int32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt64Int32MapMessage &SimpleUInt64Int32MapMessage::operator =(SimpleUInt64Int32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt64Int32MapMessage::operator ==(const SimpleUInt64Int32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt64Int32MapMessage::operator !=(const SimpleUInt64Int32MapMessage &other) const
@@ -5854,11 +7488,42 @@ bool SimpleUInt64Int32MapMessage::operator !=(const SimpleUInt64Int32MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleUInt64Int32MapMessage::MapFieldEntry SimpleUInt64Int32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt64Int32MapMessage::MapFieldEntry &SimpleUInt64Int32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt64Int32MapMessage::setMapField(const SimpleUInt64Int32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed32Int32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed32Int32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed32Int32MapMessage_QtProtobufData(const SimpleFixed32Int32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed32Int32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed32Int32MapMessage::~SimpleFixed32Int32MapMessage() = default;
 
@@ -5908,41 +7573,37 @@ void SimpleFixed32Int32MapMessage::registerTypes()
 }
 
 SimpleFixed32Int32MapMessage::SimpleFixed32Int32MapMessage()
-    : QProtobufMessage(&SimpleFixed32Int32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed32Int32MapMessage::staticMetaObject),
+      dptr(new SimpleFixed32Int32MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed32Int32MapMessage::SimpleFixed32Int32MapMessage(const SimpleFixed32Int32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed32Int32MapMessage &SimpleFixed32Int32MapMessage::operator =(const SimpleFixed32Int32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed32Int32MapMessage::SimpleFixed32Int32MapMessage(SimpleFixed32Int32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed32Int32MapMessage &SimpleFixed32Int32MapMessage::operator =(SimpleFixed32Int32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed32Int32MapMessage::operator ==(const SimpleFixed32Int32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed32Int32MapMessage::operator !=(const SimpleFixed32Int32MapMessage &other) const
@@ -5950,11 +7611,42 @@ bool SimpleFixed32Int32MapMessage::operator !=(const SimpleFixed32Int32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleFixed32Int32MapMessage::MapFieldEntry SimpleFixed32Int32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed32Int32MapMessage::MapFieldEntry &SimpleFixed32Int32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed32Int32MapMessage::setMapField(const SimpleFixed32Int32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed64Int32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed64Int32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed64Int32MapMessage_QtProtobufData(const SimpleFixed64Int32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed64Int32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed64Int32MapMessage::~SimpleFixed64Int32MapMessage() = default;
 
@@ -6004,41 +7696,37 @@ void SimpleFixed64Int32MapMessage::registerTypes()
 }
 
 SimpleFixed64Int32MapMessage::SimpleFixed64Int32MapMessage()
-    : QProtobufMessage(&SimpleFixed64Int32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed64Int32MapMessage::staticMetaObject),
+      dptr(new SimpleFixed64Int32MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed64Int32MapMessage::SimpleFixed64Int32MapMessage(const SimpleFixed64Int32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed64Int32MapMessage &SimpleFixed64Int32MapMessage::operator =(const SimpleFixed64Int32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed64Int32MapMessage::SimpleFixed64Int32MapMessage(SimpleFixed64Int32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed64Int32MapMessage &SimpleFixed64Int32MapMessage::operator =(SimpleFixed64Int32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed64Int32MapMessage::operator ==(const SimpleFixed64Int32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed64Int32MapMessage::operator !=(const SimpleFixed64Int32MapMessage &other) const
@@ -6046,11 +7734,42 @@ bool SimpleFixed64Int32MapMessage::operator !=(const SimpleFixed64Int32MapMessag
     return !this->operator ==(other);
 }
 
+SimpleFixed64Int32MapMessage::MapFieldEntry SimpleFixed64Int32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed64Int32MapMessage::MapFieldEntry &SimpleFixed64Int32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed64Int32MapMessage::setMapField(const SimpleFixed64Int32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed32Int32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed32Int32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed32Int32MapMessage_QtProtobufData(const SimpleSFixed32Int32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed32Int32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed32Int32MapMessage::~SimpleSFixed32Int32MapMessage() = default;
 
@@ -6100,41 +7819,37 @@ void SimpleSFixed32Int32MapMessage::registerTypes()
 }
 
 SimpleSFixed32Int32MapMessage::SimpleSFixed32Int32MapMessage()
-    : QProtobufMessage(&SimpleSFixed32Int32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed32Int32MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed32Int32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed32Int32MapMessage::SimpleSFixed32Int32MapMessage(const SimpleSFixed32Int32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed32Int32MapMessage &SimpleSFixed32Int32MapMessage::operator =(const SimpleSFixed32Int32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed32Int32MapMessage::SimpleSFixed32Int32MapMessage(SimpleSFixed32Int32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed32Int32MapMessage &SimpleSFixed32Int32MapMessage::operator =(SimpleSFixed32Int32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed32Int32MapMessage::operator ==(const SimpleSFixed32Int32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed32Int32MapMessage::operator !=(const SimpleSFixed32Int32MapMessage &other) const
@@ -6142,11 +7857,42 @@ bool SimpleSFixed32Int32MapMessage::operator !=(const SimpleSFixed32Int32MapMess
     return !this->operator ==(other);
 }
 
+SimpleSFixed32Int32MapMessage::MapFieldEntry SimpleSFixed32Int32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed32Int32MapMessage::MapFieldEntry &SimpleSFixed32Int32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed32Int32MapMessage::setMapField(const SimpleSFixed32Int32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed64Int32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed64Int32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed64Int32MapMessage_QtProtobufData(const SimpleSFixed64Int32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed64Int32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed64Int32MapMessage::~SimpleSFixed64Int32MapMessage() = default;
 
@@ -6196,41 +7942,37 @@ void SimpleSFixed64Int32MapMessage::registerTypes()
 }
 
 SimpleSFixed64Int32MapMessage::SimpleSFixed64Int32MapMessage()
-    : QProtobufMessage(&SimpleSFixed64Int32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed64Int32MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed64Int32MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed64Int32MapMessage::SimpleSFixed64Int32MapMessage(const SimpleSFixed64Int32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed64Int32MapMessage &SimpleSFixed64Int32MapMessage::operator =(const SimpleSFixed64Int32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed64Int32MapMessage::SimpleSFixed64Int32MapMessage(SimpleSFixed64Int32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed64Int32MapMessage &SimpleSFixed64Int32MapMessage::operator =(SimpleSFixed64Int32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed64Int32MapMessage::operator ==(const SimpleSFixed64Int32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed64Int32MapMessage::operator !=(const SimpleSFixed64Int32MapMessage &other) const
@@ -6238,11 +7980,42 @@ bool SimpleSFixed64Int32MapMessage::operator !=(const SimpleSFixed64Int32MapMess
     return !this->operator ==(other);
 }
 
+SimpleSFixed64Int32MapMessage::MapFieldEntry SimpleSFixed64Int32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed64Int32MapMessage::MapFieldEntry &SimpleSFixed64Int32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed64Int32MapMessage::setMapField(const SimpleSFixed64Int32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleStringInt32MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleStringInt32MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleStringInt32MapMessage_QtProtobufData(const SimpleStringInt32MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleStringInt32MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleStringInt32MapMessage::~SimpleStringInt32MapMessage() = default;
 
@@ -6292,41 +8065,37 @@ void SimpleStringInt32MapMessage::registerTypes()
 }
 
 SimpleStringInt32MapMessage::SimpleStringInt32MapMessage()
-    : QProtobufMessage(&SimpleStringInt32MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleStringInt32MapMessage::staticMetaObject),
+      dptr(new SimpleStringInt32MapMessage_QtProtobufData)
 {
 }
 
 SimpleStringInt32MapMessage::SimpleStringInt32MapMessage(const SimpleStringInt32MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleStringInt32MapMessage &SimpleStringInt32MapMessage::operator =(const SimpleStringInt32MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleStringInt32MapMessage::SimpleStringInt32MapMessage(SimpleStringInt32MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleStringInt32MapMessage &SimpleStringInt32MapMessage::operator =(SimpleStringInt32MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleStringInt32MapMessage::operator ==(const SimpleStringInt32MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleStringInt32MapMessage::operator !=(const SimpleStringInt32MapMessage &other) const
@@ -6334,11 +8103,42 @@ bool SimpleStringInt32MapMessage::operator !=(const SimpleStringInt32MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleStringInt32MapMessage::MapFieldEntry SimpleStringInt32MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleStringInt32MapMessage::MapFieldEntry &SimpleStringInt32MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleStringInt32MapMessage::setMapField(const SimpleStringInt32MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt32Int64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt32Int64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt32Int64MapMessage_QtProtobufData(const SimpleSInt32Int64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt32Int64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt32Int64MapMessage::~SimpleSInt32Int64MapMessage() = default;
 
@@ -6388,41 +8188,37 @@ void SimpleSInt32Int64MapMessage::registerTypes()
 }
 
 SimpleSInt32Int64MapMessage::SimpleSInt32Int64MapMessage()
-    : QProtobufMessage(&SimpleSInt32Int64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt32Int64MapMessage::staticMetaObject),
+      dptr(new SimpleSInt32Int64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt32Int64MapMessage::SimpleSInt32Int64MapMessage(const SimpleSInt32Int64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt32Int64MapMessage &SimpleSInt32Int64MapMessage::operator =(const SimpleSInt32Int64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt32Int64MapMessage::SimpleSInt32Int64MapMessage(SimpleSInt32Int64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt32Int64MapMessage &SimpleSInt32Int64MapMessage::operator =(SimpleSInt32Int64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt32Int64MapMessage::operator ==(const SimpleSInt32Int64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt32Int64MapMessage::operator !=(const SimpleSInt32Int64MapMessage &other) const
@@ -6430,11 +8226,42 @@ bool SimpleSInt32Int64MapMessage::operator !=(const SimpleSInt32Int64MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleSInt32Int64MapMessage::MapFieldEntry SimpleSInt32Int64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt32Int64MapMessage::MapFieldEntry &SimpleSInt32Int64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt32Int64MapMessage::setMapField(const SimpleSInt32Int64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt64Int64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt64Int64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt64Int64MapMessage_QtProtobufData(const SimpleSInt64Int64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt64Int64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt64Int64MapMessage::~SimpleSInt64Int64MapMessage() = default;
 
@@ -6484,41 +8311,37 @@ void SimpleSInt64Int64MapMessage::registerTypes()
 }
 
 SimpleSInt64Int64MapMessage::SimpleSInt64Int64MapMessage()
-    : QProtobufMessage(&SimpleSInt64Int64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt64Int64MapMessage::staticMetaObject),
+      dptr(new SimpleSInt64Int64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt64Int64MapMessage::SimpleSInt64Int64MapMessage(const SimpleSInt64Int64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt64Int64MapMessage &SimpleSInt64Int64MapMessage::operator =(const SimpleSInt64Int64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt64Int64MapMessage::SimpleSInt64Int64MapMessage(SimpleSInt64Int64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt64Int64MapMessage &SimpleSInt64Int64MapMessage::operator =(SimpleSInt64Int64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt64Int64MapMessage::operator ==(const SimpleSInt64Int64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt64Int64MapMessage::operator !=(const SimpleSInt64Int64MapMessage &other) const
@@ -6526,11 +8349,42 @@ bool SimpleSInt64Int64MapMessage::operator !=(const SimpleSInt64Int64MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleSInt64Int64MapMessage::MapFieldEntry SimpleSInt64Int64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt64Int64MapMessage::MapFieldEntry &SimpleSInt64Int64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt64Int64MapMessage::setMapField(const SimpleSInt64Int64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt32Int64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt32Int64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt32Int64MapMessage_QtProtobufData(const SimpleInt32Int64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt32Int64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt32Int64MapMessage::~SimpleInt32Int64MapMessage() = default;
 
@@ -6580,41 +8434,37 @@ void SimpleInt32Int64MapMessage::registerTypes()
 }
 
 SimpleInt32Int64MapMessage::SimpleInt32Int64MapMessage()
-    : QProtobufMessage(&SimpleInt32Int64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt32Int64MapMessage::staticMetaObject),
+      dptr(new SimpleInt32Int64MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt32Int64MapMessage::SimpleInt32Int64MapMessage(const SimpleInt32Int64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt32Int64MapMessage &SimpleInt32Int64MapMessage::operator =(const SimpleInt32Int64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt32Int64MapMessage::SimpleInt32Int64MapMessage(SimpleInt32Int64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt32Int64MapMessage &SimpleInt32Int64MapMessage::operator =(SimpleInt32Int64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt32Int64MapMessage::operator ==(const SimpleInt32Int64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt32Int64MapMessage::operator !=(const SimpleInt32Int64MapMessage &other) const
@@ -6622,11 +8472,42 @@ bool SimpleInt32Int64MapMessage::operator !=(const SimpleInt32Int64MapMessage &o
     return !this->operator ==(other);
 }
 
+SimpleInt32Int64MapMessage::MapFieldEntry SimpleInt32Int64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt32Int64MapMessage::MapFieldEntry &SimpleInt32Int64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt32Int64MapMessage::setMapField(const SimpleInt32Int64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt64Int64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt64Int64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt64Int64MapMessage_QtProtobufData(const SimpleInt64Int64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt64Int64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt64Int64MapMessage::~SimpleInt64Int64MapMessage() = default;
 
@@ -6676,41 +8557,37 @@ void SimpleInt64Int64MapMessage::registerTypes()
 }
 
 SimpleInt64Int64MapMessage::SimpleInt64Int64MapMessage()
-    : QProtobufMessage(&SimpleInt64Int64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt64Int64MapMessage::staticMetaObject),
+      dptr(new SimpleInt64Int64MapMessage_QtProtobufData)
 {
 }
 
 SimpleInt64Int64MapMessage::SimpleInt64Int64MapMessage(const SimpleInt64Int64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt64Int64MapMessage &SimpleInt64Int64MapMessage::operator =(const SimpleInt64Int64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt64Int64MapMessage::SimpleInt64Int64MapMessage(SimpleInt64Int64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt64Int64MapMessage &SimpleInt64Int64MapMessage::operator =(SimpleInt64Int64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt64Int64MapMessage::operator ==(const SimpleInt64Int64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt64Int64MapMessage::operator !=(const SimpleInt64Int64MapMessage &other) const
@@ -6718,11 +8595,42 @@ bool SimpleInt64Int64MapMessage::operator !=(const SimpleInt64Int64MapMessage &o
     return !this->operator ==(other);
 }
 
+SimpleInt64Int64MapMessage::MapFieldEntry SimpleInt64Int64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt64Int64MapMessage::MapFieldEntry &SimpleInt64Int64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt64Int64MapMessage::setMapField(const SimpleInt64Int64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt32Int64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt32Int64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt32Int64MapMessage_QtProtobufData(const SimpleUInt32Int64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt32Int64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt32Int64MapMessage::~SimpleUInt32Int64MapMessage() = default;
 
@@ -6772,41 +8680,37 @@ void SimpleUInt32Int64MapMessage::registerTypes()
 }
 
 SimpleUInt32Int64MapMessage::SimpleUInt32Int64MapMessage()
-    : QProtobufMessage(&SimpleUInt32Int64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt32Int64MapMessage::staticMetaObject),
+      dptr(new SimpleUInt32Int64MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt32Int64MapMessage::SimpleUInt32Int64MapMessage(const SimpleUInt32Int64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt32Int64MapMessage &SimpleUInt32Int64MapMessage::operator =(const SimpleUInt32Int64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt32Int64MapMessage::SimpleUInt32Int64MapMessage(SimpleUInt32Int64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt32Int64MapMessage &SimpleUInt32Int64MapMessage::operator =(SimpleUInt32Int64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt32Int64MapMessage::operator ==(const SimpleUInt32Int64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt32Int64MapMessage::operator !=(const SimpleUInt32Int64MapMessage &other) const
@@ -6814,11 +8718,42 @@ bool SimpleUInt32Int64MapMessage::operator !=(const SimpleUInt32Int64MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleUInt32Int64MapMessage::MapFieldEntry SimpleUInt32Int64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt32Int64MapMessage::MapFieldEntry &SimpleUInt32Int64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt32Int64MapMessage::setMapField(const SimpleUInt32Int64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt64Int64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt64Int64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt64Int64MapMessage_QtProtobufData(const SimpleUInt64Int64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt64Int64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt64Int64MapMessage::~SimpleUInt64Int64MapMessage() = default;
 
@@ -6868,41 +8803,37 @@ void SimpleUInt64Int64MapMessage::registerTypes()
 }
 
 SimpleUInt64Int64MapMessage::SimpleUInt64Int64MapMessage()
-    : QProtobufMessage(&SimpleUInt64Int64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt64Int64MapMessage::staticMetaObject),
+      dptr(new SimpleUInt64Int64MapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt64Int64MapMessage::SimpleUInt64Int64MapMessage(const SimpleUInt64Int64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt64Int64MapMessage &SimpleUInt64Int64MapMessage::operator =(const SimpleUInt64Int64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt64Int64MapMessage::SimpleUInt64Int64MapMessage(SimpleUInt64Int64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt64Int64MapMessage &SimpleUInt64Int64MapMessage::operator =(SimpleUInt64Int64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt64Int64MapMessage::operator ==(const SimpleUInt64Int64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt64Int64MapMessage::operator !=(const SimpleUInt64Int64MapMessage &other) const
@@ -6910,11 +8841,42 @@ bool SimpleUInt64Int64MapMessage::operator !=(const SimpleUInt64Int64MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleUInt64Int64MapMessage::MapFieldEntry SimpleUInt64Int64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt64Int64MapMessage::MapFieldEntry &SimpleUInt64Int64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt64Int64MapMessage::setMapField(const SimpleUInt64Int64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed32Int64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed32Int64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed32Int64MapMessage_QtProtobufData(const SimpleFixed32Int64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed32Int64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed32Int64MapMessage::~SimpleFixed32Int64MapMessage() = default;
 
@@ -6964,41 +8926,37 @@ void SimpleFixed32Int64MapMessage::registerTypes()
 }
 
 SimpleFixed32Int64MapMessage::SimpleFixed32Int64MapMessage()
-    : QProtobufMessage(&SimpleFixed32Int64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed32Int64MapMessage::staticMetaObject),
+      dptr(new SimpleFixed32Int64MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed32Int64MapMessage::SimpleFixed32Int64MapMessage(const SimpleFixed32Int64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed32Int64MapMessage &SimpleFixed32Int64MapMessage::operator =(const SimpleFixed32Int64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed32Int64MapMessage::SimpleFixed32Int64MapMessage(SimpleFixed32Int64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed32Int64MapMessage &SimpleFixed32Int64MapMessage::operator =(SimpleFixed32Int64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed32Int64MapMessage::operator ==(const SimpleFixed32Int64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed32Int64MapMessage::operator !=(const SimpleFixed32Int64MapMessage &other) const
@@ -7006,11 +8964,42 @@ bool SimpleFixed32Int64MapMessage::operator !=(const SimpleFixed32Int64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleFixed32Int64MapMessage::MapFieldEntry SimpleFixed32Int64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed32Int64MapMessage::MapFieldEntry &SimpleFixed32Int64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed32Int64MapMessage::setMapField(const SimpleFixed32Int64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed64Int64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed64Int64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed64Int64MapMessage_QtProtobufData(const SimpleFixed64Int64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed64Int64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed64Int64MapMessage::~SimpleFixed64Int64MapMessage() = default;
 
@@ -7060,41 +9049,37 @@ void SimpleFixed64Int64MapMessage::registerTypes()
 }
 
 SimpleFixed64Int64MapMessage::SimpleFixed64Int64MapMessage()
-    : QProtobufMessage(&SimpleFixed64Int64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed64Int64MapMessage::staticMetaObject),
+      dptr(new SimpleFixed64Int64MapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed64Int64MapMessage::SimpleFixed64Int64MapMessage(const SimpleFixed64Int64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed64Int64MapMessage &SimpleFixed64Int64MapMessage::operator =(const SimpleFixed64Int64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed64Int64MapMessage::SimpleFixed64Int64MapMessage(SimpleFixed64Int64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed64Int64MapMessage &SimpleFixed64Int64MapMessage::operator =(SimpleFixed64Int64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed64Int64MapMessage::operator ==(const SimpleFixed64Int64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed64Int64MapMessage::operator !=(const SimpleFixed64Int64MapMessage &other) const
@@ -7102,11 +9087,42 @@ bool SimpleFixed64Int64MapMessage::operator !=(const SimpleFixed64Int64MapMessag
     return !this->operator ==(other);
 }
 
+SimpleFixed64Int64MapMessage::MapFieldEntry SimpleFixed64Int64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed64Int64MapMessage::MapFieldEntry &SimpleFixed64Int64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed64Int64MapMessage::setMapField(const SimpleFixed64Int64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed32Int64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed32Int64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed32Int64MapMessage_QtProtobufData(const SimpleSFixed32Int64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed32Int64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed32Int64MapMessage::~SimpleSFixed32Int64MapMessage() = default;
 
@@ -7156,41 +9172,37 @@ void SimpleSFixed32Int64MapMessage::registerTypes()
 }
 
 SimpleSFixed32Int64MapMessage::SimpleSFixed32Int64MapMessage()
-    : QProtobufMessage(&SimpleSFixed32Int64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed32Int64MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed32Int64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed32Int64MapMessage::SimpleSFixed32Int64MapMessage(const SimpleSFixed32Int64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed32Int64MapMessage &SimpleSFixed32Int64MapMessage::operator =(const SimpleSFixed32Int64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed32Int64MapMessage::SimpleSFixed32Int64MapMessage(SimpleSFixed32Int64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed32Int64MapMessage &SimpleSFixed32Int64MapMessage::operator =(SimpleSFixed32Int64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed32Int64MapMessage::operator ==(const SimpleSFixed32Int64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed32Int64MapMessage::operator !=(const SimpleSFixed32Int64MapMessage &other) const
@@ -7198,11 +9210,42 @@ bool SimpleSFixed32Int64MapMessage::operator !=(const SimpleSFixed32Int64MapMess
     return !this->operator ==(other);
 }
 
+SimpleSFixed32Int64MapMessage::MapFieldEntry SimpleSFixed32Int64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed32Int64MapMessage::MapFieldEntry &SimpleSFixed32Int64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed32Int64MapMessage::setMapField(const SimpleSFixed32Int64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed64Int64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed64Int64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed64Int64MapMessage_QtProtobufData(const SimpleSFixed64Int64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed64Int64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed64Int64MapMessage::~SimpleSFixed64Int64MapMessage() = default;
 
@@ -7252,41 +9295,37 @@ void SimpleSFixed64Int64MapMessage::registerTypes()
 }
 
 SimpleSFixed64Int64MapMessage::SimpleSFixed64Int64MapMessage()
-    : QProtobufMessage(&SimpleSFixed64Int64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed64Int64MapMessage::staticMetaObject),
+      dptr(new SimpleSFixed64Int64MapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed64Int64MapMessage::SimpleSFixed64Int64MapMessage(const SimpleSFixed64Int64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed64Int64MapMessage &SimpleSFixed64Int64MapMessage::operator =(const SimpleSFixed64Int64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed64Int64MapMessage::SimpleSFixed64Int64MapMessage(SimpleSFixed64Int64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed64Int64MapMessage &SimpleSFixed64Int64MapMessage::operator =(SimpleSFixed64Int64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed64Int64MapMessage::operator ==(const SimpleSFixed64Int64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed64Int64MapMessage::operator !=(const SimpleSFixed64Int64MapMessage &other) const
@@ -7294,11 +9333,42 @@ bool SimpleSFixed64Int64MapMessage::operator !=(const SimpleSFixed64Int64MapMess
     return !this->operator ==(other);
 }
 
+SimpleSFixed64Int64MapMessage::MapFieldEntry SimpleSFixed64Int64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed64Int64MapMessage::MapFieldEntry &SimpleSFixed64Int64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed64Int64MapMessage::setMapField(const SimpleSFixed64Int64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleStringInt64MapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleStringInt64MapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleStringInt64MapMessage_QtProtobufData(const SimpleStringInt64MapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleStringInt64MapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleStringInt64MapMessage::~SimpleStringInt64MapMessage() = default;
 
@@ -7348,41 +9418,37 @@ void SimpleStringInt64MapMessage::registerTypes()
 }
 
 SimpleStringInt64MapMessage::SimpleStringInt64MapMessage()
-    : QProtobufMessage(&SimpleStringInt64MapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleStringInt64MapMessage::staticMetaObject),
+      dptr(new SimpleStringInt64MapMessage_QtProtobufData)
 {
 }
 
 SimpleStringInt64MapMessage::SimpleStringInt64MapMessage(const SimpleStringInt64MapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleStringInt64MapMessage &SimpleStringInt64MapMessage::operator =(const SimpleStringInt64MapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleStringInt64MapMessage::SimpleStringInt64MapMessage(SimpleStringInt64MapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleStringInt64MapMessage &SimpleStringInt64MapMessage::operator =(SimpleStringInt64MapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleStringInt64MapMessage::operator ==(const SimpleStringInt64MapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleStringInt64MapMessage::operator !=(const SimpleStringInt64MapMessage &other) const
@@ -7390,11 +9456,42 @@ bool SimpleStringInt64MapMessage::operator !=(const SimpleStringInt64MapMessage 
     return !this->operator ==(other);
 }
 
+SimpleStringInt64MapMessage::MapFieldEntry SimpleStringInt64MapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleStringInt64MapMessage::MapFieldEntry &SimpleStringInt64MapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleStringInt64MapMessage::setMapField(const SimpleStringInt64MapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt32ComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt32ComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt32ComplexMessageMapMessage_QtProtobufData(const SimpleSInt32ComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt32ComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt32ComplexMessageMapMessage::~SimpleSInt32ComplexMessageMapMessage() = default;
 
@@ -7444,41 +9541,37 @@ void SimpleSInt32ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleSInt32ComplexMessageMapMessage::SimpleSInt32ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleSInt32ComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt32ComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleSInt32ComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt32ComplexMessageMapMessage::SimpleSInt32ComplexMessageMapMessage(const SimpleSInt32ComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt32ComplexMessageMapMessage &SimpleSInt32ComplexMessageMapMessage::operator =(const SimpleSInt32ComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt32ComplexMessageMapMessage::SimpleSInt32ComplexMessageMapMessage(SimpleSInt32ComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt32ComplexMessageMapMessage &SimpleSInt32ComplexMessageMapMessage::operator =(SimpleSInt32ComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt32ComplexMessageMapMessage::operator ==(const SimpleSInt32ComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt32ComplexMessageMapMessage::operator !=(const SimpleSInt32ComplexMessageMapMessage &other) const
@@ -7486,11 +9579,42 @@ bool SimpleSInt32ComplexMessageMapMessage::operator !=(const SimpleSInt32Complex
     return !this->operator ==(other);
 }
 
+SimpleSInt32ComplexMessageMapMessage::MapFieldEntry SimpleSInt32ComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &SimpleSInt32ComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt32ComplexMessageMapMessage::setMapField(const SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSInt64ComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSInt64ComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSInt64ComplexMessageMapMessage_QtProtobufData(const SimpleSInt64ComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSInt64ComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSInt64ComplexMessageMapMessage::~SimpleSInt64ComplexMessageMapMessage() = default;
 
@@ -7540,41 +9664,37 @@ void SimpleSInt64ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleSInt64ComplexMessageMapMessage::SimpleSInt64ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleSInt64ComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSInt64ComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleSInt64ComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleSInt64ComplexMessageMapMessage::SimpleSInt64ComplexMessageMapMessage(const SimpleSInt64ComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSInt64ComplexMessageMapMessage &SimpleSInt64ComplexMessageMapMessage::operator =(const SimpleSInt64ComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSInt64ComplexMessageMapMessage::SimpleSInt64ComplexMessageMapMessage(SimpleSInt64ComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSInt64ComplexMessageMapMessage &SimpleSInt64ComplexMessageMapMessage::operator =(SimpleSInt64ComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSInt64ComplexMessageMapMessage::operator ==(const SimpleSInt64ComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSInt64ComplexMessageMapMessage::operator !=(const SimpleSInt64ComplexMessageMapMessage &other) const
@@ -7582,11 +9702,42 @@ bool SimpleSInt64ComplexMessageMapMessage::operator !=(const SimpleSInt64Complex
     return !this->operator ==(other);
 }
 
+SimpleSInt64ComplexMessageMapMessage::MapFieldEntry SimpleSInt64ComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &SimpleSInt64ComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSInt64ComplexMessageMapMessage::setMapField(const SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt32ComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt32ComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt32ComplexMessageMapMessage_QtProtobufData(const SimpleInt32ComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt32ComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt32ComplexMessageMapMessage::~SimpleInt32ComplexMessageMapMessage() = default;
 
@@ -7636,41 +9787,37 @@ void SimpleInt32ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleInt32ComplexMessageMapMessage::SimpleInt32ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleInt32ComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt32ComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleInt32ComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleInt32ComplexMessageMapMessage::SimpleInt32ComplexMessageMapMessage(const SimpleInt32ComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt32ComplexMessageMapMessage &SimpleInt32ComplexMessageMapMessage::operator =(const SimpleInt32ComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt32ComplexMessageMapMessage::SimpleInt32ComplexMessageMapMessage(SimpleInt32ComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt32ComplexMessageMapMessage &SimpleInt32ComplexMessageMapMessage::operator =(SimpleInt32ComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt32ComplexMessageMapMessage::operator ==(const SimpleInt32ComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt32ComplexMessageMapMessage::operator !=(const SimpleInt32ComplexMessageMapMessage &other) const
@@ -7678,11 +9825,42 @@ bool SimpleInt32ComplexMessageMapMessage::operator !=(const SimpleInt32ComplexMe
     return !this->operator ==(other);
 }
 
+SimpleInt32ComplexMessageMapMessage::MapFieldEntry SimpleInt32ComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt32ComplexMessageMapMessage::MapFieldEntry &SimpleInt32ComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt32ComplexMessageMapMessage::setMapField(const SimpleInt32ComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleInt64ComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleInt64ComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleInt64ComplexMessageMapMessage_QtProtobufData(const SimpleInt64ComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleInt64ComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleInt64ComplexMessageMapMessage::~SimpleInt64ComplexMessageMapMessage() = default;
 
@@ -7732,41 +9910,37 @@ void SimpleInt64ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleInt64ComplexMessageMapMessage::SimpleInt64ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleInt64ComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleInt64ComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleInt64ComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleInt64ComplexMessageMapMessage::SimpleInt64ComplexMessageMapMessage(const SimpleInt64ComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleInt64ComplexMessageMapMessage &SimpleInt64ComplexMessageMapMessage::operator =(const SimpleInt64ComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleInt64ComplexMessageMapMessage::SimpleInt64ComplexMessageMapMessage(SimpleInt64ComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleInt64ComplexMessageMapMessage &SimpleInt64ComplexMessageMapMessage::operator =(SimpleInt64ComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleInt64ComplexMessageMapMessage::operator ==(const SimpleInt64ComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleInt64ComplexMessageMapMessage::operator !=(const SimpleInt64ComplexMessageMapMessage &other) const
@@ -7774,11 +9948,42 @@ bool SimpleInt64ComplexMessageMapMessage::operator !=(const SimpleInt64ComplexMe
     return !this->operator ==(other);
 }
 
+SimpleInt64ComplexMessageMapMessage::MapFieldEntry SimpleInt64ComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleInt64ComplexMessageMapMessage::MapFieldEntry &SimpleInt64ComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleInt64ComplexMessageMapMessage::setMapField(const SimpleInt64ComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt32ComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt32ComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt32ComplexMessageMapMessage_QtProtobufData(const SimpleUInt32ComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt32ComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt32ComplexMessageMapMessage::~SimpleUInt32ComplexMessageMapMessage() = default;
 
@@ -7828,41 +10033,37 @@ void SimpleUInt32ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleUInt32ComplexMessageMapMessage::SimpleUInt32ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleUInt32ComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt32ComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleUInt32ComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt32ComplexMessageMapMessage::SimpleUInt32ComplexMessageMapMessage(const SimpleUInt32ComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt32ComplexMessageMapMessage &SimpleUInt32ComplexMessageMapMessage::operator =(const SimpleUInt32ComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt32ComplexMessageMapMessage::SimpleUInt32ComplexMessageMapMessage(SimpleUInt32ComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt32ComplexMessageMapMessage &SimpleUInt32ComplexMessageMapMessage::operator =(SimpleUInt32ComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt32ComplexMessageMapMessage::operator ==(const SimpleUInt32ComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt32ComplexMessageMapMessage::operator !=(const SimpleUInt32ComplexMessageMapMessage &other) const
@@ -7870,11 +10071,42 @@ bool SimpleUInt32ComplexMessageMapMessage::operator !=(const SimpleUInt32Complex
     return !this->operator ==(other);
 }
 
+SimpleUInt32ComplexMessageMapMessage::MapFieldEntry SimpleUInt32ComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &SimpleUInt32ComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt32ComplexMessageMapMessage::setMapField(const SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleUInt64ComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleUInt64ComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleUInt64ComplexMessageMapMessage_QtProtobufData(const SimpleUInt64ComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleUInt64ComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleUInt64ComplexMessageMapMessage::~SimpleUInt64ComplexMessageMapMessage() = default;
 
@@ -7924,41 +10156,37 @@ void SimpleUInt64ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleUInt64ComplexMessageMapMessage::SimpleUInt64ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleUInt64ComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleUInt64ComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleUInt64ComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleUInt64ComplexMessageMapMessage::SimpleUInt64ComplexMessageMapMessage(const SimpleUInt64ComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleUInt64ComplexMessageMapMessage &SimpleUInt64ComplexMessageMapMessage::operator =(const SimpleUInt64ComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleUInt64ComplexMessageMapMessage::SimpleUInt64ComplexMessageMapMessage(SimpleUInt64ComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleUInt64ComplexMessageMapMessage &SimpleUInt64ComplexMessageMapMessage::operator =(SimpleUInt64ComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleUInt64ComplexMessageMapMessage::operator ==(const SimpleUInt64ComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleUInt64ComplexMessageMapMessage::operator !=(const SimpleUInt64ComplexMessageMapMessage &other) const
@@ -7966,11 +10194,42 @@ bool SimpleUInt64ComplexMessageMapMessage::operator !=(const SimpleUInt64Complex
     return !this->operator ==(other);
 }
 
+SimpleUInt64ComplexMessageMapMessage::MapFieldEntry SimpleUInt64ComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &SimpleUInt64ComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleUInt64ComplexMessageMapMessage::setMapField(const SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed32ComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed32ComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed32ComplexMessageMapMessage_QtProtobufData(const SimpleFixed32ComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed32ComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed32ComplexMessageMapMessage::~SimpleFixed32ComplexMessageMapMessage() = default;
 
@@ -8020,41 +10279,37 @@ void SimpleFixed32ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleFixed32ComplexMessageMapMessage::SimpleFixed32ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleFixed32ComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed32ComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleFixed32ComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed32ComplexMessageMapMessage::SimpleFixed32ComplexMessageMapMessage(const SimpleFixed32ComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed32ComplexMessageMapMessage &SimpleFixed32ComplexMessageMapMessage::operator =(const SimpleFixed32ComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed32ComplexMessageMapMessage::SimpleFixed32ComplexMessageMapMessage(SimpleFixed32ComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed32ComplexMessageMapMessage &SimpleFixed32ComplexMessageMapMessage::operator =(SimpleFixed32ComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed32ComplexMessageMapMessage::operator ==(const SimpleFixed32ComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed32ComplexMessageMapMessage::operator !=(const SimpleFixed32ComplexMessageMapMessage &other) const
@@ -8062,11 +10317,42 @@ bool SimpleFixed32ComplexMessageMapMessage::operator !=(const SimpleFixed32Compl
     return !this->operator ==(other);
 }
 
+SimpleFixed32ComplexMessageMapMessage::MapFieldEntry SimpleFixed32ComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &SimpleFixed32ComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed32ComplexMessageMapMessage::setMapField(const SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleFixed64ComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleFixed64ComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleFixed64ComplexMessageMapMessage_QtProtobufData(const SimpleFixed64ComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleFixed64ComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleFixed64ComplexMessageMapMessage::~SimpleFixed64ComplexMessageMapMessage() = default;
 
@@ -8116,41 +10402,37 @@ void SimpleFixed64ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleFixed64ComplexMessageMapMessage::SimpleFixed64ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleFixed64ComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleFixed64ComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleFixed64ComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleFixed64ComplexMessageMapMessage::SimpleFixed64ComplexMessageMapMessage(const SimpleFixed64ComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleFixed64ComplexMessageMapMessage &SimpleFixed64ComplexMessageMapMessage::operator =(const SimpleFixed64ComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleFixed64ComplexMessageMapMessage::SimpleFixed64ComplexMessageMapMessage(SimpleFixed64ComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleFixed64ComplexMessageMapMessage &SimpleFixed64ComplexMessageMapMessage::operator =(SimpleFixed64ComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleFixed64ComplexMessageMapMessage::operator ==(const SimpleFixed64ComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleFixed64ComplexMessageMapMessage::operator !=(const SimpleFixed64ComplexMessageMapMessage &other) const
@@ -8158,11 +10440,42 @@ bool SimpleFixed64ComplexMessageMapMessage::operator !=(const SimpleFixed64Compl
     return !this->operator ==(other);
 }
 
+SimpleFixed64ComplexMessageMapMessage::MapFieldEntry SimpleFixed64ComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &SimpleFixed64ComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleFixed64ComplexMessageMapMessage::setMapField(const SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed32ComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed32ComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed32ComplexMessageMapMessage_QtProtobufData(const SimpleSFixed32ComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed32ComplexMessageMapMessage::~SimpleSFixed32ComplexMessageMapMessage() = default;
 
@@ -8212,41 +10525,37 @@ void SimpleSFixed32ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleSFixed32ComplexMessageMapMessage::SimpleSFixed32ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleSFixed32ComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed32ComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleSFixed32ComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed32ComplexMessageMapMessage::SimpleSFixed32ComplexMessageMapMessage(const SimpleSFixed32ComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed32ComplexMessageMapMessage &SimpleSFixed32ComplexMessageMapMessage::operator =(const SimpleSFixed32ComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed32ComplexMessageMapMessage::SimpleSFixed32ComplexMessageMapMessage(SimpleSFixed32ComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed32ComplexMessageMapMessage &SimpleSFixed32ComplexMessageMapMessage::operator =(SimpleSFixed32ComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed32ComplexMessageMapMessage::operator ==(const SimpleSFixed32ComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed32ComplexMessageMapMessage::operator !=(const SimpleSFixed32ComplexMessageMapMessage &other) const
@@ -8254,11 +10563,42 @@ bool SimpleSFixed32ComplexMessageMapMessage::operator !=(const SimpleSFixed32Com
     return !this->operator ==(other);
 }
 
+SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry SimpleSFixed32ComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &SimpleSFixed32ComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed32ComplexMessageMapMessage::setMapField(const SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleSFixed64ComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleSFixed64ComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleSFixed64ComplexMessageMapMessage_QtProtobufData(const SimpleSFixed64ComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleSFixed64ComplexMessageMapMessage::~SimpleSFixed64ComplexMessageMapMessage() = default;
 
@@ -8308,41 +10648,37 @@ void SimpleSFixed64ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleSFixed64ComplexMessageMapMessage::SimpleSFixed64ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleSFixed64ComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleSFixed64ComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleSFixed64ComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleSFixed64ComplexMessageMapMessage::SimpleSFixed64ComplexMessageMapMessage(const SimpleSFixed64ComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleSFixed64ComplexMessageMapMessage &SimpleSFixed64ComplexMessageMapMessage::operator =(const SimpleSFixed64ComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleSFixed64ComplexMessageMapMessage::SimpleSFixed64ComplexMessageMapMessage(SimpleSFixed64ComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleSFixed64ComplexMessageMapMessage &SimpleSFixed64ComplexMessageMapMessage::operator =(SimpleSFixed64ComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleSFixed64ComplexMessageMapMessage::operator ==(const SimpleSFixed64ComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleSFixed64ComplexMessageMapMessage::operator !=(const SimpleSFixed64ComplexMessageMapMessage &other) const
@@ -8350,11 +10686,42 @@ bool SimpleSFixed64ComplexMessageMapMessage::operator !=(const SimpleSFixed64Com
     return !this->operator ==(other);
 }
 
+SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry SimpleSFixed64ComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &SimpleSFixed64ComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleSFixed64ComplexMessageMapMessage::setMapField(const SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
+
+
+class SimpleStringComplexMessageMapMessage_QtProtobufData : public QSharedData
+{
+public:
+    SimpleStringComplexMessageMapMessage_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    SimpleStringComplexMessageMapMessage_QtProtobufData(const SimpleStringComplexMessageMapMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_mapField(other.m_mapField)
+    {
+    }
+
+    SimpleStringComplexMessageMapMessage::MapFieldEntry m_mapField;
+};
 
 SimpleStringComplexMessageMapMessage::~SimpleStringComplexMessageMapMessage() = default;
 
@@ -8404,41 +10771,37 @@ void SimpleStringComplexMessageMapMessage::registerTypes()
 }
 
 SimpleStringComplexMessageMapMessage::SimpleStringComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleStringComplexMessageMapMessage::staticMetaObject)
+    : QProtobufMessage(&SimpleStringComplexMessageMapMessage::staticMetaObject),
+      dptr(new SimpleStringComplexMessageMapMessage_QtProtobufData)
 {
 }
 
 SimpleStringComplexMessageMapMessage::SimpleStringComplexMessageMapMessage(const SimpleStringComplexMessageMapMessage &other)
     : QProtobufMessage(other),
-      m_mapField(other.m_mapField)
+      dptr(other.dptr)
 {
 }
-
 SimpleStringComplexMessageMapMessage &SimpleStringComplexMessageMapMessage::operator =(const SimpleStringComplexMessageMapMessage &other)
 {
     QProtobufMessage::operator=(other);
-    setMapField(other.m_mapField);
+    dptr = other.dptr;
     return *this;
 }
-
 SimpleStringComplexMessageMapMessage::SimpleStringComplexMessageMapMessage(SimpleStringComplexMessageMapMessage &&other) noexcept
-    : QProtobufMessage(std::move(other))
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
 {
-    m_mapField = std::move(other.m_mapField);
 }
-
 SimpleStringComplexMessageMapMessage &SimpleStringComplexMessageMapMessage::operator =(SimpleStringComplexMessageMapMessage &&other) noexcept
 {
     QProtobufMessage::operator=(std::move(other));
-    if (m_mapField != other.m_mapField)
-        m_mapField = std::move(other.m_mapField);
+    dptr.swap(other.dptr);
     return *this;
 }
-
 bool SimpleStringComplexMessageMapMessage::operator ==(const SimpleStringComplexMessageMapMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(m_mapField, other.m_mapField);
+        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
 }
 
 bool SimpleStringComplexMessageMapMessage::operator !=(const SimpleStringComplexMessageMapMessage &other) const
@@ -8446,10 +10809,23 @@ bool SimpleStringComplexMessageMapMessage::operator !=(const SimpleStringComplex
     return !this->operator ==(other);
 }
 
+SimpleStringComplexMessageMapMessage::MapFieldEntry SimpleStringComplexMessageMapMessage::mapField() const
+{
+    return dptr->m_mapField;
+}
+
+SimpleStringComplexMessageMapMessage::MapFieldEntry &SimpleStringComplexMessageMapMessage::mapField()
+{
+    dptr.detach();
+    return dptr->m_mapField;
+}
+
 void SimpleStringComplexMessageMapMessage::setMapField(const SimpleStringComplexMessageMapMessage::MapFieldEntry &mapField)
 {
-    if (m_mapField != mapField)
-        m_mapField = mapField;
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = mapField;
+    }
 }
 
 } // namespace qtprotobufnamespace::tests

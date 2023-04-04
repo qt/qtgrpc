@@ -214,6 +214,7 @@ TypeMap common::produceMessageTypeMap(const Descriptor *type, const Descriptor *
 
     const std::string initializer = "nullptr";
     return { { "classname", name },
+             { "dataclassname", name + CommonTemplates::DataClassName() },
              { "classname_low_case", utils::deCapitalizeAsciiName(type->name()) },
              { "type", name },
              { "full_type", fullName },
@@ -467,6 +468,7 @@ PropertyMap common::producePropertyMap(const OneofDescriptor *oneof, const Descr
     propertyMap["optional_property_name_cap"] = utils::capitalizeAsciiName(oneof->name());
     auto scopeTypeMap = produceMessageTypeMap(scope, nullptr);
     propertyMap["classname"] = scope != nullptr ? scopeTypeMap["classname"] : "";
+    propertyMap["dataclassname"] = propertyMap["classname"] + CommonTemplates::DataClassName();
     propertyMap["type"] = propertyMap["optional_property_name_cap"] + "Fields";
 
     return propertyMap;
@@ -498,6 +500,7 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
     propertyMap["key_type"] = "";
     propertyMap["value_type"] = "";
     propertyMap["classname"] = scope != nullptr ? scopeTypeMap["classname"] : "";
+    propertyMap["dataclassname"] = propertyMap["classname"] + CommonTemplates::DataClassName();
     propertyMap["number"] = std::to_string(field->number());
 
     if (common::isOneofField(field)) {
