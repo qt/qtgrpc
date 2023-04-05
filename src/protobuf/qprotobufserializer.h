@@ -207,9 +207,15 @@ void deserializeObject(const QProtobufSerializer *serializer, QProtobufSelfcheck
                        QVariant &to)
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
-    auto value = std::make_unique<T>();
-    if (serializer->deserializeObject(value.get(), T::propertyOrdering, it))
-        to = QVariant::fromValue<T *>(value.release());
+    Q_ASSERT_X(to.isNull() || to.metaType() == QMetaType::fromType<T *>(), "QProtobufSerializer",
+               "Property should be either uninitialized or contain a valid pointer");
+
+    T *value = to.value<T *>();
+    if (value == nullptr) {
+        value = new T;
+        to = QVariant::fromValue<T *>(value);
+    }
+    serializer->deserializeObject(value, T::propertyOrdering, it);
 }
 
 /*!
