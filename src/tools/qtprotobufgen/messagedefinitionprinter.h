@@ -19,6 +19,7 @@ public:
 
     void printClassDefinition();
     void printClassRegistration(::google::protobuf::io::Printer *printer);
+    void printQmlPluginClassRegistration();
 
 private:
     void printRegisterBody();

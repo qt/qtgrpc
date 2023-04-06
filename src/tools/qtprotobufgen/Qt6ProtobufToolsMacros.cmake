@@ -174,7 +174,7 @@ endfunction()
 function(_qt_internal_protobuf_preparse_proto_files
     out_proto_files out_proto_includes out_generated_files base_dir)
 
-    cmake_parse_arguments(arg "GENERATE_PACKAGE_SUBFOLDERS" "" "PROTO_FILES" ${ARGN})
+    cmake_parse_arguments(arg "GENERATE_PACKAGE_SUBFOLDERS;QML" "" "PROTO_FILES" ${ARGN})
 
     unset(proto_files)
     unset(proto_includes)
@@ -208,6 +208,9 @@ function(_qt_internal_protobuf_preparse_proto_files
             "${folder_path}${basename}.qpb.cpp"
             "${folder_path}${basename}_protobuftyperegistrations.cpp"
         )
+        if(arg_QML)
+            list(APPEND output_files "${folder_path}${basename}plugin.cpp")
+        endif()
     endforeach()
     list(REMOVE_DUPLICATES proto_files)
     list(REMOVE_DUPLICATES proto_includes)
@@ -256,9 +259,16 @@ function(qt6_add_protobuf target)
     if(arg_GENERATE_PACKAGE_SUBFOLDERS)
         list(APPEND extra_pre_parse_options "GENERATE_PACKAGE_SUBFOLDERS")
     endif()
+
+    if(arg_QML)
+        set(arg_QML QML)
+    else()
+        set(arg_QML "")
+    endif()
     _qt_internal_protobuf_preparse_proto_files(proto_files proto_includes generated_files
         "${base_dir}"
         ${extra_pre_parse_options}
+        ${arg_QML}
         PROTO_FILES
             ${arg_PROTO_FILES}
     )

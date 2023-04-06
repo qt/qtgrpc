@@ -19,6 +19,7 @@ public:
     void run() { printRegisterBody(); }
 
     void printRegisterBody();
+    void printQmlPluginRegisterBody();
 };
 
 } // namespace QtProtobuf

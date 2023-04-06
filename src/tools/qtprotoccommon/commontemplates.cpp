@@ -854,10 +854,23 @@ const char *CommonTemplates::QmlRegisterTypeTemplate()
 {
     return "qmlRegisterType<$scope_type$>(\"$qml_package$\", 1, 0, \"$type$\");\n";
 }
-const char *CommonTemplates::QmlRegisterTypeEnumTemplate()
+
+const char *CommonTemplates::QmlRegisterGlobalEnumTypeTemplate()
 {
-    return "qmlRegisterUncreatableType<$enum_gadget$>(\"$qml_package$\", 1, 0, \"$type$\", "
-           "QStringLiteral(\"$full_type$ Could not be created from qml context\"));\n";
+    return "    qmlRegisterUncreatableMetaObject(\n"
+           "        $scope_namespaces$::staticMetaObject,\n"
+           "        uri, 1, 0, \"$type$\", "
+           "\"You can only use the nested enums of $type$, "
+           "but not create its instances in QML scope.\");\n";
+}
+
+const char *CommonTemplates::QmlRegisterMessageTypeTemplate()
+{
+    return "    qmlRegisterUncreatableMetaObject(\n"
+           "        $full_type$::staticMetaObject,\n"
+           "        uri, 1, 0, \"$type$\", "
+           "\"You can only use the nested enums of $type$, "
+           "but not create its instances in QML scope.\");\n";
 }
 
 const char *CommonTemplates::RepeatedSuffix()
@@ -936,3 +949,30 @@ const char *CommonTemplates::ExportMacroTemplate()
            "#endif\n";
 }
 
+const char *CommonTemplates::QmlExtensionPluginClass()
+{
+    return "\nclass QPB_$export_macro$_EXPORT $plugin_name$Plugin : public QQmlExtensionPlugin\n";
+}
+
+const char *CommonTemplates::QmlExtensionPluginClassNoExport()
+{
+    return "\nclass $plugin_name$Plugin : public QQmlExtensionPlugin\n";
+}
+
+const char *CommonTemplates::QmlExtensionPluginClassBody()
+{
+    return "{\n"
+           "    Q_OBJECT\n"
+           "    Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)\n\n"
+           "public:\n"
+           "    $plugin_name$Plugin(QObject *parent = 0) : QQmlExtensionPlugin(parent) { }\n\n"
+           "    void registerTypes(const char *uri) override\n"
+           "    {\n"
+           "        Q_ASSERT(uri == QLatin1String(\"$qml_package$\"));\n"
+           "        qmlRegisterModule(uri, 1, 0);\n";
+}
+
+const char *CommonTemplates::MocIncludeTemplate()
+{
+    return "#include \"$source_file$\"\n";
+}

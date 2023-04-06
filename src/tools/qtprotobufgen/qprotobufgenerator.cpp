@@ -39,7 +39,8 @@ bool QProtobufGenerator::Generate(const FileDescriptor *file,
                                   GeneratorContext *generatorContext,
                                   std::string *error) const
 {
-    assert(file != nullptr && generatorContext != nullptr);
+    assert(file != nullptr);
+    assert(generatorContext != nullptr);
 
     if (file->syntax() != FileDescriptor::SYNTAX_PROTO3) {
         *error = "Invalid proto used. qtprotobufgen only supports 'proto3' syntax";
@@ -52,7 +53,8 @@ bool QProtobufGenerator::Generate(const FileDescriptor *file,
 void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
                                          GeneratorContext *generatorContext) const
 {
-    assert(file != nullptr && generatorContext != nullptr);
+    assert(file != nullptr);
+    assert(generatorContext != nullptr);
 
     std::string filename = utils::extractFileBasename(file->name());
     std::string basename = generateBaseName(file, filename);
@@ -63,6 +65,10 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
 
     std::shared_ptr<Printer> sourcePrinter(new Printer(sourceStream.get(), '$'));
     std::shared_ptr<Printer> registrationPrinter(new Printer(registrationStream.get(), '$'));
+
+    if (Options::instance().hasQml()) {
+        GenerateQmlPluginSource(file, generatorContext);
+    }
 
     printDisclaimer(sourcePrinter.get());
     sourcePrinter->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
@@ -77,7 +83,7 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
     sourcePrinter->Print({{"include", "QtProtobuf/qprotobufserializer.h"}},
                          CommonTemplates::ExternalIncludeTemplate());
     if (Options::instance().hasQml()) {
-        sourcePrinter->Print({{"include", "QtQml/QQmlEngine"}},
+        sourcePrinter->Print({{"include", "QtQml/qqmlengine.h"}},
                              CommonTemplates::ExternalIncludeTemplate());
     }
 
@@ -101,15 +107,77 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
     CloseFileNamespaces(file, sourcePrinter.get());
 
     // Include the moc file:
-    sourcePrinter->Print({{"source_file", filename + CommonTemplates::ProtoFileSuffix()}},
-                         "#include \"moc_$source_file$.cpp\"\n");
+    sourcePrinter->Print({{"source_file",
+                           "moc_" + filename + CommonTemplates::ProtoFileSuffix() + ".cpp"}},
+                         CommonTemplates::MocIncludeTemplate());
 
+}
+
+void QProtobufGenerator::GenerateQmlPluginSource(const FileDescriptor *file,
+                                                 GeneratorContext *context) const
+{
+    assert(file != nullptr);
+    assert(context != nullptr);
+    std::string filename = utils::extractFileBasename(file->name());
+    std::string basename = generateBaseName(file, filename);
+    std::string pluginName = utils::capitalizeAsciiName(basename);
+    std::string qmlPackageUri = file->package();
+
+    std::unique_ptr<io::ZeroCopyOutputStream> qmlPluginStream(
+            context->Open(basename + "plugin.cpp"));
+    std::shared_ptr<Printer> registrationPluginPrinter(new Printer(qmlPluginStream.get(), '$'));
+
+    printDisclaimer(registrationPluginPrinter.get());
+
+    registrationPluginPrinter->Print({{"include", "QtQml/qqmlextensionplugin.h"}},
+                                     CommonTemplates::ExternalIncludeTemplate());
+    registrationPluginPrinter->Print({{"include", "QtQml/qqml.h"}},
+                                     CommonTemplates::ExternalIncludeTemplate());
+    registrationPluginPrinter->Print({{"include", "QtQml/qqmlengine.h"}},
+                                     CommonTemplates::ExternalIncludeTemplate());
+    registrationPluginPrinter->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
+                                     CommonTemplates::InternalIncludeTemplate());
+    if (Options::instance().exportMacro().empty()) {
+        registrationPluginPrinter->Print({{"plugin_name", pluginName}},
+                                         CommonTemplates::QmlExtensionPluginClassNoExport());
+    } else {
+        registrationPluginPrinter->Print({{"export_macro", Options::instance().exportMacro()},
+                                          {"plugin_name", pluginName}},
+                                         CommonTemplates::QmlExtensionPluginClass());
+    }
+    registrationPluginPrinter->Print({{"plugin_name", pluginName},
+                                      {"qml_package", qmlPackageUri}},
+                                     CommonTemplates::QmlExtensionPluginClassBody());
+
+    common::iterateMessages(file, [&registrationPluginPrinter](const Descriptor *message) {
+        if (message->enum_type_count() > 0) {
+            MessageDefinitionPrinter messageDefinition(message, registrationPluginPrinter);
+            messageDefinition.printQmlPluginClassRegistration();
+        }
+    });
+
+    for (int i = 0; i < file->enum_type_count(); ++i) {
+        EnumDefinitionPrinter enumSourceDefinition(file->enum_type(i),
+                                                   registrationPluginPrinter);
+        enumSourceDefinition.printQmlPluginRegisterBody();
+    }
+
+    registrationPluginPrinter->Indent();
+    registrationPluginPrinter->Indent();
+    registrationPluginPrinter->Print(CommonTemplates::SimpleBlockEnclosureTemplate());
+    registrationPluginPrinter->Outdent();
+    registrationPluginPrinter->Outdent();
+    registrationPluginPrinter->Print(CommonTemplates::SemicolonBlockEnclosureTemplate());
+    // Include the moc file:
+    registrationPluginPrinter->Print({{"source_file", filename + "plugin.moc"}},
+                                     CommonTemplates::MocIncludeTemplate());
 }
 
 void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
                                         GeneratorContext *generatorContext) const
 {
-    assert(file != nullptr && generatorContext != nullptr);
+    assert(file != nullptr);
+    assert(generatorContext != nullptr);
 
     std::string filename = utils::extractFileBasename(file->name());
     std::string basename = generateBaseName(file, filename);
@@ -234,7 +302,8 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
 bool QProtobufGenerator::GenerateMessages(const FileDescriptor *file,
                                           GeneratorContext *generatorContext) const
 {
-    assert(file != nullptr && generatorContext != nullptr);
+    assert(file != nullptr);
+    assert(generatorContext != nullptr);
 
     if (file->message_type_count() <= 0 && file->enum_type_count() <= 0) {
         return false;

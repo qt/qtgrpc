@@ -2,3 +2,4 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 add_subdirectory(basic)
+add_subdirectory(enums)

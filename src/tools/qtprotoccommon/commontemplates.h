@@ -173,7 +173,8 @@ public:
     static const char *RegistrarTemplate();
     static const char *RegistrarEnumTemplate();
     static const char *QmlRegisterTypeTemplate();
-    static const char *QmlRegisterTypeEnumTemplate();
+    static const char *QmlRegisterGlobalEnumTypeTemplate();
+    static const char *QmlRegisterMessageTypeTemplate();
 
     static const char *RepeatedSuffix();
     static const char *ProtoFileSuffix();
@@ -190,7 +191,11 @@ public:
     static const char *QtProtobufFieldEnum();
 
     static const char *ExportMacroTemplate();
+    static const char *QmlExtensionPluginClass();
+    static const char *QmlExtensionPluginClassNoExport();
+    static const char *QmlExtensionPluginClassBody();
     static const char *QObjectConstructorMessageDeclarationTemplate();
+    static const char *MocIncludeTemplate();
 };
 
 } // namespace qtprotoccommon

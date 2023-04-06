@@ -74,7 +74,6 @@ void MessageDefinitionPrinter::printRegisterBody()
 
     if (Options::instance().hasQml()) {
         m_printer->Print(m_typeMap, CommonTemplates::MetaTypeRegistrationQmlListTemplate());
-        m_printer->Print(m_typeMap, CommonTemplates::QmlRegisterTypeTemplate());
     }
 
     common::iterateMessageFields(
@@ -535,4 +534,11 @@ void MessageDefinitionPrinter::printClassRegistration(Printer *printer)
     }
 
     printer->Print(m_typeMap, CommonTemplates::RegistrarTemplate());
+}
+
+void MessageDefinitionPrinter::printQmlPluginClassRegistration()
+{
+    Indent();
+    m_printer->Print(m_typeMap, CommonTemplates::QmlRegisterMessageTypeTemplate());
+    Outdent();
 }
