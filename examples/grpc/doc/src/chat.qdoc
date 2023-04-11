@@ -4,7 +4,7 @@
 /*!
     \example chat
     \ingroup qtgrpc-examples
-    \meta category {Networking}
+    \examplecategory {Networking}
     \meta tag {network,protobuf,grpc,serialization,tcp}
     \title Chat
 

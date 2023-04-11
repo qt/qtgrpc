@@ -4,7 +4,7 @@
 /*!
     \example magic8ball
     \ingroup qtgrpc-examples
-    \meta category {Networking}
+    \examplecategory {Networking}
     \meta tag {network,protobuf,grpc}
     \title Magic 8 Ball
 

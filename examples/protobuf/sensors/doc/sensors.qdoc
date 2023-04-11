@@ -5,7 +5,7 @@
     \example sensors
     \ingroup qtprotobuf-examples
     \meta tag {network,protobuf,serialization,udp}
-    \meta category {Networking}
+    \examplecategory {Networking}
     \title Sensors
 
     \brief The Sensors example shows how two applications can communicate by
