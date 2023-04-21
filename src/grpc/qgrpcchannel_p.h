@@ -95,12 +95,13 @@ struct QGrpcChannelPrivate
                                  const QStringList &credentialsList);
     ~QGrpcChannelPrivate();
 
-    std::shared_ptr<QGrpcCallReply> call(QAbstractGrpcClient *client, QLatin1StringView method,
-                                         QLatin1StringView service, QByteArrayView args);
+    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
+                                         QByteArrayView args);
     QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
                      QByteArray &ret);
-    std::shared_ptr<QGrpcStream> startStream(QAbstractGrpcClient *client, QLatin1StringView method,
-                                             QLatin1StringView service, QByteArrayView arg);
+    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QLatin1StringView service,
+                                             QByteArrayView arg);
+    std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 };
 
 QT_END_NAMESPACE

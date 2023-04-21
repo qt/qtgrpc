@@ -251,12 +251,11 @@ QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView 
     The method can emit QGrpcCallReply::finished() and QGrpcCallReply::errorOccurred()
     signals on a QGrpcCallReply returned object.
 */
-std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QAbstractGrpcClient *client,
-                                                        QLatin1StringView method,
+std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QLatin1StringView method,
                                                         QLatin1StringView service,
                                                         QByteArrayView args)
 {
-    std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(client),
+    std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(serializer()),
                                           [](QGrpcCallReply *reply) { reply->deleteLater(); });
 
     QNetworkReply *networkReply = dPtr->post(method, service, args);
@@ -303,20 +302,18 @@ std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QAbstractGrpcClient *cli
 
     The RPC method name is constructed by concatenating the \a method
     and \a service parameters and called with the \a arg argument.
-    Returns a shared pointer to the QGrpcStream, which was created with the \a client
-    object.
+    Returns a shared pointer to the QGrpcStream.
 
     Calls QGrpcStream::handler() when the stream receives data from the server.
     The method may emit QGrpcStream::errorOccurred() when the stream has terminated with an error.
 */
-std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QAbstractGrpcClient *client,
-                                                            QLatin1StringView method,
+std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView method,
                                                             QLatin1StringView service,
                                                             QByteArrayView arg)
 {
     QNetworkReply *networkReply = dPtr->post(method, service, arg, true);
 
-    std::shared_ptr<QGrpcStream> grpcStream(new QGrpcStream(method, arg, client));
+    std::shared_ptr<QGrpcStream> grpcStream(new QGrpcStream(method, arg, serializer()));
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
     auto readConnection = std::make_shared<QMetaObject::Connection>();
@@ -380,7 +377,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QAbstractGrpcClient 
     *finishConnection = QObject::connect(
             networkReply, &QNetworkReply::finished, grpcStream.get(),
             [weakGrpcStream, service, networkReply, abortConnection, readConnection,
-             finishConnection, client, this]() {
+             finishConnection, this]() {
                 const QString errorString = networkReply->errorString();
                 const QNetworkReply::NetworkError networkError = networkReply->error();
                 QObject::disconnect(*readConnection);
@@ -401,7 +398,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QAbstractGrpcClient 
                 case QNetworkReply::RemoteHostClosedError:
                     qGrpcDebug() << "Remote server closed connection. Reconnect silently.";
 
-                    this->startStream(client, grpcStream->method(), service, grpcStream->arg());
+                    this->startStream(grpcStream->method(), service, grpcStream->arg());
                     break;
                 case QNetworkReply::NoError: {
                     // Reply is closed without network error, but may contain an unhandled data

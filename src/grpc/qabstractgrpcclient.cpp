@@ -165,7 +165,7 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
     Q_D(QAbstractGrpcClient);
 
     if (d->channel) {
-        reply = d->channel->call(this, method, QLatin1StringView(d->service), arg);
+        reply = d->channel->call(method, QLatin1StringView(d->service), arg);
 
         auto errorConnection = std::make_shared<QMetaObject::Connection>();
         *errorConnection =
@@ -193,7 +193,7 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
     Q_D(QAbstractGrpcClient);
 
     if (d->channel) {
-        grpcStream = d->channel->startStream(this, method, QLatin1StringView(d->service), arg);
+        grpcStream = d->channel->startStream(method, QLatin1StringView(d->service), arg);
 
         auto errorConnection = std::make_shared<QMetaObject::Connection>();
         *errorConnection = connect(grpcStream.get(), &QGrpcStream::errorOccurred, this,

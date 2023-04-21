@@ -112,8 +112,6 @@ protected:
         });
     }
 
-    friend class QGrpcOperation;
-
 private:
     QGrpcStatus call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret);
 

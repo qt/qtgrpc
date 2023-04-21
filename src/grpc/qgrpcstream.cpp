@@ -22,8 +22,10 @@ QT_BEGIN_NAMESPACE
     The signal is emitted when the stream receives an updated value from server.
 */
 
-QGrpcStream::QGrpcStream(QLatin1StringView method, QByteArrayView arg, QAbstractGrpcClient *client)
-    : QGrpcOperation(client), m_method(method.data(), method.size()), m_arg(arg.toByteArray())
+QGrpcStream::QGrpcStream(QLatin1StringView method, QByteArrayView arg,
+                         std::shared_ptr<QAbstractProtobufSerializer> serializer)
+    : QGrpcOperation(std::move(serializer)), m_method(method.data(), method.size()),
+      m_arg(arg.toByteArray())
 {
 }
 

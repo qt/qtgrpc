@@ -27,12 +27,10 @@ class Q_GRPC_EXPORT QAbstractGrpcChannel
 public:
     virtual QGrpcStatus call(QLatin1StringView method, QLatin1StringView service,
                              QByteArrayView args, QByteArray &ret) = 0;
-    virtual std::shared_ptr<QGrpcCallReply> call(QAbstractGrpcClient *client,
-                                                 QLatin1StringView method,
+    virtual std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method,
                                                  QLatin1StringView service,
                                                  QByteArrayView args) = 0;
-    virtual std::shared_ptr<QGrpcStream> startStream(QAbstractGrpcClient *client,
-                                                     QLatin1StringView method,
+    virtual std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method,
                                                      QLatin1StringView service,
                                                      QByteArrayView arg) = 0;
     virtual std::shared_ptr<QAbstractProtobufSerializer> serializer() const = 0;

@@ -53,7 +53,10 @@ using namespace Qt::StringLiterals;
     \endcode
 */
 
-QGrpcCallReply::QGrpcCallReply(QAbstractGrpcClient *client) : QGrpcOperation(client) { }
+QGrpcCallReply::QGrpcCallReply(std::shared_ptr<QAbstractProtobufSerializer> serializer)
+    : QGrpcOperation(std::move(serializer))
+{
+}
 
 QGrpcCallReply::~QGrpcCallReply() = default;
 

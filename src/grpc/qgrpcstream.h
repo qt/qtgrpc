@@ -24,7 +24,8 @@ class Q_GRPC_EXPORT QGrpcStream final : public QGrpcOperation
 public:
     using StreamHandler = std::function<void(const QByteArray &)>;
 
-    explicit QGrpcStream(QLatin1StringView method, QByteArrayView arg, QAbstractGrpcClient *client);
+    explicit QGrpcStream(QLatin1StringView method, QByteArrayView arg,
+                         std::shared_ptr<QAbstractProtobufSerializer> serializer);
     ~QGrpcStream() override;
 
     void abort() override;

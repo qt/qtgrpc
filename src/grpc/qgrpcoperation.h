@@ -6,8 +6,9 @@
 #define QGRPCOPERATION_H
 
 #include <QtCore/QObject>
-#include <QtGrpc/qabstractgrpcclient.h>
+#include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
+#include <QtProtobuf/qabstractprotobufserializer.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -21,8 +22,8 @@ public:
     T read() const
     {
         T value;
-        if (client())
-            client()->tryDeserialize(&value, data());
+        if (auto ser = serializer(); ser)
+            ser->deserialize(&value, data());
         return value;
     }
 
@@ -36,16 +37,14 @@ Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status);
 
 protected:
-    explicit QGrpcOperation(QAbstractGrpcClient *client);
+    explicit QGrpcOperation(std::shared_ptr<QAbstractProtobufSerializer> serializer);
     ~QGrpcOperation() override;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
 
-    friend class QAbstractGrpcClient;
-
     QByteArray data() const;
-    QAbstractGrpcClient *client() const;
+    std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 
     Q_DECLARE_PRIVATE(QGrpcOperation)
 };

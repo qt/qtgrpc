@@ -32,15 +32,13 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QAbstractGrpcClient *client,
-                                                                        QLatin1StringView method,
+    \fn virtual std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView method,
                                                                         QLatin1StringView service,
                                                                         QByteArrayView args) = 0
 
     This pure virtual function asynchronously calls the RPC method combined
     with the \a method and \a service parameters with the given \a args
-    and returns an asynchronous response in the form of QGrpcCallReply,
-    which uses the \a client to deserialize messages.
+    and returns an asynchronous response in the form of QGrpcCallReply.
 
     You may reimplement this function in a subclass to define your own call
     mechanism behavior. QGrpcChannel or QGrpcHttp2Channel, which are full
@@ -48,8 +46,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual std::shared_ptr<QGrpcStream> QAbstractGrpcChannel::startStream(QAbstractGrpcClient *client,
-                                                     QLatin1StringView method,
+    \fn virtual std::shared_ptr<QGrpcStream> QAbstractGrpcChannel::startStream(QLatin1StringView method,
                                                      QLatin1StringView service,
                                                      QByteArrayView arg) = 0
 
@@ -57,8 +54,7 @@ QT_BEGIN_NAMESPACE
 
     The RPC method name is constructed by concatenating the \a method
     and \a service parameters and called with the \a arg argument.
-    Returns a shared pointer to the QGrpcStream, which was created with the \a client
-    object.
+    Returns a shared pointer to the QGrpcStream.
 
     You may reimplement this function in a subclass to define your own stream
     mechanism behavior. QGrpcChannel or QGrpcHttp2Channel, which are full
@@ -71,8 +67,8 @@ QT_BEGIN_NAMESPACE
     This pure virtual function shall return a shared pointer
     to QAbstractProtobufSerializer.
 
-    This function is called to obtain the QAbstractProtobufSerializer used by
-    QAbstractGrpcClient to perform serialization and deserialization of the message.
+    This function is called to obtain the QAbstractProtobufSerializer used
+    to perform serialization and deserialization of the message.
 */
 
 QAbstractGrpcChannel::QAbstractGrpcChannel() : dPtr(std::make_unique<QAbstractGrpcChannelPrivate>())

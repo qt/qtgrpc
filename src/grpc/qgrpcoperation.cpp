@@ -49,13 +49,17 @@ class QGrpcOperationPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGrpcOperation)
 public:
-    QGrpcOperationPrivate(QAbstractGrpcClient *_client) : client(_client) { }
-    QPointer<QAbstractGrpcClient> client;
+    QGrpcOperationPrivate(std::shared_ptr<QAbstractProtobufSerializer> _serializer)
+        : serializer(std::move(_serializer))
+    {
+    }
+
     QByteArray data;
+    std::shared_ptr<QAbstractProtobufSerializer> serializer;
 };
 
-QGrpcOperation::QGrpcOperation(QAbstractGrpcClient *client)
-    : QObject(*new QGrpcOperationPrivate(client))
+QGrpcOperation::QGrpcOperation(std::shared_ptr<QAbstractProtobufSerializer> serializer)
+    : QObject(*new QGrpcOperationPrivate(std::move(serializer)))
 {
 }
 
@@ -96,12 +100,11 @@ QByteArray QGrpcOperation::data() const
 
 /*!
     \internal
-    Allows access to the client that is the formal owner of this
-    QGrpcOperation.
+    Getter of the serializer that QGrpcOperation was constructed with.
 */
-QAbstractGrpcClient *QGrpcOperation::client() const
+std::shared_ptr<QAbstractProtobufSerializer> QGrpcOperation::serializer() const
 {
-    return d_func()->client.get();
+    return d_func()->serializer;
 }
 
 QT_END_NAMESPACE

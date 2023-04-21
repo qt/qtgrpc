@@ -5,7 +5,6 @@
 #ifndef QGRPCCALLREPLY_H
 #define QGRPCCALLREPLY_H
 
-#include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
@@ -16,7 +15,7 @@ class Q_GRPC_EXPORT QGrpcCallReply final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcCallReply(QAbstractGrpcClient *client);
+    explicit QGrpcCallReply(std::shared_ptr<QAbstractProtobufSerializer> serializer);
     ~QGrpcCallReply() override;
 
     void abort() override;
@@ -42,8 +41,6 @@ public:
 private:
     QGrpcCallReply();
     Q_DISABLE_COPY_MOVE(QGrpcCallReply)
-
-    friend class QAbstractGrpcClient;
 };
 
 QT_END_NAMESPACE
