@@ -20,6 +20,10 @@ class Options
 
     static Options &mutableInstance();
 public:
+    enum GeneratorType {
+        QtProtobufGen = 0,
+        QtGrpcGen
+    };
     ~Options();
     Options(const Options &) = delete;
     Options &operator=(const Options &) = delete;
@@ -27,9 +31,9 @@ public:
     Options &operator=(Options &&) = delete;
 
     static const Options &instance();
-    static void setFromString(const std::string &options);
+    static void setFromString(const std::string &options, GeneratorType type = QtProtobufGen);
 
-    bool hasQml() const { return !m_qmlUri.empty(); }
+    bool hasQml() const { return m_qml || !m_qmlUri.empty(); }
     bool generateComments() const { return m_generateComments; }
     bool isFolder() const { return m_isFolder; }
     bool generateFieldEnum() const { return m_generateFieldEnum; }
@@ -44,6 +48,7 @@ private:
     std::string m_extraNamespace;
     std::string m_exportMacro;
     std::string m_qmlUri;
+    bool m_qml;
 };
 
 }

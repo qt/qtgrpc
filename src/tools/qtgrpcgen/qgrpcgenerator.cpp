@@ -110,8 +110,11 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
                                CommonTemplates::PreambleTemplate());
 
     clientHeaderPrinter->Print(CommonTemplates::DefaultProtobufIncludesTemplate());
-    if (Options::instance().hasQml())
+    if (Options::instance().hasQml()) {
+        clientHeaderPrinter->Print({ { "include", "QtQml/qjsvalue.h" } },
+                                   CommonTemplates::ExternalIncludeTemplate());
         clientHeaderPrinter->Print(CommonTemplates::QmlProtobufIncludesTemplate());
+    }
 
     printDisclaimer(clientSourcePrinter.get());
     clientSourcePrinter->Print({ { "include", clientFileName } },
@@ -135,11 +138,11 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
     }
 
     if (Options::instance().hasQml()) {
-        clientSourcePrinter->Print({ { "include", "QtQml/QmlEngine" } },
+        clientSourcePrinter->Print({ { "include", "QtQml/qqmlengine.h" } },
                                    CommonTemplates::ExternalIncludeTemplate());
-        clientSourcePrinter->Print({ { "include", "QtQml/QJSEngine" } },
+        clientSourcePrinter->Print({ { "include", "QtQml/qjsengine.h" } },
                                    CommonTemplates::ExternalIncludeTemplate());
-        clientSourcePrinter->Print({ { "include", "QtQml/QJSValue" } },
+        clientSourcePrinter->Print({ { "include", "QtQml/qjsvalue.h" } },
                                    CommonTemplates::ExternalIncludeTemplate());
     }
 
@@ -217,4 +220,12 @@ bool QGrpcGenerator::GenerateServerServices(const FileDescriptor *file,
     serverHeaderPrinter->Print({ { "filename", filename + "_service" } },
                                CommonTemplates::FooterTemplate());
     return true;
+}
+
+bool QGrpcGenerator::GenerateAll(const std::vector<const FileDescriptor *> &files,
+                                 const std::string &parameter, GeneratorContext *generatorContext,
+                                 std::string *error) const
+{
+    Options::setFromString(parameter, qtprotoccommon::Options::QtGrpcGen);
+    return CodeGenerator::GenerateAll(files, parameter, generatorContext, error);
 }
