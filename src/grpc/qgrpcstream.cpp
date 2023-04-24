@@ -62,21 +62,15 @@ QByteArrayView QGrpcStream::arg() const
     return m_arg;
 }
 
-void QGrpcStream::setHandler(const StreamHandler &handler)
-{
-    m_handler = handler;
-}
 /*!
-    Invokes the handler method assigned to this stream with \a data.
+    Sets underlying data field with \a data and emits QGrpcStream::messageReceived signal.
 
     Should be used by QAbstractGrpcChannel implementations,
     to update data in a stream and notify clients about stream updates.
 */
-void QGrpcStream::handler(const QByteArray &data)
+void QGrpcStream::updateData(const QByteArray &data)
 {
     setData(QByteArray(data));
-    if (m_handler)
-        m_handler(data);
     emit messageReceived();
 }
 

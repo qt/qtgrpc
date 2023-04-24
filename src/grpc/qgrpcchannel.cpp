@@ -283,7 +283,7 @@ std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(QLatin1StringView 
 
     *readConnection = QObject::connect(sub.get(), &QGrpcChannelStream::dataReady, stream.get(),
                                        [stream](QByteArrayView data) {
-                                           stream->handler(data.toByteArray());
+                                           stream->updateData(data.toByteArray());
                                        });
 
     *connection = QObject::connect(sub.get(), &QGrpcChannelStream::finished, stream.get(),
@@ -372,7 +372,7 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannel::call(QLatin1StringView method,
     and \a service parameters and called with the \a arg argument.
     Returns a shared pointer to the QGrpcStream.
 
-    Calls QGrpcStream::handler() when the stream receives data from the server.
+    Calls QGrpcStream::updateData() when the stream receives data from the server.
     The method may emit QGrpcStream::errorOccurred() when the stream has terminated with an error.
 */
 std::shared_ptr<QGrpcStream> QGrpcChannel::startStream(QLatin1StringView method,

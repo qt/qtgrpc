@@ -22,8 +22,6 @@ class Q_GRPC_EXPORT QGrpcStream final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    using StreamHandler = std::function<void(const QByteArray &)>;
-
     explicit QGrpcStream(QLatin1StringView method, QByteArrayView arg,
                          std::shared_ptr<QAbstractProtobufSerializer> serializer);
     ~QGrpcStream() override;
@@ -32,8 +30,7 @@ public:
 
     QLatin1StringView method() const;
     QByteArrayView arg() const;
-    void handler(const QByteArray &data);
-    void setHandler(const StreamHandler &handler);
+    void updateData(const QByteArray &data);
 
     bool operator==(const QGrpcStream &other) const
     {
@@ -46,7 +43,6 @@ Q_SIGNALS:
 private:
     const std::string m_method;
     const QByteArray m_arg;
-    StreamHandler m_handler;
 };
 
 QT_END_NAMESPACE

@@ -304,7 +304,7 @@ std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QLatin1StringView method
     and \a service parameters and called with the \a arg argument.
     Returns a shared pointer to the QGrpcStream.
 
-    Calls QGrpcStream::handler() when the stream receives data from the server.
+    Calls QGrpcStream::updateData() when the stream receives data from the server.
     The method may emit QGrpcStream::errorOccurred() when the stream has terminated with an error.
 */
 std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView method,
@@ -333,7 +333,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                                  << "expectedDataSize:" << expectedDataSize;
 
                     if (expectedDataSize == 0) {
-                        grpcStream->handler(QByteArray());
+                        grpcStream->updateData(QByteArray());
                         return;
                     }
 
@@ -354,7 +354,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                     qGrpcDebug() << "Full data received:" << data.size()
                                  << "dataContainer:" << dataContainer.container.size()
                                  << "capacity:" << dataContainer.expectedSize;
-                    grpcStream->handler(dataContainer.container.mid(
+                    grpcStream->updateData(dataContainer.container.mid(
                             GrpcMessageSizeHeaderSize,
                             dataContainer.expectedSize - GrpcMessageSizeHeaderSize));
                     dataContainer.container.remove(0, dataContainer.expectedSize);

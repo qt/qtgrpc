@@ -238,17 +238,6 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
     return grpcStream;
 }
 
-std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(
-        QLatin1StringView method, QByteArrayView arg,
-        const std::function<void(const QByteArray &)> &handler)
-{
-    auto stream = startStream(method, arg);
-    if (stream) {
-        stream->setHandler(handler);
-    }
-    return stream;
-}
-
 /*!
     Serializer provides assigned to client serializer.
     Returns pointer to serializerowned by QProtobufSerializerRegistry.

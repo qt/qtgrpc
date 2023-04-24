@@ -80,48 +80,12 @@ protected:
         return startStream(method, *argData);
     }
 
-    template <typename ParamType, typename ReturnType>
-    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, const QProtobufMessage &arg,
-                                             const QWeakPointer<ReturnType> ret)
-    {
-        using namespace Qt::StringLiterals;
-        if (ret.isNull()) {
-            const auto nullPointerError = "Unable to stream method: %1. "
-                                          "Pointer to return data is null."_L1.arg(method);
-            Q_EMIT errorOccurred({ QGrpcStatus::InvalidArgument, nullPointerError });
-            logError(nullPointerError);
-            return {};
-        }
-        std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
-        if (!argData)
-            return {};
-
-        return startStream(method, *argData, [ret, this](QByteArrayView data) {
-            if (auto retVal = ret.lock()) {
-                auto status = tryDeserialize(retVal.get(), data);
-                if (status != QGrpcStatus::Ok) {
-                    Q_EMIT errorOccurred(status);
-                    logError(status.message());
-                }
-            } else {
-                static const QLatin1StringView nullPointerError("Pointer to return data is null "
-                                                                "while stream update received");
-                Q_EMIT errorOccurred({ QGrpcStatus::InvalidArgument, nullPointerError });
-                logError(nullPointerError);
-            }
-        });
-    }
-
 private:
     QGrpcStatus call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret);
 
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg);
 
     std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QByteArrayView arg);
-
-    std::shared_ptr<QGrpcStream> startStream(
-            QLatin1StringView method, QByteArrayView arg,
-            const std::function<void(const QByteArray &)> &handler);
 
     template <typename ReturnType>
     QGrpcStatus tryDeserialize(ReturnType *ret, QByteArrayView retData)

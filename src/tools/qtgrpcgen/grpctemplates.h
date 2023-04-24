@@ -36,7 +36,6 @@ public:
     static const char *ClientMethodServerStreamQmlDeclarationTemplate();
 
     static const char *ClientMethodServerStreamDefinitionTemplate();
-    static const char *ClientMethodServerStream2DefinitionTemplate();
     static const char *ClientMethodServerStreamQmlDefinitionTemplate();
 };
 

@@ -191,16 +191,6 @@ const char *GrpcTemplates::ClientMethodServerStreamDefinitionTemplate()
            "}\n\n";
 }
 
-const char *GrpcTemplates::ClientMethodServerStream2DefinitionTemplate()
-{
-    return "std::shared_ptr<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
-           "&$param_name$, const QWeakPointer<$return_type$> &$return_name$)\n"
-           "{\n"
-           "    return startStream<$param_type$>(\"$method_name$\"_L1, $param_name$, "
-           "$return_name$);\n"
-           "}\n\n";
-}
-
 const char *GrpcTemplates::GrpcClientFileSuffix()
 {
     return "_client.grpc";
