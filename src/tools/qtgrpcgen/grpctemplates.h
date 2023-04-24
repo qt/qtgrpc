@@ -12,6 +12,8 @@ public:
     // gRPC
     static const char *ChildClassDeclarationTemplate();
 
+    static const char *ClientQmlDeclarationTemplate();
+
     static const char *GrpcClientFileSuffix();
     static const char *GrpcServiceFileSuffix();
 
@@ -21,7 +23,6 @@ public:
     static const char *ClientMethodDeclarationAsyncTemplate();
     static const char *ClientMethodDeclarationAsync2Template();
     static const char *ClientMethodDeclarationQmlTemplate();
-    static const char *ClientMethodDeclarationQml2Template();
 
     static const char *ServerMethodDeclarationTemplate();
 
@@ -29,7 +30,6 @@ public:
     static const char *ClientMethodDefinitionAsyncTemplate();
     static const char *ClientMethodDefinitionAsync2Template();
     static const char *ClientMethodDefinitionQmlTemplate();
-    static const char *ClientMethodDefinitionQml2Template();
 
     static const char *ClientMethodServerStreamDeclarationTemplate();
     static const char *ClientMethodServerStream2DeclarationTemplate();

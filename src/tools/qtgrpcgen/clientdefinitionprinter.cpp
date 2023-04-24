@@ -59,10 +59,8 @@ void ClientDefinitionPrinter::printMethod(const MethodDescriptor *method)
         m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionSyncTemplate());
         m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionAsyncTemplate());
         m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionAsync2Template());
-        if (Options::instance().hasQml()) {
+        if (Options::instance().hasQml())
             m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionQmlTemplate());
-            m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionQml2Template());
-        }
     }
 }
 

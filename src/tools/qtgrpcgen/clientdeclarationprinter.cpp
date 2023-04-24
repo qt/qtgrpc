@@ -48,6 +48,8 @@ void ClientDeclarationPrinter::printOpenNamespace()
 void ClientDeclarationPrinter::printClientClass()
 {
     m_printer->Print(m_typeMap, GrpcTemplates::ChildClassDeclarationTemplate());
+    if (Options::instance().hasQml())
+        m_printer->Print(m_typeMap, GrpcTemplates::ClientQmlDeclarationTemplate());
 }
 
 void ClientDeclarationPrinter::printConstructor()
@@ -71,10 +73,8 @@ void ClientDeclarationPrinter::printClientMethodsDeclaration()
             m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationSyncTemplate());
             m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationAsyncTemplate());
             m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationAsync2Template());
-            if (Options::instance().hasQml()) {
+            if (Options::instance().hasQml())
                 m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationQmlTemplate());
-                m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationQml2Template());
-            }
         }
         m_printer->Print("\n");
     }

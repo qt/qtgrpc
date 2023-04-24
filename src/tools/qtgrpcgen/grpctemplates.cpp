@@ -11,6 +11,11 @@ const char *GrpcTemplates::ChildClassDeclarationTemplate()
            "    Q_OBJECT\n";
 }
 
+const char *GrpcTemplates::ClientQmlDeclarationTemplate()
+{
+    return "    QML_ELEMENT\n";
+}
+
 const char *GrpcTemplates::ClientMethodDeclarationSyncTemplate()
 {
     return "QGrpcStatus $method_name$(const $param_type$ &$param_name$, "
@@ -33,14 +38,10 @@ const char *GrpcTemplates::ClientMethodDeclarationAsync2Template()
 
 const char *GrpcTemplates::ClientMethodDeclarationQmlTemplate()
 {
-    return "Q_INVOKABLE void $method_name$($param_type$ *$param_name$, const QJSValue &callback, "
-           "const QJSValue &errorCallback);\n";
-}
-
-const char *GrpcTemplates::ClientMethodDeclarationQml2Template()
-{
-    return "Q_INVOKABLE void $method_name$($param_type$ *$param_name$, $return_type$ "
-           "*$return_name$, const QJSValue &errorCallback);\n";
+    return "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$, "
+           "const QJSValue &callback, "
+           "const QJSValue &errorCallback, "
+           "const QGrpcCallOptions &options = {});\n";
 }
 
 const char *GrpcTemplates::ServerMethodDeclarationTemplate()
@@ -95,21 +96,16 @@ const char *GrpcTemplates::ClientMethodDefinitionAsync2Template()
 
 const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
 {
-    return "\nvoid $classname$::$method_name$($param_type$ *$param_name$, const QJSValue "
+    return "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$, const QJSValue "
            "&callback, "
-           "const QJSValue &errorCallback)\n"
+           "const QJSValue &errorCallback,"
+           "const QGrpcCallOptions &options)\n"
            "{\n"
            "    if (!callback.isCallable()) {\n"
            "        qWarning() << \"Unable to call $classname$::$method_name$, callback is not "
            "callable\";\n"
            "        return;\n"
            "    }\n\n"
-           "    if (arg == nullptr) {\n"
-           "        qWarning() << \"Invalid argument provided for method "
-           "$classname$::$method_name$, "
-           "argument of type '$param_type$ *' expected\";\n"
-           "        return;\n"
-           "    }\n\n"
            "    QJSEngine *jsEngine = qjsEngine(this);\n"
            "    if (jsEngine == nullptr) {\n"
            "        qWarning() << \"Unable to call $classname$::$method_name$, it's only callable "
@@ -117,49 +113,10 @@ const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
            "        return;\n"
            "    }\n\n"
            "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\"_L1, "
-           "*$param_name$);\n"
+           "$param_name$, options);\n"
            "    reply->subscribe(jsEngine, [this, reply, callback, jsEngine]() {\n"
-           "        auto result = new $return_type$(reply->read<$return_type$>());\n"
-           "        qmlEngine(this)->setObjectOwnership(result, QQmlEngine::JavaScriptOwnership);\n"
+           "        auto result = $return_type$(reply->read<$return_type$>());\n"
            "        QJSValue(callback).call(QJSValueList{jsEngine->toScriptValue(result)});\n"
-           "    }, [errorCallback, jsEngine](const QGrpcStatus &status) {\n"
-           "        QJSValue(errorCallback).call(QJSValueList{jsEngine->toScriptValue(status)});\n"
-           "    });\n"
-           "}\n";
-}
-
-const char *GrpcTemplates::ClientMethodDefinitionQml2Template()
-{
-    return "\nvoid $classname$::$method_name$($param_type$ *$param_name$, $return_type$ "
-           "*$return_name$, const QJSValue &errorCallback)\n"
-           "{\n"
-           "    if ($return_name$ == nullptr) {\n"
-           "        qWarning() << \"Invalid argument provided for method "
-           "$classname$::$method_name$, "
-           "argument of type '$return_type$ *' expected\";\n"
-           "        return;\n"
-           "    }\n\n"
-           "    QWeakPointer<$return_type$> safeReturn($return_name$);\n\n"
-           "    if ($param_name$ == nullptr) {\n"
-           "        qWarning() << \"Invalid argument provided for method "
-           "$classname$::$method_name$, "
-           "argument of type '$param_type$ *' expected\";\n"
-           "        return;\n"
-           "    }\n\n"
-           "    QJSEngine *jsEngine = qjsEngine(this);\n"
-           "    if (jsEngine == nullptr) {\n"
-           "        qWarning() << \"Unable to call $classname$::$method_name$, it's only callable "
-           "from JS engine context\";\n"
-           "        return;\n"
-           "    }\n\n"
-           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\"_L1, "
-           "*$param_name$);\n"
-           "    reply->subscribe(jsEngine, [this, reply, jsEngine, safeReturn]() {\n"
-           "        if (safeReturn.isNull()) {\n"
-           "            qWarning() << \"Return value is destroyed. Ignore call result\";\n"
-           "            return;\n"
-           "        }\n"
-           "        *safeReturn = $return_type$(reply->read<$return_type$>());\n"
            "    }, [errorCallback, jsEngine](const QGrpcStatus &status) {\n"
            "        QJSValue(errorCallback).call(QJSValueList{jsEngine->toScriptValue(status)});\n"
            "    });\n"
