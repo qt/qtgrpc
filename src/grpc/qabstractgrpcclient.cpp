@@ -117,7 +117,7 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
 {
     if (channel->dPtr->threadId != QThread::currentThreadId()) {
         const QString status = threadSafetyWarning("QAbstractGrpcClient::attachChannel"_L1);
-        logError(status);
+        qGrpcCritical() << status;
         emit errorOccurred({ QGrpcStatus::Unknown, status });
         return;
     }
@@ -136,7 +136,7 @@ QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, QByteArrayView a
     if (thread() != QThread::currentThread()) {
         const QGrpcStatus status({ QGrpcStatus::Unknown,
                                    threadSafetyWarning("QAbstractGrpcClient::call"_L1) });
-        logError(status.message());
+        qGrpcCritical() << status.message();
         emit errorOccurred(status);
         return status;
     }
@@ -158,7 +158,7 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
     if (thread() != QThread::currentThread()) {
         const QGrpcStatus status({ QGrpcStatus::Unknown,
                                    threadSafetyWarning("QAbstractGrpcClient::call"_L1) });
-        logError(status.message());
+        qGrpcCritical() << status.message();
         emit errorOccurred(status);
         return reply;
     }
@@ -186,7 +186,7 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
     if (thread() != QThread::currentThread()) {
         const QGrpcStatus status({ QGrpcStatus::Unknown,
                                    threadSafetyWarning("QAbstractGrpcClient::stream"_L1) });
-        logError(status.message());
+        qGrpcCritical() << status.message();
         emit errorOccurred(status);
         return grpcStream;
     }
@@ -250,11 +250,6 @@ std::shared_ptr<QAbstractProtobufSerializer> QAbstractGrpcClient::serializer() c
     return nullptr;
 }
 
-void QAbstractGrpcClient::logError(const QString &str) const
-{
-    qGrpcCritical() << str;
-}
-
 QGrpcStatus QAbstractGrpcClient::handleDeserializationError(
         const QAbstractProtobufSerializer::DeserializationError &err)
 {
@@ -263,19 +258,19 @@ QGrpcStatus QAbstractGrpcClient::handleDeserializationError(
     case QAbstractProtobufSerializer::InvalidHeaderError: {
         const QLatin1StringView errStr("Response deserialization failed: invalid field found.");
         status = { QGrpcStatus::InvalidArgument, errStr };
-        logError(errStr);
+        qGrpcCritical() << errStr;
         emit errorOccurred(status);
     } break;
     case QAbstractProtobufSerializer::NoDeserializerError: {
         const QLatin1StringView errStr("No deserializer was found for a given type.");
         status = { QGrpcStatus::InvalidArgument, errStr };
-        logError(errStr);
+        qGrpcCritical() << errStr;
         emit errorOccurred(status);
     } break;
     case QAbstractProtobufSerializer::UnexpectedEndOfStreamError: {
         const QLatin1StringView errStr("Invalid size of received buffer.");
         status = { QGrpcStatus::OutOfRange, errStr };
-        logError(errStr);
+        qGrpcCritical() << errStr;
         emit errorOccurred(status);
     } break;
     case QAbstractProtobufSerializer::NoError:
@@ -283,7 +278,7 @@ QGrpcStatus QAbstractGrpcClient::handleDeserializationError(
     default:
         const QLatin1StringView errStr("Deserializing failed, but no error was set.");
         status = { QGrpcStatus::InvalidArgument, errStr };
-        logError(errStr);
+        qGrpcCritical() << errStr;
         emit errorOccurred(status);
     }
     return status;

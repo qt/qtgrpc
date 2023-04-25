@@ -38,17 +38,9 @@ protected:
     ~QAbstractGrpcClient() override;
 
     template <typename ParamType, typename ReturnType>
-    QGrpcStatus call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType *ret)
+    QGrpcStatus call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType &ret)
     {
         using namespace Qt::StringLiterals;
-        if (ret == nullptr) {
-            const auto errorString = "Unable to call method: %1. "
-                                     "Pointer to return data is null."_L1.arg(method);
-            QGrpcStatus status{ QGrpcStatus::InvalidArgument, errorString };
-            Q_EMIT errorOccurred(status);
-            logError(errorString);
-            return status;
-        }
         QGrpcStatus status{ QGrpcStatus::Unknown,
                             "Serializing failed. Serializer is not ready."_L1 };
 
@@ -113,7 +105,6 @@ private:
 
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 
-    void logError(const QString &str) const;
     QGrpcStatus handleDeserializationError(
             const QAbstractProtobufSerializer::DeserializationError &err);
 
