@@ -47,6 +47,10 @@ function(qt_internal_add_protobuf_wellknown_types target)
         list(REMOVE_DUPLICATES known_proto_includes)
         set_target_properties(${target} PROPERTIES
             QT_PROTO_INCLUDES "${known_proto_includes}")
+        # Assume that ProtobufWellKnownTypes is the Qt module that should have _sync_headers.
+        foreach(generated_target IN LISTS generated_targets)
+            add_dependencies(${generated_target} ${target}_sync_headers)
+        endforeach()
     endforeach()
 
     if(generated_headers)
