@@ -45,7 +45,7 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 
 /*!
     \fn template <typename ParamType> QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method,
-    const QProtobufMessage &arg);
+    const QProtobufMessage &arg)
 
     Synchronously calls the given \a method of this service client,
     with argument \a arg.
@@ -53,7 +53,7 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 
 /*!
     \fn template <typename ParamType, typename ReturnType> QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method,
-    const QProtobufMessage &arg, ReturnType *ret);
+    const QProtobufMessage &arg, ReturnType &ret)
 
     Synchronously calls the given \a method of this service client,
     with argument \a arg and fills \a ret with gRPC reply.
@@ -61,26 +61,10 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 
 /*!
     \fn template <typename ParamType> QSharedPointer<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView method,
-    const QProtobufMessage &arg);
+    const QProtobufMessage &arg)
 
     Streams messages from the server stream \a method with the message
     argument \a arg to the attached channel.
-*/
-
-/*!
-    \fn template <typename ParamType, typename ReturnType> QSharedPointer<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView method,
-    const QProtobufMessage &arg, const QWeakPointer<ReturnType> ret);
-
-    Streams messages from the server stream \a method with the message
-    argument \a arg to the attached channel.
-
-    Makes \a ret argument point to allocated return-message structure.
-    The return-message structure will be updated each time a message
-    is received from the server-stream.
-
-    \note If \a ret is used as property-fields in other object,
-    property NOTIFY signal won't be called in case of updated
-    message received from server-stream.
 */
 
 class QAbstractGrpcClientPrivate : public QObjectPrivate
