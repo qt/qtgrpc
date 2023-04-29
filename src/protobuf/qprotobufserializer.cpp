@@ -95,7 +95,7 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
     \relates QProtobufSerializer
     \fn template<typename T> inline void qRegisterProtobufType()
 
-    Registers a Protobuf type \a T.
+    Registers a Protobuf type \e T.
     This function is normally called by generated code.
 */
 
