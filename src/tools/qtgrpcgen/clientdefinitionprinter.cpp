@@ -51,10 +51,6 @@ void ClientDefinitionPrinter::printMethod(const MethodDescriptor *method)
     MethodMap parameters = common::produceMethodMap(method, m_typeMap["classname"]);
     if (method->server_streaming()) {
         m_printer->Print(parameters, GrpcTemplates::ClientMethodServerStreamDefinitionTemplate());
-        if (Options::instance().hasQml()) {
-            m_printer->Print(parameters,
-                             GrpcTemplates::ClientMethodServerStreamQmlDefinitionTemplate());
-        }
     } else {
         m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionSyncTemplate());
         m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionAsyncTemplate());
