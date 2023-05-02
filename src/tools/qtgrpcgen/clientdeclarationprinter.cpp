@@ -81,18 +81,6 @@ void ClientDeclarationPrinter::printClientMethodsDeclaration()
     Outdent();
 
     printPrivateBlock();
-    Indent();
-    for (int i = 0; i < m_descriptor->method_count(); i++) {
-        const MethodDescriptor *method = m_descriptor->method(i);
-        MethodMap parameters = common::produceMethodMap(method, m_typeMap["classname"]);
-        if (method->server_streaming()) {
-            if (Options::instance().hasQml()) {
-                m_printer->Print(parameters,
-                                 GrpcTemplates::ClientMethodServerStreamQmlDeclarationTemplate());
-            }
-        }
-    }
-    Outdent();
     m_printer->Print("\n");
 }
 
