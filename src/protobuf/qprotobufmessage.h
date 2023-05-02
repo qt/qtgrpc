@@ -28,6 +28,7 @@ class QProtobufMessage
 public:
     Q_PROTOBUF_EXPORT QVariant property(QAnyStringView propertyName) const;
     Q_PROTOBUF_EXPORT bool setProperty(QAnyStringView propertyName, const QVariant &value);
+    Q_PROTOBUF_EXPORT bool setProperty(QAnyStringView propertyName, QVariant &&value);
 
     Q_REQUIRED_RESULT
     Q_PROTOBUF_EXPORT static QProtobufMessagePointer constructByName(const QString &messageType);
@@ -50,6 +51,8 @@ protected:
     QVariant property(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
     bool setProperty(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
                      const QVariant &value);
+    bool setProperty(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
+                     QVariant &&value);
 
 private:
     const QMetaObject *metaObject() const;

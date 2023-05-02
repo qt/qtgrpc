@@ -100,6 +100,20 @@ bool QProtobufMessage::setProperty(QAnyStringView propertyName, const QVariant &
 }
 
 /*!
+    \overload
+    \since 6.6
+*/
+bool QProtobufMessage::setProperty(QAnyStringView propertyName, QVariant &&value)
+{
+    Q_D(QProtobufMessage);
+
+    if (auto mp = d->metaProperty(propertyName))
+        return mp->writeOnGadget(this, std::move(value));
+
+    return false;
+}
+
+/*!
     Get the value of the property \a propertyName.
 
     If the \a propertyName isn't known then the returned QVariant is invalid.
@@ -234,6 +248,16 @@ bool QProtobufMessage::setProperty(
 {
     Q_D(QProtobufMessage);
     const auto mp = d->metaProperty(fieldInfo);
+    if (!mp)
+        return false;
+    return mp->writeOnGadget(this, value);
+}
+
+bool QProtobufMessage::setProperty(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &info,
+                                   QVariant &&value)
+{
+    Q_D(QProtobufMessage);
+    const auto mp = d->metaProperty(info);
     if (!mp)
         return false;
     return mp->writeOnGadget(this, value);
