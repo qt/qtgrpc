@@ -16,15 +16,17 @@
 // We mean it.
 //
 
-#include <QtCore/QObject>
-#include <QtCore/QThread>
-#include <QtCore/qbytearray.h>
 #include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qabstractgrpccredentials.h>
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcchannel.h>
 #include <QtGrpc/qgrpccredentials.h>
 #include <QtGrpc/qgrpcstream.h>
+#include <QtGrpc/private/qtgrpcglobal_p.h>
+
+#include <QtCore/QObject>
+#include <QtCore/QThread>
+#include <QtCore/qbytearray.h>
 
 QT_REQUIRE_CONFIG(native_grpc);
 #include <grpcpp/channel.h>

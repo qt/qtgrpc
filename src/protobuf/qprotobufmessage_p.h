@@ -15,11 +15,13 @@
 // We mean it.
 //
 
+#include "qprotobufmessage.h"
+
 #include <QtProtobuf/qtprotobufglobal.h>
+
 #include <QtCore/qtconfigmacros.h>
 #include <QtCore/qhash.h>
-
-#include "qprotobufmessage.h"
+#include <QtCore/private/qglobal_p.h>
 
 QT_BEGIN_NAMESPACE
 
