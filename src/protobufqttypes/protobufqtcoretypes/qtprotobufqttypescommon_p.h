@@ -17,9 +17,10 @@
 
 #include <QtProtobuf/qtprotobuftypes.h>
 #include <QtProtobuf/qprotobufserializer.h>
+
 #include <QtCore/QDebug>
 #include <QtCore/QVariant>
-#include <QtCore/QtGlobal>
+#include <QtCore/private/qglobal_p.h>
 
 #include <optional>
 

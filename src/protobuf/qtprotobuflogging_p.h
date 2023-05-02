@@ -16,9 +16,10 @@
 // We mean it.
 //
 
-#include <QtCore/qloggingcategory.h>
-
 #include <QtProtobuf/qtprotobufglobal.h>
+
+#include <QtCore/qloggingcategory.h>
+#include <QtCore/private/qglobal_p.h>
 
 QT_BEGIN_NAMESPACE
 Q_DECLARE_EXPORTED_LOGGING_CATEGORY(Protobuf, Q_PROTOBUF_EXPORT)
