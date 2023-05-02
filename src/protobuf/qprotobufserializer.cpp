@@ -696,7 +696,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(
         handler.deserializer(q_ptr, it, newPropertyValue);
     }
 
-    return message->setProperty(fieldInfo, newPropertyValue);
+    return message->setProperty(fieldInfo, std::move(newPropertyValue));
 }
 
 bool QProtobufSerializerPrivate::deserializeMapPair(QVariant &key, QVariant &value, QProtobufSelfcheckIterator &it)
