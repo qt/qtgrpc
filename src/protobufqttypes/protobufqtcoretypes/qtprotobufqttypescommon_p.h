@@ -15,10 +15,11 @@
 // We mean it.
 //
 
+#include <QtProtobufQtCoreTypes/qtprotobufqtcoretypesexports.h>
+
 #include <QtProtobuf/qtprotobuftypes.h>
 #include <QtProtobuf/qprotobufserializer.h>
 
-#include <QtCore/QDebug>
 #include <QtCore/QVariant>
 #include <QtCore/private/qglobal_p.h>
 
@@ -27,6 +28,8 @@
 QT_BEGIN_NAMESPACE
 
 namespace QtProtobufPrivate {
+
+Q_DECL_COLD_FUNCTION Q_PROTOBUFQTCORETYPES_EXPORT void warnTypeConversionError();
 
 template <typename T>
 constexpr inline bool is_optional_v = false;
@@ -44,7 +47,7 @@ void registerQtTypeHandler()
                      auto res = convert(qtype);
                      if constexpr (is_optional_v<decltype(res)>) {
                          if (!res) {
-                             qWarning() << "Qt Proto Type conversion error.";
+                             warnTypeConversionError();
                              return PType();
                          }
                          return PType(std::move(*res));
@@ -63,7 +66,7 @@ void registerQtTypeHandler()
                   auto res = convert(object);
                   if constexpr (is_optional_v<decltype(res)>) {
                       if (!res)
-                          qWarning() << "Qt Proto Type conversion error.";
+                          warnTypeConversionError();
                       else
                           value = QVariant::fromValue<QType>(*res);
                   } else {

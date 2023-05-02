@@ -21,6 +21,11 @@
 
 QT_BEGIN_NAMESPACE
 
+void QtProtobufPrivate::warnTypeConversionError()
+{
+    qWarning("Qt Proto Type conversion error.");
+}
+
 static std::optional<QUrl> convert(const QtProtobufPrivate::QtCore::QUrl &from)
 {
     QUrl url(from.url());
