@@ -61,6 +61,25 @@ void QProtobufMessagePrivate::storeUnknownEntry(QByteArrayView entry)
     ++unknownEntries[entry.toByteArray()];
 }
 
+std::optional<QMetaProperty> QProtobufMessagePrivate::metaProperty(QAnyStringView name) const
+{
+    const int index = getPropertyIndex(name);
+    const QMetaProperty property = metaObject->property(index);
+    if (property.isValid())
+        return property;
+    return std::nullopt;
+}
+
+std::optional<QMetaProperty>
+QProtobufMessagePrivate::metaProperty(QtProtobufPrivate::QProtobufPropertyOrderingInfo info) const
+{
+    const int propertyIndex = info.getPropertyIndex() + metaObject->propertyOffset();
+    const QMetaProperty metaProperty = metaObject->property(propertyIndex);
+    if (metaProperty.isValid())
+        return metaProperty;
+    return std::nullopt;
+}
+
 /*!
     Set the property \a propertyName to the value stored in \a value.
 
@@ -74,11 +93,10 @@ bool QProtobufMessage::setProperty(QAnyStringView propertyName, const QVariant &
 {
     Q_D(QProtobufMessage);
 
-    int index = d->getPropertyIndex(propertyName);
-    const QMetaProperty &property = d->metaObject->property(index);
-    if (!property.isValid())
-        return false;
-    return property.writeOnGadget(this, value);
+    if (auto mp = d->metaProperty(propertyName))
+        return mp->writeOnGadget(this, value);
+
+    return false;
 }
 
 /*!
@@ -90,9 +108,9 @@ QVariant QProtobufMessage::property(QAnyStringView propertyName) const
 {
     Q_D(const QProtobufMessage);
 
-    int index = d->getPropertyIndex(propertyName);
-    const QMetaProperty &property = d->metaObject->property(index);
-    return property.readOnGadget(this);
+    if (const auto mp = d->metaProperty(propertyName))
+        return mp->readOnGadget(this);
+    return false;
 }
 
 /*!
@@ -214,13 +232,11 @@ QProtobufMessage::property(const QtProtobufPrivate::QProtobufPropertyOrderingInf
 bool QProtobufMessage::setProperty(
         const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo, const QVariant &value)
 {
-    int propertyIndex = fieldInfo.getPropertyIndex() + metaObject()->propertyOffset();
-    QMetaProperty metaProperty = metaObject()->property(propertyIndex);
-
-    if (!metaProperty.isValid())
+    Q_D(QProtobufMessage);
+    const auto mp = d->metaProperty(fieldInfo);
+    if (!mp)
         return false;
-
-    return metaProperty.writeOnGadget(this, value);
+    return mp->writeOnGadget(this, value);
 }
 
 QT_END_NAMESPACE
