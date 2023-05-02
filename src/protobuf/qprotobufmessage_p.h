@@ -23,7 +23,11 @@
 #include <QtCore/qhash.h>
 #include <QtCore/private/qglobal_p.h>
 
+#include <optional>
+
 QT_BEGIN_NAMESPACE
+
+class QMetaProperty;
 
 class QProtobufMessagePrivate
 {
@@ -37,6 +41,8 @@ public:
 
     int getPropertyIndex(QAnyStringView propertyName) const;
     void storeUnknownEntry(QByteArrayView entry);
+
+    std::optional<QMetaProperty> metaProperty(QAnyStringView name) const;
 
     static QProtobufMessagePrivate *get(QProtobufMessage *message) { return message->d_func(); }
     static const QProtobufMessagePrivate *get(const QProtobufMessage *message)
