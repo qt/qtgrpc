@@ -5,4 +5,4 @@ add_subdirectory(basic)
 add_subdirectory(enums)
 add_subdirectory(nopackage)
 add_subdirectory(syntax)
-
+add_subdirectory(nested)
