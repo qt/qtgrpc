@@ -11,6 +11,7 @@ qt_internal_add_test(tst_protobuf_qtcoretypes
         Qt::Protobuf
         Qt::ProtobufQtCoreTypes
         Qt::Core
+        Qt::CorePrivate
     DEFINES
         PROTOC_EXECUTABLE="$<TARGET_FILE:WrapProtoc::WrapProtoc>"
 )

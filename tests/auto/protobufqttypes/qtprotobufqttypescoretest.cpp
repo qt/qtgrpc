@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
+#include <private/qtenvironmentvariables_p.h>
 
 constexpr char conversionErrorMessage[] = "Qt Proto Type conversion error.";
 
@@ -40,6 +41,29 @@ private slots:
 
 private:
     QProtobufSerializer serializer;
+
+#if QT_CONFIG(timezone)
+    class TimeZoneRollback
+    {
+        const QByteArray prior;
+    public:
+        explicit TimeZoneRollback(const QByteArray &zone) : prior(qgetenv("TZ"))
+        { reset(zone); }
+        void reset(const QByteArray &zone)
+        {
+            qputenv("TZ", zone);
+            qTzSet();
+        }
+        ~TimeZoneRollback()
+        {
+            if (prior.isNull())
+                qunsetenv("TZ");
+            else
+                qputenv("TZ", prior);
+            qTzSet();
+        }
+    };
+#endif // timezone
 };
 
 void QtProtobufQtTypesQtCoreTest::initTestCase()
@@ -204,16 +228,16 @@ void QtProtobufQtTypesQtCoreTest::qDateTime_data()
                 << QByteArray("0a1b0891ddef89eb25121212104175737472616c69612f44617277696e")
                 << true;
     }
+    QTest::addRow("LocalTime")
+            << QTimeZone(QTimeZone(QTimeZone::LocalTime))
+            << QDate(2011, 3, 14)
+            << QByteArray("0a0b08d190979aeb2512021800")
+            << true;
 #endif //QT_CONFIG(timezone)
     QTest::addRow("UTC")
             << QTimeZone(QTimeZone::UTC)
             << QDate(2011, 3, 14)
             << QByteArray("0a0b08d190979aeb2512021801")
-            << true;
-    QTest::addRow("LocalTime")
-            << QTimeZone(QTimeZone::LocalTime)
-            << QDate(2011, 3, 14)
-            << QByteArray("0a0b08d190979aeb2512021800")
             << true;
     QTest::addRow("OffsetFromUTC")
             << QTimeZone::fromSecondsAheadOfUtc(3141)
@@ -225,6 +249,13 @@ void QtProtobufQtTypesQtCoreTest::qDateTime_data()
 
 void QtProtobufQtTypesQtCoreTest::qDateTime()
 {
+#if QT_CONFIG(timezone)
+#ifdef Q_OS_WIN
+    TimeZoneRollback useZone("GMT Standard Time");
+#else
+    TimeZoneRollback useZone("GMT");
+#endif //Q_OS_WIN
+#endif //QT_CONFIG(timezone)
     QFETCH(const QTimeZone, zone);
     QFETCH(const QDate, date);
     QFETCH(const QByteArray, zoneHex);
