@@ -215,14 +215,14 @@ void QtProtobufQtTypesQtCoreTest::qDateTime_data()
     QTest::addColumn<bool>("isValid");
 #if QT_CONFIG(timezone)
     if (QTimeZone rus("Asia/Magadan"); rus.isValid()) {
-        QTest::addRow(rus.id().constData())
+        QTest::addRow("Asia/Magadan")
                 << rus
                 << QDate(2011, 3, 14)
                 << QByteArray("0a1708d191a687eb25120e120c417369612f4d61676164616e")
                 << true;
     }
     if (QTimeZone oz("Australia/Darwin"); oz.isValid()) {
-        QTest::addRow(oz.id().constData())
+        QTest::addRow("Australia/Darwin")
                 << oz
                 << QDate(2011, 3, 14)
                 << QByteArray("0a1b0891ddef89eb25121212104175737472616c69612f44617277696e")
