@@ -98,7 +98,7 @@ QVariant QProtobufMessage::property(QAnyStringView propertyName) const
 
     if (const auto mp = d->metaProperty(propertyName))
         return mp->readOnGadget(this);
-    return false;
+    return {};
 }
 
 /*!
