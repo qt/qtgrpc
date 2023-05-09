@@ -3,8 +3,6 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QGrpcHttp2Channel>
-#include <QGrpcInsecureCallCredentials>
-#include <QGrpcInsecureChannelCredentials>
 
 #include <QCoreApplication>
 #include <QSignalSpy>
@@ -33,8 +31,8 @@ void QtGrpcUnattachedChannelClientTest::CheckMethodsGeneration()
 {
     // Dummy compile time check of functions generation and interface compatibility
     TestService::Client client;
-    client.attachChannel(std::make_shared<QGrpcHttp2Channel>(
-            QUrl(), QGrpcInsecureChannelCredentials() | QGrpcInsecureCallCredentials()));
+    QGrpcChannelOptions channelOptions{ QUrl() };
+    client.attachChannel(std::make_shared<QGrpcHttp2Channel>(channelOptions));
     SimpleStringMessage request;
     auto result = std::make_shared<SimpleStringMessage>();
     client.testMethod(request, result.get());
@@ -76,11 +74,10 @@ void QtGrpcUnattachedChannelClientTest::ClientSyncTestUnattachedChannelSignal()
 void QtGrpcUnattachedChannelClientTest::AttachChannelThreadTest()
 {
     std::shared_ptr<QGrpcHttp2Channel> channel;
+    QGrpcChannelOptions channelOptions(QUrl("http://localhost:50051", QUrl::StrictMode));
+
     std::shared_ptr<QThread> thread(QThread::create([&] {
-        const QUrl url("http://localhost:50051", QUrl::StrictMode);
-        channel = std::make_shared<QGrpcHttp2Channel>(url,
-                                                      QGrpcInsecureCallCredentials()
-                                                              | QGrpcInsecureChannelCredentials());
+        channel = std::make_shared<QGrpcHttp2Channel>(channelOptions);
     }));
     thread->start();
     thread->wait();

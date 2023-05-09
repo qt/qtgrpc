@@ -92,17 +92,16 @@ struct QGrpcChannelPrivate
     std::shared_ptr<grpc::Channel> m_channel;
     std::shared_ptr<grpc::ChannelCredentials> m_credentials;
 
-    explicit QGrpcChannelPrivate(const QUrl &url,
-                                 QGrpcChannel::NativeGrpcChannelCredentials credentialsType,
-                                 const QStringList &credentialsList);
+    explicit QGrpcChannelPrivate(const QGrpcChannelOptions &options,
+                                 QGrpcChannel::NativeGrpcChannelCredentials credentialsType);
     ~QGrpcChannelPrivate();
 
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
-                                         QByteArrayView args);
+                                         QByteArrayView args, const QGrpcCallOptions &options);
     QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-                     QByteArray &ret);
+                     QByteArray &ret, const QGrpcCallOptions &options);
     std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QLatin1StringView service,
-                                             QByteArrayView arg);
+                                             QByteArrayView arg, const QGrpcCallOptions &options);
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 };
 

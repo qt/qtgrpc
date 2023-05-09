@@ -38,7 +38,8 @@ protected:
     ~QAbstractGrpcClient() override;
 
     template <typename ParamType, typename ReturnType>
-    QGrpcStatus call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType &ret)
+    QGrpcStatus call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType &ret,
+                     const QGrpcCallOptions &options)
     {
         using namespace Qt::StringLiterals;
         QGrpcStatus status{ QGrpcStatus::Unknown,
@@ -47,7 +48,7 @@ protected:
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (argData) {
             QByteArray retData;
-            status = call(method, *argData, retData);
+            status = call(method, *argData, retData, options);
             if (status == QGrpcStatus::StatusCode::Ok)
                 status = tryDeserialize(ret, retData);
         }
@@ -55,29 +56,34 @@ protected:
     }
 
     template <typename ParamType>
-    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg)
+    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg,
+                                         const QGrpcCallOptions &options)
     {
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData)
             return {};
-        return call(method, *argData);
+        return call(method, *argData, options);
     }
 
     template <typename ParamType>
-    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, const QProtobufMessage &arg)
+    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, const QProtobufMessage &arg,
+                                             const QGrpcCallOptions &options)
     {
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData)
             return {};
-        return startStream(method, *argData);
+        return startStream(method, *argData, options);
     }
 
 private:
-    QGrpcStatus call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret);
+    QGrpcStatus call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret,
+                     const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg);
+    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg,
+                                         const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QByteArrayView arg);
+    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QByteArrayView arg,
+                                             const QGrpcCallOptions &options);
 
     template <typename ReturnType>
     QGrpcStatus tryDeserialize(ReturnType *ret, QByteArrayView retData)
@@ -96,8 +102,8 @@ private:
         using namespace Qt::StringLiterals;
         auto _serializer = serializer();
         if (_serializer == nullptr) {
-            Q_EMIT errorOccurred(
-                    { QGrpcStatus::Unknown, "Serializing failed. Serializer is not ready."_L1 });
+            Q_EMIT errorOccurred({ QGrpcStatus::Unknown,
+                                   "Serializing failed. Serializer is not ready."_L1 });
             return std::nullopt;
         }
         return _serializer->serialize<ParamType>(&arg);

@@ -36,9 +36,7 @@
 
     The client application binds on the \c localhost with port
     \c 50051:
-    \quotefromfile magic8ball/clientservice.cpp
-    \skipto QUrl url("http://localhost:50051", QUrl::StrictMode);
-    \printuntil | QGrpcInsecureCallCredentials()));
+    \snippet magic8ball/clientservice.cpp 0
 
     And sends a request to the server part:
     \quotefromfile magic8ball/clientservice.cpp

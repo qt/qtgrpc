@@ -45,26 +45,29 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 
 /*!
     \fn template <typename ParamType> QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method,
-    const QProtobufMessage &arg)
+    const QProtobufMessage &arg, const QGrpcCallOptions &options);
 
     Synchronously calls the given \a method of this service client,
     with argument \a arg.
+    Uses \a options argument to set additional parameter for the call.
 */
 
 /*!
     \fn template <typename ParamType, typename ReturnType> QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method,
-    const QProtobufMessage &arg, ReturnType &ret)
+    const QProtobufMessage &arg, ReturnType &ret, const QGrpcCallOptions &options);
 
     Synchronously calls the given \a method of this service client,
     with argument \a arg and fills \a ret with gRPC reply.
+    Uses \a options argument to set additional parameter for the call.
 */
 
 /*!
     \fn template <typename ParamType> QSharedPointer<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView method,
-    const QProtobufMessage &arg)
+    const QProtobufMessage &arg, const QGrpcCallOptions &options);
 
     Streams messages from the server stream \a method with the message
     argument \a arg to the attached channel.
+    Uses \a options argument to set additional parameter for the call.
 */
 
 class QAbstractGrpcClientPrivate : public QObjectPrivate
@@ -114,7 +117,8 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
         stream->abort();
 }
 
-QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret)
+QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret,
+                                      const QGrpcCallOptions &options)
 {
     QGrpcStatus callStatus{ QGrpcStatus::Unknown };
     if (thread() != QThread::currentThread()) {
@@ -126,8 +130,9 @@ QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, QByteArrayView a
     }
     Q_D(QAbstractGrpcClient);
 
-    callStatus = d->channel ? d->channel->call(method, QLatin1StringView(d->service), arg, ret)
-                            : QGrpcStatus{ QGrpcStatus::Unknown, "No channel(s) attached."_L1 };
+    callStatus = d->channel
+            ? d->channel->call(method, QLatin1StringView(d->service), arg, ret, options)
+            : QGrpcStatus{ QGrpcStatus::Unknown, "No channel(s) attached."_L1 };
 
     if (callStatus != QGrpcStatus::Ok)
         emit errorOccurred(callStatus);
@@ -136,7 +141,8 @@ QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, QByteArrayView a
 }
 
 std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView method,
-                                                          QByteArrayView arg)
+                                                          QByteArrayView arg,
+                                                          const QGrpcCallOptions &options)
 {
     std::shared_ptr<QGrpcCallReply> reply;
     if (thread() != QThread::currentThread()) {
@@ -149,12 +155,13 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
     Q_D(QAbstractGrpcClient);
 
     if (d->channel) {
-        reply = d->channel->call(method, QLatin1StringView(d->service), arg);
+        reply = d->channel->call(method, QLatin1StringView(d->service), arg, options);
 
         auto errorConnection = std::make_shared<QMetaObject::Connection>();
-        *errorConnection =
-                connect(reply.get(), &QGrpcCallReply::errorOccurred, this,
-                        [this](const QGrpcStatus &status) { emit errorOccurred(status); });
+        *errorConnection = connect(reply.get(), &QGrpcCallReply::errorOccurred, this,
+                                   [this](const QGrpcStatus &status) {
+                                       emit errorOccurred(status);
+                                   });
     } else {
         emit errorOccurred({ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
     }
@@ -163,7 +170,8 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
 }
 
 std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView method,
-                                                              QByteArrayView arg)
+                                                              QByteArrayView arg,
+                                                              const QGrpcCallOptions &options)
 {
     std::shared_ptr<QGrpcStream> grpcStream;
 
@@ -181,7 +189,7 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
 
         auto errorConnection = std::make_shared<QMetaObject::Connection>();
         *errorConnection = connect(grpcStream.get(), &QGrpcStream::errorOccurred, this,
-                                   [this, grpcStream](const QGrpcStatus &status) {
+                                   [this, grpcStream, &options](const QGrpcStatus &status) {
                                        Q_D(QAbstractGrpcClient);
                                        qGrpcWarning()
                                                << grpcStream->method() << "call" << d->service
@@ -190,8 +198,9 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
                                        // TODO: Make timeout configurable from channel settings
                                        QTimer::singleShot(1000, this,
                                                           [this, method = grpcStream->method(),
-                                                           arg = grpcStream->arg()] {
-                                                              this->startStream(method, arg);
+                                                           arg = grpcStream->arg(), &options] {
+                                                              this->startStream(method, arg,
+                                                                                options);
                                                           });
                                    });
 

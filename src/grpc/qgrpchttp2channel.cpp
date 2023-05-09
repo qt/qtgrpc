@@ -94,9 +94,8 @@ struct QGrpcHttp2ChannelPrivate
         QByteArray container;
     };
 
-    QUrl url;
     QNetworkAccessManager nm;
-    std::unique_ptr<QAbstractGrpcCredentials> credentials;
+    QGrpcChannelOptions channelOptions;
 #if QT_CONFIG(ssl)
     QSslConfiguration sslConfig;
 #endif
@@ -104,9 +103,9 @@ struct QGrpcHttp2ChannelPrivate
     QObject lambdaContext;
 
     QNetworkReply *post(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-                        bool stream = false)
+                        const QGrpcCallOptions &callOptions, bool stream = false)
     {
-        QUrl callUrl = url;
+        QUrl callUrl = channelOptions.host();
         callUrl.setPath("/%1/%2"_L1.arg(service, method));
 
         qGrpcDebug() << "Service call url:" << callUrl;
@@ -118,9 +117,10 @@ struct QGrpcHttp2ChannelPrivate
 #if QT_CONFIG(ssl)
         request.setSslConfiguration(sslConfig);
 #endif
-        for (const auto &[key, value] : credentials->callCredentials().toStdMap())
-            request.setRawHeader(key, value.toString().toUtf8());
-
+        if (const auto credentials = callOptions.credentials()) {
+            for (const auto &[key, value] : credentials->toStdMap())
+                request.setRawHeader(key, value.toString().toUtf8());
+        }
         request.setAttribute(QNetworkRequest::Http2DirectAttribute, true);
 
         QByteArray msg(GrpcMessageSizeHeaderSize, '\0');
@@ -175,22 +175,22 @@ struct QGrpcHttp2ChannelPrivate
         return networkReply->readAll().mid(GrpcMessageSizeHeaderSize);
     }
 
-    QGrpcHttp2ChannelPrivate(const QUrl &_url,
-                             std::unique_ptr<QAbstractGrpcCredentials> _credentials)
-        : url(_url), credentials(std::move(_credentials))
+    QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &options) : channelOptions(options)
     {
 #if QT_CONFIG(ssl)
-        if (url.scheme() == "https"_L1) {
+        if (channelOptions.host().scheme() == "https"_L1) {
             // HTTPS connection requested but not ssl configuration provided.
-            Q_ASSERT(credentials->channelCredentials().contains(SslConfigCredential));
-            sslConfig = credentials->channelCredentials()
-                                .value(SslConfigCredential)
-                                .value<QSslConfiguration>();
-        } else if (url.scheme().isEmpty()) {
-            url.setScheme("http"_L1);
+            Q_ASSERT(channelOptions.sslConfiguration());
+            sslConfig = *channelOptions.sslConfiguration();
+        } else if (channelOptions.host().scheme().isEmpty()) {
+            auto tmpHost = channelOptions.host();
+            tmpHost.setScheme("http"_L1);
+            channelOptions.withHost(tmpHost);
         }
 #else
-        url.setScheme("http"_L1);
+        auto tmpHost = channelOptions.host();
+        tmpHost.setScheme("http"_L1);
+        channelOptions.withHost(tmpHost);
 #endif
     }
 
@@ -202,13 +202,10 @@ struct QGrpcHttp2ChannelPrivate
 };
 
 /*!
-    QGrpcHttp2Channel constructs QGrpcHttp2Channel with \a url used to
-    establish channel connections and \a credentials.
+    QGrpcHttp2Channel constructs QGrpcHttp2Channel with \a options.
 */
-QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &url,
-                                     std::unique_ptr<QAbstractGrpcCredentials> credentials)
-    : QAbstractGrpcChannel(),
-      dPtr(std::make_unique<QGrpcHttp2ChannelPrivate>(url, std::move(credentials)))
+QGrpcHttp2Channel::QGrpcHttp2Channel(const QGrpcChannelOptions &options)
+    : QAbstractGrpcChannel(), dPtr(std::make_unique<QGrpcHttp2ChannelPrivate>(options))
 {
 }
 
@@ -222,13 +219,15 @@ QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
 
     The RPC method name is constructed by concatenating the \a method
     and \a service parameters and called with the \a args argument.
+    Uses \a options argument to set additional parameter for the call.
 */
 QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView service,
-                                    QByteArrayView args, QByteArray &ret)
+                                    QByteArrayView args, QByteArray &ret,
+                                    const QGrpcCallOptions &options)
 {
     QEventLoop loop;
 
-    QNetworkReply *networkReply = dPtr->post(method, service, args);
+    QNetworkReply *networkReply = dPtr->post(method, service, args, options);
     QObject::connect(networkReply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 
     // If reply was finished in same stack it doesn't make sense to start event loop
@@ -248,17 +247,19 @@ QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView 
 
     The RPC method name is constructed by concatenating the \a method
     and \a service parameters and called with the \a args argument.
+    Uses \a options argument to set additional parameter for the call.
     The method can emit QGrpcCallReply::finished() and QGrpcCallReply::errorOccurred()
     signals on a QGrpcCallReply returned object.
 */
 std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QLatin1StringView method,
                                                         QLatin1StringView service,
-                                                        QByteArrayView args)
+                                                        QByteArrayView args,
+                                                        const QGrpcCallOptions &options)
 {
     std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(serializer()),
                                           [](QGrpcCallReply *reply) { reply->deleteLater(); });
 
-    QNetworkReply *networkReply = dPtr->post(method, service, args);
+    QNetworkReply *networkReply = dPtr->post(method, service, args, options);
 
     auto connection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
@@ -302,16 +303,18 @@ std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QLatin1StringView method
 
     The RPC method name is constructed by concatenating the \a method
     and \a service parameters and called with the \a arg argument.
-    Returns a shared pointer to the QGrpcStream.
+    Returns a shared pointer to the QGrpcStream. Uses \a options argument
+    to set additional parameter for the stream.
 
     Calls QGrpcStream::updateData() when the stream receives data from the server.
     The method may emit QGrpcStream::errorOccurred() when the stream has terminated with an error.
 */
 std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView method,
                                                             QLatin1StringView service,
-                                                            QByteArrayView arg)
+                                                            QByteArrayView arg,
+                                                            const QGrpcCallOptions &options)
 {
-    QNetworkReply *networkReply = dPtr->post(method, service, arg, true);
+    QNetworkReply *networkReply = dPtr->post(method, service, arg, options, true);
 
     std::shared_ptr<QGrpcStream> grpcStream(new QGrpcStream(method, arg, serializer()));
     auto finishConnection = std::make_shared<QMetaObject::Connection>();

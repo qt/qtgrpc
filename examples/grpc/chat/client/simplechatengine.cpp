@@ -6,7 +6,6 @@
 
 #include <QGrpcHttp2Channel>
 #include <QGrpcUserPasswordCredentials>
-#include <QGrpcInsecureChannelCredentials>
 
 #include <QDebug>
 #include <QFile>
@@ -45,10 +44,9 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
     QUrl url("http://localhost:65002");
 
     // ![0]
-    std::shared_ptr<QAbstractGrpcChannel> channel(
-            new QGrpcHttp2Channel(url,
-                                  QGrpcUserPasswordCredentials(name, password.toUtf8())
-                                          | QGrpcInsecureChannelCredentials()));
+    Q_UNUSED(password);
+    QGrpcChannelOptions options(url);
+    std::shared_ptr<QAbstractGrpcChannel> channel(new QGrpcHttp2Channel(options));
     // ![0]
 
     m_client->attachChannel(channel);

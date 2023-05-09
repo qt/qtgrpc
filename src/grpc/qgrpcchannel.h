@@ -8,6 +8,7 @@
 #include <QtCore/QSharedPointer>
 #include <QtCore/QUrl>
 #include <QtGrpc/qabstractgrpcclient.h>
+#include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 #include <memory>
@@ -26,17 +27,20 @@ public:
         SslDefaultCredentials,
     };
 
-    explicit QGrpcChannel(const QUrl &name, NativeGrpcChannelCredentials credentialsType,
-                          const QStringList &credentialsList);
-    explicit QGrpcChannel(const QUrl &name, NativeGrpcChannelCredentials credentialsType);
+    explicit QGrpcChannel(const QGrpcChannelOptions &options,
+                          NativeGrpcChannelCredentials credentialsType);
+
     ~QGrpcChannel() override;
 
     QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-                     QByteArray &ret) override;
-    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
-                                         QByteArrayView args) override;
-    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QLatin1StringView service,
-                                             QByteArrayView arg) override;
+                     QByteArray &ret,
+                     const QGrpcCallOptions &options = QGrpcCallOptions()) override;
+    std::shared_ptr<QGrpcCallReply> call(
+            QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
+            const QGrpcCallOptions &options = QGrpcCallOptions()) override;
+    std::shared_ptr<QGrpcStream> startStream(
+            QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
+            const QGrpcCallOptions &options = QGrpcCallOptions()) override;
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const override;
 
 private:

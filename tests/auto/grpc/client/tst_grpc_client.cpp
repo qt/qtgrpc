@@ -8,8 +8,6 @@
 #endif
 #include <QGrpcCredentials>
 #include <QGrpcHttp2Channel>
-#include <QGrpcInsecureCallCredentials>
-#include <QGrpcInsecureChannelCredentials>
 
 #include <QCoreApplication>
 #include <QCryptographicHash>
@@ -39,10 +37,8 @@ using namespace qtgrpc::tests;
 static std::shared_ptr<TestService::Client> createHttp2Client()
 {
     auto client = std::make_shared<TestService::Client>();
-    auto channel = std::make_shared<QGrpcHttp2Channel>(QUrl("http://localhost:50051",
-                                                            QUrl::StrictMode),
-                                                       QGrpcInsecureChannelCredentials()
-                                                               | QGrpcInsecureCallCredentials());
+    QGrpcChannelOptions channelOptions(QUrl("http://localhost:50051", QUrl::StrictMode));
+    auto channel = std::make_shared<QGrpcHttp2Channel>(channelOptions);
     client->attachChannel(std::move(channel));
     return client;
 }
@@ -52,7 +48,8 @@ static std::shared_ptr<TestService::Client> createHttp2Client()
 static std::shared_ptr<TestService::Client> createGrpcSocketClient()
 {
     auto client = std::make_shared<TestService::Client>();
-    auto channel = std::make_shared<QGrpcChannel>(QString("unix:///tmp/test.sock"),
+    QGrpcChannelOptions channelOptions(QUrl("unix:///tmp/test.sock"));
+    auto channel = std::make_shared<QGrpcChannel>(channelOptions,
                                                   QGrpcChannel::InsecureChannelCredentials);
     client->attachChannel(std::move(channel));
     return client;
@@ -61,7 +58,8 @@ static std::shared_ptr<TestService::Client> createGrpcSocketClient()
 static std::shared_ptr<TestService::Client> createGrpcHttpClient()
 {
     auto client = std::make_shared<TestService::Client>();
-    auto channel = std::make_shared<QGrpcChannel>(QString("localhost:50051"),
+    QGrpcChannelOptions channelOptions(QUrl("localhost:50051"));
+    auto channel = std::make_shared<QGrpcChannel>(channelOptions,
                                                   QGrpcChannel::InsecureChannelCredentials);
     client->attachChannel(std::move(channel));
     return client;

@@ -180,39 +180,38 @@ void QGrpcChannelCall::waitForFinished(const QDeadlineTimer &deadline)
     thread->wait(deadline);
 }
 
-QGrpcChannelPrivate::QGrpcChannelPrivate(const QUrl &url,
-                                         QGrpcChannel::NativeGrpcChannelCredentials credentialsType,
-                                         const QStringList &credentialsList)
+QGrpcChannelPrivate::QGrpcChannelPrivate(const QGrpcChannelOptions &options,
+                                         QGrpcChannel::NativeGrpcChannelCredentials credentialsType)
 {
     switch (credentialsType) {
     case QGrpcChannel::InsecureChannelCredentials:
         m_credentials = grpc::InsecureChannelCredentials();
-        m_channel = grpc::CreateChannel(url.toString().toStdString(), m_credentials);
+        m_channel = grpc::CreateChannel(options.host().toString().toStdString(), m_credentials);
         break;
     case QGrpcChannel::GoogleDefaultCredentials:
         m_credentials = grpc::GoogleDefaultCredentials();
-        m_channel = grpc::CreateChannel(url.toString().toStdString(), m_credentials);
+        m_channel = grpc::CreateChannel(options.host().toString().toStdString(), m_credentials);
         break;
     case QGrpcChannel::SslDefaultCredentials:
-        if (credentialsList.size() < 3) {
-            m_credentials = grpc::SslCredentials(grpc::SslCredentialsOptions());
-        } else {
+        if (auto maybeCredentialList = options.credentialList()) {
             grpc::SslCredentialsOptions options;
-            options.pem_root_certs = credentialsList[0].toStdString();
-            options.pem_private_key = credentialsList[1].toStdString();
-            options.pem_cert_chain = credentialsList[2].toStdString();
+            options.pem_root_certs = (*maybeCredentialList)[0].toStdString();
+            options.pem_private_key = (*maybeCredentialList)[1].toStdString();
+            options.pem_cert_chain = (*maybeCredentialList)[2].toStdString();
             m_credentials = grpc::SslCredentials(options);
+        } else {
+            m_credentials = grpc::SslCredentials(grpc::SslCredentialsOptions());
         }
-        m_channel = grpc::CreateChannel(url.toString().toStdString(), m_credentials);
+        m_channel = grpc::CreateChannel(options.host().toString().toStdString(), m_credentials);
         break;
     }
 }
 
 QGrpcChannelPrivate::~QGrpcChannelPrivate() = default;
 
-std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(QLatin1StringView method,
-                                                          QLatin1StringView service,
-                                                          QByteArrayView args)
+std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(
+        QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
+        [[maybe_unused]] const QGrpcCallOptions &options)
 {
     const QByteArray rpcName = buildRpcName(service, method);
     std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(serializer()));
@@ -248,21 +247,22 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(QLatin1StringView meth
 }
 
 QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView service,
-                                      QByteArrayView args, QByteArray &ret)
+                                      QByteArrayView args, QByteArray &ret,
+                                      const QGrpcCallOptions &options)
 {
     const QByteArray rpcName = buildRpcName(service, method);
     QGrpcChannelCall call(m_channel.get(), QLatin1StringView(rpcName), args);
 
     call.start();
-    call.waitForFinished();
+    options.deadline() ? call.waitForFinished(*options.deadline()) : call.waitForFinished();
 
     ret = call.response;
     return call.status;
 }
 
-std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(QLatin1StringView method,
-                                                              QLatin1StringView service,
-                                                              QByteArrayView arg)
+std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(
+        QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
+        [[maybe_unused]] const QGrpcCallOptions &options)
 {
     std::shared_ptr<QGrpcStream> stream(new QGrpcStream(method, arg, serializer()));
     const QByteArray rpcName = buildRpcName(service, stream->method());
@@ -315,22 +315,11 @@ std::shared_ptr<QAbstractProtobufSerializer> QGrpcChannelPrivate::serializer() c
 }
 
 /*!
-    Constructs a gRPC channel, with \a url, \a credentialsType,
-    and \a credentialsList object.
+    Constructs a gRPC channel, with \a options and \a credentialsType.
 */
-QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credentialsType,
-                           const QStringList &credentialsList)
-    : QAbstractGrpcChannel(),
-      dPtr(std::make_unique<QGrpcChannelPrivate>(url, credentialsType, credentialsList))
-{
-}
-
-/*!
-    Constructs a gRPC channel, with \a url, \a credentialsType and
-    an empty credentials list.
-*/
-QGrpcChannel::QGrpcChannel(const QUrl &url, NativeGrpcChannelCredentials credentialsType)
-    : QGrpcChannel(std::move(url), credentialsType, QStringList())
+QGrpcChannel::QGrpcChannel(const QGrpcChannelOptions &options,
+                           NativeGrpcChannelCredentials credentialsType)
+    : QAbstractGrpcChannel(), dPtr(std::make_unique<QGrpcChannelPrivate>(options, credentialsType))
 {
 }
 
@@ -344,11 +333,13 @@ QGrpcChannel::~QGrpcChannel() = default;
 
     The RPC method name is constructed by concatenating the \a method
     and \a service parameters and called with the \a args argument.
+    Uses \a options argument to set additional parameter for the call.
 */
 QGrpcStatus QGrpcChannel::call(QLatin1StringView method, QLatin1StringView service,
-                               QByteArrayView args, QByteArray &ret)
+                               QByteArrayView args, QByteArray &ret,
+                               const QGrpcCallOptions &options)
 {
-    return dPtr->call(method, service, args, ret);
+    return dPtr->call(method, service, args, ret, options);
 }
 
 /*!
@@ -356,13 +347,15 @@ QGrpcStatus QGrpcChannel::call(QLatin1StringView method, QLatin1StringView servi
 
     The RPC method name is constructed by concatenating the \a method
     and \a service parameters and called with the \a args argument.
+    Uses \a options argument to set additional parameter for the call.
     The method can emit QGrpcCallReply::finished() and QGrpcCallReply::errorOccurred()
     signals on a QGrpcCallReply returned object.
 */
 std::shared_ptr<QGrpcCallReply> QGrpcChannel::call(QLatin1StringView method,
-                                                   QLatin1StringView service, QByteArrayView args)
+                                                   QLatin1StringView service, QByteArrayView args,
+                                                   const QGrpcCallOptions &options)
 {
-    return dPtr->call(method, service, args);
+    return dPtr->call(method, service, args, options);
 }
 
 /*!
@@ -371,15 +364,17 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannel::call(QLatin1StringView method,
     The RPC method name is constructed by concatenating the \a method
     and \a service parameters and called with the \a arg argument.
     Returns a shared pointer to the QGrpcStream.
+    Uses \a options argument to set additional parameter for the stream.
 
     Calls QGrpcStream::updateData() when the stream receives data from the server.
     The method may emit QGrpcStream::errorOccurred() when the stream has terminated with an error.
 */
 std::shared_ptr<QGrpcStream> QGrpcChannel::startStream(QLatin1StringView method,
                                                        QLatin1StringView service,
-                                                       QByteArrayView arg)
+                                                       QByteArrayView arg,
+                                                       const QGrpcCallOptions &options)
 {
-    return dPtr->startStream(method, service, arg);
+    return dPtr->startStream(method, service, arg, options);
 }
 
 /*!

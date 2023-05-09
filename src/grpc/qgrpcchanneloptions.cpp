@@ -1,0 +1,164 @@
+// Copyright (C) 2023 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+
+#include <qtgrpcglobal_p.h>
+
+#include "qgrpcchanneloptions.h"
+
+QT_BEGIN_NAMESPACE
+
+using namespace Qt::StringLiterals;
+
+/*!
+    \class QGrpcChannelOptions
+    \inmodule QtGrpc
+    \brief The QGrpcChannelOptions is an storage class used to set additional channel options.
+
+    QGrpcChannelOptions provides a set of functions to set and access the channel and default call
+    options that are used by gRPC channels to communicate with the services.
+*/
+
+struct QGrpcChannelOptionsPrivate
+{
+public:
+    QGrpcChannelOptionsPrivate(const QUrl &_host) : host(_host), credentials(nullptr) { }
+
+    QUrl host;
+    std::optional<std::chrono::milliseconds> deadline;
+    std::shared_ptr<QGrpcChannelCredentials> credentials;
+    std::optional<QStringList> credentialList;
+#if QT_CONFIG(ssl)
+    std::optional<QSslConfiguration> sslConfiguration;
+#endif
+};
+
+/*!
+    Constructs an QGrpcChannelOptions object with \a host value.
+*/
+QGrpcChannelOptions::QGrpcChannelOptions(const QUrl &host)
+    : dPtr(std::make_unique<QGrpcChannelOptionsPrivate>(host))
+{
+}
+
+/*!
+    Construct a copy of QGrpcChannelOptions with \a other object.
+*/
+QGrpcChannelOptions::QGrpcChannelOptions(const QGrpcChannelOptions &other)
+    : dPtr(std::make_unique<QGrpcChannelOptionsPrivate>(*other.dPtr))
+{
+}
+
+/*!
+    Assigns \a other to this QGrpcChannelOptions and returns a reference to this
+    QGrpcChannelOptions.
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::operator=(const QGrpcChannelOptions &other)
+{
+    *dPtr = *other.dPtr;
+    return *this;
+}
+
+/*!
+    Destroys the QGrpcChannelOptions object.
+*/
+QGrpcChannelOptions::~QGrpcChannelOptions() = default;
+
+/*!
+    Sets host value with \a host and returns updated QGrpcChannelOptions object.
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::withHost(const QUrl &host)
+{
+    dPtr->host = host;
+    return *this;
+}
+
+/*!
+    Sets deadline value with \a deadline and returns updated QGrpcChannelOptions object.
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::withDeadline(std::chrono::milliseconds deadline)
+{
+    dPtr->deadline = deadline;
+    return *this;
+}
+
+/*!
+    Sets channel credentials with \a credentials and returns updated QGrpcChannelOptions object.
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::withCredentials(
+        std::shared_ptr<QGrpcChannelCredentials> credentials)
+{
+    dPtr->credentials = credentials;
+    return *this;
+}
+
+/*!
+    Sets channel credential list with \a credentialList and returns updated QGrpcChannelOptions object.
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::withCredentialList(const QStringList &credentialList)
+{
+    dPtr->credentialList = credentialList;
+    return *this;
+}
+
+/*!
+    Returns deadline value for every call on the channel.
+
+    If value was not set returns empty std::optional.
+*/
+std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const
+{
+    return dPtr->deadline;
+}
+
+/*!
+    Returns host value for every call on the channel.
+*/
+QUrl QGrpcChannelOptions::host() const
+{
+    return dPtr->host;
+}
+
+/*!
+    Returns credentials for the channel.
+
+    If value was not set returns empty std::optional.
+*/
+std::optional<QGrpcCredentialMap> QGrpcChannelOptions::credentials() const
+{
+    return dPtr->credentials ? dPtr->credentials->channelCredentials()
+                             : std::optional<QGrpcCredentialMap>();
+}
+
+/*!
+    Returns credential list for the channel.
+
+    If value was not set returns empty std::optional.
+*/
+std::optional<QStringList> QGrpcChannelOptions::credentialList() const
+{
+    return dPtr->credentialList;
+}
+
+#if QT_CONFIG(ssl)
+/*!
+    Sets SSL configuration with \a sslConfiguration and returns updated QGrpcChannelOptions object.
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::withSslConfiguration(
+        const QSslConfiguration &sslConfiguration)
+{
+    dPtr->sslConfiguration = sslConfiguration;
+    return *this;
+}
+
+/*!
+    Returns SSL configuration for the channel.
+
+    If value was not set returns empty std::optional.
+*/
+std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const
+{
+    return dPtr->sslConfiguration;
+}
+#endif
+
+QT_END_NAMESPACE

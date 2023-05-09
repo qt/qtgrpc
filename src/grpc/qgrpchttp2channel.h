@@ -7,6 +7,7 @@
 
 #include <QtCore/QUrl>
 #include <QtGrpc/qabstractgrpcchannel.h>
+#include <QtGrpc/qgrpcchanneloptions.h>
 
 #include <memory>
 
@@ -18,16 +19,18 @@ struct QGrpcHttp2ChannelPrivate;
 class Q_GRPC_EXPORT QGrpcHttp2Channel final : public QAbstractGrpcChannel
 {
 public:
-    explicit QGrpcHttp2Channel(const QUrl &url,
-                               std::unique_ptr<QAbstractGrpcCredentials> credentials);
+    explicit QGrpcHttp2Channel(const QGrpcChannelOptions &options);
     ~QGrpcHttp2Channel() override;
 
     QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-                     QByteArray &ret) override;
-    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
-                                         QByteArrayView args) override;
-    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QLatin1StringView service,
-                                             QByteArrayView arg) override;
+                     QByteArray &ret,
+                     const QGrpcCallOptions &options = QGrpcCallOptions()) override;
+    std::shared_ptr<QGrpcCallReply> call(
+            QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
+            const QGrpcCallOptions &options = QGrpcCallOptions()) override;
+    std::shared_ptr<QGrpcStream> startStream(
+            QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
+            const QGrpcCallOptions &options = QGrpcCallOptions()) override;
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const override;
 
 private:

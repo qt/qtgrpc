@@ -9,9 +9,6 @@
 #  include <grpcpp/security/credentials.h>
 #endif
 #include <QGrpcHttp2Channel>
-#include <QGrpcInsecureCallCredentials>
-#include <QGrpcInsecureChannelCredentials>
-#include <QGrpcSslCredentials>
 
 #include <QCoreApplication>
 #include <QCryptographicHash>
@@ -94,9 +91,9 @@ void QtGrpcSslClientTest::Http2ChannelIncorrectSecureCredentialsTest()
     //  conf.setCaCertificates({QSslCertificate(cert)});
 
     TestService::Client testClient;
-    testClient.attachChannel(std::make_shared<QGrpcHttp2Channel>(
-            QUrl("https://localhost:60051", QUrl::StrictMode),
-            QGrpcInsecureCallCredentials() | QGrpcSslCredentials(conf)));
+    QGrpcChannelOptions channelOptions(QUrl("https://localhost:60051", QUrl::StrictMode));
+    channelOptions.withSslConfiguration(conf);
+    testClient.attachChannel(std::make_shared<QGrpcHttp2Channel>(channelOptions));
 
     SimpleStringMessage expected;
     expected.setTestFieldString("Hello Qt!");
@@ -113,9 +110,11 @@ void QtGrpcSslClientTest::GrpcHttpChannelIncorrectSecureCredentialsTest()
     optionsList.append(QString::fromStdString(options.pem_root_certs));
     optionsList.append(QString::fromStdString(options.pem_private_key));
     optionsList.append(QString::fromStdString(options.pem_cert_chain));
-    testClient.attachChannel(std::make_shared<QGrpcChannel>(QUrl("localhost:60051"),
-                                                            QGrpcChannel::SslDefaultCredentials,
-                                                            optionsList));
+    QGrpcChannelOptions channelOptions(QUrl("localhost:60051"));
+    channelOptions.withCredentialList(optionsList);
+
+    testClient.attachChannel(std::make_shared<QGrpcChannel>(channelOptions,
+                                                            QGrpcChannel::SslDefaultCredentials));
 
     SimpleStringMessage expected;
     expected.setTestFieldString("Hello Qt!");
@@ -127,7 +126,8 @@ void QtGrpcSslClientTest::GrpcHttpChannelIncorrectSecureCredentialsTest()
 void QtGrpcSslClientTest::GrpcSocketChannelIncorrectSecureCredentialsTest()
 {
     TestService::Client testClient;
-    testClient.attachChannel(std::make_shared<QGrpcChannel>(QUrl("unix:///tmp/test.sock"),
+    QGrpcChannelOptions channelOptions(QUrl("unix:///tmp/test.sock"));
+    testClient.attachChannel(std::make_shared<QGrpcChannel>(channelOptions,
                                                             QGrpcChannel::SslDefaultCredentials));
 
     SimpleStringMessage expected;

@@ -8,6 +8,7 @@
 #include <QtCore/QString>
 #include <QtCore/QThread>
 #include <QtCore/qbytearray.h>
+#include <QtGrpc/qgrpccalloptions.h>
 #include <QtGrpc/qgrpccredentials.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
@@ -26,13 +27,14 @@ class Q_GRPC_EXPORT QAbstractGrpcChannel
 {
 public:
     virtual QGrpcStatus call(QLatin1StringView method, QLatin1StringView service,
-                             QByteArrayView args, QByteArray &ret) = 0;
-    virtual std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method,
-                                                 QLatin1StringView service,
-                                                 QByteArrayView args) = 0;
-    virtual std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method,
-                                                     QLatin1StringView service,
-                                                     QByteArrayView arg) = 0;
+                             QByteArrayView args, QByteArray &ret,
+                             const QGrpcCallOptions &options = QGrpcCallOptions()) = 0;
+    virtual std::shared_ptr<QGrpcCallReply> call(
+            QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
+            const QGrpcCallOptions &options = QGrpcCallOptions()) = 0;
+    virtual std::shared_ptr<QGrpcStream> startStream(
+            QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
+            const QGrpcCallOptions &options = QGrpcCallOptions()) = 0;
     virtual std::shared_ptr<QAbstractProtobufSerializer> serializer() const = 0;
 
 protected:

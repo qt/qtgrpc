@@ -14,19 +14,21 @@ const char *GrpcTemplates::ChildClassDeclarationTemplate()
 const char *GrpcTemplates::ClientMethodDeclarationSyncTemplate()
 {
     return "QGrpcStatus $method_name$(const $param_type$ &$param_name$, "
-           "$return_type$ *$return_name$);\n";
+           "$return_type$ *$return_name$, const QGrpcCallOptions &options = {});\n";
 }
 
 const char *GrpcTemplates::ClientMethodDeclarationAsyncTemplate()
 {
-    return "std::shared_ptr<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$);\n";
+    return "std::shared_ptr<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$, const "
+           "QGrpcCallOptions &options = {});\n";
 }
 
 const char *GrpcTemplates::ClientMethodDeclarationAsync2Template()
 {
     return "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$, const QObject "
            "*context, "
-           "const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback);\n";
+           "const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback, const "
+           "QGrpcCallOptions &options = {});\n";
 }
 
 const char *GrpcTemplates::ClientMethodDeclarationQmlTemplate()
@@ -59,28 +61,30 @@ const char *GrpcTemplates::ClientConstructorDefinitionTemplate()
 const char *GrpcTemplates::ClientMethodDefinitionSyncTemplate()
 {
     return "QGrpcStatus $classname$::$method_name$(const $param_type$ &$param_name$, "
-           "$return_type$ *$return_name$)\n"
+           "$return_type$ *$return_name$, const QGrpcCallOptions &options)\n"
            "{\n"
-           "    return call<$param_type$>(\"$method_name$\"_L1, $param_name$, $return_name$);\n"
+           "    return call<$param_type$>(\"$method_name$\"_L1, $param_name$, $return_name$, "
+           "options);\n"
            "}\n";
 }
 
 const char *GrpcTemplates::ClientMethodDefinitionAsyncTemplate()
 {
     return "\nstd::shared_ptr<QGrpcCallReply> $classname$::$method_name$(const $param_type$ "
-           "&$param_name$)\n"
+           "&$param_name$, const QGrpcCallOptions &options)\n"
            "{\n"
-           "    return call<$param_type$>(\"$method_name$\"_L1, $param_name$);\n"
+           "    return call<$param_type$>(\"$method_name$\"_L1, $param_name$, options);\n"
            "}\n";
 }
 
 const char *GrpcTemplates::ClientMethodDefinitionAsync2Template()
 {
     return "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$, const QObject "
-           "*context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback)\n"
+           "*context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback, const "
+           "QGrpcCallOptions &options)\n"
            "{\n"
            "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\"_L1, "
-           "$param_name$);\n"
+           "$param_name$, options);\n"
            "    QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, "
            "callback]() "
            "{\n"
@@ -165,7 +169,7 @@ const char *GrpcTemplates::ClientMethodDefinitionQml2Template()
 const char *GrpcTemplates::ClientMethodServerStreamDeclarationTemplate()
 {
     return "std::shared_ptr<QGrpcStream> stream$method_name_upper$(const $param_type$ "
-           "&$param_name$);\n";
+           "&$param_name$, const QGrpcCallOptions &options = {});\n";
 }
 
 const char *GrpcTemplates::ClientMethodServerStream2DeclarationTemplate()
@@ -185,9 +189,9 @@ const char *GrpcTemplates::ClientMethodServerStreamQmlDeclarationTemplate()
 const char *GrpcTemplates::ClientMethodServerStreamDefinitionTemplate()
 {
     return "std::shared_ptr<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
-           "&$param_name$)\n"
+           "&$param_name$, const QGrpcCallOptions &options)\n"
            "{\n"
-           "    return startStream<$param_type$>(\"$method_name$\"_L1, $param_name$);\n"
+           "    return startStream<$param_type$>(\"$method_name$\"_L1, $param_name$, options);\n"
            "}\n\n";
 }
 

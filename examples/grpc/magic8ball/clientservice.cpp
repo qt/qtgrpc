@@ -4,7 +4,6 @@
 #include "clientservice.h"
 
 #include <QGrpcHttp2Channel>
-#include <QGrpcInsecureChannelCredentials>
 
 using namespace qtgrpc::examples;
 
@@ -16,10 +15,10 @@ ClientService::ClientService(QObject *parent) :
     connect(m_client.get(), &ExampleService::Client::errorOccurred,
             this, &ClientService::errorOccurred);
 
-    QUrl url("http://localhost:50051", QUrl::StrictMode);
-    m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(url,
-                                                                QGrpcInsecureChannelCredentials()
-                                                                | QGrpcInsecureCallCredentials()));
+    //! [0]
+    QGrpcChannelOptions channelOptions(QUrl("http://localhost:50051", QUrl::StrictMode));
+    m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(channelOptions));
+    //! [0]
 }
 
 void ClientService::errorOccurred()
