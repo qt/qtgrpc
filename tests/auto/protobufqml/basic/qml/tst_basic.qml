@@ -6,6 +6,8 @@ import QtTest
 
 import qtprotobufnamespace.tests
 
+pragma ValueTypeBehavior: Addressable
+
 TestCase {
     name: "QtProtobuf basic messages test"
     property simpleBoolMessage boolMsg;
@@ -18,6 +20,15 @@ TestCase {
     property complexMessage complexMsg;
     property simpleStringMessage outerMessage;
     property simpleStringMessage innerMessage;
+    property complexMessage complexMsgNoInit;
+    property simpleInt64Message int64Msg;
+    property simpleSInt64Message sint64Msg;
+    property simpleUInt64Message uint64Msg;
+    property simpleFixedInt64Message fixed64Msg;
+    property simpleSFixedInt64Message sfixed64Msg;
+
+    // Messages with fields not compatible with QML
+    property simpleBytesMessage bytesMessage;
 
     function test_1initialization() {
         int32Msg.testFieldInt = 2147483647
@@ -30,6 +41,133 @@ TestCase {
         innerMessage.testFieldString = "inner"
         complexMsg.testComplexField = innerMessage
         complexMsg.testComplexField.testFieldString = "inner"
+    }
+
+    function test_protobufTypesTypeCheck_data() {
+        return [
+                    {
+                        tag: "SimpleBoolMessage testFieldBool type",
+                        field: typeof boolMsg.testFieldBool,
+                        answer: "boolean"
+                    },
+                    {
+                        tag: "SimpleIntMessage testFieldInt type",
+                        field: typeof int32Msg.testFieldInt,
+                        answer: "number"
+                    },
+                    {
+                        tag: "SimpleSIntMessage testFieldInt type",
+                        field: typeof sint32Msg.testFieldInt,
+                        answer: "number"
+                    },
+                    {
+                        tag: "SimpleUIntMessage testFieldInt type",
+                        field: typeof uint32Msg.testFieldInt,
+                        answer: "number"
+                    },
+                    {
+                        tag: "SimpleFixedInt32Message testFieldInt type",
+                        field: typeof fixed32Msg.testFieldFixedInt32,
+                        answer: "number"
+                    },
+                    {
+                        tag: "SimpleSFixedInt32Message testFieldInt type",
+                        field: typeof sfixed32Msg.testFieldFixedInt32,
+                        answer: "number"
+                    },
+                    {
+                        tag: "SimpleStringMessage testFieldString type",
+                        field: typeof stringMsg.testFieldString,
+                        answer: "string"
+                    },
+                    {
+                        tag: "SimpleSInt64Message testFieldInt type",
+                        field: typeof sint64Msg.testFieldInt,
+                        answer: "number"
+                    },
+                    {
+                        tag: "SimpleUInt64Message testFieldInt type",
+                        field: typeof uint64Msg.testFieldInt,
+                        answer: "number"
+                    },
+                    {
+                        tag: "SimpleInt64Message testFieldInt type",
+                        field: typeof int64Msg.testFieldInt,
+                        answer: "number"
+                    },
+                    {
+                        tag: "SimpleFixedInt64Message testFieldInt type",
+                        field: typeof fixed64Msg.testFieldFixedInt64,
+                        answer: "number"
+                    },
+                    {
+                        tag: "SimpleSFixedInt64Message testFieldInt type",
+                        field: typeof sfixed64Msg.testFieldFixedInt64,
+                        answer: "number"
+                    }
+                ]
+    }
+
+    function test_protobufTypesTypeCheck(data) {
+        //TODO: int64, fixed64, sfixed64 not recognized as numbers. See QTBUG-113516.
+        expectFail("SimpleInt64Message testFieldInt type",
+            "Proper type support is not implemented")
+        expectFail("SimpleFixedInt64Message testFieldInt type",
+            "Proper type support is not implemented")
+        expectFail("SimpleSFixedInt64Message testFieldInt type",
+            "Proper type support is not implemented")
+        compare(data.field, data.answer)
+    }
+
+    function test_unsupportedProtobufTypesTypeCheck_data() {
+        // The below types contain fields that are not supported by QML so the property is not
+        // accessible but we can still check that it's valid. typeof check returns 'object' for
+        // these fields.
+        return [
+                    {
+                        tag: "SimpleBytesMessage testFieldBytes type",
+                        field: typeof bytesMessage.testFieldBytes,
+                        answer: "object"
+                    },
+                ]
+    }
+
+    function test_unsupportedProtobufTypesTypeCheck(data) {
+        compare(data.field, data.answer)
+    }
+
+    function test_complexMessageTypeCheck_data() {
+        return [
+                    {
+                        tag: "ComplexMessage testComplexField type",
+                        field: typeof complexMsgNoInit.testComplexField,
+                        answer: "object"
+                    },
+                    {
+                        tag: "ComplexMessage testComplexField exact type",
+                        field: complexMsgNoInit.testComplexField as simpleStringMessage,
+                        answer: "qtprotobufnamespace::tests::SimpleStringMessage()"
+                    },
+                    {
+                        tag: "ComplexMessage testComplexField exact invalid type",
+                        field: complexMsgNoInit.testComplexField as simpleSIntMessage,
+                        answer: null
+                    },
+                    {
+                        tag: "ComplexMessage testComplexField.testFieldString type",
+                        field: typeof complexMsgNoInit.testComplexField.testFieldString,
+                        answer: "string"
+                    },
+                    {
+                        tag: "ComplexMessage testFieldInt type",
+                        field: typeof complexMsgNoInit.testFieldInt,
+                        answer: "number"
+                    },
+                ]
+    }
+
+    function test_complexMessageTypeCheck(data) {
+        compare(data.field, data.answer)
     }
 
     function test_1initializationCheck_data() {
