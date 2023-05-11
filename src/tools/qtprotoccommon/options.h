@@ -29,20 +29,21 @@ public:
     static const Options &instance();
     static void setFromString(const std::string &options);
 
-    bool hasQml() const { return m_hasQml; }
+    bool hasQml() const { return !m_qmlUri.empty(); }
     bool generateComments() const { return m_generateComments; }
     bool isFolder() const { return m_isFolder; }
     bool generateFieldEnum() const { return m_generateFieldEnum; }
     const std::string &extraNamespace() const { return m_extraNamespace; }
     const std::string &exportMacro() const { return m_exportMacro; }
+    const std::string &qmlUri() const { return m_qmlUri; }
 
 private:
-    bool m_hasQml;
     bool m_generateComments;
     bool m_isFolder;
     bool m_generateFieldEnum;
     std::string m_extraNamespace;
     std::string m_exportMacro;
+    std::string m_qmlUri;
 };
 
 }

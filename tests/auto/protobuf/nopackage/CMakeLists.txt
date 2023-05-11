@@ -3,8 +3,8 @@
 
 qt6_add_protobuf(tst_protobuf_nopackagetypes_qtprotobuf_gen
     PROTO_FILES
-        proto/nopackage.proto
-        proto/nopackageexternal.proto
+        ../../shared/data/proto/nopackage.proto
+        ../../shared/data/proto/nopackageexternal.proto
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_nopackagetypes_qtprotobuf_gen)

@@ -48,4 +48,16 @@ qt_add_protobuf(tst_qtprotobufgen
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/packed"
 )
 
+if(TARGET Qt6::Qml)
+    qt_add_protobuf(tst_qtprotobufgenplugin
+        PROTO_FILES
+            ../shared/data/proto/nopackage.proto
+            ../shared/data/proto/nopackageexternal.proto
+        QML
+        QML_URI "nopackage.uri.test"
+        OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/qml-no-package"
+    )
+    qt_autogen_tools_initial_setup(tst_qtprotobufgenplugin)
+endif()
+
 qt_autogen_tools_initial_setup(tst_qtprotobufgen)

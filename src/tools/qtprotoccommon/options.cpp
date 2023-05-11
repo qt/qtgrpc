@@ -8,7 +8,7 @@
 
 using namespace ::qtprotoccommon;
 
-static const char QmlPluginOption[] = "QML";
+static const char QmlPluginUriOption[] = "QML_URI";
 static const char CommentsGenerationOption[] = "COPY_COMMENTS";
 static const char FolderGenerationOption[] = "GENERATE_PACKAGE_SUBFOLDERS";
 static const char FieldEnumGenerationOption[] = "FIELD_ENUM";
@@ -16,7 +16,7 @@ static const char ExtraNamespaceGenerationOption[] = "EXTRA_NAMESPACE";
 static const char ExportMacroGenerationOption[] = "EXPORT_MACRO";
 
 Options::Options()
-    : m_hasQml(false), m_generateComments(false), m_isFolder(false), m_generateFieldEnum(true)
+    : m_generateComments(false), m_isFolder(false), m_generateFieldEnum(true)
 {
 }
 
@@ -50,10 +50,7 @@ void Options::setFromString(const std::string &options)
     Options &instance = mutableInstance();
     for (const auto &option : utils::split(options, ";")) {
         QT_PROTOBUF_DEBUG("option: " << option);
-        if (option == QmlPluginOption) {
-            QT_PROTOBUF_DEBUG("set m_hasQml: true");
-            instance.m_hasQml = true;
-        } else if (option == CommentsGenerationOption) {
+        if (option == CommentsGenerationOption) {
             QT_PROTOBUF_DEBUG("set m_generateComments: true");
             instance.m_generateComments = true;
         } else if (option == FolderGenerationOption) {
@@ -70,6 +67,9 @@ void Options::setFromString(const std::string &options)
         } else if (option.find(ExportMacroGenerationOption) == 0) {
             instance.m_exportMacro = extractCompositeOptionValue(option);
             QT_PROTOBUF_DEBUG("set m_exportMacro: " << instance.m_exportMacro);
+        } else if (option.find(QmlPluginUriOption) == 0) {
+            instance.m_qmlUri = extractCompositeOptionValue(option);
+            QT_PROTOBUF_DEBUG("set m_qmlUri: " << instance.m_qmlUri);
         }
     }
 }

@@ -13,6 +13,7 @@ macro(_qt_internal_get_protoc_common_options option_args single_args multi_args)
     set(${single_args}
         EXTRA_NAMESPACE
         EXPORT_MACRO
+        QML_URI
     )
 
     set(${multi_args} "")
@@ -178,13 +179,14 @@ endfunction()
 # Multi-value arguments:
 #   PROTO_FILES - input list of the proto files. May contain either absolute or relative paths.
 function(_qt_internal_protobuf_preparse_proto_files
-    out_proto_files out_proto_includes out_generated_files base_dir)
+    out_proto_files out_proto_includes out_generated_files out_qml_uri base_dir)
 
-    cmake_parse_arguments(arg "GENERATE_PACKAGE_SUBFOLDERS;QML" "" "PROTO_FILES" ${ARGN})
+    cmake_parse_arguments(arg "GENERATE_PACKAGE_SUBFOLDERS;QML" "QML_URI" "PROTO_FILES" ${ARGN})
 
     unset(proto_files)
     unset(proto_includes)
     unset(output_files)
+    set(proto_packages "")
     foreach(f IN LISTS arg_PROTO_FILES)
         if(NOT IS_ABSOLUTE "${f}")
             set(f "${base_dir}/${f}")
@@ -215,12 +217,40 @@ function(_qt_internal_protobuf_preparse_proto_files
             "${folder_path}${basename}_protobuftyperegistrations.cpp"
         )
         if(arg_QML)
-            list(APPEND output_files "${folder_path}${basename}plugin.cpp")
+            list(APPEND proto_packages "${proto_package}")
         endif()
     endforeach()
     list(REMOVE_DUPLICATES proto_files)
     list(REMOVE_DUPLICATES proto_includes)
     list(REMOVE_DUPLICATES output_files)
+
+    if(arg_QML)
+        if(arg_QML_URI)
+            set(qml_uri "${arg_QML_URI}")
+        elseif(proto_packages)
+            list(REMOVE_DUPLICATES proto_packages)
+            list(LENGTH proto_packages length)
+            if(NOT length EQUAL 1)
+                string(JOIN "\n" proto_packages_string "${proto_packages}")
+                message(FATAL_ERROR "All *.proto files must have single package name,"
+                    " that will be used for QML plugin registration."
+                    "\nThe following packages found in the .proto files for ${target}:"
+                    "\n${proto_packages_string}."
+                    " Please split the ${target} target per package."
+                )
+            endif()
+            list(GET proto_packages 0 qml_uri)
+        else()
+            message(FATAL_ERROR ".proto files of ${target} don't specify a package."
+                " Please, set QML_URI when using .proto without package name."
+            )
+        endif()
+        if(qml_uri)
+            string(REPLACE "." "_" plguin_base_name "${qml_uri}")
+            list(APPEND output_files "${plguin_base_name}plugin.cpp")
+            set(${out_qml_uri} "${qml_uri}" PARENT_SCOPE)
+        endif()
+    endif()
 
     set(${out_proto_files} "${proto_files}" PARENT_SCOPE)
     set(${out_proto_includes} "${proto_includes}" PARENT_SCOPE)
@@ -256,6 +286,11 @@ function(qt6_add_protobuf target)
     _qt_internal_get_protoc_options(generation_options arg
         protoc_option_opt protoc_single_opt protoc_multi_opt)
 
+    if(arg_QML_URI AND NOT arg_QML)
+        message(FATAL_ERROR "QML_URI requires the QML option set, "
+            "but the QML argument is not provided.")
+    endif()
+
     if(arg_PROTO_FILES_BASE_DIR)
         set(base_dir "${arg_PROTO_FILES_BASE_DIR}")
     else()
@@ -271,10 +306,12 @@ function(qt6_add_protobuf target)
     else()
         set(arg_QML "")
     endif()
-    _qt_internal_protobuf_preparse_proto_files(proto_files proto_includes generated_files
+    _qt_internal_protobuf_preparse_proto_files(proto_files proto_includes generated_files qml_uri
         "${base_dir}"
         ${extra_pre_parse_options}
         ${arg_QML}
+        QML_URI
+            ${arg_QML_URI}
         PROTO_FILES
             ${arg_PROTO_FILES}
     )
@@ -320,6 +357,10 @@ function(qt6_add_protobuf target)
         # Define this so we can conditionally set the export macro
         target_compile_definitions(${target}
             PRIVATE "QT_BUILD_${target_upper}_LIB")
+    endif()
+
+    if(qml_uri)
+        list(APPEND generation_options "QML_URI=${qml_uri}")
     endif()
 
     set(output_directory "${CMAKE_CURRENT_BINARY_DIR}")
@@ -406,6 +447,20 @@ function(qt6_add_protobuf target)
 
     if(DEFINED arg_OUTPUT_TARGETS)
         set(${arg_OUTPUT_TARGETS} "${${arg_OUTPUT_TARGETS}}" PARENT_SCOPE)
+    endif()
+
+    if(arg_QML)
+        qt_policy(SET QTP0001 NEW)
+        string(REPLACE "." "/" output_qml_plugin "${qml_uri}")
+        qt6_add_qml_module(${target}
+            URI ${qml_uri}
+            PLUGIN_TARGET ${target}
+            NO_PLUGIN_OPTIONAL
+            NO_GENERATE_PLUGIN_SOURCE
+            VERSION 1.0
+            OUTPUT_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}/${output_qml_plugin}
+        )
     endif()
 endfunction()
 

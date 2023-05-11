@@ -66,10 +66,6 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
     std::shared_ptr<Printer> sourcePrinter(new Printer(sourceStream.get(), '$'));
     std::shared_ptr<Printer> registrationPrinter(new Printer(registrationStream.get(), '$'));
 
-    if (Options::instance().hasQml()) {
-        GenerateQmlPluginSource(file, generatorContext);
-    }
-
     printDisclaimer(sourcePrinter.get());
     sourcePrinter->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
                          CommonTemplates::InternalIncludeTemplate());
@@ -113,64 +109,120 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
 
 }
 
+bool QProtobufGenerator::GenerateAll(const std::vector<const FileDescriptor *> &files,
+                                const std::string &parameter, GeneratorContext *generatorContext,
+                                std::string *error) const
+{
+    assert(!files.empty());
+    assert(generatorContext != nullptr);
+
+    Options::setFromString(parameter);
+    if (Options::instance().hasQml()) {
+        std::set<std::string> headersContainer;
+        // Collect all required includes
+        std::transform(files.begin(), files.end(), std::inserter(headersContainer,
+                                                                 headersContainer.begin()),
+                       [](const auto &it) {
+                           std::string filename = utils::extractFileBasename(it->name());
+                           return generateBaseName(it, filename);
+                       });
+
+        std::string qmlPackageUri;
+        for (const FileDescriptor *file: files) {
+            assert(file != nullptr);
+            for (int i = 0; i < file->dependency_count(); ++i) {
+                if (file->dependency(i)->name() == "QtCore/QtCore.proto"
+                    || file->dependency(i)->name() == "QtGui/QtGui.proto") {
+                    continue;
+                }
+                if (file->dependency(i)->name() == "google/protobuf/any.proto") {
+                    headersContainer.insert("QtProtobufWellKnownTypes/qprotobufanysupport.h");
+                    continue;
+                }
+                std::string filename = utils::extractFileBasename(file->dependency(i)->name());
+                headersContainer.insert(utils::removeFileSuffix(generateBaseName(file, filename)));
+            }
+        }
+        qmlPackageUri = Options::instance().qmlUri();
+
+        // Fill QML plugin openning
+        std::string pluginFileName = utils::replace(qmlPackageUri, ".", "_");
+        std::unique_ptr<io::ZeroCopyOutputStream> qmlPluginStream(
+                generatorContext->Open(pluginFileName + "plugin.cpp"));
+        std::shared_ptr<Printer> registrationPluginPrinter(new Printer(qmlPluginStream.get(),
+                                                                       '$'));
+        GenerateQmlPluginIntro(registrationPluginPrinter.get(), headersContainer, qmlPackageUri);
+
+        for (const FileDescriptor *file: files) {
+            GenerateQmlPluginSource(file, registrationPluginPrinter);
+        }
+
+        registrationPluginPrinter->Indent();
+        registrationPluginPrinter->Indent();
+        registrationPluginPrinter->Print(CommonTemplates::SimpleBlockEnclosureTemplate());
+        registrationPluginPrinter->Outdent();
+        registrationPluginPrinter->Outdent();
+        registrationPluginPrinter->Print(CommonTemplates::SemicolonBlockEnclosureTemplate());
+        // Include the moc file:
+        registrationPluginPrinter->Print({{"source_file", pluginFileName + "plugin.moc"}},
+                                         CommonTemplates::MocIncludeTemplate());
+    }
+
+    return CodeGenerator::GenerateAll(files, parameter, generatorContext, error);
+}
+
+void QProtobufGenerator::GenerateQmlPluginIntro(Printer *printer,
+                                                const std::set<std::string> &headersContainer,
+                                                const std::string &qmlPackageUri) const
+{
+    std::vector<std::string> packageNameList = utils::split(qmlPackageUri, ".");
+    std::string pluginClassName;
+    for (std::string name: packageNameList) {
+        pluginClassName += utils::capitalizeAsciiName(name);
+    }
+    printDisclaimer(printer);
+
+    const std::array<std::string, 3> qmlHeaders = {"QtQml/qqmlextensionplugin.h",
+                                                   "QtQml/qqml.h",
+                                                   "QtQml/qqmlengine.h"};
+    for (const auto &header : qmlHeaders) {
+        printer->Print({{"include", header}},
+                       CommonTemplates::ExternalIncludeTemplate());
+    }
+    for (std::string basename: headersContainer) {
+        printer->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
+                       CommonTemplates::InternalIncludeTemplate());
+    }
+    if (Options::instance().exportMacro().empty()) {
+        printer->Print({{"plugin_name", pluginClassName}},
+                       CommonTemplates::QmlExtensionPluginClassNoExport());
+    } else {
+        printer->Print({{"export_macro", Options::instance().exportMacro()},
+                         {"plugin_name", pluginClassName}},
+                       CommonTemplates::QmlExtensionPluginClass());
+    }
+    printer->Print({{"plugin_name", pluginClassName},
+                     {"qml_package", qmlPackageUri}},
+                   CommonTemplates::QmlExtensionPluginClassBody());
+}
+
 void QProtobufGenerator::GenerateQmlPluginSource(const FileDescriptor *file,
-                                                 GeneratorContext *context) const
+                                                 std::shared_ptr<Printer> printer) const
 {
     assert(file != nullptr);
-    assert(context != nullptr);
-    std::string filename = utils::extractFileBasename(file->name());
-    std::string basename = generateBaseName(file, filename);
-    std::string pluginName = utils::capitalizeAsciiName(basename);
-    std::string qmlPackageUri = file->package();
 
-    std::unique_ptr<io::ZeroCopyOutputStream> qmlPluginStream(
-            context->Open(basename + "plugin.cpp"));
-    std::shared_ptr<Printer> registrationPluginPrinter(new Printer(qmlPluginStream.get(), '$'));
-
-    printDisclaimer(registrationPluginPrinter.get());
-
-    registrationPluginPrinter->Print({{"include", "QtQml/qqmlextensionplugin.h"}},
-                                     CommonTemplates::ExternalIncludeTemplate());
-    registrationPluginPrinter->Print({{"include", "QtQml/qqml.h"}},
-                                     CommonTemplates::ExternalIncludeTemplate());
-    registrationPluginPrinter->Print({{"include", "QtQml/qqmlengine.h"}},
-                                     CommonTemplates::ExternalIncludeTemplate());
-    registrationPluginPrinter->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
-                                     CommonTemplates::InternalIncludeTemplate());
-    if (Options::instance().exportMacro().empty()) {
-        registrationPluginPrinter->Print({{"plugin_name", pluginName}},
-                                         CommonTemplates::QmlExtensionPluginClassNoExport());
-    } else {
-        registrationPluginPrinter->Print({{"export_macro", Options::instance().exportMacro()},
-                                          {"plugin_name", pluginName}},
-                                         CommonTemplates::QmlExtensionPluginClass());
-    }
-    registrationPluginPrinter->Print({{"plugin_name", pluginName},
-                                      {"qml_package", qmlPackageUri}},
-                                     CommonTemplates::QmlExtensionPluginClassBody());
-
-    common::iterateMessages(file, [&registrationPluginPrinter](const Descriptor *message) {
+    common::iterateMessages(file, [&printer](const Descriptor *message) {
         if (message->enum_type_count() > 0) {
-            MessageDefinitionPrinter messageDefinition(message, registrationPluginPrinter);
+            MessageDefinitionPrinter messageDefinition(message, printer);
             messageDefinition.printQmlPluginClassRegistration();
         }
     });
 
     for (int i = 0; i < file->enum_type_count(); ++i) {
         EnumDefinitionPrinter enumSourceDefinition(file->enum_type(i),
-                                                   registrationPluginPrinter);
+                                                   printer);
         enumSourceDefinition.printQmlPluginRegisterBody();
     }
-
-    registrationPluginPrinter->Indent();
-    registrationPluginPrinter->Indent();
-    registrationPluginPrinter->Print(CommonTemplates::SimpleBlockEnclosureTemplate());
-    registrationPluginPrinter->Outdent();
-    registrationPluginPrinter->Outdent();
-    registrationPluginPrinter->Print(CommonTemplates::SemicolonBlockEnclosureTemplate());
-    // Include the moc file:
-    registrationPluginPrinter->Print({{"source_file", filename + "plugin.moc"}},
-                                     CommonTemplates::MocIncludeTemplate());
 }
 
 void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,

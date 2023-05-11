@@ -6,11 +6,10 @@ qt_internal_add_test(tst_protobuf_basictypes_qml
     SOURCES
         tst_protobuf_basictypes_qml.cpp
     LIBRARIES
-        Qt6::Gui
         Qt6::Qml
 )
 
-qt_add_protobuf(tst_protobuf_basictypes_qml
+qt_add_protobuf(tst_protobuf_basictypes_qml_plugin
     PROTO_FILES
         ../../shared/data/proto/basicmessages.proto
     QML
@@ -21,13 +20,14 @@ qt_add_protobuf(tst_protobuf_basictypes_qml
 qt_policy(SET QTP0001 NEW)
 
 qt_add_qml_module(tst_protobuf_basictypes_qml
-    URI "qtprotobufnamespace.tests"
+    URI QmlTestUri
     VERSION 1.0
     QML_FILES
         qml/tst_basic.qml
 )
 
 qt_autogen_tools_initial_setup(tst_protobuf_basictypes_qml)
+qt_autogen_tools_initial_setup(tst_protobuf_basictypes_qml_plugin)
 
 if(QT_BUILD_STANDALONE_TESTS)
     qt_import_qml_plugins(tst_protobuf_basictypes_qml)
