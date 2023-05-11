@@ -100,6 +100,11 @@ const char *CommonTemplates::EnumRegistrationDeclaration()
     return "$export_macro$ void registerTypes();\n";
 }
 
+const char *CommonTemplates::EnumRegistrationDeclarationNoExport()
+{
+    return "void registerTypes();\n";
+}
+
 const char *CommonTemplates::MetaTypeRegistrationDeclaration()
 {
     return "static void registerTypes();\n";
@@ -155,6 +160,13 @@ const char *CommonTemplates::EnumDeclarationTemplate()
     return "\nnamespace $classname$ {\n"
            "Q_NAMESPACE_EXPORT($export_macro$)\n";
 }
+
+const char *CommonTemplates::EnumDeclarationNoExportTemplate()
+{
+    return "\nnamespace $classname$ {\n"
+           "Q_NAMESPACE\n";
+}
+
 const char *CommonTemplates::ClassMessageForwardDeclarationTemplate()
 {
     return "class $classname$;\n";

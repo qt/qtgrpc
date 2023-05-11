@@ -23,7 +23,10 @@ EnumDeclarationPrinter::~EnumDeclarationPrinter() = default;
 void EnumDeclarationPrinter::startEnum()
 {
     printEnumClass();
-    m_printer->Print(m_typeMap, CommonTemplates::EnumRegistrationDeclaration());
+    if (!m_typeMap["export_macro"].empty())
+        m_printer->Print(m_typeMap, CommonTemplates::EnumRegistrationDeclaration());
+    else
+        m_printer->Print(m_typeMap, CommonTemplates::EnumRegistrationDeclarationNoExport());
 }
 
 void EnumDeclarationPrinter::printEnum()
@@ -48,5 +51,8 @@ void EnumDeclarationPrinter::printEnum()
 
 void EnumDeclarationPrinter::printEnumClass()
 {
-    m_printer->Print(m_typeMap, CommonTemplates::EnumDeclarationTemplate());
+    if (!m_typeMap["export_macro"].empty())
+        m_printer->Print(m_typeMap, CommonTemplates::EnumDeclarationTemplate());
+    else
+        m_printer->Print(m_typeMap, CommonTemplates::EnumDeclarationNoExportTemplate());
 }

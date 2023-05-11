@@ -28,6 +28,7 @@ public:
     static const char *GlobalEnumIncludeTemplate();
     static const char *MetaTypeRegistrationDeclaration();
     static const char *EnumRegistrationDeclaration();
+    static const char *EnumRegistrationDeclarationNoExport();
     static const char *MetaTypeRegistrationMessageDefinition();
     static const char *MetaTypeRegistrationGlobalEnumDefinition();
     static const char *MetaTypeRegistrationGlobalEnumTemplate();
@@ -39,6 +40,7 @@ public:
     static const char *NamespaceTemplate();
     static const char *NamespaceClosingTemplate();
     static const char *EnumDeclarationTemplate();
+    static const char *EnumDeclarationNoExportTemplate();
     static const char *ClassMessageForwardDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplateEmptyMacros();
