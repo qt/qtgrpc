@@ -8,7 +8,6 @@
 #include <QtCore/QUrl>
 #include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qgrpccallreply.h>
-#include <QtGrpc/qgrpccredentials.h>
 #include <QtGrpc/qgrpcstream.h>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
@@ -130,10 +129,7 @@ struct QGrpcHttp2ChannelPrivate
 #if QT_CONFIG(ssl)
         request.setSslConfiguration(sslConfig);
 #endif
-        if (const auto credentials = callOptions.credentials()) {
-            for (const auto &[key, value] : credentials->toStdMap())
-                request.setRawHeader(key, value.toString().toUtf8());
-        }
+
         addMetadataToRequest(&request, channelOptions.metadata(), callOptions.metadata());
 
         request.setAttribute(QNetworkRequest::Http2DirectAttribute, true);

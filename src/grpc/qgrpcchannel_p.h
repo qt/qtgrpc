@@ -19,7 +19,6 @@
 #include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcchannel.h>
-#include <QtGrpc/qgrpccredentials.h>
 #include <QtGrpc/qgrpcstream.h>
 #include <QtGrpc/private/qtgrpcglobal_p.h>
 

@@ -9,7 +9,6 @@
 #include <QtCore/QThread>
 #include <QtCore/qbytearray.h>
 #include <QtGrpc/qgrpccalloptions.h>
-#include <QtGrpc/qgrpccredentials.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
 

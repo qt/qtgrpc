@@ -7,7 +7,6 @@
 #include <QtCore/QThread>
 #include <QtCore/qloggingcategory.h>
 #include <QtGrpc/qabstractgrpcclient.h>
-#include <QtGrpc/qgrpccredentials.h>
 #include <QtProtobuf/QProtobufSerializer>
 #include <qtgrpcglobal_p.h>
 

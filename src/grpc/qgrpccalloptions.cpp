@@ -21,13 +21,10 @@ using namespace Qt::StringLiterals;
 struct QGrpcCallOptionsPrivate
 {
 public:
-    QGrpcCallOptionsPrivate() : credentials(nullptr) { }
-
     std::optional<QUrl> host;
     std::optional<std::chrono::milliseconds> deadline;
-    std::shared_ptr<QGrpcCallCredentials> credentials;
-    std::optional<qint64> maxRetryAttempts;
     QGrpcMetadata metadata;
+    std::optional<qint64> maxRetryAttempts;
 };
 
 /*!
@@ -70,16 +67,6 @@ QGrpcCallOptions &QGrpcCallOptions::withDeadline(std::chrono::milliseconds deadl
 }
 
 /*!
-    Sets call credentials with \a credentials and returns updated QGrpcCallOptions object.
-*/
-QGrpcCallOptions &QGrpcCallOptions::withCredentials(
-        std::shared_ptr<QGrpcCallCredentials> credentials)
-{
-    dPtr->credentials = credentials;
-    return *this;
-}
-
-/*!
     Sets maximum retry attempts value with \a maxRetryAttempts and returns updated QGrpcCallOptions object.
 */
 QGrpcCallOptions &QGrpcCallOptions::withMaxRetryAttempts(qint64 maxRetryAttempts)
@@ -105,16 +92,6 @@ QGrpcCallOptions &QGrpcCallOptions::withMetadata(const QGrpcMetadata &metadata)
 std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadline() const
 {
     return dPtr->deadline;
-}
-
-/*!
-    Returns credentials for a call.
-
-    If value was not set returns empty std::optional.
-*/
-std::optional<QGrpcCredentialMap> QGrpcCallOptions::credentials() const
-{
-    return dPtr->credentials ? (*dPtr->credentials)() : std::optional<QGrpcCredentialMap>();
 }
 
 /*!

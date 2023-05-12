@@ -21,13 +21,12 @@ using namespace Qt::StringLiterals;
 struct QGrpcChannelOptionsPrivate
 {
 public:
-    QGrpcChannelOptionsPrivate(const QUrl &_host) : host(_host), credentials(nullptr) { }
+    QGrpcChannelOptionsPrivate(const QUrl &_host) : host(_host) { }
 
     QUrl host;
     std::optional<std::chrono::milliseconds> deadline;
-    std::shared_ptr<QGrpcChannelCredentials> credentials;
-    std::optional<QStringList> credentialList;
     QGrpcMetadata metadata;
+    std::optional<QStringList> credentialList;
 #if QT_CONFIG(ssl)
     std::optional<QSslConfiguration> sslConfiguration;
 #endif
@@ -83,16 +82,6 @@ QGrpcChannelOptions &QGrpcChannelOptions::withDeadline(std::chrono::milliseconds
 }
 
 /*!
-    Sets channel credentials with \a credentials and returns updated QGrpcChannelOptions object.
-*/
-QGrpcChannelOptions &QGrpcChannelOptions::withCredentials(
-        std::shared_ptr<QGrpcChannelCredentials> credentials)
-{
-    dPtr->credentials = credentials;
-    return *this;
-}
-
-/*!
     Sets channel credential list with \a credentialList and returns updated QGrpcChannelOptions object.
 */
 QGrpcChannelOptions &QGrpcChannelOptions::withCredentialList(const QStringList &credentialList)
@@ -126,17 +115,6 @@ std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const
 QUrl QGrpcChannelOptions::host() const
 {
     return dPtr->host;
-}
-
-/*!
-    Returns credentials for the channel.
-
-    If value was not set returns empty std::optional.
-*/
-std::optional<QGrpcCredentialMap> QGrpcChannelOptions::credentials() const
-{
-    return dPtr->credentials ? dPtr->credentials->channelCredentials()
-                             : std::optional<QGrpcCredentialMap>();
 }
 
 /*!
