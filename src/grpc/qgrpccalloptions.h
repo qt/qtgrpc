@@ -6,6 +6,7 @@
 
 #include <QtCore/QUrl>
 #include <QtGrpc/QGrpcCallCredentials>
+#include <QtGrpc/qgrpcmetadata.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 #include <chrono>
@@ -28,10 +29,12 @@ public:
     QGrpcCallOptions &withDeadline(std::chrono::milliseconds deadline);
     QGrpcCallOptions &withCredentials(std::shared_ptr<QGrpcCallCredentials> credentials);
     QGrpcCallOptions &withMaxRetryAttempts(qint64 maxRetryAttempts);
+    QGrpcCallOptions &withMetadata(const QGrpcMetadata &metadata);
 
     std::optional<std::chrono::milliseconds> deadline() const;
     std::optional<QGrpcCredentialMap> credentials() const;
     std::optional<qint64> maxRetryAttempts() const;
+    QGrpcMetadata metadata() const;
 
 private:
     std::unique_ptr<QGrpcCallOptionsPrivate> dPtr;

@@ -86,6 +86,19 @@ constexpr char GrpcStatusHeader[] = "grpc-status";
 constexpr char GrpcStatusMessageHeader[] = "grpc-message";
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
 
+static void addMetadataToRequest(QNetworkRequest *request, const QGrpcMetadata &channelMetadata,
+                                 const QGrpcMetadata &callMetadata)
+{
+    auto iterateMetadata = [&request](const auto &metadata) {
+        for (const auto &[key, value] : std::as_const(metadata)) {
+            request->setRawHeader(key, value);
+        }
+    };
+
+    iterateMetadata(channelMetadata);
+    iterateMetadata(callMetadata);
+}
+
 struct QGrpcHttp2ChannelPrivate
 {
     struct ExpectedData
@@ -121,6 +134,8 @@ struct QGrpcHttp2ChannelPrivate
             for (const auto &[key, value] : credentials->toStdMap())
                 request.setRawHeader(key, value.toString().toUtf8());
         }
+        addMetadataToRequest(&request, channelOptions.metadata(), callOptions.metadata());
+
         request.setAttribute(QNetworkRequest::Http2DirectAttribute, true);
 
         QByteArray msg(GrpcMessageSizeHeaderSize, '\0');

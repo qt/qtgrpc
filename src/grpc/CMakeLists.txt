@@ -14,6 +14,7 @@ qt_internal_add_module(Grpc
         qgrpcuserpasswordcredentials.h qgrpcuserpasswordcredentials.cpp
         qgrpccalloptions.h qgrpccalloptions.cpp
         qgrpcchanneloptions.h qgrpcchanneloptions.cpp
+        qgrpcmetadata.h
         qtgrpcglobal.h qtgrpcglobal_p.h  qtgrpcglobal.cpp
     GENERATE_CPP_EXPORTS
     LIBRARIES

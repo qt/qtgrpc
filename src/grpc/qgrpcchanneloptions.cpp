@@ -27,6 +27,7 @@ public:
     std::optional<std::chrono::milliseconds> deadline;
     std::shared_ptr<QGrpcChannelCredentials> credentials;
     std::optional<QStringList> credentialList;
+    QGrpcMetadata metadata;
 #if QT_CONFIG(ssl)
     std::optional<QSslConfiguration> sslConfiguration;
 #endif
@@ -101,6 +102,15 @@ QGrpcChannelOptions &QGrpcChannelOptions::withCredentialList(const QStringList &
 }
 
 /*!
+    Sets \a metadata for a call and returns updated QGrpcCallOptions object.
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::withMetadata(const QGrpcMetadata &metadata)
+{
+    dPtr->metadata = metadata;
+    return *this;
+}
+
+/*!
     Returns deadline value for every call on the channel.
 
     If value was not set returns empty std::optional.
@@ -140,6 +150,16 @@ std::optional<QStringList> QGrpcChannelOptions::credentialList() const
 }
 
 #if QT_CONFIG(ssl)
+/*!
+    Returns metadata used for a call.
+
+    If value was not set returns empty QGrpcMetadata.
+*/
+QGrpcMetadata QGrpcChannelOptions::metadata() const
+{
+    return dPtr->metadata;
+}
+
 /*!
     Sets SSL configuration with \a sslConfiguration and returns updated QGrpcChannelOptions object.
 */

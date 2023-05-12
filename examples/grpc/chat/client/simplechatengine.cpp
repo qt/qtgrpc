@@ -5,7 +5,6 @@
 #include "simplechatengine.h"
 
 #include <QGrpcHttp2Channel>
-#include <QGrpcUserPasswordCredentials>
 
 #include <QDebug>
 #include <QFile>

@@ -27,6 +27,7 @@ public:
     std::optional<std::chrono::milliseconds> deadline;
     std::shared_ptr<QGrpcCallCredentials> credentials;
     std::optional<qint64> maxRetryAttempts;
+    QGrpcMetadata metadata;
 };
 
 /*!
@@ -88,6 +89,15 @@ QGrpcCallOptions &QGrpcCallOptions::withMaxRetryAttempts(qint64 maxRetryAttempts
 }
 
 /*!
+    Sets \a metadata for a call and returns updated QGrpcCallOptions object.
+*/
+QGrpcCallOptions &QGrpcCallOptions::withMetadata(const QGrpcMetadata &metadata)
+{
+    dPtr->metadata = metadata;
+    return *this;
+}
+
+/*!
     Returns deadline value for a call.
 
     If value was not set returns empty std::optional.
@@ -115,6 +125,16 @@ std::optional<QGrpcCredentialMap> QGrpcCallOptions::credentials() const
 std::optional<qint64> QGrpcCallOptions::maxRetryAttempts() const
 {
     return dPtr->maxRetryAttempts;
+}
+
+/*!
+    Returns metadata used for a call.
+
+    If value was not set returns empty QGrpcMetadata.
+*/
+QGrpcMetadata QGrpcCallOptions::metadata() const
+{
+    return dPtr->metadata;
 }
 
 QT_END_NAMESPACE
