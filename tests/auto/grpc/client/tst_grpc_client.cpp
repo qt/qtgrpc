@@ -6,7 +6,6 @@
 #if QT_CONFIG(native_grpc)
 #  include <QGrpcChannel>
 #endif
-#include <QGrpcCredentials>
 #include <QGrpcHttp2Channel>
 
 #include <QCoreApplication>

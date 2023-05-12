@@ -15,7 +15,6 @@
 
 QT_BEGIN_NAMESPACE
 
-class QAbstractGrpcCredentials;
 struct QGrpcChannelPrivate;
 
 class Q_GRPC_EXPORT QGrpcChannel final : public QAbstractGrpcChannel

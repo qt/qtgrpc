@@ -13,7 +13,6 @@
 
 QT_BEGIN_NAMESPACE
 
-class QAbstractGrpcCredentials;
 struct QGrpcHttp2ChannelPrivate;
 
 class Q_GRPC_EXPORT QGrpcHttp2Channel final : public QAbstractGrpcChannel

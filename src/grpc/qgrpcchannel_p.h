@@ -17,7 +17,6 @@
 //
 
 #include <QtGrpc/qabstractgrpcclient.h>
-#include <QtGrpc/qabstractgrpccredentials.h>
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcchannel.h>
 #include <QtGrpc/qgrpccredentials.h>
