@@ -25,11 +25,6 @@ qt_internal_add_module(Grpc
         Qt::Network
 )
 
-qt_internal_extend_target(Grpc CONDITION QT_FEATURE_ssl
-    SOURCES
-        qgrpcsslcredentials.h  qgrpcsslcredentials.cpp
-)
-
 qt_internal_extend_target(Grpc CONDITION QT_FEATURE_native_grpc
     SOURCES
         qgrpcchannel.h qgrpcchannel_p.h qgrpcchannel.cpp
