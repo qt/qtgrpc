@@ -35,7 +35,7 @@ set_target_properties(magic8ball PROPERTIES
 qt_add_qml_module(magic8ball
     URI qtgrpc.examples.magic8ball
     VERSION 1.0
-    AUTO_RESOURCE_PREFIX
+    RESOURCE_PREFIX "/qt/qml"
     SOURCES
         clientservice.h
         clientservice.cpp

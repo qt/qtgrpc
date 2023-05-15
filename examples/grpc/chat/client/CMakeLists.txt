@@ -23,7 +23,7 @@ qt_add_executable(grpcchatclient
 qt_add_qml_module(grpcchatclient
     URI qtgrpc.examples.chat
     VERSION 1.0
-    AUTO_RESOURCE_PREFIX
+    RESOURCE_PREFIX "/qt/qml"
     QML_FILES
         Main.qml
         ChatInputField.qml
