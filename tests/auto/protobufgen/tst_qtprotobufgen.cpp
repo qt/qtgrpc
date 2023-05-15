@@ -14,6 +14,8 @@
 
 using namespace Qt::StringLiterals;
 
+[[maybe_unused]] const QLatin1StringView
+qmlProtobufTypeRegistration("qtprotobufnamespace_testsplugin.cpp");
 const QLatin1StringView protobuftyperegistrations("_protobuftyperegistrations.cpp");
 [[maybe_unused]] const QLatin1StringView protobufQmlPlugin("_uri_testplugin.cpp");
 const QLatin1StringView cppExtension(".qpb.cpp");
@@ -253,6 +255,27 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
             << "nopackage"
             << "/qml-no-package/"
             << QString(protobufQmlPlugin);
+
+    const QLatin1StringView qmlExtensions[]
+            = {protobuftyperegistrations, cppExtension,
+                headerExtension};
+
+    for (const auto extension : qmlExtensions) {
+        QTest::addRow("enummessages%s with QML option", extension.data())
+                << "enummessages"
+                << "/qmlgen/"
+                << QString(extension);
+
+        QTest::addRow("basicmessages%s with QML option", extension.data())
+                << "basicmessages"
+                << "/qmlgen/"
+                << QString(extension);
+    }
+
+    QTest::addRow("QML plugin file: %s", qmlProtobufTypeRegistration.data())
+            << ""
+            << "/qmlgen/"
+            << QString(qmlProtobufTypeRegistration);
 #endif
 }
 
