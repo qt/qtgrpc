@@ -60,7 +60,6 @@ void EmptyMessage::registerTypes()
 {
     qRegisterMetaType<EmptyMessage>();
     qRegisterMetaType<EmptyMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::EmptyMessage>>();
 }
 
 EmptyMessage::EmptyMessage()
@@ -163,7 +162,6 @@ void SimpleBoolMessage::registerTypes()
 {
     qRegisterMetaType<SimpleBoolMessage>();
     qRegisterMetaType<SimpleBoolMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleBoolMessage>>();
 }
 
 SimpleBoolMessage::SimpleBoolMessage()
@@ -280,7 +278,6 @@ void SimpleIntMessage::registerTypes()
 {
     qRegisterMetaType<SimpleIntMessage>();
     qRegisterMetaType<SimpleIntMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleIntMessage>>();
 }
 
 SimpleIntMessage::SimpleIntMessage()
@@ -410,7 +407,6 @@ void SimpleSIntMessage::registerTypes()
 {
     qRegisterMetaType<SimpleSIntMessage>();
     qRegisterMetaType<SimpleSIntMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleSIntMessage>>();
 }
 
 SimpleSIntMessage::SimpleSIntMessage()
@@ -527,7 +523,6 @@ void SimpleUIntMessage::registerTypes()
 {
     qRegisterMetaType<SimpleUIntMessage>();
     qRegisterMetaType<SimpleUIntMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleUIntMessage>>();
 }
 
 SimpleUIntMessage::SimpleUIntMessage()
@@ -644,7 +639,6 @@ void SimpleInt64Message::registerTypes()
 {
     qRegisterMetaType<SimpleInt64Message>();
     qRegisterMetaType<SimpleInt64MessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleInt64Message>>();
 }
 
 SimpleInt64Message::SimpleInt64Message()
@@ -761,7 +755,6 @@ void SimpleSInt64Message::registerTypes()
 {
     qRegisterMetaType<SimpleSInt64Message>();
     qRegisterMetaType<SimpleSInt64MessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleSInt64Message>>();
 }
 
 SimpleSInt64Message::SimpleSInt64Message()
@@ -878,7 +871,6 @@ void SimpleUInt64Message::registerTypes()
 {
     qRegisterMetaType<SimpleUInt64Message>();
     qRegisterMetaType<SimpleUInt64MessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleUInt64Message>>();
 }
 
 SimpleUInt64Message::SimpleUInt64Message()
@@ -994,7 +986,6 @@ void SimpleStringMessage::registerTypes()
 {
     qRegisterMetaType<SimpleStringMessage>();
     qRegisterMetaType<SimpleStringMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleStringMessage>>();
 }
 
 SimpleStringMessage::SimpleStringMessage()
@@ -1111,7 +1102,6 @@ void SimpleFloatMessage::registerTypes()
 {
     qRegisterMetaType<SimpleFloatMessage>();
     qRegisterMetaType<SimpleFloatMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleFloatMessage>>();
 }
 
 SimpleFloatMessage::SimpleFloatMessage()
@@ -1228,7 +1218,6 @@ void SimpleDoubleMessage::registerTypes()
 {
     qRegisterMetaType<SimpleDoubleMessage>();
     qRegisterMetaType<SimpleDoubleMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleDoubleMessage>>();
 }
 
 SimpleDoubleMessage::SimpleDoubleMessage()
@@ -1344,7 +1333,6 @@ void SimpleBytesMessage::registerTypes()
 {
     qRegisterMetaType<SimpleBytesMessage>();
     qRegisterMetaType<SimpleBytesMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleBytesMessage>>();
 }
 
 SimpleBytesMessage::SimpleBytesMessage()
@@ -1461,7 +1449,6 @@ void SimpleFixedInt32Message::registerTypes()
 {
     qRegisterMetaType<SimpleFixedInt32Message>();
     qRegisterMetaType<SimpleFixedInt32MessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleFixedInt32Message>>();
 }
 
 SimpleFixedInt32Message::SimpleFixedInt32Message()
@@ -1591,7 +1578,6 @@ void SimpleFixedInt64Message::registerTypes()
 {
     qRegisterMetaType<SimpleFixedInt64Message>();
     qRegisterMetaType<SimpleFixedInt64MessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleFixedInt64Message>>();
 }
 
 SimpleFixedInt64Message::SimpleFixedInt64Message()
@@ -1707,7 +1693,6 @@ void SimpleSFixedInt32Message::registerTypes()
 {
     qRegisterMetaType<SimpleSFixedInt32Message>();
     qRegisterMetaType<SimpleSFixedInt32MessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleSFixedInt32Message>>();
 }
 
 SimpleSFixedInt32Message::SimpleSFixedInt32Message()
@@ -1836,7 +1821,6 @@ void SimpleSFixedInt64Message::registerTypes()
 {
     qRegisterMetaType<SimpleSFixedInt64Message>();
     qRegisterMetaType<SimpleSFixedInt64MessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleSFixedInt64Message>>();
 }
 
 SimpleSFixedInt64Message::SimpleSFixedInt64Message()
@@ -1962,7 +1946,6 @@ void ComplexMessage::registerTypes()
 {
     qRegisterMetaType<ComplexMessage>();
     qRegisterMetaType<ComplexMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::ComplexMessage>>();
 }
 
 ComplexMessage::ComplexMessage()

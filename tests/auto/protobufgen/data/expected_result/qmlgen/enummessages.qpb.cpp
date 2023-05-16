@@ -83,7 +83,6 @@ void SimpleEnumMessage::registerTypes()
 {
     qRegisterMetaType<SimpleEnumMessage>();
     qRegisterMetaType<SimpleEnumMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleEnumMessage>>();
     qRegisterProtobufEnumType<SimpleEnumMessage::LocalEnum>();
     qRegisterMetaType<SimpleEnumMessage::LocalEnum>();
     qRegisterMetaType<SimpleEnumMessage::LocalEnum>();
@@ -203,7 +202,6 @@ void RepeatedEnumMessage::registerTypes()
 {
     qRegisterMetaType<RepeatedEnumMessage>();
     qRegisterMetaType<RepeatedEnumMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::RepeatedEnumMessage>>();
     qRegisterProtobufEnumType<RepeatedEnumMessage::LocalEnum>();
     qRegisterMetaType<RepeatedEnumMessage::LocalEnum>();
     qRegisterMetaType<RepeatedEnumMessage::LocalEnum>();
@@ -342,7 +340,6 @@ void MixedEnumUsageMessage::registerTypes()
 {
     qRegisterMetaType<MixedEnumUsageMessage>();
     qRegisterMetaType<MixedEnumUsageMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::MixedEnumUsageMessage>>();
     qRegisterProtobufEnumType<MixedEnumUsageMessage::LocalEnum>();
     qRegisterMetaType<MixedEnumUsageMessage::LocalEnum>();
     qRegisterMetaType<MixedEnumUsageMessage::LocalEnum>();
@@ -511,7 +508,6 @@ void SimpleFileEnumMessage::registerTypes()
 {
     qRegisterMetaType<SimpleFileEnumMessage>();
     qRegisterMetaType<SimpleFileEnumMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::SimpleFileEnumMessage>>();
 }
 
 SimpleFileEnumMessage::SimpleFileEnumMessage()
@@ -654,7 +650,6 @@ void StepChildEnumMessage::registerTypes()
 {
     qRegisterMetaType<StepChildEnumMessage>();
     qRegisterMetaType<StepChildEnumMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<qtprotobufnamespace::tests::StepChildEnumMessage>>();
 }
 
 StepChildEnumMessage::StepChildEnumMessage()

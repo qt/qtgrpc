@@ -68,5 +68,4 @@ private:
 };
 
 Q_DECLARE_METATYPE(SimpleIntMessageExt)
-Q_DECLARE_METATYPE(QQmlListProperty<SimpleIntMessageExt>)
 #endif // QPROTOBUF_NOPACKAGEEXTERNAL_H

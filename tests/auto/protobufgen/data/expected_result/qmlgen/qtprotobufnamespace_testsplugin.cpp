@@ -6,6 +6,7 @@
 #include <QtProtobuf/qtprotobuftypes.h>
 #include "basicmessages.qpb.h"
 #include "enummessages.qpb.h"
+#include "repeatedmessages.qpb.h"
 
 class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT QtprotobufnamespaceTestsPlugin : public QQmlExtensionPlugin
 {

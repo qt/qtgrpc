@@ -6,3 +6,5 @@ add_subdirectory(enums)
 add_subdirectory(nopackage)
 add_subdirectory(nested)
 add_subdirectory(syntax)
+add_subdirectory(messagelists)
+

@@ -67,7 +67,6 @@ void EmptyMessage::registerTypes()
 {
     qRegisterMetaType<EmptyMessage>();
     qRegisterMetaType<EmptyMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<EmptyMessage>>();
 }
 
 EmptyMessage::EmptyMessage()
@@ -170,7 +169,6 @@ void SimpleIntMessage::registerTypes()
 {
     qRegisterMetaType<SimpleIntMessage>();
     qRegisterMetaType<SimpleIntMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<SimpleIntMessage>>();
 }
 
 SimpleIntMessage::SimpleIntMessage()
@@ -302,7 +300,6 @@ void NoPackageExternalMessage::registerTypes()
 {
     qRegisterMetaType<NoPackageExternalMessage>();
     qRegisterMetaType<NoPackageExternalMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<NoPackageExternalMessage>>();
 }
 
 NoPackageExternalMessage::NoPackageExternalMessage()
@@ -435,7 +432,6 @@ void NoPackageMessage::registerTypes()
 {
     qRegisterMetaType<NoPackageMessage>();
     qRegisterMetaType<NoPackageMessageRepeated>();
-    qRegisterMetaType<QQmlListProperty<NoPackageMessage>>();
 }
 
 NoPackageMessage::NoPackageMessage()
