@@ -66,7 +66,6 @@ void SimpleIntMessageExt::registerTypes()
 {
     qRegisterMetaType<SimpleIntMessageExt>();
     qRegisterMetaType<SimpleIntMessageExtRepeated>();
-    qRegisterMetaType<QQmlListProperty<SimpleIntMessageExt>>();
 }
 
 SimpleIntMessageExt::SimpleIntMessageExt()

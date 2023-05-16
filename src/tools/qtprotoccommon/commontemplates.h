@@ -58,7 +58,6 @@ public:
     static const char *PropertyNonScriptableTemplate();
     static const char *PropertyNonScriptableAliasTemplate();
     static const char *PropertyMessageTemplate();
-    static const char *PropertyQmlListTemplate();
     static const char *PropertyQmlMessageTemplate();
     static const char *PropertyOneofTemplate();
     static const char *PropertyOneofMessageTemplate();
@@ -172,10 +171,8 @@ public:
     static const char *EmptyBracesTemplate();
     static const char *DeclareMetaTypeTemplate();
     static const char *DeclareMetaTypeMapTemplate();
-    static const char *DeclareMetaTypeQmlListTemplate();
     static const char *MetaTypeRegistrationLocalEnumTemplate();
     static const char *MetaTypeRegistrationMapTemplate();
-    static const char *MetaTypeRegistrationQmlListTemplate();
     static const char *QEnumTemplate();
     static const char *QEnumNSTemplate();
     static const char *RegisterEnumSerializersTemplate();

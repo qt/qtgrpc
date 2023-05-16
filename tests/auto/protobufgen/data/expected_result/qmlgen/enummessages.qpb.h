@@ -279,13 +279,8 @@ private:
 } // namespace qtprotobufnamespace::tests
 
 Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleEnumMessage)
-Q_DECLARE_METATYPE(QQmlListProperty<qtprotobufnamespace::tests::SimpleEnumMessage>)
 Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedEnumMessage)
-Q_DECLARE_METATYPE(QQmlListProperty<qtprotobufnamespace::tests::RepeatedEnumMessage>)
 Q_DECLARE_METATYPE(qtprotobufnamespace::tests::MixedEnumUsageMessage)
-Q_DECLARE_METATYPE(QQmlListProperty<qtprotobufnamespace::tests::MixedEnumUsageMessage>)
 Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleFileEnumMessage)
-Q_DECLARE_METATYPE(QQmlListProperty<qtprotobufnamespace::tests::SimpleFileEnumMessage>)
 Q_DECLARE_METATYPE(qtprotobufnamespace::tests::StepChildEnumMessage)
-Q_DECLARE_METATYPE(QQmlListProperty<qtprotobufnamespace::tests::StepChildEnumMessage>)
 #endif // QPROTOBUF_ENUMMESSAGES_H

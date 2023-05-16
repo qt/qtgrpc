@@ -181,11 +181,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(EmptyMessage)
-Q_DECLARE_METATYPE(QQmlListProperty<EmptyMessage>)
 Q_DECLARE_METATYPE(SimpleIntMessage)
-Q_DECLARE_METATYPE(QQmlListProperty<SimpleIntMessage>)
 Q_DECLARE_METATYPE(NoPackageExternalMessage)
-Q_DECLARE_METATYPE(QQmlListProperty<NoPackageExternalMessage>)
 Q_DECLARE_METATYPE(NoPackageMessage)
-Q_DECLARE_METATYPE(QQmlListProperty<NoPackageMessage>)
 #endif // QPROTOBUF_NOPACKAGE_H

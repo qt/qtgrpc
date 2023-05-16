@@ -264,11 +264,6 @@ const char *CommonTemplates::PropertyHasOneofTemplate()
            "READ has$property_name_cap$)\n";
 }
 
-const char *CommonTemplates::PropertyQmlListTemplate()
-{
-    return "Q_PROPERTY(QQmlListProperty<$property_type$> $property_name$ READ $property_name$_l)\n";
-}
-
 const char *CommonTemplates::ConstructorMessageDeclarationTemplate()
 {
     return "$classname$();\n";
@@ -877,11 +872,6 @@ const char *CommonTemplates::DeclareMetaTypeTemplate()
     return "Q_DECLARE_METATYPE($full_type$)\n";
 }
 
-const char *CommonTemplates::DeclareMetaTypeQmlListTemplate()
-{
-    return "Q_DECLARE_METATYPE(QQmlListProperty<$full_type$>)\n";
-}
-
 const char *CommonTemplates::MetaTypeRegistrationLocalEnumTemplate()
 {
     return "qRegisterProtobufEnumType<$scope_type$>();\n"
@@ -893,11 +883,6 @@ const char *CommonTemplates::MetaTypeRegistrationMapTemplate()
 {
     return "qRegisterMetaType<$scope_type$>();\n"
            "qRegisterProtobufMapType<$key_type$, $value_type$>();\n";
-}
-
-const char *CommonTemplates::MetaTypeRegistrationQmlListTemplate()
-{
-    return "qRegisterMetaType<QQmlListProperty<$full_type$>>();\n";
 }
 
 const char *CommonTemplates::QEnumTemplate()

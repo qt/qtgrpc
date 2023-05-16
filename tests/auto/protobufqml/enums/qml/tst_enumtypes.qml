@@ -168,7 +168,7 @@ TestCase {
     }
 
     function test_enumValues(data) {
-         compare(data.field, data.answer)
+        compare(data.field, data.answer)
     }
 
     function test_checkMessagesFields_data() {

@@ -62,6 +62,7 @@ if(TARGET Qt6::Qml)
     qt_add_protobuf(tst_qtprotobufgen_qml_plugin
         PROTO_FILES
         ../shared/data/proto/basicmessages.proto
+        ../shared/data/proto/repeatedmessages.proto
         ../protobuf/enums/enummessages.proto
         QML
         OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/qmlgen"

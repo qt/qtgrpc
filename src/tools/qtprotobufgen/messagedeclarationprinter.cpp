@@ -148,10 +148,6 @@ void MessageDeclarationPrinter::printMetaTypesDeclaration()
 {
     m_printer->Print(m_typeMap, CommonTemplates::DeclareMetaTypeTemplate());
 
-    if (Options::instance().hasQml()) {
-        m_printer->Print(m_typeMap, CommonTemplates::DeclareMetaTypeQmlListTemplate());
-    }
-
     common::iterateNestedMessages(m_descriptor, [&](const Descriptor *nestedMessage) {
         MessageDeclarationPrinter nestedPrinter(nestedMessage, m_printer);
         nestedPrinter.printMetaTypesDeclaration();
@@ -205,11 +201,7 @@ void MessageDeclarationPrinter::printProperties()
         // Generate extra QmlListProperty that is mapped to list
         for (int i = 0; i < numFields; ++i) {
             const FieldDescriptor *field = m_descriptor->field(i);
-            if (field->type() == FieldDescriptor::TYPE_MESSAGE && field->is_repeated()
-                && !field->is_map()) {
-                m_printer->Print(common::producePropertyMap(field, m_descriptor),
-                                 CommonTemplates::PropertyQmlListTemplate());
-            } else if (common::hasQmlAlias(field)) {
+            if (common::hasQmlAlias(field)) {
                 m_printer->Print(common::producePropertyMap(field, m_descriptor),
                                  CommonTemplates::PropertyNonScriptableAliasTemplate());
             }
@@ -243,11 +235,6 @@ void MessageDeclarationPrinter::printGetters()
                 if (field->is_repeated()) {
                     m_printer->Print(propertyMap,
                                      CommonTemplates::GetterComplexDeclarationTemplate());
-                    if (field->type() == FieldDescriptor::TYPE_MESSAGE && !field->is_map()
-                        && Options::instance().hasQml()) {
-                        m_printer->Print(propertyMap,
-                                         CommonTemplates::GetterQmlListDeclarationTemplate());
-                    }
                 }
             });
     common::iterateOneofFields(
