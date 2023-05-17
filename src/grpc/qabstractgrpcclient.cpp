@@ -211,11 +211,9 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
                     Q_D(QAbstractGrpcClient);
                     qGrpcWarning()
                             << grpcStream->method() << "call" << d->service << "stream finished.";
-                    auto it = std::find_if(d->activeStreams.begin(), d->activeStreams.end(),
-                                           [grpcStream](std::shared_ptr<QGrpcStream> activeStream) {
-                                               return *activeStream == *grpcStream;
-                                           });
 
+                    auto it =
+                            std::find(d->activeStreams.begin(), d->activeStreams.end(), grpcStream);
                     if (it != d->activeStreams.end())
                         d->activeStreams.erase(it);
 

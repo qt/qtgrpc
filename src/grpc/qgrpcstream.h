@@ -32,11 +32,6 @@ public:
     QByteArrayView arg() const;
     void updateData(const QByteArray &data);
 
-    bool operator==(const QGrpcStream &other) const
-    {
-        return other.method() == method() && other.arg() == arg();
-    }
-
 Q_SIGNALS:
     void messageReceived();
 
