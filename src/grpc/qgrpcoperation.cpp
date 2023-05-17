@@ -55,6 +55,7 @@ public:
     }
 
     QByteArray data;
+    QGrpcMetadata metadata;
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
 };
 
@@ -96,6 +97,41 @@ void QGrpcOperation::setData(QByteArray &&data)
 QByteArray QGrpcOperation::data() const
 {
     return d_func()->data;
+}
+
+/*!
+    Interface for implementation of QAbstractGrpcChannel.
+
+    Should be used to write metadata from channel to reply \a metadata received
+    from channel. For the HTTP2 channels it usually contains the HTTP
+    headers received from the server.
+*/
+void QGrpcOperation::setMetadata(const QGrpcMetadata &metadata)
+{
+    Q_D(QGrpcOperation);
+    d->metadata = metadata;
+}
+
+/*!
+    Interface for implementation of QAbstractGrpcChannel.
+
+    Should be used to write metadata from channel to reply \a metadata received
+    from channel. For the HTTP2 channels it usually contains the HTTP
+    headers received from the server.
+*/
+void QGrpcOperation::setMetadata(QGrpcMetadata &&metadata)
+{
+    Q_D(QGrpcOperation);
+    d->metadata = std::move(metadata);
+}
+
+/*!
+    Getter of the metadata received from the channel. For the HTTP2 channels it
+    usually contains the HTTP headers received from the server.
+*/
+QGrpcMetadata QGrpcOperation::metadata() const
+{
+    return d_func()->metadata;
 }
 
 /*!

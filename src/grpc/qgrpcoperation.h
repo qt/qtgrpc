@@ -8,6 +8,7 @@
 #include <QtCore/QObject>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
+#include <QtGrpc/qgrpcmetadata.h>
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +33,9 @@ public:
 
     virtual void abort() = 0;
 
+    void setMetadata(const QGrpcMetadata &metadata);
+    void setMetadata(QGrpcMetadata &&metadata);
+    QGrpcMetadata metadata() const;
 Q_SIGNALS:
     void finished();
     void errorOccurred(const QGrpcStatus &status);
