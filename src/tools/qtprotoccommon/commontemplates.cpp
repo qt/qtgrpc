@@ -127,7 +127,7 @@ const char *CommonTemplates::MetaTypeRegistrationGlobalEnumTemplate()
 }
 const char *CommonTemplates::UsingMessageTemplate()
 {
-    return "using $classname$Repeated = QList<std::shared_ptr<$classname$>>;\n";
+    return "using $classname$Repeated = QList<$classname$>;\n";
 }
 const char *CommonTemplates::UsingMapTemplate()
 {

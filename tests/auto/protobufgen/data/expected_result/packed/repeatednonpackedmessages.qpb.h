@@ -19,33 +19,33 @@
 
 namespace qtprotobufnamespace::tests {
 class RepeatedNonPackedIntMessage;
-using RepeatedNonPackedIntMessageRepeated = QList<std::shared_ptr<RepeatedNonPackedIntMessage>>;
+using RepeatedNonPackedIntMessageRepeated = QList<RepeatedNonPackedIntMessage>;
 class RepeatedNonPackedSIntMessage;
-using RepeatedNonPackedSIntMessageRepeated = QList<std::shared_ptr<RepeatedNonPackedSIntMessage>>;
+using RepeatedNonPackedSIntMessageRepeated = QList<RepeatedNonPackedSIntMessage>;
 class RepeatedNonPackedUIntMessage;
-using RepeatedNonPackedUIntMessageRepeated = QList<std::shared_ptr<RepeatedNonPackedUIntMessage>>;
+using RepeatedNonPackedUIntMessageRepeated = QList<RepeatedNonPackedUIntMessage>;
 class RepeatedNonPackedInt64Message;
-using RepeatedNonPackedInt64MessageRepeated = QList<std::shared_ptr<RepeatedNonPackedInt64Message>>;
+using RepeatedNonPackedInt64MessageRepeated = QList<RepeatedNonPackedInt64Message>;
 class RepeatedNonPackedSInt64Message;
-using RepeatedNonPackedSInt64MessageRepeated = QList<std::shared_ptr<RepeatedNonPackedSInt64Message>>;
+using RepeatedNonPackedSInt64MessageRepeated = QList<RepeatedNonPackedSInt64Message>;
 class RepeatedNonPackedUInt64Message;
-using RepeatedNonPackedUInt64MessageRepeated = QList<std::shared_ptr<RepeatedNonPackedUInt64Message>>;
+using RepeatedNonPackedUInt64MessageRepeated = QList<RepeatedNonPackedUInt64Message>;
 class RepeatedNonPackedFixedIntMessage;
-using RepeatedNonPackedFixedIntMessageRepeated = QList<std::shared_ptr<RepeatedNonPackedFixedIntMessage>>;
+using RepeatedNonPackedFixedIntMessageRepeated = QList<RepeatedNonPackedFixedIntMessage>;
 class RepeatedNonPackedSFixedIntMessage;
-using RepeatedNonPackedSFixedIntMessageRepeated = QList<std::shared_ptr<RepeatedNonPackedSFixedIntMessage>>;
+using RepeatedNonPackedSFixedIntMessageRepeated = QList<RepeatedNonPackedSFixedIntMessage>;
 class RepeatedNonPackedFixedInt64Message;
-using RepeatedNonPackedFixedInt64MessageRepeated = QList<std::shared_ptr<RepeatedNonPackedFixedInt64Message>>;
+using RepeatedNonPackedFixedInt64MessageRepeated = QList<RepeatedNonPackedFixedInt64Message>;
 class RepeatedNonPackedSFixedInt64Message;
-using RepeatedNonPackedSFixedInt64MessageRepeated = QList<std::shared_ptr<RepeatedNonPackedSFixedInt64Message>>;
+using RepeatedNonPackedSFixedInt64MessageRepeated = QList<RepeatedNonPackedSFixedInt64Message>;
 class RepeatedNonPackedBoolMessage;
-using RepeatedNonPackedBoolMessageRepeated = QList<std::shared_ptr<RepeatedNonPackedBoolMessage>>;
+using RepeatedNonPackedBoolMessageRepeated = QList<RepeatedNonPackedBoolMessage>;
 class RepeatedNonPackedDoubleMessage;
-using RepeatedNonPackedDoubleMessageRepeated = QList<std::shared_ptr<RepeatedNonPackedDoubleMessage>>;
+using RepeatedNonPackedDoubleMessageRepeated = QList<RepeatedNonPackedDoubleMessage>;
 class RepeatedNonPackedFloatMessage;
-using RepeatedNonPackedFloatMessageRepeated = QList<std::shared_ptr<RepeatedNonPackedFloatMessage>>;
+using RepeatedNonPackedFloatMessageRepeated = QList<RepeatedNonPackedFloatMessage>;
 class NonPackedIntMessageWithExtraMember;
-using NonPackedIntMessageWithExtraMemberRepeated = QList<std::shared_ptr<NonPackedIntMessageWithExtraMember>>;
+using NonPackedIntMessageWithExtraMemberRepeated = QList<NonPackedIntMessageWithExtraMember>;
 
 class RepeatedNonPackedIntMessage_QtProtobufData;
 class RepeatedNonPackedIntMessage : public QProtobufMessage

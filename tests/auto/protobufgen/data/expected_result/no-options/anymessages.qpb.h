@@ -20,15 +20,15 @@
 
 namespace qtproto::tests {
 class AnyMessage;
-using AnyMessageRepeated = QList<std::shared_ptr<AnyMessage>>;
+using AnyMessageRepeated = QList<AnyMessage>;
 class RepeatedAnyMessage;
-using RepeatedAnyMessageRepeated = QList<std::shared_ptr<RepeatedAnyMessage>>;
+using RepeatedAnyMessageRepeated = QList<RepeatedAnyMessage>;
 class TwoAnyMessage;
-using TwoAnyMessageRepeated = QList<std::shared_ptr<TwoAnyMessage>>;
+using TwoAnyMessageRepeated = QList<TwoAnyMessage>;
 class Example;
-using ExampleRepeated = QList<std::shared_ptr<Example>>;
+using ExampleRepeated = QList<Example>;
 class SimpleMessage;
-using SimpleMessageRepeated = QList<std::shared_ptr<SimpleMessage>>;
+using SimpleMessageRepeated = QList<SimpleMessage>;
 
 class AnyMessage_QtProtobufData;
 class AnyMessage : public QProtobufMessage

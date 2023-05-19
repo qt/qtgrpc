@@ -20,37 +20,37 @@
 
 namespace qtprotobufnamespace::tests {
 class RepeatedStringMessage;
-using RepeatedStringMessageRepeated = QList<std::shared_ptr<RepeatedStringMessage>>;
+using RepeatedStringMessageRepeated = QList<RepeatedStringMessage>;
 class RepeatedDoubleMessage;
-using RepeatedDoubleMessageRepeated = QList<std::shared_ptr<RepeatedDoubleMessage>>;
+using RepeatedDoubleMessageRepeated = QList<RepeatedDoubleMessage>;
 class RepeatedBytesMessage;
-using RepeatedBytesMessageRepeated = QList<std::shared_ptr<RepeatedBytesMessage>>;
+using RepeatedBytesMessageRepeated = QList<RepeatedBytesMessage>;
 class RepeatedFloatMessage;
-using RepeatedFloatMessageRepeated = QList<std::shared_ptr<RepeatedFloatMessage>>;
+using RepeatedFloatMessageRepeated = QList<RepeatedFloatMessage>;
 class RepeatedComplexMessage;
-using RepeatedComplexMessageRepeated = QList<std::shared_ptr<RepeatedComplexMessage>>;
+using RepeatedComplexMessageRepeated = QList<RepeatedComplexMessage>;
 class RepeatedSIntMessage;
-using RepeatedSIntMessageRepeated = QList<std::shared_ptr<RepeatedSIntMessage>>;
+using RepeatedSIntMessageRepeated = QList<RepeatedSIntMessage>;
 class RepeatedIntMessage;
-using RepeatedIntMessageRepeated = QList<std::shared_ptr<RepeatedIntMessage>>;
+using RepeatedIntMessageRepeated = QList<RepeatedIntMessage>;
 class RepeatedUIntMessage;
-using RepeatedUIntMessageRepeated = QList<std::shared_ptr<RepeatedUIntMessage>>;
+using RepeatedUIntMessageRepeated = QList<RepeatedUIntMessage>;
 class RepeatedSInt64Message;
-using RepeatedSInt64MessageRepeated = QList<std::shared_ptr<RepeatedSInt64Message>>;
+using RepeatedSInt64MessageRepeated = QList<RepeatedSInt64Message>;
 class RepeatedInt64Message;
-using RepeatedInt64MessageRepeated = QList<std::shared_ptr<RepeatedInt64Message>>;
+using RepeatedInt64MessageRepeated = QList<RepeatedInt64Message>;
 class RepeatedUInt64Message;
-using RepeatedUInt64MessageRepeated = QList<std::shared_ptr<RepeatedUInt64Message>>;
+using RepeatedUInt64MessageRepeated = QList<RepeatedUInt64Message>;
 class RepeatedFixedIntMessage;
-using RepeatedFixedIntMessageRepeated = QList<std::shared_ptr<RepeatedFixedIntMessage>>;
+using RepeatedFixedIntMessageRepeated = QList<RepeatedFixedIntMessage>;
 class RepeatedSFixedIntMessage;
-using RepeatedSFixedIntMessageRepeated = QList<std::shared_ptr<RepeatedSFixedIntMessage>>;
+using RepeatedSFixedIntMessageRepeated = QList<RepeatedSFixedIntMessage>;
 class RepeatedFixedInt64Message;
-using RepeatedFixedInt64MessageRepeated = QList<std::shared_ptr<RepeatedFixedInt64Message>>;
+using RepeatedFixedInt64MessageRepeated = QList<RepeatedFixedInt64Message>;
 class RepeatedSFixedInt64Message;
-using RepeatedSFixedInt64MessageRepeated = QList<std::shared_ptr<RepeatedSFixedInt64Message>>;
+using RepeatedSFixedInt64MessageRepeated = QList<RepeatedSFixedInt64Message>;
 class RepeatedBoolMessage;
-using RepeatedBoolMessageRepeated = QList<std::shared_ptr<RepeatedBoolMessage>>;
+using RepeatedBoolMessageRepeated = QList<RepeatedBoolMessage>;
 
 class RepeatedStringMessage_QtProtobufData;
 class RepeatedStringMessage : public QProtobufMessage

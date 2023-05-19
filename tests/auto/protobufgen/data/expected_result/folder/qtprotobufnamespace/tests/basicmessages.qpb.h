@@ -19,39 +19,39 @@
 
 namespace qtprotobufnamespace::tests {
 class EmptyMessage;
-using EmptyMessageRepeated = QList<std::shared_ptr<EmptyMessage>>;
+using EmptyMessageRepeated = QList<EmptyMessage>;
 class SimpleBoolMessage;
-using SimpleBoolMessageRepeated = QList<std::shared_ptr<SimpleBoolMessage>>;
+using SimpleBoolMessageRepeated = QList<SimpleBoolMessage>;
 class SimpleIntMessage;
-using SimpleIntMessageRepeated = QList<std::shared_ptr<SimpleIntMessage>>;
+using SimpleIntMessageRepeated = QList<SimpleIntMessage>;
 class SimpleSIntMessage;
-using SimpleSIntMessageRepeated = QList<std::shared_ptr<SimpleSIntMessage>>;
+using SimpleSIntMessageRepeated = QList<SimpleSIntMessage>;
 class SimpleUIntMessage;
-using SimpleUIntMessageRepeated = QList<std::shared_ptr<SimpleUIntMessage>>;
+using SimpleUIntMessageRepeated = QList<SimpleUIntMessage>;
 class SimpleInt64Message;
-using SimpleInt64MessageRepeated = QList<std::shared_ptr<SimpleInt64Message>>;
+using SimpleInt64MessageRepeated = QList<SimpleInt64Message>;
 class SimpleSInt64Message;
-using SimpleSInt64MessageRepeated = QList<std::shared_ptr<SimpleSInt64Message>>;
+using SimpleSInt64MessageRepeated = QList<SimpleSInt64Message>;
 class SimpleUInt64Message;
-using SimpleUInt64MessageRepeated = QList<std::shared_ptr<SimpleUInt64Message>>;
+using SimpleUInt64MessageRepeated = QList<SimpleUInt64Message>;
 class SimpleStringMessage;
-using SimpleStringMessageRepeated = QList<std::shared_ptr<SimpleStringMessage>>;
+using SimpleStringMessageRepeated = QList<SimpleStringMessage>;
 class SimpleFloatMessage;
-using SimpleFloatMessageRepeated = QList<std::shared_ptr<SimpleFloatMessage>>;
+using SimpleFloatMessageRepeated = QList<SimpleFloatMessage>;
 class SimpleDoubleMessage;
-using SimpleDoubleMessageRepeated = QList<std::shared_ptr<SimpleDoubleMessage>>;
+using SimpleDoubleMessageRepeated = QList<SimpleDoubleMessage>;
 class SimpleBytesMessage;
-using SimpleBytesMessageRepeated = QList<std::shared_ptr<SimpleBytesMessage>>;
+using SimpleBytesMessageRepeated = QList<SimpleBytesMessage>;
 class SimpleFixedInt32Message;
-using SimpleFixedInt32MessageRepeated = QList<std::shared_ptr<SimpleFixedInt32Message>>;
+using SimpleFixedInt32MessageRepeated = QList<SimpleFixedInt32Message>;
 class SimpleFixedInt64Message;
-using SimpleFixedInt64MessageRepeated = QList<std::shared_ptr<SimpleFixedInt64Message>>;
+using SimpleFixedInt64MessageRepeated = QList<SimpleFixedInt64Message>;
 class SimpleSFixedInt32Message;
-using SimpleSFixedInt32MessageRepeated = QList<std::shared_ptr<SimpleSFixedInt32Message>>;
+using SimpleSFixedInt32MessageRepeated = QList<SimpleSFixedInt32Message>;
 class SimpleSFixedInt64Message;
-using SimpleSFixedInt64MessageRepeated = QList<std::shared_ptr<SimpleSFixedInt64Message>>;
+using SimpleSFixedInt64MessageRepeated = QList<SimpleSFixedInt64Message>;
 class ComplexMessage;
-using ComplexMessageRepeated = QList<std::shared_ptr<ComplexMessage>>;
+using ComplexMessageRepeated = QList<ComplexMessage>;
 
 class EmptyMessage_QtProtobufData;
 class EmptyMessage : public QProtobufMessage

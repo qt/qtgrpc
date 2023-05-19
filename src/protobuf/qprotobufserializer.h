@@ -126,13 +126,8 @@ void serializeList(const QProtobufSerializer *serializer, const QVariant &listVa
                    const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer)
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
-    QList<std::shared_ptr<V>> list = listValue.value<QList<std::shared_ptr<V>>>();
-
-    for (auto &value : list) {
-        if (!value) {
-            continue;
-        }
-        buffer.append(serializer->serializeListObject(value.get(), V::propertyOrdering, fieldInfo));
+    for (const auto &value : listValue.value<QList<V>>()) {
+        buffer.append(serializer->serializeListObject(&value, V::propertyOrdering, fieldInfo));
     }
 }
 
@@ -229,10 +224,10 @@ void deserializeList(const QProtobufSerializer *serializer, QProtobufSelfcheckIt
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
 
-    auto newValue = std::make_shared<V>();
-    QList<std::shared_ptr<V>> list = previous.value<QList<std::shared_ptr<V>>>();
-    if (serializer->deserializeListObject(newValue.get(), V::propertyOrdering, it)) {
-        list.append(std::move(newValue));
+    V newValue;
+    if (serializer->deserializeListObject(&newValue, V::propertyOrdering, it)) {
+        QList<V> list = previous.value<QList<V>>();
+        list.append(newValue);
         previous.setValue(list);
     }
 }
@@ -326,7 +321,7 @@ inline void qRegisterProtobufType()
             QMetaType::fromType<T *>(),
             { QtProtobufPrivate::serializeObject<T>, QtProtobufPrivate::deserializeObject<T> });
     QtProtobufPrivate::registerHandler(
-            QMetaType::fromType<QList<std::shared_ptr<T>>>(),
+            QMetaType::fromType<QList<T>>(),
             { QtProtobufPrivate::serializeList<T>, QtProtobufPrivate::deserializeList<T> });
 }
 

@@ -30,7 +30,7 @@
 #endif
 
 class SimpleIntMessageExt;
-using SimpleIntMessageExtRepeated = QList<std::shared_ptr<SimpleIntMessageExt>>;
+using SimpleIntMessageExtRepeated = QList<SimpleIntMessageExt>;
 
 class SimpleIntMessageExt_QtProtobufData;
 class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT SimpleIntMessageExt : public QProtobufMessage

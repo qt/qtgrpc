@@ -6,12 +6,9 @@
 #define CHATMESSAGEMODEL_H
 
 #include <QAbstractListModel>
-
 #include <memory>
 
-namespace qtgrpc::examples::chat {
-class ChatMessage;
-}
+#include "simplechat.qpb.h"
 
 class ChatMessageModel : public QAbstractListModel
 {
@@ -23,10 +20,10 @@ public:
     QHash<int, QByteArray> roleNames() const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
-    void append(const QList<std::shared_ptr<qtgrpc::examples::chat::ChatMessage>> &messages);
+    void append(const qtgrpc::examples::chat::ChatMessageRepeated &messages);
 
 private:
-    QList<std::shared_ptr<qtgrpc::examples::chat::ChatMessage>> m_container;
+    qtgrpc::examples::chat::ChatMessageRepeated m_container;
 };
 
 #endif // CHATMESSAGEMODEL_H

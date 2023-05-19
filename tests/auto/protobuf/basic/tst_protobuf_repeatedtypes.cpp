@@ -322,28 +322,28 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedComplexMessageCompareTest()
 {
     SimpleStringMessage stringMsg;
 
-    std::shared_ptr<ComplexMessage> msg1(new ComplexMessage);
+    ComplexMessage msg1;
     stringMsg.setTestFieldString("qwerty");
-    msg1->setTestFieldInt(10);
-    msg1->setTestComplexField(stringMsg);
+    msg1.setTestFieldInt(10);
+    msg1.setTestComplexField(stringMsg);
 
-    std::shared_ptr<ComplexMessage> msg2(new ComplexMessage);
+    ComplexMessage msg2;
     stringMsg.setTestFieldString("ytrewq");
-    msg2->setTestFieldInt(20);
-    msg2->setTestComplexField(stringMsg);
+    msg2.setTestFieldInt(20);
+    msg2.setTestComplexField(stringMsg);
 
-    std::shared_ptr<ComplexMessage> msg3(new ComplexMessage);
+    ComplexMessage msg3;
     stringMsg.setTestFieldString("qwerty");
-    msg3->setTestFieldInt(10);
-    msg3->setTestComplexField(stringMsg);
+    msg3.setTestFieldInt(10);
+    msg3.setTestComplexField(stringMsg);
 
-    std::shared_ptr<ComplexMessage> msg4(new ComplexMessage);
+    ComplexMessage msg4;
     stringMsg.setTestFieldString("ytrewq");
-    msg4->setTestFieldInt(20);
-    msg4->setTestComplexField(stringMsg);
+    msg4.setTestFieldInt(20);
+    msg4.setTestComplexField(stringMsg);
 
-    QCOMPARE(*msg1, *msg3);
-    QCOMPARE(*msg2, *msg4);
+    QCOMPARE(msg1, msg3);
+    QCOMPARE(msg2, msg4);
 
     RepeatedComplexMessage test1;
     test1.setTestRepeatedComplex({ msg1, msg2 });

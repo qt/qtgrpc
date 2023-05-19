@@ -19,13 +19,13 @@
 
 namespace qtprotobufnamespace::tests {
 class FieldIndexTest1Message;
-using FieldIndexTest1MessageRepeated = QList<std::shared_ptr<FieldIndexTest1Message>>;
+using FieldIndexTest1MessageRepeated = QList<FieldIndexTest1Message>;
 class FieldIndexTest2Message;
-using FieldIndexTest2MessageRepeated = QList<std::shared_ptr<FieldIndexTest2Message>>;
+using FieldIndexTest2MessageRepeated = QList<FieldIndexTest2Message>;
 class FieldIndexTest3Message;
-using FieldIndexTest3MessageRepeated = QList<std::shared_ptr<FieldIndexTest3Message>>;
+using FieldIndexTest3MessageRepeated = QList<FieldIndexTest3Message>;
 class FieldIndexTest4Message;
-using FieldIndexTest4MessageRepeated = QList<std::shared_ptr<FieldIndexTest4Message>>;
+using FieldIndexTest4MessageRepeated = QList<FieldIndexTest4Message>;
 
 class FieldIndexTest1Message_QtProtobufData;
 class FieldIndexTest1Message : public QProtobufMessage

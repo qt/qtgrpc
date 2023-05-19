@@ -50,6 +50,10 @@ qt6_add_protobuf(tst_protobuf_maptypes_gen
         proto/mapmessages.proto
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
+if(MINGW)
+    target_compile_options(tst_protobuf_maptypes_gen PRIVATE "-Wa,-mbig-obj")
+endif()
+
 qt_autogen_tools_initial_setup(tst_protobuf_maptypes_gen)
 
 # @todo: this explicit linking is needed, try to make it automatic since it's a dependency

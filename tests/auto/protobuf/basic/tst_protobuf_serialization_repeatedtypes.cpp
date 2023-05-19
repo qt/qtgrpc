@@ -233,9 +233,9 @@ void QtProtobufRepeatedTypesSerializationTest::RepeatedComplexMessageTest()
 {
     SimpleStringMessage stringMsg;
     stringMsg.setTestFieldString("qwerty");
-    std::shared_ptr<ComplexMessage> msg(new ComplexMessage);
-    msg->setTestFieldInt(25);
-    msg->setTestComplexField(stringMsg);
+    ComplexMessage msg;
+    msg.setTestFieldInt(25);
+    msg.setTestComplexField(stringMsg);
     RepeatedComplexMessage test;
     test.setTestRepeatedComplex({msg, msg, msg});
     QByteArray result = test.serialize(m_serializer.get());

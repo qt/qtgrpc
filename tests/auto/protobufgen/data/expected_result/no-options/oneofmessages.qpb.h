@@ -21,9 +21,9 @@
 
 namespace qtprotobufnamespace::tests {
 class OneofSimpleMessage;
-using OneofSimpleMessageRepeated = QList<std::shared_ptr<OneofSimpleMessage>>;
+using OneofSimpleMessageRepeated = QList<OneofSimpleMessage>;
 class OneofComplexMessage;
-using OneofComplexMessageRepeated = QList<std::shared_ptr<OneofComplexMessage>>;
+using OneofComplexMessageRepeated = QList<OneofComplexMessage>;
 
 class OneofSimpleMessage_QtProtobufData;
 class OneofSimpleMessage : public QProtobufMessage

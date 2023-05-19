@@ -32,8 +32,8 @@ void QtProtobufExternalPackageGenerationTest::RepeatedExternalComplexMessageTest
     qtprotobufnamespace1::externaltests::ExternalInt32Message complexMessage;
     complexMessage.setLocalList({1, 2, 3, 4, 5});
 
-    std::shared_ptr<qtprotobufnamespace1::externaltests::ExternalComplexMessage> externalMessage(new qtprotobufnamespace1::externaltests::ExternalComplexMessage);
-    externalMessage->setTestFieldInt(complexMessage);
+    qtprotobufnamespace1::externaltests::ExternalComplexMessage externalMessage;
+    externalMessage.setTestFieldInt(complexMessage);
 
     qtprotobufnamespace1::externaltests::ExternalComplexMessageRepeated complexMessageList;
     complexMessageList << externalMessage;

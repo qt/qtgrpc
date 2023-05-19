@@ -19,11 +19,11 @@
 
 namespace qtgrpc::tests {
 class SimpleStringMessage;
-using SimpleStringMessageRepeated = QList<std::shared_ptr<SimpleStringMessage>>;
+using SimpleStringMessageRepeated = QList<SimpleStringMessage>;
 class SimpleIntMessage;
-using SimpleIntMessageRepeated = QList<std::shared_ptr<SimpleIntMessage>>;
+using SimpleIntMessageRepeated = QList<SimpleIntMessage>;
 class BlobMessage;
-using BlobMessageRepeated = QList<std::shared_ptr<BlobMessage>>;
+using BlobMessageRepeated = QList<BlobMessage>;
 
 class SimpleStringMessage_QtProtobufData;
 class SimpleStringMessage : public QProtobufMessage

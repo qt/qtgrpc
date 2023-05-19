@@ -528,7 +528,7 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
 */
 
 /*!
-    \fn template<typename T> bool QtProtobuf::repeatedValueCompare(const QList<std::shared_ptr<T>> &a, const QList<std::shared_ptr<T>> &b)
+    \fn template<typename T> bool QtProtobuf::repeatedValueCompare(const QList<T> &a, const QList<T> &b)
     \fn template<typename K, typename V> bool QtProtobuf::repeatedValueCompare(const QHash<K, V> &a, const QHash<K, V> &b)
     \fn template<typename K, typename V> bool repeatedValueCompare(const QHash<K, std::shared_ptr<V>> &a, const QHash<K, std::shared_ptr<V>> &b)
 

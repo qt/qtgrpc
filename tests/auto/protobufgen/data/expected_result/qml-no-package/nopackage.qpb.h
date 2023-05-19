@@ -44,13 +44,13 @@ Q_ENUM_NS(TestEnum)
 using TestEnumRepeated = QList<TestEnum>;
 };
 class EmptyMessage;
-using EmptyMessageRepeated = QList<std::shared_ptr<EmptyMessage>>;
+using EmptyMessageRepeated = QList<EmptyMessage>;
 class SimpleIntMessage;
-using SimpleIntMessageRepeated = QList<std::shared_ptr<SimpleIntMessage>>;
+using SimpleIntMessageRepeated = QList<SimpleIntMessage>;
 class NoPackageExternalMessage;
-using NoPackageExternalMessageRepeated = QList<std::shared_ptr<NoPackageExternalMessage>>;
+using NoPackageExternalMessageRepeated = QList<NoPackageExternalMessage>;
 class NoPackageMessage;
-using NoPackageMessageRepeated = QList<std::shared_ptr<NoPackageMessage>>;
+using NoPackageMessageRepeated = QList<NoPackageMessage>;
 
 class EmptyMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT EmptyMessage : public QProtobufMessage

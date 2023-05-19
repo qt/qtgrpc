@@ -19,23 +19,23 @@
 
 namespace qtprotobufnamespace::tests {
 class AnnotatedMessage1;
-using AnnotatedMessage1Repeated = QList<std::shared_ptr<AnnotatedMessage1>>;
+using AnnotatedMessage1Repeated = QList<AnnotatedMessage1>;
 class AnnotatedMessage2;
-using AnnotatedMessage2Repeated = QList<std::shared_ptr<AnnotatedMessage2>>;
+using AnnotatedMessage2Repeated = QList<AnnotatedMessage2>;
 class AnnotatedMessage3;
-using AnnotatedMessage3Repeated = QList<std::shared_ptr<AnnotatedMessage3>>;
+using AnnotatedMessage3Repeated = QList<AnnotatedMessage3>;
 class AnnotatedMessage4;
-using AnnotatedMessage4Repeated = QList<std::shared_ptr<AnnotatedMessage4>>;
+using AnnotatedMessage4Repeated = QList<AnnotatedMessage4>;
 class AnnotatedMessage5;
-using AnnotatedMessage5Repeated = QList<std::shared_ptr<AnnotatedMessage5>>;
+using AnnotatedMessage5Repeated = QList<AnnotatedMessage5>;
 class AnnotatedMessage6;
-using AnnotatedMessage6Repeated = QList<std::shared_ptr<AnnotatedMessage6>>;
+using AnnotatedMessage6Repeated = QList<AnnotatedMessage6>;
 class AnnotatedMessage7;
-using AnnotatedMessage7Repeated = QList<std::shared_ptr<AnnotatedMessage7>>;
+using AnnotatedMessage7Repeated = QList<AnnotatedMessage7>;
 class AnnotatedMessage8;
-using AnnotatedMessage8Repeated = QList<std::shared_ptr<AnnotatedMessage8>>;
+using AnnotatedMessage8Repeated = QList<AnnotatedMessage8>;
 class AnnotatedMessage9;
-using AnnotatedMessage9Repeated = QList<std::shared_ptr<AnnotatedMessage9>>;
+using AnnotatedMessage9Repeated = QList<AnnotatedMessage9>;
 
 class AnnotatedMessage1_QtProtobufData;
 class AnnotatedMessage1 : public QProtobufMessage

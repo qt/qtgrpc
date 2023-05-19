@@ -6,7 +6,6 @@
 #include <QBuffer>
 
 #include "chatmessagemodel.h"
-#include "simplechat.qpb.h"
 
 namespace {
 enum Role {
@@ -53,21 +52,21 @@ QVariant ChatMessageModel::data(const QModelIndex &index, int role) const
 {
     int row = index.row();
 
-    if (row < 0 || row >= m_container.count() || !m_container.at(row))
+    if (row < 0 || row >= m_container.count())
         return QVariant();
 
-    auto dataPtr = m_container.at(row).get();
+    const auto &data = m_container.at(row);
 
     switch (role) {
     case Content:
-        if (dataPtr->type() == qtgrpc::examples::chat::ChatMessage::Image)
-            return QVariant::fromValue(getImageScaled(dataPtr->content()));
+        if (data.type() == qtgrpc::examples::chat::ChatMessage::Image)
+            return QVariant::fromValue(getImageScaled(data.content()));
         else
-            return QVariant::fromValue(getText(dataPtr->content()));
+            return QVariant::fromValue(getText(data.content()));
     case Type:
-        return QVariant::fromValue(dataPtr->type());
+        return QVariant::fromValue(data.type());
     case From:
-        return QVariant::fromValue(dataPtr->from());
+        return QVariant::fromValue(data.from());
     }
 
     return QVariant();
@@ -78,8 +77,7 @@ int ChatMessageModel::rowCount(const QModelIndex &) const
     return m_container.count();
 }
 
-void ChatMessageModel::append(
-        const QList<std::shared_ptr<qtgrpc::examples::chat::ChatMessage>> &messages)
+void ChatMessageModel::append(const qtgrpc::examples::chat::ChatMessageRepeated &messages)
 {
     if (messages.size() > 0) {
         beginInsertRows(QModelIndex(), m_container.size(),

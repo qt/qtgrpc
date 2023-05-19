@@ -19,11 +19,11 @@
 
 namespace qtprotobufnamespace::tests {
 class EmptyMessage;
-using EmptyMessageRepeated = QList<std::shared_ptr<EmptyMessage>>;
+using EmptyMessageRepeated = QList<EmptyMessage>;
 class SimpleStringMessage;
-using SimpleStringMessageRepeated = QList<std::shared_ptr<SimpleStringMessage>>;
+using SimpleStringMessageRepeated = QList<SimpleStringMessage>;
 class ComplexMessage;
-using ComplexMessageRepeated = QList<std::shared_ptr<ComplexMessage>>;
+using ComplexMessageRepeated = QList<ComplexMessage>;
 
 class EmptyMessage_QtProtobufData;
 class EmptyMessage : public QProtobufMessage

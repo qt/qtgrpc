@@ -48,6 +48,10 @@ qt_add_protobuf(tst_qtprotobufgen
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/packed"
 )
 
+if(MINGW)
+    target_compile_options(tst_qtprotobufgen PRIVATE "-Wa,-mbig-obj")
+endif()
+
 if(TARGET Qt6::Qml)
     qt_add_protobuf(tst_qtprotobufgenplugin
         PROTO_FILES

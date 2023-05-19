@@ -177,17 +177,17 @@ void QtProtobufRepeatedTypesDeserializationTest::RepeatedComplexMessageTest()
     RepeatedComplexMessage test;
     test.deserialize(serializer.get(), QByteArray::fromHex("0a0c0819120832067177657274790a0c0819120832067177657274790a0c081912083206717765727479"));
     QCOMPARE(test.testRepeatedComplex().count(), 3);
-    QCOMPARE(test.testRepeatedComplex().at(0)->testFieldInt(), 25);
-    QCOMPARE(test.testRepeatedComplex().at(0)->testComplexField().testFieldString(), QString("qwerty"));
-    QCOMPARE(test.testRepeatedComplex().at(1)->testFieldInt(), 25);
-    QCOMPARE(test.testRepeatedComplex().at(1)->testComplexField().testFieldString(), QString("qwerty"));
-    QCOMPARE(test.testRepeatedComplex().at(2)->testFieldInt(), 25);
-    QCOMPARE(test.testRepeatedComplex().at(2)->testComplexField().testFieldString(), QString("qwerty"));
+    QCOMPARE(test.testRepeatedComplex().at(0).testFieldInt(), 25);
+    QCOMPARE(test.testRepeatedComplex().at(0).testComplexField().testFieldString(), QString("qwerty"));
+    QCOMPARE(test.testRepeatedComplex().at(1).testFieldInt(), 25);
+    QCOMPARE(test.testRepeatedComplex().at(1).testComplexField().testFieldString(), QString("qwerty"));
+    QCOMPARE(test.testRepeatedComplex().at(2).testFieldInt(), 25);
+    QCOMPARE(test.testRepeatedComplex().at(2).testComplexField().testFieldString(), QString("qwerty"));
 
     test.deserialize(serializer.get(), QByteArray::fromHex("0a1508d3feffffffffffffff0112083206717765727479"));
-    QVERIFY(0 < test.testRepeatedComplex().count());
-    QCOMPARE(-173, test.testRepeatedComplex().at(0)->testFieldInt());
-    QCOMPARE(test.testRepeatedComplex().at(0)->testComplexField().testFieldString(), QString("qwerty"));
+    QVERIFY(!test.testRepeatedComplex().isEmpty());
+    QCOMPARE(test.testRepeatedComplex().at(0).testFieldInt(), -173);
+    QCOMPARE(test.testRepeatedComplex().at(0).testComplexField().testFieldString(), QString("qwerty"));
 }
 
 void QtProtobufRepeatedTypesDeserializationTest::RepeatedBoolMessageTest()

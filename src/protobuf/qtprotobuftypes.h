@@ -175,15 +175,6 @@ bool repeatedValueCompare(const QList<T> &a, const QList<T> &b)
     return std::equal(a.begin(), a.end(), b.begin(), b.end());
 }
 
-template<typename T>
-bool repeatedValueCompare(const QList<std::shared_ptr<T>> &a, const QList<std::shared_ptr<T>> &b)
-{
-    auto dereferenced = [](const std::shared_ptr<T> &lhs, const std::shared_ptr<T> &rhs) {
-        return lhs == rhs || (lhs && rhs && *lhs == *rhs);
-    };
-    return std::equal(a.begin(), a.end(), b.begin(), b.end(), dereferenced);
-}
-
 template<typename K, typename V>
 bool repeatedValueCompare(const QHash<K, V> &a, const QHash<K, V> &b)
 {
