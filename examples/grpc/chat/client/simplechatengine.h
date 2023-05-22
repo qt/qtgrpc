@@ -68,6 +68,7 @@ private:
     qtgrpc::examples::chat::SimpleChat::Client *m_client;
     QClipboard *m_clipBoard;
     QString m_userName;
+    QString m_password;
 };
 
 Q_DECLARE_METATYPE(ChatMessageModel *)

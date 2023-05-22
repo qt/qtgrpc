@@ -28,10 +28,12 @@
     \note The list of users is predefined on the server side and is constant.
     The password for all users is \c qwerty.
 
-    The chat client uses an authentication type called \c {call credentials}.
+    The chat client authenticates to the server using \c {user-name} and
+    \c {user-password} HTTP headers. These fields are set by the
+    \l QGrpcMetadata.
     Each gRPC message includes the user credentials in the message header.
-    Credentials are passed to the \l QGrpcHttp2Channel once and reused
-    implicitily:
+    \l QGrpcMetadata is passed to the \l QGrpcHttp2Channel inside
+    \l QGrpcChannelOptions once and reused implicitily:
 
     \snippet chat/client/simplechatengine.cpp 0
 

@@ -43,9 +43,14 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
     QUrl url("http://localhost:65002");
 
     // ![0]
-    Q_UNUSED(password);
-    QGrpcChannelOptions options(url);
-    std::shared_ptr<QAbstractGrpcChannel> channel(new QGrpcHttp2Channel(options));
+    QGrpcChannelOptions channelOptions(url);
+    QGrpcMetadata metadata = {
+        { "user-name", { name.toUtf8() } },
+        { "user-password", { password.toUtf8() } },
+    };
+    channelOptions.withMetadata(metadata);
+    std::shared_ptr<QAbstractGrpcChannel> channel = std::make_shared<QGrpcHttp2Channel>(
+            channelOptions);
     // ![0]
 
     m_client->attachChannel(channel);
@@ -63,14 +68,16 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
     QObject::connect(stream.get(), &QGrpcStream::finished, this,
                      [this, stream]() { setState(Disconnected); });
 
-    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [this, name, stream]() {
-        if (m_userName != name) {
-            m_userName = name;
-            emit userNameChanged();
-        }
-        setState(Connected);
-        m_messages.append(stream->read<qtgrpc::examples::chat::ChatMessages>().messages());
-    });
+    QObject::connect(
+            stream.get(), &QGrpcStream::messageReceived, this, [this, name, password, stream]() {
+                if (m_userName != name) {
+                    m_userName = name;
+                    m_password = password;
+                    emit userNameChanged();
+                }
+                setState(Connected);
+                m_messages.append(stream->read<qtgrpc::examples::chat::ChatMessages>().messages());
+            });
     // ![1]
 }
 
