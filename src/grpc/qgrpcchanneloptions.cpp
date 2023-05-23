@@ -82,15 +82,6 @@ QGrpcChannelOptions &QGrpcChannelOptions::withDeadline(std::chrono::milliseconds
 }
 
 /*!
-    Sets channel credential list with \a credentialList and returns updated QGrpcChannelOptions object.
-*/
-QGrpcChannelOptions &QGrpcChannelOptions::withCredentialList(const QStringList &credentialList)
-{
-    dPtr->credentialList = credentialList;
-    return *this;
-}
-
-/*!
     Sets \a metadata for a call and returns updated QGrpcCallOptions object.
 */
 QGrpcChannelOptions &QGrpcChannelOptions::withMetadata(const QGrpcMetadata &metadata)
@@ -115,16 +106,6 @@ std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const
 QUrl QGrpcChannelOptions::host() const
 {
     return dPtr->host;
-}
-
-/*!
-    Returns credential list for the channel.
-
-    If value was not set returns empty std::optional.
-*/
-std::optional<QStringList> QGrpcChannelOptions::credentialList() const
-{
-    return dPtr->credentialList;
 }
 
 #if QT_CONFIG(ssl)

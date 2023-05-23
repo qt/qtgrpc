@@ -105,13 +105,9 @@ void QtGrpcSslClientTest::Http2ChannelIncorrectSecureCredentialsTest()
 void QtGrpcSslClientTest::GrpcHttpChannelIncorrectSecureCredentialsTest()
 {
     TestService::Client testClient;
-    grpc::SslCredentialsOptions options = grpc::SslCredentialsOptions();
-    QStringList optionsList;
-    optionsList.append(QString::fromStdString(options.pem_root_certs));
-    optionsList.append(QString::fromStdString(options.pem_private_key));
-    optionsList.append(QString::fromStdString(options.pem_cert_chain));
+    QSslConfiguration conf = QSslConfiguration::defaultConfiguration();
     QGrpcChannelOptions channelOptions(QUrl("localhost:60051"));
-    channelOptions.withCredentialList(optionsList);
+    channelOptions.withSslConfiguration(conf);
 
     testClient.attachChannel(std::make_shared<QGrpcChannel>(channelOptions,
                                                             QGrpcChannel::SslDefaultCredentials));

@@ -25,6 +25,10 @@
 #include "qgrpcchannel.h"
 #include "qgrpcchannel_p.h"
 
+#if QT_CONFIG(ssl)
+#  include <QtNetwork/QSslKey>
+#endif
+
 QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
@@ -190,15 +194,26 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QGrpcChannelOptions &options,
         m_channel = grpc::CreateChannel(options.host().toString().toStdString(), m_credentials);
         break;
     case QGrpcChannel::SslDefaultCredentials:
-        if (auto maybeCredentialList = options.credentialList()) {
+#if QT_CONFIG(ssl)
+        if (auto maybeSslConfig = options.sslConfiguration()) {
             grpc::SslCredentialsOptions options;
-            options.pem_root_certs = (*maybeCredentialList)[0].toStdString();
-            options.pem_private_key = (*maybeCredentialList)[1].toStdString();
-            options.pem_cert_chain = (*maybeCredentialList)[2].toStdString();
+            auto accumulateSslCert = [](const std::string &lhs, const QSslCertificate &rhs) {
+                return lhs + rhs.toPem().toStdString();
+            };
+            std::accumulate(maybeSslConfig->peerCertificateChain().begin(),
+                            maybeSslConfig->peerCertificateChain().end(), options.pem_root_certs,
+                            accumulateSslCert);
+            std::accumulate(maybeSslConfig->localCertificateChain().begin(),
+                            maybeSslConfig->localCertificateChain().end(), options.pem_cert_chain,
+                            accumulateSslCert);
+            options.pem_private_key = maybeSslConfig->privateKey().toPem();
             m_credentials = grpc::SslCredentials(options);
         } else {
             m_credentials = grpc::SslCredentials(grpc::SslCredentialsOptions());
         }
+#else
+        m_credentials = grpc::SslCredentials(grpc::SslCredentialsOptions());
+#endif
         m_channel = grpc::CreateChannel(options.host().toString().toStdString(), m_credentials);
         break;
     }

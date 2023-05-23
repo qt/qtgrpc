@@ -32,12 +32,10 @@ public:
 
     QGrpcChannelOptions &withHost(const QUrl &host);
     QGrpcChannelOptions &withDeadline(std::chrono::milliseconds deadline);
-    QGrpcChannelOptions &withCredentialList(const QStringList &credentialList);
     QGrpcChannelOptions &withMetadata(const QGrpcMetadata &metadata);
 
     QUrl host() const;
     std::optional<std::chrono::milliseconds> deadline() const;
-    std::optional<QStringList> credentialList() const;
     QGrpcMetadata metadata() const;
 
 #if QT_CONFIG(ssl)
