@@ -158,9 +158,9 @@ void serializeMap(const QProtobufSerializer *serializer, const QVariant &value,
                   const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &buffer)
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
-    for (const auto &[k, v] : value.value<QHash<K, std::shared_ptr<V>>>().asKeyValueRange()) {
+    for (const auto &[k, v] : value.value<QHash<K, V>>().asKeyValueRange()) {
         buffer.append(serializer->serializeMapPair(QVariant::fromValue<K>(k),
-                                                   QVariant::fromValue<V *>(v.get()), fieldInfo));
+                                                   QVariant::fromValue<V *>(&v), fieldInfo));
     }
 }
 
@@ -267,13 +267,14 @@ void deserializeMap(const QProtobufSerializer *serializer, QProtobufSelfcheckIte
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
 
-    auto out = previous.value<QHash<K, std::shared_ptr<V>>>();
+    auto out = previous.value<QHash<K, V>>();
     QVariant key = QVariant::fromValue<K>(K());
     QVariant value = QVariant::fromValue<V *>(nullptr);
 
     if (serializer->deserializeMapPair(key, value, it)) {
-        out[key.value<K>()] = std::shared_ptr<V>(value.value<V *>());
-        previous = QVariant::fromValue<QHash<K, std::shared_ptr<V>>>(out);
+        const auto valuePtr = value.value<V *>();
+        out[key.value<K>()] = valuePtr ? *valuePtr : V();
+        previous = QVariant::fromValue<QHash<K, V>>(out);
     }
 }
 
@@ -325,33 +326,13 @@ inline void qRegisterProtobufType()
             { QtProtobufPrivate::serializeList<T>, QtProtobufPrivate::deserializeList<T> });
 }
 
-#ifdef Q_QDOC
 template<typename K, typename V>
-inline void qRegisterProtobufMapType();
-#else // !Q_QDOC
-template<typename K, typename V,
-         typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
 inline void qRegisterProtobufMapType()
 {
     QtProtobufPrivate::registerHandler(
             QMetaType::fromType<QHash<K, V>>(),
             { QtProtobufPrivate::serializeMap<K, V>, QtProtobufPrivate::deserializeMap<K, V> });
 }
-#endif // Q_QDOC
-
-#ifdef Q_QDOC
-template<typename K, typename V>
-inline void qRegisterProtobufMapType();
-#else // !Q_QDOC
-template<typename K, typename V,
-         typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-inline void qRegisterProtobufMapType()
-{
-    QtProtobufPrivate::registerHandler(
-            QMetaType::fromType<QHash<K, std::shared_ptr<V>>>(),
-            { QtProtobufPrivate::serializeMap<K, V>, QtProtobufPrivate::deserializeMap<K, V> });
-}
-#endif // Q_QDOC
 
 #ifdef Q_QDOC
 template<typename T>

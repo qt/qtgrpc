@@ -181,22 +181,6 @@ bool repeatedValueCompare(const QHash<K, V> &a, const QHash<K, V> &b)
     return a == b;
 }
 
-template<typename K, typename V>
-bool repeatedValueCompare(const QHash<K, std::shared_ptr<V>> &a,
-                          const QHash<K, std::shared_ptr<V>> &b)
-{
-    if (a.size() != b.size())
-        return false;
-
-    for (auto itA = a.constBegin(); itA != a.constEnd(); ++itA) {
-        auto itB = b.constFind(itA.key());
-        if (itB == b.constEnd() || (itA.value() != itB.value() && *(itA.value()) != *(itB.value())))
-            return false;
-    }
-
-    return true;
-}
-
 template<typename T>
 struct qMakeUnsignedImpl
 {

@@ -112,11 +112,8 @@ void MessageDeclarationPrinter::printMaps()
     for (int i = 0; i < numFields; ++i) {
         const FieldDescriptor *field = m_descriptor->field(i);
         if (field->is_map()) {
-            const Descriptor *type = field->message_type();
-            const char *mapTemplate = type->field(1)->type() == FieldDescriptor::TYPE_MESSAGE
-                    ? CommonTemplates::UsingMapMessageTemplate()
-                    : CommonTemplates::UsingMapTemplate();
-            m_printer->Print(common::producePropertyMap(field, m_descriptor), mapTemplate);
+            m_printer->Print(common::producePropertyMap(field, m_descriptor),
+                             CommonTemplates::UsingMapTemplate());
         }
     }
     Outdent();

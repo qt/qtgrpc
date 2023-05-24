@@ -53,9 +53,9 @@ void QtProtobufMapTypesSerializationTest::SimpleFixed32ComplexMapSerializeTest()
     expected3.setTestComplexField(stringMsg);
 
     SimpleFixed32ComplexMessageMapMessage test;
-    test.setMapField({ { 10, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { 42, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { 65555, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { 10, ComplexMessage(expected1) },
+                       { 42, ComplexMessage(expected2) },
+                       { 65555, ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(
@@ -85,9 +85,9 @@ void QtProtobufMapTypesSerializationTest::SimpleSFixed32ComplexMapSerializeTest(
     expected3.setTestComplexField(stringMsg);
 
     SimpleSFixed32ComplexMessageMapMessage test;
-    test.setMapField({ { 10, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { -42, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { 65555, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { 10, ComplexMessage(expected1) },
+                       { -42, ComplexMessage(expected2) },
+                       { 65555, ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(result.toHex(),
@@ -118,9 +118,9 @@ void QtProtobufMapTypesSerializationTest::SimpleInt32ComplexMapSerializeTest()
     expected3.setTestComplexField(stringMsg);
 
     SimpleInt32ComplexMessageMapMessage test;
-    test.setMapField({ { 10, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { -42, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { 65555, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { 10, ComplexMessage(expected1) },
+                       { -42, ComplexMessage(expected2) },
+                       { 65555, ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(result.toHex(),
@@ -151,10 +151,9 @@ void QtProtobufMapTypesSerializationTest::SimpleSInt32ComplexMapSerializeTest()
     expected3.setTestComplexField(stringMsg);
 
     SimpleSInt32ComplexMessageMapMessage test;
-    test.setMapField({ { 10, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { 42, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { -65555,
-                         std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { 10, ComplexMessage(expected1) },
+                       { 42, ComplexMessage(expected2) },
+                       { -65555, ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(
@@ -185,9 +184,9 @@ void QtProtobufMapTypesSerializationTest::SimpleUInt32ComplexMapSerializeTest()
     expected3.setTestComplexField(stringMsg);
 
     SimpleUInt32ComplexMessageMapMessage test;
-    test.setMapField({ { 10, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { 42, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { 65555, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { 10, ComplexMessage(expected1) },
+                       { 42, ComplexMessage(expected2) },
+                       { 65555, ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(
@@ -217,10 +216,9 @@ void QtProtobufMapTypesSerializationTest::SimpleFixed64ComplexMapSerializeTest()
     expected3.setTestComplexField(stringMsg);
 
     SimpleFixed64ComplexMessageMapMessage test;
-    test.setMapField({ { 10, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { UINT64_MAX,
-                         std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { 65555, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { 10, ComplexMessage(expected1) },
+                       { UINT64_MAX, ComplexMessage(expected2) },
+                       { 65555, ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(result.toHex(),
@@ -251,9 +249,9 @@ void QtProtobufMapTypesSerializationTest::SimpleSFixed64ComplexMapSerializeTest(
     expected3.setTestComplexField(stringMsg);
 
     SimpleSFixed64ComplexMessageMapMessage test;
-    test.setMapField({ { 10, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { -42, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { 65555, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { 10, ComplexMessage(expected1) },
+                       { -42, ComplexMessage(expected2) },
+                       { 65555, ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(result.toHex(),
@@ -284,9 +282,9 @@ void QtProtobufMapTypesSerializationTest::SimpleInt64ComplexMapSerializeTest()
     expected3.setTestComplexField(stringMsg);
 
     SimpleInt64ComplexMessageMapMessage test;
-    test.setMapField({ { 10, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { -42, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { 65555, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { 10, ComplexMessage(expected1) },
+                       { -42, ComplexMessage(expected2) },
+                       { 65555, ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(result.toHex(),
@@ -317,9 +315,9 @@ void QtProtobufMapTypesSerializationTest::SimpleSInt64ComplexMapSerializeTest()
     expected3.setTestComplexField(stringMsg);
 
     SimpleSInt64ComplexMessageMapMessage test;
-    test.setMapField({ { 10, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { -42, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { 65555, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { 10, ComplexMessage(expected1) },
+                       { -42, ComplexMessage(expected2) },
+                       { 65555, ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(result.toHex(),
@@ -350,9 +348,9 @@ void QtProtobufMapTypesSerializationTest::SimpleUInt64ComplexMapSerializeTest()
     expected3.setTestComplexField(stringMsg);
 
     SimpleUInt64ComplexMessageMapMessage test;
-    test.setMapField({ { 10, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { 42, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { 65555, std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { 10, ComplexMessage(expected1) },
+                       { 42, ComplexMessage(expected2) },
+                       { 65555, ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(
@@ -383,11 +381,9 @@ void QtProtobufMapTypesSerializationTest::SimpleStringComplexMapSerializeTest()
     expected3.setTestComplexField(stringMsg);
 
     SimpleStringComplexMessageMapMessage test;
-    test.setMapField({ { "ben", std::shared_ptr<ComplexMessage>(new ComplexMessage(expected1)) },
-                       { "where is my car dude?",
-                         std::shared_ptr<ComplexMessage>(new ComplexMessage(expected2)) },
-                       { "WUT??",
-                         std::shared_ptr<ComplexMessage>(new ComplexMessage(expected3)) } });
+    test.setMapField({ { "ben", ComplexMessage(expected1) },
+                       { "where is my car dude?", ComplexMessage(expected2) },
+                       { "WUT??", ComplexMessage(expected3) } });
     QByteArray result = test.serialize(m_serializer.get());
 
     QVERIFY2(compareSerializedChunks(result.toHex(),

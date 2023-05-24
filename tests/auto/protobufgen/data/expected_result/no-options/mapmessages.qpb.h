@@ -2751,7 +2751,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QtProtobuf::sint32, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QtProtobuf::sint32, ComplexMessage>;
     SimpleSInt32ComplexMessageMapMessage();
     ~SimpleSInt32ComplexMessageMapMessage();
     SimpleSInt32ComplexMessageMapMessage(const SimpleSInt32ComplexMessageMapMessage &other);
@@ -2784,7 +2784,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QtProtobuf::sint64, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QtProtobuf::sint64, ComplexMessage>;
     SimpleSInt64ComplexMessageMapMessage();
     ~SimpleSInt64ComplexMessageMapMessage();
     SimpleSInt64ComplexMessageMapMessage(const SimpleSInt64ComplexMessageMapMessage &other);
@@ -2817,7 +2817,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QtProtobuf::int32, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QtProtobuf::int32, ComplexMessage>;
     SimpleInt32ComplexMessageMapMessage();
     ~SimpleInt32ComplexMessageMapMessage();
     SimpleInt32ComplexMessageMapMessage(const SimpleInt32ComplexMessageMapMessage &other);
@@ -2850,7 +2850,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QtProtobuf::int64, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QtProtobuf::int64, ComplexMessage>;
     SimpleInt64ComplexMessageMapMessage();
     ~SimpleInt64ComplexMessageMapMessage();
     SimpleInt64ComplexMessageMapMessage(const SimpleInt64ComplexMessageMapMessage &other);
@@ -2883,7 +2883,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QtProtobuf::uint32, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QtProtobuf::uint32, ComplexMessage>;
     SimpleUInt32ComplexMessageMapMessage();
     ~SimpleUInt32ComplexMessageMapMessage();
     SimpleUInt32ComplexMessageMapMessage(const SimpleUInt32ComplexMessageMapMessage &other);
@@ -2916,7 +2916,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QtProtobuf::uint64, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QtProtobuf::uint64, ComplexMessage>;
     SimpleUInt64ComplexMessageMapMessage();
     ~SimpleUInt64ComplexMessageMapMessage();
     SimpleUInt64ComplexMessageMapMessage(const SimpleUInt64ComplexMessageMapMessage &other);
@@ -2949,7 +2949,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QtProtobuf::fixed32, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QtProtobuf::fixed32, ComplexMessage>;
     SimpleFixed32ComplexMessageMapMessage();
     ~SimpleFixed32ComplexMessageMapMessage();
     SimpleFixed32ComplexMessageMapMessage(const SimpleFixed32ComplexMessageMapMessage &other);
@@ -2982,7 +2982,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QtProtobuf::fixed64, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QtProtobuf::fixed64, ComplexMessage>;
     SimpleFixed64ComplexMessageMapMessage();
     ~SimpleFixed64ComplexMessageMapMessage();
     SimpleFixed64ComplexMessageMapMessage(const SimpleFixed64ComplexMessageMapMessage &other);
@@ -3015,7 +3015,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QtProtobuf::sfixed32, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QtProtobuf::sfixed32, ComplexMessage>;
     SimpleSFixed32ComplexMessageMapMessage();
     ~SimpleSFixed32ComplexMessageMapMessage();
     SimpleSFixed32ComplexMessageMapMessage(const SimpleSFixed32ComplexMessageMapMessage &other);
@@ -3048,7 +3048,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QtProtobuf::sfixed64, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QtProtobuf::sfixed64, ComplexMessage>;
     SimpleSFixed64ComplexMessageMapMessage();
     ~SimpleSFixed64ComplexMessageMapMessage();
     SimpleSFixed64ComplexMessageMapMessage(const SimpleSFixed64ComplexMessageMapMessage &other);
@@ -3081,7 +3081,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    using MapFieldEntry = QHash<QString, std::shared_ptr<ComplexMessage>>;
+    using MapFieldEntry = QHash<QString, ComplexMessage>;
     SimpleStringComplexMessageMapMessage();
     ~SimpleStringComplexMessageMapMessage();
     SimpleStringComplexMessageMapMessage(const SimpleStringComplexMessageMapMessage &other);

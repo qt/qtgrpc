@@ -133,10 +133,6 @@ const char *CommonTemplates::UsingMapTemplate()
 {
     return "using $type$ = QHash<$key_type$, $value_type$>;\n";
 }
-const char *CommonTemplates::UsingMapMessageTemplate()
-{
-    return "using $type$ = QHash<$key_type$, std::shared_ptr<$value_type$>>;\n";
-}
 const char *CommonTemplates::UsingNestedMessageTemplate()
 {
     return "using $type$ = $scope_namespaces$::$type$;\n"
