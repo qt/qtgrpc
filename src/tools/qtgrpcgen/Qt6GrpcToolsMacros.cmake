@@ -169,6 +169,7 @@ function(qt6_add_grpc target type)
         PROTO_FILES ${proto_files}
         PROTO_INCLUDES ${proto_includes}
         GENERATED_FILES ${generated_files}
+        OPTIONS ${generation_options}
     )
 
     target_sources(${target} PRIVATE ${generated_files})
