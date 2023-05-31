@@ -52,7 +52,6 @@ static void listDeserializerProxy(const QProtobufSerializer *deserializer,
                               QProtobufSelfcheckIterator &it, QVariant &object)
 {
     auto anyList = object.value<QList<Any>>();
-    QVariant result;
     const auto &ordering = google::protobuf::Any::propertyOrdering;
     google::protobuf::Any realAny;
     if (deserializer->deserializeObject(&realAny, ordering, it)) {
