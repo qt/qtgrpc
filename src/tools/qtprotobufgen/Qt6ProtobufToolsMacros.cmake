@@ -57,8 +57,9 @@ endmacro()
 #   PROTO_INCLUDES - list of the protobuf include paths.
 #   GENERATED_FILES - list of files that are expected
 #                     to be genreated by the custom generator plugin.
+#   OPTIONS - list of the generator-specific options.
 function(_qt_internal_protoc_generate target generator output_directory)
-    cmake_parse_arguments(arg "" "" "PROTO_FILES;PROTO_INCLUDES;GENERATED_FILES" ${ARGN})
+    cmake_parse_arguments(arg "" "" "PROTO_FILES;PROTO_INCLUDES;GENERATED_FILES;OPTIONS" ${ARGN})
 
     if(NOT arg_PROTO_FILES)
         message(FATAL_ERROR "PROTO_FILES list is empty.")
@@ -70,10 +71,11 @@ function(_qt_internal_protoc_generate target generator output_directory)
     endif()
 
     if(NOT arg_GENERATED_FILES)
-        set(generated_files "${arg_GENERATED_FILES}")
         message(FATAL_ERROR
             "List of generated sources for target '${target}' is empty")
     endif()
+
+    set(generated_files "${arg_GENERATED_FILES}")
 
     get_filename_component(output_directory "${output_directory}" REALPATH)
     get_target_property(is_generator_imported ${QT_CMAKE_EXPORT_NAMESPACE}::${generator} IMPORTED)
@@ -108,7 +110,11 @@ function(_qt_internal_protoc_generate target generator output_directory)
         )
     endif()
     list(JOIN arg_PROTO_FILES "\\$<SEMICOLON>"  proto_files_string)
-    list(JOIN generation_options "\\\\$<SEMICOLON>" generation_options_string)
+    if(arg_OPTIONS)
+        list(JOIN arg_OPTIONS "\\\\$<SEMICOLON>" generation_options_string)
+    else()
+        set(generation_options_string "")
+    endif()
     string(JOIN "\\$<SEMICOLON>" protoc_arguments
         "--plugin=protoc-gen-${generator}=${generator_file}"
         "--${generator}_out=${tmp_output_directory}"
@@ -316,6 +322,7 @@ function(qt6_add_protobuf target)
         PROTO_FILES ${proto_files}
         PROTO_INCLUDES ${proto_includes}
         GENERATED_FILES ${generated_files}
+        OPTIONS ${generation_options}
     )
 
     # Filter generated headers
