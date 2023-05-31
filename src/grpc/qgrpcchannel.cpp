@@ -135,7 +135,6 @@ QGrpcChannelCall::QGrpcChannelCall(grpc::Channel *channel, QLatin1StringView met
     grpc::ByteBuffer request = parseQByteArray(data);
     thread = QThread::create([this, request, channel, method = toStdString(method)] {
         grpc::ByteBuffer callResponse;
-        QByteArray data;
         grpc::Status callStatus;
 
         callStatus = grpc::internal::BlockingUnaryCall(
