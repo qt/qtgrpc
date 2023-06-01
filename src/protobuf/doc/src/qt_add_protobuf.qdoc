@@ -21,6 +21,8 @@ Usually \c qtprotobufgen would be invoked through CMake using the
         [GENERATE_PACKAGE_SUBFOLDERS]
         [EXTRA_NAMESPACE <namespace>]
         [EXPORT_MACRO <infix>]
+        [QML]
+        [QML_URI <uri>]
         [PROTO_INCLUDES <path> ...]
         [OUTPUT_DIRECTORY <dir>]
         [OUTPUT_HEADERS <var>]
@@ -35,6 +37,49 @@ link to.
 
 \section1 Arguments
 \list
+    \include qtprotoccommon-options.qdocinc
+    \li \c QML enables QProtobufMessage types in QML context by registering
+        them as a \c {QML module}. For such purpose, the \l {qt_add_qml_module}
+        CMake macro is called inside the \c protobuf function.
+        Every QML module has to define a \c URI name. Other QML modules may
+        use this name in \l{qtqml-syntax-imports.html}{import statements}
+        to import the module into a user application. Use the \c QML_URI
+        option to set the \c URI name. It has to be specified in dotted
+        notation, e.g. \c {Qt.Protobuf.Package}.
+        If \c QML_URI is omitted, then the protobuf package name will be used
+        as the module \c URI.
+        Pay attention, the \c protobuf function always creates a new QML
+        module. It means it cannot be used to extend existing targets.
+        For example, following cases are prohibited:
+        \badcode
+            qt_add_qml_module(targetname
+                ...
+            )
+
+            qt_add_protobuf(targetname
+            QML
+                ...
+            )
+        \endcode
+
+        \badcode
+            qt_add_executable(targetname
+                ...
+            )
+
+            qt_add_protobuf(targetname
+            QML
+                ...
+            )
+        \endcode
+        \note If the \c QML_URI is skipped, all *.proto files specified
+        in the \c qt_add_protobuf function should have the same \c protobuf
+        package name, since it shall be used as a default \c URI for the
+        resulting QML module.
+        \note You should escape creating several QML modules with the same
+        \c QML_URI or proto package name, because it leads to import error
+        in QML context.
+
     \include qtprotogen-options.qdocinc
     \include qtprotogen-cmake-options.qdocinc
 \endlist

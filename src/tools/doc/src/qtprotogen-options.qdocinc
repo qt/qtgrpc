@@ -1,15 +1,7 @@
-\li \c COPY_COMMENTS Copies comments from \c .proto files. If provided in
-the parameter list, comments related to messages and fields are copied to
-generated header files.
-\li \c GENERATE_PACKAGE_SUBFOLDERS generates a folder structure for the
-generated files matching the \c .proto file's package name. For example
-\c{package io.qt.test;} would put the generated files into \c {io/qt/test/}.
-\li \c EXTRA_NAMESPACE is an optional namespace that will be used for the
-generated classes. The classes are always generated in a namespace whose
-name is the same as the package name specified in the \c .proto file.
-If this option is used then everything will be nested inside the extra
-namespace.
-\li \c EXPORT_MACRO is the base name of the symbol export macro used for
-the generated code. The generated macro name is constructed as
-\c QPB_<EXPORT_MACRO>_EXPORT. If the option is not set, the macro is not
-generated.
+\li \c QML_URI enables QProtobufMessage types in the QML context
+by registering them in a QML module via the provided \c URI import path.
+The \c URI option will be used in the line of the generated \c qmldir file,
+and also used to form the target path by replacing dots with forward
+slashes.
+\note Read \l{qtqml-modules-identifiedmodules.html}{Identified Modules}
+for further in-depth discussion of the \c URI.
