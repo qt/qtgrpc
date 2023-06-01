@@ -38,7 +38,7 @@ link to.
         Since gRPC supports a client-server architecture, \c CLIENT or
         \c SERVER source code may be generated.
         \note for Qt 6.5 only \c CLIENT source code generation is supported.
-    \include qtprotogen-options.qdocinc
+    \include qtprotoccommon-options.qdocinc
     \include qtprotogen-cmake-options.qdocinc
 \endlist
 

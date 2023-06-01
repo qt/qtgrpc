@@ -14,9 +14,9 @@ target_link_libraries(mytarget PRIVATE Qt6::Protobuf)
 \endcode
 
 You can use \e {qt-add-protobuf} CMake macros.
-The macros implicitly calls Protobuf code generation for qt-project.
+The macros implicitly call Protobuf code generation for qt-project.
 
-The macros usage example:
+The macros usage examples:
 \include qt-add-protobuf-example.qdocinc
 
 \sa{CMake Command Reference}

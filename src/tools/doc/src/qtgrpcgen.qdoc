@@ -61,6 +61,6 @@ Options have direct aliases in the \l{qt_add_grpc} function. The following
 options are supported:
 
 \list
-    \include qtprotogen-options.qdocinc
+    \include qtprotoccommon-options.qdocinc
 \endlist
 */

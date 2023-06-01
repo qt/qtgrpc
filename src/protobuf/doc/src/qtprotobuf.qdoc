@@ -40,14 +40,13 @@
         \li Convenient serialization and deserialization API.
         \li Integrated properties mechanism for generated protobuf messages.
         \li Integrated gRPC-client support (see \l {Qt GRPC}{QtGrpc module}).
+        \li Integrated QML-types support for generated protobuf messages.
+        \li Enabled using Qt Core and Qt GUI types as a part of *.proto schema.
     \endlist
 
     \section2 Incoming features
     \list
-        \li Enabling using Qt Core and Qt GUI types as a part of *.proto
-            schema.
         \li Enabling gRPC-server support.
-        \li Enabling QML-types support for generated protobuf messages.
     \endlist
 
     \section1 Using Qt Protobuf

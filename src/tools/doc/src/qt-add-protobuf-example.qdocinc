@@ -19,12 +19,49 @@ qt_add_executable(MyApp main.cpp)
 target_link_libraries(MyApp PRIVATE MyMessages)
 \endcode
 
-In the example above we generate a library called \c{MyMessages} which
+In the example above, we generate a library called \c{MyMessages}, which
 contains the message types defined in the paths passed to the
-\c{PROTO_FILES} option. We use the \c{GENERATE_PACKAGE_SUBFOLDERS} option
+\c{PROTO_FILES} option. The \c{GENERATE_PACKAGE_SUBFOLDERS} option
 to generate a folder structure for the generated files. And the
-\c{PROTO_INCLUDES} option tells protoc to look for dependencies/imports
+\c{PROTO_INCLUDES} option tells protoc to look for dependencies or imports
 in the specified directories.
-
-We then create a target for an executable called \c{MyApp} which we link
+We create a target for an executable called \c{MyApp}, which we link
 to the \c{MyMessages} library.
+
+\section2 QML extended protobuf example:
+\badcode
+cmake_minimum_required(VERSION 3.16...3.22)
+project(MyThings)
+
+find_package(Qt6 REQUIRED COMPONENTS Protobuf Quick)
+qt_standard_project_setup()
+
+qt_add_protobuf(MyMessagesPlugin
+    QML
+    QML_URI my.messages.module.uri
+    PROTO_FILES
+        path/to/message.proto
+        path/to/other_message.proto
+    PROTO_INCLUDES
+        /path/to/proto/include
+)
+
+qt_add_qml_module(MyApp
+    URI example.uri
+    VERSION 1.0
+    QML_FILES qml/main.qml
+)
+
+qt_add_executable(MyApp main.cpp)
+target_link_libraries(MyApp PRIVATE Quick)
+\endcode
+
+In the QML extended example above, we generate a QML module called
+\c{MyMessagesPlugin}, which contains the message types defined in
+the paths passed to the \c{PROTO_FILES} option. We use the \c QML option,
+that enables proto message types registration in the \c QML context.
+The registered types will be available in \c QML by importing a path
+that is set by the \c QML_URI.
+Finally, we create a target for an executable called \c{MyApp}, which
+has a QML module for the graphical part and loads \c MyMessagesPlugin
+into the main.qml file via the \c{my.messages.module.uri} import.
