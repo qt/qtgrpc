@@ -108,7 +108,6 @@ QUrl QGrpcChannelOptions::host() const
     return dPtr->host;
 }
 
-#if QT_CONFIG(ssl)
 /*!
     Returns metadata used for a call.
 
@@ -119,6 +118,7 @@ QGrpcMetadata QGrpcChannelOptions::metadata() const
     return dPtr->metadata;
 }
 
+#if QT_CONFIG(ssl)
 /*!
     Sets SSL configuration with \a sslConfiguration and returns updated QGrpcChannelOptions object.
 */
