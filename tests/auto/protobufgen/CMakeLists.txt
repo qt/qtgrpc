@@ -53,6 +53,10 @@ if(MINGW)
 endif()
 
 if(TARGET Qt6::Qml)
+    qt_internal_extend_target(tst_qtprotobufgen
+        DEFINES
+            HAVE_QML
+    )
     qt_add_protobuf(tst_qtprotobufgenplugin
         PROTO_FILES
             ../shared/data/proto/nopackage.proto

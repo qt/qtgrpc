@@ -15,7 +15,7 @@
 using namespace Qt::StringLiterals;
 
 const QLatin1StringView protobuftyperegistrations("_protobuftyperegistrations.cpp");
-const QLatin1StringView protobufQmlPlugin("_uri_testplugin.cpp");
+[[maybe_unused]] const QLatin1StringView protobufQmlPlugin("_uri_testplugin.cpp");
 const QLatin1StringView cppExtension(".qpb.cpp");
 const QLatin1StringView headerExtension(".qpb.h");
 const QLatin1StringView protocGenQtprotobufKey(" --plugin=protoc-gen-qtprotobuf=");
@@ -241,17 +241,19 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
                 << "extranamespace"
                 << "/extra-namespace/"
                 << QString(extension);
-
+#ifdef HAVE_QML
         QTest::addRow("nopackage%s", extension.data())
                 << "nopackage"
                 << "/qml-no-package/"
                 << QString(extension);
+#endif
     }
-
+#ifdef HAVE_QML
     QTest::addRow("nopackage%s", protobufQmlPlugin.data())
             << "nopackage"
             << "/qml-no-package/"
             << QString(protobufQmlPlugin);
+#endif
 }
 
 void tst_qtprotobufgen::cmakeGeneratedFile()
@@ -348,21 +350,23 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
                 << "/extra-namespace/"
                 << QString(extension)
                 << "";
-
+#ifdef HAVE_QML
         QTest::addRow("nopackage%s", extension.data())
                 << "nopackage"
                 << "QML_URI=nopackage.uri.test;EXPORT_MACRO=TST_QTPROTOBUFGENPLUGIN"
                 << "/qml-no-package/"
                 << QString(extension)
                 << "";
+#endif
     }
-
+#ifdef HAVE_QML
     QTest::addRow("nopackage%s", protobufQmlPlugin.data())
             << "nopackage"
             << "QML_URI=nopackage.uri.test;EXPORT_MACRO=TST_QTPROTOBUFGENPLUGIN"
             << "/qml-no-package/"
             << QString(protobufQmlPlugin)
             << "";
+#endif
 }
 
 void tst_qtprotobufgen::cmdLineGeneratedFile()
