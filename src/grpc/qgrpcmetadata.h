@@ -8,6 +8,12 @@
 
 #include <unordered_map>
 
+#if 0
+// Create a forwarding header
+#pragma qt_class(QGrpcMetadata)
+#pragma qt_sync_stop_processing
+#endif
+
 QT_BEGIN_NAMESPACE
 
 using QGrpcMetadata = std::unordered_multimap<QByteArray, QByteArray>;
