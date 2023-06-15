@@ -4,6 +4,9 @@ syntax = "proto3";
 
 package qtgrpc.tests;
 
+message Empty {
+}
+
 message SimpleStringMessage {
     string testFieldString = 6;
 }
@@ -17,11 +20,12 @@ message BlobMessage {
 }
 
 service TestService {
-  rpc testMethod(SimpleStringMessage) returns (SimpleStringMessage) {}
-  rpc testMethodServerStream(SimpleStringMessage) returns (stream SimpleStringMessage) {}
-  rpc testMethodClientStream(stream SimpleStringMessage) returns (SimpleStringMessage) {}
-  rpc testMethodBiStream(stream SimpleStringMessage) returns (stream SimpleStringMessage) {}
-  rpc testMethodBlobServerStream(BlobMessage) returns (stream BlobMessage) {}
-  rpc testMethodStatusMessage(SimpleStringMessage) returns (SimpleStringMessage) {}
-  rpc testMethodNonCompatibleArgRet(SimpleIntMessage) returns (SimpleStringMessage) {}
+    rpc testMethod(SimpleStringMessage) returns (SimpleStringMessage) {}
+    rpc testMethodServerStream(SimpleStringMessage) returns (stream SimpleStringMessage) {}
+    rpc testMethodClientStream(stream SimpleStringMessage) returns (SimpleStringMessage) {}
+    rpc testMethodBiStream(stream SimpleStringMessage) returns (stream SimpleStringMessage) {}
+    rpc testMethodBlobServerStream(BlobMessage) returns (stream BlobMessage) {}
+    rpc testMethodStatusMessage(SimpleStringMessage) returns (SimpleStringMessage) {}
+    rpc testMethodNonCompatibleArgRet(SimpleIntMessage) returns (SimpleStringMessage) {}
+    rpc testMetadata(Empty) returns (Empty) {}
 }

@@ -7,6 +7,8 @@
 #  include <QGrpcChannel>
 #endif
 #include <QGrpcHttp2Channel>
+#include <QtGrpc/QGrpcCallOptions>
+#include <QtGrpc/QGrpcMetadata>
 
 #include <QCoreApplication>
 #include <QCryptographicHash>
@@ -24,6 +26,8 @@
 #  include <grpcpp/security/credentials.h>
 #endif
 #include "testservice_client.grpc.qpb.h"
+
+using namespace Qt::Literals::StringLiterals;
 
 namespace {
 constexpr int MessageLatency = QT_GRPC_TEST_MESSAGE_LATENCY;
@@ -74,14 +78,15 @@ public:
 private slots:
     void initTestCase_data()
     {
+        QTest::addColumn<QString>("type");
         QTest::addColumn<std::shared_ptr<TestService::Client>>("client");
 
-        QTest::newRow("Http2Client") << createHttp2Client();
+        QTest::newRow("Http2Client") << "qt" << createHttp2Client();
 #if QT_CONFIG(native_grpc)
 #  ifndef Q_OS_WINDOWS
-        QTest::newRow("GrpcSocket") << createGrpcSocketClient();
+        QTest::newRow("GrpcSocket") << "native" << createGrpcSocketClient();
 #  endif
-        QTest::newRow("GrpcHttp") << createGrpcHttpClient();
+        QTest::newRow("GrpcHttp") << "native" << createGrpcHttpClient();
 #endif
     }
 
@@ -104,6 +109,9 @@ private slots:
         if (QSysInfo::productVersion() == "8.6" && QSysInfo::productType().contains("rhel")) {
             QSKIP("Test case disabled on RHEL due to QTBUG-111098");
         }
+
+        QFETCH_GLOBAL(QString, type);
+        channelType = type;
 
         QFETCH_GLOBAL(std::shared_ptr<TestService::Client>, client);
         _client = std::move(client);
@@ -138,6 +146,7 @@ private slots:
     void StringAsyncThreadTest();
     void StreamStringThreadTest();
     void StreamCancelWhileErrorTimeoutTest();
+    void MetadataTest();
 
 private:
     void startServer()
@@ -152,6 +161,7 @@ private:
     }
 
     std::unique_ptr<QProcess> serverProc;
+    QString channelType;
     std::shared_ptr<TestService::Client> _client;
 };
 
@@ -699,6 +709,41 @@ void QtGrpcClientTest::StreamCancelWhileErrorTimeoutTest()
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1, MessageLatencyWithThreshold);
     QCOMPARE_EQ(streamErrorSpy.count(), 0);
+}
+
+void QtGrpcClientTest::MetadataTest()
+{
+    QSignalSpy clientErrorSpy(_client.get(), &TestService::Client::errorOccurred);
+    QVERIFY(clientErrorSpy.isValid());
+
+    QGrpcCallOptions opt;
+    opt.withMetadata({ { "client_header", "1" }, { "client_return_header", "valid_value" } });
+    auto reply = _client->testMetadata({}, opt);
+
+    QGrpcMetadata metadata;
+    QEventLoop waiter;
+    reply->subscribe(this, [reply, &metadata, &waiter] {
+        metadata = reply->metadata();
+        waiter.quit();
+    });
+
+    waiter.exec();
+
+    int serverHeaderCount = 0;
+    QByteArray clientReturnHeader;
+    for (const auto &header : reply->metadata()) {
+        if (header.first == "server_header") {
+            QCOMPARE_EQ(QString::fromLatin1(header.second), QString::number(++serverHeaderCount));
+        } else if (header.first == "client_return_header") {
+            clientReturnHeader = header.second;
+        }
+    }
+
+    QCOMPARE_EQ(clientErrorSpy.count(), 0);
+    if (channelType == "native")
+        QEXPECT_FAIL("", "Unimplemented in the reference gRPC channel", Abort);
+    QCOMPARE_EQ(serverHeaderCount, 1);
+    QCOMPARE_EQ(clientReturnHeader, "valid_value"_ba);
 }
 
 QTEST_MAIN(QtGrpcClientTest)
