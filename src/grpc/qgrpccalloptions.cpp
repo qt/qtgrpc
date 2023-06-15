@@ -77,6 +77,9 @@ QGrpcCallOptions &QGrpcCallOptions::withMaxRetryAttempts(qint64 maxRetryAttempts
 
 /*!
     Sets \a metadata for a call and returns updated QGrpcCallOptions object.
+
+    For HTTP2-based channels, \a metadata is converted into HTTP/2 headers, that
+    added to the corresponding HTTP/2 request.
 */
 QGrpcCallOptions &QGrpcCallOptions::withMetadata(const QGrpcMetadata &metadata)
 {

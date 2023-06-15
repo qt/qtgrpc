@@ -19,6 +19,7 @@ using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::ServerWriter;
 using grpc::Status;
+using qtgrpc::tests::Empty;
 using qtgrpc::tests::BlobMessage;
 using qtgrpc::tests::SimpleIntMessage;
 using qtgrpc::tests::SimpleStringMessage;
@@ -40,6 +41,9 @@ class TestServiceServiceImpl final : public qtgrpc::tests::TestService::Service
     grpc::Status testMethodNonCompatibleArgRet(grpc::ServerContext *,
                                                const SimpleIntMessage *request,
                                                SimpleStringMessage *response) override;
+    grpc::Status testMetadata(grpc::ServerContext *,
+                                                const Empty *,
+                                                qtgrpc::tests::Empty *) override;
 };
 }
 
@@ -98,7 +102,7 @@ Status TestServiceServiceImpl::testMethodBlobServerStream(grpc::ServerContext *,
     return Status();
 }
 
-Status TestServiceServiceImpl::testMethodStatusMessage(ServerContext *,
+Status TestServiceServiceImpl::testMethodStatusMessage(grpc::ServerContext *,
                                                        const SimpleStringMessage *request,
                                                        SimpleStringMessage *)
 {
@@ -111,6 +115,26 @@ Status TestServiceServiceImpl::testMethodNonCompatibleArgRet(grpc::ServerContext
 {
     qInfo() << "testMethodNonCompatibleArgRet called with: " << request->testfield();
     response->set_testfieldstring(std::to_string(request->testfield()));
+    return Status();
+}
+
+Status TestServiceServiceImpl::testMetadata(grpc::ServerContext *ctx, const Empty *,
+                                            qtgrpc::tests::Empty *)
+{
+    std::string client_return_header;
+    for (const auto &header : ctx->client_metadata()) {
+        if (header.first == "client_header") {
+            ctx->AddTrailingMetadata("server_header",
+                                     std::string(header.second.data(), header.second.size()));
+        } else if (header.first == "client_return_header") {
+            if (client_return_header.empty())
+                client_return_header = std::string(header.second.data(), header.second.size());
+            else
+                client_return_header = "invalid_value";
+        }
+    }
+
+    ctx->AddTrailingMetadata("client_return_header", client_return_header);
     return Status();
 }
 

@@ -98,6 +98,12 @@ static void addMetadataToRequest(QNetworkRequest *request, const QGrpcMetadata &
     iterateMetadata(callMetadata);
 }
 
+static QGrpcMetadata collectMetadata(QNetworkReply *networkReply)
+{
+    return QGrpcMetadata(networkReply->rawHeaderPairs().begin(),
+                         networkReply->rawHeaderPairs().end());
+}
+
 struct QGrpcHttp2ChannelPrivate
 {
     struct ExpectedData
@@ -280,6 +286,7 @@ std::shared_ptr<QGrpcCallReply> QGrpcHttp2Channel::call(QLatin1StringView method
             [reply, networkReply, connection, abortConnection] {
                 QGrpcStatus::StatusCode grpcStatus = QGrpcStatus::StatusCode::Unknown;
                 QByteArray data = QGrpcHttp2ChannelPrivate::processReply(networkReply, grpcStatus);
+                reply->setMetadata(collectMetadata(networkReply));
                 QObject::disconnect(*connection);
                 QObject::disconnect(*abortConnection);
 
@@ -368,6 +375,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                     qGrpcDebug() << "Full data received:" << data.size()
                                  << "dataContainer:" << dataContainer.container.size()
                                  << "capacity:" << dataContainer.expectedSize;
+                    grpcStream->setMetadata(collectMetadata(networkReply));
                     grpcStream->updateData(dataContainer.container.mid(
                             GrpcMessageSizeHeaderSize,
                             dataContainer.expectedSize - GrpcMessageSizeHeaderSize));
@@ -408,6 +416,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                 }
                 qGrpcWarning() << grpcStream->method() << "call" << service
                                << "stream finished:" << errorString;
+                grpcStream->setMetadata(collectMetadata(networkReply));
                 switch (networkError) {
                 case QNetworkReply::RemoteHostClosedError:
                     qGrpcDebug() << "Remote server closed connection. Reconnect silently.";

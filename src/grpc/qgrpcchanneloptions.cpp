@@ -83,6 +83,9 @@ QGrpcChannelOptions &QGrpcChannelOptions::withDeadline(std::chrono::milliseconds
 
 /*!
     Sets \a metadata for a call and returns updated QGrpcCallOptions object.
+
+    For HTTP2-based channels, \a metadata is converted into HTTP/2 headers, that
+    added to each HTTP/2 request.
 */
 QGrpcChannelOptions &QGrpcChannelOptions::withMetadata(const QGrpcMetadata &metadata)
 {
