@@ -154,6 +154,10 @@ private:
         serverProc = std::make_unique<QProcess>();
         QString serverPath = QFINDTESTDATA("../shared/test_server/testserver");
         QVERIFY2(!serverPath.isEmpty(), "testserver binary is missing");
+        QObject::connect(serverProc.get(), &QProcess::readyReadStandardOutput, this,
+                         [this] { qInfo() << serverProc->readAllStandardOutput(); });
+        QObject::connect(serverProc.get(), &QProcess::readyReadStandardError, this,
+                         [this] { qInfo() << serverProc->readAllStandardError(); });
         serverProc->start(serverPath);
         serverProc->waitForStarted();
         // Extra time for the server to setup
