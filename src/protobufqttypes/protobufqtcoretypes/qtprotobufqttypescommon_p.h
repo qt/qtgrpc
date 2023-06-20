@@ -46,18 +46,19 @@ void registerQtTypeHandler()
                  auto do_convert = [](const QType &qtype) {
                      auto res = convert(qtype);
                      if constexpr (is_optional_v<decltype(res)>) {
-                         if (!res) {
-                             warnTypeConversionError();
-                             return PType();
-                         }
-                         return PType(std::move(*res));
+                         return res;
                      } else {
-                         return PType(std::move(res));
+                         return std::optional<PType>(std::move(res));
                      }
                  };
-                 PType object = do_convert(value.value<QType>());
-                 buffer.append(serializer->serializeObject(&object,
-                                                           PType::propertyOrdering, info));
+
+                 std::optional<PType> object = do_convert(value.value<QType>());
+                 if (object) {
+                     buffer.append(serializer->serializeObject(&(object.value()),
+                                                               PType::propertyOrdering, info));
+                 } else {
+                     warnTypeConversionError();
+                 }
               },
               [](const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it,
                  QVariant &value) {

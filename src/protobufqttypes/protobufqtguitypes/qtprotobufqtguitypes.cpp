@@ -47,15 +47,15 @@ static std::optional<QColor> convert(const QtProtobufPrivate::QtGui::QColor &fro
 
 static std::optional<QtProtobufPrivate::QtGui::QColor> convert(const QColor &from)
 {
-    if (from.isValid()) {
-        QtProtobufPrivate::QtGui::QRgba64 rgba64;
-        rgba64.setRgba64((quint64)from.rgba64());
+    if (!from.isValid())
+        return std::nullopt;
 
-        QtProtobufPrivate::QtGui::QColor color;
-        color.setRgba64(rgba64);
-        return color;
-    }
-    return std::nullopt;
+    QtProtobufPrivate::QtGui::QRgba64 rgba64;
+    rgba64.setRgba64((quint64)from.rgba64());
+
+    QtProtobufPrivate::QtGui::QColor color;
+    color.setRgba64(rgba64);
+    return color;
 }
 
 static std::optional<QMatrix4x4> convert(const QtProtobufPrivate::QtGui::QMatrix4x4 &from)
@@ -90,8 +90,11 @@ static QVector2D convert(const QtProtobufPrivate::QtGui::QVector2D &from)
     return QVector2D(from.xPos(), from.yPos());;
 }
 
-static QtProtobufPrivate::QtGui::QVector2D convert(const QVector2D &from)
+static std::optional<QtProtobufPrivate::QtGui::QVector2D> convert(const QVector2D &from)
 {
+    if (from.isNull())
+        return std::nullopt;
+
     QtProtobufPrivate::QtGui::QVector2D vector2D;
     vector2D.setXPos(from.x());
     vector2D.setYPos(from.y());
@@ -103,8 +106,11 @@ static QVector3D convert(const QtProtobufPrivate::QtGui::QVector3D &from)
     return QVector3D(from.xPos(), from.yPos(), from.zPos());
 }
 
-static QtProtobufPrivate::QtGui::QVector3D convert(const QVector3D &from)
+static std::optional<QtProtobufPrivate::QtGui::QVector3D> convert(const QVector3D &from)
 {
+    if (from.isNull())
+        return std::nullopt;
+
     QtProtobufPrivate::QtGui::QVector3D vector3D;
     vector3D.setXPos(from.x());
     vector3D.setYPos(from.y());
@@ -117,8 +123,11 @@ static QVector4D convert(const QtProtobufPrivate::QtGui::QVector4D &from)
     return QVector4D(from.xPos(), from.yPos(), from.zPos(), from.wPos());
 }
 
-static QtProtobufPrivate::QtGui::QVector4D convert(const QVector4D &from)
+static std::optional<QtProtobufPrivate::QtGui::QVector4D> convert(const QVector4D &from)
 {
+    if (from.isNull())
+        return std::nullopt;
+
     QtProtobufPrivate::QtGui::QVector4D vector4D;
     vector4D.setXPos(from.x());
     vector4D.setYPos(from.y());
@@ -154,8 +163,11 @@ static QQuaternion convert(const QtProtobufPrivate::QtGui::QQuaternion &from)
     return QQuaternion(from.scalar(), from.x(), from.y(), from.z());
 }
 
-static QtProtobufPrivate::QtGui::QQuaternion convert(const QQuaternion &from)
+static std::optional<QtProtobufPrivate::QtGui::QQuaternion> convert(const QQuaternion &from)
 {
+    if (from.isNull())
+        return std::nullopt;
+
     QtProtobufPrivate::QtGui::QQuaternion quaternion;
     quaternion.setScalar(from.scalar());
     quaternion.setX(from.x());
@@ -187,6 +199,9 @@ static bool isFloatingPointImageFormat(QImage::Format format)
 
 static std::optional<QtProtobufPrivate::QtGui::QImage> convert(const QImage &from)
 {
+    if (from.isNull())
+        return std::nullopt;
+
     static bool tiffSupported = QImageReader::supportedImageFormats().contains("tiff");
     const auto extension = (isFloatingPointImageFormat(from.format())
                             && tiffSupported) ? "tiff"_L1 : "png"_L1;

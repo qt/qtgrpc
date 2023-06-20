@@ -17,7 +17,7 @@
 #include <memory>
 
 const char *conversionErrorMessage = "Qt Proto Type conversion error.";
-const char *invalidHex = "0";
+const char *emptyValue = "";
 
 class QtProtobufQtTypesQtGuiTest : public QObject
 {
@@ -60,6 +60,15 @@ void QtProtobufQtTypesQtGuiTest::qRgba64()
     msg.setTestField({});
     msg.deserialize(&serializer, QByteArray::fromHex(rgba64Hex));
     QCOMPARE(rgba64, msg.testField());
+
+    const char *defaultHexValue = "0a00"; //QRgba64() has only default constructor
+    msg.setTestField(QRgba64());
+    result = msg.serialize(&serializer);
+    QCOMPARE(QByteArray::fromHex(defaultHexValue), result);
+
+    msg.setTestField(rgba64);
+    msg.deserialize(&serializer, QByteArray::fromHex(defaultHexValue));
+    QCOMPARE(msg.testField(), QRgba64());
 }
 
 void QtProtobufQtTypesQtGuiTest::qColor()
@@ -89,13 +98,15 @@ void QtProtobufQtTypesQtGuiTest::qColor()
     QColor invalidColor;
     msg.setTestField(invalidColor);
 
+    QVERIFY(!msg.testField().isValid());
     QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
-    msg.serialize(&serializer); // Error message is generated
-    QVERIFY(!msg.testField().isValid());
+    QByteArray result = msg.serialize(&serializer); // Error message is generated
+    QVERIFY(result.isEmpty());
 
-    msg.setTestField({});
-    QVERIFY(!msg.deserialize(&serializer, QByteArray::fromHex(invalidHex)));
+    msg.setTestField(color32);
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
     QVERIFY(!msg.testField().isValid());
+    QCOMPARE(msg.testField(), invalidColor);
 }
 
 void QtProtobufQtTypesQtGuiTest::qMatrix4x4()
@@ -134,6 +145,16 @@ void QtProtobufQtTypesQtGuiTest::qVector2D()
     msg.deserialize(&serializer, QByteArray::fromHex("0a0a0d0000c0411500002842"));
 
     QCOMPARE(QVector2D(vector.y(), vector.x()), msg.testField());
+
+    msg.setTestField(QVector2D());
+    QVERIFY(msg.testField().isNull());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(vector);
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(msg.testField().isNull());
 }
 
 void QtProtobufQtTypesQtGuiTest::qVector3D()
@@ -152,6 +173,16 @@ void QtProtobufQtTypesQtGuiTest::qVector3D()
     msg.deserialize(&serializer, QByteArray::fromHex("0a0f0d0000c04115000030411d00002842"));
 
     QCOMPARE(QVector3D(vector.y(), vector.z(), vector.x()), msg.testField());
+
+    msg.setTestField(QVector3D());
+    QVERIFY(msg.testField().isNull());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(vector);
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(msg.testField().isNull());
 }
 
 void QtProtobufQtTypesQtGuiTest::qVector4D()
@@ -170,6 +201,16 @@ void QtProtobufQtTypesQtGuiTest::qVector4D()
     msg.deserialize(&serializer, QByteArray::fromHex("0a0f0d0000c04115000030411d00002842"));
 
     QCOMPARE(vector, msg.testField());
+
+    msg.setTestField(QVector4D());
+    QVERIFY(msg.testField().isNull());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(vector);
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(msg.testField().isNull());
 }
 
 void QtProtobufQtTypesQtGuiTest::qTransform()
@@ -178,7 +219,8 @@ void QtProtobufQtTypesQtGuiTest::qTransform()
             QTransform>(1, "QTransform", "testField");
 
     QTransformMessage msg;
-    msg.setTestField(QTransform(0, 1, 2, 3, 4, 5, 6, 7, 8));
+    QTransform form(0, 1, 2, 3, 4, 5, 6, 7, 8);
+    msg.setTestField(form);
     auto result = msg.serialize(&serializer);
     const char * transformHex = "0a4a0a480000000000000000000000000000f03f0000000000000040000"
                                 "00000000008400000000000001040000000000000144000000000000018"
@@ -190,6 +232,18 @@ void QtProtobufQtTypesQtGuiTest::qTransform()
                                         "0001840000000000000144000000000000010400000000000"
                                         "0008400000000000000040000000000000f03f0000000000000000"));
     QCOMPARE(QTransform(8, 7, 6, 5, 4, 3, 2, 1, 0), msg.testField());
+
+    //QTransform() constructs an identity matrix
+    const char *defaultHexValue = "0a4a0a48000000000000f03f0000000000000000000000000000000000000"
+                                  "00000000000000000000000f03f0000000000000000000000000000000000"
+                                  "00000000000000000000000000f03f";
+    msg.setTestField(QTransform());
+    result = msg.serialize(&serializer);
+    QCOMPARE(QByteArray::fromHex(defaultHexValue), result);
+
+    msg.setTestField(form);
+    msg.deserialize(&serializer, QByteArray::fromHex(defaultHexValue));
+    QCOMPARE(msg.testField(), QTransform());
 }
 
 void QtProtobufQtTypesQtGuiTest::qQuaternion()
@@ -209,6 +263,15 @@ void QtProtobufQtTypesQtGuiTest::qQuaternion()
                     QByteArray::fromHex(hexValue));
 
     QCOMPARE(quater, msg.testField());
+
+    const char *defaultHexValue = "0a050d0000803f";
+    msg.setTestField(QQuaternion());
+    result = msg.serialize(&serializer);
+    QCOMPARE(QByteArray::fromHex(defaultHexValue), result);
+
+    msg.setTestField(quater);
+    msg.deserialize(&serializer, QByteArray::fromHex(defaultHexValue));
+    QCOMPARE(msg.testField(), QQuaternion());
 }
 
 void fillTestImage(QImage &testImage)
@@ -242,6 +305,16 @@ void QtProtobufQtTypesQtGuiTest::qImage()
     msg.setTestField({});
     msg.deserialize(&serializer, result);
     QCOMPARE(initialImage, msg.testField());
+
+    msg.setTestField(QImage());
+    QVERIFY(msg.testField().isNull());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer); // Error message is generated
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(initialImage);
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QCOMPARE(msg.testField(), QImage());
 }
 
 QTEST_MAIN(QtProtobufQtTypesQtGuiTest)

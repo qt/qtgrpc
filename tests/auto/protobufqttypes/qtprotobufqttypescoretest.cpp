@@ -15,6 +15,7 @@ constexpr char conversionErrorMessage[] = "Qt Proto Type conversion error.";
 
 const QTime testTime = QTime(7, 30, 18, 321);
 const QDate testDate = QDate(1856, 6, 10);
+const char *emptyValue = "";
 
 class QtProtobufQtTypesQtCoreTest : public QObject
 {
@@ -79,6 +80,7 @@ void QtProtobufQtTypesQtCoreTest::qUrl()
 
     QUrlMessage msg;
     const char *qtUrl = "https://www.qt.io/product/framework";
+    const char *qtUrlInvalid = "%https://www.qt.io/"; // '%' symbol is not allowed.
     const char *hexUrlValue
             = "0a250a2368747470733a2f2f7777772e71742e696f2f70726f647563742f6672616d65776f726b";
     msg.setTestField(QUrl(qtUrl));
@@ -88,7 +90,18 @@ void QtProtobufQtTypesQtCoreTest::qUrl()
     msg.setTestField({});
     msg.deserialize(&serializer, QByteArray::fromHex(hexUrlValue));
 
+    QVERIFY(msg.testField().isValid());
     QCOMPARE(QString::fromLatin1(qtUrl), msg.testField().url());
+
+    msg.setTestField(QUrl(qtUrlInvalid));
+    QVERIFY(!msg.testField().isValid());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    QByteArray result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(QUrl(qtUrl));
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(!msg.testField().isValid());
 }
 
 void QtProtobufQtTypesQtCoreTest::qChar()
@@ -121,6 +134,16 @@ void QtProtobufQtTypesQtCoreTest::qUuid()
     msg.deserialize(&serializer, QByteArray::fromHex(hexUuidValue));
 
     QCOMPARE(QUuid(uuidValue), msg.testField());
+
+    const char *uuidInvalidHex = "0a120a1000000000000000000000000000000000";
+    msg.setTestField(QUuid());
+    QVERIFY(msg.testField().isNull());
+    QByteArray result = msg.serialize(&serializer);
+    QCOMPARE(QByteArray::fromHex(uuidInvalidHex), result);
+
+    msg.setTestField(QUuid(uuidValue));
+    msg.deserialize(&serializer, QByteArray::fromHex(uuidInvalidHex));
+    QVERIFY(msg.testField().isNull());
 }
 
 void QtProtobufQtTypesQtCoreTest::qTime()
@@ -137,6 +160,16 @@ void QtProtobufQtTypesQtCoreTest::qTime()
     QCOMPARE(msg.testField().minute(), testTime.minute());
     QCOMPARE(msg.testField().second(), testTime.second());
     QCOMPARE(msg.testField().msec(), testTime.msec());
+
+    msg.setTestField(QTime());
+    QVERIFY(msg.testField().isNull());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer); // Error message is generated
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(QTime(5, 30, 48, 123));
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(msg.testField().isNull());
 }
 
 void QtProtobufQtTypesQtCoreTest::qDate()
@@ -151,6 +184,16 @@ void QtProtobufQtTypesQtCoreTest::qDate()
     msg.setTestField({});
     msg.deserialize(&serializer, QByteArray::fromHex("0a0508aeab9301"));
     QCOMPARE(msg.testField().year(), 1897);
+
+    msg.setTestField(QDate());
+    QVERIFY(!msg.testField().isValid());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer); // Error message is generated
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(testDate);
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(!msg.testField().isValid());
 }
 
 void QtProtobufQtTypesQtCoreTest::qTimeZone_data()
@@ -201,8 +244,13 @@ void QtProtobufQtTypesQtCoreTest::qTimeZone()
         msg.deserialize(&serializer, QByteArray::fromHex(zoneHex.constData()));
         QCOMPARE(msg.testField(), zone);
     } else {
+        QVERIFY(!msg.testField().isValid());
         QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
-        msg.serialize(&serializer); // Error message is generated
+        QByteArray result = msg.serialize(&serializer); // Error message is generated
+        QVERIFY(result.isEmpty());
+
+        msg.setTestField(QTimeZone(QTimeZone::UTC));
+        msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
         QVERIFY(!msg.testField().isValid());
     }
 }
@@ -276,9 +324,14 @@ void QtProtobufQtTypesQtCoreTest::qDateTime()
         msg.deserialize(&serializer, QByteArray::fromHex(zoneHex));
         QCOMPARE(msg.testField(), dateTime);
     } else {
+        QVERIFY(msg.testField().isNull());
         QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
-        msg.serialize(&serializer); // Error message is generated
-        QVERIFY(!msg.testField().isValid());
+        QByteArray result = msg.serialize(&serializer); // Error message is generated
+        QVERIFY(result.isEmpty());
+
+        msg.setTestField(dateTime);
+        msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+        QVERIFY(msg.testField().isNull());
     }
 }
 
@@ -303,6 +356,16 @@ void QtProtobufQtTypesQtCoreTest::qSize()
     msg.deserialize(&serializer, QByteArray::fromHex("0a06088006108008"));
     QCOMPARE(msg.testField().width(), size.height());
     QCOMPARE(msg.testField().height(), size.width());
+
+    msg.setTestField(QSize(0, 0));
+    QVERIFY(msg.testField().isNull());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(QSize(20, 67));
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(!msg.testField().isValid());
 }
 
 void QtProtobufQtTypesQtCoreTest::qSizeF()
@@ -326,6 +389,16 @@ void QtProtobufQtTypesQtCoreTest::qSizeF()
                     QByteArray::fromHex("0a12090000000000008840110000000000009040"));
     QCOMPARE(msg.testField().width(), sizeF.height());
     QCOMPARE(msg.testField().height(), sizeF.width());
+
+    msg.setTestField(QSizeF(0.0, 0.0));
+    QVERIFY(msg.testField().isNull());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(QSizeF(30.0, 0.2));
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(!msg.testField().isValid());
 }
 
 void QtProtobufQtTypesQtCoreTest::qPoint()
@@ -346,6 +419,16 @@ void QtProtobufQtTypesQtCoreTest::qPoint()
     msg.deserialize(&serializer, QByteArray::fromHex("0a0608800c108010"));
     QCOMPARE(msg.testField().x(), point.y());
     QCOMPARE(msg.testField().y(), point.x());
+
+    msg.setTestField(QPoint(0, 0));
+    QVERIFY(msg.testField().isNull());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(QPoint(2, 9));
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(msg.testField().isNull());
 }
 
 void QtProtobufQtTypesQtCoreTest::qPointF()
@@ -369,6 +452,16 @@ void QtProtobufQtTypesQtCoreTest::qPointF()
                     QByteArray::fromHex("0a12090000000000008840110000000000009040"));
     QCOMPARE(msg.testField().x(), pointF.y());
     QCOMPARE(msg.testField().y(), pointF.x());
+
+    msg.setTestField(QPointF(0, 0));
+    QVERIFY(msg.testField().isNull());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(QPointF(0.25, 10));
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(msg.testField().isNull());
 }
 
 void QtProtobufQtTypesQtCoreTest::qRect()
@@ -399,6 +492,16 @@ void QtProtobufQtTypesQtCoreTest::qRect()
     QCOMPARE(msg.testField().y(), 0);
     QCOMPARE(msg.testField().width(), 1024);
     QCOMPARE(msg.testField().height(), 768);
+
+    msg.setTestField(QRect());
+    QVERIFY(!msg.testField().isValid());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(QRect(1, 2, 10, 10));
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(!msg.testField().isValid());
 }
 
 void QtProtobufQtTypesQtCoreTest::qRectF()
@@ -430,6 +533,16 @@ void QtProtobufQtTypesQtCoreTest::qRectF()
     QCOMPARE(msg.testField().y(), 0.0);
     QCOMPARE(msg.testField().width(), 1024.0);
     QCOMPARE(msg.testField().height(), 768.0);
+
+    msg.setTestField(QRectF());
+    QVERIFY(!msg.testField().isValid());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(QRectF(88.8, 87, 100, 101.2));
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(!msg.testField().isValid());
 }
 
 void QtProtobufQtTypesQtCoreTest::qVersionNumber()
@@ -447,6 +560,16 @@ void QtProtobufQtTypesQtCoreTest::qVersionNumber()
     msg.setTestField({});
     msg.deserialize(&serializer, QByteArray::fromHex(hexValue));
     QCOMPARE(msg.testField(), version);
+
+    msg.setTestField(QVersionNumber());
+    QVERIFY(msg.testField().isNull());
+    QTest::ignoreMessage(QtWarningMsg, conversionErrorMessage);
+    result = msg.serialize(&serializer);
+    QVERIFY(result.isEmpty());
+
+    msg.setTestField(version);
+    msg.deserialize(&serializer, QByteArray::fromHex(emptyValue));
+    QVERIFY(msg.testField().isNull());
 }
 
 QTEST_MAIN(QtProtobufQtTypesQtCoreTest)
