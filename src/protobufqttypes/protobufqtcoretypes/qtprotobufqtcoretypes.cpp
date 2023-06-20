@@ -80,7 +80,7 @@ static std::optional<QTime> convert(const QtProtobufPrivate::QtCore::QTime &from
 
 static std::optional<QtProtobufPrivate::QtCore::QTime> convert(const QTime &from)
 {
-    if (!from.isValid())
+    if (!from.isValid() || from.isNull())
         return std::nullopt;
 
     QtProtobufPrivate::QtCore::QTime time;
@@ -96,7 +96,7 @@ static std::optional<QDate> convert(const QtProtobufPrivate::QtCore::QDate &from
 
 static std::optional<QtProtobufPrivate::QtCore::QDate> convert(const QDate &from)
 {
-    if (!from.isValid())
+    if (!from.isValid() || from.isNull())
         return std::nullopt;
 
     QtProtobufPrivate::QtCore::QDate date;
@@ -129,9 +129,10 @@ static std::optional<QTimeZone> convert(
         result = QTimeZone(getTimeZoneInitialization(from.timeSpec()));
         break;
     case QtProtobufPrivate::QtCore::QTimeZone::TimeZoneFields::OffsetSeconds:
-    default:
         result = QTimeZone::fromSecondsAheadOfUtc(from.offsetSeconds());
         break;
+    case QtProtobufPrivate::QtCore::QTimeZone::TimeZoneFields::UninitializedField:
+        return std::nullopt;
     }
     return result.isValid() ?  std::optional<QTimeZone>(result) : std::nullopt;
 }
@@ -179,7 +180,7 @@ static std::optional<QDateTime> convert(const QtProtobufPrivate::QtCore::QDateTi
 
 static std::optional<QtProtobufPrivate::QtCore::QDateTime> convert(const QDateTime &from)
 {
-    if (!from.isValid())
+    if (!from.isValid() || from.isNull())
         return std::nullopt;
 
     QtProtobufPrivate::QtCore::QDateTime datetime;
@@ -201,8 +202,11 @@ static QSize convert(const QtProtobufPrivate::QtCore::QSize &from)
     return QSize(from.width(), from.height());
 }
 
-static QtProtobufPrivate::QtCore::QSize convert(const QSize &from)
+static std::optional<QtProtobufPrivate::QtCore::QSize> convert(const QSize &from)
 {
+    if (from.isNull() || from.isEmpty() || !from.isValid())
+        return std::nullopt;
+
     QtProtobufPrivate::QtCore::QSize size;
     size.setWidth(from.width());
     size.setHeight(from.height());
@@ -214,8 +218,11 @@ static QSizeF convert(const QtProtobufPrivate::QtCore::QSizeF &from)
     return QSizeF(from.width(), from.height());
 }
 
-static QtProtobufPrivate::QtCore::QSizeF convert(const QSizeF &from)
+static std::optional<QtProtobufPrivate::QtCore::QSizeF> convert(const QSizeF &from)
 {
+    if (from.isNull() || from.isEmpty() || !from.isValid())
+        return std::nullopt;
+
     QtProtobufPrivate::QtCore::QSizeF sizeF;
     sizeF.setWidth(from.width());
     sizeF.setHeight(from.height());
@@ -227,8 +234,11 @@ static QPoint convert(const QtProtobufPrivate::QtCore::QPoint &from)
     return QPoint(from.x(), from.y());
 }
 
-static QtProtobufPrivate::QtCore::QPoint convert(const QPoint &from)
+static std::optional<QtProtobufPrivate::QtCore::QPoint> convert(const QPoint &from)
 {
+    if (from.isNull())
+        return std::nullopt;
+
     QtProtobufPrivate::QtCore::QPoint pointT;
     pointT.setX(from.x());
     pointT.setY(from.y());
@@ -240,8 +250,11 @@ static QPointF convert(const QtProtobufPrivate::QtCore::QPointF &from)
     return QPointF(from.x(), from.y());
 }
 
-static QtProtobufPrivate::QtCore::QPointF convert(const QPointF &from)
+static std::optional<QtProtobufPrivate::QtCore::QPointF> convert(const QPointF &from)
 {
+    if (from.isNull())
+        return std::nullopt;
+
     QtProtobufPrivate::QtCore::QPointF pointF;
     pointF.setX(from.x());
     pointF.setY(from.y());
@@ -254,8 +267,11 @@ static QRect convert(const QtProtobufPrivate::QtCore::QRect &from)
                  QSize(from.width(), from.height()));
 }
 
-static QtProtobufPrivate::QtCore::QRect convert(const QRect &from)
+static std::optional<QtProtobufPrivate::QtCore::QRect> convert(const QRect &from)
 {
+    if (from.isNull() || from.isEmpty() || !from.isValid())
+        return std::nullopt;
+
     QtProtobufPrivate::QtCore::QRect rect;
     rect.setX(from.x());
     rect.setY(from.y());
@@ -270,8 +286,11 @@ static QRectF convert(const QtProtobufPrivate::QtCore::QRectF &from)
                   QSizeF(from.width(), from.height()));
 }
 
-static QtProtobufPrivate::QtCore::QRectF convert(const QRectF &from)
+static std::optional<QtProtobufPrivate::QtCore::QRectF> convert(const QRectF &from)
 {
+    if (from.isNull() || from.isEmpty() || !from.isValid())
+        return std::nullopt;
+
     QtProtobufPrivate::QtCore::QRectF rectF;
     rectF.setX(from.x());
     rectF.setY(from.y());
