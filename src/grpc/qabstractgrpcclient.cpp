@@ -183,23 +183,16 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
     Q_D(QAbstractGrpcClient);
 
     if (d->channel) {
-        grpcStream = d->channel->startStream(method, QLatin1StringView(d->service), arg);
+        grpcStream = d->channel->startStream(method, QLatin1StringView(d->service), arg, options);
 
         auto errorConnection = std::make_shared<QMetaObject::Connection>();
         *errorConnection = connect(grpcStream.get(), &QGrpcStream::errorOccurred, this,
-                                   [this, grpcStream, &options](const QGrpcStatus &status) {
+                                   [this, grpcStream](const QGrpcStatus &status) {
                                        Q_D(QAbstractGrpcClient);
                                        qGrpcWarning()
                                                << grpcStream->method() << "call" << d->service
                                                << "stream error: " << status.message();
                                        errorOccurred(status);
-                                       // TODO: Make timeout configurable from channel settings
-                                       QTimer::singleShot(1000, this,
-                                                          [this, method = grpcStream->method(),
-                                                           arg = grpcStream->arg(), &options] {
-                                                              this->startStream(method, arg,
-                                                                                options);
-                                                          });
                                    });
 
         auto finishedConnection = std::make_shared<QMetaObject::Connection>();

@@ -121,7 +121,7 @@ struct QGrpcHttp2ChannelPrivate
     QObject lambdaContext;
 
     QNetworkReply *post(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-                        const QGrpcCallOptions &callOptions, bool stream = false)
+                        const QGrpcCallOptions &callOptions)
     {
         QUrl callUrl = channelOptions.host();
         callUrl.setPath("/%1/%2"_L1.arg(service, method));
@@ -157,9 +157,8 @@ struct QGrpcHttp2ChannelPrivate
                              QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
                          });
 #endif
-        if (!stream) {
-            // TODO: Add configurable timeout logic
-            QTimer::singleShot(6000, networkReply, [networkReply] {
+        if (callOptions.deadline()) {
+            QTimer::singleShot(*callOptions.deadline(), networkReply, [networkReply] {
                 QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
             });
         }
@@ -332,7 +331,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                                                             QByteArrayView arg,
                                                             const QGrpcCallOptions &options)
 {
-    QNetworkReply *networkReply = dPtr->post(method, service, arg, options, true);
+    QNetworkReply *networkReply = dPtr->post(method, service, arg, options);
 
     std::shared_ptr<QGrpcStream> grpcStream(new QGrpcStream(method, arg, serializer()));
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
