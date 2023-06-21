@@ -5,6 +5,7 @@
 #include <QtCore/QFuture>
 #include <QtCore/QList>
 #include <QtCore/QThread>
+#include <QtCore/QTimer>
 #include <QtCore/qloggingcategory.h>
 #include <QtGrpc/qabstractgrpcclient.h>
 #include <QtProtobuf/QProtobufSerializer>
@@ -221,9 +222,10 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QGrpcChannelOptions &options,
 
 QGrpcChannelPrivate::~QGrpcChannelPrivate() = default;
 
-std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(
-        QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-        [[maybe_unused]] const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(QLatin1StringView method,
+                                                          QLatin1StringView service,
+                                                          QByteArrayView args,
+                                                          const QGrpcCallOptions &options)
 {
     const QByteArray rpcName = buildRpcName(service, method);
     std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(serializer()));
@@ -254,7 +256,10 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(
                                                 QObject::disconnect(*abortConnection);
                                             }
                                         });
+
     call->start();
+    if (options.deadline())
+        QTimer::singleShot(*options.deadline(), call.get(), [call] { call->cancel(); });
     return reply;
 }
 
@@ -272,9 +277,10 @@ QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringVie
     return call.status;
 }
 
-std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(
-        QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
-        [[maybe_unused]] const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(QLatin1StringView method,
+                                                              QLatin1StringView service,
+                                                              QByteArrayView arg,
+                                                              const QGrpcCallOptions &options)
 {
     std::shared_ptr<QGrpcStream> stream(new QGrpcStream(method, arg, serializer()));
     const QByteArray rpcName = buildRpcName(service, stream->method());
@@ -317,6 +323,9 @@ std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(
                                         });
 
     sub->start();
+    if (options.deadline())
+        QTimer::singleShot(*options.deadline(), sub.get(), [sub] { sub->cancel(); });
+
     return stream;
 }
 

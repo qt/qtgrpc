@@ -147,6 +147,10 @@ private slots:
     void StreamStringThreadTest();
     void StreamCancelWhileErrorTimeoutTest();
     void MetadataTest();
+    void CallDeadlineTest_data();
+    void CallDeadlineTest();
+    void StreamDeadlineTest_data();
+    void StreamDeadlineTest();
 
 private:
     void startServer()
@@ -748,6 +752,106 @@ void QtGrpcClientTest::MetadataTest()
         QEXPECT_FAIL("", "Unimplemented in the reference gRPC channel", Abort);
     QCOMPARE_EQ(serverHeaderCount, 1);
     QCOMPARE_EQ(clientReturnHeader, "valid_value"_ba);
+}
+
+void QtGrpcClientTest::CallDeadlineTest_data()
+{
+    QTest::addColumn<std::chrono::milliseconds>("timeout");
+    constexpr std::array<float, 6> messageLatencyFractions{ 0.5, 0.75, 0.9, 1.0, 1.1, 1.25 };
+    for (const auto &fraction : messageLatencyFractions)
+        QTest::newRow(QString("MessageLatency * %1").arg(fraction).toStdString().c_str())
+                << std::chrono::milliseconds(static_cast<int64_t>(MessageLatency * fraction));
+}
+
+void QtGrpcClientTest::CallDeadlineTest()
+{
+    QFETCH(const std::chrono::milliseconds, timeout);
+
+    QGrpcCallOptions opt;
+    opt.withDeadline(timeout);
+
+    SimpleStringMessage request;
+    request.setTestFieldString("sleep");
+
+    QSignalSpy clientErrorSpy(_client.get(), &TestService::Client::errorOccurred);
+    QVERIFY(clientErrorSpy.isValid());
+
+    auto reply = _client->testMethod(request, opt);
+    QSignalSpy callFinishedSpy(reply.get(), &QGrpcCallReply::finished);
+    QVERIFY(callFinishedSpy.isValid());
+
+    if (timeout.count() < MessageLatency) {
+        QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
+        const auto code = qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code();
+        // Really low timeout can trigger before service becomes available
+        QVERIFY(code == QGrpcStatus::StatusCode::Cancelled
+                || code == QGrpcStatus::StatusCode::Unavailable);
+    } else if (timeout.count() >= MessageLatencyWithThreshold) {
+        QTRY_COMPARE_EQ_WITH_TIMEOUT(callFinishedSpy.count(), 1, FailTimeout);
+        QCOMPARE(reply->read<SimpleStringMessage>().testFieldString(), request.testFieldString());
+    } else {
+        // Because we're can't be sure about the result,
+        // abort the call, that might affect other tests.
+        reply->abort();
+    }
+}
+
+void QtGrpcClientTest::StreamDeadlineTest_data()
+{
+    const int ExpectedMessageCount = 4;
+    QTest::addColumn<std::chrono::milliseconds>("timeout");
+    QTest::addColumn<int>("ExpectedMessageCount");
+    constexpr std::array<float, 6> messageLatencyFractions{ 0.5, 0.75, 0.9, 1.0, 1.1, 1.25 };
+    for (const auto &fraction : messageLatencyFractions)
+        QTest::newRow(QString("MessageLatency * ExpectedMessageCount * %1")
+                              .arg(fraction)
+                              .toStdString()
+                              .c_str())
+                << std::chrono::milliseconds(static_cast<int64_t>((MessageLatency * fraction
+                                                                   * ExpectedMessageCount)))
+                << ExpectedMessageCount;
+}
+
+void QtGrpcClientTest::StreamDeadlineTest()
+{
+    QFETCH(const std::chrono::milliseconds, timeout);
+    QFETCH(const int, ExpectedMessageCount);
+
+    QGrpcCallOptions opt;
+    opt.withDeadline(timeout);
+
+    SimpleStringMessage request;
+    request.setTestFieldString("Stream");
+
+    auto stream = _client->streamTestMethodServerStream(request, opt);
+
+    QSignalSpy streamErrorSpy(stream.get(), &QGrpcStream::errorOccurred);
+    QVERIFY(streamErrorSpy.isValid());
+    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcStream::finished);
+    QVERIFY(streamFinishedSpy.isValid());
+
+    SimpleStringMessage result;
+    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream] {
+        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
+        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+    });
+
+    if (timeout.count() < MessageLatency * ExpectedMessageCount) {
+        QTRY_COMPARE_EQ_WITH_TIMEOUT(streamErrorSpy.count(), 1, FailTimeout);
+        const auto code = qvariant_cast<QGrpcStatus>(streamErrorSpy.at(0).first()).code();
+        // Really low timeout can trigger before service becomes available
+        QVERIFY(code == QGrpcStatus::StatusCode::Cancelled
+                || code == QGrpcStatus::StatusCode::Unavailable);
+    } else if (timeout.count() >= MessageLatencyWithThreshold * ExpectedMessageCount) {
+        QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
+                                     FailTimeout * ExpectedMessageCount);
+        QCOMPARE_EQ(streamErrorSpy.count(), 0);
+        QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2Stream3Stream4");
+    } else {
+        // Because we're can't be sure about the result,
+        // abort the stream, that might affect other tests.
+        stream->abort();
+    }
 }
 
 QTEST_MAIN(QtGrpcClientTest)
