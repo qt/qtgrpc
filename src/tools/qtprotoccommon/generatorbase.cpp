@@ -5,10 +5,9 @@
 #include "generatorbase.h"
 
 #include <google/protobuf/descriptor.h>
-#include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
 #include <google/protobuf/io/printer.h>
 #include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/stubs/common.h>
 
 #include "utils.h"
 #include "commontemplates.h"
