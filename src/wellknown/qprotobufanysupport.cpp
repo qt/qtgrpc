@@ -239,7 +239,7 @@ std::optional<Any> Any::asAnyImpl() const
     \c{Q_PROTOBUF_OBJECT} macro or (for a nested Any message) be Any itself.
 */
 
-Any Any::fromMessageImpl(QProtobufMessage *message,
+Any Any::fromMessageImpl(const QProtobufMessage *message,
                          QtProtobufPrivate::QProtobufPropertyOrdering ordering,
                          QAnyStringView typeUrlPrefix)
 {

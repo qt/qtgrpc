@@ -80,7 +80,7 @@ private:
     bool asImpl(QProtobufMessage *message,
                 QtProtobufPrivate::QProtobufPropertyOrdering ordering) const;
     std::optional<Any> asAnyImpl() const;
-    static Any fromMessageImpl(QProtobufMessage *message,
+    static Any fromMessageImpl(const QProtobufMessage *message,
                                QtProtobufPrivate::QProtobufPropertyOrdering ordering,
                                QAnyStringView typeUrlPrefix);
     static Any fromAnyMessageImpl(const Any *message, QAnyStringView typeUrlPrefix);

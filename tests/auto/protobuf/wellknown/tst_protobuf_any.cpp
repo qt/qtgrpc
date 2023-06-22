@@ -19,6 +19,7 @@ private slots:
     void repeatedAnyMessage();
     void twoAnyMessage_data();
     void twoAnyMessage();
+    void fromMessage();
 };
 
 using namespace qtproto::tests;
@@ -174,6 +175,18 @@ void tst_protobuf_any::twoAnyMessage()
         // and the value of the field is empty:
         QCOMPARE_EQ(message.one().value(), QByteArray());
     }
+}
+
+void tst_protobuf_any::fromMessage()
+{
+    Example ex;
+    ex.setH(242);
+    AnyMessage message;
+    message.setField(QtProtobuf::Any::fromMessage(ex));
+    std::optional<Example> exop = message.field().as<Example>();
+    QVERIFY(exop.has_value());
+    QCOMPARE(exop->h(), 242);
+    QCOMPARE(*exop, ex);
 }
 
 QTEST_MAIN(tst_protobuf_any)
