@@ -7,6 +7,7 @@
 
 #include "generatorbase.h"
 
+#include <memory>
 #include <set>
 
 namespace google::protobuf {
