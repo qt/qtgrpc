@@ -12,11 +12,10 @@
 
 #include <set>
 #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/descriptor.h>
 #include <google/protobuf/io/printer.h>
 #include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/descriptor.h>
+#include <google/protobuf/stubs/common.h>
 
 using namespace ::QtGrpc;
 using namespace ::qtprotoccommon;
