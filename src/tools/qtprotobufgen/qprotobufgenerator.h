@@ -7,6 +7,8 @@
 
 #include "generatorbase.h"
 
+#include <set>
+
 namespace google::protobuf {
 class FileDescriptor;
 class Descriptor;

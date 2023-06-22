@@ -4,8 +4,9 @@
 #ifndef QGRPCGENERATOR_H
 #define QGRPCGENERATOR_H
 
-#include <memory>
 #include "generatorbase.h"
+#include <memory>
+#include <set>
 
 namespace google::protobuf {
 class FileDescriptor;
