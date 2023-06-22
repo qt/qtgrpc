@@ -184,6 +184,7 @@ public:
     static const char *QmlRegisterTypeTemplate();
     static const char *QmlRegisterGlobalEnumTypeTemplate();
     static const char *QmlRegisterMessageTypeTemplate();
+    static const char *QmlRegisterProtobufTypes();
 
     static const char *RepeatedSuffix();
     static const char *ProtoFileSuffix();

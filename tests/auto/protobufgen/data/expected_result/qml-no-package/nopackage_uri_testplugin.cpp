@@ -3,6 +3,7 @@
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
 #include <QtQml/qqmlengine.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 #include "nopackage.qpb.h"
 #include "nopackageexternal.qpb.h"
 
@@ -21,6 +22,7 @@ public:
         qmlRegisterUncreatableMetaObject(
             ::TestEnumGadget::staticMetaObject,
             uri, 1, 0, "TestEnum", "You can only use the nested enums of TestEnum, but not create its instances in QML scope.");
+        qRegisterProtobufTypes();
     }
 
 };
