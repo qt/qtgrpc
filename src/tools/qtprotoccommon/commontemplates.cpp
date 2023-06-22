@@ -947,6 +947,11 @@ const char *CommonTemplates::QmlRegisterMessageTypeTemplate()
            "but not create its instances in QML scope.\");\n";
 }
 
+const char *CommonTemplates::QmlRegisterProtobufTypes()
+{
+    return "        qRegisterProtobufTypes();\n";
+}
+
 const char *CommonTemplates::RepeatedSuffix()
 {
     return "Repeated";

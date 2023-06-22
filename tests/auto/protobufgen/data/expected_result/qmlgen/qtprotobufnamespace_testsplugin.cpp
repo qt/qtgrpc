@@ -3,6 +3,7 @@
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
 #include <QtQml/qqmlengine.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 #include "basicmessages.qpb.h"
 #include "enummessages.qpb.h"
 
@@ -33,6 +34,7 @@ public:
         qmlRegisterUncreatableMetaObject(
             qtprotobufnamespace::tests::TestEnumSecondInFileGadget::staticMetaObject,
             uri, 1, 0, "TestEnumSecondInFile", "You can only use the nested enums of TestEnumSecondInFile, but not create its instances in QML scope.");
+        qRegisterProtobufTypes();
     }
 
 };

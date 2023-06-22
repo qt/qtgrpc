@@ -156,7 +156,7 @@ bool QProtobufGenerator::GenerateAll(const std::vector<const FileDescriptor *> &
         for (const FileDescriptor *file: files) {
             GenerateQmlPluginSource(file, registrationPluginPrinter);
         }
-
+        registrationPluginPrinter->Print(CommonTemplates::QmlRegisterProtobufTypes());
         registrationPluginPrinter->Indent();
         registrationPluginPrinter->Indent();
         registrationPluginPrinter->Print(CommonTemplates::SimpleBlockEnclosureTemplate());
@@ -182,9 +182,10 @@ void QProtobufGenerator::GenerateQmlPluginIntro(Printer *printer,
     }
     printDisclaimer(printer);
 
-    const std::array<std::string, 3> qmlHeaders = {"QtQml/qqmlextensionplugin.h",
+    const std::array<std::string, 4> qmlHeaders = {"QtQml/qqmlextensionplugin.h",
                                                    "QtQml/qqml.h",
-                                                   "QtQml/qqmlengine.h"};
+                                                   "QtQml/qqmlengine.h",
+                                                   "QtProtobuf/qtprotobuftypes.h"};
     for (const auto &header : qmlHeaders) {
         printer->Print({{"include", header}},
                        CommonTemplates::ExternalIncludeTemplate());
