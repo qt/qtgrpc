@@ -25,14 +25,20 @@ public:
 };
 
 static void serializerProxy(const QProtobufSerializer *serializer, const QVariant &object,
-                            const QProtobufPropertyOrderingInfo &ordering, QByteArray &output)
+                            const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &output)
 {
-    Q_UNUSED(ordering);
+    if (object.isNull())
+        return;
+
     Any any = object.value<Any>();
+    if (any.typeUrl().isEmpty())
+        return;
+
     google::protobuf::Any realAny;
     realAny.setValue(any.value());
     realAny.setTypeUrl(any.typeUrl());
-    output.append(serializer->serializeMessage(&realAny, google::protobuf::Any::propertyOrdering));
+    output.append(serializer->serializeObject(&realAny, google::protobuf::Any::propertyOrdering,
+                                              fieldInfo));
 }
 
 static void listSerializerProxy(const QProtobufSerializer *serializer, const QVariant &object,
