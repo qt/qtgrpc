@@ -48,6 +48,7 @@ private slots:
     void StringMessageSerializeTest();
     void ComplexTypeSerializeTest_data();
     void ComplexTypeSerializeTest();
+    void DefaultConstructedComplexTypeSerializeTest();
     void EmptyBytesMessageTest();
     void EmptyStringMessageTest();
     void FieldIndexRangeTest();
@@ -455,6 +456,13 @@ void QtProtobufTypesSerializationTest::ComplexTypeSerializeTest()
     test.setTestComplexField(stringMessage);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.toHex(), expectedData);
+}
+
+void QtProtobufTypesSerializationTest::DefaultConstructedComplexTypeSerializeTest()
+{
+    ComplexMessage test;
+    QByteArray result = test.serialize(m_serializer.get());
+    QCOMPARE(result.toHex(), ""_ba);
 }
 
 void QtProtobufTypesSerializationTest::EmptyBytesMessageTest()
