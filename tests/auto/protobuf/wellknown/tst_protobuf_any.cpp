@@ -14,6 +14,7 @@ class tst_protobuf_any : public QObject
     Q_OBJECT
 private slots:
     void defaultConstructed();
+    void simpleMessage();
     void anyMessage_data();
     void anyMessage();
     void repeatedAnyMessage();
@@ -32,12 +33,34 @@ void tst_protobuf_any::defaultConstructed()
     AnyMessage message;
     // Serialize default-constructed message...
     QByteArray serialized = message.serialize(&serializer);
-    QCOMPARE_EQ(serialized, QByteArray());
+    QCOMPARE_EQ(serialized.toHex(), ""_ba);
 
     AnyMessage message2;
     // ... and then deserialize it. They should be equal.
     message2.deserialize(&serializer, serialized);
     QCOMPARE_EQ(message2, message);
+}
+
+void tst_protobuf_any::simpleMessage()
+{
+    QProtobufSerializer serializer;
+
+    SimpleMessage payload;
+    payload.setI(42);
+
+    AnyMessage message;
+    message.setField(QtProtobuf::Any::fromMessage(payload));
+    QByteArray serialized = message.serialize(&serializer);
+    QCOMPARE_EQ(serialized.toHex(),
+                "0a380a2f747970652e676f6f676c65617069732e636f6d2f717470726f74"
+                "6f2e74657374732e53696d706c654d65737361676512058092f4012a"_ba);
+
+    AnyMessage message2;
+    message2.deserialize(&serializer, serialized);
+
+    auto result = message2.field().as<SimpleMessage>();
+    QVERIFY(result.has_value());
+    QCOMPARE_EQ(result.value(), payload);
 }
 
 void tst_protobuf_any::anyMessage_data()
