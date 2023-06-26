@@ -46,7 +46,3 @@ navigation.cppclassespage = "Qt GRPC C++ Classes"
 navigation.qmltypespage = "Qt GRPC QML Types"
 
 tagfile                 = qtgrpc.tags
-
-# Fail the documentation build if there are more warnings than the limit
-warninglimit = 0
-

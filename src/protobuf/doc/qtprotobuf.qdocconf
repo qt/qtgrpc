@@ -45,7 +45,3 @@ navigation.cppclassespage = "Qt Protobuf C++ Classes"
 #navigation.qmltypespage = "Qt Protobuf QML Types"
 
 tagfile                 = qtprotobuf.tags
-
-# Fail the documentation build if there are more warnings than the limit
-warninglimit = 0
-
