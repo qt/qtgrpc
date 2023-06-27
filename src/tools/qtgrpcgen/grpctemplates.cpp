@@ -90,7 +90,7 @@ const char *GrpcTemplates::ClientMethodDefinitionAsync2Template()
            "callback]() "
            "{\n"
            "        callback(reply);\n"
-           "    });\n"
+           "    }, Qt::SingleShotConnection);\n"
            "}\n\n";
 }
 

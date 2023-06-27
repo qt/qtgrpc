@@ -26,7 +26,7 @@ void Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QOb
     std::shared_ptr<QGrpcCallReply> reply = call<qtgrpc::tests::SimpleStringMessage>("testMethod"_L1, arg, options);
     QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, callback]() {
         callback(reply);
-    });
+    }, Qt::SingleShotConnection);
 }
 
 std::shared_ptr<QGrpcStream> Client::streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
@@ -49,7 +49,7 @@ void Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &ar
     std::shared_ptr<QGrpcCallReply> reply = call<qtgrpc::tests::SimpleStringMessage>("testMethodClientStream"_L1, arg, options);
     QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, callback]() {
         callback(reply);
-    });
+    }, Qt::SingleShotConnection);
 }
 
 std::shared_ptr<QGrpcStream> Client::streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
