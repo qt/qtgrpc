@@ -425,7 +425,7 @@ function(qt6_add_protobuf target)
                 PRIVATE
                     ${QT_CMAKE_EXPORT_NAMESPACE}::Platform
                     ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
-                    $<TARGET_PROPERTY:${target},LINK_LIBRARIES>
+                    $<GENEX_EVAL:$<TARGET_PROPERTY:${target},LINK_LIBRARIES>>
             )
 
             if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
