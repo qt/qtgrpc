@@ -36,15 +36,10 @@ QProtobufGenerator::~QProtobufGenerator() = default;
 bool QProtobufGenerator::Generate(const FileDescriptor *file,
                                   [[maybe_unused]] const std::string &parameter,
                                   GeneratorContext *generatorContext,
-                                  std::string *error) const
+                                  [[maybe_unused]] std::string *error) const
 {
     assert(file != nullptr);
     assert(generatorContext != nullptr);
-
-    if (file->syntax() != FileDescriptor::SYNTAX_PROTO3) {
-        *error = "Invalid proto used. qtprotobufgen only supports 'proto3' syntax";
-        return false;
-    }
 
     return GenerateMessages(file, generatorContext);
 }

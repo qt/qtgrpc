@@ -30,13 +30,9 @@ QGrpcGenerator::~QGrpcGenerator() = default;
 bool QGrpcGenerator::Generate(const FileDescriptor *file,
                               [[maybe_unused]] const std::string &parameter,
                               GeneratorContext *generatorContext,
-                              std::string *error) const
+                              [[maybe_unused]] std::string *error) const
 {
     assert(file != nullptr && generatorContext != nullptr);
-    if (file->syntax() != FileDescriptor::SYNTAX_PROTO3) {
-        *error = "Invalid proto used. qtgrpcgen only supports 'proto3' syntax";
-        return false;
-    }
 
     return GenerateClientServices(file, generatorContext);
 }
