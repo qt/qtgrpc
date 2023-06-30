@@ -300,19 +300,6 @@ void MessageDefinitionPrinter::printConstructors()
 {
     m_printer->Print(m_typeMap, CommonTemplates::ConstructorMessageDefinitionTemplate());
     m_printer->Print(CommonTemplates::EmptyBracesTemplate());
-
-    if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
-        m_printer->Print(
-                "Timestamp::Timestamp(const QDateTime &datetime) : "
-                "QProtobufMessage(&Timestamp::staticMetaObject),"
-                "m_seconds(datetime.toMSecsSinceEpoch() / 1000)\n"
-                ", m_nanos((datetime.toMSecsSinceEpoch() % 1000) * 1000)\n"
-                "{}\n"
-                "Timestamp::operator QDateTime() const\n"
-                "{\n"
-                "    return QDateTime::fromMSecsSinceEpoch(m_seconds * 1000 + m_nanos / 1000);\n"
-                "}\n");
-    }
 }
 
 void MessageDefinitionPrinter::printInitializationList()

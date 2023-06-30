@@ -98,11 +98,6 @@ void MessageDeclarationPrinter::printComparisonOperators()
 void MessageDeclarationPrinter::printConstructors()
 {
     m_printer->Print(m_typeMap, CommonTemplates::ConstructorMessageDeclarationTemplate());
-
-    if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
-        m_printer->Print("Timestamp(const QDateTime &datetime);\n"
-                        "operator QDateTime() const;\n");
-    }
 }
 
 void MessageDeclarationPrinter::printMaps()
