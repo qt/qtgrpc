@@ -78,8 +78,6 @@ void ClientDeclarationPrinter::printClientMethodsDeclaration()
         m_printer->Print("\n");
     }
     Outdent();
-
-    printPrivateBlock();
     m_printer->Print("\n");
 }
 

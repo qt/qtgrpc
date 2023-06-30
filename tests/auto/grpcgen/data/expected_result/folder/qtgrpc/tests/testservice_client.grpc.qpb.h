@@ -40,8 +40,6 @@ public:
     std::shared_ptr<QGrpcStream> streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QWeakPointer<qtgrpc::tests::SimpleStringMessage> &ret);
 
 
-private:
-
 };
 } // namespace TestService
 } // namespace qtgrpc::tests
