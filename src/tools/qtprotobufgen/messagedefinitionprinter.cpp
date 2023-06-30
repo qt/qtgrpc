@@ -129,6 +129,7 @@ void MessageDefinitionPrinter::printClassDefinitionPrivate()
     printMoveSemantic();
     printComparisonOperators();
     printGetters();
+    printPublicExtras();
 }
 
 void MessageDefinitionPrinter::printClassDefinition()
@@ -300,19 +301,6 @@ void MessageDefinitionPrinter::printConstructors()
 {
     m_printer->Print(m_typeMap, CommonTemplates::ConstructorMessageDefinitionTemplate());
     m_printer->Print(CommonTemplates::EmptyBracesTemplate());
-
-    if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
-        m_printer->Print(
-                "Timestamp::Timestamp(const QDateTime &datetime) : "
-                "QProtobufMessage(&Timestamp::staticMetaObject),"
-                "m_seconds(datetime.toMSecsSinceEpoch() / 1000)\n"
-                ", m_nanos((datetime.toMSecsSinceEpoch() % 1000) * 1000)\n"
-                "{}\n"
-                "Timestamp::operator QDateTime() const\n"
-                "{\n"
-                "    return QDateTime::fromMSecsSinceEpoch(m_seconds * 1000 + m_nanos / 1000);\n"
-                "}\n");
-    }
 }
 
 void MessageDefinitionPrinter::printInitializationList()
@@ -473,6 +461,25 @@ void MessageDefinitionPrinter::printGetters()
 void MessageDefinitionPrinter::printDestructor()
 {
     m_printer->Print(m_typeMap, "$classname$::~$classname$() = default;\n\n");
+}
+
+void MessageDefinitionPrinter::printPublicExtras()
+{
+    if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
+        m_printer->Print(
+                "Timestamp Timestamp::fromDateTime(const QDateTime &dateTime)\n"
+                "{\n"
+                "    Timestamp ts;\n"
+                "    ts.setSeconds(dateTime.toMSecsSinceEpoch() / 1000);\n"
+                "    ts.setNanos((dateTime.toMSecsSinceEpoch() % 1000) * 1000000);\n"
+                "    return ts;\n"
+                "}\n\n"
+                "QDateTime Timestamp::toDateTime() const\n"
+                "{\n"
+                "    return QDateTime::fromMSecsSinceEpoch(\n"
+                "            seconds() * 1000 + nanos() / 1000000, QTimeZone(QTimeZone::UTC));\n"
+                "}\n\n");
+    }
 }
 
 void MessageDefinitionPrinter::printClassRegistration(Printer *printer)

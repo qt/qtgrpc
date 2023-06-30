@@ -98,11 +98,6 @@ void MessageDeclarationPrinter::printComparisonOperators()
 void MessageDeclarationPrinter::printConstructors()
 {
     m_printer->Print(m_typeMap, CommonTemplates::ConstructorMessageDeclarationTemplate());
-
-    if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
-        m_printer->Print("Timestamp(const QDateTime &datetime);\n"
-                        "operator QDateTime() const;\n");
-    }
 }
 
 void MessageDeclarationPrinter::printMaps()
@@ -388,6 +383,14 @@ void MessageDeclarationPrinter::printOneofEnums()
             });
 }
 
+void MessageDeclarationPrinter::printPublicExtras()
+{
+    if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
+        m_printer->Print("static Timestamp fromDateTime(const QDateTime &dateTime);\n"
+                         "QDateTime toDateTime() const;\n");
+    }
+}
+
 void MessageDeclarationPrinter::printClassBody()
 {
     printProperties();
@@ -412,6 +415,7 @@ void MessageDeclarationPrinter::printClassBody()
 
     Indent();
     m_printer->Print(m_typeMap, CommonTemplates::MetaTypeRegistrationDeclaration());
+    printPublicExtras();
     Outdent();
 
     printPrivateBlock();

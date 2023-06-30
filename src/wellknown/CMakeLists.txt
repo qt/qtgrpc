@@ -19,7 +19,7 @@ qt_internal_add_protobuf_wellknown_types(ProtobufWellKnownTypes
     # field_mask
     # source_context
     # struct
-    # timestamp
+    timestamp
     # wrappers
     # type
     # api

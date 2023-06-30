@@ -75,6 +75,18 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
     registrationPrinter->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
                                CommonTemplates::InternalIncludeTemplate());
 
+    bool generateWellknownTimestamp = false;
+    common::iterateMessages(file, [&](const Descriptor *message) {
+        if (message->full_name() == "google.protobuf.Timestamp") {
+            generateWellknownTimestamp = true;
+            return;
+        }
+    });
+    if (generateWellknownTimestamp) {
+        sourcePrinter->Print({ { "include", "QtCore/QTimeZone" } },
+                             CommonTemplates::ExternalIncludeTemplate());
+    }
+
     sourcePrinter->Print({{"include", "QtProtobuf/qprotobufserializer.h"}},
                          CommonTemplates::ExternalIncludeTemplate());
     if (Options::instance().hasQml()) {
