@@ -79,8 +79,6 @@ void ClientDeclarationPrinter::printClientMethodsDeclaration()
         m_printer->Print("\n");
     }
     Outdent();
-
-    printPrivateBlock();
     Indent();
     for (int i = 0; i < m_descriptor->method_count(); i++) {
         const MethodDescriptor *method = m_descriptor->method(i);
