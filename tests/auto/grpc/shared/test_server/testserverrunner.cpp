@@ -8,6 +8,8 @@
 #include <QString>
 
 #include "testservice.grpc.pb.h"
+#include <message_latency_defs.h>
+
 #include <grpc++/grpc++.h>
 
 #include <memory>

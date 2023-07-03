@@ -26,6 +26,7 @@
 #  include <grpcpp/security/credentials.h>
 #endif
 #include "testservice_client.grpc.qpb.h"
+#include <message_latency_defs.h>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -156,7 +157,7 @@ private:
     void startServer()
     {
         serverProc = std::make_unique<QProcess>();
-        QString serverPath = QFINDTESTDATA("../shared/test_server/testserver");
+        QString serverPath = QFINDTESTDATA(TEST_GRPC_SERVER_PATH);
         QVERIFY2(!serverPath.isEmpty(), "testserver binary is missing");
         QObject::connect(serverProc.get(), &QProcess::readyReadStandardOutput, this,
                          [this] { qInfo() << serverProc->readAllStandardOutput(); });

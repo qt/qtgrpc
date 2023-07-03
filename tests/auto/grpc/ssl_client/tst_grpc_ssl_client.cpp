@@ -68,7 +68,7 @@ private:
     void startServer()
     {
         serverProc = std::make_unique<QProcess>();
-        QString serverPath = QFINDTESTDATA("../shared/test_server/securetestserver");
+        QString serverPath = QFINDTESTDATA(TEST_GRPC_SERVER_PATH);
         QVERIFY2(!serverPath.isEmpty(), "securetestserver binary is missing");
         serverProc->start(serverPath);
         serverProc->waitForStarted();
