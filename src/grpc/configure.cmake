@@ -19,7 +19,7 @@ qt_feature("qtgrpcgen" PRIVATE
     PURPOSE "Provides support for generating Qt-based gRPC services."
     DISABLE NOT QT_FEATURE_grpc
     CONDITION TARGET WrapProtobuf::WrapLibProtoc AND TARGET WrapProtobuf::WrapLibProtobuf AND
-        TARGET WrapProtoc::WrapProtoc
+        TARGET WrapProtoc::WrapProtoc AND TEST_libprotobuf AND TEST_libprotoc
 )
 
 # If CMAKE_CPP_LINK_PIE_SUPPORTED is set we build Qt libraries with -fPIE enabled. In this case
