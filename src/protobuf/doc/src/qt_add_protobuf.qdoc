@@ -39,7 +39,7 @@ link to.
 \list
     \include qtprotoccommon-options.qdocinc
     \li \c QML enables QProtobufMessage types in QML context by registering
-        them as a \c {QML module}. For such purpose, the \l {qt_add_qml_module}
+        them as a QML module. For such purpose, the \l {qt_add_qml_module}
         CMake macro is called inside the \c protobuf function.
         Every QML module has to define a \c URI name. Other QML modules may
         use this name in \l{qtqml-syntax-imports.html}{import statements}
