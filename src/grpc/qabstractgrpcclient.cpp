@@ -113,8 +113,6 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
         stream->abort();
 
     d->channel = channel;
-    for (auto &stream : d->activeStreams)
-        stream->abort();
 }
 
 QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret,
