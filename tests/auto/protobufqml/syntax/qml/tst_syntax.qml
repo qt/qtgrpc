@@ -89,20 +89,20 @@ TestCase {
                         field: MessageEnumReserved.Id, answer: 2 },
 
                     { tag: "MessageEnumReserved.enumValue0 == 0",
-                        field: MessageEnumReserved.enumValue0, answer: 0 },
+                        field: MessageEnumReserved.EnumValue0, answer: 0 },
                     { tag: "MessageEnumReserved.enumValue1 == 1",
-                        field: MessageEnumReserved.enumValue1, answer: 1 },
+                        field: MessageEnumReserved.EnumValue1, answer: 1 },
                     { tag: "MessageEnumReserved.enumValue2 == 2",
-                        field: MessageEnumReserved.enumValue2, answer: 2 },
+                        field: MessageEnumReserved.EnumValue2, answer: 2 },
 
-                    { tag: "MessageEnumReserved._enumUnderscoreValue0 == 0",
-                        field: MessageEnumReserved._enumUnderscoreValue0, answer: 0 },
-                    { tag: "MessageEnumReserved._EnumUnderscoreValue1 == 1",
-                        field: MessageEnumReserved._EnumUnderscoreValue1, answer: 1 },
+                    { tag: "MessageEnumReserved._enumUnderscoreValue0 is undefined",
+                        field: MessageEnumReserved._enumUnderscoreValue0, answer: undefined },
+                    { tag: "MessageEnumReserved._EnumUnderscoreValue1 is undefined",
+                        field: MessageEnumReserved._EnumUnderscoreValue1, answer: undefined }
                 ]
     }
 
-    function test_enumValues() {
+    function test_enumValues(data) {
         compare(data.field, data.answer)
     }
 }
