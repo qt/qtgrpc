@@ -7,6 +7,7 @@ qt_internal_add_tool(${target_name}
     INSTALL_DIR "${INSTALL_LIBEXECDIR}"
     TOOLS_TARGET Protobuf
     CORE_LIBRARY None
+    EXCEPTIONS
     SOURCES
         main.cpp
         qprotobufgenerator.cpp qprotobufgenerator.h

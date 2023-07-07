@@ -7,6 +7,7 @@ qt_internal_add_tool(${target_name}
     INSTALL_DIR "${INSTALL_LIBEXECDIR}"
     TOOLS_TARGET Grpc
     CORE_LIBRARY None
+    EXCEPTIONS
     SOURCES
         main.cpp
         qgrpcgenerator.cpp qgrpcgenerator.h
