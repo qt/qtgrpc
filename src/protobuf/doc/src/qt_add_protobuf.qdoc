@@ -12,7 +12,7 @@
 \cmakecommandsince 6.5
 
 Usually \c qtprotobufgen would be invoked through CMake using the
-\c qt_add_protobuf macro.
+\c qt_add_protobuf command.
 
 \badcode
     qt_add_protobuf(<target>
@@ -39,7 +39,7 @@ link to.
     \include qtprotoccommon-options.qdocinc
     \li \c QML enables QProtobufMessage types in QML context by registering
         them as a QML module. For such purpose, the \l {qt_add_qml_module}
-        CMake macro is called inside the \c protobuf function.
+        command is called inside the \c qt_add_protobuf command.
         Every QML module has to define a \c URI name. Other QML modules may
         use this name in \l{qtqml-syntax-imports.html}{import statements}
         to import the module into a user application. Use the \c QML_URI
@@ -47,16 +47,16 @@ link to.
         notation, e.g. \c {Qt.Protobuf.Package}.
         If \c QML_URI is omitted, then the protobuf package name will be used
         as the module \c URI.
-        Pay attention, the \c protobuf function always creates a new QML
-        module. It means it cannot be used to extend existing targets.
-        For example, following cases are prohibited:
+        Note that when \c QML argument is used, the \c qt_add_protobuf
+        command always creates a new QML module; therefore, it cannot be used
+        to extend existing targets. For example, following cases are invalid:
         \badcode
             qt_add_qml_module(targetname
                 ...
             )
 
             qt_add_protobuf(targetname
-            QML
+                QML
                 ...
             )
         \endcode
@@ -67,15 +67,15 @@ link to.
             )
 
             qt_add_protobuf(targetname
-            QML
+                QML
                 ...
             )
         \endcode
         \note If the \c QML_URI is skipped, all *.proto files specified
-        in the \c qt_add_protobuf function should have the same \c protobuf
+        in the \c qt_add_protobuf command should have the same \c protobuf
         package name, since it shall be used as a default \c URI for the
         resulting QML module.
-        \note You should escape creating several QML modules with the same
+        \note You should avoid creating several QML modules with the same
         \c QML_URI or proto package name, because it leads to import error
         in QML context.
 
