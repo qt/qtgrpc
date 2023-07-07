@@ -72,7 +72,7 @@ TestCase {
          compare(data.field, data.answer)
     }
 
-    function test_messageValuesUpdate(data) {
+    function test_messageValuesUpdate() {
         noPackageMessageUser.testField.testFieldInt = 43;
         compare(noPackageMessageUser.testField.testFieldInt, 43,
                 "noPackageExternalMessage message contains invalid value");
