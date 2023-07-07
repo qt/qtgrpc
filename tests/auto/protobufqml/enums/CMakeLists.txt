@@ -6,7 +6,7 @@ qt_internal_add_test(tst_protobuf_enumtypes_qml
     SOURCES
         tst_protobuf_enumtypes_qml.cpp
     LIBRARIES
-        Qt6::Qml
+        Qt::Qml
 )
 
 qt_policy(SET QTP0001 NEW)

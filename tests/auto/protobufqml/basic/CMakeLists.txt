@@ -6,7 +6,7 @@ qt_internal_add_test(tst_protobuf_basictypes_qml
     SOURCES
         tst_protobuf_basictypes_qml.cpp
     LIBRARIES
-        Qt6::Qml
+        Qt::Qml
 )
 
 qt_add_protobuf(tst_protobuf_basictypes_qml_plugin
