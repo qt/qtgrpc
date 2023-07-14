@@ -103,7 +103,8 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
                                                            const QGrpcCallOptions &options)
 {
     auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options);
-    QObject::connect(channelOperation.get(), &QGrpcChannelOperation::sendData, []() {
+    QObject::connect(channelOperation.get(), &QGrpcChannelOperation::sendData,
+                     channelOperation.get(), []() {
         Q_ASSERT_X(false, "QAbstractGrpcChannel::call",
                    "QAbstractGrpcChannel::call disallows sendData signal from "
                    "QGrpcChannelOperation");
@@ -128,7 +129,8 @@ QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringV
                                         QByteArrayView arg, const QGrpcCallOptions &options)
 {
     auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options);
-    QObject::connect(channelOperation.get(), &QGrpcChannelOperation::sendData, []() {
+    QObject::connect(channelOperation.get(), &QGrpcChannelOperation::sendData,
+                     channelOperation.get(), []() {
         Q_ASSERT_X(false, "QAbstractGrpcChannel::startServerStream",
                    "QAbstractGrpcChannel::startServerStream disallows sendData signal from "
                    "QGrpcChannelOperation");

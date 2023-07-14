@@ -73,7 +73,7 @@ QGrpcStatus QGrpcCallReply::waitForFinished() const
 {
     QEventLoop loop;
     QGrpcStatus status;
-    QObject::connect(this, &QGrpcCallReply::errorOccurred,
+    QObject::connect(this, &QGrpcCallReply::errorOccurred, this,
                      [&status, &loop](const QGrpcStatus &error) {
                          status = error;
                          loop.quit();
