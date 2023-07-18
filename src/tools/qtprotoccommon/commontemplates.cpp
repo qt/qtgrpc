@@ -506,6 +506,21 @@ const char *CommonTemplates::PrivateGetterMessageDefinitionTemplate()
            "}\n\n";
 }
 
+const char *CommonTemplates::ClearMessageDeclarationTemplate()
+{
+    return "void clear$property_name_cap$();\n";
+}
+
+const char *CommonTemplates::ClearMessageDefinitionTemplate()
+{
+    return "void $classname$::clear$property_name_cap$()\n{\n"
+           "    if (dptr->m_$property_name$) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$property_name$.reset();\n"
+           "    }\n"
+           "}\n\n";
+}
+
 const char *CommonTemplates::GetterMessageDeclarationTemplate()
 {
     return "$getter_type$ &$property_name$() const;\n";

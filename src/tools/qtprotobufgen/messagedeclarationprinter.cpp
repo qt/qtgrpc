@@ -222,10 +222,14 @@ void MessageDeclarationPrinter::printGetters()
                     return;
                 }
 
-                m_printer->Print(propertyMap,
-                                 common::isPureMessage(field)
-                                         ? CommonTemplates::GetterMessageDeclarationTemplate()
-                                         : CommonTemplates::GetterDeclarationTemplate());
+                if (common::isPureMessage(field)) {
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::GetterMessageDeclarationTemplate());
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::ClearMessageDeclarationTemplate());
+                } else {
+                    m_printer->Print(propertyMap, CommonTemplates::GetterDeclarationTemplate());
+                }
 
                 if (field->is_repeated()) {
                     m_printer->Print(propertyMap,

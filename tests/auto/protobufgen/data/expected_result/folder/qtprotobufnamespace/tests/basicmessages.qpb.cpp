@@ -1964,6 +1964,14 @@ SimpleStringMessage &ComplexMessage::testComplexField() const
     return *dptr->m_testComplexField;
 }
 
+void ComplexMessage::clearTestComplexField()
+{
+    if (dptr->m_testComplexField) {
+        dptr.detach();
+        dptr->m_testComplexField.reset();
+    }
+}
+
 void ComplexMessage::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {

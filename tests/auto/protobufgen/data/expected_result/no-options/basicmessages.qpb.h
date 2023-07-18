@@ -568,6 +568,7 @@ public:
     QtProtobuf::int32 testFieldInt() const;
 
     SimpleStringMessage &testComplexField() const;
+    void clearTestComplexField();
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     void setTestComplexField(const SimpleStringMessage &testComplexField);
     static void registerTypes();

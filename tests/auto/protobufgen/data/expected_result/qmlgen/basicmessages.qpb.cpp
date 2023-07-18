@@ -2009,6 +2009,14 @@ SimpleStringMessage &ComplexMessage::testComplexField() const
     return *dptr->m_testComplexField;
 }
 
+void ComplexMessage::clearTestComplexField()
+{
+    if (dptr->m_testComplexField) {
+        dptr.detach();
+        dptr->m_testComplexField.reset();
+    }
+}
+
 void ComplexMessage::setTestFieldInt_p(const int &testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {

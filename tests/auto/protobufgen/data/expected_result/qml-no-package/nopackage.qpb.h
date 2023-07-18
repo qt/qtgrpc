@@ -136,6 +136,7 @@ public:
     bool operator !=(const NoPackageExternalMessage &other) const;
 
     SimpleIntMessageExt &testField() const;
+    void clearTestField();
     void setTestField(const SimpleIntMessageExt &testField);
     static void registerTypes();
 
@@ -171,6 +172,7 @@ public:
     bool operator !=(const NoPackageMessage &other) const;
 
     SimpleIntMessage &testField() const;
+    void clearTestField();
     void setTestField(const SimpleIntMessage &testField);
     static void registerTypes();
 

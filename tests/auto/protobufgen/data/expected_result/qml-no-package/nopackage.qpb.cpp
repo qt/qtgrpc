@@ -352,6 +352,14 @@ SimpleIntMessageExt &NoPackageExternalMessage::testField() const
     return *dptr->m_testField;
 }
 
+void NoPackageExternalMessage::clearTestField()
+{
+    if (dptr->m_testField) {
+        dptr.detach();
+        dptr->m_testField.reset();
+    }
+}
+
 void NoPackageExternalMessage::setTestField_p(SimpleIntMessageExt *testField)
 {
     if (dptr->m_testField.get() != testField) {
@@ -482,6 +490,14 @@ SimpleIntMessage *NoPackageMessage::testField_p() const
 SimpleIntMessage &NoPackageMessage::testField() const
 {
     return *dptr->m_testField;
+}
+
+void NoPackageMessage::clearTestField()
+{
+    if (dptr->m_testField) {
+        dptr.detach();
+        dptr->m_testField.reset();
+    }
 }
 
 void NoPackageMessage::setTestField_p(SimpleIntMessage *testField)

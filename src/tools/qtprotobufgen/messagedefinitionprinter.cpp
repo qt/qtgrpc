@@ -405,6 +405,8 @@ void MessageDefinitionPrinter::printGetters()
                                      CommonTemplates::PrivateGetterMessageDefinitionTemplate());
                     m_printer->Print(propertyMap,
                                      CommonTemplates::GetterMessageDefinitionTemplate());
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::ClearMessageDefinitionTemplate());
                 } else {
                     m_printer->Print(propertyMap, CommonTemplates::GetterDefinitionTemplate());
                 }

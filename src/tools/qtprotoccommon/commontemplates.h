@@ -110,6 +110,8 @@ public:
     static const char *NotEqualOperatorDefinitionTemplate();
     static const char *PrivateGetterMessageDeclarationTemplate();
     static const char *PrivateGetterMessageDefinitionTemplate();
+    static const char *ClearMessageDeclarationTemplate();
+    static const char *ClearMessageDefinitionTemplate();
     static const char *GetterMessageDeclarationTemplate();
     static const char *GetterMessageDefinitionTemplate();
     static const char *PrivateGetterOneofDeclarationTemplate();
