@@ -14,6 +14,9 @@
 #  define QPB_QML_EXPORT
 #endif
 
+extern void qml_register_types_qtprotobufnamespace_tests();
+Q_GHS_KEEP_REFERENCE(qml_register_types_qtprotobufnamespace_tests);
+
 class QPB_QML_EXPORT QtprotobufnamespaceTestsPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
@@ -25,6 +28,8 @@ public:
     void registerTypes(const char *uri) override
     {
         Q_ASSERT(uri == QLatin1String("qtprotobufnamespace.tests"));
+        volatile auto registration = &qml_register_types_qtprotobufnamespace_tests;
+        Q_UNUSED(registration);
         qmlRegisterModule(uri, 1, 0);
         qmlRegisterUncreatableMetaObject(
             qtprotobufnamespace::tests::SimpleEnumMessage::staticMetaObject,

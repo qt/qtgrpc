@@ -9,6 +9,7 @@
 
 #include <ctype.h>
 #include <assert.h>
+#include <regex>
 
 namespace {
 const std::string_view asciiSpacing = " \t\n\r\f\v";
@@ -98,6 +99,13 @@ std::string deCapitalizeAsciiName(std::string name)
         return name;
     name[0] |= char(0x20);
     return name;
+}
+
+std::string escapedQmlUri(const std::string &uri)
+{
+    assert(!uri.empty());
+    static std::regex uriExceptionsRegex("[^a-zA-Z0-9]");
+    return std::regex_replace(uri, uriExceptionsRegex, "_");
 }
 
 std::string &rtrim(std::string &s)
