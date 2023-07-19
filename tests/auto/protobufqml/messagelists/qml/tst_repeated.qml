@@ -48,7 +48,6 @@ TestCase {
         rUInt64Msg.testRepeatedInt = [0, 65536, 200, 2]
         rBoolMsg.testRepeatedBool = [true, false, true, false, true, false]
 
-        //TODO: see QTBUG-113690
         rByteMsg.testRepeatedBytes = ["\x02hi!\x03\x00", "\x00"]
         //TODO: int64, fixed64, sfixed64 not recognized as numbers. See QTBUG-113516.
         rSFixedIntMsg.testRepeatedInt = [0, 65536, -65536, 2]
@@ -161,8 +160,6 @@ TestCase {
                    "Proper type support is not implemented")
         expectFail("rInt64Msg.testRepeatedInt[i] is a number",
                    "Proper type support is not implemented")
-        expectFail("rByteMsg.testRepeatedBytes[i] is a object",
-                   "Proper ComplexList type support is not implemented")
 
         compare(data.field, data.answer)
     }
