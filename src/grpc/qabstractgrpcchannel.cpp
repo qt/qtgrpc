@@ -30,6 +30,9 @@ QT_BEGIN_NAMESPACE
     You may reimplement this function in a subclass to define your own call
     mechanism behavior. QGrpcChannel or QGrpcHttp2Channel, which are full
     implementations of QAbstractGrpcChannel are recommended to use.
+
+    \note If a deadline is not specified in the \a options,
+    the call may be suspended indefinitely.
 */
 
 /*!

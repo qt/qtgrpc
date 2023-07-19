@@ -90,6 +90,8 @@ QGrpcCallOptions &QGrpcCallOptions::withMetadata(const QGrpcMetadata &metadata)
 /*!
     Returns deadline value for a call.
 
+    Deadline value controls the maximum execution time of an call or a stream.
+
     If value was not set returns empty std::optional.
 */
 std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadline() const
@@ -99,6 +101,9 @@ std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadline() const
 
 /*!
     Returns maximum retry attempts value for a call.
+
+    The value controls the maximum number of call or stream attempts,
+    including the original attempt.
 
     If value was not set returns empty std::optional.
 */

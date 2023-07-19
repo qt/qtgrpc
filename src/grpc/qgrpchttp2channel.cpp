@@ -236,6 +236,9 @@ QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
     The RPC method name is constructed by concatenating the \a method
     and \a service parameters and called with the \a args argument.
     Uses \a options argument to set additional parameter for the call.
+
+    \note If a deadline is not specified in the \a options,
+    the call may be suspended indefinitely.
 */
 QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView service,
                                     QByteArrayView args, QByteArray &ret,
