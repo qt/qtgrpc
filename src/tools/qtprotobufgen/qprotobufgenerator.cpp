@@ -195,11 +195,18 @@ void QProtobufGenerator::GenerateQmlPluginIntro(Printer *printer,
     }
     printer->Print("\n");
     printer->Print(CommonTemplates::QmlPluginExportMacroTemplate());
+
+    std::string qmlPackageEscaped = utils::escapedQmlUri(qmlPackageUri);
+    printer->Print({{"qml_package", qmlPackageUri},
+                    {"qml_package_escaped", qmlPackageEscaped}},
+                CommonTemplates::QmlExtensionPluginPreamble());
+
     printer->Print({{"plugin_name", pluginClassName}},
                     CommonTemplates::QmlExtensionPluginClass());
 
     printer->Print({{"plugin_name", pluginClassName},
-                     {"qml_package", qmlPackageUri}},
+                    {"qml_package", qmlPackageUri},
+                    {"qml_package_escaped", qmlPackageEscaped}},
                    CommonTemplates::QmlExtensionPluginClassBody());
 }
 

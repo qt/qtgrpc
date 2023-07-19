@@ -29,6 +29,7 @@ std::string removeFileSuffix(std::string fileName);
 std::string extractFileBasename(std::string fileName);
 std::string capitalizeAsciiName(std::string name);
 std::string deCapitalizeAsciiName(std::string name);
+std::string escapedQmlUri(const std::string &uri);
 std::string &rtrim(std::string &s);
 // trim from beginning of string (left)
 std::string &ltrim(std::string &s);

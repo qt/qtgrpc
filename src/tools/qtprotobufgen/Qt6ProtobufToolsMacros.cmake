@@ -419,26 +419,38 @@ function(qt6_add_protobuf target)
         target_sources(${target} PRIVATE ${type_registrations})
     endif()
 
+    if(arg_QML)
+        string(REPLACE "." "/" qml_module_output_path "${qml_uri}")
+        set(qml_module_output_full_path "${CMAKE_CURRENT_BINARY_DIR}/${qml_module_output_path}")
+
+        qt_policy(SET QTP0001 NEW)
+        qt6_add_qml_module(${target}
+            URI ${qml_uri}
+            NO_GENERATE_PLUGIN_SOURCE
+            NO_PLUGIN_OPTIONAL
+            PLUGIN_TARGET "${target}plugin"
+            VERSION 1.0
+            OUTPUT_DIRECTORY "${qml_module_output_full_path}"
+        )
+        target_sources(${target}plugin PRIVATE
+            "${output_directory}/${qml_plugin_base_name}plugin.cpp")
+        set_target_properties(${target}plugin
+            PROPERTIES
+                AUTOMOC ON
+        )
+        target_link_libraries(${target}plugin PRIVATE
+            ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
+        )
+
+        list(APPEND ${arg_OUTPUT_TARGETS} ${target}plugin)
+    endif()
+
     if(DEFINED arg_OUTPUT_HEADERS)
         set(${arg_OUTPUT_HEADERS} "${generated_headers}" PARENT_SCOPE)
     endif()
 
     if(DEFINED arg_OUTPUT_TARGETS)
         set(${arg_OUTPUT_TARGETS} "${${arg_OUTPUT_TARGETS}}" PARENT_SCOPE)
-    endif()
-
-    if(arg_QML)
-        qt_policy(SET QTP0001 NEW)
-        string(REPLACE "." "/" output_qml_plugin "${qml_uri}")
-        qt6_add_qml_module(${target}
-            URI ${qml_uri}
-            PLUGIN_TARGET ${target}
-            NO_PLUGIN_OPTIONAL
-            NO_GENERATE_PLUGIN_SOURCE
-            VERSION 1.0
-            OUTPUT_DIRECTORY
-                ${CMAKE_CURRENT_BINARY_DIR}/${output_qml_plugin}
-        )
     endif()
 endfunction()
 

@@ -13,6 +13,9 @@
 #  define QPB_QML_EXPORT
 #endif
 
+extern void qml_register_types_nopackage_uri_test();
+Q_GHS_KEEP_REFERENCE(qml_register_types_nopackage_uri_test);
+
 class QPB_QML_EXPORT NopackageUriTestPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
@@ -24,6 +27,8 @@ public:
     void registerTypes(const char *uri) override
     {
         Q_ASSERT(uri == QLatin1String("nopackage.uri.test"));
+        volatile auto registration = &qml_register_types_nopackage_uri_test;
+        Q_UNUSED(registration);
         qmlRegisterModule(uri, 1, 0);
         qmlRegisterUncreatableMetaObject(
             ::TestEnumGadget::staticMetaObject,

@@ -1027,6 +1027,12 @@ const char *CommonTemplates::QmlPluginExportMacroTemplate()
            "#endif\n";
 }
 
+const char *CommonTemplates::QmlExtensionPluginPreamble()
+{
+    return "\nextern void qml_register_types_$qml_package_escaped$();\n"
+           "Q_GHS_KEEP_REFERENCE(qml_register_types_$qml_package_escaped$);\n";
+}
+
 const char *CommonTemplates::QmlExtensionPluginClass()
 {
     return "\nclass QPB_QML_EXPORT $plugin_name$Plugin : public QQmlExtensionPlugin\n";
@@ -1042,6 +1048,8 @@ const char *CommonTemplates::QmlExtensionPluginClassBody()
            "    void registerTypes(const char *uri) override\n"
            "    {\n"
            "        Q_ASSERT(uri == QLatin1String(\"$qml_package$\"));\n"
+           "        volatile auto registration = &qml_register_types_$qml_package_escaped$;\n"
+           "        Q_UNUSED(registration);\n"
            "        qmlRegisterModule(uri, 1, 0);\n";
 }
 
