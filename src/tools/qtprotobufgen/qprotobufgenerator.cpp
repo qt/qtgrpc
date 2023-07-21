@@ -193,14 +193,11 @@ void QProtobufGenerator::GenerateQmlPluginIntro(Printer *printer,
         printer->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
                        CommonTemplates::InternalIncludeTemplate());
     }
-    if (Options::instance().exportMacro().empty()) {
-        printer->Print({{"plugin_name", pluginClassName}},
-                       CommonTemplates::QmlExtensionPluginClassNoExport());
-    } else {
-        printer->Print({{"export_macro", Options::instance().exportMacro()},
-                         {"plugin_name", pluginClassName}},
-                       CommonTemplates::QmlExtensionPluginClass());
-    }
+    printer->Print("\n");
+    printer->Print(CommonTemplates::QmlPluginExportMacroTemplate());
+    printer->Print({{"plugin_name", pluginClassName}},
+                    CommonTemplates::QmlExtensionPluginClass());
+
     printer->Print({{"plugin_name", pluginClassName},
                      {"qml_package", qmlPackageUri}},
                    CommonTemplates::QmlExtensionPluginClassBody());
