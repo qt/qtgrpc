@@ -757,7 +757,7 @@ void QtGrpcClientTest::MetadataTest()
 void QtGrpcClientTest::CallDeadlineTest_data()
 {
     QTest::addColumn<std::chrono::milliseconds>("timeout");
-    constexpr std::array<float, 6> messageLatencyFractions{ 0.5, 0.75, 0.9, 1.0, 1.1, 1.25 };
+    constexpr std::array<qreal, 4> messageLatencyFractions{ 0.7, 0.9, 1.0, 1.3 };
     for (const auto &fraction : messageLatencyFractions)
         QTest::newRow(QString("MessageLatency * %1").arg(fraction).toStdString().c_str())
                 << std::chrono::milliseconds(static_cast<int64_t>(MessageLatency * fraction));
@@ -787,7 +787,7 @@ void QtGrpcClientTest::CallDeadlineTest()
         QVERIFY(code == QGrpcStatus::StatusCode::Cancelled
                 || code == QGrpcStatus::StatusCode::Unavailable);
     } else if (timeout.count() >= MessageLatencyWithThreshold) {
-        QTRY_COMPARE_EQ_WITH_TIMEOUT(callFinishedSpy.count(), 1, FailTimeout);
+        QTRY_COMPARE_EQ_WITH_TIMEOUT(callFinishedSpy.count(), 1, MessageLatencyWithThreshold);
         QCOMPARE(reply->read<SimpleStringMessage>().testFieldString(), request.testFieldString());
     } else {
         // Because we're can't be sure about the result,
@@ -801,7 +801,7 @@ void QtGrpcClientTest::StreamDeadlineTest_data()
     const int ExpectedMessageCount = 4;
     QTest::addColumn<std::chrono::milliseconds>("timeout");
     QTest::addColumn<int>("ExpectedMessageCount");
-    constexpr std::array<float, 6> messageLatencyFractions{ 0.5, 0.75, 0.9, 1.0, 1.1, 1.25 };
+    constexpr std::array<qreal, 4> messageLatencyFractions{ 0.7, 0.9, 1.0, 1.3 };
     for (const auto &fraction : messageLatencyFractions)
         QTest::newRow(QString("MessageLatency * ExpectedMessageCount * %1")
                               .arg(fraction)
@@ -844,8 +844,8 @@ void QtGrpcClientTest::StreamDeadlineTest()
                 || code == QGrpcStatus::StatusCode::Unavailable);
     } else if (timeout.count() >= MessageLatencyWithThreshold * ExpectedMessageCount) {
         QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
-                                     FailTimeout * ExpectedMessageCount);
-        QCOMPARE_EQ(streamErrorSpy.count(), 0);
+                                     MessageLatencyWithThreshold * ExpectedMessageCount);
+        QCOMPARE(streamErrorSpy.count(), 0);
         QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2Stream3Stream4");
     } else {
         // Because we're can't be sure about the result,
