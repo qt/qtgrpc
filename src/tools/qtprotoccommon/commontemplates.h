@@ -202,6 +202,8 @@ public:
     static const char *QtProtobufFieldEnum();
 
     static const char *ExportMacroTemplate();
+
+    static const char *QmlPluginExportMacroTemplate();
     static const char *QmlExtensionPluginClass();
     static const char *QmlExtensionPluginClassNoExport();
     static const char *QmlExtensionPluginClassBody();

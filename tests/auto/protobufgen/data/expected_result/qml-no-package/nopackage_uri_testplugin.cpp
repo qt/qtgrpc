@@ -7,7 +7,13 @@
 #include "nopackage.qpb.h"
 #include "nopackageexternal.qpb.h"
 
-class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT NopackageUriTestPlugin : public QQmlExtensionPlugin
+#if defined(QT_SHARED) || !defined(QT_STATIC)
+#  define QPB_QML_EXPORT Q_DECL_EXPORT
+#else
+#  define QPB_QML_EXPORT
+#endif
+
+class QPB_QML_EXPORT NopackageUriTestPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)

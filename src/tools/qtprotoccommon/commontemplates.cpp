@@ -1033,14 +1033,18 @@ const char *CommonTemplates::ExportMacroTemplate()
            "#endif\n";
 }
 
-const char *CommonTemplates::QmlExtensionPluginClass()
+const char *CommonTemplates::QmlPluginExportMacroTemplate()
 {
-    return "\nclass QPB_$export_macro$_EXPORT $plugin_name$Plugin : public QQmlExtensionPlugin\n";
+    return "#if defined(QT_SHARED) || !defined(QT_STATIC)\n"
+           "#  define QPB_QML_EXPORT Q_DECL_EXPORT\n"
+           "#else\n"
+           "#  define QPB_QML_EXPORT\n"
+           "#endif\n";
 }
 
-const char *CommonTemplates::QmlExtensionPluginClassNoExport()
+const char *CommonTemplates::QmlExtensionPluginClass()
 {
-    return "\nclass $plugin_name$Plugin : public QQmlExtensionPlugin\n";
+    return "\nclass QPB_QML_EXPORT $plugin_name$Plugin : public QQmlExtensionPlugin\n";
 }
 
 const char *CommonTemplates::QmlExtensionPluginClassBody()
