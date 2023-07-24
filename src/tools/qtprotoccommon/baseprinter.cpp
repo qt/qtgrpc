@@ -6,8 +6,6 @@
 #include "commontemplates.h"
 #include <google/protobuf/io/printer.h>
 
-#include <string.h>
-
 using namespace ::google::protobuf;
 using namespace ::google::protobuf::io;
 using namespace ::qtprotoccommon;
