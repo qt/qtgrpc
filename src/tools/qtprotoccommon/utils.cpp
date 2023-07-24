@@ -7,8 +7,8 @@
 #include <sstream>
 #include <string_view>
 
-#include <ctype.h>
-#include <assert.h>
+#include <cctype>
+#include <cassert>
 
 namespace {
 const std::string_view asciiSpacing = " \t\n\r\f\v";
