@@ -145,6 +145,7 @@ private slots:
 private:
     QString m_grpcgen;
     QString m_cmakeGenerated;
+    QString m_qmlCmakeGenerated;
     QString m_commandLineGenerated;
     QString m_expectedResult;
     QString m_protoFiles;
@@ -156,6 +157,11 @@ void tst_qtgrpcgen::initTestCase()
 
     m_cmakeGenerated = QFINDTESTDATA("qt_grpc_generated");
     QVERIFY(!m_cmakeGenerated.isEmpty());
+
+#ifdef HAVE_QML
+    m_qmlCmakeGenerated = QFINDTESTDATA("qt_grpc_generated_qml");
+    QVERIFY(!m_qmlCmakeGenerated.isEmpty());
+#endif
 
     m_expectedResult = QFINDTESTDATA("data/expected_result");
     QVERIFY(!m_expectedResult.isEmpty());
@@ -186,6 +192,7 @@ void tst_qtgrpcgen::cmakeGeneratedFile_data()
     QTest::addColumn<QString>("fileName");
     QTest::addColumn<QString>("folder");
     QTest::addColumn<QString>("extension");
+    QTest::addColumn<QString>("cmakeGenerationFolder");
 
     const QLatin1StringView extensions[] = { cppProtobufGenExtension,
                                              headerProtobufGenExtension,
@@ -196,8 +203,22 @@ void tst_qtgrpcgen::cmakeGeneratedFile_data()
         QTest::addRow("testservice%s", extension.data())
                 << "testservice"
                 << "/folder/qtgrpc/tests/"
-                << QString(extension);
+                << QString(extension)
+                << m_cmakeGenerated;
     }
+
+#ifdef HAVE_QML
+    const QLatin1StringView qmlExtensions[] = { cppExtension,
+                                                headerExtension };
+
+    for (const auto extension : qmlExtensions) {
+        QTest::addRow("qmltestservice%s", extension.data())
+                << "qmltestservice"
+                << "/qml/"
+                << QString(extension)
+                << m_qmlCmakeGenerated;
+    }
+#endif
 }
 
 void tst_qtgrpcgen::cmakeGeneratedFile()
@@ -205,9 +226,10 @@ void tst_qtgrpcgen::cmakeGeneratedFile()
     QFETCH(QString, fileName);
     QFETCH(QString, folder);
     QFETCH(QString, extension);
+    QFETCH(QString, cmakeGenerationFolder);
 
     QFile expectedResultFile(m_expectedResult + folder + fileName + extension);
-    QFile generatedFile(m_cmakeGenerated + folder + fileName + extension);
+    QFile generatedFile(cmakeGenerationFolder + folder + fileName + extension);
 
     QVERIFY(expectedResultFile.exists());
     QVERIFY(generatedFile.exists());

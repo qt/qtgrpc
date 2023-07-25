@@ -18,6 +18,7 @@ public:
     static const char *GrpcServiceFileSuffix();
 
     static const char *ClientConstructorDefinitionTemplate();
+    static const char *ClientQmlConstructorDefinitionTemplate();
 
     static const char *ClientMethodDeclarationSyncTemplate();
     static const char *ClientMethodDeclarationAsyncTemplate();

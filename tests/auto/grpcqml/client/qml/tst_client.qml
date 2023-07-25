@@ -19,7 +19,7 @@ TestCase {
     property var errorCallback: function() { console.log("Error is handled!") }
 
     function createItem() {
-        return Qt.createQmlObject("import QtQuick; import qtgrpc.tests; Client {  }", root)
+        return Qt.createQmlObject("import QtQuick; import qtgrpc.tests; QmlClient {  }", root)
     }
 
     function test_1initialization() {

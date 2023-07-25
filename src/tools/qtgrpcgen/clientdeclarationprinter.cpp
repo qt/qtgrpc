@@ -47,8 +47,6 @@ void ClientDeclarationPrinter::printOpenNamespace()
 void ClientDeclarationPrinter::printClientClass()
 {
     m_printer->Print(m_typeMap, GrpcTemplates::ChildClassDeclarationTemplate());
-    if (Options::instance().hasQml())
-        m_printer->Print(m_typeMap, GrpcTemplates::ClientQmlDeclarationTemplate());
 }
 
 void ClientDeclarationPrinter::printConstructor()
@@ -61,7 +59,7 @@ void ClientDeclarationPrinter::printConstructor()
 void ClientDeclarationPrinter::printClientMethodsDeclaration()
 {
     Indent();
-    for (int i = 0; i < m_descriptor->method_count(); i++) {
+    for (int i = 0; i < m_descriptor->method_count(); ++i) {
         const MethodDescriptor *method = m_descriptor->method(i);
         MethodMap parameters = common::produceMethodMap(method, m_typeMap["classname"]);
 
@@ -72,8 +70,6 @@ void ClientDeclarationPrinter::printClientMethodsDeclaration()
             m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationSyncTemplate());
             m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationAsyncTemplate());
             m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationAsync2Template());
-            if (Options::instance().hasQml())
-                m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationQmlTemplate());
         }
         m_printer->Print("\n");
     }

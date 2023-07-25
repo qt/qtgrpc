@@ -59,6 +59,14 @@ const char *GrpcTemplates::ClientConstructorDefinitionTemplate()
            "}\n\n";
 }
 
+const char *GrpcTemplates::ClientQmlConstructorDefinitionTemplate()
+{
+    return "\n$classname$::$classname$(QObject *parent)\n"
+           "    : $parent_class$(parent)\n"
+           "{\n"
+           "}\n\n";
+}
+
 const char *GrpcTemplates::ClientMethodDefinitionSyncTemplate()
 {
     return "QGrpcStatus $classname$::$method_name$(const $param_type$ &$param_name$, "

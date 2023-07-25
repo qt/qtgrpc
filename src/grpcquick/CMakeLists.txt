@@ -15,6 +15,7 @@ qt_internal_add_qml_module(GrpcQuick
     LIBRARIES
         Qt::Core
         Qt::Grpc
+    PUBLIC_LIBRARIES
         Qt::Quick
     GENERATE_CPP_EXPORTS
     GENERATE_PRIVATE_CPP_EXPORTS

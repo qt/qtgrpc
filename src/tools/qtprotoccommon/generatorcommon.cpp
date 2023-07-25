@@ -399,6 +399,26 @@ TypeMap common::produceClientTypeMap(const ServiceDescriptor *service, const Des
              { "export_macro", exportMacro } };
 }
 
+TypeMap common::produceQmlClientTypeMap(const ServiceDescriptor *service, const Descriptor *scope)
+{
+    const std::string name = "QmlClient";
+    const std::string fullName = "QmlClient";
+    const std::string scopeName = service->name();
+    const std::string exportMacro = common::buildExportMacro(Options::instance().exportMacro());
+
+    const std::string namespaces = getFullNamespace(service, "::");
+    const std::string scopeNamespaces = getScopeNamespace(namespaces,
+                                                          getFullNamespace(scope, "::"));
+
+    return { { "classname", name },
+             { "classname_low_case", utils::deCapitalizeAsciiName(name) },
+             { "full_type", fullName },
+             { "scope_type", scopeName },
+             { "scope_namespaces", scopeNamespaces },
+             { "parent_class", "Client" },
+             { "export_macro", exportMacro } };
+}
+
 bool common::isQtType(const FieldDescriptor *field)
 {
     const auto fullName = field->message_type()->full_name();

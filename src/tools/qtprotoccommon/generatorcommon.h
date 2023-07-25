@@ -66,6 +66,8 @@ struct common {
     static MethodMap produceMethodMap(const MethodDescriptor *method, const std::string &scope);
     static TypeMap produceServiceTypeMap(const ServiceDescriptor *service, const Descriptor *scope);
     static TypeMap produceClientTypeMap(const ServiceDescriptor *service, const Descriptor *scope);
+    static TypeMap produceQmlClientTypeMap(const ServiceDescriptor *service,
+                                           const Descriptor *scope);
     static std::string qualifiedName(const std::string &name);
     static bool isOneofField(const FieldDescriptor *field);
     static bool isLocalEnum(const EnumDescriptor *type, const google::protobuf::Descriptor *scope);

@@ -34,3 +34,29 @@ qt_add_grpc(tst_qtgrpcgen CLIENT
 )
 
 qt_autogen_tools_initial_setup(tst_qtgrpcgen)
+
+if(TARGET Qt6::Qml)
+    qt_internal_extend_target(tst_qtgrpcgen
+        DEFINES
+            HAVE_QML
+    )
+
+    qt_add_protobuf(tst_qtgrpcgen_plugin
+        OUTPUT_DIRECTORY
+            "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated_qml/qml"
+        PROTO_FILES
+            ../shared/data/proto/testservice.proto
+    )
+
+    qt_add_grpc(tst_qtgrpcgen_plugin CLIENT
+        PROTO_FILES
+            ../shared/data/proto/testservice.proto
+        QML
+        OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated_qml/qml"
+    )
+
+    qt_autogen_tools_initial_setup(tst_qtgrpcgen_plugin)
+    if(QT_BUILD_STANDALONE_TESTS)
+        qt_import_qml_plugins(tst_qtgrpcgen_plugin)
+    endif()
+endif()

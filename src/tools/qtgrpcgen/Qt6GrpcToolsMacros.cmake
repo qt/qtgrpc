@@ -48,6 +48,11 @@ function(_qt_internal_grpc_preparse_proto_files type
             list(APPEND output_files
                 "${folder_path}${basename}_client.grpc.qpb.h"
                 "${folder_path}${basename}_client.grpc.qpb.cpp")
+            if(arg_QML)
+                list(APPEND output_files
+                    "${folder_path}qml${basename}_client.grpc.qpb.h"
+                    "${folder_path}qml${basename}_client.grpc.qpb.cpp")
+            endif()
         else()
             message(FATAL_ERROR "Unknown gRPC target type: '${type}'.\n"
                 "Supported types: CLIENT.")
@@ -189,6 +194,10 @@ function(qt6_add_grpc target type)
     target_link_libraries(${target} PRIVATE
         ${QT_CMAKE_EXPORT_NAMESPACE}::Grpc
     )
+    if(arg_QML)
+        target_link_libraries(${target} PRIVATE
+            ${QT_CMAKE_EXPORT_NAMESPACE}::GrpcQuick)
+    endif()
 
     if(DEFINED arg_OUTPUT_HEADERS)
         set(${arg_OUTPUT_HEADERS} "${generated_headers}" PARENT_SCOPE)
