@@ -15,6 +15,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     Protobuf
     Grpc
     GrpcQuick
+    GrpcTools
     Quick
 )
 

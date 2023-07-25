@@ -16,6 +16,10 @@ if(NOT TARGET WrapgRPC::WrapgRPCPlugin OR NOT TARGET WrapProtoc::WrapProtoc
     return()
 endif()
 
+# Avoid "Protobuf requires at least C++11." errors
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set(proto_files "${CMAKE_CURRENT_LIST_DIR}/../proto/exampleservice.proto")
 set(out_dir ${CMAKE_CURRENT_BINARY_DIR})
 
