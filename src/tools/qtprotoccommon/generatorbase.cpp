@@ -29,6 +29,11 @@ bool GeneratorBase::GenerateAll(const std::vector<const FileDescriptor *> &files
     return CodeGenerator::GenerateAll(files, parameter, generatorContext, error);
 }
 
+uint64_t GeneratorBase::GetSupportedFeatures() const
+{
+    return CodeGenerator::Feature::FEATURE_PROTO3_OPTIONAL;
+}
+
 std::string GeneratorBase::generateBaseName(const FileDescriptor *file, const std::string &name)
 {
     std::string outFileBasename;
