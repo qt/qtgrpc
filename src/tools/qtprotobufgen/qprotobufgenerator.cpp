@@ -40,7 +40,6 @@ bool QProtobufGenerator::Generate(const FileDescriptor *file,
 {
     assert(file != nullptr);
     assert(generatorContext != nullptr);
-
     return GenerateMessages(file, generatorContext);
 }
 
@@ -254,6 +253,7 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     }
 
     bool hasOneofFields = false;
+    bool hasOptionalFields = false;
     std::unordered_set<std::string> qtTypesSet;
     common::iterateMessages(
             file, [&](const Descriptor *message) {
@@ -274,11 +274,22 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
                                                 + "/" + field->message_type()->name());
                         qtTypesSet.insert(field->message_type()->file()->package());
                     }
+                    if (field->has_optional_keyword())
+                        hasOptionalFields = true;
                 }
             });
 
     if (hasOneofFields)
         externalIncludes.insert("QtProtobuf/qprotobufoneof.h");
+
+    if (hasOptionalFields) {
+        std::cerr << "WARNING: '" << file->name() << "' contains 'optional' fields.\n"
+                     "\nOptional fields are not supported in this qtprotobufgen version\n"
+                     "The generator disregards the keyword, but generates the regular\n"
+                     "fields instead.\n"
+                     "\nPlease upgrade Qt to the most recent version to get full support\n"
+                     "of the 'optional' fields.\n";
+    }
 
     for (const auto &qtTypeInclude: qtTypesSet) {
         std::string qtTypeLower = qtTypeInclude;

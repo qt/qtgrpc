@@ -37,6 +37,8 @@ public:
                      std::string *error) const override;
     bool HasGenerateAll() const override { return true; }
 
+    uint64_t GetSupportedFeatures() const override;
+
     static void printDisclaimer(::google::protobuf::io::Printer *printer);
     void OpenFileNamespaces(const ::google::protobuf::FileDescriptor *file,
                             google::protobuf::io::Printer *printer) const;
