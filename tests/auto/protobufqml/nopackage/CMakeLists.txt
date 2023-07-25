@@ -9,7 +9,7 @@ qt_internal_add_test(tst_protobuf_nopackage_qml
         Qt::Qml
 )
 
-qt_add_protobuf(tst_protobuf_nopackage_qml_plugin
+qt_add_protobuf(tst_protobuf_nopackage_qml_gen
     PROTO_FILES
         ../../shared/data/proto/nopackage.proto
         ../../shared/data/proto/nopackageexternal.proto
@@ -27,10 +27,11 @@ qt_add_qml_module(tst_protobuf_nopackage_qml
 )
 
 qt_autogen_tools_initial_setup(tst_protobuf_nopackage_qml)
-qt_autogen_tools_initial_setup(tst_protobuf_nopackage_qml_plugin)
+qt_autogen_tools_initial_setup(tst_protobuf_nopackage_qml_gen)
+qt_autogen_tools_initial_setup(tst_protobuf_nopackage_qml_genplugin)
 
 if(QT_BUILD_STANDALONE_TESTS)
     qt_import_qml_plugins(tst_protobuf_nopackage_qml)
-    qt_import_qml_plugins(tst_protobuf_nopackage_qml_plugin)
+    qt_import_qml_plugins(tst_protobuf_nopackage_qml_gen)
 endif()
 

@@ -30,6 +30,7 @@ qt_add_qml_module(tst_nestedtypes_qtprotobuf_qmltest
 
 qt_autogen_tools_initial_setup(tst_nestedtypes_qtprotobuf_qmltest)
 qt_autogen_tools_initial_setup(tst_nestedtypes_qtprotobuf_qml)
+qt_autogen_tools_initial_setup(tst_nestedtypes_qtprotobuf_qmlplugin)
 
 qt_add_protobuf(tst_externalpackage_qtprotobuf_qml
     PROTO_FILES
@@ -39,6 +40,7 @@ qt_add_protobuf(tst_externalpackage_qtprotobuf_qml
 )
 
 qt_autogen_tools_initial_setup(tst_externalpackage_qtprotobuf_qml)
+qt_autogen_tools_initial_setup(tst_externalpackage_qtprotobuf_qmlplugin)
 
 if(QT_BUILD_STANDALONE_TESTS)
     qt_import_qml_plugins(tst_nestedtypes_qtprotobuf_qmltest)

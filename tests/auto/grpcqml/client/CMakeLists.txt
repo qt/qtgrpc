@@ -10,7 +10,7 @@ qt_internal_add_test(tst_client_qml
         Qt6::Grpc
 )
 
-qt_add_grpc(tst_client_qml_plugin CLIENT
+qt_add_grpc(tst_client_qml_gen CLIENT
     PROTO_FILES
         ../../shared/data/proto/testservice.proto
     QML
@@ -18,7 +18,7 @@ qt_add_grpc(tst_client_qml_plugin CLIENT
         "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated_qml"
 )
 
-qt_add_protobuf(tst_client_qml_plugin
+qt_add_protobuf(tst_client_qml_gen
     PROTO_FILES
         ../../shared/data/proto/testservice.proto
     QML
@@ -37,10 +37,11 @@ qt_add_qml_module(tst_client_qml
 )
 
 qt_autogen_tools_initial_setup(tst_client_qml)
-qt_autogen_tools_initial_setup(tst_client_qml_plugin)
+qt_autogen_tools_initial_setup(tst_client_qml_gen)
+qt_autogen_tools_initial_setup(tst_client_qml_genplugin)
 
 if(QT_BUILD_STANDALONE_TESTS)
     qt_import_qml_plugins(tst_client_qml)
-    qt_import_qml_plugins(tst_client_qml_plugin)
+    qt_import_qml_plugins(tst_client_qml_gen)
 endif()
 
