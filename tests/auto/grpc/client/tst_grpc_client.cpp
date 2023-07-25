@@ -157,16 +157,20 @@ private:
     void startServer()
     {
         serverProc = std::make_unique<QProcess>();
-        QString serverPath = QFINDTESTDATA(TEST_GRPC_SERVER_PATH);
-        QVERIFY2(!serverPath.isEmpty(), "testserver binary is missing");
         QObject::connect(serverProc.get(), &QProcess::readyReadStandardOutput, this,
                          [this] { qInfo() << serverProc->readAllStandardOutput(); });
+        QString serverPath = QFINDTESTDATA(TEST_GRPC_SERVER_PATH);
+        QVERIFY2(!serverPath.isEmpty(), "testserver binary is missing");
+        serverProc->start(serverPath);
+        serverProc->waitForStarted(5000);
+        // Wait for the 'Server listening' log from the server
+        serverProc->waitForReadyRead(2000);
+        auto serverData = serverProc->readAllStandardError();
+        QVERIFY2(serverData.startsWith("Server listening"),
+                 "The server was not ready within the deadline.");
+        // Connect remaining error logs to the server
         QObject::connect(serverProc.get(), &QProcess::readyReadStandardError, this,
                          [this] { qInfo() << serverProc->readAllStandardError(); });
-        serverProc->start(serverPath);
-        serverProc->waitForStarted();
-        // Extra time for the server to setup
-        QTest::qSleep(1000);
     }
 
     std::unique_ptr<QProcess> serverProc;
