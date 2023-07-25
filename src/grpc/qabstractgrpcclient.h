@@ -26,12 +26,15 @@ class QAbstractGrpcClientPrivate;
 class Q_GRPC_EXPORT QAbstractGrpcClient : public QObject
 {
     Q_OBJECT
-
+    Q_PROPERTY(std::shared_ptr<QAbstractGrpcChannel> channel READ channel
+                       WRITE attachChannel NOTIFY channelChanged)
 public:
     void attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel);
+    const std::shared_ptr<QAbstractGrpcChannel> &channel();
 
 Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status);
+    void channelChanged();
 
 protected:
     explicit QAbstractGrpcClient(QLatin1StringView service, QObject *parent = nullptr);
@@ -119,5 +122,8 @@ private:
 };
 
 QT_END_NAMESPACE
+
+Q_DECLARE_METATYPE(QAbstractGrpcChannel *)
+Q_DECLARE_METATYPE(std::shared_ptr<QAbstractGrpcChannel>)
 
 #endif // QABSTRACTGRPCLIENT_H

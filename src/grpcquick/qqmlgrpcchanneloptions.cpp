@@ -25,16 +25,14 @@ void QQmlGrpcChannelOptions::setHost(const QUrl &newUrl)
 
 qint64 QQmlGrpcChannelOptions::deadline() const
 {
-    if (!m_options.deadline())
-        return 0;
-
-    return (*m_options.deadline()).count();
+    std::chrono::milliseconds ms = m_options.deadline().value_or(std::chrono::milliseconds(0));
+    return ms.count();
 }
 
 void QQmlGrpcChannelOptions::setDeadline(qint64 value)
 {
-    std::chrono::milliseconds seconds(value);
-    m_options.withDeadline(seconds);
+    std::chrono::milliseconds ms(value);
+    m_options.withDeadline(ms);
     emit deadlineChanged();
 }
 

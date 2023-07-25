@@ -113,6 +113,17 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
         stream->abort();
 
     d->channel = channel;
+    emit channelChanged();
+}
+
+/*!
+ * \brief channel is getter method.
+ * \return pointer to currently attached channel.
+ */
+const std::shared_ptr<QAbstractGrpcChannel> &QAbstractGrpcClient::channel()
+{
+    Q_D(QAbstractGrpcClient);
+    return d->channel;
 }
 
 QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret,

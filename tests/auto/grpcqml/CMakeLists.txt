@@ -4,3 +4,4 @@
 add_subdirectory(client)
 add_subdirectory(metadata)
 add_subdirectory(options)
+add_subdirectory(http2channel)
