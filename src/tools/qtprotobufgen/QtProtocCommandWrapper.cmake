@@ -20,4 +20,6 @@ execute_process(COMMAND
 
 if(NOT result EQUAL 0)
     message(FATAL_ERROR "Unable to execute ${PROTOC_EXECUTABLE}:(${result}) ${output}")
+elseif(output)
+    message("${output}")
 endif()
