@@ -275,6 +275,7 @@ function(qt6_add_protobuf target)
         set(output_directory "${arg_OUTPUT_DIRECTORY}")
     endif()
 
+    set(extra_include_directories "")
     set(cpp_sources "")
     set(idx 0)
     foreach(f IN LISTS proto_files)
@@ -286,6 +287,8 @@ function(qt6_add_protobuf target)
             endif()
             string(REPLACE "." "/" package_full_path "${package}/")
             math(EXPR idx "${idx} + 1")
+            list(APPEND extra_include_directories
+                "$<BUILD_INTERFACE:${output_directory}/${package_full_path}>")
         else()
             set(package_full_path "")
         endif()
@@ -384,6 +387,10 @@ function(qt6_add_protobuf target)
             PRIVATE "/Zc:__cplusplus" "/permissive-" "/bigobj")
     endif()
 
+    # TODO: adding these include paths might cause the ambiguous include handling if
+    # two different packages contain messages with the same name. This should be fixed
+    # in moc and qmltypesregistar, see QTBUG-115499.
+    target_include_directories(${target} PRIVATE ${extra_include_directories})
     target_link_libraries(${target} PRIVATE
         ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
     )
@@ -398,7 +405,7 @@ function(qt6_add_protobuf target)
             add_dependencies(${target} ${target}_protobuf_registration)
 
             target_include_directories(${target}_protobuf_registration
-                PRIVATE "$<TARGET_PROPERTY:${target},INCLUDE_DIRECTORIES>")
+                PRIVATE "$<GENEX_EVAL:$<TARGET_PROPERTY:${target},INCLUDE_DIRECTORIES>>")
             target_link_libraries(${target}_protobuf_registration
                 PRIVATE
                     ${QT_CMAKE_EXPORT_NAMESPACE}::Platform
