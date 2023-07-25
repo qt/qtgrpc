@@ -21,19 +21,19 @@
 #include <memory>
 
 #if defined(QT_SHARED) || !defined(QT_STATIC)
-#  if defined(QT_BUILD_TST_QTPROTOBUFGENPLUGIN_LIB)
-#    define QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT Q_DECL_EXPORT
+#  if defined(QT_BUILD_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_LIB)
+#    define QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT Q_DECL_EXPORT
 #  else
-#    define QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT Q_DECL_IMPORT
+#    define QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT Q_DECL_IMPORT
 #  endif
 #else
-#  define QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT
+#  define QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT
 #endif
 
 
 namespace TestEnumGadget {
-Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT)
-QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT void registerTypes();
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
+QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void registerTypes();
 enum TestEnum {
     LOCAL_ENUM_VALUE0 = 0,
     LOCAL_ENUM_VALUE1 = 1,
@@ -53,7 +53,7 @@ class NoPackageMessage;
 using NoPackageMessageRepeated = QList<NoPackageMessage>;
 
 class EmptyMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT EmptyMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT EmptyMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -76,7 +76,7 @@ private:
 };
 
 class SimpleIntMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT SimpleIntMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -111,7 +111,7 @@ private:
 };
 
 class NoPackageExternalMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT NoPackageExternalMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -147,7 +147,7 @@ private:
 };
 
 class NoPackageMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT NoPackageMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT

@@ -65,7 +65,7 @@ if(TARGET Qt6::Qml)
             HAVE_QML
     )
 
-    qt_add_protobuf(tst_qtprotobufgen_qml_plugin
+    qt_add_protobuf(tst_qtprotobufgen_qml_gen
         PROTO_FILES
         ../shared/data/proto/basicmessages.proto
         ../shared/data/proto/repeatedmessages.proto
@@ -73,9 +73,10 @@ if(TARGET Qt6::Qml)
         QML
         OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/qmlgen"
     )
-    qt_autogen_tools_initial_setup(tst_qtprotobufgen_qml_plugin)
+    qt_autogen_tools_initial_setup(tst_qtprotobufgen_qml_gen)
+    qt_autogen_tools_initial_setup(tst_qtprotobufgen_qml_genplugin)
 
-    qt_add_protobuf(tst_qtprotobufgenplugin
+    qt_add_protobuf(tst_qtprotobufgen_nopackage_qml_gen
         PROTO_FILES
             ../shared/data/proto/nopackage.proto
             ../shared/data/proto/nopackageexternal.proto
@@ -83,5 +84,6 @@ if(TARGET Qt6::Qml)
         QML_URI "nopackage.uri.test"
         OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/qml-no-package"
     )
-    qt_autogen_tools_initial_setup(tst_qtprotobufgenplugin)
+    qt_autogen_tools_initial_setup(tst_qtprotobufgen_nopackage_qml_gen)
+    qt_autogen_tools_initial_setup(tst_qtprotobufgen_nopackage_qml_genplugin)
 endif()

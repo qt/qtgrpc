@@ -20,20 +20,20 @@
 #include <memory>
 
 #if defined(QT_SHARED) || !defined(QT_STATIC)
-#  if defined(QT_BUILD_TST_QTPROTOBUFGEN_QML_PLUGIN_LIB)
-#    define QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT Q_DECL_EXPORT
+#  if defined(QT_BUILD_TST_QTPROTOBUFGEN_QML_GEN_LIB)
+#    define QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT Q_DECL_EXPORT
 #  else
-#    define QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT Q_DECL_IMPORT
+#    define QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT Q_DECL_IMPORT
 #  endif
 #else
-#  define QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT
+#  define QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT
 #endif
 
 namespace qtprotobufnamespace::tests {
 
 namespace TestEnumGadget {
-Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT)
-QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT void registerTypes();
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT)
+QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void registerTypes();
 enum TestEnum {
     TEST_ENUM_VALUE0 = 0,
     TEST_ENUM_VALUE1 = 1,
@@ -46,8 +46,8 @@ using TestEnumRepeated = QList<TestEnum>;
 };
 
 namespace TestEnumSecondInFileGadget {
-Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT)
-QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT void registerTypes();
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT)
+QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void registerTypes();
 enum TestEnumSecondInFile {
     TEST_ENUM_SIF_VALUE0 = 0,
     TEST_ENUM_SIF_VALUE1 = 1,
@@ -68,7 +68,7 @@ class StepChildEnumMessage;
 using StepChildEnumMessageRepeated = QList<StepChildEnumMessage>;
 
 class SimpleEnumMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleEnumMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleEnumMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -108,7 +108,7 @@ private:
 };
 
 class RepeatedEnumMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT RepeatedEnumMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT RepeatedEnumMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -149,7 +149,7 @@ private:
 };
 
 class MixedEnumUsageMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT MixedEnumUsageMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT MixedEnumUsageMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -202,7 +202,7 @@ private:
 };
 
 class SimpleFileEnumMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleFileEnumMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFileEnumMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -240,7 +240,7 @@ private:
 };
 
 class StepChildEnumMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT StepChildEnumMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT StepChildEnumMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT

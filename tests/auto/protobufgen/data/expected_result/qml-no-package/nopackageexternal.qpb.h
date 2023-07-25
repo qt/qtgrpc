@@ -20,20 +20,20 @@
 #include <memory>
 
 #if defined(QT_SHARED) || !defined(QT_STATIC)
-#  if defined(QT_BUILD_TST_QTPROTOBUFGENPLUGIN_LIB)
-#    define QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT Q_DECL_EXPORT
+#  if defined(QT_BUILD_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_LIB)
+#    define QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT Q_DECL_EXPORT
 #  else
-#    define QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT Q_DECL_IMPORT
+#    define QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT Q_DECL_IMPORT
 #  endif
 #else
-#  define QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT
+#  define QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT
 #endif
 
 class SimpleIntMessageExt;
 using SimpleIntMessageExtRepeated = QList<SimpleIntMessageExt>;
 
 class SimpleIntMessageExt_QtProtobufData;
-class QPB_TST_QTPROTOBUFGENPLUGIN_EXPORT SimpleIntMessageExt : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT

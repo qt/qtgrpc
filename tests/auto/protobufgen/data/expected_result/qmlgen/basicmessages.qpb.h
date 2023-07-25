@@ -20,13 +20,13 @@
 #include <memory>
 
 #if defined(QT_SHARED) || !defined(QT_STATIC)
-#  if defined(QT_BUILD_TST_QTPROTOBUFGEN_QML_PLUGIN_LIB)
-#    define QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT Q_DECL_EXPORT
+#  if defined(QT_BUILD_TST_QTPROTOBUFGEN_QML_GEN_LIB)
+#    define QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT Q_DECL_EXPORT
 #  else
-#    define QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT Q_DECL_IMPORT
+#    define QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT Q_DECL_IMPORT
 #  endif
 #else
-#  define QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT
+#  define QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT
 #endif
 
 namespace qtprotobufnamespace::tests {
@@ -66,7 +66,7 @@ class ComplexMessage;
 using ComplexMessageRepeated = QList<ComplexMessage>;
 
 class EmptyMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT EmptyMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT EmptyMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -89,7 +89,7 @@ private:
 };
 
 class SimpleBoolMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleBoolMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleBoolMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -121,7 +121,7 @@ private:
 };
 
 class SimpleIntMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleIntMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -156,7 +156,7 @@ private:
 };
 
 class SimpleSIntMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleSIntMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -188,7 +188,7 @@ private:
 };
 
 class SimpleUIntMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleUIntMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleUIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -220,7 +220,7 @@ private:
 };
 
 class SimpleInt64Message_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleInt64Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -252,7 +252,7 @@ private:
 };
 
 class SimpleSInt64Message_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleSInt64Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -284,7 +284,7 @@ private:
 };
 
 class SimpleUInt64Message_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleUInt64Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleUInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -316,7 +316,7 @@ private:
 };
 
 class SimpleStringMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleStringMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleStringMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -348,7 +348,7 @@ private:
 };
 
 class SimpleFloatMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleFloatMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFloatMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -380,7 +380,7 @@ private:
 };
 
 class SimpleDoubleMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleDoubleMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleDoubleMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -412,7 +412,7 @@ private:
 };
 
 class SimpleBytesMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleBytesMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleBytesMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -444,7 +444,7 @@ private:
 };
 
 class SimpleFixedInt32Message_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleFixedInt32Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFixedInt32Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -479,7 +479,7 @@ private:
 };
 
 class SimpleFixedInt64Message_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleFixedInt64Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -511,7 +511,7 @@ private:
 };
 
 class SimpleSFixedInt32Message_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleSFixedInt32Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSFixedInt32Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -546,7 +546,7 @@ private:
 };
 
 class SimpleSFixedInt64Message_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT SimpleSFixedInt64Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -578,7 +578,7 @@ private:
 };
 
 class ComplexMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_QML_PLUGIN_EXPORT ComplexMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT ComplexMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
