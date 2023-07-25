@@ -3,39 +3,76 @@
 
 import QtQuick
 import QtTest
-
 import QmlTestUri
 import qtgrpc.tests
 
 TestCase {
     id: root
-    name: "QtGrpc client QML registration test"
+    name: "qtgrpcClientRegistration"
 
     property simpleStringMessage messageArg;
     property simpleStringMessage messageResponse;
 
+    property bool calbackCalled: false
     property var clientQml
+    property var grpcChannel
+    property var grpcChannelDeadline
     property var setResponse: function(value) { root.messageResponse = value }
-    property var errorCallback: function() { console.log("Error is handled!") }
+    property var errorCallback: function() { root.calbackCalled = true }
 
-    function createItem() {
-        return Qt.createQmlObject("import QtQuick; import qtgrpc.tests; QmlClient {  }", root)
+    function createClientItem() {
+        return Qt.createQmlObject("import QtQuick; import QtGrpcQuick; \
+                                   import qtgrpc.tests; QmlClient {}", root)
     }
 
-    function test_1initialization() {
-        clientQml = root.createItem()
+    function createGrpcChannelItem() {
+        return Qt.createQmlObject("import QtQuick; import QtGrpcQuick; GrpcHttp2Channel { \
+                                   options: GrpcChannelOptions { \
+                                   host: \"http://localhost:50051\"} }", root)
     }
 
-    function test_clientTypeIsObject() {
-        compare(typeof clientQml, "object")
+    function createGrpcChannelWithDeadlineItem() {
+        return Qt.createQmlObject("import QtQuick; import QtGrpcQuick; GrpcHttp2Channel { \
+                                   options: GrpcChannelOptions { \
+                                   host: \"http://localhost:50051\"; \
+                                   deadline: { 1000 } }  }", root)
     }
 
-    function test_clientTypeTestMethod()
-    {
-        // There is no established connection yet, so warning is generated
-        for (var i = 0; i < 2; i++)
-            ignoreWarning("QObject::connect(QGrpcOperation, QQmlEngine): invalid nullptr parameter")
+    function test_1clientTypes_data() {
+        return [
+                    { tag: "Grpc Client created",
+                        field: typeof clientQml, answer: "object" },
+                    { tag: "Grpc Http2 Channel created",
+                        field: typeof grpcChannel, answer: "object" },
+                    { tag: "Grpc Http2 Deadline Channel created",
+                        field: typeof grpcChannelDeadline, answer: "object" }
+                ]
+    }
+
+    function test_1clientTypes(data) {
+        compare(data.field, data.answer)
+    }
+
+    function test_ChannelOptions_data() {
+        return [
+                    { tag: "grpcChannelOptions URL is set",
+                        field: grpcChannel.options.host, answer: "http://localhost:50051" },
+                    { tag: "grpcChannelOptions deadline is set",
+                        field: grpcChannelDeadline.options.deadline, answer: 1000 },
+                    { tag: "errorCallback() is called",
+                        field: root.calbackCalled, answer: true }
+                ]
+    }
+
+    function test_ChannelOptions(data) {
+        compare(data.field, data.answer)
+    }
+
+    Component.onCompleted: {
+        clientQml = root.createClientItem()
+        grpcChannel = root.createGrpcChannelItem()
+        grpcChannelDeadline = root.createGrpcChannelWithDeadlineItem()
+        clientQml.channel = grpcChannel.channel
         clientQml.testMethod(root.messageArg, root.setResponse, root.errorCallback)
     }
-
 }

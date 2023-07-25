@@ -1,0 +1,4 @@
+# QTBUG-115692
+[qtgrpcClientRegistration::test_ChannelOptions]
+windows
+qnx
