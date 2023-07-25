@@ -13,6 +13,7 @@ qt_add_protobuf(tst_protobuf_basictypes_qml_gen
     PROTO_FILES
         ../../shared/data/proto/basicmessages.proto
     QML
+    GENERATE_PACKAGE_SUBFOLDERS
     FIELD_ENUM
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
