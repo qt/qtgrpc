@@ -10,6 +10,7 @@ qt_internal_add_qml_module(GrpcQuick
         qqmlabstractgrpcchannel.h
         qqmlgrpchttp2channel_p.h qqmlgrpchttp2channel.cpp
         qqmlgrpcchanneloptions_p.h qqmlgrpcchanneloptions.cpp
+        qqmlgrpccalloptions_p.h qqmlgrpccalloptions.cpp
         qqmlgrpcmetadata_p.h qqmlgrpcmetadata.cpp
     LIBRARIES
         Qt::Core
