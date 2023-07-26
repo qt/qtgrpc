@@ -12,15 +12,15 @@ project(QtGrpc
 )
 
 find_package(Qt6 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS BuildInternals Core)
-find_package(Qt6 ${PROJECT_VERSION} CONFIG OPTIONAL_COMPONENTS Network Gui Widgets Quick
-    QuickControls2)
-qt_internal_project_setup()
-
 # Try to find Qt6::qtprotobufgen and Qt6::qtgrpcgen targets from host tools
 # when cross-compiling.
 if(NOT "${QT_HOST_PATH}" STREQUAL "")
     add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/src/tools/host")
 endif()
+
+find_package(Qt6 ${PROJECT_VERSION} CONFIG OPTIONAL_COMPONENTS Network Gui Widgets Quick
+    QuickControls2)
+qt_internal_project_setup()
 
 include("${CMAKE_CURRENT_LIST_DIR}/src/tools/qtprotobufgen/Qt6ProtobufToolsMacros.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/src/tools/qtgrpcgen/Qt6GrpcToolsMacros.cmake")
