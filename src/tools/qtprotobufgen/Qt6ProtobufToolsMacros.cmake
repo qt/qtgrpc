@@ -278,6 +278,10 @@ function(qt6_add_protobuf target)
         endif()
     endif()
 
+    foreach(f ${proto_files})
+        _qt_internal_expose_source_file_to_ide(${target} ${f})
+    endforeach()
+
     set(is_shared FALSE)
     set(is_static FALSE)
     set(is_executable FALSE)
