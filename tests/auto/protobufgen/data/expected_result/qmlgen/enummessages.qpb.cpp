@@ -264,6 +264,124 @@ void RepeatedEnumMessage::setLocalEnumList(const RepeatedEnumMessage::LocalEnumR
     }
 }
 
+namespace MixedEnumUsageMessage_QtProtobufNested {
+
+class NestedEnumMessage_QtProtobufData : public QSharedData
+{
+public:
+    NestedEnumMessage_QtProtobufData()
+        : QSharedData(),
+          m_localEnumMsg(MixedEnumUsageMessage::LocalEnum::LOCAL_ENUM_VALUE0)
+    {
+    }
+
+    NestedEnumMessage_QtProtobufData(const NestedEnumMessage_QtProtobufData &other)
+        : QSharedData(other),
+          m_localEnumMsg(other.m_localEnumMsg)
+    {
+    }
+
+    MixedEnumUsageMessage::LocalEnum m_localEnumMsg;
+};
+
+NestedEnumMessage::~NestedEnumMessage() = default;
+
+static constexpr struct {
+    QtProtobufPrivate::QProtobufPropertyOrdering::Data data;
+    const std::array<uint, 5> qt_protobuf_NestedEnumMessage_uint_data;
+    const char qt_protobuf_NestedEnumMessage_char_data[80];
+} qt_protobuf_NestedEnumMessage_metadata {
+    // data
+    {
+        0, /* = version */
+        1, /* = num fields */
+        2, /* = field number offset */
+        3, /* = property index offset */
+        4, /* = field flags offset */
+        65, /* = message full name length */
+    },
+    // uint_data
+    {
+        // JSON name offsets:
+        66, /* = localEnumMsg */
+        79, /* = end-of-string-marker */
+        // Field numbers:
+        1, /* = localEnumMsg */
+        // Property indices:
+        0, /* = localEnumMsg */
+        // Field flags:
+        QtProtobufPrivate::NoFlags, /* = localEnumMsg */
+    },
+    // char_data
+    /* metadata char_data: */
+    "qtprotobufnamespace.tests.MixedEnumUsageMessage.NestedEnumMessage\0" /* = full message name */
+    /* field char_data: */
+    "localEnumMsg\0"
+};
+
+const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumMessage::propertyOrdering = {
+    &qt_protobuf_NestedEnumMessage_metadata.data
+};
+
+void NestedEnumMessage::registerTypes()
+{
+    qRegisterMetaType<NestedEnumMessage>();
+    qRegisterMetaType<NestedEnumMessageRepeated>();
+}
+
+NestedEnumMessage::NestedEnumMessage()
+    : QProtobufMessage(&NestedEnumMessage::staticMetaObject),
+      dptr(new NestedEnumMessage_QtProtobufData)
+{
+}
+
+NestedEnumMessage::NestedEnumMessage(const NestedEnumMessage &other)
+    : QProtobufMessage(other),
+      dptr(other.dptr)
+{
+}
+NestedEnumMessage &NestedEnumMessage::operator =(const NestedEnumMessage &other)
+{
+    QProtobufMessage::operator=(other);
+    dptr = other.dptr;
+    return *this;
+}
+NestedEnumMessage::NestedEnumMessage(NestedEnumMessage &&other) noexcept
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
+{
+}
+NestedEnumMessage &NestedEnumMessage::operator =(NestedEnumMessage &&other) noexcept
+{
+    QProtobufMessage::operator=(std::move(other));
+    dptr.swap(other.dptr);
+    return *this;
+}
+bool NestedEnumMessage::operator ==(const NestedEnumMessage &other) const
+{
+    return QProtobufMessage::isEqual(*this, other)
+        && dptr->m_localEnumMsg == other.dptr->m_localEnumMsg;
+}
+
+bool NestedEnumMessage::operator !=(const NestedEnumMessage &other) const
+{
+    return !this->operator ==(other);
+}
+
+MixedEnumUsageMessage::LocalEnum NestedEnumMessage::localEnumMsg() const
+{
+    return dptr->m_localEnumMsg;
+}
+
+void NestedEnumMessage::setLocalEnumMsg(const MixedEnumUsageMessage::LocalEnum &localEnumMsg)
+{
+    if (dptr->m_localEnumMsg != localEnumMsg) {
+        dptr.detach();
+        dptr->m_localEnumMsg = localEnumMsg;
+    }
+}
+
+} // namespace MixedEnumUsageMessage_QtProtobufNested
 
 class MixedEnumUsageMessage_QtProtobufData : public QSharedData
 {
@@ -278,29 +396,31 @@ public:
         : QSharedData(other),
           m_localEnum(other.m_localEnum),
           m_localEnumList(other.m_localEnumList),
-          m_localEnumMap(other.m_localEnumMap)
+          m_localEnumMap(other.m_localEnumMap),
+          m_msgList(other.m_msgList)
     {
     }
 
     MixedEnumUsageMessage::LocalEnum m_localEnum;
     MixedEnumUsageMessage::LocalEnumRepeated m_localEnumList;
     MixedEnumUsageMessage::LocalEnumMapEntry m_localEnumMap;
+    MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated m_msgList;
 };
 
 MixedEnumUsageMessage::~MixedEnumUsageMessage() = default;
 
 static constexpr struct {
     QtProtobufPrivate::QProtobufPropertyOrdering::Data data;
-    const std::array<uint, 13> qt_protobuf_MixedEnumUsageMessage_uint_data;
-    const char qt_protobuf_MixedEnumUsageMessage_char_data[86];
+    const std::array<uint, 17> qt_protobuf_MixedEnumUsageMessage_uint_data;
+    const char qt_protobuf_MixedEnumUsageMessage_char_data[94];
 } qt_protobuf_MixedEnumUsageMessage_metadata {
     // data
     {
         0, /* = version */
-        3, /* = num fields */
-        4, /* = field number offset */
-        7, /* = property index offset */
-        10, /* = field flags offset */
+        4, /* = num fields */
+        5, /* = field number offset */
+        9, /* = property index offset */
+        13, /* = field flags offset */
         47, /* = message full name length */
     },
     // uint_data
@@ -309,25 +429,29 @@ static constexpr struct {
         48, /* = localEnum */
         58, /* = localEnumList */
         72, /* = localEnumMap */
-        85, /* = end-of-string-marker */
+        85, /* = msgList */
+        93, /* = end-of-string-marker */
         // Field numbers:
         1, /* = localEnum */
         2, /* = localEnumList */
         3, /* = localEnumMap */
+        4, /* = msgList */
         // Property indices:
         0, /* = localEnum */
         1, /* = localEnumList */
         2, /* = localEnumMap */
+        3, /* = msgList */
         // Field flags:
         QtProtobufPrivate::NoFlags, /* = localEnum */
         QtProtobufPrivate::NoFlags, /* = localEnumList */
         QtProtobufPrivate::NoFlags, /* = localEnumMap */
+        QtProtobufPrivate::NoFlags, /* = msgList */
     },
     // char_data
     /* metadata char_data: */
     "qtprotobufnamespace.tests.MixedEnumUsageMessage\0" /* = full message name */
     /* field char_data: */
-    "localEnum\0localEnumList\0localEnumMap\0"
+    "localEnum\0localEnumList\0localEnumMap\0msgList\0"
 };
 
 const QtProtobufPrivate::QProtobufPropertyOrdering MixedEnumUsageMessage::propertyOrdering = {
@@ -378,7 +502,8 @@ bool MixedEnumUsageMessage::operator ==(const MixedEnumUsageMessage &other) cons
     return QProtobufMessage::isEqual(*this, other)
         && dptr->m_localEnum == other.dptr->m_localEnum
         && dptr->m_localEnumList == other.dptr->m_localEnumList
-        && QtProtobuf::repeatedValueCompare(dptr->m_localEnumMap, other.dptr->m_localEnumMap);
+        && QtProtobuf::repeatedValueCompare(dptr->m_localEnumMap, other.dptr->m_localEnumMap)
+        && QtProtobuf::repeatedValueCompare(dptr->m_msgList, other.dptr->m_msgList);
 }
 
 bool MixedEnumUsageMessage::operator !=(const MixedEnumUsageMessage &other) const
@@ -413,6 +538,17 @@ MixedEnumUsageMessage::LocalEnumMapEntry &MixedEnumUsageMessage::localEnumMap()
     return dptr->m_localEnumMap;
 }
 
+MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated MixedEnumUsageMessage::msgList() const
+{
+    return dptr->m_msgList;
+}
+
+MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated &MixedEnumUsageMessage::msgList()
+{
+    dptr.detach();
+    return dptr->m_msgList;
+}
+
 void MixedEnumUsageMessage::setLocalEnum(const MixedEnumUsageMessage::LocalEnum &localEnum)
 {
     if (dptr->m_localEnum != localEnum) {
@@ -434,6 +570,14 @@ void MixedEnumUsageMessage::setLocalEnumMap(const MixedEnumUsageMessage::LocalEn
     if (dptr->m_localEnumMap != localEnumMap) {
         dptr.detach();
         dptr->m_localEnumMap = localEnumMap;
+    }
+}
+
+void MixedEnumUsageMessage::setMsgList(const MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated &msgList)
+{
+    if (dptr->m_msgList != msgList) {
+        dptr.detach();
+        dptr->m_msgList = msgList;
     }
 }
 
