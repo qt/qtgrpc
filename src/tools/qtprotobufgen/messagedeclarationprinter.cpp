@@ -30,6 +30,9 @@ MessageDeclarationPrinter::~MessageDeclarationPrinter() = default;
 
 void MessageDeclarationPrinter::printClassForwardDeclarationPrivate()
 {
+    m_printer->Print(m_typeMap, CommonTemplates::ClassMessageForwardDeclarationTemplate());
+    m_printer->Print(m_typeMap, CommonTemplates::UsingMessageTemplate());
+
     if (common::hasNestedMessages(m_descriptor)) {
         auto scopeNamespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
         m_printer->Print(scopeNamespaces, CommonTemplates::NamespaceTemplate());
@@ -39,9 +42,6 @@ void MessageDeclarationPrinter::printClassForwardDeclarationPrivate()
         });
         m_printer->Print(scopeNamespaces, CommonTemplates::NamespaceClosingTemplate());
     }
-
-    m_printer->Print(m_typeMap, CommonTemplates::ClassMessageForwardDeclarationTemplate());
-    m_printer->Print(m_typeMap, CommonTemplates::UsingMessageTemplate());
 }
 
 void MessageDeclarationPrinter::printClassForwardDeclaration()
@@ -56,6 +56,11 @@ void MessageDeclarationPrinter::printClassDeclaration()
 
 void MessageDeclarationPrinter::printClassDeclarationPrivate()
 {
+    printComments(m_descriptor);
+    printClassDeclarationBegin();
+    printClassBody();
+    encloseClass();
+
     if (common::hasNestedMessages(m_descriptor)) {
         auto scopeNamespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
         m_printer->Print(scopeNamespaces, CommonTemplates::NamespaceTemplate());
@@ -65,10 +70,6 @@ void MessageDeclarationPrinter::printClassDeclarationPrivate()
         });
         m_printer->Print(scopeNamespaces, CommonTemplates::NamespaceClosingTemplate());
     }
-    printComments(m_descriptor);
-    printClassDeclarationBegin();
-    printClassBody();
-    encloseClass();
 }
 
 void MessageDeclarationPrinter::printCopyFunctionality()
