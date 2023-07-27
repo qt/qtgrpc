@@ -35,9 +35,14 @@ message MixedEnumUsageMessage
         LOCAL_ENUM_VALUE3 = 3;
     }
 
+    message NestedEnumMessage {
+        LocalEnum localEnumMsg = 1;
+    }
+
     LocalEnum localEnum = 1;
     repeated LocalEnum localEnumList = 2;
     map<string, LocalEnum> localEnumMap = 3;
+    repeated NestedEnumMessage msgList = 4;
 }
 
 message SimpleFileEnumMessage {

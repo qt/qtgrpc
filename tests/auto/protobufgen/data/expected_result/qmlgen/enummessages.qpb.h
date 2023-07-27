@@ -62,6 +62,10 @@ class RepeatedEnumMessage;
 using RepeatedEnumMessageRepeated = QList<RepeatedEnumMessage>;
 class MixedEnumUsageMessage;
 using MixedEnumUsageMessageRepeated = QList<MixedEnumUsageMessage>;
+namespace MixedEnumUsageMessage_QtProtobufNested {
+class NestedEnumMessage;
+using NestedEnumMessageRepeated = QList<NestedEnumMessage>;
+} // namespace MixedEnumUsageMessage_QtProtobufNested
 class SimpleFileEnumMessage;
 using SimpleFileEnumMessageRepeated = QList<SimpleFileEnumMessage>;
 class StepChildEnumMessage;
@@ -158,12 +162,14 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT MixedEnumUsageMessage : public QProto
     Q_PROPERTY(LocalEnum localEnum READ localEnum WRITE setLocalEnum SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::MixedEnumUsageMessage::LocalEnumRepeated localEnumList READ localEnumList WRITE setLocalEnumList SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::MixedEnumUsageMessage::LocalEnumMapEntry localEnumMap READ localEnumMap WRITE setLocalEnumMap SCRIPTABLE true)
+    Q_PROPERTY(qtprotobufnamespace::tests::MixedEnumUsageMessage::NestedEnumMessageRepeated msgListData READ msgList WRITE setMsgList SCRIPTABLE true)
 
 public:
     enum QtProtobufFieldEnum {
         LocalEnumProtoFieldNumber = 1,
         LocalEnumListProtoFieldNumber = 2,
         LocalEnumMapProtoFieldNumber = 3,
+        MsgListProtoFieldNumber = 4,
     };
     Q_ENUM(QtProtobufFieldEnum)
 
@@ -175,6 +181,8 @@ public:
     };
     Q_ENUM(LocalEnum)
     using LocalEnumRepeated = QList<LocalEnum>;
+    using NestedEnumMessage = MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessage;
+    using NestedEnumMessageRepeated = MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated;
     using LocalEnumMapEntry = QHash<QString, MixedEnumUsageMessage::LocalEnum>;
     MixedEnumUsageMessage();
     ~MixedEnumUsageMessage();
@@ -192,14 +200,52 @@ public:
 
     MixedEnumUsageMessage::LocalEnumMapEntry localEnumMap() const;
     MixedEnumUsageMessage::LocalEnumMapEntry &localEnumMap();
+
+    MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated msgList() const;
+    MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated &msgList();
     void setLocalEnum(const MixedEnumUsageMessage::LocalEnum &localEnum);
     void setLocalEnumList(const MixedEnumUsageMessage::LocalEnumRepeated &localEnumList);
     void setLocalEnumMap(const MixedEnumUsageMessage::LocalEnumMapEntry &localEnumMap);
+    void setMsgList(const MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated &msgList);
     static void registerTypes();
 
 private:
     QExplicitlySharedDataPointer<MixedEnumUsageMessage_QtProtobufData> dptr;
 };
+namespace MixedEnumUsageMessage_QtProtobufNested {
+
+class NestedEnumMessage_QtProtobufData;
+class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumMessage : public QProtobufMessage
+{
+    Q_GADGET
+    Q_PROTOBUF_OBJECT
+    Q_DECLARE_PROTOBUF_SERIALIZERS(NestedEnumMessage)
+    QML_VALUE_TYPE(nestedEnumMessage)
+    Q_PROPERTY(qtprotobufnamespace::tests::MixedEnumUsageMessage::LocalEnum localEnumMsg READ localEnumMsg WRITE setLocalEnumMsg SCRIPTABLE true)
+
+public:
+    enum QtProtobufFieldEnum {
+        LocalEnumMsgProtoFieldNumber = 1,
+    };
+    Q_ENUM(QtProtobufFieldEnum)
+
+    NestedEnumMessage();
+    ~NestedEnumMessage();
+    NestedEnumMessage(const NestedEnumMessage &other);
+    NestedEnumMessage &operator =(const NestedEnumMessage &other);
+    NestedEnumMessage(NestedEnumMessage &&other) noexcept;
+    NestedEnumMessage &operator =(NestedEnumMessage &&other) noexcept;
+    bool operator ==(const NestedEnumMessage &other) const;
+    bool operator !=(const NestedEnumMessage &other) const;
+
+    MixedEnumUsageMessage::LocalEnum localEnumMsg() const;
+    void setLocalEnumMsg(const MixedEnumUsageMessage::LocalEnum &localEnumMsg);
+    static void registerTypes();
+
+private:
+    QExplicitlySharedDataPointer<NestedEnumMessage_QtProtobufData> dptr;
+};
+} // namespace MixedEnumUsageMessage_QtProtobufNested
 
 class SimpleFileEnumMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFileEnumMessage : public QProtobufMessage
@@ -281,6 +327,7 @@ private:
 Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleEnumMessage)
 Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedEnumMessage)
 Q_DECLARE_METATYPE(qtprotobufnamespace::tests::MixedEnumUsageMessage)
+Q_DECLARE_METATYPE(qtprotobufnamespace::tests::MixedEnumUsageMessage::NestedEnumMessage)
 Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleFileEnumMessage)
 Q_DECLARE_METATYPE(qtprotobufnamespace::tests::StepChildEnumMessage)
 #endif // QPROTOBUF_ENUMMESSAGES_H
