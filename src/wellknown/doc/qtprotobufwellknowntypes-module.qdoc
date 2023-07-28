@@ -18,7 +18,36 @@
     \l{https://developers.google.com/protocol-buffers/docs/reference/google.protobuf}{Protobuf Well-Known types}:
     Supported types:
     \list
-        \li \l{Any}
+        \li \l{Any} (message)
+        \li \l{Api} (message)
+        \li \l{BoolValue} (message)
+        \li \l{BytesValue} (message)
+        \li \l{DoubleValue} (message)
+        \li \l{Duration} (message)
+        \li \l{Empty} (message)
+        \li \l{Enum} (message)
+        \li \l{EnumValue} (message)
+        \li \l{Field} (message)
+        \li \l{Field.Cardinality} (enum)
+        \li \l{Field.Kind} (enum)
+        \li \l{FieldMask} (message)
+        \li \l{FloatValue} (message)
+        \li \l{Int32Value} (message)
+        \li \l{Int64Value} (message)
+        \li \l{ListValue} (message)
+        \li \l{Method} (message)
+        \li \l{Mixin} (message)
+        \li \l{NullValue} (enum)
+        \li \l{Option} (message)
+        \li \l{SourceContext} (message)
+        \li \l{StringValue} (message)
+        \li \l{Struct} (message)
+        \li \l{Syntax} (enum)
+        \li \l{Timestamp} (message)
+        \li \l{Type} (message)
+        \li \l{UInt32Value} (message)
+        \li \l{UInt64Value} (message)
+        \li \l{Value} (message)
     \endlist
 
     To use well-known type in your project you may include the corresponding

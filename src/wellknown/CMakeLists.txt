@@ -14,15 +14,15 @@ qt_internal_add_protobuf_module(ProtobufWellKnownTypes
 
 qt_internal_add_protobuf_wellknown_types(ProtobufWellKnownTypes
     any
-    # duration
-    # empty
-    # field_mask
-    # source_context
-    # struct
+    api
+    duration
+    empty
+    field_mask
+    source_context
+    struct
     timestamp
-    # wrappers
-    # type
-    # api
+    type
+    wrappers
 )
 
 qt_internal_add_docs(ProtobufWellKnownTypes
