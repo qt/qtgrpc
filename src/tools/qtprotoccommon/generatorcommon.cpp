@@ -547,42 +547,23 @@ bool common::isOneofField(const FieldDescriptor *field)
 
 bool common::isLocalEnum(const EnumDescriptor *type, const Descriptor *scope)
 {
-    if (scope == nullptr) {
-        return false;
-    }
-
     assert(type != nullptr);
-    int numEnumTypes = scope->enum_type_count();
-    for (int i = 0; i < numEnumTypes; ++i) {
-        const EnumDescriptor *scopeEnum = scope->enum_type(i);
-        if (scopeEnum && scopeEnum->full_name() == type->full_name()) {
-            return true;
-        }
-    }
-    return false;
+
+    return scope != nullptr && type->containing_type() == scope;
 }
 
 common::EnumVisibility common::enumVisibility(const EnumDescriptor *type, const Descriptor *scope)
 {
     assert(type != nullptr);
 
+    if (type->containing_type() == nullptr)
+        return GLOBAL_ENUM;
+
     if (isLocalEnum(type, scope)) {
         return LOCAL_ENUM;
     }
 
-    const FileDescriptor *typeFile = type->file();
-
-    int numMessageTypes = typeFile->message_type_count();
-    for (int i = 0; i < numMessageTypes; ++i) {
-        const Descriptor *msg = typeFile->message_type(i);
-        int numEnumTypes = msg->enum_type_count();
-        for (int j = 0; j < numEnumTypes; ++j) {
-            if (type->full_name() == msg->enum_type(j)->full_name())
-                return NEIGHBOR_ENUM;
-        }
-    }
-
-    return GLOBAL_ENUM;
+    return NEIGHBOR_ENUM;
 }
 
 bool common::hasQmlAlias(const FieldDescriptor *field)
