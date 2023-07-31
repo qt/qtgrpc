@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 qt_add_library(QtProtocCommon STATIC
+    qtprotocdefs.h
     baseprinter.cpp baseprinter.h
     descriptorprinterbase.h
     generatorbase.cpp generatorbase.h

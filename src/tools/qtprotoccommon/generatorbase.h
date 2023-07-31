@@ -6,7 +6,7 @@
 #define GENERATORBASE_H
 
 #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/port_def.inc>
+#include "qtprotocdefs.h"
 
 #include <string>
 #include <functional>
@@ -41,7 +41,7 @@ public:
 // TODO: This suppresses the build issue with old protobuf versions. Since we don't have the
 // strict protobuf versions that we support this work around will be here for a while, since
 // yocto builds quite old protobuf by now. See QTBUG-115702.
-#if PROTOBUF_VERSION < 3012000
+#ifndef HAVE_PROTOBUF_SYNC_PIPER
     uint64_t GetSupportedFeatures() const { return 0; };
 #else
     uint64_t GetSupportedFeatures() const override
@@ -61,7 +61,5 @@ protected:
                                         const std::string &name);
 };
 } // namespace qtprotoccommon
-
-#include <google/protobuf/port_undef.inc>
 
 #endif // GENERATORBASE_H

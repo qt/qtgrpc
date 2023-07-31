@@ -27,6 +27,7 @@ private slots:
     void NeighborTest();
     void NestedNoFieldsTest();
     void NestedCyclingTest();
+    void UnusedNestedMessageTest();
 private:
     std::unique_ptr<QProtobufSerializer> m_serializer;
 };
@@ -251,6 +252,13 @@ void QtProtobufNestedTest::NestedCyclingTest()
     NestedCyclingAA::NestedCyclingBB test2;
     test.setTestField(test2);
     test2.setTestField(test);
+}
+
+void QtProtobufNestedTest::UnusedNestedMessageTest()
+{
+    qProtobufAssertMessagePropertyRegistered<NestedFieldMessage::UnusedNestedMessage,
+                                             QtProtobuf::sint32>(1, "QtProtobuf::sint32",
+                                                                 "testFieldInt");
 }
 
 QTEST_MAIN(QtProtobufNestedTest)

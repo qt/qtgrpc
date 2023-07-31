@@ -10,6 +10,9 @@ message NestedFieldMessage {
     message NestedMessage {
         sint32 testFieldInt = 1;
     }
+    message UnusedNestedMessage {
+        sint32 testFieldInt = 1;
+    }
     NestedMessage nested = 2;
 }
 

@@ -7,6 +7,12 @@
 #include "utils.h"
 #include "commontemplates.h"
 
+#include "qtprotocdefs.h"
+
+#ifndef HAVE_PROTOBUF_SYNC_PIPER
+#  include <google/protobuf/descriptor.pb.h>
+#endif
+
 #include <cassert>
 #include <algorithm>
 #include <string_view>
@@ -622,20 +628,13 @@ void common::iterateNestedMessages(const Descriptor *message,
     int numNestedTypes = message->nested_type_count();
     for (int i = 0; i < numNestedTypes; ++i) {
         const Descriptor *nestedMessage = message->nested_type(i);
-        if (message->field_count() <= 0) {
+#ifdef HAVE_PROTOBUF_SYNC_PIPER
+        if (nestedMessage->map_key() == nullptr) {
+#else
+        if (!nestedMessage->options().map_entry()) {
+#endif
             callback(nestedMessage);
             continue;
-        }
-        int numFields = message->field_count();
-        for (int j = 0; j < numFields; ++j) {
-            const FieldDescriptor *field = message->field(j);
-            // Probably there is more correct way to detect map in
-            // nested messages.
-            // TODO: Have idea to make maps nested classes instead of typedefs.
-            if (!field->is_map() && field->message_type() == nestedMessage) {
-                callback(nestedMessage);
-                break;
-            }
         }
     }
 }
@@ -643,20 +642,17 @@ void common::iterateNestedMessages(const Descriptor *message,
 bool common::hasNestedMessages(const Descriptor *message)
 {
     int numNestedTypes = message->nested_type_count();
-    int numFields = message->field_count();
-    if (numNestedTypes > 0 && numFields <= 0)
+    if (numNestedTypes > 0 && message->field_count() == 0)
         return true;
 
     for (int i = 0; i < numNestedTypes; ++i) {
         const Descriptor *nestedMessage = message->nested_type(i);
-        for (int j = 0; j < numFields; ++j) {
-            const FieldDescriptor *field = message->field(j);
-            // Probably there is more correct way to detect map in
-            // nested messages.
-            // TODO: Have idea to make maps nested classes instead of typedefs.
-            if (!field->is_map() && field->message_type() == nestedMessage)
-                return true;
-        }
+#ifdef HAVE_PROTOBUF_SYNC_PIPER
+        if (nestedMessage->map_key() == nullptr)
+#else
+        if (!nestedMessage->options().map_entry())
+#endif
+            return true;
     }
 
     return false;
