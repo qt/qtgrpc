@@ -10,6 +10,12 @@ function(qt_internal_add_protobuf_wellknown_types target)
             _qt_internal_proto_include_dirs)
     endif()
 
+    if(QT_PROTOBUF_WELL_KNOWN_TYPES_PROTO_DIR)
+        list(PREPEND lookup_dirs "${QT_PROTOBUF_WELL_KNOWN_TYPES_PROTO_DIR}")
+        set(extra_find_path_args NO_DEFAULT_PATH CMAKE_FIND_ROOT_PATH_BOTH)
+    else()
+        set(extra_find_path_args "")
+    endif()
     # It's not possible to generate all the well-known types in one chunk, because of complicated
     # dependencies between the .proto files. So we use separate qt_add_protobuf(protoc) calls for
     # them.
@@ -18,7 +24,12 @@ function(qt_internal_add_protobuf_wellknown_types target)
     foreach(type IN LISTS ARGN)
         set(proto_file_name "google/protobuf/${type}.proto")
         unset(proto_file_dir)
-        find_path(proto_file_dir NAMES "${proto_file_name}" PATHS ${lookup_dirs} NO_CACHE)
+        find_path(proto_file_dir
+            NAMES "${proto_file_name}"
+            PATHS ${lookup_dirs}
+            NO_CACHE
+            ${extra_find_path_args}
+        )
         if(NOT proto_file_dir)
             message(AUTHOR_WARNING "The .proto schema ${proto_file_name} is not found. This can"
                 " happen because an incompatible protobuf version is used. Please file a bug on"
