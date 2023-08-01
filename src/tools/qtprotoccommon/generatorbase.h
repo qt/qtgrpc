@@ -6,6 +6,7 @@
 #define GENERATORBASE_H
 
 #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/port_def.inc>
 
 #include <string>
 #include <functional>
@@ -37,7 +38,17 @@ public:
                      std::string *error) const override;
     bool HasGenerateAll() const override { return true; }
 
-    uint64_t GetSupportedFeatures() const override;
+// TODO: This suppresses the build issue with old protobuf versions. Since we don't have the
+// strict protobuf versions that we support this work around will be here for a while, since
+// yocto builds quite old protobuf by now. See QTBUG-115702.
+#if PROTOBUF_VERSION < 3012000
+    uint64_t GetSupportedFeatures() const { return 0; };
+#else
+    uint64_t GetSupportedFeatures() const override
+    {
+        return CodeGenerator::Feature::FEATURE_PROTO3_OPTIONAL;
+    }
+#endif
 
     static void printDisclaimer(::google::protobuf::io::Printer *printer);
     void OpenFileNamespaces(const ::google::protobuf::FileDescriptor *file,
@@ -50,5 +61,7 @@ protected:
                                         const std::string &name);
 };
 } // namespace qtprotoccommon
+
+#include <google/protobuf/port_undef.inc>
 
 #endif // GENERATORBASE_H
