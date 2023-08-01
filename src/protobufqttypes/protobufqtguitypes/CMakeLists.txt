@@ -13,6 +13,8 @@ qt_internal_add_protobuf_module(ProtobufQtGuiTypes
         Qt::Protobuf
         Qt::ProtobufPrivate
         Qt::ProtobufQtCoreTypesPrivate
+    PUBLIC_LIBRARIES
+        Qt::ProtobufQtCoreTypes # TODO: QTBUG-86533 workaround
     PROTO_FILES
         QtGui/QtGui.proto
     PRIVATE_HEADER_FILTERS
