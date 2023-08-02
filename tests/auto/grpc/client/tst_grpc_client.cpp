@@ -26,14 +26,12 @@
 #  include <grpcpp/security/credentials.h>
 #endif
 #include "testservice_client.grpc.qpb.h"
+#include <message_latency_defs.h>
+#include <server_proc_runner.h>
 
 using namespace Qt::Literals::StringLiterals;
 
 namespace {
-constexpr int MessageLatency = QT_GRPC_TEST_MESSAGE_LATENCY;
-constexpr int MessageLatencyThreshold = MessageLatency / 5;
-constexpr int MessageLatencyWithThreshold = MessageLatency + MessageLatencyThreshold;
-constexpr int FailTimeout = QT_GRPC_TEST_MESSAGE_LATENCY * 5;
 
 using namespace qtgrpc::tests;
 
@@ -90,36 +88,21 @@ private slots:
 #endif
     }
 
-    void initTestCase()
-    {
-        startServer();
-        qRegisterProtobufTypes();
-    }
-
-    void cleanupTestCase()
-    {
-        if (serverProc && serverProc->state() == QProcess::ProcessState::Running) {
-            serverProc->kill();
-            serverProc->waitForFinished();
-        }
-    }
+    void initTestCase() { qRegisterProtobufTypes(); }
 
     void init()
     {
         if (QSysInfo::productVersion() == "8.6" && QSysInfo::productType().contains("rhel")) {
             QSKIP("Test case disabled on RHEL due to QTBUG-111098");
         }
-
         QFETCH_GLOBAL(QString, type);
         channelType = type;
-
         QFETCH_GLOBAL(std::shared_ptr<TestService::Client>, client);
         _client = std::move(client);
-
-        if (serverProc->state() != QProcess::ProcessState::Running) {
+        if (serverProc.state() != QProcess::ProcessState::Running) {
             qInfo() << "Restarting server";
-            startServer();
-            QVERIFY2(serverProc->state() == QProcess::ProcessState::Running,
+            serverProc.restart();
+            QVERIFY2(serverProc.state() == QProcess::ProcessState::Running,
                      "Precondition failed - Server cannot be started.");
         }
     }
@@ -153,26 +136,7 @@ private slots:
     void StreamDeadlineTest();
 
 private:
-    void startServer()
-    {
-        serverProc = std::make_unique<QProcess>();
-        QObject::connect(serverProc.get(), &QProcess::readyReadStandardOutput, this,
-                         [this] { qInfo() << serverProc->readAllStandardOutput(); });
-        QString serverPath = QFINDTESTDATA("../shared/test_server/testserver");
-        QVERIFY2(!serverPath.isEmpty(), "testserver binary is missing");
-        serverProc->start(serverPath);
-        serverProc->waitForStarted(5000);
-        // Wait for the 'Server listening' log from the server
-        serverProc->waitForReadyRead(2000);
-        auto serverData = serverProc->readAllStandardError();
-        QVERIFY2(serverData.startsWith("Server listening"),
-                 "The server was not ready within the deadline.");
-        // Connect remaining error logs to the server
-        QObject::connect(serverProc.get(), &QProcess::readyReadStandardError, this,
-                         [this] { qInfo() << serverProc->readAllStandardError(); });
-    }
-
-    std::unique_ptr<QProcess> serverProc;
+    ServerProcRunner serverProc{ QFINDTESTDATA("../shared/test_server/testserver") };
     QString channelType;
     std::shared_ptr<TestService::Client> _client;
 };
