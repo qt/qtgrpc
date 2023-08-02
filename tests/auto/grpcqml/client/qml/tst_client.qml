@@ -6,9 +6,16 @@ import QtTest
 import QmlTestUri
 import qtgrpc.tests
 
-TestCase {
+Item {
     id: root
-    name: "qtgrpcClientRegistration"
+
+    Timer {
+        id: timer
+        running: false
+        repeat: false
+        interval: 10000
+        onTriggered:  testCase.when = true;
+    }
 
     property simpleStringMessage messageArg;
     property simpleStringMessage messageResponse;
@@ -28,7 +35,8 @@ TestCase {
     function createGrpcChannelItem() {
         return Qt.createQmlObject("import QtQuick; import QtGrpcQuick; GrpcHttp2Channel { \
                                    options: GrpcChannelOptions { \
-                                   host: \"http://localhost:50051\"} }", root)
+                                   host: \"http://localhost:50051\"; \
+                                   deadline: { 2000 } } }", root)
     }
 
     function createGrpcChannelWithDeadlineItem() {
@@ -38,34 +46,50 @@ TestCase {
                                    deadline: { 1000 } }  }", root)
     }
 
-    function test_1clientTypes_data() {
-        return [
-                    { tag: "Grpc Client created",
-                        field: typeof clientQml, answer: "object" },
-                    { tag: "Grpc Http2 Channel created",
-                        field: typeof grpcChannel, answer: "object" },
-                    { tag: "Grpc Http2 Deadline Channel created",
-                        field: typeof grpcChannelDeadline, answer: "object" }
-                ]
+    TestCase {
+        name: "qtgrpcClientRegistration"
+        function test_1clientTypes_data() {
+            return [
+                        { tag: "Grpc Client created",
+                            field: typeof clientQml, answer: "object" },
+                        { tag: "Grpc Http2 Channel created",
+                            field: typeof grpcChannel, answer: "object" },
+                        { tag: "Grpc Http2 Deadline Channel created",
+                            field: typeof grpcChannelDeadline, answer: "object" }
+                    ]
+        }
+
+        function test_1clientTypes(data) {
+            compare(data.field, data.answer)
+        }
+
+        function test_ChannelOptions_data() {
+            return [
+                        { tag: "grpcChannelOptions URL is set",
+                            field: grpcChannel.options.host, answer: "http://localhost:50051" },
+                        { tag: "grpcChannelOptions deadline is set",
+                            field: grpcChannelDeadline.options.deadline, answer: 1000 }
+                    ]
+        }
+
+        function test_ChannelOptions(data) {
+            compare(data.field, data.answer)
+        }
+
+        function test_testMethodCall() {
+            clientQml.testMethod(root.messageArg, root.setResponse, root.errorCallback);
+            timer.start()
+        }
     }
 
-    function test_1clientTypes(data) {
-        compare(data.field, data.answer)
-    }
+    TestCase {
+        id: testCase
+        name: "qtgrpcClientTestCall"
+        when: false
 
-    function test_ChannelOptions_data() {
-        return [
-                    { tag: "grpcChannelOptions URL is set",
-                        field: grpcChannel.options.host, answer: "http://localhost:50051" },
-                    { tag: "grpcChannelOptions deadline is set",
-                        field: grpcChannelDeadline.options.deadline, answer: 1000 },
-                    { tag: "errorCallback() is called",
-                        field: root.calbackCalled, answer: true }
-                ]
-    }
-
-    function test_ChannelOptions(data) {
-        compare(data.field, data.answer)
+        function test_testMethodCallCheck() {
+            verify(root.calbackCalled == true)
+        }
     }
 
     Component.onCompleted: {
@@ -73,6 +97,5 @@ TestCase {
         grpcChannel = root.createGrpcChannelItem()
         grpcChannelDeadline = root.createGrpcChannelWithDeadlineItem()
         clientQml.channel = grpcChannel.channel
-        clientQml.testMethod(root.messageArg, root.setResponse, root.errorCallback)
     }
 }
