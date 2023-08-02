@@ -8,7 +8,7 @@ import qtprotobufnamespace.tests.nested
 import qtprotobufnamespace1.tests.nested as NestedFieldMessages1
 
 TestCase {
-    name: "QtProtobuf nested messages test"
+    name: "qtprotobufNestedTest"
 
     // Messages from "qtprotobufnamespace.tests.nested"
     property nestedFieldMessage fieldMsg;

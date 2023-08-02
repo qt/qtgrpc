@@ -8,7 +8,7 @@ import QmlTestUri
 
 TestCase {
     id: root
-    name: "QtGrpc Metadata QML registration test"
+    name: "qtgrpcMetadataQmlTest"
 
     GrpcMetadata {
         id: grpcData

@@ -8,7 +8,7 @@ import QmlTestUri
 
 TestCase {
     id: root
-    name: "QtGrpcCallOptions QML registration test"
+    name: "qtgrpcCallOptionsTest"
 
     GrpcCallOptions {
         id : options

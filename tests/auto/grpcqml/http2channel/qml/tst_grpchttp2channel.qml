@@ -8,7 +8,7 @@ import QmlTestUri
 
 TestCase {
     id: root
-    name: "QtGrpcHttp2Channel QML registration test"
+    name: "qtgrpcHttp2ChannelTest"
 
     GrpcChannelOptions {
         id: optionsVar
