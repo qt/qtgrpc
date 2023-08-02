@@ -8,7 +8,7 @@ import qtprotobufnamespace.tests
 import qtprotobufnamespace.tests.enums as EnumPack_
 
 TestCase {
-    name: "QtProtobuf enum types test"
+    name: "qtprotobufEnumTest"
     property simpleEnumMessage localEnumMessage
     property repeatedEnumMessage localRepeatedEnumMessage
     property mixedEnumUsageMessage localMixedEnumMessage

@@ -7,7 +7,7 @@ import QtTest
 import qtprotobufnamespace.tests
 
 TestCase {
-    name: "QtProtobuf syntax messages test"
+    name: "qtrotobufSyntaxTest"
 
     property message_Uderscore_name underscore_name;
     property messageUderscorename underscoreName;

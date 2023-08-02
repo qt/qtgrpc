@@ -7,7 +7,7 @@ import QtTest
 import qtprotobufnamespace.tests
 
 TestCase {
-    name: "QtProtobuf repeated messages test"
+    name: "qtprotobufRepeatedTest"
 
     property repeatedStringMessage rStrMsg;
     property repeatedStringMessage rComparisonStrMsg;

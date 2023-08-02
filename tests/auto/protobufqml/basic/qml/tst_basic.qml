@@ -9,7 +9,7 @@ import qtprotobufnamespace.tests
 pragma ValueTypeBehavior: Addressable
 
 TestCase {
-    name: "QtProtobuf basic messages test"
+    name: "qtprotobufBasicTest"
     property simpleBoolMessage boolMsg;
     property simpleIntMessage int32Msg;
     property simpleSIntMessage sint32Msg;

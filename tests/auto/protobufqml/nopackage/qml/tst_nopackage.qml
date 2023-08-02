@@ -7,7 +7,7 @@ import QtTest
 import nopackage.uri.test
 
 TestCase {
-    name: "QtProtobuf nopackage messages test"
+    name: "qtprotobufNopackageTest"
     property noPackageMessage noPackageMessageUser;
     property noPackageExternalMessage noPackageExternal;
     property simpleIntMessageExt intMsgExt;

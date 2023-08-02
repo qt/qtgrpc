@@ -9,7 +9,7 @@ import qtgrpc.tests
 
 TestCase {
     id: root
-    name: "QtGrpc client QML registration test"
+    name: "qtgrpcClientRegistration"
 
     property simpleStringMessage messageArg;
     property simpleStringMessage messageResponse;
