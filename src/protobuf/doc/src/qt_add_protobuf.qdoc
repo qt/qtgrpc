@@ -71,65 +71,6 @@ link to.
                 ...
             )
         \endcode
-        \note Pay attention to the keywords that are reserved in QML or
-        JavaScript context, but not reserved in *.proto context. These words
-        will be silently renamed by the
-        \l {The qtprotobufgen Tool}{generator plugin}.
-        For example, \c id, \c property, and \c import are reserved keywords.
-        They will be replaced by \c id_proto, \c property_proto,
-        \c import_proto:
-        \badcode
-            message MessageUpperCaseReserved {
-                sint32 Import = 1;
-                sint32 Property = 2;
-                sint32 Id = 3;
-            }
-        \endcode
-        Generated code output:
-        \code
-            Q_PROPERTY(QtProtobuf::sint32 import_proto READ import_proto ...)
-            Q_PROPERTY(QtProtobuf::sint32 property_proto READ property_proto ...)
-            Q_PROPERTY(QtProtobuf::sint32 id_proto READ id_proto ...)
-        \endcode
-        Also, enum values cannot begin with a lower case letter.
-        The \l {The qtprotobufgen Tool}{generator plugin} will capitalize
-        the first letter in code output. See the \c *.proto example below:
-        \badcode
-            enum LowerCaseEnum {
-                enumValue0 = 0;
-                enumValue1 = 1;
-                enumValue2 = 2;
-            }
-        \endcode
-        Generated code output:
-        \code
-            enum LowerCaseEnum {
-                EnumValue0 = 0,
-                EnumValue1 = 1,
-                EnumValue2 = 2,
-            };
-            Q_ENUM(LowerCaseEnum)
-        \endcode
-        Also, enum fields cannot begin with an underscore symbol.
-        Such fields will be generated as is, but will be undefined in
-        the QML context, unless the QML engine will allow registering
-        them in the future. See the \c *.proto example below:
-        \badcode
-            enum UnderScoreEnum {
-                _enumUnderscoreValue0 = 0;
-                _EnumUnderscoreValue1 = 1;
-            }
-        \endcode
-        Generated output:
-        \code
-            enum UnderScoreEnum {
-                _enumUnderscoreValue0 = 0,
-                _EnumUnderscoreValue1 = 1,
-            };
-            Q_ENUM(UnderScoreEnum)
-        \endcode
-        For more information about the QML properties syntax, check
-        \l {Defining Property Attributes}.
         \note If the \c QML_URI is skipped, all *.proto files specified
         in the \c qt_add_protobuf command should have the same \c protobuf
         package name, since it shall be used as a default \c URI for the
