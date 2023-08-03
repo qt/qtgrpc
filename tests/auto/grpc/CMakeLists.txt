@@ -11,6 +11,7 @@ add_compile_definitions(QT_GRPC_TEST_MESSAGE_LATENCY=${QT_INTERNAL_GRPC_TEST_MES
 if(TARGET WrapgRPC::WrapLibgRPC)
     add_subdirectory(shared)
     add_subdirectory(client)
+    add_subdirectory(client_no_channel)
     add_subdirectory(server)
     if(QT_FEATURE_ssl)
         add_subdirectory(ssl_client)

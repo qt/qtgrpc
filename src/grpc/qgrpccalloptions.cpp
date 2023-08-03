@@ -90,6 +90,10 @@ QGrpcCallOptions &QGrpcCallOptions::withMetadata(const QGrpcMetadata &metadata)
 /*!
     Returns deadline value for a call.
 
+    Deadline value controls the maximum execution time of an call or a stream.
+    This value overrides value set by QGrpcChannelOptions::deadline()
+    for a specific call or stream.
+
     If value was not set returns empty std::optional.
 */
 std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadline() const

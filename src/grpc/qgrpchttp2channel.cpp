@@ -104,6 +104,16 @@ static QGrpcMetadata collectMetadata(QNetworkReply *networkReply)
                          networkReply->rawHeaderPairs().end());
 }
 
+static std::optional<std::chrono::milliseconds> deadlineForCall(
+        const QGrpcChannelOptions &channelOptions, const QGrpcCallOptions &callOptions)
+{
+    if (callOptions.deadline())
+        return *callOptions.deadline();
+    if (channelOptions.deadline())
+        return *channelOptions.deadline();
+    return std::nullopt;
+}
+
 struct QGrpcHttp2ChannelPrivate
 {
     struct ExpectedData
@@ -157,8 +167,8 @@ struct QGrpcHttp2ChannelPrivate
                              QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
                          });
 #endif
-        if (callOptions.deadline()) {
-            QTimer::singleShot(*callOptions.deadline(), networkReply, [networkReply] {
+        if (auto deadline = deadlineForCall(channelOptions, callOptions)) {
+            QTimer::singleShot(*deadline, networkReply, [networkReply] {
                 QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
             });
         }
