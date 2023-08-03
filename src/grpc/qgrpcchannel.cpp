@@ -79,6 +79,16 @@ static QByteArray buildRpcName(QLatin1StringView service, QLatin1StringView meth
     return '/' % QByteArrayView(service) % '/' % QByteArrayView(method);
 }
 
+static std::optional<std::chrono::milliseconds> deadlineForCall(
+        const QGrpcChannelOptions &channelOptions, const QGrpcCallOptions &callOptions)
+{
+    if (callOptions.deadline())
+        return *callOptions.deadline();
+    if (channelOptions.deadline())
+        return *channelOptions.deadline();
+    return std::nullopt;
+}
+
 QGrpcChannelStream::QGrpcChannelStream(grpc::Channel *channel, QLatin1StringView method,
                                        QByteArrayView data)
 {
@@ -182,21 +192,24 @@ void QGrpcChannelCall::waitForFinished(const QDeadlineTimer &deadline)
     thread->wait(deadline);
 }
 
-QGrpcChannelPrivate::QGrpcChannelPrivate(const QGrpcChannelOptions &options,
+QGrpcChannelPrivate::QGrpcChannelPrivate(const QGrpcChannelOptions &channelOptions,
                                          QGrpcChannel::NativeGrpcChannelCredentials credentialsType)
+    : m_channelOptions(channelOptions)
 {
     switch (credentialsType) {
     case QGrpcChannel::InsecureChannelCredentials:
         m_credentials = grpc::InsecureChannelCredentials();
-        m_channel = grpc::CreateChannel(options.host().toString().toStdString(), m_credentials);
+        m_channel = grpc::CreateChannel(m_channelOptions.host().toString().toStdString(),
+                                        m_credentials);
         break;
     case QGrpcChannel::GoogleDefaultCredentials:
         m_credentials = grpc::GoogleDefaultCredentials();
-        m_channel = grpc::CreateChannel(options.host().toString().toStdString(), m_credentials);
+        m_channel = grpc::CreateChannel(m_channelOptions.host().toString().toStdString(),
+                                        m_credentials);
         break;
     case QGrpcChannel::SslDefaultCredentials:
 #if QT_CONFIG(ssl)
-        if (auto maybeSslConfig = options.sslConfiguration()) {
+        if (auto maybeSslConfig = m_channelOptions.sslConfiguration()) {
             grpc::SslCredentialsOptions options;
             auto accumulateSslCert = [](const std::string &lhs, const QSslCertificate &rhs) {
                 return lhs + rhs.toPem().toStdString();
@@ -215,7 +228,8 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QGrpcChannelOptions &options,
 #else
         m_credentials = grpc::SslCredentials(grpc::SslCredentialsOptions());
 #endif
-        m_channel = grpc::CreateChannel(options.host().toString().toStdString(), m_credentials);
+        m_channel = grpc::CreateChannel(m_channelOptions.host().toString().toStdString(),
+                                        m_credentials);
         break;
     }
 }
@@ -258,8 +272,8 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(QLatin1StringView meth
                                         });
 
     call->start();
-    if (options.deadline())
-        QTimer::singleShot(*options.deadline(), call.get(), [call] { call->cancel(); });
+    if (auto deadline = deadlineForCall(m_channelOptions, options))
+        QTimer::singleShot(*deadline, call.get(), [call] { call->cancel(); });
     return reply;
 }
 
@@ -271,7 +285,8 @@ QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringVie
     QGrpcChannelCall call(m_channel.get(), QLatin1StringView(rpcName), args);
 
     call.start();
-    options.deadline() ? call.waitForFinished(*options.deadline()) : call.waitForFinished();
+    auto deadline = deadlineForCall(m_channelOptions, options);
+    deadline ? call.waitForFinished(*deadline) : call.waitForFinished();
 
     ret = call.response;
     return call.status;
@@ -323,8 +338,8 @@ std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(QLatin1StringView 
                                         });
 
     sub->start();
-    if (options.deadline())
-        QTimer::singleShot(*options.deadline(), sub.get(), [sub] { sub->cancel(); });
+    if (auto deadline = deadlineForCall(m_channelOptions, options))
+        QTimer::singleShot(*deadline, sub.get(), [sub] { sub->cancel(); });
 
     return stream;
 }

@@ -96,6 +96,9 @@ QGrpcChannelOptions &QGrpcChannelOptions::withMetadata(const QGrpcMetadata &meta
 /*!
     Returns deadline value for setting up the channel.
 
+    Deadline value controls the maximum execution time of any call or stream
+    executed on the channel.
+
     If value was not set returns empty std::optional.
 */
 std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const
