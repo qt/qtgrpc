@@ -7,7 +7,13 @@ endif()
 
 set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/grpc/magic8ball")
 
-find_package(Qt6 REQUIRED COMPONENTS Core Protobuf Grpc Quick)
+find_package(Qt6 REQUIRED COMPONENTS
+    Core
+    Protobuf
+    Grpc
+    GrpcQuick
+    Quick
+)
 
 qt_standard_project_setup()
 
