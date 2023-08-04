@@ -11,6 +11,9 @@
 #include <string>
 #include <string_view>
 #include <functional>
+#include <cassert>
+
+#include "commontemplates.h"
 
 #include <google/protobuf/descriptor.h>
 
@@ -50,6 +53,41 @@ struct common {
         if (type == nullptr)
             return {};
         return getFullNamespace(type->full_name(), separator);
+    }
+
+    template<typename T>
+    static std::string getScopeNamespace(const T *type, const Descriptor *scope)
+    {
+        assert(type != nullptr);
+        // If types locate in different packages, message can only be identified using
+        // full namespace
+        if (scope == nullptr || scope->file()->package() != type->file()->package())
+            return getFullNamespace(type, "::");
+
+        // All nested messages locate under the namespace but not inside the original message body.
+        // This is done due to Qt 'moc' limitations. When calculating the nested namespace we should
+        // use this namespace name but not the original containing_type name.
+        std::string nestedNameSpaceSuffix = CommonTemplates::QtProtobufNestedNamespace();
+        std::string suffix;
+        if constexpr (std::is_same<T, Descriptor>::value)
+            suffix = !isMap(type) ? CommonTemplates::QtProtobufNestedNamespace() : "";
+
+        const Descriptor *containingType = type->containing_type();
+        std::string nestingNamespaces;
+        bool first = true;
+        while (containingType) {
+            nestingNamespaces.insert(0, containingType->name() + suffix);
+            // Scope is detected as parent, it doesn't make sense to go deeper.
+            if (containingType == scope)
+                break;
+            if (first) {
+                suffix = nestedNameSpaceSuffix + "::";
+                first = false;
+            }
+            containingType = containingType->containing_type();
+        }
+
+        return nestingNamespaces;
     }
 
     static std::string getNestedNamespace(const Descriptor *type, std::string_view separator);
