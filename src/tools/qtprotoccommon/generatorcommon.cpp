@@ -464,11 +464,7 @@ void common::iterateNestedMessages(const Descriptor *message,
     int numNestedTypes = message->nested_type_count();
     for (int i = 0; i < numNestedTypes; ++i) {
         const Descriptor *nestedMessage = message->nested_type(i);
-#ifdef HAVE_PROTOBUF_SYNC_PIPER
-        if (nestedMessage->map_key() == nullptr) {
-#else
-        if (!nestedMessage->options().map_entry()) {
-#endif
+        if (!isMap(nestedMessage)) {
             callback(nestedMessage);
             continue;
         }
@@ -483,11 +479,7 @@ bool common::hasNestedMessages(const Descriptor *message)
 
     for (int i = 0; i < numNestedTypes; ++i) {
         const Descriptor *nestedMessage = message->nested_type(i);
-#ifdef HAVE_PROTOBUF_SYNC_PIPER
-        if (nestedMessage->map_key() == nullptr)
-#else
-        if (!nestedMessage->options().map_entry())
-#endif
+        if (!isMap(nestedMessage))
             return true;
     }
 
@@ -510,6 +502,16 @@ bool common::isNested(const Descriptor *message)
     }
 
     return true;
+}
+
+bool common::isMap(const Descriptor *message)
+{
+    assert(message != nullptr);
+#ifdef HAVE_PROTOBUF_SYNC_PIPER
+    return message->map_key() != nullptr;
+#else
+    return message->options().map_entry();
+#endif
 }
 
 const Descriptor *common::findHighestMessage(const Descriptor *message)
