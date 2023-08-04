@@ -91,6 +91,7 @@ struct common {
     static bool hasNestedMessages(const Descriptor *message);
 
     static bool isNested(const Descriptor *message);
+    static bool isMap(const Descriptor *message);
     static const Descriptor *findHighestMessage(const Descriptor *message);
 
     static std::string collectFieldFlags(const google::protobuf::FieldDescriptor *field);
