@@ -266,57 +266,372 @@ void RepeatedEnumMessage::setLocalEnumList(const RepeatedEnumMessage::LocalEnumR
 
 namespace MixedEnumUsageMessage_QtProtobufNested {
 
+class NestedEnumHolder_QtProtobufData : public QSharedData
+{
+public:
+    NestedEnumHolder_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    NestedEnumHolder_QtProtobufData(const NestedEnumHolder_QtProtobufData &other)
+        : QSharedData(other)
+    {
+    }
+
+};
+
+NestedEnumHolder::~NestedEnumHolder() = default;
+
+static constexpr struct {
+    QtProtobufPrivate::QProtobufPropertyOrdering::Data data;
+    const std::array<uint, 1> qt_protobuf_NestedEnumHolder_uint_data;
+    const char qt_protobuf_NestedEnumHolder_char_data[66];
+} qt_protobuf_NestedEnumHolder_metadata {
+    // data
+    {
+        0, /* = version */
+        0, /* = num fields */
+        1, /* = field number offset */
+        1, /* = property index offset */
+        1, /* = field flags offset */
+        64, /* = message full name length */
+    },
+    // uint_data
+    {
+        // JSON name offsets:
+        65, /* = end-of-string-marker */
+        // Field numbers:
+        // Property indices:
+        // Field flags:
+    },
+    // char_data
+    /* metadata char_data: */
+    "qtprotobufnamespace.tests.MixedEnumUsageMessage.NestedEnumHolder\0" /* = full message name */
+    /* field char_data: */
+    ""
+};
+
+const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumHolder::propertyOrdering = {
+    &qt_protobuf_NestedEnumHolder_metadata.data
+};
+
+void NestedEnumHolder::registerTypes()
+{
+    qRegisterMetaType<NestedEnumHolder>();
+    qRegisterMetaType<NestedEnumHolderRepeated>();
+}
+
+NestedEnumHolder::NestedEnumHolder()
+    : QProtobufMessage(&NestedEnumHolder::staticMetaObject),
+      dptr(new NestedEnumHolder_QtProtobufData)
+{
+}
+
+NestedEnumHolder::NestedEnumHolder(const NestedEnumHolder &other)
+    : QProtobufMessage(other),
+      dptr(other.dptr)
+{
+}
+NestedEnumHolder &NestedEnumHolder::operator =(const NestedEnumHolder &other)
+{
+    QProtobufMessage::operator=(other);
+    dptr = other.dptr;
+    return *this;
+}
+NestedEnumHolder::NestedEnumHolder(NestedEnumHolder &&other) noexcept
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
+{
+}
+NestedEnumHolder &NestedEnumHolder::operator =(NestedEnumHolder &&other) noexcept
+{
+    QProtobufMessage::operator=(std::move(other));
+    dptr.swap(other.dptr);
+    return *this;
+}
+bool NestedEnumHolder::operator ==(const NestedEnumHolder &other) const
+{
+    return QProtobufMessage::isEqual(*this, other);
+}
+
+bool NestedEnumHolder::operator !=(const NestedEnumHolder &other) const
+{
+    return !this->operator ==(other);
+}
+
+namespace NestedEnumHolderLevel1_QtProtobufNested {
+
+class NestedEnumHolderLevel2_QtProtobufData : public QSharedData
+{
+public:
+    NestedEnumHolderLevel2_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    NestedEnumHolderLevel2_QtProtobufData(const NestedEnumHolderLevel2_QtProtobufData &other)
+        : QSharedData(other)
+    {
+    }
+
+};
+
+NestedEnumHolderLevel2::~NestedEnumHolderLevel2() = default;
+
+static constexpr struct {
+    QtProtobufPrivate::QProtobufPropertyOrdering::Data data;
+    const std::array<uint, 1> qt_protobuf_NestedEnumHolderLevel2_uint_data;
+    const char qt_protobuf_NestedEnumHolderLevel2_char_data[95];
+} qt_protobuf_NestedEnumHolderLevel2_metadata {
+    // data
+    {
+        0, /* = version */
+        0, /* = num fields */
+        1, /* = field number offset */
+        1, /* = property index offset */
+        1, /* = field flags offset */
+        93, /* = message full name length */
+    },
+    // uint_data
+    {
+        // JSON name offsets:
+        94, /* = end-of-string-marker */
+        // Field numbers:
+        // Property indices:
+        // Field flags:
+    },
+    // char_data
+    /* metadata char_data: */
+    "qtprotobufnamespace.tests.MixedEnumUsageMessage.NestedEnumHolderLevel1.NestedEnumHolderLevel2\0" /* = full message name */
+    /* field char_data: */
+    ""
+};
+
+const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumHolderLevel2::propertyOrdering = {
+    &qt_protobuf_NestedEnumHolderLevel2_metadata.data
+};
+
+void NestedEnumHolderLevel2::registerTypes()
+{
+    qRegisterMetaType<NestedEnumHolderLevel2>();
+    qRegisterMetaType<NestedEnumHolderLevel2Repeated>();
+}
+
+NestedEnumHolderLevel2::NestedEnumHolderLevel2()
+    : QProtobufMessage(&NestedEnumHolderLevel2::staticMetaObject),
+      dptr(new NestedEnumHolderLevel2_QtProtobufData)
+{
+}
+
+NestedEnumHolderLevel2::NestedEnumHolderLevel2(const NestedEnumHolderLevel2 &other)
+    : QProtobufMessage(other),
+      dptr(other.dptr)
+{
+}
+NestedEnumHolderLevel2 &NestedEnumHolderLevel2::operator =(const NestedEnumHolderLevel2 &other)
+{
+    QProtobufMessage::operator=(other);
+    dptr = other.dptr;
+    return *this;
+}
+NestedEnumHolderLevel2::NestedEnumHolderLevel2(NestedEnumHolderLevel2 &&other) noexcept
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
+{
+}
+NestedEnumHolderLevel2 &NestedEnumHolderLevel2::operator =(NestedEnumHolderLevel2 &&other) noexcept
+{
+    QProtobufMessage::operator=(std::move(other));
+    dptr.swap(other.dptr);
+    return *this;
+}
+bool NestedEnumHolderLevel2::operator ==(const NestedEnumHolderLevel2 &other) const
+{
+    return QProtobufMessage::isEqual(*this, other);
+}
+
+bool NestedEnumHolderLevel2::operator !=(const NestedEnumHolderLevel2 &other) const
+{
+    return !this->operator ==(other);
+}
+
+} // namespace NestedEnumHolderLevel1_QtProtobufNested
+
+class NestedEnumHolderLevel1_QtProtobufData : public QSharedData
+{
+public:
+    NestedEnumHolderLevel1_QtProtobufData()
+        : QSharedData()
+    {
+    }
+
+    NestedEnumHolderLevel1_QtProtobufData(const NestedEnumHolderLevel1_QtProtobufData &other)
+        : QSharedData(other)
+    {
+    }
+
+};
+
+NestedEnumHolderLevel1::~NestedEnumHolderLevel1() = default;
+
+static constexpr struct {
+    QtProtobufPrivate::QProtobufPropertyOrdering::Data data;
+    const std::array<uint, 1> qt_protobuf_NestedEnumHolderLevel1_uint_data;
+    const char qt_protobuf_NestedEnumHolderLevel1_char_data[72];
+} qt_protobuf_NestedEnumHolderLevel1_metadata {
+    // data
+    {
+        0, /* = version */
+        0, /* = num fields */
+        1, /* = field number offset */
+        1, /* = property index offset */
+        1, /* = field flags offset */
+        70, /* = message full name length */
+    },
+    // uint_data
+    {
+        // JSON name offsets:
+        71, /* = end-of-string-marker */
+        // Field numbers:
+        // Property indices:
+        // Field flags:
+    },
+    // char_data
+    /* metadata char_data: */
+    "qtprotobufnamespace.tests.MixedEnumUsageMessage.NestedEnumHolderLevel1\0" /* = full message name */
+    /* field char_data: */
+    ""
+};
+
+const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumHolderLevel1::propertyOrdering = {
+    &qt_protobuf_NestedEnumHolderLevel1_metadata.data
+};
+
+void NestedEnumHolderLevel1::registerTypes()
+{
+    qRegisterMetaType<NestedEnumHolderLevel1>();
+    qRegisterMetaType<NestedEnumHolderLevel1Repeated>();
+}
+
+NestedEnumHolderLevel1::NestedEnumHolderLevel1()
+    : QProtobufMessage(&NestedEnumHolderLevel1::staticMetaObject),
+      dptr(new NestedEnumHolderLevel1_QtProtobufData)
+{
+}
+
+NestedEnumHolderLevel1::NestedEnumHolderLevel1(const NestedEnumHolderLevel1 &other)
+    : QProtobufMessage(other),
+      dptr(other.dptr)
+{
+}
+NestedEnumHolderLevel1 &NestedEnumHolderLevel1::operator =(const NestedEnumHolderLevel1 &other)
+{
+    QProtobufMessage::operator=(other);
+    dptr = other.dptr;
+    return *this;
+}
+NestedEnumHolderLevel1::NestedEnumHolderLevel1(NestedEnumHolderLevel1 &&other) noexcept
+    : QProtobufMessage(std::move(other)),
+      dptr(std::move(other.dptr))
+{
+}
+NestedEnumHolderLevel1 &NestedEnumHolderLevel1::operator =(NestedEnumHolderLevel1 &&other) noexcept
+{
+    QProtobufMessage::operator=(std::move(other));
+    dptr.swap(other.dptr);
+    return *this;
+}
+bool NestedEnumHolderLevel1::operator ==(const NestedEnumHolderLevel1 &other) const
+{
+    return QProtobufMessage::isEqual(*this, other);
+}
+
+bool NestedEnumHolderLevel1::operator !=(const NestedEnumHolderLevel1 &other) const
+{
+    return !this->operator ==(other);
+}
+
+
 class NestedEnumMessage_QtProtobufData : public QSharedData
 {
 public:
     NestedEnumMessage_QtProtobufData()
         : QSharedData(),
-          m_localEnumMsg(MixedEnumUsageMessage::LocalEnum::LOCAL_ENUM_VALUE0)
+          m_localEnumField(MixedEnumUsageMessage::LocalEnum::LOCAL_ENUM_VALUE0),
+          m_localEnumField2(RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE0),
+          m_localEnumField3(MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolder::LocalEnum::NESTED_LOCAL_ENUM_VALUE0),
+          m_localEnumField4(MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolderLevel1::LocalEnum::NESTED_LEVEL1_LOCAL_ENUM_VALUE0),
+          m_localEnumField5(MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolderLevel1_QtProtobufNested::NestedEnumHolderLevel2::LocalEnum::NESTED_LEVEL2_LOCAL_ENUM_VALUE0)
     {
     }
 
     NestedEnumMessage_QtProtobufData(const NestedEnumMessage_QtProtobufData &other)
         : QSharedData(other),
-          m_localEnumMsg(other.m_localEnumMsg)
+          m_localEnumField(other.m_localEnumField),
+          m_localEnumField2(other.m_localEnumField2),
+          m_localEnumField3(other.m_localEnumField3),
+          m_localEnumField4(other.m_localEnumField4),
+          m_localEnumField5(other.m_localEnumField5)
     {
     }
 
-    MixedEnumUsageMessage::LocalEnum m_localEnumMsg;
+    MixedEnumUsageMessage::LocalEnum m_localEnumField;
+    RepeatedEnumMessage::LocalEnum m_localEnumField2;
+    MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolder::LocalEnum m_localEnumField3;
+    MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolderLevel1::LocalEnum m_localEnumField4;
+    MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolderLevel1_QtProtobufNested::NestedEnumHolderLevel2::LocalEnum m_localEnumField5;
 };
 
 NestedEnumMessage::~NestedEnumMessage() = default;
 
 static constexpr struct {
     QtProtobufPrivate::QProtobufPropertyOrdering::Data data;
-    const std::array<uint, 5> qt_protobuf_NestedEnumMessage_uint_data;
-    const char qt_protobuf_NestedEnumMessage_char_data[80];
+    const std::array<uint, 21> qt_protobuf_NestedEnumMessage_uint_data;
+    const char qt_protobuf_NestedEnumMessage_char_data[146];
 } qt_protobuf_NestedEnumMessage_metadata {
     // data
     {
         0, /* = version */
-        1, /* = num fields */
-        2, /* = field number offset */
-        3, /* = property index offset */
-        4, /* = field flags offset */
+        5, /* = num fields */
+        6, /* = field number offset */
+        11, /* = property index offset */
+        16, /* = field flags offset */
         65, /* = message full name length */
     },
     // uint_data
     {
         // JSON name offsets:
-        66, /* = localEnumMsg */
-        79, /* = end-of-string-marker */
+        66, /* = localEnumField */
+        81, /* = localEnumField2 */
+        97, /* = localEnumField3 */
+        113, /* = localEnumField4 */
+        129, /* = localEnumField5 */
+        145, /* = end-of-string-marker */
         // Field numbers:
-        1, /* = localEnumMsg */
+        1, /* = localEnumField */
+        2, /* = localEnumField2 */
+        3, /* = localEnumField3 */
+        4, /* = localEnumField4 */
+        5, /* = localEnumField5 */
         // Property indices:
-        0, /* = localEnumMsg */
+        0, /* = localEnumField */
+        1, /* = localEnumField2 */
+        2, /* = localEnumField3 */
+        3, /* = localEnumField4 */
+        4, /* = localEnumField5 */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = localEnumMsg */
+        QtProtobufPrivate::NoFlags, /* = localEnumField */
+        QtProtobufPrivate::NoFlags, /* = localEnumField2 */
+        QtProtobufPrivate::NoFlags, /* = localEnumField3 */
+        QtProtobufPrivate::NoFlags, /* = localEnumField4 */
+        QtProtobufPrivate::NoFlags, /* = localEnumField5 */
     },
     // char_data
     /* metadata char_data: */
     "qtprotobufnamespace.tests.MixedEnumUsageMessage.NestedEnumMessage\0" /* = full message name */
     /* field char_data: */
-    "localEnumMsg\0"
+    "localEnumField\0localEnumField2\0localEnumField3\0localEnumField4\0localEnumField5\0"
 };
 
 const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumMessage::propertyOrdering = {
@@ -360,7 +675,11 @@ NestedEnumMessage &NestedEnumMessage::operator =(NestedEnumMessage &&other) noex
 bool NestedEnumMessage::operator ==(const NestedEnumMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_localEnumMsg == other.dptr->m_localEnumMsg;
+        && dptr->m_localEnumField == other.dptr->m_localEnumField
+        && dptr->m_localEnumField2 == other.dptr->m_localEnumField2
+        && dptr->m_localEnumField3 == other.dptr->m_localEnumField3
+        && dptr->m_localEnumField4 == other.dptr->m_localEnumField4
+        && dptr->m_localEnumField5 == other.dptr->m_localEnumField5;
 }
 
 bool NestedEnumMessage::operator !=(const NestedEnumMessage &other) const
@@ -368,16 +687,68 @@ bool NestedEnumMessage::operator !=(const NestedEnumMessage &other) const
     return !this->operator ==(other);
 }
 
-MixedEnumUsageMessage::LocalEnum NestedEnumMessage::localEnumMsg() const
+MixedEnumUsageMessage::LocalEnum NestedEnumMessage::localEnumField() const
 {
-    return dptr->m_localEnumMsg;
+    return dptr->m_localEnumField;
 }
 
-void NestedEnumMessage::setLocalEnumMsg(const MixedEnumUsageMessage::LocalEnum &localEnumMsg)
+RepeatedEnumMessage::LocalEnum NestedEnumMessage::localEnumField2() const
 {
-    if (dptr->m_localEnumMsg != localEnumMsg) {
+    return dptr->m_localEnumField2;
+}
+
+MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolder::LocalEnum NestedEnumMessage::localEnumField3() const
+{
+    return dptr->m_localEnumField3;
+}
+
+MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolderLevel1::LocalEnum NestedEnumMessage::localEnumField4() const
+{
+    return dptr->m_localEnumField4;
+}
+
+MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolderLevel1_QtProtobufNested::NestedEnumHolderLevel2::LocalEnum NestedEnumMessage::localEnumField5() const
+{
+    return dptr->m_localEnumField5;
+}
+
+void NestedEnumMessage::setLocalEnumField(const MixedEnumUsageMessage::LocalEnum &localEnumField)
+{
+    if (dptr->m_localEnumField != localEnumField) {
         dptr.detach();
-        dptr->m_localEnumMsg = localEnumMsg;
+        dptr->m_localEnumField = localEnumField;
+    }
+}
+
+void NestedEnumMessage::setLocalEnumField2(const RepeatedEnumMessage::LocalEnum &localEnumField2)
+{
+    if (dptr->m_localEnumField2 != localEnumField2) {
+        dptr.detach();
+        dptr->m_localEnumField2 = localEnumField2;
+    }
+}
+
+void NestedEnumMessage::setLocalEnumField3(const MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolder::LocalEnum &localEnumField3)
+{
+    if (dptr->m_localEnumField3 != localEnumField3) {
+        dptr.detach();
+        dptr->m_localEnumField3 = localEnumField3;
+    }
+}
+
+void NestedEnumMessage::setLocalEnumField4(const MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolderLevel1::LocalEnum &localEnumField4)
+{
+    if (dptr->m_localEnumField4 != localEnumField4) {
+        dptr.detach();
+        dptr->m_localEnumField4 = localEnumField4;
+    }
+}
+
+void NestedEnumMessage::setLocalEnumField5(const MixedEnumUsageMessage_QtProtobufNested::NestedEnumHolderLevel1_QtProtobufNested::NestedEnumHolderLevel2::LocalEnum &localEnumField5)
+{
+    if (dptr->m_localEnumField5 != localEnumField5) {
+        dptr.detach();
+        dptr->m_localEnumField5 = localEnumField5;
     }
 }
 
