@@ -98,7 +98,7 @@ std::map<std::string, std::string> common::getNestedScopeNamespace(const std::st
 TypeMap common::produceQtTypeMap(const Descriptor *type, const Descriptor *scope)
 {
     std::string namespaces = getFullNamespace(type, "::");
-    std::string scopeNamespaces = getScopeNamespace(namespaces, getFullNamespace(scope, "::"));
+    std::string scopeNamespaces = getScopeNamespace(type, scope);
     std::string qmlPackage = getFullNamespace(type, ".");
 
     std::string name = type->name();
@@ -127,7 +127,7 @@ TypeMap common::produceMessageTypeMap(const Descriptor *type, const Descriptor *
 {
     std::string namespaces = getFullNamespace(type, "::");
     std::string nestedNamespaces = isNested(type) ? getNestedNamespace(type, "::") : namespaces;
-    std::string scopeNamespaces = getScopeNamespace(nestedNamespaces, getFullNamespace(scope, "::"));
+    std::string scopeNamespaces = getScopeNamespace(type, scope);
     std::string qmlPackage = getFullNamespace(type, ".");
     if (qmlPackage.empty())
         qmlPackage = "QtProtobuf";
@@ -172,15 +172,15 @@ TypeMap common::produceEnumTypeMap(const EnumDescriptor *type, const Descriptor 
     std::string qmlPackage = getFullNamespace(type, ".");
     if (qmlPackage.empty())
         qmlPackage = "QtProtobuf";
-    // Not used:
+
+    std::string scopeNamespaces = getScopeNamespace(type, scope);
     std::string enumGadget = scope != nullptr ? utils::capitalizeAsciiName(scope->name()) : "";
     if (visibility == GLOBAL_ENUM) {
         enumGadget = name + CommonTemplates::EnumClassSuffix();
         namespaces += "::";
         namespaces += enumGadget; // Global enums are stored in helper Gadget
+        scopeNamespaces = getScopeNamespace(namespaces, getFullNamespace(scope, "::"));
     }
-
-    std::string scopeNamespaces = getScopeNamespace(namespaces, getFullNamespace(scope, "::"));
 
     std::string fullName = namespaces.empty() ? name : (namespaces + "::" + name);
     std::string scopeName = scopeNamespaces.empty() ? name : (scopeNamespaces + "::" + name);
