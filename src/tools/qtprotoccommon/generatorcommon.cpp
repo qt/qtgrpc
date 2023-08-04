@@ -48,24 +48,20 @@ std::string common::getFullNamespace(std::string_view fullDescriptorName,
 */
 std::string common::getNestedNamespace(const Descriptor *type, std::string_view separator)
 {
-    static const std::string nestedSuffix = CommonTemplates::QtProtobufNestedNamespace();
+    assert(type != nullptr);
+    std::string namespaces = type->file()->package();
 
-    const std::size_t packageSize =
-            type->file()->package().size() > 0 ? type->file()->package().size() + 1 : 0;
-    const std::size_t nameSize = type->name().size() > 0 ? type->name().size() + 1 : 0;
-    const std::size_t namespaceSize = type->full_name().size() - packageSize - nameSize;
-    if (namespaceSize == 0)
-        return {};
-    std::string nestedNamespaces =
-            utils::replace(type->full_name().substr(packageSize, namespaceSize), ".",
-                           nestedSuffix + std::string(separator));
-    if (!nestedNamespaces.empty())
-        nestedNamespaces += nestedSuffix;
-    std::string output = utils::replace(type->file()->package(), ".", separator);
-    if (!output.empty() && !nestedNamespaces.empty())
-        output += separator;
-    output += nestedNamespaces;
-    return output;
+    std::string nestingNamespaces;
+    const Descriptor *containingType = type->containing_type();
+    while (containingType) {
+        nestingNamespaces.insert(0,
+                                 std::string(separator) + containingType->name()
+                                         + CommonTemplates::QtProtobufNestedNamespace());
+        containingType = containingType->containing_type();
+    }
+    if (!nestingNamespaces.empty())
+        namespaces += nestingNamespaces;
+    return utils::replace(namespaces, ".", separator);
 }
 
 /*
