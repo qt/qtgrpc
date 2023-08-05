@@ -346,7 +346,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
 {
     QNetworkReply *networkReply = dPtr->post(method, service, arg, options);
 
-    std::shared_ptr<QGrpcStream> grpcStream(new QGrpcStream(method, arg, serializer()));
+    std::shared_ptr<QGrpcStream> grpcStream(new QGrpcStream(method, serializer()));
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
     auto readConnection = std::make_shared<QMetaObject::Connection>();

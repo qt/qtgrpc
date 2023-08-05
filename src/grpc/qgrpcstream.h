@@ -22,14 +22,13 @@ class Q_GRPC_EXPORT QGrpcStream final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcStream(QLatin1StringView method, QByteArrayView arg,
+    explicit QGrpcStream(QLatin1StringView method,
                          std::shared_ptr<QAbstractProtobufSerializer> serializer);
     ~QGrpcStream() override;
 
     void abort() override;
 
     QLatin1StringView method() const;
-    QByteArrayView arg() const;
     void updateData(const QByteArray &data);
 
 Q_SIGNALS:
@@ -37,7 +36,6 @@ Q_SIGNALS:
 
 private:
     const std::string m_method;
-    const QByteArray m_arg;
 };
 
 QT_END_NAMESPACE

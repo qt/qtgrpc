@@ -297,12 +297,12 @@ std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(QLatin1StringView 
                                                               QByteArrayView arg,
                                                               const QGrpcCallOptions &options)
 {
-    std::shared_ptr<QGrpcStream> stream(new QGrpcStream(method, arg, serializer()));
+    std::shared_ptr<QGrpcStream> stream(new QGrpcStream(method, serializer()));
     const QByteArray rpcName = buildRpcName(service, stream->method());
 
     QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(),
                                                                   QLatin1StringView(rpcName),
-                                                                  stream->arg()));
+                                                                  arg));
 
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
     auto readConnection = std::make_shared<QMetaObject::Connection>();
