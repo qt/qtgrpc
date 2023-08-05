@@ -34,7 +34,7 @@ namespace qtprotobufnamespace::tests {
 namespace TestEnumGadget {
 Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT)
 QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void registerTypes();
-enum TestEnum {
+enum TestEnum : int32_t {
     TEST_ENUM_VALUE0 = 0,
     TEST_ENUM_VALUE1 = 1,
     TEST_ENUM_VALUE2 = 2,
@@ -48,7 +48,7 @@ using TestEnumRepeated = QList<TestEnum>;
 namespace TestEnumSecondInFileGadget {
 Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT)
 QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void registerTypes();
-enum TestEnumSecondInFile {
+enum TestEnumSecondInFile : int32_t {
     TEST_ENUM_SIF_VALUE0 = 0,
     TEST_ENUM_SIF_VALUE1 = 1,
     TEST_ENUM_SIF_VALUE2 = 2,
@@ -94,7 +94,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    enum LocalEnum {
+    enum LocalEnum : int32_t {
         LOCAL_ENUM_VALUE0 = 0,
         LOCAL_ENUM_VALUE1 = 1,
         LOCAL_ENUM_VALUE2 = 2,
@@ -134,7 +134,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    enum LocalEnum {
+    enum LocalEnum : int32_t {
         LOCAL_ENUM_VALUE0 = 0,
         LOCAL_ENUM_VALUE1 = 1,
         LOCAL_ENUM_VALUE2 = 2,
@@ -181,7 +181,7 @@ public:
     };
     Q_ENUM(QtProtobufFieldEnum)
 
-    enum LocalEnum {
+    enum LocalEnum : int32_t {
         LOCAL_ENUM_VALUE0 = 0,
         LOCAL_ENUM_VALUE1 = 1,
         LOCAL_ENUM_VALUE2 = 2,
@@ -235,7 +235,7 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumHolder : public QProtobufMe
     QML_VALUE_TYPE(nestedEnumHolder)
 
 public:
-    enum LocalEnum {
+    enum LocalEnum : int32_t {
         NESTED_LOCAL_ENUM_VALUE0 = 0,
         NESTED_LOCAL_ENUM_VALUE1 = 1,
         NESTED_LOCAL_ENUM_VALUE2 = 2,
@@ -266,7 +266,7 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumHolderLevel1 : public QProt
     QML_VALUE_TYPE(nestedEnumHolderLevel1)
 
 public:
-    enum LocalEnum {
+    enum LocalEnum : int32_t {
         NESTED_LEVEL1_LOCAL_ENUM_VALUE0 = 0,
         NESTED_LEVEL1_LOCAL_ENUM_VALUE1 = 1,
     };
@@ -298,7 +298,7 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumHolderLevel2 : public QProt
     QML_VALUE_TYPE(nestedEnumHolderLevel2)
 
 public:
-    enum LocalEnum {
+    enum LocalEnum : int32_t {
         NESTED_LEVEL2_LOCAL_ENUM_VALUE0 = 0,
         NESTED_LEVEL2_LOCAL_ENUM_VALUE1 = 1,
     };

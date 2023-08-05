@@ -305,7 +305,7 @@ const char *CommonTemplates::PrivateBlockTemplate()
 }
 const char *CommonTemplates::EnumDefinitionTemplate()
 {
-    return "enum $type$ {\n";
+    return "enum $type$ : int32_t {\n";
 }
 const char *CommonTemplates::EnumClassDefinitionTemplate()
 {
