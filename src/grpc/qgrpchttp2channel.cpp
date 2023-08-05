@@ -346,7 +346,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
 {
     QNetworkReply *networkReply = dPtr->post(method, service, arg, options);
 
-    std::shared_ptr<QGrpcStream> grpcStream(new QGrpcStream(method, serializer()));
+    std::shared_ptr<QGrpcStream> grpcStream(new QGrpcStream(serializer()));
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
     auto readConnection = std::make_shared<QMetaObject::Connection>();
@@ -411,7 +411,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
     *finishConnection = QObject::connect(
             networkReply, &QNetworkReply::finished, grpcStream.get(),
             [weakGrpcStream, service, networkReply, abortConnection, readConnection,
-             finishConnection, this]() {
+             finishConnection, this, method]() {
                 const QString errorString = networkReply->errorString();
                 const QNetworkReply::NetworkError networkError = networkReply->error();
                 QObject::disconnect(*readConnection);
@@ -426,7 +426,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                     qGrpcWarning() << "Could not lock gRPC stream pointer.";
                     return;
                 }
-                qGrpcWarning() << grpcStream->method() << "call" << service
+                qGrpcWarning() << method << "call" << service
                                << "stream finished:" << errorString;
                 grpcStream->setMetadata(collectMetadata(networkReply));
                 switch (networkError) {
@@ -449,7 +449,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                     emit grpcStream->errorOccurred(
                             QGrpcStatus{ StatusCodeMap.at(networkError),
                                          "%1 call %2 stream failed: %3"_L1.arg(
-                                                 service, grpcStream->method(), errorString) });
+                                                 service, method, errorString) });
                     break;
                 }
             });

@@ -22,9 +22,8 @@ QT_BEGIN_NAMESPACE
     The signal is emitted when the stream receives an updated value from server.
 */
 
-QGrpcStream::QGrpcStream(QLatin1StringView method,
-                         std::shared_ptr<QAbstractProtobufSerializer> serializer)
-    : QGrpcOperation(std::move(serializer)), m_method(method.data(), method.size())
+QGrpcStream::QGrpcStream(std::shared_ptr<QAbstractProtobufSerializer> serializer)
+    : QGrpcOperation(std::move(serializer))
 {
 }
 
@@ -43,14 +42,6 @@ void QGrpcStream::abort()
         QMetaObject::invokeMethod(this, &QGrpcStream::finished, Qt::BlockingQueuedConnection);
     else
         emit finished();
-}
-
-/*!
-    Returns the method for this stream.
-*/
-QLatin1StringView QGrpcStream::method() const
-{
-    return QLatin1StringView(m_method);
 }
 
 /*!

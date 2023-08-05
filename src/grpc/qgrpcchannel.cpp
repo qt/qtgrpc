@@ -297,8 +297,8 @@ std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(QLatin1StringView 
                                                               QByteArrayView arg,
                                                               const QGrpcCallOptions &options)
 {
-    std::shared_ptr<QGrpcStream> stream(new QGrpcStream(method, serializer()));
-    const QByteArray rpcName = buildRpcName(service, stream->method());
+    std::shared_ptr<QGrpcStream> stream(new QGrpcStream(serializer()));
+    const QByteArray rpcName = buildRpcName(service, method);
 
     QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(),
                                                                   QLatin1StringView(rpcName),

@@ -198,10 +198,10 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
 
         auto errorConnection = std::make_shared<QMetaObject::Connection>();
         *errorConnection = connect(grpcStream.get(), &QGrpcStream::errorOccurred, this,
-                                   [this, grpcStream](const QGrpcStatus &status) {
+                                   [this, grpcStream, method](const QGrpcStatus &status) {
                                        Q_D(QAbstractGrpcClient);
                                        qGrpcWarning()
-                                               << grpcStream->method() << "call" << d->service
+                                               << method << "call" << d->service
                                                << "stream error: " << status.message();
                                        errorOccurred(status);
                                    });
@@ -209,10 +209,9 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
         auto finishedConnection = std::make_shared<QMetaObject::Connection>();
         *finishedConnection = connect(
                 grpcStream.get(), &QGrpcStream::finished, this,
-                [this, grpcStream, errorConnection, finishedConnection]() mutable {
+                [this, grpcStream, errorConnection, finishedConnection, method]() mutable {
                     Q_D(QAbstractGrpcClient);
-                    qGrpcWarning()
-                            << grpcStream->method() << "call" << d->service << "stream finished.";
+                    qGrpcWarning() << method << "call" << d->service << "stream finished.";
 
                     auto it =
                             std::find(d->activeStreams.begin(), d->activeStreams.end(), grpcStream);
