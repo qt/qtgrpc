@@ -427,11 +427,6 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                                << "stream finished:" << errorString;
                 grpcStream->setMetadata(collectMetadata(networkReply));
                 switch (networkError) {
-                case QNetworkReply::RemoteHostClosedError:
-                    qGrpcDebug() << "Remote server closed connection. Reconnect silently.";
-
-                    this->startStream(grpcStream->method(), service, grpcStream->arg());
-                    break;
                 case QNetworkReply::NoError: {
                     // Reply is closed without network error, but may contain an unhandled data
                     // TODO: processReply returns the data, that might need the processing. It's
