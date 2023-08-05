@@ -71,6 +71,8 @@ struct common {
         std::string suffix;
         if constexpr (std::is_same<T, Descriptor>::value)
             suffix = !isMap(type) ? CommonTemplates::QtProtobufNestedNamespace() : "";
+        else if constexpr (std::is_same<T, EnumDescriptor>::value)
+            suffix = CommonTemplates::QtProtobufNestedNamespace();
 
         const Descriptor *containingType = type->containing_type();
         std::string nestingNamespaces;
@@ -111,6 +113,7 @@ struct common {
     static bool isLocalEnum(const EnumDescriptor *type, const google::protobuf::Descriptor *scope);
     static EnumVisibility enumVisibility(const EnumDescriptor *type, const Descriptor *scope);
     static bool hasQmlAlias(const FieldDescriptor *field);
+    static bool hasNestedTypes(const Descriptor *type);
     static bool isQtType(const FieldDescriptor *field);
     static bool isOverridden(const FieldDescriptor *field);
     static bool isPureMessage(const FieldDescriptor *field);

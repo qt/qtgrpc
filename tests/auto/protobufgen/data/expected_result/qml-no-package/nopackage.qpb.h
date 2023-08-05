@@ -33,7 +33,8 @@
 
 namespace TestEnumGadget {
 Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
-QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void registerTypes();
+QML_NAMED_ELEMENT(TestEnum)
+
 enum TestEnum : int32_t {
     LOCAL_ENUM_VALUE0 = 0,
     LOCAL_ENUM_VALUE1 = 1,
@@ -41,16 +42,34 @@ enum TestEnum : int32_t {
     LOCAL_ENUM_VALUE3 = 5,
 };
 Q_ENUM_NS(TestEnum)
+
 using TestEnumRepeated = QList<TestEnum>;
-};
+QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void registerTypes();
+} // namespace TestEnumGadget
 class EmptyMessage;
 using EmptyMessageRepeated = QList<EmptyMessage>;
+namespace EmptyMessage_QtProtobufNested {
+enum class QtProtobufFieldEnum;
+} // namespace EmptyMessage_QtProtobufNested
+
 class SimpleIntMessage;
 using SimpleIntMessageRepeated = QList<SimpleIntMessage>;
+namespace SimpleIntMessage_QtProtobufNested {
+enum class QtProtobufFieldEnum;
+} // namespace SimpleIntMessage_QtProtobufNested
+
 class NoPackageExternalMessage;
 using NoPackageExternalMessageRepeated = QList<NoPackageExternalMessage>;
+namespace NoPackageExternalMessage_QtProtobufNested {
+enum class QtProtobufFieldEnum;
+} // namespace NoPackageExternalMessage_QtProtobufNested
+
 class NoPackageMessage;
 using NoPackageMessageRepeated = QList<NoPackageMessage>;
+namespace NoPackageMessage_QtProtobufNested {
+enum class QtProtobufFieldEnum;
+} // namespace NoPackageMessage_QtProtobufNested
+
 
 class EmptyMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT EmptyMessage : public QProtobufMessage
@@ -61,6 +80,7 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT EmptyMessage : public QProt
     QML_VALUE_TYPE(emptyMessage)
 
 public:
+    using QtProtobufFieldEnum = EmptyMessage_QtProtobufNested::QtProtobufFieldEnum;
     EmptyMessage();
     ~EmptyMessage();
     EmptyMessage(const EmptyMessage &other);
@@ -74,6 +94,11 @@ public:
 private:
     QExplicitlySharedDataPointer<EmptyMessage_QtProtobufData> dptr;
 };
+namespace EmptyMessage_QtProtobufNested {
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
+QML_NAMED_ELEMENT(EmptyMessage)
+
+} // namespace EmptyMessage_QtProtobufNested
 
 class SimpleIntMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage : public QProtobufMessage
@@ -86,11 +111,7 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage : public Q
     Q_PROPERTY(int testFieldInt READ testFieldInt_p WRITE setTestFieldInt_p SCRIPTABLE true)
 
 public:
-    enum QtProtobufFieldEnum {
-        TestFieldIntProtoFieldNumber = 1,
-    };
-    Q_ENUM(QtProtobufFieldEnum)
-
+    using QtProtobufFieldEnum = SimpleIntMessage_QtProtobufNested::QtProtobufFieldEnum;
     SimpleIntMessage();
     ~SimpleIntMessage();
     SimpleIntMessage(const SimpleIntMessage &other);
@@ -109,6 +130,16 @@ private:
     void setTestFieldInt_p(const int &testFieldInt);
     QExplicitlySharedDataPointer<SimpleIntMessage_QtProtobufData> dptr;
 };
+namespace SimpleIntMessage_QtProtobufNested {
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
+QML_NAMED_ELEMENT(SimpleIntMessage)
+
+enum class QtProtobufFieldEnum {
+    TestFieldIntProtoFieldNumber = 1,
+};
+Q_ENUM_NS(QtProtobufFieldEnum)
+
+} // namespace SimpleIntMessage_QtProtobufNested
 
 class NoPackageExternalMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage : public QProtobufMessage
@@ -121,11 +152,7 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage : 
     Q_PROPERTY(SimpleIntMessageExt testField READ testField WRITE setTestField)
 
 public:
-    enum QtProtobufFieldEnum {
-        TestFieldProtoFieldNumber = 1,
-    };
-    Q_ENUM(QtProtobufFieldEnum)
-
+    using QtProtobufFieldEnum = NoPackageExternalMessage_QtProtobufNested::QtProtobufFieldEnum;
     NoPackageExternalMessage();
     ~NoPackageExternalMessage();
     NoPackageExternalMessage(const NoPackageExternalMessage &other);
@@ -145,6 +172,16 @@ private:
     void setTestField_p(SimpleIntMessageExt *testField);
     QExplicitlySharedDataPointer<NoPackageExternalMessage_QtProtobufData> dptr;
 };
+namespace NoPackageExternalMessage_QtProtobufNested {
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
+QML_NAMED_ELEMENT(NoPackageExternalMessage)
+
+enum class QtProtobufFieldEnum {
+    TestFieldProtoFieldNumber = 1,
+};
+Q_ENUM_NS(QtProtobufFieldEnum)
+
+} // namespace NoPackageExternalMessage_QtProtobufNested
 
 class NoPackageMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage : public QProtobufMessage
@@ -157,11 +194,7 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage : public Q
     Q_PROPERTY(SimpleIntMessage testField READ testField WRITE setTestField)
 
 public:
-    enum QtProtobufFieldEnum {
-        TestFieldProtoFieldNumber = 1,
-    };
-    Q_ENUM(QtProtobufFieldEnum)
-
+    using QtProtobufFieldEnum = NoPackageMessage_QtProtobufNested::QtProtobufFieldEnum;
     NoPackageMessage();
     ~NoPackageMessage();
     NoPackageMessage(const NoPackageMessage &other);
@@ -181,6 +214,16 @@ private:
     void setTestField_p(SimpleIntMessage *testField);
     QExplicitlySharedDataPointer<NoPackageMessage_QtProtobufData> dptr;
 };
+namespace NoPackageMessage_QtProtobufNested {
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
+QML_NAMED_ELEMENT(NoPackageMessage)
+
+enum class QtProtobufFieldEnum {
+    TestFieldProtoFieldNumber = 1,
+};
+Q_ENUM_NS(QtProtobufFieldEnum)
+
+} // namespace NoPackageMessage_QtProtobufNested
 
 Q_DECLARE_METATYPE(EmptyMessage)
 Q_DECLARE_METATYPE(SimpleIntMessage)

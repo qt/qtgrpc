@@ -86,7 +86,7 @@ void SimpleChatEngine::sendMessage(const QString &content)
     // ![2]
     qtgrpc::examples::chat::ChatMessage msg;
     msg.setContent(content.toUtf8());
-    msg.setType(qtgrpc::examples::chat::ChatMessage::Text);
+    msg.setType(qtgrpc::examples::chat::ChatMessage::ContentType::Text);
     msg.setTimestamp(QDateTime::currentMSecsSinceEpoch());
     msg.setFrom(m_userName);
     m_client->sendMessage(msg);
@@ -146,7 +146,7 @@ void SimpleChatEngine::sendImageFromClipboard()
 
     qtgrpc::examples::chat::ChatMessage msg;
     msg.setContent(imgData);
-    msg.setType(qtgrpc::examples::chat::ChatMessage::Image);
+    msg.setType(qtgrpc::examples::chat::ChatMessage::ContentType::Image);
     msg.setTimestamp(QDateTime::currentMSecsSinceEpoch());
     msg.setFrom(m_userName);
     m_client->sendMessage(msg);

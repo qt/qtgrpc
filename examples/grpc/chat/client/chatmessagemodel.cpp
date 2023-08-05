@@ -59,7 +59,7 @@ QVariant ChatMessageModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case Content:
-        if (data.type() == qtgrpc::examples::chat::ChatMessage::Image)
+        if (data.type() == qtgrpc::examples::chat::ChatMessage::ContentType::Image)
             return QVariant::fromValue(getImageScaled(data.content()));
         else
             return QVariant::fromValue(getText(data.content()));

@@ -39,11 +39,6 @@ private:
                         ::google::protobuf::compiler::GeneratorContext *generatorContext) const;
     void GenerateSources(const ::google::protobuf::FileDescriptor *file,
                          ::google::protobuf::compiler::GeneratorContext *generatorContext) const;
-    void GenerateQmlPluginSource(const ::google::protobuf::FileDescriptor *file,
-                                 std::shared_ptr<google::protobuf::io::Printer> printer) const;
-    void GenerateQmlPluginIntro(::google::protobuf::io::Printer *printer,
-                                const std::set<std::string> &headersContainer,
-                                const std::string &packageName) const;
 };
 } // namespace QtProtobuf
 

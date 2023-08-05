@@ -315,10 +315,6 @@ function(qt6_add_protobuf target)
             )
         endif()
         list(APPEND generation_options "QML_URI=${qml_uri}")
-
-        string(REPLACE "." "_" qml_plugin_base_name "${qml_uri}")
-        list(APPEND qml_sources
-            "${output_directory}/${qml_plugin_base_name}plugin.cpp")
     endif()
 
     if(arg_PROTO_INCLUDES)
@@ -437,14 +433,10 @@ function(qt6_add_protobuf target)
         qt_policy(SET QTP0001 NEW)
         qt6_add_qml_module(${target}
             URI ${qml_uri}
-            NO_GENERATE_PLUGIN_SOURCE
-            NO_PLUGIN_OPTIONAL
             PLUGIN_TARGET "${target}plugin"
             VERSION 1.0
             OUTPUT_DIRECTORY "${qml_module_output_full_path}"
         )
-        target_sources(${target}plugin PRIVATE
-            "${output_directory}/${qml_plugin_base_name}plugin.cpp")
         set_target_properties(${target}plugin
             PROPERTIES
                 AUTOMOC ON

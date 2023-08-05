@@ -138,7 +138,10 @@ const char *CommonTemplates::UsingNestedMessageTemplate()
     return "using $type$ = $scope_namespaces$::$type$;\n"
            "using $list_type$ = $scope_namespaces$::$list_type$;\n";
 }
-
+const char *CommonTemplates::UsingEnumTemplate()
+{
+    return "using $type$ = $scope_namespaces$::$type$;\n";
+}
 const char *CommonTemplates::UsingRepeatedEnumTemplate()
 {
     return "using $list_type$ = QList<$type$>;\n";
@@ -152,21 +155,32 @@ const char *CommonTemplates::NamespaceClosingTemplate()
 {
     return "} // namespace $scope_namespaces$\n";
 }
-const char *CommonTemplates::EnumDeclarationTemplate()
+const char *CommonTemplates::EnumGadgetDeclarationTemplate()
 {
-    return "\nnamespace $classname$ {\n"
-           "Q_NAMESPACE_EXPORT($export_macro$)\n";
+    return "\nnamespace $enum_gadget$ {\n";
 }
-
-const char *CommonTemplates::EnumDeclarationNoExportTemplate()
+const char *CommonTemplates::QNamespaceDeclarationTemplate()
 {
-    return "\nnamespace $classname$ {\n"
-           "Q_NAMESPACE\n";
+    return "Q_NAMESPACE_EXPORT($export_macro$)\n";
 }
-
+const char *CommonTemplates::QNamespaceDeclarationNoExportTemplate()
+{
+    return "Q_NAMESPACE\n";
+}
 const char *CommonTemplates::ClassMessageForwardDeclarationTemplate()
 {
     return "class $classname$;\n";
+}
+
+const char *CommonTemplates::EnumForwardDeclarationTemplate()
+{
+    return "enum $type$ : int32_t;\n"
+           "using $list_type$ = QList<$type$>;\n";
+}
+
+const char *CommonTemplates::EnumClassForwardDeclarationTemplate()
+{
+    return "enum class $type$;\n";
 }
 
 const char *CommonTemplates::ClassMessageQmlBeginDeclarationTemplate()
@@ -890,8 +904,8 @@ const char *CommonTemplates::DeclareMetaTypeTemplate()
 const char *CommonTemplates::MetaTypeRegistrationLocalEnumTemplate()
 {
     return "qRegisterProtobufEnumType<$scope_type$>();\n"
-           "qRegisterMetaType<$scope_type$>();\n"
-           "qRegisterMetaType<$scope_list_type$>();\n";
+           "qRegisterMetaType<$type$>();\n"
+           "qRegisterMetaType<$list_type$>();\n";
 }
 const char *CommonTemplates::MetaTypeRegistrationMapTemplate()
 {
@@ -899,14 +913,9 @@ const char *CommonTemplates::MetaTypeRegistrationMapTemplate()
            "qRegisterProtobufMapType<$key_type$, $value_type$>();\n";
 }
 
-const char *CommonTemplates::QEnumTemplate()
-{
-    return "Q_ENUM($type$)\n";
-}
-
 const char *CommonTemplates::QEnumNSTemplate()
 {
-    return "Q_ENUM_NS($type$)\n";
+    return "Q_ENUM_NS($type$)\n\n";
 }
 
 const char *CommonTemplates::RegisterEnumSerializersTemplate()
@@ -923,6 +932,12 @@ const char *CommonTemplates::RegistrarEnumTemplate()
     return "static QtProtobuf::ProtoTypeRegistrar "
            "ProtoTypeRegistrar$enum_gadget$($enum_gadget$::registerTypes);\n";
 }
+
+const char *CommonTemplates::QmlNamedElement()
+{
+    return "QML_NAMED_ELEMENT($classname$)\n";
+}
+
 const char *CommonTemplates::QmlRegisterTypeTemplate()
 {
     return "qmlRegisterType<$scope_type$>(\"$qml_package$\", 1, 0, \"$type$\");\n";
@@ -1012,7 +1027,7 @@ const char *CommonTemplates::QtProtobufFieldEnum()
 }
 const char *CommonTemplates::FieldEnumTemplate()
 {
-    return "enum QtProtobufFieldEnum {\n";
+    return "enum class QtProtobufFieldEnum {\n";
 }
 const char *CommonTemplates::FieldNumberTemplate()
 {

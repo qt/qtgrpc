@@ -14,10 +14,6 @@
 
 using namespace Qt::StringLiterals;
 
-[[maybe_unused]] const QLatin1StringView
-qmlProtobufTypeRegistration("qtprotobufnamespace_testsplugin.cpp");
-const QLatin1StringView protobuftyperegistrations("_protobuftyperegistrations.cpp");
-[[maybe_unused]] const QLatin1StringView protobufQmlPlugin("_uri_testplugin.cpp");
 const QLatin1StringView cppExtension(".qpb.cpp");
 const QLatin1StringView headerExtension(".qpb.h");
 const QLatin1StringView protocGenQtprotobufKey(" --plugin=protoc-gen-qtprotobuf=");
@@ -200,8 +196,7 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
     QTest::addColumn<QString>("folder");
     QTest::addColumn<QString>("extension");
 
-    const QLatin1StringView extensions[]
-            = {protobuftyperegistrations, cppExtension, headerExtension};
+    const QLatin1StringView extensions[] = {cppExtension, headerExtension};
 
     for (const auto extension : extensions) {
         QTest::addRow("repeatednonpackedmessages%s", extension.data())
@@ -251,13 +246,8 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
 #endif
     }
 #ifdef HAVE_QML
-    QTest::addRow("nopackage%s", protobufQmlPlugin.data())
-            << "nopackage"
-            << "/qml-no-package/"
-            << QString(protobufQmlPlugin);
-
     const QLatin1StringView qmlExtensions[]
-            = {protobuftyperegistrations, cppExtension,
+            = {cppExtension,
                 headerExtension};
 
     for (const auto extension : qmlExtensions) {
@@ -271,11 +261,6 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
                 << "/qmlgen/"
                 << QString(extension);
     }
-
-    QTest::addRow("QML plugin file: %s", qmlProtobufTypeRegistration.data())
-            << ""
-            << "/qmlgen/"
-            << QString(qmlProtobufTypeRegistration);
 #endif
 }
 
@@ -322,7 +307,7 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
     QTest::addColumn<QString>("generatedFolderStructure");
 
     const QLatin1StringView extensions[]
-            = {protobuftyperegistrations, cppExtension, headerExtension};
+            = {cppExtension, headerExtension};
 
     for (const auto extension : extensions) {
         QTest::addRow("basicmessages%s", extension.data())
@@ -382,14 +367,6 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
                 << "";
 #endif
     }
-#ifdef HAVE_QML
-    QTest::addRow("nopackage%s", protobufQmlPlugin.data())
-            << "nopackage"
-            << "QML_URI=nopackage.uri.test;EXPORT_MACRO=TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN"
-            << "/qml-no-package/"
-            << QString(protobufQmlPlugin)
-            << "";
-#endif
 }
 
 void tst_qtprotobufgen::cmdLineGeneratedFile()
@@ -458,7 +435,7 @@ void tst_qtprotobufgen::cmdLineGeneratedNoOptions_data()
     QTest::addColumn<QString>("extension");
 
     const QLatin1StringView extensions[]
-            = {protobuftyperegistrations, cppExtension, headerExtension};
+            = {cppExtension, headerExtension};
 
     for (const auto extension : extensions) {
         QTest::addRow("annotation%s", extension.data())

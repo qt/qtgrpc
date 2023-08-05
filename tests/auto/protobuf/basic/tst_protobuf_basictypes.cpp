@@ -74,7 +74,7 @@ void QtProtobufTypesGenerationTest::BoolMessageTest()
     QCOMPARE(test.property(propertyName).value<bool>(), true);
     QCOMPARE(test.testFieldBool(), true);
 
-    QCOMPARE(SimpleBoolMessage::TestFieldBoolProtoFieldNumber, 1);
+    QCOMPARE(int(SimpleBoolMessage::QtProtobufFieldEnum::TestFieldBoolProtoFieldNumber), 1);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleBoolMessage");
 }
@@ -89,7 +89,9 @@ void QtProtobufTypesGenerationTest::IntMessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::int32>(), 1);
     QCOMPARE(test.testFieldInt(), 1);
 
-    QCOMPARE(qtprotobufnamespace::tests::SimpleIntMessage::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(int(qtprotobufnamespace::tests::SimpleIntMessage::QtProtobufFieldEnum::
+                         TestFieldIntProtoFieldNumber),
+             1);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleIntMessage");
 }
@@ -104,7 +106,7 @@ void QtProtobufTypesGenerationTest::SIntMessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::sint32>(), 1);
     QCOMPARE(test.testFieldInt(), 1);
 
-    QCOMPARE(SimpleSIntMessage::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(int(SimpleSIntMessage::QtProtobufFieldEnum::TestFieldIntProtoFieldNumber), 1);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleSIntMessage");
 }
@@ -119,7 +121,7 @@ void QtProtobufTypesGenerationTest::UIntMessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::uint32>(), (uint32_t)1);
     QCOMPARE(test.testFieldInt(), 1u);
 
-    QCOMPARE(SimpleUIntMessage::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(int(SimpleUIntMessage::QtProtobufFieldEnum::TestFieldIntProtoFieldNumber), 1);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleUIntMessage");
 }
@@ -134,7 +136,7 @@ void QtProtobufTypesGenerationTest::Int64MessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::int64>(), 1);
     QCOMPARE(test.testFieldInt(), 1);
 
-    QCOMPARE(SimpleInt64Message::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(int(SimpleInt64Message::QtProtobufFieldEnum::TestFieldIntProtoFieldNumber), 1);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleInt64Message");
 }
@@ -149,7 +151,7 @@ void QtProtobufTypesGenerationTest::SInt64MessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::sint64>(), 1);
     QCOMPARE(test.testFieldInt(), 1);
 
-    QCOMPARE(SimpleSInt64Message::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(int(SimpleSInt64Message::QtProtobufFieldEnum::TestFieldIntProtoFieldNumber), 1);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleSInt64Message");
 }
@@ -164,7 +166,7 @@ void QtProtobufTypesGenerationTest::UInt64MessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::uint64>(), 1u);
     QCOMPARE(test.testFieldInt(), 1u);
 
-    QCOMPARE(SimpleUInt64Message::TestFieldIntProtoFieldNumber, 1u);
+    QCOMPARE(uint(SimpleUInt64Message::QtProtobufFieldEnum::TestFieldIntProtoFieldNumber), 1u);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleUInt64Message");
 }
@@ -179,7 +181,9 @@ void QtProtobufTypesGenerationTest::FixedInt32MessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::fixed32>(), 1u);
     QCOMPARE(test.testFieldFixedInt32(), 1u);
 
-    QCOMPARE(SimpleFixedInt32Message::TestFieldFixedInt32ProtoFieldNumber, 1u);
+    QCOMPARE(
+            uint(SimpleFixedInt32Message::QtProtobufFieldEnum::TestFieldFixedInt32ProtoFieldNumber),
+            1u);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleFixedInt32Message");
 }
@@ -194,7 +198,9 @@ void QtProtobufTypesGenerationTest::FixedInt64MessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::fixed64>(), 1u);
     QCOMPARE(test.testFieldFixedInt64(), 1u);
 
-    QCOMPARE(SimpleFixedInt64Message::TestFieldFixedInt64ProtoFieldNumber, 1u);
+    QCOMPARE(
+            uint(SimpleFixedInt64Message::QtProtobufFieldEnum::TestFieldFixedInt64ProtoFieldNumber),
+            1u);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleFixedInt64Message");
 }
@@ -209,7 +215,9 @@ void QtProtobufTypesGenerationTest::SFixedInt32MessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::sfixed32>(), 1);
     QCOMPARE(test.testFieldFixedInt32(), 1);
 
-    QCOMPARE(SimpleSFixedInt32Message::TestFieldFixedInt32ProtoFieldNumber, 1);
+    QCOMPARE(
+            int(SimpleSFixedInt32Message::QtProtobufFieldEnum::TestFieldFixedInt32ProtoFieldNumber),
+            1);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleSFixedInt32Message");
 }
@@ -224,7 +232,9 @@ void QtProtobufTypesGenerationTest::SFixedInt64MessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::sfixed64>(), 1);
     QCOMPARE(test.testFieldFixedInt64(), 1);
 
-    QCOMPARE(SimpleSFixedInt64Message::TestFieldFixedInt64ProtoFieldNumber, 1);
+    QCOMPARE(
+            int(SimpleSFixedInt64Message::QtProtobufFieldEnum::TestFieldFixedInt64ProtoFieldNumber),
+            1);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleSFixedInt64Message");
 }
@@ -241,7 +251,7 @@ void QtProtobufTypesGenerationTest::StringMessageTest()
     QCOMPARE(test.property(propertyName).toString(), "test1"_L1);
     QCOMPARE(test.testFieldString(), "test1"_L1);
 
-    QCOMPARE(SimpleStringMessage::TestFieldStringProtoFieldNumber, 6);
+    QCOMPARE(int(SimpleStringMessage::QtProtobufFieldEnum::TestFieldStringProtoFieldNumber), 6);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleStringMessage");
 }
@@ -261,7 +271,7 @@ void QtProtobufTypesGenerationTest::FloatMessageTest()
     QCOMPARE(test.property(propertyName).toFloat(), assignedValue);
     QCOMPARE(test.testFieldFloat(), assignedValue);
 
-    QCOMPARE(SimpleFloatMessage::TestFieldFloatProtoFieldNumber, 7);
+    QCOMPARE(int(SimpleFloatMessage::QtProtobufFieldEnum::TestFieldFloatProtoFieldNumber), 7);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleFloatMessage");
 }
@@ -280,7 +290,7 @@ void QtProtobufTypesGenerationTest::DoubleMessageTest()
     QCOMPARE(test.property(propertyName).toDouble(), assignedValue);
     QCOMPARE(test.testFieldDouble(), assignedValue);
 
-    QCOMPARE(SimpleDoubleMessage::TestFieldDoubleProtoFieldNumber, 8);
+    QCOMPARE(int(SimpleDoubleMessage::QtProtobufFieldEnum::TestFieldDoubleProtoFieldNumber), 8);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleDoubleMessage");
 }

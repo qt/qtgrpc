@@ -31,6 +31,10 @@
 
 class SimpleIntMessageExt;
 using SimpleIntMessageExtRepeated = QList<SimpleIntMessageExt>;
+namespace SimpleIntMessageExt_QtProtobufNested {
+enum class QtProtobufFieldEnum;
+} // namespace SimpleIntMessageExt_QtProtobufNested
+
 
 class SimpleIntMessageExt_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt : public QProtobufMessage
@@ -43,11 +47,7 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt : publi
     Q_PROPERTY(int testFieldInt READ testFieldInt_p WRITE setTestFieldInt_p SCRIPTABLE true)
 
 public:
-    enum QtProtobufFieldEnum {
-        TestFieldIntProtoFieldNumber = 1,
-    };
-    Q_ENUM(QtProtobufFieldEnum)
-
+    using QtProtobufFieldEnum = SimpleIntMessageExt_QtProtobufNested::QtProtobufFieldEnum;
     SimpleIntMessageExt();
     ~SimpleIntMessageExt();
     SimpleIntMessageExt(const SimpleIntMessageExt &other);
@@ -66,6 +66,16 @@ private:
     void setTestFieldInt_p(const int &testFieldInt);
     QExplicitlySharedDataPointer<SimpleIntMessageExt_QtProtobufData> dptr;
 };
+namespace SimpleIntMessageExt_QtProtobufNested {
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
+QML_NAMED_ELEMENT(SimpleIntMessageExt)
+
+enum class QtProtobufFieldEnum {
+    TestFieldIntProtoFieldNumber = 1,
+};
+Q_ENUM_NS(QtProtobufFieldEnum)
+
+} // namespace SimpleIntMessageExt_QtProtobufNested
 
 Q_DECLARE_METATYPE(SimpleIntMessageExt)
 #endif // QPROTOBUF_NOPACKAGEEXTERNAL_H

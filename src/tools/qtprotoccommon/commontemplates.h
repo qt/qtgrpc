@@ -37,11 +37,16 @@ public:
     static const char *UsingMapMessageTemplate();
     static const char *UsingNestedMessageTemplate();
     static const char *UsingRepeatedEnumTemplate();
+    static const char *UsingEnumTemplate();
     static const char *NamespaceTemplate();
     static const char *NamespaceClosingTemplate();
-    static const char *EnumDeclarationTemplate();
-    static const char *EnumDeclarationNoExportTemplate();
+    static const char *EnumGadgetDeclarationTemplate();
+    static const char *EnumGadgetDeclarationNoExportTemplate();
+    static const char *QNamespaceDeclarationTemplate();
+    static const char *QNamespaceDeclarationNoExportTemplate();
     static const char *ClassMessageForwardDeclarationTemplate();
+    static const char *EnumForwardDeclarationTemplate();
+    static const char *EnumClassForwardDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplateEmptyMacros();
     static const char *ClassMessageQmlBeginDeclarationTemplate();
@@ -175,7 +180,6 @@ public:
     static const char *DeclareMetaTypeMapTemplate();
     static const char *MetaTypeRegistrationLocalEnumTemplate();
     static const char *MetaTypeRegistrationMapTemplate();
-    static const char *QEnumTemplate();
     static const char *QEnumNSTemplate();
     static const char *RegisterEnumSerializersTemplate();
     static const char *RegistrarTemplate();
@@ -203,11 +207,14 @@ public:
 
     static const char *ExportMacroTemplate();
 
+    static const char *QmlNamedElement();
+
     static const char *QmlPluginExportMacroTemplate();
     static const char *QmlExtensionPluginPreamble();
     static const char *QmlExtensionPluginClass();
     static const char *QmlExtensionPluginClassNoExport();
     static const char *QmlExtensionPluginClassBody();
+
     static const char *QObjectConstructorMessageDeclarationTemplate();
     static const char *MocIncludeTemplate();
 };

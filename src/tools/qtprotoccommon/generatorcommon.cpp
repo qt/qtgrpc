@@ -269,8 +269,8 @@ TypeMap common::produceEnumTypeMap(const EnumDescriptor *type, const Descriptor 
     exportMacro = common::buildExportMacro(exportMacro);
 
     std::string initializer = scopeName + "::" + type->value(0)->name();
-    return { { "classname", enumGadget },
-             { "classname_low_case", utils::deCapitalizeAsciiName(enumGadget) },
+    return { { "classname", name },
+             { "classname_low_case", utils::deCapitalizeAsciiName(name) },
              { "type", name },
              { "full_type", fullName },
              { "scope_type", scopeName },
@@ -589,6 +589,12 @@ bool common::hasQmlAlias(const FieldDescriptor *field)
                 || field->type() == FieldDescriptor::TYPE_SFIXED32
                 || field->type() == FieldDescriptor::TYPE_FIXED32)
             && Options::instance().hasQml();
+}
+
+bool common::hasNestedTypes(const Descriptor *type)
+{
+    return common::hasNestedMessages(type) || type->enum_type_count() > 0
+            || Options::instance().generateFieldEnum() || type->oneof_decl_count() > 0;
 }
 
 void common::iterateMessages(const FileDescriptor *file,

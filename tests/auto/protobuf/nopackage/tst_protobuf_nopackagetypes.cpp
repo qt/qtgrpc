@@ -38,7 +38,7 @@ void QtProtobufNoPackageTypesGenerationTest::NoPackageSimpleIntMessageTest()
     QCOMPARE(test.property(propertyName).value<QtProtobuf::int32>(), 1);
     QCOMPARE(test.testFieldInt(), 1);
 
-    QCOMPARE(::SimpleIntMessage::TestFieldIntProtoFieldNumber, 1);
+    QCOMPARE(int(::SimpleIntMessage::QtProtobufFieldEnum::TestFieldIntProtoFieldNumber), 1);
     QCOMPARE(test.propertyOrdering.getMessageFullName(), "SimpleIntMessage");
 }
 

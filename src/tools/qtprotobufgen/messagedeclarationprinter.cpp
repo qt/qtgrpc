@@ -33,14 +33,31 @@ void MessageDeclarationPrinter::printClassForwardDeclarationPrivate()
     m_printer->Print(m_typeMap, CommonTemplates::ClassMessageForwardDeclarationTemplate());
     m_printer->Print(m_typeMap, CommonTemplates::UsingMessageTemplate());
 
-    if (common::hasNestedMessages(m_descriptor)) {
+    if (common::hasNestedTypes(m_descriptor)) {
         auto scopeNamespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
         m_printer->Print(scopeNamespaces, CommonTemplates::NamespaceTemplate());
+
+        m_printer->Print({ { "type", CommonTemplates::QtProtobufFieldEnum() } },
+                         CommonTemplates::EnumClassForwardDeclarationTemplate());
+
+        for (int i = 0; i < m_descriptor->enum_type_count(); ++i) {
+            m_printer->Print(common::produceEnumTypeMap(m_descriptor->enum_type(i), nullptr),
+                             CommonTemplates::EnumForwardDeclarationTemplate());
+        }
+
+        common::iterateOneofFields(
+                m_descriptor, [this](const OneofDescriptor *, PropertyMap typeMap) {
+                    m_printer->Print(typeMap,
+                                     CommonTemplates::EnumClassForwardDeclarationTemplate());
+                });
+
         common::iterateNestedMessages(m_descriptor, [this](const Descriptor *nestedMessage) {
             MessageDeclarationPrinter nesterPrinter(nestedMessage, m_printer);
             nesterPrinter.printClassForwardDeclarationPrivate();
         });
+
         m_printer->Print(scopeNamespaces, CommonTemplates::NamespaceClosingTemplate());
+        m_printer->Print("\n");
     }
 }
 
@@ -61,9 +78,22 @@ void MessageDeclarationPrinter::printClassDeclarationPrivate()
     printClassBody();
     encloseClass();
 
-    if (common::hasNestedMessages(m_descriptor)) {
+    if (common::hasNestedTypes(m_descriptor)) {
         auto scopeNamespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
         m_printer->Print(scopeNamespaces, CommonTemplates::NamespaceTemplate());
+
+        if (!m_typeMap["export_macro"].empty())
+            m_printer->Print(m_typeMap, CommonTemplates::QNamespaceDeclarationTemplate());
+        else
+            m_printer->Print(m_typeMap, CommonTemplates::QNamespaceDeclarationNoExportTemplate());
+
+        if (Options::instance().hasQml())
+            m_printer->Print(m_typeMap, CommonTemplates::QmlNamedElement());
+
+        m_printer->Print("\n");
+
+        printEnums();
+
         common::iterateNestedMessages(m_descriptor, [this](const Descriptor *nestedMessage) {
             MessageDeclarationPrinter nesterPrinter(nestedMessage, m_printer);
             nesterPrinter.printClassDeclarationPrivate();
@@ -118,10 +148,29 @@ void MessageDeclarationPrinter::printMaps()
 void MessageDeclarationPrinter::printNested()
 {
     Indent();
+    m_printer->Print({ { "type", CommonTemplates::QtProtobufFieldEnum() },
+                       { "scope_namespaces",
+                         m_typeMap["classname"] + CommonTemplates::QtProtobufNestedNamespace() } },
+                     CommonTemplates::UsingEnumTemplate());
+
+    for (int i = 0; i < m_descriptor->enum_type_count(); ++i) {
+        const auto *enumDescr = m_descriptor->enum_type(i);
+        auto typeMap = common::produceEnumTypeMap(enumDescr, m_descriptor);
+        m_printer->Print(typeMap, CommonTemplates::UsingEnumTemplate());
+        m_printer->Print(typeMap, CommonTemplates::UsingRepeatedEnumTemplate());
+    }
+
+    common::iterateOneofFields(m_descriptor, [this](const OneofDescriptor *, PropertyMap typeMap) {
+        typeMap["scope_namespaces"] =
+                m_typeMap["classname"] + CommonTemplates::QtProtobufNestedNamespace();
+        m_printer->Print(typeMap, CommonTemplates::UsingEnumTemplate());
+    });
+
     common::iterateNestedMessages(m_descriptor, [&](const Descriptor *nestedMessage) {
         m_printer->Print(common::produceMessageTypeMap(nestedMessage, m_descriptor),
                         CommonTemplates::UsingNestedMessageTemplate());
     });
+
     Outdent();
 }
 
@@ -329,14 +378,11 @@ void MessageDeclarationPrinter::printPrivateSetters()
 
 void MessageDeclarationPrinter::printEnums()
 {
-    Indent();
     if (Options::instance().generateFieldEnum())
         printFieldEnum();
-    if (m_descriptor->enum_type_count() > 0)
-        printQEnums();
-    if (m_descriptor->oneof_decl_count() > 0)
-        printOneofEnums();
-    Outdent();
+
+    printQEnums();
+    printOneofEnums();
 }
 
 void MessageDeclarationPrinter::printQEnums()
@@ -355,12 +401,7 @@ void MessageDeclarationPrinter::printQEnums()
         }
         Outdent();
         m_printer->Print(CommonTemplates::SemicolonBlockEnclosureTemplate());
-        m_printer->Print(typeMap, CommonTemplates::QEnumTemplate());
-    }
-
-    for (int i = 0; i < m_descriptor->enum_type_count(); ++i) {
-        const auto *enumDescr = m_descriptor->enum_type(i);
-        auto typeMap = common::produceEnumTypeMap(enumDescr, m_descriptor);
+        m_printer->Print(typeMap, CommonTemplates::QEnumNSTemplate());
         m_printer->Print(typeMap, CommonTemplates::UsingRepeatedEnumTemplate());
     }
 }
@@ -368,7 +409,7 @@ void MessageDeclarationPrinter::printQEnums()
 void MessageDeclarationPrinter::printOneofEnums()
 {
     common::iterateOneofFields(
-            m_descriptor, [this](const OneofDescriptor *oneofDescr, PropertyMap &typeMap) {
+            m_descriptor, [this](const OneofDescriptor *oneofDescr, const PropertyMap &typeMap) {
                 m_printer->Print(typeMap, CommonTemplates::EnumClassDefinitionTemplate());
                 Indent();
                 m_printer->Print({ { "enumvalue", "UninitializedField" },
@@ -383,8 +424,7 @@ void MessageDeclarationPrinter::printOneofEnums()
                 }
                 Outdent();
                 m_printer->Print(CommonTemplates::SemicolonBlockEnclosureTemplate());
-                m_printer->Print(typeMap, CommonTemplates::QEnumTemplate());
-                m_printer->Print("\n");
+                m_printer->Print(typeMap, CommonTemplates::QEnumNSTemplate());
             });
 }
 
@@ -401,7 +441,6 @@ void MessageDeclarationPrinter::printClassBody()
     printProperties();
 
     printPublicBlock();
-    printEnums();
     printNested();
     printMaps();
 
@@ -455,7 +494,6 @@ void MessageDeclarationPrinter::printFieldEnum()
         Outdent();
         m_printer->Print(CommonTemplates::SemicolonBlockEnclosureTemplate());
         m_printer->Print({ { "type", CommonTemplates::QtProtobufFieldEnum() } },
-                         CommonTemplates::QEnumTemplate());
-        m_printer->Print("\n");
+                         CommonTemplates::QEnumNSTemplate());
     }
 }

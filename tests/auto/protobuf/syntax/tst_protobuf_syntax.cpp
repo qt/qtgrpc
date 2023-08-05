@@ -62,10 +62,11 @@ void QtProtobufSyntaxTest::ReservedUpperCaseTest()
 
 void QtProtobufSyntaxTest::ReservedEnumTest()
 {
-    QVERIFY(MessageEnumReserved::staticMetaObject.enumeratorCount() > 0);
+    const auto &metaObject = MessageEnumReserved_QtProtobufNested::staticMetaObject;
+    QVERIFY(metaObject.enumeratorCount() > 0);
     QMetaEnum simpleEnum;
-    for (int i = 0; i < MessageEnumReserved::staticMetaObject.enumeratorCount(); i++) {
-        QMetaEnum tmp = MessageEnumReserved::staticMetaObject.enumerator(i);
+    for (int i = 0; i < metaObject.enumeratorCount(); i++) {
+        QMetaEnum tmp = metaObject.enumerator(i);
         if (QString(tmp.name()) == QString("ReservedEnum")) {
             simpleEnum = tmp;
             break;
@@ -83,10 +84,11 @@ void QtProtobufSyntaxTest::ReservedEnumTest()
 
 void QtProtobufSyntaxTest::LowerCaseEnumTest()
 {
-    QVERIFY(MessageEnumReserved::staticMetaObject.enumeratorCount() > 0);
+    const auto &metaObject = MessageEnumReserved_QtProtobufNested::staticMetaObject;
+    QVERIFY(metaObject.enumeratorCount() > 0);
     QMetaEnum simpleEnum;
-    for (int i = 0; i < MessageEnumReserved::staticMetaObject.enumeratorCount(); i++) {
-        QMetaEnum tmp = MessageEnumReserved::staticMetaObject.enumerator(i);
+    for (int i = 0; i < metaObject.enumeratorCount(); i++) {
+        QMetaEnum tmp = metaObject.enumerator(i);
         if (QString(tmp.name()) == QString("LowerCaseEnum")) {
             simpleEnum = tmp;
             break;
