@@ -598,7 +598,6 @@ const char *CommonTemplates::MetaTypeRegistrationLocalEnumTemplate()
 {
     return "qRegisterProtobufEnumType<$scope_type$>();\n"
            "qRegisterMetaType<$scope_type$>();\n"
-           "qRegisterMetaType<$scope_type$>();\n"
            "qRegisterMetaType<$scope_list_type$>();\n";
 }
 const char *CommonTemplates::MetaTypeRegistrationMapTemplate()
