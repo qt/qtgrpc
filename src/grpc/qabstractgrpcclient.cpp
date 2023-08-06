@@ -245,7 +245,7 @@ std::shared_ptr<QAbstractProtobufSerializer> QAbstractGrpcClient::serializer() c
 QGrpcStatus QAbstractGrpcClient::handleDeserializationError(
         const QAbstractProtobufSerializer::DeserializationError &err)
 {
-    QGrpcStatus status{ QGrpcStatus::Ok };
+    QGrpcStatus status;
     switch (err) {
     case QAbstractProtobufSerializer::InvalidHeaderError: {
         const QLatin1StringView errStr("Response deserialization failed: invalid field found.");

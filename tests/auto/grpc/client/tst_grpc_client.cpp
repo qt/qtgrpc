@@ -441,7 +441,7 @@ void QtGrpcClientTest::StreamAndGetAsyncReplyTest()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Some status message");
-    QGrpcStatus::StatusCode asyncStatus = QGrpcStatus::StatusCode::Ok;
+    QGrpcStatus::StatusCode asyncStatus;
     QString statusMessage;
 
     auto reply = _client->testMethodStatusMessage(request);
