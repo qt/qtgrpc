@@ -30,6 +30,25 @@ Q_SIGNALS:
     void messageReceived();
 };
 
+class Q_GRPC_EXPORT QGrpcClientStream final : public QGrpcOperation
+{
+    Q_OBJECT
+
+public:
+    explicit QGrpcClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                               std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    ~QGrpcClientStream() override;
+
+    template<typename T>
+    void sendMessage(const T &message)
+    {
+        sendMessage(serializer()->serialize<T>(&message));
+    }
+
+private:
+    void sendMessage(const QByteArray &data);
+};
+
 QT_END_NAMESPACE
 
 #endif // QGRPCSTREAM_H

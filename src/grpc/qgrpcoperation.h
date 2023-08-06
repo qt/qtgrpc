@@ -44,12 +44,12 @@ protected:
     ~QGrpcOperation() override;
 
     const QGrpcChannelOperation *channelOperation() const;
+    std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
 
     QByteArray data() const;
-    std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
     QGrpcStatus deserializationError() const;
 
     Q_DECLARE_PRIVATE(QGrpcOperation)

@@ -39,6 +39,41 @@ QGrpcServerStream::QGrpcServerStream(std::shared_ptr<QGrpcChannelOperation> chan
 */
 QGrpcServerStream::~QGrpcServerStream() = default;
 
+/*!
+    \class QGrpcClientStream
+    \inmodule QtGrpc
+
+    \brief The QGrpcClientStream class provides the interface to access the
+    client-side gRPC stream functionality from gRPC client side.
+*/
+
+/*!
+    \fn template<typename T> void QGrpcClientStream::sendMessage(const T &message)
+
+    The function serializes and sends the \a message to the server.
+*/
+
+QGrpcClientStream::QGrpcClientStream(
+        std::shared_ptr<QGrpcChannelOperation> channelOperation,
+        std::shared_ptr<QAbstractProtobufSerializer> serializer)
+    : QGrpcOperation(std::move(channelOperation), std::move(serializer))
+{
+}
+
+/*!
+    Destroys the QGrpcClientStream object.
+*/
+QGrpcClientStream::~QGrpcClientStream() = default;
+
+/*!
+    \internal
+    Sends the serialized \a data to the server.
+*/
+void QGrpcClientStream::sendMessage(const QByteArray &data)
+{
+    emit QGrpcOperation::channelOperation()->sendData(data);
+}
+
 QT_END_NAMESPACE
 
 #include "moc_qgrpcstream.cpp"
