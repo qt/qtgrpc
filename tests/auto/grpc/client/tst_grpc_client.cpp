@@ -664,7 +664,8 @@ void QtGrpcClientTest::StreamStringThreadTest()
     QTRY_VERIFY(
             qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
                     .message()
-                    .startsWith("QAbstractGrpcClient::stream is called from a different thread."));
+                    .startsWith(
+                            "QAbstractGrpcClient::startStream is called from a different thread."));
 }
 
 void QtGrpcClientTest::StreamCancelWhileErrorTimeoutTest()
