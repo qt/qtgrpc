@@ -74,6 +74,48 @@ void QGrpcClientStream::sendMessage(const QByteArray &data)
     emit QGrpcOperation::channelOperation()->sendData(data);
 }
 
+/*!
+    \class QGrpcBidirStream
+    \inmodule QtGrpc
+
+    \brief The QGrpcBidirStream class provides the interface to access the
+    bidirectional gRPC stream functionality from gRPC client side.
+*/
+
+/*!
+    \fn void QGrpcBidirStream::messageReceived()
+
+    The signal is emitted when the stream receives an updated value from server.
+*/
+
+/*!
+    \fn template<typename T> void QGrpcBidirStream::sendMessage(const T &message)
+
+    The function serializes and sends the \a message to the server.
+*/
+
+QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                                            std::shared_ptr<QAbstractProtobufSerializer> serializer)
+    : QGrpcOperation(std::move(channelOperation), std::move(serializer))
+{
+    QObject::connect(QGrpcOperation::channelOperation(), &QGrpcChannelOperation::dataReady, this,
+                     [this] { emit messageReceived(); });
+}
+
+/*!
+    Destroys the QGrpcBidirStream object.
+*/
+QGrpcBidirStream::~QGrpcBidirStream() = default;
+
+/*!
+    \internal
+    Sends the serialized \a data to the server.
+*/
+void QGrpcBidirStream::sendMessage(const QByteArray &data)
+{
+    emit QGrpcOperation::channelOperation()->sendData(data);
+}
+
 QT_END_NAMESPACE
 
 #include "moc_qgrpcstream.cpp"

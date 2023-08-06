@@ -49,6 +49,28 @@ private:
     void sendMessage(const QByteArray &data);
 };
 
+class Q_GRPC_EXPORT QGrpcBidirStream final : public QGrpcOperation
+{
+    Q_OBJECT
+
+public:
+    explicit QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                              std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    ~QGrpcBidirStream() override;
+
+    template<typename T>
+    void sendMessage(const T &message)
+    {
+        sendMessage(serializer()->serialize<T>(&message));
+    }
+
+Q_SIGNALS:
+    void messageReceived();
+
+private:
+    void sendMessage(const QByteArray &data);
+};
+
 QT_END_NAMESPACE
 
 #endif // QGRPCSTREAM_H
