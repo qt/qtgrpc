@@ -93,10 +93,25 @@ public:
     {
     }
 
+    QGrpcStatus checkThread(QLatin1StringView warningPreamble);
+
     std::shared_ptr<QAbstractGrpcChannel> channel;
     const std::string service;
     std::vector<std::shared_ptr<QGrpcStream>> activeStreams;
 };
+
+QGrpcStatus QAbstractGrpcClientPrivate::checkThread(QLatin1StringView warningPreamble)
+{
+    Q_Q(QAbstractGrpcClient);
+
+    QGrpcStatus status;
+    if (q->thread() != QThread::currentThread()) {
+        status = { QGrpcStatus::Unknown, threadSafetyWarning(warningPreamble) };
+        qGrpcCritical() << status.message();
+        emit q->errorOccurred(status);
+    }
+    return status;
+}
 
 QAbstractGrpcClient::QAbstractGrpcClient(QLatin1StringView service, QObject *parent)
     : QObject(*new QAbstractGrpcClientPrivate(service), parent)
@@ -132,18 +147,15 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
 
 QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret)
 {
-    QGrpcStatus callStatus{ QGrpcStatus::Unknown };
-    if (thread() != QThread::currentThread()) {
-        const QGrpcStatus status({ QGrpcStatus::Unknown,
-                                   threadSafetyWarning("QAbstractGrpcClient::call"_L1) });
-        logError(status.message());
-        emit errorOccurred(status);
-        return status;
-    }
     Q_D(QAbstractGrpcClient);
 
-    callStatus = d->channel ? d->channel->call(method, QLatin1StringView(d->service), arg, ret)
-                            : QGrpcStatus{ QGrpcStatus::Unknown, "No channel(s) attached."_L1 };
+    QGrpcStatus callStatus = d->checkThread("QAbstractGrpcClient::call"_L1);
+    if (callStatus != QGrpcStatus::Ok)
+        return callStatus;
+
+    callStatus = d->channel
+            ? d->channel->call(method, QLatin1StringView(d->service), arg, ret)
+            : QGrpcStatus{ QGrpcStatus::Unknown, "No channel(s) attached."_L1 };
 
     if (callStatus != QGrpcStatus::Ok)
         emit errorOccurred(callStatus);
@@ -155,14 +167,9 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
                                                           QByteArrayView arg)
 {
     std::shared_ptr<QGrpcCallReply> reply;
-    if (thread() != QThread::currentThread()) {
-        const QGrpcStatus status({ QGrpcStatus::Unknown,
-                                   threadSafetyWarning("QAbstractGrpcClient::call"_L1) });
-        logError(status.message());
-        emit errorOccurred(status);
-        return reply;
-    }
     Q_D(QAbstractGrpcClient);
+    if (d->checkThread("QAbstractGrpcClient::call"_L1) != QGrpcStatus::Ok)
+        return reply;
 
     if (d->channel) {
         reply = d->channel->call(this, method, QLatin1StringView(d->service), arg);
@@ -182,16 +189,11 @@ std::shared_ptr<QGrpcStream> QAbstractGrpcClient::startStream(QLatin1StringView 
                                                               QByteArrayView arg,
                                                               const StreamHandler &handler)
 {
-    std::shared_ptr<QGrpcStream> grpcStream;
-
-    if (thread() != QThread::currentThread()) {
-        const QGrpcStatus status({ QGrpcStatus::Unknown,
-                                   threadSafetyWarning("QAbstractGrpcClient::stream"_L1) });
-        logError(status.message());
-        emit errorOccurred(status);
-        return grpcStream;
-    }
     Q_D(QAbstractGrpcClient);
+
+    std::shared_ptr<QGrpcStream> grpcStream;
+    if (d->checkThread("QAbstractGrpcClient::startStream"_L1) != QGrpcStatus::Ok)
+        return grpcStream;
 
     if (d->channel) {
         grpcStream.reset(new QGrpcStream(method, arg, handler, this),
