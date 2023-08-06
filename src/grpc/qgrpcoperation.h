@@ -13,6 +13,7 @@
 
 QT_BEGIN_NAMESPACE
 
+class QGrpcChannelOperation;
 class QGrpcOperationPrivate;
 class Q_GRPC_EXPORT QGrpcOperation : public QObject
 {
@@ -30,21 +31,19 @@ public:
         return value;
     }
 
-    void setData(const QByteArray &data);
-    void setData(QByteArray &&data);
-
-    virtual void abort() = 0;
-
-    void setMetadata(const QGrpcMetadata &metadata);
-    void setMetadata(QGrpcMetadata &&metadata);
     QGrpcMetadata metadata() const;
+    void cancel();
+
 Q_SIGNALS:
     void finished();
     void errorOccurred(const QGrpcStatus &status) const;
 
 protected:
-    explicit QGrpcOperation(std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                            std::shared_ptr<QAbstractProtobufSerializer> serializer);
     ~QGrpcOperation() override;
+
+    const QGrpcChannelOperation *channelOperation() const;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)

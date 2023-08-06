@@ -15,10 +15,9 @@ class Q_GRPC_EXPORT QGrpcCallReply final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcCallReply(std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    explicit QGrpcCallReply(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                            std::shared_ptr<QAbstractProtobufSerializer> serializer);
     ~QGrpcCallReply() override;
-
-    void abort() override;
 
     template<typename Func1, typename Func2>
     void subscribe(QObject *receiver, Func1 &&finishCallback, Func2 &&errorCallback,

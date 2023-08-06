@@ -21,19 +21,23 @@ class QAbstractProtobufSerializer;
 struct QAbstractGrpcChannelPrivate;
 class QGrpcStream;
 class QGrpcCallReply;
+class QGrpcChannelOperation;
 
 class Q_GRPC_EXPORT QAbstractGrpcChannel
 {
 public:
-    virtual std::shared_ptr<QGrpcCallReply> call(
-            QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-            const QGrpcCallOptions &options = QGrpcCallOptions()) = 0;
-    virtual std::shared_ptr<QGrpcStream> startStream(
-            QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
-            const QGrpcCallOptions &options = QGrpcCallOptions()) = 0;
+    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
+                                         QByteArrayView arg,
+                                         const QGrpcCallOptions &options = QGrpcCallOptions());
+    std::shared_ptr<QGrpcStream>
+    startStream(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
+                      const QGrpcCallOptions &options = QGrpcCallOptions());
     virtual std::shared_ptr<QAbstractProtobufSerializer> serializer() const = 0;
 
 protected:
+    virtual void call(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
+    virtual void startStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
+
     friend class QAbstractGrpcClient;
     QAbstractGrpcChannel();
     virtual ~QAbstractGrpcChannel();

@@ -74,9 +74,10 @@ protected:
         return call(method, *argData, options);
     }
 
-    template <typename ParamType>
-    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, const QProtobufMessage &arg,
-                                             const QGrpcCallOptions &options)
+    template<typename ParamType>
+    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method,
+                                                         const QProtobufMessage &arg,
+                                                         const QGrpcCallOptions &options)
     {
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData)
@@ -88,8 +89,9 @@ private:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg,
                                          const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QByteArrayView arg,
-                                             const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method,
+                                                         QByteArrayView arg,
+                                                         const QGrpcCallOptions &options);
 
     template <typename ParamType>
     std::optional<QByteArray> trySerialize(const QProtobufMessage &arg)

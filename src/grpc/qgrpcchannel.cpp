@@ -2,12 +2,17 @@
 // Copyright (C) 2019 Giulio Girardi <giulio.girardi@protechgroup.it>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
+#include "qgrpcchannel.h"
+#include "qgrpcchannel_p.h"
+#include "qgrpcchanneloperation.h"
+
+#include "qabstractgrpcclient.h"
+
 #include <QtCore/QFuture>
 #include <QtCore/QList>
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
 #include <QtCore/qloggingcategory.h>
-#include <QtGrpc/qabstractgrpcclient.h>
 #include <QtProtobuf/QProtobufSerializer>
 #include <qtgrpcglobal_p.h>
 
@@ -23,9 +28,6 @@
 
 #include <unordered_map>
 
-#include "qgrpcchannel.h"
-#include "qgrpcchannel_p.h"
-
 #if QT_CONFIG(ssl)
 #  include <QtNetwork/QSslKey>
 #endif
@@ -38,8 +40,8 @@ using namespace Qt::StringLiterals;
     \class QGrpcChannel
     \inmodule QtGrpc
 
-    \brief The QGrpcChannel class is a gRPC-cpp native api implementation of
-    QAbstractGrpcChannel interface.
+    \brief The QGrpcHttp2Channel class is an HTTP/2 implementation of
+    QAbstractGrpcChannel, based on the reference gRPC C++ API.
 
     QGrpcChannel accepts the same grpc::ChannelCredentials type that is required
     by native-api grpc::CreateChannel.
@@ -236,58 +238,45 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QGrpcChannelOptions &channelOptio
 
 QGrpcChannelPrivate::~QGrpcChannelPrivate() = default;
 
-std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(QLatin1StringView method,
-                                                          QLatin1StringView service,
-                                                          QByteArrayView args,
-                                                          const QGrpcCallOptions &options)
+void QGrpcChannelPrivate::call(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    const QByteArray rpcName = buildRpcName(service, method);
-    std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(serializer()));
-    QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(m_channel.get(),
-                                                               QLatin1StringView(rpcName), args));
+    const QByteArray rpcName =
+            buildRpcName(channelOperation->service(), channelOperation->method());
+    QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(
+            m_channel.get(), QLatin1StringView(rpcName), channelOperation->arg()));
     auto connection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
 
-    *connection = QObject::connect(call.get(), &QGrpcChannelCall::finished, reply.get(),
-                                   [call, reply, connection, abortConnection] {
-                                       if (call->status.code() == QGrpcStatus::Ok) {
-                                           reply->setData(call->response);
-                                           emit reply->finished();
-                                       } else {
-                                           reply->setData({});
-                                           emit reply->errorOccurred(call->status);
-                                       }
-
+    *connection = QObject::connect(call.get(), &QGrpcChannelCall::finished, channelOperation.get(),
+                                   [call, channelOperation, connection, abortConnection] {
                                        QObject::disconnect(*connection);
                                        QObject::disconnect(*abortConnection);
+                                       if (call->status == QGrpcStatus::Ok) {
+                                           channelOperation->dataReady(call->response);
+                                           emit channelOperation->finished();
+                                       } else {
+                                           emit channelOperation->errorOccurred(call->status);
+                                       }
                                    });
 
-    *abortConnection = QObject::connect(reply.get(), &QGrpcCallReply::errorOccurred, call.get(),
-                                        [call, connection,
-                                         abortConnection](const QGrpcStatus &status) {
-                                            if (status.code() == QGrpcStatus::Aborted) {
-                                                QObject::disconnect(*connection);
-                                                QObject::disconnect(*abortConnection);
-                                            }
+    *abortConnection = QObject::connect(channelOperation.get(), &QGrpcChannelOperation::cancelled,
+                                        call.get(), [connection, abortConnection]() {
+                                            QObject::disconnect(*connection);
+                                            QObject::disconnect(*abortConnection);
                                         });
 
     call->start();
-    if (auto deadline = deadlineForCall(m_channelOptions, options))
+    if (auto deadline = deadlineForCall(m_channelOptions, channelOperation->options()))
         QTimer::singleShot(*deadline, call.get(), [call] { call->cancel(); });
-    return reply;
 }
 
-std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(QLatin1StringView method,
-                                                              QLatin1StringView service,
-                                                              QByteArrayView arg,
-                                                              const QGrpcCallOptions &options)
+void QGrpcChannelPrivate::startStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    std::shared_ptr<QGrpcStream> stream(new QGrpcStream(serializer()));
-    const QByteArray rpcName = buildRpcName(service, method);
+    const QByteArray rpcName =
+            buildRpcName(channelOperation->service(), channelOperation->method());
 
-    QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(),
-                                                                  QLatin1StringView(rpcName),
-                                                                  arg));
+    QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(
+            m_channel.get(), QLatin1StringView(rpcName), channelOperation->arg()));
 
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
     auto readConnection = std::make_shared<QMetaObject::Connection>();
@@ -299,34 +288,34 @@ std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(QLatin1StringView 
         QObject::disconnect(*abortConnection);
     };
 
-    *readConnection = QObject::connect(sub.get(), &QGrpcChannelStream::dataReady, stream.get(),
-                                       [stream](QByteArrayView data) {
-                                           stream->updateData(data.toByteArray());
-                                       });
+    *readConnection =
+            QObject::connect(sub.get(), &QGrpcChannelStream::dataReady, channelOperation.get(),
+                             [channelOperation](QByteArrayView data) {
+                                 channelOperation->dataReady(data.toByteArray());
+                             });
 
-    *connection = QObject::connect(sub.get(), &QGrpcChannelStream::finished, stream.get(),
-                                   [disconnectAllConnections, sub, stream] {
+    *connection = QObject::connect(sub.get(), &QGrpcChannelStream::finished, channelOperation.get(),
+                                   [disconnectAllConnections, sub, channelOperation] {
                                        qGrpcDebug()
                                                << "Stream ended with server closing connection";
                                        disconnectAllConnections();
 
-                                       if (sub->status.code() != QGrpcStatus::Ok)
-                                           emit stream->errorOccurred(sub->status);
-                                       emit stream->finished();
+                                       if (sub->status != QGrpcStatus::Ok)
+                                           emit channelOperation->errorOccurred(sub->status);
+                                       emit channelOperation->finished();
                                    });
 
-    *abortConnection = QObject::connect(stream.get(), &QGrpcStream::finished, sub.get(),
-                                        [disconnectAllConnections, sub] {
-                                            qGrpcDebug() << "Stream client was finished";
-                                            disconnectAllConnections();
-                                            sub->cancel();
-                                        });
+    *abortConnection =
+            QObject::connect(channelOperation.get(), &QGrpcChannelOperation::cancelled, sub.get(),
+                             [disconnectAllConnections, sub, channelOperation] {
+                                 qGrpcDebug() << "Server stream was cancelled by client";
+                                 disconnectAllConnections();
+                                 sub->cancel();
+                             });
 
     sub->start();
-    if (auto deadline = deadlineForCall(m_channelOptions, options))
+    if (auto deadline = deadlineForCall(m_channelOptions, channelOperation->options()))
         QTimer::singleShot(*deadline, sub.get(), [sub] { sub->cancel(); });
-
-    return stream;
 }
 
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcChannelPrivate::serializer() const
@@ -350,38 +339,23 @@ QGrpcChannel::QGrpcChannel(const QGrpcChannelOptions &options,
 QGrpcChannel::~QGrpcChannel() = default;
 
 /*!
-    Asynchronously calls the RPC method.
-
-    The RPC method name is constructed by concatenating the \a method
-    and \a service parameters and called with the \a args argument.
-    Uses \a options argument to set additional parameter for the call.
-    The method can emit QGrpcCallReply::finished() and QGrpcCallReply::errorOccurred()
-    signals on a QGrpcCallReply returned object.
+    \internal
+    Implementation of unary gRPC call based on the
+    reference gRPC C++ API.
 */
-std::shared_ptr<QGrpcCallReply> QGrpcChannel::call(QLatin1StringView method,
-                                                   QLatin1StringView service, QByteArrayView args,
-                                                   const QGrpcCallOptions &options)
+void QGrpcChannel::call(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    return dPtr->call(method, service, args, options);
+    dPtr->call(std::move(channelOperation));
 }
 
 /*!
-    Creates and starts a stream to the RPC method.
-
-    The RPC method name is constructed by concatenating the \a method
-    and \a service parameters and called with the \a arg argument.
-    Returns a shared pointer to the QGrpcStream.
-    Uses \a options argument to set additional parameter for the stream.
-
-    Calls QGrpcStream::updateData() when the stream receives data from the server.
-    The method may emit QGrpcStream::errorOccurred() when the stream has terminated with an error.
+    \internal
+    Implementation of server-side gRPC stream based on the
+    reference gRPC C++ API.
 */
-std::shared_ptr<QGrpcStream> QGrpcChannel::startStream(QLatin1StringView method,
-                                                       QLatin1StringView service,
-                                                       QByteArrayView arg,
-                                                       const QGrpcCallOptions &options)
+void QGrpcChannel::startStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    return dPtr->startStream(method, service, arg, options);
+    dPtr->startStream(std::move(channelOperation));
 }
 
 /*!

@@ -110,7 +110,7 @@ private slots:
     void CallAndRecieveStringTest();
     void CallAndAsyncRecieveWithSubscribeStringTest();
     void CallAndAsyncRecieveWithLambdaStringTest();
-    void CallAndAsyncImmediateAbortStringTest();
+    void CallAndAsyncImmediateCancelStringTest();
     void CallAndAsyncDeferredAbortStringTest();
     void StreamStringTest();
     void StreamStringAndAbortTest();
@@ -182,7 +182,7 @@ void QtGrpcClientTest::CallAndAsyncRecieveWithLambdaStringTest()
     QCOMPARE_EQ(result.testFieldString(), "Hello Qt!");
 }
 
-void QtGrpcClientTest::CallAndAsyncImmediateAbortStringTest()
+void QtGrpcClientTest::CallAndAsyncImmediateCancelStringTest()
 {
     SimpleStringMessage result;
     SimpleStringMessage request;
@@ -195,20 +195,18 @@ void QtGrpcClientTest::CallAndAsyncImmediateAbortStringTest()
                      [&result, reply] { result = reply->read<SimpleStringMessage>(); });
 
     QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
+    QSignalSpy replyFinishedSpy(reply.get(), &QGrpcCallReply::finished);
     QSignalSpy clientErrorSpy(_client.get(), &TestService::Client::errorOccurred);
 
     QVERIFY(replyErrorSpy.isValid());
+    QVERIFY(replyFinishedSpy.isValid());
     QVERIFY(clientErrorSpy.isValid());
 
-    reply->abort();
+    reply->cancel();
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(replyErrorSpy.count(), 1, FailTimeout);
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
-
-    QCOMPARE(qvariant_cast<QGrpcStatus>(replyErrorSpy.at(0).first()).code(),
-             QGrpcStatus::StatusCode::Aborted);
-    QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(),
-             QGrpcStatus::StatusCode::Aborted);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 0, FailTimeout);
 
     QCOMPARE_EQ(result.testFieldString(), "Result not changed by echo");
 }
@@ -228,7 +226,7 @@ void QtGrpcClientTest::CallAndAsyncDeferredAbortStringTest()
     QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
     QVERIFY(replyErrorSpy.isValid());
 
-    QTimer::singleShot(MessageLatencyThreshold, reply.get(), &QGrpcCallReply::abort);
+    QTimer::singleShot(MessageLatencyThreshold, reply.get(), &QGrpcCallReply::cancel);
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(replyErrorSpy.count(), 1, FailTimeout);
     QCOMPARE_EQ(result.testFieldString(), "Result not changed by echo");
@@ -279,16 +277,17 @@ void QtGrpcClientTest::StreamStringAndAbortTest()
     QVERIFY(streamErrorSpy.isValid());
 
     int i = 0;
-    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, &i, stream] {
-        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
-        if (++i == ExpectedMessageCount)
-            stream->abort();
-    });
+    QObject::connect(
+            stream.get(), &QGrpcStream::messageReceived, this, [&result, &i, stream] {
+                SimpleStringMessage ret = stream->read<SimpleStringMessage>();
+                result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+                if (++i == ExpectedMessageCount)
+                    stream->cancel();
+            });
 
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamErrorSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
-    QCOMPARE(streamErrorSpy.count(), 0);
+    QCOMPARE(streamFinishedSpy.count(), 0);
     QCOMPARE(i, 2);
     QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2");
 }
@@ -313,16 +312,18 @@ void QtGrpcClientTest::StreamStringAndDeferredAbortTest()
     QVERIFY(messageReceivedSpy.isValid());
 
     int i = 0;
-    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream, &i] {
-        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
-        if (++i == ExpectedMessageCount)
-            QTimer::singleShot(MessageLatencyThreshold, stream.get(), &QGrpcStream::abort);
-    });
+    QObject::connect(
+            stream.get(), &QGrpcStream::messageReceived, this, [&result, stream, &i] {
+                SimpleStringMessage ret = stream->read<SimpleStringMessage>();
+                result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+                if (++i == ExpectedMessageCount)
+                    QTimer::singleShot(MessageLatencyThreshold, stream.get(),
+                                       &QGrpcStream::cancel);
+            });
 
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamErrorSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
-    QCOMPARE(streamErrorSpy.count(), 0);
+    QCOMPARE(streamFinishedSpy.count(), 0);
     QCOMPARE(messageReceivedSpy.count(), ExpectedMessageCount);
 
     QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2Stream3");
@@ -531,13 +532,13 @@ void QtGrpcClientTest::MultipleStreamsCancelTest()
     QSignalSpy streamNextErrorSpy(streamNext.get(), &QGrpcStream::errorOccurred);
     QVERIFY(streamNextErrorSpy.isValid());
 
-    streamNext->abort();
+    streamNext->cancel();
 
     QCOMPARE(streamFinishedSpy.count(), 0);
     QCOMPARE(streamErrorSpy.count(), 0);
 
-    QCOMPARE(streamNextFinishedSpy.count(), 1);
-    QCOMPARE(streamNextErrorSpy.count(), 0);
+    QCOMPARE(streamNextFinishedSpy.count(), 0);
+    QCOMPARE(streamNextErrorSpy.count(), 1);
 
     stream = _client->streamTestMethodServerStream(request);
     QCOMPARE_NE(stream, streamNext);
@@ -556,10 +557,10 @@ void QtGrpcClientTest::MultipleStreamsCancelTest()
     QSignalSpy otherStreamNextErrorSpy(streamNext.get(), &QGrpcStream::errorOccurred);
     QVERIFY(otherStreamNextErrorSpy.isValid());
 
-    stream->abort();
+    stream->cancel();
 
-    QCOMPARE(otherStreamFinishedSpy.count(), 1);
-    QCOMPARE_EQ(otherStreamErrorSpy.count(), 0);
+    QCOMPARE(otherStreamFinishedSpy.count(), 0);
+    QCOMPARE_EQ(otherStreamErrorSpy.count(), 1);
 
     QCOMPARE(otherStreamNextFinishedSpy.count(), 0);
     QCOMPARE_EQ(otherStreamNextErrorSpy.count(), 0);
@@ -661,11 +662,10 @@ void QtGrpcClientTest::StreamStringThreadTest()
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
     QTRY_VERIFY(result.testFieldString().isEmpty());
-    QTRY_VERIFY(
-            qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
-                    .message()
-                    .startsWith(
-                            "QAbstractGrpcClient::startStream is called from a different thread."));
+    QTRY_VERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
+                        .message()
+                        .startsWith("QAbstractGrpcClient::startStream is called from a "
+                                    "different thread."));
 }
 
 void QtGrpcClientTest::StreamCancelWhileErrorTimeoutTest()
@@ -681,11 +681,11 @@ void QtGrpcClientTest::StreamCancelWhileErrorTimeoutTest()
     QSignalSpy streamErrorSpy(stream.get(), &QGrpcStream::errorOccurred);
     QVERIFY(streamErrorSpy.isValid());
 
-    stream->abort();
+    stream->cancel();
     stream.reset();
 
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1, MessageLatencyWithThreshold);
-    QCOMPARE_EQ(streamErrorSpy.count(), 0);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamErrorSpy.count(), 1, MessageLatencyWithThreshold);
+    QCOMPARE_EQ(streamFinishedSpy.count(), 0);
 }
 
 void QtGrpcClientTest::MetadataTest()
@@ -760,8 +760,8 @@ void QtGrpcClientTest::CallDeadlineTest()
         QCOMPARE(reply->read<SimpleStringMessage>().testFieldString(), request.testFieldString());
     } else {
         // Because we're can't be sure about the result,
-        // abort the call, that might affect other tests.
-        reply->abort();
+        // cancel the call, that might affect other tests.
+        reply->cancel();
     }
 }
 
@@ -818,8 +818,8 @@ void QtGrpcClientTest::StreamDeadlineTest()
         QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2Stream3Stream4");
     } else {
         // Because we're can't be sure about the result,
-        // abort the stream, that might affect other tests.
-        stream->abort();
+        // cancel the stream, that might affect other tests.
+        stream->cancel();
     }
 }
 

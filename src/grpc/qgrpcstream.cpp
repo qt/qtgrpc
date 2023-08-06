@@ -2,9 +2,11 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <QtCore/QThread>
-
 #include "qgrpcstream.h"
+
+#include "qgrpcchanneloperation.h"
+
+#include <QtCore/QThread>
 
 QT_BEGIN_NAMESPACE
 
@@ -12,8 +14,10 @@ QT_BEGIN_NAMESPACE
     \class QGrpcStream
     \inmodule QtGrpc
 
-    \brief The QGrpcStream class implements logic to handle stream communication
-    in the Grpc channel.
+    \brief The QGrpcStream class provides the interface to access the
+    server-side gRPC stream functionality from gRPC client side.
+
+    The QGrpcStream object is owned by the client object that created it.
 */
 
 /*!
@@ -22,39 +26,18 @@ QT_BEGIN_NAMESPACE
     The signal is emitted when the stream receives an updated value from server.
 */
 
-QGrpcStream::QGrpcStream(std::shared_ptr<QAbstractProtobufSerializer> serializer)
-    : QGrpcOperation(std::move(serializer))
+QGrpcStream::QGrpcStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                                     std::shared_ptr<QAbstractProtobufSerializer> serializer)
+    : QGrpcOperation(std::move(channelOperation), std::move(serializer))
 {
+    QObject::connect(QGrpcOperation::channelOperation(), &QGrpcChannelOperation::dataReady, this,
+                     [this] { emit messageReceived(); });
 }
 
 /*!
     Destroys the QGrpcStream object.
 */
 QGrpcStream::~QGrpcStream() = default;
-
-/*!
-    Cancel this stream and try to abort any call active on any channel
-    in the stream.
-*/
-void QGrpcStream::abort()
-{
-    if (thread() != QThread::currentThread())
-        QMetaObject::invokeMethod(this, &QGrpcStream::finished, Qt::BlockingQueuedConnection);
-    else
-        emit finished();
-}
-
-/*!
-    Sets underlying data field with \a data and emits QGrpcStream::messageReceived signal.
-
-    Should be used by QAbstractGrpcChannel implementations,
-    to update data in a stream and notify clients about stream updates.
-*/
-void QGrpcStream::updateData(const QByteArray &data)
-{
-    setData(QByteArray(data));
-    emit messageReceived();
-}
 
 QT_END_NAMESPACE
 

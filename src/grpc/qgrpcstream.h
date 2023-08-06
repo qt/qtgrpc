@@ -22,11 +22,10 @@ class Q_GRPC_EXPORT QGrpcStream final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcStream(std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    explicit QGrpcStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                               std::shared_ptr<QAbstractProtobufSerializer> serializer);
     ~QGrpcStream() override;
 
-    void abort() override;
-    void updateData(const QByteArray &data);
 Q_SIGNALS:
     void messageReceived();
 };
