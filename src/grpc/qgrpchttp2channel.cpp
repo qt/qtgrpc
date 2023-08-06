@@ -2,7 +2,6 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>, Viktor Kopp <vifactor@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <QtCore/QEventLoop>
 #include <QtCore/QMetaObject>
 #include <QtCore/QTimer>
 #include <QtCore/QUrl>
@@ -239,37 +238,6 @@ QGrpcHttp2Channel::QGrpcHttp2Channel(const QGrpcChannelOptions &options)
     Destroys the QGrpcHttp2Channel object.
 */
 QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
-
-/*!
-    Synchronously calls the RPC method and writes the result to the output parameter \a ret.
-
-    The RPC method name is constructed by concatenating the \a method
-    and \a service parameters and called with the \a args argument.
-    Uses \a options argument to set additional parameter for the call.
-
-    \note If a deadline is not specified in the \a options,
-    the call may be suspended indefinitely.
-*/
-QGrpcStatus QGrpcHttp2Channel::call(QLatin1StringView method, QLatin1StringView service,
-                                    QByteArrayView args, QByteArray &ret,
-                                    const QGrpcCallOptions &options)
-{
-    QEventLoop loop;
-
-    QNetworkReply *networkReply = dPtr->post(method, service, args, options);
-    QObject::connect(networkReply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-
-    // If reply was finished in same stack it doesn't make sense to start event loop
-    if (!networkReply->isFinished())
-        loop.exec();
-
-    QGrpcStatus::StatusCode grpcStatus = QGrpcStatus::StatusCode::Unknown;
-    ret = dPtr->processReply(networkReply, grpcStatus);
-
-    networkReply->deleteLater();
-    qGrpcDebug() << __func__ << "RECV:" << ret.toHex() << "grpcStatus" << grpcStatus;
-    return { grpcStatus, QString::fromUtf8(networkReply->rawHeader(GrpcStatusMessageHeader)) };
-}
 
 /*!
     Asynchronously calls the RPC method.

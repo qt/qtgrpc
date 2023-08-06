@@ -141,25 +141,6 @@ const std::shared_ptr<QAbstractGrpcChannel> &QAbstractGrpcClient::channel()
     return d->channel;
 }
 
-QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret,
-                                      const QGrpcCallOptions &options)
-{
-    Q_D(QAbstractGrpcClient);
-
-    QGrpcStatus callStatus = d->checkThread("QAbstractGrpcClient::call"_L1);
-    if (callStatus != QGrpcStatus::Ok)
-        return callStatus;
-
-    callStatus = d->channel
-            ? d->channel->call(method, QLatin1StringView(d->service), arg, ret, options)
-            : QGrpcStatus{ QGrpcStatus::Unknown, "No channel(s) attached."_L1 };
-
-    if (callStatus != QGrpcStatus::Ok)
-        emit errorOccurred(callStatus);
-
-    return callStatus;
-}
-
 std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView method,
                                                           QByteArrayView arg,
                                                           const QGrpcCallOptions &options)

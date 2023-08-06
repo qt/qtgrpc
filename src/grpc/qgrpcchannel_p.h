@@ -97,8 +97,6 @@ struct QGrpcChannelPrivate
 
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
                                          QByteArrayView args, const QGrpcCallOptions &options);
-    QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-                     QByteArray &ret, const QGrpcCallOptions &options);
     std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QLatin1StringView service,
                                              QByteArrayView arg, const QGrpcCallOptions &options);
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const;

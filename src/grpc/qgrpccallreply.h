@@ -38,6 +38,8 @@ public:
                          std::forward<Func1>(finishCallback), type);
     }
 
+    QGrpcStatus waitForFinished() const;
+
 private:
     QGrpcCallReply();
     Q_DISABLE_COPY_MOVE(QGrpcCallReply)

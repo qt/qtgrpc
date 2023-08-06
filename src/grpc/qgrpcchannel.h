@@ -29,9 +29,6 @@ public:
 
     ~QGrpcChannel() override;
 
-    QGrpcStatus call(QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
-                     QByteArray &ret,
-                     const QGrpcCallOptions &options = QGrpcCallOptions()) override;
     std::shared_ptr<QGrpcCallReply> call(
             QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
             const QGrpcCallOptions &options = QGrpcCallOptions()) override;

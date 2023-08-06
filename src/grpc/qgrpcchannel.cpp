@@ -277,21 +277,6 @@ std::shared_ptr<QGrpcCallReply> QGrpcChannelPrivate::call(QLatin1StringView meth
     return reply;
 }
 
-QGrpcStatus QGrpcChannelPrivate::call(QLatin1StringView method, QLatin1StringView service,
-                                      QByteArrayView args, QByteArray &ret,
-                                      const QGrpcCallOptions &options)
-{
-    const QByteArray rpcName = buildRpcName(service, method);
-    QGrpcChannelCall call(m_channel.get(), QLatin1StringView(rpcName), args);
-
-    call.start();
-    auto deadline = deadlineForCall(m_channelOptions, options);
-    deadline ? call.waitForFinished(*deadline) : call.waitForFinished();
-
-    ret = call.response;
-    return call.status;
-}
-
 std::shared_ptr<QGrpcStream> QGrpcChannelPrivate::startStream(QLatin1StringView method,
                                                               QLatin1StringView service,
                                                               QByteArrayView arg,
@@ -363,20 +348,6 @@ QGrpcChannel::QGrpcChannel(const QGrpcChannelOptions &options,
     Destroys the QGrpcChannel object.
 */
 QGrpcChannel::~QGrpcChannel() = default;
-
-/*!
-    Synchronously calls the RPC method and writes the result to the output parameter \a ret.
-
-    The RPC method name is constructed by concatenating the \a method
-    and \a service parameters and called with the \a args argument.
-    Uses \a options argument to set additional parameter for the call.
-*/
-QGrpcStatus QGrpcChannel::call(QLatin1StringView method, QLatin1StringView service,
-                               QByteArrayView args, QByteArray &ret,
-                               const QGrpcCallOptions &options)
-{
-    return dPtr->call(method, service, args, ret, options);
-}
 
 /*!
     Asynchronously calls the RPC method.

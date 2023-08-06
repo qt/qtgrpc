@@ -25,9 +25,6 @@ class QGrpcCallReply;
 class Q_GRPC_EXPORT QAbstractGrpcChannel
 {
 public:
-    virtual QGrpcStatus call(QLatin1StringView method, QLatin1StringView service,
-                             QByteArrayView args, QByteArray &ret,
-                             const QGrpcCallOptions &options = QGrpcCallOptions()) = 0;
     virtual std::shared_ptr<QGrpcCallReply> call(
             QLatin1StringView method, QLatin1StringView service, QByteArrayView args,
             const QGrpcCallOptions &options = QGrpcCallOptions()) = 0;

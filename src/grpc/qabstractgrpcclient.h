@@ -10,6 +10,7 @@
 #include <QtCore/QWeakPointer>
 #include <QtCore/qbytearray.h>
 #include <QtGrpc/qabstractgrpcchannel.h>
+#include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
 #include <QtProtobuf/qabstractprotobufserializer.h>
@@ -41,19 +42,24 @@ protected:
     ~QAbstractGrpcClient() override;
 
     template <typename ParamType, typename ReturnType>
-    QGrpcStatus call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType &ret,
+    QGrpcStatus call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType *ret,
                      const QGrpcCallOptions &options)
     {
+        Q_ASSERT(ret != nullptr);
+
         using namespace Qt::StringLiterals;
         QGrpcStatus status{ QGrpcStatus::Unknown,
                             "Serializing failed. Serializer is not ready."_L1 };
 
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (argData) {
-            QByteArray retData;
-            status = call(method, *argData, retData, options);
-            if (status == QGrpcStatus::StatusCode::Ok)
-                status = tryDeserialize(ret, retData);
+            std::shared_ptr<QGrpcCallReply> reply = call(method, *argData, options);
+            if (!reply)
+                return QGrpcStatus{ QGrpcStatus::Unknown, "No channel(s) attached."_L1 };
+
+            status = reply->waitForFinished();
+            if (status == QGrpcStatus::Ok)
+                *ret = reply->read<ReturnType>();
         }
         return status;
     }
@@ -79,25 +85,11 @@ protected:
     }
 
 private:
-    QGrpcStatus call(QLatin1StringView method, QByteArrayView arg, QByteArray &ret,
-                     const QGrpcCallOptions &options);
-
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg,
                                          const QGrpcCallOptions &options);
 
     std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method, QByteArrayView arg,
                                              const QGrpcCallOptions &options);
-
-    template <typename ReturnType>
-    QGrpcStatus tryDeserialize(ReturnType *ret, QByteArrayView retData)
-    {
-        auto _serializer = serializer();
-        if (_serializer == nullptr)
-            return QGrpcStatus::Unknown;
-        if (!_serializer->deserialize(ret, retData))
-            return handleDeserializationError(_serializer->deserializationError());
-        return QGrpcStatus::Ok;
-    }
 
     template <typename ParamType>
     std::optional<QByteArray> trySerialize(const QProtobufMessage &arg)

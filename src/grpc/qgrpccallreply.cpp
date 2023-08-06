@@ -4,6 +4,7 @@
 
 #include "qgrpccallreply.h"
 #include <QtCore/QThread>
+#include <QtCore/QEventLoop>
 
 QT_BEGIN_NAMESPACE
 
@@ -74,6 +75,29 @@ void QGrpcCallReply::abort()
         QMetaObject::invokeMethod(this, abortFunc, Qt::BlockingQueuedConnection);
     else
         abortFunc();
+}
+
+/*!
+    Waits for the call either finished or returned the error. Returns the
+    resulting QGrpcStatus of the call. If the call was successful, the received
+    response can be read using the QGrpcCallReply::read method.
+
+    To control the maximum waiting time, use \c QGrpcChannelOptions or
+    \c QGrpcCallOptions, otherwise the call may be suspended indefinitely.
+*/
+QGrpcStatus QGrpcCallReply::waitForFinished() const
+{
+    QEventLoop loop;
+    QGrpcStatus status;
+    QObject::connect(this, &QGrpcCallReply::errorOccurred,
+                     [&status, &loop](const QGrpcStatus &error) {
+                         status = error;
+                         loop.quit();
+                     });
+    QObject::connect(this, &QGrpcCallReply::finished, &loop, &QEventLoop::quit);
+
+    loop.exec();
+    return status;
 }
 
 QT_END_NAMESPACE
