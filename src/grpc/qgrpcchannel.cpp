@@ -270,7 +270,7 @@ void QGrpcChannelPrivate::call(std::shared_ptr<QGrpcChannelOperation> channelOpe
         QTimer::singleShot(*deadline, call.get(), [call] { call->cancel(); });
 }
 
-void QGrpcChannelPrivate::startStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
+void QGrpcChannelPrivate::startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
     const QByteArray rpcName =
             buildRpcName(channelOperation->service(), channelOperation->method());
@@ -353,9 +353,9 @@ void QGrpcChannel::call(std::shared_ptr<QGrpcChannelOperation> channelOperation)
     Implementation of server-side gRPC stream based on the
     reference gRPC C++ API.
 */
-void QGrpcChannel::startStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
+void QGrpcChannel::startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    dPtr->startStream(std::move(channelOperation));
+    dPtr->startServerStream(std::move(channelOperation));
 }
 
 /*!

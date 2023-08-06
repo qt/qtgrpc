@@ -57,7 +57,7 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
 
     // ![1]
     auto stream = m_client->streamMessageList(qtgrpc::examples::chat::None());
-    QObject::connect(stream.get(), &QGrpcStream::errorOccurred, this,
+    QObject::connect(stream.get(), &QGrpcServerStream::errorOccurred, this,
                      [this, stream](const QGrpcStatus &status) {
                          qCritical()
                                  << "Stream error(" << status.code() << "):" << status.message();
@@ -65,19 +65,20 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
                              emit authFailed();
                      });
 
-    QObject::connect(stream.get(), &QGrpcStream::finished, this,
+    QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
                      [this, stream]() { setState(Disconnected); });
 
-    QObject::connect(
-            stream.get(), &QGrpcStream::messageReceived, this, [this, name, password, stream]() {
-                if (m_userName != name) {
-                    m_userName = name;
-                    m_password = password;
-                    emit userNameChanged();
-                }
-                setState(Connected);
-                m_messages.append(stream->read<qtgrpc::examples::chat::ChatMessages>().messages());
-            });
+    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this,
+                     [this, name, password, stream]() {
+                         if (m_userName != name) {
+                             m_userName = name;
+                             m_password = password;
+                             emit userNameChanged();
+                         }
+                         setState(Connected);
+                         m_messages.append(
+                                 stream->read<qtgrpc::examples::chat::ChatMessages>().messages());
+                     });
     // ![1]
 }
 

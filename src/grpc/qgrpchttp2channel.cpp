@@ -288,7 +288,7 @@ void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcChannelOperation> channelOpera
     \internal
     Implementation of server-side gRPC stream based on \l QNetworkAccessManager.
 */
-void QGrpcHttp2Channel::startStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
+void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
     QNetworkReply *networkReply =
             dPtr->post(channelOperation->method(), channelOperation->service(),

@@ -46,11 +46,11 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual void startStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
+    \fn virtual void startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
 
     This pure virtual function that the starts of the server-side stream. The
     \a channelOperation is the pointer to a channel side
-    \l QGrpcChannelOperation primitive that is connected with \l QGrpcStream
+    \l QGrpcChannelOperation primitive that is connected with \l QGrpcServerStream
     primitive, that is used in \l QAbstractGrpcClient implementations.
 
     The function should implement the channel-side logic of server-side stream.
@@ -90,27 +90,27 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
 
 /*!
     \internal
-    Function constructs \l QGrpcStream and \l QGrpcChannelOperation
+    Function constructs \l QGrpcServerStream and \l QGrpcChannelOperation
     primitives and makes the required for server-side gRPC stream connections
     between them.
 
     The function should not be called directly, but only by
     \l QAbstractGrpcClient implementations.
 */
-std::shared_ptr<QGrpcStream>
-QAbstractGrpcChannel::startStream(QLatin1StringView method, QLatin1StringView service,
+std::shared_ptr<QGrpcServerStream>
+QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringView service,
                                         QByteArrayView arg, const QGrpcCallOptions &options)
 {
     auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options);
     QObject::connect(channelOperation.get(), &QGrpcChannelOperation::sendData, []() {
-        Q_ASSERT_X(false, "QAbstractGrpcChannel::startStream",
-                   "QAbstractGrpcChannel::startStream disallows sendData signal from "
+        Q_ASSERT_X(false, "QAbstractGrpcChannel::startServerStream",
+                   "QAbstractGrpcChannel::startServerStream disallows sendData signal from "
                    "QGrpcChannelOperation");
     });
 
-    std::shared_ptr<QGrpcStream> stream(
-            new QGrpcStream(channelOperation, serializer()));
-    startStream(channelOperation);
+    std::shared_ptr<QGrpcServerStream> stream(
+            new QGrpcServerStream(channelOperation, serializer()));
+    startServerStream(channelOperation);
     return stream;
 }
 

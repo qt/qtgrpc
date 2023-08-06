@@ -29,9 +29,9 @@ void Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QOb
     }, Qt::SingleShotConnection);
 }
 
-std::shared_ptr<QGrpcStream> Client::streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcServerStream> Client::streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
-    return startStream<qtgrpc::tests::SimpleStringMessage>("testMethodServerStream"_L1, arg, options);
+    return startServerStream<qtgrpc::tests::SimpleStringMessage>("testMethodServerStream"_L1, arg, options);
 }
 
 } // namespace TestService

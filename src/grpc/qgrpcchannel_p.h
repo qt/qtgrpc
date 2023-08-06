@@ -96,7 +96,7 @@ struct QGrpcChannelPrivate
     ~QGrpcChannelPrivate();
 
     void call(std::shared_ptr<QGrpcChannelOperation> channelOperation);
-    void startStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
+    void startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 };
 

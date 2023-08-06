@@ -1,4 +1,4 @@
 [CallDeadlineTest]
 macos 64bit arm
-[StreamDeadlineTest]
+[ServerStreamDeadlineTest]
 macos 64bit arm

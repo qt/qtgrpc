@@ -75,21 +75,21 @@ protected:
     }
 
     template<typename ParamType>
-    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method,
+    std::shared_ptr<QGrpcServerStream> startServerStream(QLatin1StringView method,
                                                          const QProtobufMessage &arg,
                                                          const QGrpcCallOptions &options)
     {
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData)
             return {};
-        return startStream(method, *argData, options);
+        return startServerStream(method, *argData, options);
     }
 
 private:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg,
                                          const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcStream> startStream(QLatin1StringView method,
+    std::shared_ptr<QGrpcServerStream> startServerStream(QLatin1StringView method,
                                                          QByteArrayView arg,
                                                          const QGrpcCallOptions &options);
 

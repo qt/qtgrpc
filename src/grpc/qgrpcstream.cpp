@@ -11,22 +11,22 @@
 QT_BEGIN_NAMESPACE
 
 /*!
-    \class QGrpcStream
+    \class QGrpcServerStream
     \inmodule QtGrpc
 
-    \brief The QGrpcStream class provides the interface to access the
+    \brief The QGrpcServerStream class provides the interface to access the
     server-side gRPC stream functionality from gRPC client side.
 
-    The QGrpcStream object is owned by the client object that created it.
+    The QGrpcServerStream object is owned by the client object that created it.
 */
 
 /*!
-    \fn void QGrpcStream::messageReceived()
+    \fn void QGrpcServerStream::messageReceived()
 
     The signal is emitted when the stream receives an updated value from server.
 */
 
-QGrpcStream::QGrpcStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+QGrpcServerStream::QGrpcServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
                                      std::shared_ptr<QAbstractProtobufSerializer> serializer)
     : QGrpcOperation(std::move(channelOperation), std::move(serializer))
 {
@@ -35,9 +35,9 @@ QGrpcStream::QGrpcStream(std::shared_ptr<QGrpcChannelOperation> channelOperation
 }
 
 /*!
-    Destroys the QGrpcStream object.
+    Destroys the QGrpcServerStream object.
 */
-QGrpcStream::~QGrpcStream() = default;
+QGrpcServerStream::~QGrpcServerStream() = default;
 
 QT_END_NAMESPACE
 

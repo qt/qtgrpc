@@ -17,14 +17,14 @@ QT_BEGIN_NAMESPACE
 
 class QAbstractGrpcClient;
 
-class Q_GRPC_EXPORT QGrpcStream final : public QGrpcOperation
+class Q_GRPC_EXPORT QGrpcServerStream final : public QGrpcOperation
 {
     Q_OBJECT
 
 public:
-    explicit QGrpcStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+    explicit QGrpcServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
                                std::shared_ptr<QAbstractProtobufSerializer> serializer);
-    ~QGrpcStream() override;
+    ~QGrpcServerStream() override;
 
 Q_SIGNALS:
     void messageReceived();
