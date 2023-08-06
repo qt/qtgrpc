@@ -106,9 +106,6 @@ private:
 
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 
-    QGrpcStatus handleDeserializationError(
-            const QAbstractProtobufSerializer::DeserializationError &err);
-
     Q_DISABLE_COPY_MOVE(QAbstractGrpcClient)
     Q_DECLARE_PRIVATE(QAbstractGrpcClient)
 };

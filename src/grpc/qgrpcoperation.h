@@ -23,8 +23,10 @@ public:
     T read() const
     {
         T value;
-        if (auto ser = serializer(); ser)
-            ser->deserialize(&value, data());
+        if (auto ser = serializer(); ser) {
+            if (!ser->deserialize(&value, data()))
+                errorOccurred(deserializationError());
+        }
         return value;
     }
 
@@ -38,7 +40,7 @@ public:
     QGrpcMetadata metadata() const;
 Q_SIGNALS:
     void finished();
-    void errorOccurred(const QGrpcStatus &status);
+    void errorOccurred(const QGrpcStatus &status) const;
 
 protected:
     explicit QGrpcOperation(std::shared_ptr<QAbstractProtobufSerializer> serializer);
@@ -49,6 +51,7 @@ private:
 
     QByteArray data() const;
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
+    QGrpcStatus deserializationError() const;
 
     Q_DECLARE_PRIVATE(QGrpcOperation)
 };

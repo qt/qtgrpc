@@ -37,7 +37,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QGrpcOperation::errorOccurred(const QGrpcStatus &status)
+    \fn void QGrpcOperation::errorOccurred(const QGrpcStatus &status) const
 
     This signal indicates the error occurred during serialization.
 
@@ -141,6 +141,39 @@ QGrpcMetadata QGrpcOperation::metadata() const
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcOperation::serializer() const
 {
     return d_func()->serializer;
+}
+
+QGrpcStatus QGrpcOperation::deserializationError() const
+{
+    QGrpcStatus status;
+    switch (d_func()->serializer->deserializationError()) {
+    case QAbstractProtobufSerializer::InvalidHeaderError: {
+        const QLatin1StringView errStr("Response deserialization failed: invalid field found.");
+        status = { QGrpcStatus::InvalidArgument, errStr };
+        qGrpcWarning() << errStr;
+        emit errorOccurred(status);
+    } break;
+    case QAbstractProtobufSerializer::NoDeserializerError: {
+        const QLatin1StringView errStr("No deserializer was found for a given type.");
+        status = { QGrpcStatus::InvalidArgument, errStr };
+        qGrpcWarning() << errStr;
+        emit errorOccurred(status);
+    } break;
+    case QAbstractProtobufSerializer::UnexpectedEndOfStreamError: {
+        const QLatin1StringView errStr("Invalid size of received buffer.");
+        status = { QGrpcStatus::OutOfRange, errStr };
+        qGrpcWarning() << errStr;
+        emit errorOccurred(status);
+    } break;
+    case QAbstractProtobufSerializer::NoError:
+        Q_FALLTHROUGH();
+    default:
+        const QLatin1StringView errStr("Deserializing failed, but no error was set.");
+        status = { QGrpcStatus::InvalidArgument, errStr };
+        qGrpcWarning() << errStr;
+        emit errorOccurred(status);
+    }
+    return status;
 }
 
 QT_END_NAMESPACE

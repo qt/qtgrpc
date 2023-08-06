@@ -224,40 +224,6 @@ std::shared_ptr<QAbstractProtobufSerializer> QAbstractGrpcClient::serializer() c
     return nullptr;
 }
 
-QGrpcStatus QAbstractGrpcClient::handleDeserializationError(
-        const QAbstractProtobufSerializer::DeserializationError &err)
-{
-    QGrpcStatus status;
-    switch (err) {
-    case QAbstractProtobufSerializer::InvalidHeaderError: {
-        const QLatin1StringView errStr("Response deserialization failed: invalid field found.");
-        status = { QGrpcStatus::InvalidArgument, errStr };
-        qGrpcCritical() << errStr;
-        emit errorOccurred(status);
-    } break;
-    case QAbstractProtobufSerializer::NoDeserializerError: {
-        const QLatin1StringView errStr("No deserializer was found for a given type.");
-        status = { QGrpcStatus::InvalidArgument, errStr };
-        qGrpcCritical() << errStr;
-        emit errorOccurred(status);
-    } break;
-    case QAbstractProtobufSerializer::UnexpectedEndOfStreamError: {
-        const QLatin1StringView errStr("Invalid size of received buffer.");
-        status = { QGrpcStatus::OutOfRange, errStr };
-        qGrpcCritical() << errStr;
-        emit errorOccurred(status);
-    } break;
-    case QAbstractProtobufSerializer::NoError:
-        Q_FALLTHROUGH();
-    default:
-        const QLatin1StringView errStr("Deserializing failed, but no error was set.");
-        status = { QGrpcStatus::InvalidArgument, errStr };
-        qGrpcCritical() << errStr;
-        emit errorOccurred(status);
-    }
-    return status;
-}
-
 QT_END_NAMESPACE
 
 #include "moc_qabstractgrpcclient.cpp"
