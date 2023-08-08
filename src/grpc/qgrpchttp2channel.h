@@ -5,7 +5,6 @@
 #ifndef QGRPCHTTP2CHANNEL_H
 #define QGRPCHTTP2CHANNEL_H
 
-#include <QtCore/QUrl>
 #include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
 
