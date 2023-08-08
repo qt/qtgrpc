@@ -5,7 +5,6 @@
 #ifndef QGRPCCHANNEL_H
 #define QGRPCCHANNEL_H
 
-#include <QtCore/QSharedPointer>
 #include <QtCore/QUrl>
 #include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qtgrpcglobal.h>
