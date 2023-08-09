@@ -91,14 +91,14 @@ void SimpleChatService::run(std::string_view address)
         switch (tag->tag) {
         case HandlerTag::Request: {
             std::cout << "New connection request received\n";
-            std::string name;
-            if (!checkUserCredentials(&(pending->ctx))) {
+            const auto name = checkUserCredentials(&(pending->ctx));
+            if (!name.has_value()) {
                 std::cout << "Authentication failed\n";
                 pending->writer.Finish(grpc::Status(grpc::StatusCode::UNAUTHENTICATED,
                                                       "User or login are invalid"),
                                        new HandlerTag(HandlerTag::Reject, pending));
             } else {
-                std::cout << "User " << name << " connected to chat\n";
+                std::cout << "User " << name.value() << " connected to chat\n";
                 addMessageHandler(pending);
                 pending->writer.Write(m_messages, nullptr);
             }
