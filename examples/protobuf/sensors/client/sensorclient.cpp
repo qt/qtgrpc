@@ -11,8 +11,8 @@
 
 SensorClient::SensorClient(QObject *parent) : QObject(parent)
 {
-    Q_ASSERT_X(m_client.bind(QHostAddress::LocalHost, 65500), "SensorClient",
-               "Unable to bind to port 65500");
+    [[maybe_unused]] bool bound = m_client.bind(QHostAddress::LocalHost, 65500);
+    Q_ASSERT_X(bound, "SensorClient", "Unable to bind to port 65500");
     QObject::connect(&m_client, &QUdpSocket::readyRead, this, &SensorClient::receive);
 }
 
