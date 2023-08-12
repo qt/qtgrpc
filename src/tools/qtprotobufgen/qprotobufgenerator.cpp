@@ -386,9 +386,9 @@ bool QProtobufGenerator::GenerateMessages(const FileDescriptor *file,
     assert(file != nullptr);
     assert(generatorContext != nullptr);
 
-    if (file->message_type_count() <= 0 && file->enum_type_count() <= 0) {
-        return false;
-    }
+    if (file->message_type_count() <= 0 && file->enum_type_count() <= 0)
+        return true;
+
     GenerateHeader(file, generatorContext);
     GenerateSources(file, generatorContext);
     return true;
