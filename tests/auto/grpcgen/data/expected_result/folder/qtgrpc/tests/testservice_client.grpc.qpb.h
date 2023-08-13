@@ -30,7 +30,6 @@ public:
     Q_INVOKABLE void testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QObject *context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback, const QGrpcCallOptions &options = {});
 
     std::shared_ptr<QGrpcStream> streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options = {});
-    std::shared_ptr<QGrpcStream> streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QWeakPointer<qtgrpc::tests::SimpleStringMessage> &ret);
 
 
 };
