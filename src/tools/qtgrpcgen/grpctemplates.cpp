@@ -139,12 +139,11 @@ const char *GrpcTemplates::ClientMethodServerStreamDeclarationTemplate()
 
 const char *GrpcTemplates::ClientMethodServerStreamDefinitionTemplate()
 {
-    return "std::shared_ptr<QGrpcServerStream> $classname$::stream$method_name_upper$(const "
-           "$param_type$ "
-           "&$param_name$, const QGrpcCallOptions &options)\n"
+    return "std::shared_ptr<QGrpcServerStream> $classname$::stream$method_name_upper$("
+           "const $param_type$ &$param_name$, const QGrpcCallOptions &options)\n"
            "{\n"
-           "    return startServerStream<$param_type$>(\"$method_name$\"_L1, $param_name$, "
-           "options);\n"
+           "    return startStream<$param_type$, QGrpcServerStream>(\"$method_name$\"_L1, "
+           "$param_name$, options);\n"
            "}\n\n";
 }
 

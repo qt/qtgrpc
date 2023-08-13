@@ -662,10 +662,12 @@ void QtGrpcClientTest::ServerStreamStringThreadTest()
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
     QTRY_VERIFY(result.testFieldString().isEmpty());
-    QTRY_VERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
-                        .message()
-                        .startsWith("QAbstractGrpcClient::startServerStream is called from a "
-                                    "different thread."));
+    QTRY_VERIFY(
+            qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
+                    .message()
+                    .startsWith(
+                            "QAbstractGrpcClient::startStream<QGrpcServerStream> is called from a "
+                            "different thread."));
 }
 
 void QtGrpcClientTest::ServerStreamCancelWhileErrorTimeoutTest()

@@ -31,7 +31,7 @@ void Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QOb
 
 std::shared_ptr<QGrpcServerStream> Client::streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
-    return startServerStream<qtgrpc::tests::SimpleStringMessage>("testMethodServerStream"_L1, arg, options);
+    return startStream<qtgrpc::tests::SimpleStringMessage, QGrpcServerStream>("testMethodServerStream"_L1, arg, options);
 }
 
 } // namespace TestService

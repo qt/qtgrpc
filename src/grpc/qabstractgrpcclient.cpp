@@ -37,9 +37,9 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 
     QAbstractGrpcClient provides a set of functions for client classes
     generated out of protobuf services.
-    QAbstractGrpcClient enforces thread safety for startServerStream() and call() methods
+    QAbstractGrpcClient enforces thread safety for startStream() and call() methods
     of generated clients.
-    The methods QAbstractGrpcClient::call() and QAbstractGrpcClient::startServerStream()
+    The methods QAbstractGrpcClient::call() and QAbstractGrpcClient::startStream()
     should only be called by the generated client classes.
 */
 
@@ -61,13 +61,16 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 */
 
 /*!
-    \fn template <typename ParamType> QSharedPointer<QGrpcServerStream>
-   QAbstractGrpcClient::startServerStream(QLatin1StringView method, const QProtobufMessage &arg,
-   const QGrpcCallOptions &options);
+    \fn template<typename ParamType, typename StreamType> std::shared_ptr<StreamType> QAbstractGrpcClient::startStream(QLatin1StringView method, const QProtobufMessage &arg, const QGrpcCallOptions &options)
 
-    Streams messages from the server stream \a method with the message
+    Starts the stream \a method of the \a StreamType type with the message
     argument \a arg to the attached channel.
-    Uses \a options argument to set additional parameter for the call.
+
+    Uses \a options argument to set additional parameter in the stream
+    communication.
+
+    The implementation is only available for \a StreamType:
+    QGrpcServerStream, QGrpcClientStream, and QGrpcBidirStream.
 */
 
 class QAbstractGrpcClientPrivate : public QObjectPrivate
@@ -79,10 +82,13 @@ public:
     }
 
     QGrpcStatus checkThread(QLatin1StringView warningPreamble);
+    bool checkChannel();
+    void addStream(std::shared_ptr<QGrpcOperation> stream);
+    void removeStream(std::shared_ptr<QGrpcOperation> stream);
 
     std::shared_ptr<QAbstractGrpcChannel> channel;
     const std::string service;
-    std::vector<std::shared_ptr<QGrpcServerStream>> activeStreams;
+    std::vector<std::shared_ptr<QGrpcOperation>> activeStreams;
 };
 
 QGrpcStatus QAbstractGrpcClientPrivate::checkThread(QLatin1StringView warningPreamble)
@@ -96,6 +102,58 @@ QGrpcStatus QAbstractGrpcClientPrivate::checkThread(QLatin1StringView warningPre
         emit q->errorOccurred(status);
     }
     return status;
+}
+
+bool QAbstractGrpcClientPrivate::checkChannel()
+{
+    Q_Q(QAbstractGrpcClient);
+
+    if (!channel) {
+        emit q->errorOccurred({ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
+        return false;
+    }
+    return true;
+}
+
+void QAbstractGrpcClientPrivate::addStream(std::shared_ptr<QGrpcOperation> grpcStream)
+{
+    Q_Q(QAbstractGrpcClient);
+    auto errorConnection = std::make_shared<QMetaObject::Connection>();
+    auto finishedConnection = std::make_shared<QMetaObject::Connection>();
+
+    *errorConnection = QObject::connect(
+            grpcStream.get(), &QGrpcOperation::errorOccurred, q,
+            [this, grpcStream, finishedConnection, errorConnection](const QGrpcStatus &status) {
+                QObject::disconnect(*errorConnection);
+                QObject::disconnect(*finishedConnection);
+
+                qGrpcWarning() << grpcStream->method() << "call" << service
+                               << "stream error: " << status.message();
+                Q_Q(QAbstractGrpcClient);
+                emit q->errorOccurred(status);
+                removeStream(std::move(grpcStream));
+            });
+
+    *finishedConnection = QObject::connect(
+            grpcStream.get(), &QGrpcOperation::finished, q,
+            [this, grpcStream, errorConnection, finishedConnection]() mutable {
+                QObject::disconnect(*errorConnection);
+                QObject::disconnect(*finishedConnection);
+
+                qGrpcWarning() << grpcStream->method() << "call" << service << "stream finished.";
+                removeStream(std::move(grpcStream));
+            });
+
+    activeStreams.push_back(grpcStream);
+}
+
+void QAbstractGrpcClientPrivate::removeStream(std::shared_ptr<QGrpcOperation> grpcStream)
+{
+    auto it = std::find(activeStreams.begin(), activeStreams.end(), grpcStream);
+    if (it != activeStreams.end())
+        activeStreams.erase(it);
+
+    grpcStream.reset();
 }
 
 QAbstractGrpcClient::QAbstractGrpcClient(QLatin1StringView service, QObject *parent)
@@ -124,8 +182,10 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
         return;
     }
     Q_D(QAbstractGrpcClient);
-    for (auto &stream : d->activeStreams)
+    for (auto &stream : d->activeStreams) {
+        assert(stream != nullptr);
         stream->cancel();
+    }
 
     d->channel = channel;
     emit channelChanged();
@@ -150,70 +210,75 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
     if (d->checkThread("QAbstractGrpcClient::call"_L1) != QGrpcStatus::Ok)
         return reply;
 
-    if (d->channel) {
-        reply = d->channel->call(method, QLatin1StringView(d->service), arg, options);
+    if (!d->checkChannel())
+        return reply;
 
-        auto errorConnection = std::make_shared<QMetaObject::Connection>();
-        *errorConnection = connect(reply.get(), &QGrpcCallReply::errorOccurred, this,
-                                   [this, reply, errorConnection](const QGrpcStatus &status) {
-                                       QObject::disconnect(*errorConnection);
-                                       emit errorOccurred(status);
-                                   });
-    } else {
-        emit errorOccurred({ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
-    }
+    reply = d->channel->call(method, QLatin1StringView(d->service), arg, options);
+
+    auto errorConnection = std::make_shared<QMetaObject::Connection>();
+    *errorConnection = connect(reply.get(), &QGrpcCallReply::errorOccurred, this,
+                               [this, reply, errorConnection](const QGrpcStatus &status) {
+                                   QObject::disconnect(*errorConnection);
+                                   emit errorOccurred(status);
+                               });
 
     return reply;
 }
 
+template<>
 std::shared_ptr<QGrpcServerStream>
-QAbstractGrpcClient::startServerStream(QLatin1StringView method, QByteArrayView arg,
-                                       const QGrpcCallOptions &options)
+QAbstractGrpcClient::startStream<QGrpcServerStream>(QLatin1StringView method, QByteArrayView arg,
+                                                    const QGrpcCallOptions &options)
 {
     Q_D(QAbstractGrpcClient);
 
-    std::shared_ptr<QGrpcServerStream> grpcStream;
-    if (d->checkThread("QAbstractGrpcClient::startServerStream"_L1) != QGrpcStatus::Ok)
-        return grpcStream;
+    if (d->checkThread("QAbstractGrpcClient::startStream<QGrpcServerStream>"_L1) != QGrpcStatus::Ok)
+        return {};
 
-    if (d->channel) {
-        grpcStream =
-                d->channel->startServerStream(method, QLatin1StringView(d->service), arg, options);
+    if (!d->checkChannel())
+        return {};
 
-        auto errorConnection = std::make_shared<QMetaObject::Connection>();
-        *errorConnection =
-                connect(grpcStream.get(), &QGrpcServerStream::errorOccurred, this,
-                        [this, grpcStream, method, errorConnection](const QGrpcStatus &status) {
-                            QObject::disconnect(*errorConnection);
+    auto grpcStream =
+            d->channel->startServerStream(method, QLatin1StringView(d->service), arg, options);
+    d->addStream(std::static_pointer_cast<QGrpcOperation>(grpcStream));
+    return grpcStream;
+}
 
-                            Q_D(QAbstractGrpcClient);
-                            qGrpcWarning() << method << "call" << d->service
-                                           << "stream error: " << status.message();
-                            emit errorOccurred(status);
-                        });
+template<>
+std::shared_ptr<QGrpcClientStream>
+QAbstractGrpcClient::startStream<QGrpcClientStream>(QLatin1StringView method, QByteArrayView arg,
+                                                    const QGrpcCallOptions &options)
+{
+    Q_D(QAbstractGrpcClient);
 
-        auto finishedConnection = std::make_shared<QMetaObject::Connection>();
-        *finishedConnection = connect(
-                grpcStream.get(), &QGrpcServerStream::finished, this,
-                [this, grpcStream, errorConnection, finishedConnection, method]() mutable {
-                    QObject::disconnect(*errorConnection);
-                    QObject::disconnect(*finishedConnection);
+    if (d->checkThread("QAbstractGrpcClient::startStream<QGrpcClientStream>"_L1) != QGrpcStatus::Ok)
+        return {};
 
-                    Q_D(QAbstractGrpcClient);
-                    qGrpcWarning() << method << "call" << d->service << "stream finished.";
+    if (!d->checkChannel())
+        return {};
 
-                    auto it =
-                            std::find(d->activeStreams.begin(), d->activeStreams.end(), grpcStream);
-                    if (it != d->activeStreams.end())
-                        d->activeStreams.erase(it);
+    auto grpcStream =
+            d->channel->startClientStream(method, QLatin1StringView(d->service), arg, options);
+    d->addStream(std::static_pointer_cast<QGrpcOperation>(grpcStream));
+    return grpcStream;
+}
 
-                    grpcStream.reset();
-                });
+template<>
+std::shared_ptr<QGrpcBidirStream>
+QAbstractGrpcClient::startStream<QGrpcBidirStream>(QLatin1StringView method, QByteArrayView arg,
+                                                   const QGrpcCallOptions &options)
+{
+    Q_D(QAbstractGrpcClient);
 
-        d->activeStreams.push_back(grpcStream);
-    } else {
-        emit errorOccurred({ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
-    }
+    if (d->checkThread("QAbstractGrpcClient::startStream<QGrpcBidirStream>"_L1) != QGrpcStatus::Ok)
+        return {};
+
+    if (!d->checkChannel())
+        return {};
+
+    auto grpcStream =
+            d->channel->startBidirStream(method, QLatin1StringView(d->service), arg, options);
+    d->addStream(std::static_pointer_cast<QGrpcOperation>(grpcStream));
     return grpcStream;
 }
 
