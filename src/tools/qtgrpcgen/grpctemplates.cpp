@@ -137,13 +137,6 @@ const char *GrpcTemplates::ClientMethodServerStreamDeclarationTemplate()
            "&$param_name$, const QGrpcCallOptions &options = {});\n";
 }
 
-const char *GrpcTemplates::ClientMethodServerStream2DeclarationTemplate()
-{
-    return "std::shared_ptr<QGrpcStream> stream$method_name_upper$(const $param_type$ "
-           "&$param_name$, const "
-           "QWeakPointer<$return_type$> &$return_name$);\n";
-}
-
 const char *GrpcTemplates::ClientMethodServerStreamDefinitionTemplate()
 {
     return "std::shared_ptr<QGrpcStream> $classname$::stream$method_name_upper$(const $param_type$ "
