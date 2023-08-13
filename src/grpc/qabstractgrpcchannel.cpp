@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual void call(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
+    \fn virtual void QAbstractGrpcChannel::call(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
 
     This pure virtual function is called by public QAbstractGrpcChannel::call
     method when making unary gRPC call. The \a channelOperation is the
@@ -46,7 +46,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual void startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
+    \fn virtual void QAbstractGrpcChannel::startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
 
     This pure virtual function that the starts of the server-side stream. The
     \a channelOperation is the pointer to a channel side
@@ -56,6 +56,32 @@ QT_BEGIN_NAMESPACE
     The function should implement the channel-side logic of server-side stream.
     The implementation must be asynchronous and must not block the thread where
     the function was called.
+*/
+
+/*!
+    \fn virtual void QAbstractGrpcChannel::startClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
+
+    This pure virtual function that the starts of the client-side stream. The
+    \a channelOperation is the pointer to a channel side
+    \l QGrpcChannelOperation primitive that is connected with
+    \l QGrpcClientStream primitive, that is used in \l QAbstractGrpcClient.
+
+    The function should implement the channel-side logic of client-side stream.
+    The implementation must be asynchronous and must not block the thread where
+    the function was called.
+*/
+
+/*!
+    \fn virtual void QAbstractGrpcChannel::startBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
+
+    This pure virtual function that the starts of the bidirectional stream. The
+    \a channelOperation is the pointer to a channel side
+    \l QGrpcChannelOperation primitive that is connected with
+    \l QGrpcBidirStream primitive, that is used in \l QAbstractGrpcClient.
+
+    The function should implement the channel-side logic of bidirectional
+    stream. The implementation must be asynchronous and must not block the
+    thread where the function was called.
 */
 QAbstractGrpcChannel::QAbstractGrpcChannel() : dPtr(std::make_unique<QAbstractGrpcChannelPrivate>())
 {
@@ -111,6 +137,44 @@ QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringV
     std::shared_ptr<QGrpcServerStream> stream(
             new QGrpcServerStream(channelOperation, serializer()));
     startServerStream(channelOperation);
+    return stream;
+}
+
+/*!
+    \internal
+    Function constructs \l QGrpcClientStream and \l QGrpcChannelOperation
+    primitives and makes the required for client-side gRPC stream connections
+    between them.
+
+    The function should not be called directly, but only by
+    \l QAbstractGrpcClient.
+*/
+std::shared_ptr<QGrpcClientStream>
+QAbstractGrpcChannel::startClientStream(QLatin1StringView method, QLatin1StringView service,
+                                        QByteArrayView arg, const QGrpcCallOptions &options)
+{
+    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options);
+    auto stream = std::make_shared<QGrpcClientStream>(channelOperation, serializer());
+    startClientStream(channelOperation);
+    return stream;
+}
+
+/*!
+    \internal
+    Function constructs \l QGrpcBidirStream and \l QGrpcChannelOperation
+    primitives and makes the required for bidirectional gRPC stream connections
+    between them.
+
+    The function should not be called directly, but only by
+    \l QAbstractGrpcClient.
+*/
+std::shared_ptr<QGrpcBidirStream>
+QAbstractGrpcChannel::startBidirStream(QLatin1StringView method, QLatin1StringView service,
+                                       QByteArrayView arg, const QGrpcCallOptions &options)
+{
+    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options);
+    auto stream = std::make_shared<QGrpcBidirStream>(channelOperation, serializer());
+    startBidirStream(channelOperation);
     return stream;
 }
 

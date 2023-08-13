@@ -406,6 +406,32 @@ void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcChannelOperation>
 }
 
 /*!
+    \internal
+    Implementation of client-side gRPC stream based on \l QNetworkAccessManager.
+*/
+void QGrpcHttp2Channel::startClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
+{
+    QTimer::singleShot(0, channelOperation.get(), [channelOperation] {
+        emit channelOperation->errorOccurred(
+                { QGrpcStatus::Unknown,
+                  "Client-side streaming support is not implemented in QGrpcChannel"_L1 });
+    });
+}
+
+/*!
+    \internal
+    Implementation of bidirectional gRPC stream based on \l QNetworkAccessManager.
+*/
+void QGrpcHttp2Channel::startBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
+{
+    QTimer::singleShot(0, channelOperation.get(), [channelOperation] {
+        emit channelOperation->errorOccurred(
+                { QGrpcStatus::Unknown,
+                  "Bidirectional streaming support is not implemented in QGrpcChannel"_L1 });
+    });
+}
+
+/*!
     Returns the newly created QProtobufSerializer shared pointer.
 */
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const
