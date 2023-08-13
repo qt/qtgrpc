@@ -63,18 +63,14 @@ void ClientDeclarationPrinter::printClientMethodsDeclaration()
         const MethodDescriptor *method = m_descriptor->method(i);
         MethodMap parameters = common::produceMethodMap(method, m_typeMap["classname"]);
 
-        if (!method->client_streaming()) {
-            if (method->server_streaming()) {
-                m_printer->Print(parameters,
-                                 GrpcTemplates::ClientMethodServerStreamDeclarationTemplate());
-            } else {
-                m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationSyncTemplate());
-                m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationAsyncTemplate());
-                m_printer->Print(parameters,
-                                 GrpcTemplates::ClientMethodDeclarationAsync2Template());
-            }
-            m_printer->Print("\n");
+        if (method->client_streaming() || method->server_streaming()) {
+            m_printer->Print(parameters, GrpcTemplates::ClientMethodStreamDeclarationTemplate());
+        } else {
+            m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationSyncTemplate());
+            m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationAsyncTemplate());
+            m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationAsync2Template());
         }
+        m_printer->Print("\n");
     }
     Outdent();
     m_printer->Print("\n");

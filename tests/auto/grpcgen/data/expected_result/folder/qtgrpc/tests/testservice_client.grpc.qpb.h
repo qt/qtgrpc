@@ -31,6 +31,10 @@ public:
 
     std::shared_ptr<QGrpcServerStream> streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options = {});
 
+    std::shared_ptr<QGrpcClientStream> streamTestMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options = {});
+
+    std::shared_ptr<QGrpcBidirStream> streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options = {});
+
 
 };
 } // namespace TestService

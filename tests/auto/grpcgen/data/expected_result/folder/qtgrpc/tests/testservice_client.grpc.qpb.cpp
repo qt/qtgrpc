@@ -34,6 +34,16 @@ std::shared_ptr<QGrpcServerStream> Client::streamTestMethodServerStream(const qt
     return startStream<qtgrpc::tests::SimpleStringMessage, QGrpcServerStream>("testMethodServerStream"_L1, arg, options);
 }
 
+std::shared_ptr<QGrpcClientStream> Client::streamTestMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+{
+    return startStream<qtgrpc::tests::SimpleStringMessage, QGrpcClientStream>("testMethodClientStream"_L1, arg, options);
+}
+
+std::shared_ptr<QGrpcBidirStream> Client::streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+{
+    return startStream<qtgrpc::tests::SimpleStringMessage, QGrpcBidirStream>("testMethodBiStream"_L1, arg, options);
+}
+
 } // namespace TestService
 } // namespace qtgrpc::tests
 

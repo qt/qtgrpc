@@ -354,10 +354,24 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
     methodNameUpper[0] = static_cast<char>(utils::toAsciiUpper(methodNameUpper[0]));
     inputTypeName = utils::replace(inputTypeName, ".", "::");
     outputTypeName = utils::replace(outputTypeName, ".", "::");
-    return { { "classname", scope },          { "return_type", outputTypeName },
+
+    std::string streamType;
+    if (method->client_streaming() && method->server_streaming()) {
+        streamType = "QGrpcBidirStream";
+    } else if (method->server_streaming()) {
+        streamType = "QGrpcServerStream";
+    } else if (method->client_streaming()) {
+        streamType = "QGrpcClientStream";
+    }
+
+    return { { "classname", scope },
+             { "return_type", outputTypeName },
              { "classname_low_case", utils::deCapitalizeAsciiName(scope) },
-             { "method_name", methodName },   { "method_name_upper", methodNameUpper },
-             { "param_type", inputTypeName }, { "param_name", "arg" },
+             { "method_name", methodName },
+             { "method_name_upper", methodNameUpper },
+             { "param_type", inputTypeName },
+             { "param_name", "arg" },
+             { "stream_type", streamType },
              { "return_name", "ret" } };
 }
 

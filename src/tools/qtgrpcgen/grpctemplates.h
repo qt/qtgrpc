@@ -32,9 +32,9 @@ public:
     static const char *ClientMethodDefinitionAsync2Template();
     static const char *ClientMethodDefinitionQmlTemplate();
 
-    static const char *ClientMethodServerStreamDeclarationTemplate();
+    static const char *ClientMethodStreamDeclarationTemplate();
 
-    static const char *ClientMethodServerStreamDefinitionTemplate();
+    static const char *ClientMethodStreamDefinitionTemplate();
 };
 
 } // namespace QtGrpc
