@@ -60,6 +60,24 @@ bool QGrpcGenerator::Generate(const FileDescriptor *file,
 {
     assert(file != nullptr && generatorContext != nullptr);
 
+    // Check if .proto files contain client side or bidirectional streaming
+    // methods which are not supported.
+    bool hasClientStreaming = false;
+    for (int i = 0; i < file->service_count() && !hasClientStreaming; ++i) {
+        auto service = file->service(i);
+        assert(service != nullptr);
+
+        for (int j = 0; j < service->method_count(); ++j) {
+            if (service->method(j)->client_streaming()) {
+                hasClientStreaming = true;
+                break;
+            }
+        }
+    }
+
+    if (hasClientStreaming)
+        std::cerr << "Client-side streaming is not supported by this QtGRPC version.";
+
     return GenerateClientServices(file, generatorContext);
 }
 
