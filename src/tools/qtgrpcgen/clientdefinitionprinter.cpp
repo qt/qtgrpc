@@ -49,22 +49,18 @@ void ClientDefinitionPrinter::printMethods()
 void ClientDefinitionPrinter::printMethod(const MethodDescriptor *method)
 {
     MethodMap parameters = common::produceMethodMap(method, m_typeMap["classname"]);
-    if (method->server_streaming()) {
-        m_printer->Print(parameters,
-                         GrpcTemplates::ClientMethodServerStreamDefinitionTemplate());
-        m_printer->Print(parameters,
-                         GrpcTemplates::ClientMethodServerStream2DefinitionTemplate());
-        if (Options::instance().hasQml()) {
+    if (!method->client_streaming()) {
+        if (method->server_streaming()) {
             m_printer->Print(parameters,
-                             GrpcTemplates::ClientMethodServerStreamQmlDefinitionTemplate());
-        }
-    } else {
-        m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionSyncTemplate());
-        m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionAsyncTemplate());
-        m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionAsync2Template());
-        if (Options::instance().hasQml()) {
-            m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionQmlTemplate());
-            m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionQml2Template());
+                             GrpcTemplates::ClientMethodServerStreamDefinitionTemplate());
+        } else {
+            m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionSyncTemplate());
+            m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionAsyncTemplate());
+            m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionAsync2Template());
+            if (Options::instance().hasQml()) {
+                m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionQmlTemplate());
+                m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionQml2Template());
+            }
         }
     }
 }

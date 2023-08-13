@@ -31,36 +31,6 @@ std::shared_ptr<QGrpcStream> Client::streamTestMethodServerStream(const qtgrpc::
 {
     return startStream<qtgrpc::tests::SimpleStringMessage>("testMethodServerStream"_L1, arg);
 }
-std::shared_ptr<QGrpcStream> Client::streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QWeakPointer<qtgrpc::tests::SimpleStringMessage> &ret)
-{
-    return startStream<qtgrpc::tests::SimpleStringMessage>("testMethodServerStream"_L1, arg, ret);
-}
-
-QGrpcStatus Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, qtgrpc::tests::SimpleStringMessage *ret)
-{
-    return call<qtgrpc::tests::SimpleStringMessage>("testMethodClientStream"_L1, arg, ret);
-}
-
-std::shared_ptr<QGrpcCallReply> Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg)
-{
-    return call<qtgrpc::tests::SimpleStringMessage>("testMethodClientStream"_L1, arg);
-}
-
-void Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QObject *context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback)
-{
-    std::shared_ptr<QGrpcCallReply> reply = call<qtgrpc::tests::SimpleStringMessage>("testMethodClientStream"_L1, arg);
-    QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, callback]() {
-        callback(reply);
-    });
-}
-std::shared_ptr<QGrpcStream> Client::streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg)
-{
-    return startStream<qtgrpc::tests::SimpleStringMessage>("testMethodBiStream"_L1, arg);
-}
-std::shared_ptr<QGrpcStream> Client::streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QWeakPointer<qtgrpc::tests::SimpleStringMessage> &ret)
-{
-    return startStream<qtgrpc::tests::SimpleStringMessage>("testMethodBiStream"_L1, arg, ret);
-}
 } // namespace TestService
 } // namespace qtgrpc::tests
 

@@ -34,13 +34,6 @@ public:
     std::shared_ptr<QGrpcStream> streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg);
     std::shared_ptr<QGrpcStream> streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QWeakPointer<qtgrpc::tests::SimpleStringMessage> &ret);
 
-    QGrpcStatus testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, qtgrpc::tests::SimpleStringMessage *ret);
-    std::shared_ptr<QGrpcCallReply> testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg);
-    Q_INVOKABLE void testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QObject *context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback);
-
-    std::shared_ptr<QGrpcStream> streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg);
-    std::shared_ptr<QGrpcStream> streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QWeakPointer<qtgrpc::tests::SimpleStringMessage> &ret);
-
 
 };
 
