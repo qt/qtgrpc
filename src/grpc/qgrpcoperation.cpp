@@ -111,6 +111,14 @@ QGrpcMetadata QGrpcOperation::metadata() const
 }
 
 /*!
+    Getter of the method that this operation was intialized with.
+*/
+QLatin1StringView QGrpcOperation::method() const
+{
+    return d_func()->channelOperation->method();
+}
+
+/*!
     \internal
     Returns a pointer to the assigned channel-side QGrpcChannelOperation.
 */

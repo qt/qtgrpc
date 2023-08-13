@@ -32,6 +32,8 @@ public:
     }
 
     QGrpcMetadata metadata() const;
+    QLatin1StringView method() const;
+
     void cancel();
 
 Q_SIGNALS:
