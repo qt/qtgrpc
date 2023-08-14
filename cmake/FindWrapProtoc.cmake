@@ -27,7 +27,7 @@ if(NOT CMAKE_CROSSCOMPILING)
     # gives this possibility.
     set(__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save ${CMAKE_FIND_PACKAGE_PREFER_CONFIG})
     set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
-    find_package(Protobuf ${__WrapProtoc_find_package_args})
+    find_package(Protobuf ${WrapProtoc_FIND_VERSION} ${__WrapProtoc_find_package_args})
     set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save})
     unset(__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save)
 
@@ -67,6 +67,7 @@ if(__WrapProtoc_protoc_imported_location)
     add_executable(WrapProtoc::WrapProtoc IMPORTED)
     set_target_properties(WrapProtoc::WrapProtoc PROPERTIES
         IMPORTED_LOCATION "${__WrapProtoc_protoc_imported_location}"
+        _qt_internal_protobuf_version "${Protobuf_VERSION}"
     )
     set(WrapProtoc_FOUND TRUE)
 endif()
