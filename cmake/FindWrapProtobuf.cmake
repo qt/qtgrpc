@@ -28,7 +28,7 @@ endif()
 # possibility.
 set(__WrapProtobuf_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save ${CMAKE_FIND_PACKAGE_PREFER_CONFIG})
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
-find_package(Protobuf ${__WrapProtobuf_find_package_args})
+find_package(Protobuf ${WrapProtobuf_FIND_VERSION} ${__WrapProtobuf_find_package_args})
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${__WrapProtobuf_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save})
 unset(__WrapProtobuf_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save)
 
@@ -39,9 +39,13 @@ endif()
 if(Protobuf_FOUND AND TARGET protobuf::libprotoc AND TARGET protobuf::libprotobuf)
     add_library(WrapProtobuf::WrapLibProtoc INTERFACE IMPORTED)
     target_link_libraries(WrapProtobuf::WrapLibProtoc INTERFACE protobuf::libprotoc)
+    set_target_properties(WrapProtobuf::WrapLibProtoc PROPERTIES
+        _qt_internal_protobuf_version "${Protobuf_VERSION}")
 
     add_library(WrapProtobuf::WrapLibProtobuf INTERFACE IMPORTED)
     target_link_libraries(WrapProtobuf::WrapLibProtobuf INTERFACE protobuf::libprotobuf)
+    set_target_properties(WrapProtobuf::WrapLibProtobuf PROPERTIES
+        _qt_internal_protobuf_version "${Protobuf_VERSION}")
 
     get_target_property(WrapProtobuf_INCLUDE_DIRS
         protobuf::libprotobuf
