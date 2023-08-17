@@ -4,8 +4,7 @@ syntax = "proto3";
 
 import "nopackageexternal.proto";
 
-message EmptyMessage {
-}
+message EmptyMessage {}
 
 enum TestEnum {
     LOCAL_ENUM_VALUE0 = 0;

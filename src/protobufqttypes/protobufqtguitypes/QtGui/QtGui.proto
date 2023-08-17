@@ -12,7 +12,7 @@ message QRgba64 {
 message QColor {
     oneof color {
         QRgba64 rgba64 = 1;
-        uint32  rgba   = 2;
+        uint32 rgba = 2;
     }
 }
 
@@ -52,5 +52,5 @@ message QQuaternion {
 
 message QImage {
     bytes data = 1;
-    string format = 2; // see QImageWriter::supportedImageFormats()
+    string format = 2;  // see QImageWriter::supportedImageFormats()
 }

@@ -43,4 +43,3 @@ message lowerCaseSequence {
 message lowerCaseSequence2 {
     bool testField = 1;
 }
-

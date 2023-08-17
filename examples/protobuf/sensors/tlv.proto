@@ -12,8 +12,7 @@ enum MessageType {
 }
 
 // Protobuf messages imply inline data size.
-message TlvMessage
-{
+message TlvMessage {
     MessageType type = 1;
     bytes value = 2;
 }

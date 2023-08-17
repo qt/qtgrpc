@@ -4,8 +4,7 @@ syntax = "proto3";
 
 package qtprotobufnamespace.tests;
 
-message EmptyMessage {
-}
+message EmptyMessage {}
 
 message SimpleBoolMessage {
     bool testFieldBool = 1;

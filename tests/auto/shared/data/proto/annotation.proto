@@ -4,7 +4,7 @@ syntax = "proto3";
 
 package qtprotobufnamespace.tests;
 
-//test annotation
+// test annotation
 message AnnotatedMessage1 {
     /**
      * \brief Field annotation
@@ -73,6 +73,6 @@ message AnnotatedMessage8 {
  * test annotation secondline
  */
 message AnnotatedMessage9 {
-    //Field annotation
+    // Field annotation
     sint32 testField = 1;
 }
