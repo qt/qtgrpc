@@ -6,26 +6,21 @@ import "basicmessages.proto";
 
 package qtprotobufnamespace.tests;
 
-message OneofSimpleMessage
-{
-    oneof testOneof
-    {
+message OneofSimpleMessage {
+    oneof testOneof {
         int32 testOneofFieldInt = 1;
         int32 testOneofFieldSecondInt = 2;
     }
 }
 
-message OneofComplexMessage
-{
+message OneofComplexMessage {
     int32 testFieldInt = 1;
-    oneof testOneof
-    {
+    oneof testOneof {
         int32 testOneofFieldInt = 42;
         ComplexMessage testOneofComplexField = 3;
         ComplexMessage testOneofSecondComplexField = 4;
     }
-    oneof secondOneof
-    {
+    oneof secondOneof {
         int32 secondFieldInt = 43;
         ComplexMessage secondComplexField = 5;
         ComplexMessage secondSecondComplexField = 6;

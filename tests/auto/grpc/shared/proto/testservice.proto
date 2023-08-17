@@ -4,15 +4,14 @@ syntax = "proto3";
 
 package qtgrpc.tests;
 
-message Empty {
-}
+message Empty {}
 
 message SimpleStringMessage {
     string testFieldString = 6;
 }
 
 message SimpleIntMessage {
-    sint32 testField= 1;
+    sint32 testField = 1;
 }
 
 message BlobMessage {

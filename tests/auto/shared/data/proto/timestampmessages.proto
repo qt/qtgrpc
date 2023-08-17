@@ -6,7 +6,6 @@ import "google/protobuf/timestamp.proto";
 
 package qtproto.tests;
 
-message TimestampMessage
-{
+message TimestampMessage {
     google.protobuf.Timestamp field = 1;
 }

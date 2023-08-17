@@ -5,29 +5,28 @@ syntax = "proto3";
 package qtprotobufnamespace.tests;
 
 message SimpleEnumMessage {
-  enum LocalEnum {
-    LOCAL_ENUM_VALUE0 = 0;
-    LOCAL_ENUM_VALUE1 = 1;
-    LOCAL_ENUM_VALUE2 = 2;
-    LOCAL_ENUM_VALUE3 = 3;
-  }
+    enum LocalEnum {
+        LOCAL_ENUM_VALUE0 = 0;
+        LOCAL_ENUM_VALUE1 = 1;
+        LOCAL_ENUM_VALUE2 = 2;
+        LOCAL_ENUM_VALUE3 = 3;
+    }
 
-  LocalEnum localEnum = 1;
+    LocalEnum localEnum = 1;
 }
 
 message RepeatedEnumMessage {
-  enum LocalEnum {
-    LOCAL_ENUM_VALUE0 = 0;
-    LOCAL_ENUM_VALUE1 = 1;
-    LOCAL_ENUM_VALUE2 = 2;
-    LOCAL_ENUM_VALUE3 = 3;
-  }
+    enum LocalEnum {
+        LOCAL_ENUM_VALUE0 = 0;
+        LOCAL_ENUM_VALUE1 = 1;
+        LOCAL_ENUM_VALUE2 = 2;
+        LOCAL_ENUM_VALUE3 = 3;
+    }
 
-  repeated LocalEnum localEnumList = 1;
+    repeated LocalEnum localEnumList = 1;
 }
 
-message MixedEnumUsageMessage
-{
+message MixedEnumUsageMessage {
     enum LocalEnum {
         LOCAL_ENUM_VALUE0 = 0;
         LOCAL_ENUM_VALUE1 = 1;
@@ -72,13 +71,13 @@ message MixedEnumUsageMessage
 }
 
 message SimpleFileEnumMessage {
-  TestEnum globalEnum = 1;
-  repeated TestEnum globalEnumList = 2;
+    TestEnum globalEnum = 1;
+    repeated TestEnum globalEnumList = 2;
 }
 
 message StepChildEnumMessage {
-  SimpleEnumMessage.LocalEnum localStepChildEnum = 1;
-  repeated SimpleEnumMessage.LocalEnum localStepChildList = 2;
+    SimpleEnumMessage.LocalEnum localStepChildEnum = 1;
+    repeated SimpleEnumMessage.LocalEnum localStepChildList = 2;
 }
 
 enum TestEnum {
