@@ -9,7 +9,7 @@ message SimpleStringMessage {
 }
 
 message SimpleIntMessage {
-    sint32 testField= 1;
+    sint32 testField = 1;
 }
 
 message BlobMessage {
@@ -17,8 +17,8 @@ message BlobMessage {
 }
 
 service TestService {
-  rpc testMethod(SimpleStringMessage) returns (SimpleStringMessage) {}
-  rpc testMethodServerStream(SimpleStringMessage) returns (stream SimpleStringMessage) {}
-  rpc testMethodClientStream(stream SimpleStringMessage) returns (SimpleStringMessage) {}
-  rpc testMethodBiStream(stream SimpleStringMessage) returns (stream SimpleStringMessage) {}
+    rpc testMethod(SimpleStringMessage) returns (SimpleStringMessage) {}
+    rpc testMethodServerStream(SimpleStringMessage) returns (stream SimpleStringMessage) {}
+    rpc testMethodClientStream(stream SimpleStringMessage) returns (SimpleStringMessage) {}
+    rpc testMethodBiStream(stream SimpleStringMessage) returns (stream SimpleStringMessage) {}
 }

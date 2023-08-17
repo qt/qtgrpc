@@ -6,8 +6,8 @@ import "basicmessages.proto";
 
 package qtprotobufnamespace.tests;
 
-//MAPS
-//Types to String
+// MAPS
+// Types to String
 message SimpleSInt32StringMapMessage {
     map<sint32, string> mapField = 1;
 }
@@ -52,7 +52,7 @@ message SimpleStringStringMapMessage {
     map<string, string> mapField = 13;
 }
 
-//Types to sint32
+// Types to sint32
 message SimpleSInt32SInt32MapMessage {
     map<sint32, sint32> mapField = 1;
 }
@@ -97,7 +97,7 @@ message SimpleStringSInt32MapMessage {
     map<string, sint32> mapField = 13;
 }
 
-//Types to sint64
+// Types to sint64
 message SimpleSInt32SInt64MapMessage {
     map<sint32, sint64> mapField = 1;
 }
@@ -142,7 +142,7 @@ message SimpleStringSInt64MapMessage {
     map<string, sint64> mapField = 13;
 }
 
-//Types to uint32
+// Types to uint32
 message SimpleSInt32UInt32MapMessage {
     map<sint32, uint32> mapField = 1;
 }
@@ -187,7 +187,7 @@ message SimpleStringUInt32MapMessage {
     map<string, uint32> mapField = 13;
 }
 
-//Types to uint64
+// Types to uint64
 message SimpleSInt32UInt64MapMessage {
     map<sint32, uint64> mapField = 1;
 }
@@ -232,7 +232,7 @@ message SimpleStringUInt64MapMessage {
     map<string, uint64> mapField = 13;
 }
 
-//Types to int32
+// Types to int32
 message SimpleSInt32Int32MapMessage {
     map<sint32, int32> mapField = 1;
 }
@@ -277,7 +277,7 @@ message SimpleStringInt32MapMessage {
     map<string, int32> mapField = 13;
 }
 
-//Types to int64
+// Types to int64
 message SimpleSInt32Int64MapMessage {
     map<sint32, int64> mapField = 1;
 }
@@ -322,7 +322,7 @@ message SimpleStringInt64MapMessage {
     map<string, int64> mapField = 13;
 }
 
-//Types to ComplexMessage
+// Types to ComplexMessage
 message SimpleSInt32ComplexMessageMapMessage {
     map<sint32, ComplexMessage> mapField = 1;
 }

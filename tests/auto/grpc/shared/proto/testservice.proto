@@ -9,7 +9,7 @@ message SimpleStringMessage {
 }
 
 message SimpleIntMessage {
-    sint32 testField= 1;
+    sint32 testField = 1;
 }
 
 message BlobMessage {

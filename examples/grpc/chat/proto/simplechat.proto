@@ -5,8 +5,7 @@ syntax = "proto3";
 //! [0]
 package qtgrpc.examples.chat;
 
-message ChatMessage
-{
+message ChatMessage {
     enum ContentType {
         Unknown = 0;
         Text = 1;
@@ -18,13 +17,11 @@ message ChatMessage
     string from = 4;
 }
 
-message ChatMessages
-{
+message ChatMessages {
     repeated ChatMessage messages = 1;
 }
 
-message User
-{
+message User {
     string name = 1;
     string password = 2;
 }
@@ -33,11 +30,10 @@ message Users {
     repeated User users = 1;
 }
 
-message None { }
+message None {}
 
-service SimpleChat
-{
-    rpc messageList(None) returns (stream ChatMessages) { }
-    rpc sendMessage(ChatMessage) returns (None) { }
+service SimpleChat {
+    rpc messageList(None) returns (stream ChatMessages) {}
+    rpc sendMessage(ChatMessage) returns (None) {}
 }
 //! [0]
