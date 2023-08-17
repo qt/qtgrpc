@@ -3,4 +3,4 @@
 
 #include <QtQuickTest>
 
-QUICK_TEST_MAIN(tst_options_qml)
+QUICK_TEST_MAIN(tst_calloptions_qml)
