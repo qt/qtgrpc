@@ -489,6 +489,8 @@ function(_qt_internal_preparse_proto_file_common out_result out_package proto_fi
         message(FATAL_ERROR "Unable to read ${proto_file}, or file is empty.")
     endif()
 
+    string(REPLACE "[" "" file_content "${file_content}")
+    string(REPLACE "]" "" file_content "${file_content}")
     string(REPLACE ";" "[[;]]" file_content "${file_content}")
     string(REGEX REPLACE "([^\t \n]+[\t ]*)}" "\\1;}" file_content "${file_content}")
     string(REGEX REPLACE "{([\t ]*[^\t \n]+)" "{;\\1" file_content "${file_content}")
