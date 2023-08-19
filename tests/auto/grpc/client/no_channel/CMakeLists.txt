@@ -6,38 +6,25 @@ if(NOT QT_BUILD_STANDALONE_TESTS AND NOT QT_BUILDING_QT)
     project(tst_grpc_client_no_channel LANGUAGES CXX)
     find_package(Qt6BuildInternals REQUIRED COMPONENTS STANDALONE_TEST)
     include("../shared/test_server/CMakeLists.txt")
+    include("../shared/client_service/CMakeLists.txt")
 endif()
 
 if(NOT TARGET testserver)
     return()
 endif()
 
-qt6_add_protobuf(tst_grpc_client_no_channel_qtgrpc_gen
-    OUTPUT_DIRECTORY
-        "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated"
-    PROTO_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared/proto/testservice.proto
-)
-
-qt6_add_grpc(tst_grpc_client_no_channel_qtgrpc_gen CLIENT
-    PROTO_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared/proto/testservice.proto
-    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated"
-)
-
-qt_autogen_tools_initial_setup(tst_grpc_client_no_channel_qtgrpc_gen)
 qt_internal_add_test(tst_grpc_client_no_channel
     SOURCES
         tst_grpc_client_no_channel.cpp
     INCLUDE_DIRECTORIES
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../shared
     DEFINES
         TEST_GRPC_SERVER_PATH="$<TARGET_FILE:testserver>"
     LIBRARIES
         Qt::Test
         Qt::Core
         Qt::Grpc
-        tst_grpc_client_no_channel_qtgrpc_gen
+        tst_grpc_client_qtgrpc_gen
 )
 
 add_dependencies(tst_grpc_client_no_channel testserver)

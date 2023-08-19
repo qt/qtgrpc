@@ -10,7 +10,7 @@ if(NOT WrapgRPCPlugin_FOUND OR NOT WrapProtobuf_FOUND OR NOT WrapgRPC_FOUND)
     return()
 endif()
 
-set(proto_files "${CMAKE_CURRENT_LIST_DIR}/../proto/testservice.proto")
+set(proto_files "${CMAKE_CURRENT_LIST_DIR}/../../../shared/proto/testservice.proto")
 set(out_dir ${CMAKE_CURRENT_BINARY_DIR})
 
 set(generated_files
@@ -24,7 +24,7 @@ add_custom_command(
     ARGS
         --grpc_out "${out_dir}"
         --cpp_out "${out_dir}"
-        -I "${CMAKE_CURRENT_LIST_DIR}/../proto/"
+        -I "${CMAKE_CURRENT_LIST_DIR}/../../../shared/proto/"
         --plugin=protoc-gen-grpc=$<TARGET_FILE:WrapgRPC::WrapgRPCPlugin>
         "${proto_files}"
     WORKING_DIRECTORY ${out_dir}
@@ -57,7 +57,7 @@ add_library(TestServerRunner
 target_include_directories(TestServerRunner
     PRIVATE
         ${out_dir}
-        ${CMAKE_CURRENT_LIST_DIR}/..
+        ${CMAKE_CURRENT_LIST_DIR}/../../../shared
 )
 
 target_link_libraries(TestServerRunner
