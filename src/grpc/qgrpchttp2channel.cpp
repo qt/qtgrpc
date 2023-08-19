@@ -396,7 +396,6 @@ void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView s
                                              QLatin1StringView(networkReply->rawHeader(
                                                      GrpcStatusMessageHeader)) });
                     }
-                    emit grpcStream->finished();
                     break;
                 }
                 default:
@@ -406,6 +405,7 @@ void QGrpcHttp2Channel::startStream(QGrpcStream *grpcStream, QLatin1StringView s
                                                  service, grpcStream->method(), errorString) });
                     break;
                 }
+                emit grpcStream->finished();
             });
 
     *abortConnection = QObject::connect(
