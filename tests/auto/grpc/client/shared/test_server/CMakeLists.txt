@@ -10,7 +10,7 @@ if(NOT WrapgRPCPlugin_FOUND OR NOT WrapProtobuf_FOUND OR NOT WrapgRPC_FOUND)
     return()
 endif()
 
-set(proto_files "${CMAKE_CURRENT_LIST_DIR}/../proto/testservice.proto")
+set(proto_files "${CMAKE_CURRENT_LIST_DIR}/../../../shared/proto/testservice.proto")
 set(out_dir ${CMAKE_CURRENT_BINARY_DIR})
 
 set(generated_files
@@ -24,7 +24,7 @@ add_custom_command(
     ARGS
         --grpc_out "${out_dir}"
         --cpp_out "${out_dir}"
-        -I "${CMAKE_CURRENT_LIST_DIR}/../proto/"
+        -I "${CMAKE_CURRENT_LIST_DIR}/../../../shared/proto/"
         --plugin=protoc-gen-grpc=$<TARGET_FILE:WrapgRPC::WrapgRPCPlugin>
         "${proto_files}"
     WORKING_DIRECTORY ${out_dir}
@@ -50,11 +50,15 @@ target_link_libraries(TestServerRunner_grpc_gen
 
 add_library(TestServerRunner
     STATIC
-        testserverrunner.cpp
-        testserverrunner.h
+        ${CMAKE_CURRENT_LIST_DIR}/testserverrunner.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/testserverrunner.h
 )
 
-target_include_directories(TestServerRunner PRIVATE ${out_dir})
+target_include_directories(TestServerRunner
+    PRIVATE
+        ${out_dir}
+        ${CMAKE_CURRENT_LIST_DIR}/../../../shared
+)
 
 target_link_libraries(TestServerRunner
     PRIVATE
@@ -63,18 +67,23 @@ target_link_libraries(TestServerRunner
         Qt6::Core
 )
 
+set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/assets/cert.pem"
+    PROPERTIES QT_RESOURCE_ALIAS assets/cert.pem)
+set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/assets/key.pem"
+    PROPERTIES QT_RESOURCE_ALIAS assets/key.pem)
+
 qt_add_resources(TestServerRunner
     "keys"
     PREFIX
         "/"
     FILES
-        "assets/cert.pem"
-        "assets/key.pem"
+        "${CMAKE_CURRENT_LIST_DIR}/assets/cert.pem"
+        "${CMAKE_CURRENT_LIST_DIR}/assets/key.pem"
 )
 
 qt_internal_add_executable(testserver
     SOURCES
-        testserver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/testserver.cpp
     LIBRARIES
         TestServerRunner
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/"
@@ -83,7 +92,7 @@ qt_internal_add_executable(testserver
 
 qt_internal_add_executable(securetestserver
     SOURCES
-        securetestserver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/securetestserver.cpp
     LIBRARIES
         TestServerRunner
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/"
