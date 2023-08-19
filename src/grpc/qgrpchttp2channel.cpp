@@ -264,13 +264,13 @@ void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcChannelOperation> channelOpera
                 qGrpcDebug() << "RECV:" << data;
                 if (QGrpcStatus::StatusCode::Ok == code) {
                     emit channelOperation->dataReady(data);
-                    emit channelOperation->finished();
                 } else {
                     emit channelOperation->errorOccurred(
                             { code,
                               QLatin1StringView(
                                       networkReply->rawHeader(GrpcStatusMessageHeader)) });
                 }
+                emit channelOperation->finished();
                 networkReply->deleteLater();
             });
 

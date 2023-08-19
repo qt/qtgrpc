@@ -447,8 +447,9 @@ void QtGrpcClientTest::ServerStreamAndGetAsyncReplyTest()
 
     auto reply = _client->testMethodStatusMessage(request);
 
+    bool finishedCalled = false;
     reply->subscribe(
-            this, [] { QVERIFY(false); },
+            this, [&finishedCalled] { finishedCalled = true; },
             [&asyncStatus, &statusMessage](const QGrpcStatus &status) {
                 asyncStatus = status.code();
                 statusMessage = status.message();
@@ -456,6 +457,7 @@ void QtGrpcClientTest::ServerStreamAndGetAsyncReplyTest()
 
     QTRY_COMPARE_WITH_TIMEOUT(statusMessage, request.testFieldString(),
                               MessageLatencyWithThreshold);
+    QVERIFY(finishedCalled);
 
     SimpleStringMessage result;
     request.setTestFieldString("Hello Qt!");

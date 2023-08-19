@@ -253,10 +253,10 @@ void QGrpcChannelPrivate::call(std::shared_ptr<QGrpcChannelOperation> channelOpe
                                        QObject::disconnect(*abortConnection);
                                        if (call->status == QGrpcStatus::Ok) {
                                            channelOperation->dataReady(call->response);
-                                           emit channelOperation->finished();
                                        } else {
                                            emit channelOperation->errorOccurred(call->status);
                                        }
+                                       emit channelOperation->finished();
                                    });
 
     *abortConnection = QObject::connect(channelOperation.get(), &QGrpcChannelOperation::cancelled,
