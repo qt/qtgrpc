@@ -439,7 +439,6 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                                              QLatin1StringView(networkReply->rawHeader(
                                                      GrpcStatusMessageHeader)) });
                     }
-                    emit grpcStream->finished();
                     break;
                 }
                 default:
@@ -449,6 +448,7 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                                                  service, grpcStream->method(), errorString) });
                     break;
                 }
+                emit grpcStream->finished();
             });
 
     *abortConnection = QObject::connect(
