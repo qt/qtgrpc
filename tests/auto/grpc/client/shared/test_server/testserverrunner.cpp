@@ -51,6 +51,11 @@ class TestServiceServiceImpl final : public qtgrpc::tests::TestService::Service
     testMethodClientStream(::grpc::ServerContext *,
                            ::grpc::ServerReader<::qtgrpc::tests::SimpleStringMessage> *reader,
                            ::qtgrpc::tests::SimpleStringMessage *response) override;
+
+    grpc::Status testMethodBiStream(
+            ::grpc::ServerContext *context,
+            ::grpc::ServerReaderWriter<::qtgrpc::tests::SimpleStringMessage,
+                                       ::qtgrpc::tests::SimpleStringMessage> *stream) override;
 };
 }
 
@@ -161,6 +166,30 @@ grpc::Status TestServiceServiceImpl::testMethodClientStream(
     }
 
     response->set_testfieldstring(rspString);
+    return {};
+}
+
+grpc::Status TestServiceServiceImpl::testMethodBiStream(
+        ::grpc::ServerContext *,
+        ::grpc::ServerReaderWriter<::qtgrpc::tests::SimpleStringMessage,
+                                   ::qtgrpc::tests::SimpleStringMessage> *stream)
+{
+    ::qtgrpc::tests::SimpleStringMessage req;
+    for (int i = 0; i < 4; ++i) {
+        if (!stream->Read(&req)) {
+            qInfo() << "Unable to read message from bidirectional stream";
+            return grpc::Status(grpc::StatusCode::DATA_LOSS, "Read failed");
+        }
+        std::string rspString = req.testfieldstring() + std::to_string(i + 1);
+        ::qtgrpc::tests::SimpleStringMessage rsp;
+        rsp.set_testfieldstring(rspString);
+        if (!stream->Write(rsp, {})) {
+            qInfo() << "Unable to write message to bidirectional stream";
+            return grpc::Status(grpc::StatusCode::DATA_LOSS, "Write failed");
+        }
+        QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
+    }
+
     return {};
 }
 
