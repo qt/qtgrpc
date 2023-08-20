@@ -3,3 +3,4 @@
 
 add_subdirectory(test_server)
 add_subdirectory(client_service)
+add_subdirectory(client_test_common)
