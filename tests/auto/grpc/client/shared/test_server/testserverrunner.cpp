@@ -46,6 +46,11 @@ class TestServiceServiceImpl final : public qtgrpc::tests::TestService::Service
     grpc::Status testMetadata(grpc::ServerContext *,
                                                 const Empty *,
                                                 qtgrpc::tests::Empty *) override;
+
+    grpc::Status
+    testMethodClientStream(::grpc::ServerContext *,
+                           ::grpc::ServerReader<::qtgrpc::tests::SimpleStringMessage> *reader,
+                           ::qtgrpc::tests::SimpleStringMessage *response) override;
 };
 }
 
@@ -138,6 +143,25 @@ Status TestServiceServiceImpl::testMetadata(grpc::ServerContext *ctx, const Empt
 
     ctx->AddTrailingMetadata("client_return_header", client_return_header);
     return Status();
+}
+
+grpc::Status TestServiceServiceImpl::testMethodClientStream(
+        ::grpc::ServerContext *, ::grpc::ServerReader<::qtgrpc::tests::SimpleStringMessage> *reader,
+        ::qtgrpc::tests::SimpleStringMessage *response)
+{
+    ::qtgrpc::tests::SimpleStringMessage req;
+    std::string rspString;
+    for (int i = 0; i < 4; ++i) {
+        if (!reader->Read(&req)) {
+            qInfo() << "Unable to read message from client stream";
+            return grpc::Status(grpc::StatusCode::DATA_LOSS, rspString);
+        }
+        rspString += req.testfieldstring();
+        rspString += std::to_string(i + 1);
+    }
+
+    response->set_testfieldstring(rspString);
+    return {};
 }
 
 void SecureTestServer::run()
