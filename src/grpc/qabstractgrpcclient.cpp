@@ -53,8 +53,7 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 */
 
 /*!
-    \fn template <typename ParamType, typename ReturnType> QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method,
-    const QProtobufMessage &arg, ReturnType &ret, const QGrpcCallOptions &options);
+    \fn template <typename ParamType, typename ReturnType> QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType *ret, const QGrpcCallOptions &options)
 
     Synchronously calls the given \a method of this service client,
     with argument \a arg and fills \a ret with gRPC reply.
