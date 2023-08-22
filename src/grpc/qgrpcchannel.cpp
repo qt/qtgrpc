@@ -216,10 +216,10 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QGrpcChannelOptions &channelOptio
             auto accumulateSslCert = [](const std::string &lhs, const QSslCertificate &rhs) {
                 return lhs + rhs.toPem().toStdString();
             };
-            std::accumulate(maybeSslConfig->peerCertificateChain().begin(),
+            options.pem_root_certs = std::accumulate(maybeSslConfig->peerCertificateChain().begin(),
                             maybeSslConfig->peerCertificateChain().end(), options.pem_root_certs,
                             accumulateSslCert);
-            std::accumulate(maybeSslConfig->localCertificateChain().begin(),
+            options.pem_cert_chain = std::accumulate(maybeSslConfig->localCertificateChain().begin(),
                             maybeSslConfig->localCertificateChain().end(), options.pem_cert_chain,
                             accumulateSslCert);
             options.pem_private_key = maybeSslConfig->privateKey().toPem();

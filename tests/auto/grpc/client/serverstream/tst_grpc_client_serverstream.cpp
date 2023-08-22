@@ -88,13 +88,12 @@ void QtGrpcClientServerStreamTest::Cancel()
     QVERIFY(streamErrorSpy.isValid());
 
     int i = 0;
-    QObject::connect(
-            stream.get(), &QGrpcServerStream::messageReceived, this, [&result, &i, stream] {
-                SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-                result.setTestFieldString(result.testFieldString() + ret.testFieldString());
-                if (++i == ExpectedMessageCount)
-                    stream->cancel();
-            });
+    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&] {
+        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
+        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+        if (++i == ExpectedMessageCount)
+            stream->cancel();
+    });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamErrorSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
@@ -123,14 +122,12 @@ void QtGrpcClientServerStreamTest::DeferredCancel()
     QVERIFY(messageReceivedSpy.isValid());
 
     int i = 0;
-    QObject::connect(
-            stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream, &i] {
-                SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-                result.setTestFieldString(result.testFieldString() + ret.testFieldString());
-                if (++i == ExpectedMessageCount)
-                    QTimer::singleShot(MessageLatencyThreshold, stream.get(),
-                                       &QGrpcServerStream::cancel);
-            });
+    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&] {
+        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
+        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+        if (++i == ExpectedMessageCount)
+            QTimer::singleShot(MessageLatencyThreshold, stream.get(), &QGrpcServerStream::cancel);
+    });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamErrorSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
