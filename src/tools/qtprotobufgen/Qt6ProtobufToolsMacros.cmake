@@ -449,6 +449,7 @@ function(qt6_add_protobuf target)
             PROPERTIES
                 AUTOMOC ON
         )
+        target_include_directories(${target}plugin PRIVATE ${extra_include_directories})
         target_link_libraries(${target}plugin PRIVATE
             ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
         )
