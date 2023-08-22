@@ -88,7 +88,7 @@ void QtGrpcClientServerStreamTest::Abort()
     QVERIFY(streamErrorSpy.isValid());
 
     int i = 0;
-    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, &i, stream] {
+    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&] {
         SimpleStringMessage ret = stream->read<SimpleStringMessage>();
         result.setTestFieldString(result.testFieldString() + ret.testFieldString());
         if (++i == ExpectedMessageCount)
@@ -122,7 +122,7 @@ void QtGrpcClientServerStreamTest::DeferredAbort()
     QVERIFY(messageReceivedSpy.isValid());
 
     int i = 0;
-    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&result, stream, &i] {
+    QObject::connect(stream.get(), &QGrpcStream::messageReceived, this, [&] {
         SimpleStringMessage ret = stream->read<SimpleStringMessage>();
         result.setTestFieldString(result.testFieldString() + ret.testFieldString());
         if (++i == ExpectedMessageCount)

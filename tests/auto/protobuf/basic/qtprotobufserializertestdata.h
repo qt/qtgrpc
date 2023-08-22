@@ -188,6 +188,7 @@ constexpr QList<SerializeData<T>> getInt64LimitValues()
                  { (T)BELOW_INT_MAX_SDATA(int16_t, Fixed64IntSize, "09ff7fffffffffffff"_ba) },
                  { (T)BELOW_INT_MAX_SDATA(int32_t, Fixed64IntSize, "09ffffff7fffffffff"_ba) } };
     }
+    return {};
 }
 
 template <typename T, IntTypes type, typename Enable = void>
