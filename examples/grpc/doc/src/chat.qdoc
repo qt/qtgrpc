@@ -30,9 +30,9 @@
 
     The chat client authenticates to the server using \c {user-name} and
     \c {user-password} HTTP headers. These fields are set by the
-    \c QGrpcMetadata.
+    \l QGrpcMetadata.
     Each gRPC message includes the user credentials in the message header.
-    \c QGrpcMetadata is passed to the \l QGrpcHttp2Channel inside
+    \l QGrpcMetadata is passed to the \l QGrpcHttp2Channel inside
     \l QGrpcChannelOptions once and reused implicitily:
 
     \snippet chat/client/simplechatengine.cpp 0

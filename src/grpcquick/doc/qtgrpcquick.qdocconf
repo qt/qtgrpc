@@ -1,0 +1,38 @@
+include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
+
+project                 = QtGrpcQuick
+description             = Qt GRPC Quick Reference Documentation
+version                 = $QT_VERSION
+
+examplesinstallpath     = grpc
+examples.fileextensions += "*.proto"
+url.examples = "https://code.qt.io/cgit/qt/qtgrpc.git/tree/examples/\1?h=$QT_VER"
+
+qhp.projects = QtGrpcQuick
+
+qhp.QtGrpcQuick.file = QtGrpcQuick.qhp
+qhp.QtGrpcQuick.namespace = org.qt-project.qtgrpcquick.$QT_VERSION_TAG
+qhp.QtGrpcQuick.virtualFolder = qtgrpcquick
+qhp.QtGrpcQuick.indexTitle = Qt GRPC Quick
+qhp.QtGrpcQuick.indexRoot =
+
+qhp.QtGrpcQuick.subprojects = qmltypes
+qhp.QtGrpcQuick.subprojects.qmltypes.title = QML Types
+qhp.QtGrpcQuick.subprojects.qmltypes.indexTitle = Qt GRPC Quick Types
+qhp.QtGrpcQuick.subprojects.qmltypes.selectors = qmlclass
+qhp.QtGrpcQuick.subprojects.qmltypes.sortPages = true
+
+depends = qtcore qtdoc qtqml qtgrpc qtnetwork qtprotobuf qtcmake
+
+# This module has no documented C++ types, clear the module header
+moduleheader =
+
+headerdirs += ../
+sourcedirs += ../
+
+imagedirs += images
+
+navigation.landingpage = "Qt GRPC Quick"
+navigation.qmltypespage = "Qt GRPC Quick Types"
+
+tagfile = qtgrpcquick.tags

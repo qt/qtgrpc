@@ -62,5 +62,6 @@ options are supported:
 
 \list
     \include qtprotoccommon-options.qdocinc
+    \include qtgrpcgen-options.qdocinc
 \endlist
 */
