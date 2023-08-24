@@ -85,6 +85,62 @@ link to.
 
 \sa{The qtprotobufgen Tool}
 
+\section1 Resolving dependencies between protobuf targets
+
+The \c qt_add_protobuf command doesn't consider the dependencies between
+\c .proto files that are used to generate code for different targets.
+
+The project may have two or more \c .proto files with dependencies:
+\badcode
+syntax = "proto3";
+
+package test.messages;
+
+message MyMessage {
+    int32 myField = 1;
+}
+\endcode
+
+\badcode
+syntax = "proto3";
+
+import "test_messages.proto";
+
+package test.extensions;
+
+message MyExtension {
+    test.messages.MyMessage baseMessage = 1;
+    int32 extension = 2;
+}
+
+\endcode
+
+The above \c .proto files can be used to generate the standalone libraries:
+\badcode
+qt_add_protobuf(test_messages
+    PROTO_FILES
+        test_messages.proto
+)
+...
+qt_add_protobuf(test_extensions
+    PROTO_FILES
+        test_extensions.proto
+)
+...
+\endcode
+
+Since the \c test_extensions target depends on messages from the
+\c test_messages target, users need to link to such targets manually in their
+\c CMake scripts:
+\badcode
+target_link_libraries(test_extensions PUBLIC test_messages)
+\endcode
+
+\note It's recommended to use the \c PUBLIC linking scope, since messages from
+\c test_messages target are referenced in header files that belong to
+the \c test_extensions target, so targets that link to \c test_extensions should
+have the \c test_messages target as a transitive dependency.
+
 \section1 Example
 
 \include qt-add-protobuf-example.qdocinc
