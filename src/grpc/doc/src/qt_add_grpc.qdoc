@@ -32,6 +32,45 @@ If the target already exists, the files are \e added to the target source
 list. If the target doesn't exist, it is created as a library which you must
 link to.
 
+The gRPC library that is generated using the \c qt_add_grpc command refers to
+the protobuf symbols that are used in service calls. This means you either need
+to use a common target in both \l qt_add_protobuf and \l qt_add_grpc calls or
+link the generated protobuf library to the gRPC one.
+
+Considering the above statement you may reuse the target for both protobuf and
+gRPC client code:
+\badcode
+    # Generate the protobuf types first
+    qt_add_protobuf(test_service_client
+        PROTO_FILES
+            test_service.protobuf
+    )
+    ...
+    # Reuse the protobuf target and extend it with gRPC client
+    # functionality
+    qt_add_grpc(test_service_client CLIENT
+        PROTO_FILES
+            test_service.protobuf
+    )
+\endcode
+
+If you want to have separate targets then you need to link the gRPC client
+target to the protobuf one:
+\badcode
+    # Generate the protobuf types first
+    qt_add_protobuf(test_service_protobuf
+        PROTO_FILES
+            test_service.protobuf
+    )
+    ...
+    # Add separate target with the generated code of the gRPC client.
+    qt_add_grpc(test_service_client CLIENT
+        PROTO_FILES
+            test_service.protobuf
+    )
+    target_link_libraries(test_service_client PRIVATE test_service_protobuf)
+\endcode
+
 \section1 Arguments
 \list
     \li \c TARGET_TYPE is the type of gRPC code to be generated.
