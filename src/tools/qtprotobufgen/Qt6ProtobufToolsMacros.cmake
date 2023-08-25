@@ -143,7 +143,7 @@ function(_qt_internal_protoc_generate target generator output_directory)
     add_custom_command(OUTPUT ${generated_files}
         COMMAND ${CMAKE_COMMAND}
             -DPROTOC_EXECUTABLE=$<TARGET_FILE:WrapProtoc::WrapProtoc>
-            -DPROTOC_ARGS=${protoc_arguments}
+            "-DPROTOC_ARGS=${protoc_arguments}"
             -DWORKING_DIRECTORY=${output_directory}
             -DGENERATOR_NAME=${generator}
             -P
