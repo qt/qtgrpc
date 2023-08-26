@@ -16,7 +16,7 @@ endif()
 add_subdirectory(tools)
 
 if(TARGET Qt6::qtprotobufgen)
-    if(TARGET WrapProtobuf::WrapLibProtobuf OR QT_PROTOBUF_WELL_KNOWN_TYPES_PROTO_DIR)
+    if(QT_FEATURE_protobuf_wellknowntypes)
         add_subdirectory(wellknown)
     endif()
     add_subdirectory(protobufqttypes)
