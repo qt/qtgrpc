@@ -43,7 +43,7 @@ struct QProtobufPropertyOrdering
     Q_PROTOBUF_EXPORT int getPropertyIndex(int index) const;
     Q_PROTOBUF_EXPORT uint getFieldFlags(int index) const;
     Q_PROTOBUF_EXPORT int indexOfFieldNumber(int fieldNumber) const;
-    inline int fieldCount() const { return int(data->numFields); }
+    int fieldCount() const { return int(data->numFields); }
 
 private:
     const uint *uint_data() const;
@@ -57,26 +57,26 @@ extern Q_PROTOBUF_EXPORT void registerOrdering(QMetaType type, QProtobufProperty
 // Convenience structure to hold a reference to a single entry
 struct QProtobufPropertyOrderingInfo
 {
-    inline QProtobufPropertyOrderingInfo(QProtobufPropertyOrdering ord, int ind)
+    QProtobufPropertyOrderingInfo(QProtobufPropertyOrdering ord, int ind)
         : ordering(ord), index(ind)
     {
         Q_ASSERT(index >= 0);
     }
 
-    inline QUtf8StringView getJsonName() const { return ordering.getJsonName(index); }
-    inline int getFieldNumber() const
+    QUtf8StringView getJsonName() const { return ordering.getJsonName(index); }
+    int getFieldNumber() const
     {
         return (overrideFieldNumber >= 0) ? overrideFieldNumber : ordering.getFieldNumber(index);
     }
-    inline int getPropertyIndex() const { return ordering.getPropertyIndex(index); }
-    inline uint getFieldFlags() const { return ordering.getFieldFlags(index); }
+    int getPropertyIndex() const { return ordering.getPropertyIndex(index); }
+    uint getFieldFlags() const { return ordering.getFieldFlags(index); }
 
     // Needed for maps, which uses field number 1 and 2 for key and value respectively
     QProtobufPropertyOrderingInfo infoForMapKey() const { return { ordering, index, 1 }; }
     QProtobufPropertyOrderingInfo infoForMapValue() const { return { ordering, index, 2 }; }
 
 private:
-    inline QProtobufPropertyOrderingInfo(QProtobufPropertyOrdering ord, int ind, int fieldNumber)
+    QProtobufPropertyOrderingInfo(QProtobufPropertyOrdering ord, int ind, int fieldNumber)
         : ordering(ord), index(ind), overrideFieldNumber(fieldNumber)
     {
     }
