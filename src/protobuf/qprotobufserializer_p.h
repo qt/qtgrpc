@@ -524,60 +524,6 @@ private:
     QProtobufSerializer *q_ptr;
 };
 
-// ###########################################################################
-//                              Common functions
-// ###########################################################################
-
-/*!
-    Encode a property field index and its type into output bytes.
-
-    Header byte
-    Meaning    |  Field index  |  Type
-    ---------- | ------------- | --------
-    bit number | 7  6  5  4  3 | 2  1  0
-
-    fieldIndex: The index of a property in parent object
-    wireType: Serialization type used for the property with index @p fieldIndex
-
-    Returns a varint-encoded fieldIndex and wireType
- */
-inline QByteArray QProtobufSerializerPrivate::encodeHeader(int fieldIndex,
-                                                           QtProtobuf::WireTypes wireType)
-{
-    uint32_t header = (fieldIndex << 3) | int(wireType);
-    return serializeVarintCommon<uint32_t>(header);
-}
-
-/*!
-    Decode a property field index and its serialization type from input bytes
-
-    Iterator: that points to header with encoded field index and serialization type
-    fieldIndex: Decoded index of a property in parent object
-    wireType: Decoded serialization type used for the property with index
- *
- \return true if both decoded wireType and fieldIndex have "allowed" values and false, otherwise
- */
-inline bool QProtobufSerializerPrivate::decodeHeader(QProtobufSelfcheckIterator &it,
-                                                     int &fieldIndex,
-                                                     QtProtobuf::WireTypes &wireType)
-{
-    if (it.bytesLeft() == 0)
-        return false;
-    auto opt = deserializeVarintCommon<uint32_t>(it);
-    if (!opt)
-        return false;
-    uint32_t header = opt.value();
-    wireType = static_cast<QtProtobuf::WireTypes>(header & 0b00000111);
-    fieldIndex = header >> 3;
-
-    constexpr int maxFieldIndex = (1 << 29) - 1;
-    return fieldIndex <= maxFieldIndex && fieldIndex > 0
-            && (wireType == QtProtobuf::WireTypes::Varint
-                || wireType == QtProtobuf::WireTypes::Fixed64
-                || wireType == QtProtobuf::WireTypes::Fixed32
-                || wireType == QtProtobuf::WireTypes::LengthDelimited);
-}
-
 QT_END_NAMESPACE
 
 #endif // QPROTOBUFSERIALIZER_P_H
