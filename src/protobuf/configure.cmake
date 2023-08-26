@@ -52,6 +52,18 @@ qt_feature("qtprotobufgen" PRIVATE
         TARGET WrapProtoc::WrapProtoc AND TEST_libprotobuf AND TEST_libprotoc
 )
 
+qt_feature("protobuf-wellknowntypes" PUBLIC
+    SECTION "Qt Protobuf"
+    LABEL "Well-known types support"
+    AUTODETECT TRUE
+    CONDITION TARGET WrapProtoc::WrapProtoc AND
+        (TARGET WrapProtobuf::WrapLibProtobuf OR QT_PROTOBUF_WELL_KNOWN_TYPES_PROTO_DIR) AND
+        (TARGET Qt6::qtprotobufgen OR (QT_FEATURE_qtprotobufgen AND NOT CMAKE_CROSSCOMPILING))
+)
+
+qt_configure_add_summary_section(NAME "Qt Protobuf")
+qt_configure_add_summary_entry(ARGS "protobuf-wellknowntypes")
+qt_configure_end_summary_section()
 qt_configure_add_summary_section(NAME "Qt Protobuf tools")
 qt_configure_add_summary_entry(ARGS "qtprotobufgen")
 qt_configure_end_summary_section()
