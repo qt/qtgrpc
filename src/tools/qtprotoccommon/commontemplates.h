@@ -74,6 +74,7 @@ public:
     static const char *MemberRepeatedTemplate();
     static const char *MemberMessageTemplate();
     static const char *MemberOneofTemplate();
+    static const char *MemberOptionalTemplate();
     static const char *PublicBlockTemplate();
     static const char *PrivateBlockTemplate();
     static const char *EnumDefinitionTemplate();
@@ -103,12 +104,14 @@ public:
     static const char *GetterMessageDefinitionTemplate();
     static const char *PrivateGetterOneofDeclarationTemplate();
     static const char *PrivateGetterOneofDefinitionTemplate();
+    static const char *PrivateGetterOptionalDefinitionTemplate();
     static const char *PrivateGetterOneofMessageDeclarationTemplate();
     static const char *PrivateGetterOneofMessageDefinitionTemplate();
     static const char *GetterOneofFieldNumberDeclarationTemplate();
     static const char *GetterOneofFieldNumberDefinitionTemplate();
     static const char *GetterOneofDeclarationTemplate();
     static const char *GetterOneofDefinitionTemplate();
+    static const char *GetterOptionalDefinitionTemplate();
     static const char *GetterOneofMessageDeclarationTemplate();
     static const char *GetterOneofMessageDefinitionTemplate();
     static const char *GetterDeclarationTemplate();
@@ -129,12 +132,15 @@ public:
     static const char *SetterNonScriptableDefinitionTemplate();
     static const char *SetterOneofDeclarationTemplate();
     static const char *SetterOneofDefinitionTemplate();
+    static const char *SetterOptionalDefinitionTemplate();
     static const char *PrivateSetterOneofDeclarationTemplate();
     static const char *PrivateSetterOneofDefinitionTemplate();
+    static const char *PrivateSetterOptionalDefinitionTemplate();
     static const char *PrivateSetterOneofMessageDeclarationTemplate();
     static const char *PrivateSetterOneofMessageDefinitionTemplate();
     static const char *ClearOneofDeclarationTemplate();
     static const char *ClearOneofDefinitionTemplate();
+    static const char *ClearOptionalDefinitionTemplate();
     static const char *JsonNameOffsetsUintDataTemplate();
     static const char *FieldNumbersUintDataTemplate();
     static const char *QtPropertyIndicesUintDataTemplate();

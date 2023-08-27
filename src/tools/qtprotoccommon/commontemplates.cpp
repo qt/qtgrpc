@@ -297,6 +297,10 @@ const char *CommonTemplates::MemberOneofTemplate()
 {
     return "QtProtobufPrivate::QProtobufOneof m_$optional_property_name$;\n";
 }
+const char *CommonTemplates::MemberOptionalTemplate()
+{
+    return "std::optional<$scope_type$> m_$optional_property_name$;\n";
+}
 const char *CommonTemplates::MemberRepeatedTemplate()
 {
     return "$scope_list_type$ m_$property_name$;\n";
@@ -461,11 +465,15 @@ const char *CommonTemplates::ClearMessageDefinitionTemplate()
 
 const char *CommonTemplates::GetterMessageDeclarationTemplate()
 {
-    return "$getter_type$ &$property_name$() const;\n";
+    return "bool has$property_name_cap$() const;\n"
+           "$getter_type$ &$property_name$() const;\n";
 }
 const char *CommonTemplates::GetterMessageDefinitionTemplate()
 {
-    return "$getter_type$ &$classname$::$property_name$() const\n{\n"
+    return "bool $classname$::has$property_name_cap$() const\n{\n"
+           "    return dptr->m_$property_name$.operator bool();\n"
+           "}\n\n"
+           "$getter_type$ &$classname$::$property_name$() const\n{\n"
            "    return *dptr->m_$property_name$;\n"
            "}\n\n";
 }
@@ -480,6 +488,14 @@ const char *CommonTemplates::PrivateGetterOneofDefinitionTemplate()
            "    return dptr->m_$optional_property_name$.holdsField($number$) ?\n"
            "        dptr->m_$optional_property_name$.value<$getter_type$>() : "
            "$getter_type$($initializer$);\n"
+           "}\n\n";
+}
+const char *CommonTemplates::PrivateGetterOptionalDefinitionTemplate()
+{
+    return "$getter_type$ $classname$::$property_name$_p() const\n{\n"
+           "    return dptr->m_$optional_property_name$ ?\n"
+           "        dptr->m_$optional_property_name$.value() : "
+           "$getter_type$();\n"
            "}\n\n";
 }
 
@@ -520,6 +536,16 @@ const char *CommonTemplates::GetterOneofDefinitionTemplate()
            "$getter_type$ $classname$::$property_name$() const\n{\n"
            "    Q_ASSERT(dptr->m_$optional_property_name$.holdsField($number$));\n"
            "    return dptr->m_$optional_property_name$.value<$getter_type$>();\n"
+           "}\n\n";
+}
+const char *CommonTemplates::GetterOptionalDefinitionTemplate()
+{
+    return "bool $classname$::has$property_name_cap$() const\n{\n"
+           "    return dptr->m_$optional_property_name$.has_value();\n"
+           "}\n"
+           "$getter_type$ $classname$::$property_name$() const\n{\n"
+           "    Q_ASSERT(dptr->m_$optional_property_name$.has_value());\n"
+           "    return dptr->m_$optional_property_name$.value();\n"
            "}\n\n";
 }
 
@@ -646,6 +672,17 @@ const char *CommonTemplates::PrivateSetterOneofDefinitionTemplate()
            "    }\n"
            "}\n\n";
 }
+const char *CommonTemplates::PrivateSetterOptionalDefinitionTemplate()
+{
+    return "void $classname$::set$property_name_cap$_p($setter_type$ $property_name$)\n"
+           "{\n"
+           "    if (!dptr->m_$optional_property_name$ || dptr->m_$optional_property_name$ != "
+           "$property_name$) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$optional_property_name$ = $property_name$;\n"
+           "    }\n"
+           "}\n\n";
+}
 
 const char *CommonTemplates::ClearOneofDeclarationTemplate()
 {
@@ -659,6 +696,15 @@ const char *CommonTemplates::ClearOneofDefinitionTemplate()
            "        dptr.detach();\n"
            "        dptr->m_$optional_property_name$ = QtProtobufPrivate::QProtobufOneof();\n"
            "    }\n"
+           "}\n";
+}
+const char *CommonTemplates::ClearOptionalDefinitionTemplate()
+{
+    return "void $classname$::clear$optional_property_name_cap$()\n{\n"
+           "    if (dptr->m_$optional_property_name$.has_value()) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$optional_property_name$.reset();\n"
+           "    }"
            "}\n";
 }
 
@@ -675,7 +721,16 @@ const char *CommonTemplates::SetterOneofDefinitionTemplate()
            "    }\n"
            "}\n\n";
 }
-
+const char *CommonTemplates::SetterOptionalDefinitionTemplate()
+{
+    return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n{\n"
+           "    if (!dptr->m_$optional_property_name$ || dptr->m_$optional_property_name$.value() "
+           "!= $property_name$) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$optional_property_name$ = $property_name$;\n"
+           "    }\n"
+           "}\n\n";
+}
 const char *CommonTemplates::SetterDeclarationTemplate()
 {
     return "void set$property_name_cap$(const $setter_type$ &$property_name$);\n";

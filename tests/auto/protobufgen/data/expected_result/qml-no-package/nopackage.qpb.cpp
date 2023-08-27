@@ -347,6 +347,11 @@ SimpleIntMessageExt *NoPackageExternalMessage::testField_p() const
     return dptr->m_testField ? dptr->m_testField.get() : nullptr;
 }
 
+bool NoPackageExternalMessage::hasTestField() const
+{
+    return dptr->m_testField.operator bool();
+}
+
 SimpleIntMessageExt &NoPackageExternalMessage::testField() const
 {
     return *dptr->m_testField;
@@ -485,6 +490,11 @@ bool NoPackageMessage::operator !=(const NoPackageMessage &other) const
 SimpleIntMessage *NoPackageMessage::testField_p() const
 {
     return dptr->m_testField ? dptr->m_testField.get() : nullptr;
+}
+
+bool NoPackageMessage::hasTestField() const
+{
+    return dptr->m_testField.operator bool();
 }
 
 SimpleIntMessage &NoPackageMessage::testField() const

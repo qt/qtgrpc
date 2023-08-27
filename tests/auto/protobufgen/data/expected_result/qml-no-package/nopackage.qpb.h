@@ -162,6 +162,7 @@ public:
     bool operator ==(const NoPackageExternalMessage &other) const;
     bool operator !=(const NoPackageExternalMessage &other) const;
 
+    bool hasTestField() const;
     SimpleIntMessageExt &testField() const;
     void clearTestField();
     void setTestField(const SimpleIntMessageExt &testField);
@@ -204,6 +205,7 @@ public:
     bool operator ==(const NoPackageMessage &other) const;
     bool operator !=(const NoPackageMessage &other) const;
 
+    bool hasTestField() const;
     SimpleIntMessage &testField() const;
     void clearTestField();
     void setTestField(const SimpleIntMessage &testField);

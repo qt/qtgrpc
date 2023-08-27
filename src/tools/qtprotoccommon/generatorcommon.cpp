@@ -548,6 +548,9 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
         propertyMap["optional_property_name"] = field->containing_oneof()->name();
         propertyMap["optional_property_name_cap"] =
                 utils::capitalizeAsciiName(field->containing_oneof()->name());
+    } else if (common::isOptionalField(field)) {
+        propertyMap["optional_property_name"] = propertyName;
+        propertyMap["optional_property_name_cap"] = propertyNameCap;
     }
 
     if (field->is_map()) {
@@ -582,6 +585,17 @@ bool common::isOneofField(const FieldDescriptor *field)
 #else
     return field->containing_oneof() != nullptr;
 #endif
+}
+
+bool common::isOptionalField(const FieldDescriptor *field)
+{
+#ifdef HAVE_PROTOBUF_SYNC_PIPER
+    bool hasOptional = field->has_optional_keyword();
+#else
+    bool hasOptional = file->syntax() == FileDescriptor::SYNTAX_PROTO2 && field->is_optional()
+            && !field->containing_oneof();
+#endif
+    return field->type() != FieldDescriptor::TYPE_MESSAGE && hasOptional;
 }
 
 bool common::isLocalEnum(const EnumDescriptor *type, const Descriptor *scope)
@@ -715,6 +729,9 @@ std::string common::collectFieldFlags(const FieldDescriptor *field)
 
     if (common::isOneofField(field))
         writeFlag("Oneof");
+
+    if (common::isOptionalField(field))
+        writeFlag("Optional");
 
     if (flags.empty())
         writeFlag("NoFlags");

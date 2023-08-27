@@ -1959,6 +1959,11 @@ SimpleStringMessage *ComplexMessage::testComplexField_p() const
     return dptr->m_testComplexField ? dptr->m_testComplexField.get() : nullptr;
 }
 
+bool ComplexMessage::hasTestComplexField() const
+{
+    return dptr->m_testComplexField.operator bool();
+}
+
 SimpleStringMessage &ComplexMessage::testComplexField() const
 {
     return *dptr->m_testComplexField;

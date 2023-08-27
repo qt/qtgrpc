@@ -238,7 +238,8 @@ QProtobufMessage::property(const QtProtobufPrivate::QProtobufPropertyOrderingInf
     if (!metaProperty.isValid())
         return {};
 
-    if (fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof) {
+    if (fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
+        || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional) {
         int hasPropertyIndex = propertyIndex + 1;
         QMetaProperty hasProperty = metaObject()->property(hasPropertyIndex);
         Q_ASSERT_X(hasProperty.isValid() && hasProperty.metaType().id() == QMetaType::Bool,

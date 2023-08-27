@@ -217,7 +217,16 @@ void MessageDeclarationPrinter::printProperties()
                                      : CommonTemplates::PropertyOneofTemplate());
             m_printer->Print(propertyMap, CommonTemplates::PropertyHasOneofTemplate());
             continue;
-        } else if (common::isPureMessage(field)) {
+        }
+
+        if (common::isOptionalField(field)) {
+            const auto propertyMap = common::producePropertyMap(field, m_descriptor);
+            m_printer->Print(propertyMap, CommonTemplates::PropertyOneofTemplate());
+            m_printer->Print(propertyMap, CommonTemplates::PropertyHasOneofTemplate());
+            continue;
+        }
+
+        if (common::isPureMessage(field)) {
             propertyTemplate = CommonTemplates::PropertyMessageTemplate();
         } else if (common::hasQmlAlias(field)) {
             propertyTemplate = CommonTemplates::PropertyNonScriptableTemplate();
@@ -271,6 +280,11 @@ void MessageDeclarationPrinter::printGetters()
                                     : CommonTemplates::GetterOneofDeclarationTemplate());
                     return;
                 }
+                if (common::isOptionalField(field)) {
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::GetterOneofDeclarationTemplate());
+                    return;
+                }
 
                 if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap,
@@ -302,6 +316,12 @@ void MessageDeclarationPrinter::printSetters()
                 if (common::isOneofField(field)) {
                     m_printer->Print(propertyMap,
                                      CommonTemplates::SetterOneofDeclarationTemplate());
+                    return;
+                }
+                if (common::isOptionalField(field)) {
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::SetterOneofDeclarationTemplate());
+                    m_printer->Print(propertyMap, CommonTemplates::ClearOneofDeclarationTemplate());
                     return;
                 }
 
@@ -344,6 +364,9 @@ void MessageDeclarationPrinter::printPrivateGetters()
                                     ? CommonTemplates::
                                             PrivateGetterOneofMessageDeclarationTemplate()
                                     : CommonTemplates::PrivateGetterOneofDeclarationTemplate());
+                } else if (common::isOptionalField(field)) {
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::PrivateGetterOneofDeclarationTemplate());
                 } else if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap,
                                     CommonTemplates::PrivateGetterMessageDeclarationTemplate());
@@ -366,6 +389,9 @@ void MessageDeclarationPrinter::printPrivateSetters()
                                     ? CommonTemplates::
                                             PrivateSetterOneofMessageDeclarationTemplate()
                                     : CommonTemplates::PrivateSetterOneofDeclarationTemplate());
+                } else if (common::isOptionalField(field)) {
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::PrivateSetterOneofDeclarationTemplate());
                 } else if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap,
                                     CommonTemplates::PrivateSetterMessageDeclarationTemplate());

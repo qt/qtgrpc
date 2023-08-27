@@ -191,14 +191,8 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     if (hasOneofFields)
         externalIncludes.insert("QtProtobuf/qprotobufoneof.h");
 
-    if (hasOptionalFields) {
-        std::cerr << "WARNING: '" << file->name() << "' contains 'optional' fields.\n"
-                     "\nOptional fields are not supported in this qtprotobufgen version\n"
-                     "The generator disregards the keyword, but generates the regular\n"
-                     "fields instead.\n"
-                     "\nPlease upgrade Qt to the most recent version to get full support\n"
-                     "of the 'optional' fields.\n";
-    }
+    if (hasOptionalFields)
+        externalIncludes.insert("optional");
 
     for (const auto &qtTypeInclude: qtTypesSet) {
         std::string qtTypeLower = qtTypeInclude;

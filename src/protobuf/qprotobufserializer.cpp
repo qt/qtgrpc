@@ -50,11 +50,11 @@ private:
 };
 Q_GLOBAL_STATIC(HandlersRegistry, handlersRegistry)
 
-inline bool isOneofField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+inline bool
+isOneofOrOptionalField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
 {
-    // TODO: Add the check for the optional flag once the functionality is
-    // implemented.
-    return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof;
+    return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
+            || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
 }
 
 } // namespace
@@ -455,7 +455,7 @@ bool QProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value, QPr
 QByteArray QProtobufSerializer::serializeEnum(QtProtobuf::int64 value,
                                               const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
-    if (value == 0 && !isOneofField(fieldInfo))
+    if (value == 0 && !isOneofOrOptionalField(fieldInfo))
         return {};
 
     QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Varint;
@@ -636,7 +636,7 @@ QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
     auto basicHandler = findIntegratedTypeHandler(
             metaType, fieldInfo.getFieldFlags() & QtProtobufPrivate::NonPacked);
     if (basicHandler) {
-        bool serializeUninitialized = isOneofField(fieldInfo);
+        bool serializeUninitialized = isOneofOrOptionalField(fieldInfo);
         if (!basicHandler->isPresent(propertyValue) && !serializeUninitialized) {
             return {};
         }

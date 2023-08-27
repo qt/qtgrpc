@@ -122,6 +122,7 @@ public:
 
     QtProtobuf::int32 testFieldInt() const;
 
+    bool hasTestComplexField() const;
     SimpleStringMessage &testComplexField() const;
     void clearTestComplexField();
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);

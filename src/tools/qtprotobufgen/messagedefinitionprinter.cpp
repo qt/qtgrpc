@@ -41,8 +41,9 @@ void MessageDefinitionPrinter::printClassMembers()
             m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
                 if (common::isOneofField(field))
                     return;
-
-                if (common::isPureMessage(field)) {
+                if (common::isOptionalField(field)) {
+                    m_printer->Print(propertyMap, CommonTemplates::MemberOptionalTemplate());
+                } else if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap, CommonTemplates::MemberMessageTemplate());
                 } else if (field->is_repeated() && !field->is_map()) {
                     m_printer->Print(propertyMap, CommonTemplates::MemberRepeatedTemplate());
@@ -86,7 +87,7 @@ void MessageDefinitionPrinter::printDataClassCopy()
     m_printer->Indent();
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-                if (common::isOneofField(field))
+                if (common::isOneofField(field) || common::isOptionalField(field))
                     return;
 
                 m_printer->Print(",\n");
@@ -250,9 +251,9 @@ void MessageDefinitionPrinter::printUintData(const char *templateString)
             { "json_name", field->json_name() },
         };
 
-        // Oneof properties generate additional has<OneofField> property next to the field property
-        // one.
-        if (common::isOneofField(field))
+        // Oneof and optional properties generate additional has<FieldName> property next to the
+        // field property one.
+        if (common::isOneofField(field) || common::isOptionalField(field))
             ++propertyIndex;
 
         m_printer->Print(variables, templateString);
@@ -309,7 +310,8 @@ void MessageDefinitionPrinter::printInitializationList()
     m_printer->Indent();
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, PropertyMap propertyMap) {
-                if (field->is_repeated() || common::isOneofField(field))
+                if (field->is_repeated() || common::isOneofField(field)
+                    || common::isOptionalField(field))
                     return;
 
                 if (!propertyMap["initializer"].empty()) {
@@ -396,6 +398,14 @@ void MessageDefinitionPrinter::printGetters()
                     return;
                 }
 
+                if (common::isOptionalField(field)) {
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::PrivateGetterOptionalDefinitionTemplate());
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::GetterOptionalDefinitionTemplate());
+                    return;
+                }
+
                 if (common::hasQmlAlias(field)) {
                     m_printer->Print(propertyMap, CommonTemplates::GetterNonScriptableDefinitionTemplate());
                 }
@@ -425,6 +435,15 @@ void MessageDefinitionPrinter::printGetters()
                             common::isPureMessage(field)
                                     ? CommonTemplates::PrivateSetterOneofMessageDefinitionTemplate()
                                     : CommonTemplates::PrivateSetterOneofDefinitionTemplate());
+                    return;
+                }
+                if (common::isOptionalField(field)) {
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::SetterOptionalDefinitionTemplate());
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::PrivateSetterOptionalDefinitionTemplate());
+                    m_printer->Print(propertyMap,
+                                     CommonTemplates::ClearOptionalDefinitionTemplate());
                     return;
                 }
                 if (common::hasQmlAlias(field)) {

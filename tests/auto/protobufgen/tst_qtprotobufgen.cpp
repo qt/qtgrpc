@@ -224,6 +224,11 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
                 << "/folder/qtprotobufnamespace/tests/"
                 << QString(extension);
 
+        QTest::addRow("optional%s", extension.data())
+                << "optional"
+                << "/folder/qtprotobufnamespace/optional/tests/"
+                << QString(extension);
+
         QTest::addRow("repeatedmessages%s", extension.data())
                 << "repeatedmessages"
                 << "/folder/qtprotobufnamespace/tests/"
@@ -330,6 +335,13 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
                 << "/folder/"
                 << QString(extension)
                 << "qtprotobufnamespace/tests/";
+
+        QTest::addRow("optional%s", extension.data())
+                << "optional"
+                << "GENERATE_PACKAGE_SUBFOLDERS"
+                << "/folder/"
+                << QString(extension)
+                << "qtprotobufnamespace/optional/tests/";
 
         QTest::addRow("repeatedmessages%s", extension.data())
                 << "repeatedmessages"
@@ -465,6 +477,11 @@ void tst_qtprotobufgen::cmdLineGeneratedNoOptions_data()
 
         QTest::addRow("oneofmessages%s", extension.data())
                 << "oneofmessages"
+                << "/no-options/"
+                << QString(extension);
+
+        QTest::addRow("optional%s", extension.data())
+                << "optional"
                 << "/no-options/"
                 << QString(extension);
 
