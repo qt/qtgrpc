@@ -180,8 +180,10 @@ OneofSimpleMessage::TestOneofFields OneofSimpleMessage::testOneofField() const
 }
 void OneofSimpleMessage::clearTestOneof()
 {
-    dptr.detach();
-    dptr->m_testOneof = QtProtobufPrivate::QProtobufOneof();
+    if (dptr->m_testOneof.fieldNumber() != QtProtobuf::InvalidFieldNumber) {
+        dptr.detach();
+        dptr->m_testOneof = QtProtobufPrivate::QProtobufOneof();
+    }
 }
 
 class OneofComplexMessage_QtProtobufData : public QSharedData
@@ -568,8 +570,10 @@ OneofComplexMessage::TestOneofFields OneofComplexMessage::testOneofField() const
 }
 void OneofComplexMessage::clearTestOneof()
 {
-    dptr.detach();
-    dptr->m_testOneof = QtProtobufPrivate::QProtobufOneof();
+    if (dptr->m_testOneof.fieldNumber() != QtProtobuf::InvalidFieldNumber) {
+        dptr.detach();
+        dptr->m_testOneof = QtProtobufPrivate::QProtobufOneof();
+    }
 }
 OneofComplexMessage::SecondOneofFields OneofComplexMessage::secondOneofField() const
 {
@@ -577,8 +581,10 @@ OneofComplexMessage::SecondOneofFields OneofComplexMessage::secondOneofField() c
 }
 void OneofComplexMessage::clearSecondOneof()
 {
-    dptr.detach();
-    dptr->m_secondOneof = QtProtobufPrivate::QProtobufOneof();
+    if (dptr->m_secondOneof.fieldNumber() != QtProtobuf::InvalidFieldNumber) {
+        dptr.detach();
+        dptr->m_secondOneof = QtProtobufPrivate::QProtobufOneof();
+    }
 }
 } // namespace qtprotobufnamespace::tests
 

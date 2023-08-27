@@ -713,8 +713,11 @@ const char *CommonTemplates::ClearOneofDeclarationTemplate()
 const char *CommonTemplates::ClearOneofDefinitionTemplate()
 {
     return "void $classname$::clear$optional_property_name_cap$()\n{\n"
-           "    dptr.detach();\n"
-           "    dptr->m_$optional_property_name$ = QtProtobufPrivate::QProtobufOneof();\n"
+           "    if (dptr->m_$optional_property_name$.fieldNumber() != "
+           "QtProtobuf::InvalidFieldNumber) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$optional_property_name$ = QtProtobufPrivate::QProtobufOneof();\n"
+           "    }\n"
            "}\n";
 }
 
