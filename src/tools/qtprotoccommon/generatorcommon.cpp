@@ -436,6 +436,10 @@ void common::iterateOneofFields(const Descriptor *message, const IterateOneofCal
     int numFields = message->oneof_decl_count();
     for (int i = 0; i < numFields; ++i) {
         const OneofDescriptor *field = message->oneof_decl(i);
+#ifdef HAVE_PROTOBUF_SYNC_PIPER
+        if (field->is_synthetic())
+            continue;
+#endif
         auto propertyMap = common::producePropertyMap(field, message);
         callback(field, propertyMap);
     }
@@ -538,7 +542,11 @@ std::string common::qualifiedName(const std::string &name)
 
 bool common::isOneofField(const FieldDescriptor *field)
 {
+#ifdef HAVE_PROTOBUF_SYNC_PIPER
+    return field->containing_oneof() != nullptr && !field->containing_oneof()->is_synthetic();
+#else
     return field->containing_oneof() != nullptr;
+#endif
 }
 
 bool common::isLocalEnum(const EnumDescriptor *type, const Descriptor *scope)
