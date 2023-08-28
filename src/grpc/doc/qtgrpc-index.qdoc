@@ -85,18 +85,31 @@
 
     \include qt-add-grpc-example.qdocinc
 
-    \section1 Class Documentation
-    \list
-        \li \l{Qt GRPC C++ Classes}{C++ Classes}
-    \endlist
+    \section2 QML API
 
-    \section1 CMake API
+    \include {module-use.qdocinc} {using the qml api} {QtGrpcQuick}
+
+    \section2 C++ API
+
+    \include {module-use.qdocinc} {using the c++ api}
+
+    \section3 Building with CMake
+
+    \include {module-use.qdocinc} {building with cmake} {Grpc}
+
+
+    \section1 Articles and Guides
     \list
         \li \l{CMake Commands in Qt6 GRPC}
     \endlist
 
-    \section1 Licenses and Trademarks
+    \section1 References
+    \list
+        \li \l{Qt GRPC Quick}
+        \li \l{Qt GRPC C++ Classes}{C++ Classes}
+    \endlist
 
+    \section1 Licenses and Trademarks
     Qt GRPC is available under commercial licenses from \l{The Qt Company}.
     In addition, it is available under the
     \l {GNU General Public License, version 3}.

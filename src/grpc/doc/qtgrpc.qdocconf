@@ -29,7 +29,7 @@ qhp.QtGrpc.subprojects.classes.indexTitle = Qt GRPC C++ Classes
 qhp.QtGrpc.subprojects.classes.selectors  = class doc:headerfile
 qhp.QtGrpc.subprojects.classes.sortPages  = true
 
-depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake
+depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake qtgrpcquick
 
 {headerdirs,sourcedirs}  += .. \
                             ../../tools/doc/src
