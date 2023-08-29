@@ -41,7 +41,10 @@
         \li Integrated properties mechanism for generated protobuf messages.
         \li Integrated gRPC-client support (see \l {Qt GRPC}{QtGrpc module}).
         \li Integrated QML-types support for generated protobuf messages.
+            See \l{Qt Protobuf QML types}
         \li Enabled using Qt Core and Qt GUI types as a part of *.proto schema.
+            See \l {Protobuf Qt Core types module} and
+            \l {Protobuf Qt GUI types module}.
     \endlist
 
     \section2 Incoming features
@@ -49,7 +52,7 @@
         \li Enabling gRPC-server support.
     \endlist
 
-    \section1 Using Qt Protobuf
+    \section1 Using the Module
     Google protocol buffers provide a generator called \c protoc that
     supports extensions. \l {The qtprotobufgen Tool} is an extension
     for \c protoc and requires that you install \c protoc on your host system.
@@ -63,19 +66,76 @@
     \endcode
     For more information about component API usage, see \e {CMake API}.
 
-    \section1 CMake API
+    \section2 QML API
+    The QML types of the module are available through the QML and QML_URI
+    options in the \l{qt_add_protobuf} macro.
+    The import name is equal to the \c.proto package name or defined by
+    QML_URI option in the \l{qt_add_protobuf} macro.
+    To use the types, add the following import statement to your .qml file:
+    \code
+        import my.proto.package.uri
+    \endcode
+
+    \section2 C++ API
+
+    \include {module-use.qdocinc} {using the c++ api}
+
+    \section3 Building with CMake
+
+    \include {module-use.qdocinc} {building with cmake} {Protobuf}
+
+    \section1 Articles and Guides
     \list
-        \li \l{CMake Commands in Qt6 Protobuf}
+        \li \l {CMake Commands in Qt6 Protobuf}
+        \li \l {Protobuf Qt Core types module} {Protobuf Qt Core types}
+        \li \l {Protobuf Qt GUI types module} {Protobuf Qt GUI types}
+        \li \l {Qt Protobuf Well-Known Types C++ Classes} {Qt Protobuf Well-Known types}
     \endlist
 
-    \section1 QML-types support
+    \section1 References
+    \list
+        \li \l {Qt Protobuf C++ Classes}{Qt Protobuf C++ Classes}
+        \li \l {Qt Protobuf QML types}
+    \endlist
+
+    \section1 Examples
+    \list
+        \li \l {Qt Protobuf Examples}
+    \endlist
+*/
+
+/*!
+    \module QtProtobuf
+    \modulestate Technical Preview
+    \title Qt Protobuf C++ Classes
+    \qtcmakepackage Protobuf
+    \since 6.5
+    \brief Provides protocol buffers support in Qt.
+*/
+
+/*!
+    \group qtprotobuf-examples
+    \keyword Qt Protobuf Examples
+    \title Qt Protobuf Examples
+    \brief A collection describes existing QML-types support for \l {Qt Protobuf}
+
+    These examples demonstrate how to generate code using the protobuf schema
+    and use it in your projects.
+*/
+
+/*!
+    \group QtProtobuf
+    \keyword Qt Protobuf QML types
+    \title Qt Protobuf QML types
+    \brief A collection of examples for \l {Qt Protobuf}
+
     With the \l{The qtprotobufgen Tool}{generator plugin}, you can register
-    protobuf messages in the QML context. To register the type, use the
+    protobuf messages in the QML. To register the type, use the
     \c QML and \c QML_URI generation keys. See API details in
     \l{qt_add_protobuf}{qt_add_protobuf} command and
     API usage example \l{QML extended protobuf example}{QML extended protobuf}.
 
-    Registered protobuf messages are available in the QML context,
+    Registered protobuf messages are available in the QML,
     like built-in \l{Q_GADGET} types. The registration is done via the QML
     module.
 
@@ -198,7 +258,7 @@
     \endcode
     Also, enum fields cannot begin with an underscore symbol.
     Such fields will be generated as is, but will be undefined in
-    the QML context, unless the QML engine will allow registering
+    the QML, unless the QML engine will allow registering
     them in the future. See the \c *.proto example below:
     \badcode
         enum UnderScoreEnum {
@@ -216,35 +276,4 @@
     \endcode
     For more information about the QML properties syntax, check
     \l {Defining Property Attributes}.
-
-    \section1 Class Documentation
-
-    \list
-        \l {Qt Protobuf C++ Classes}{C++ Classes}
-    \endlist
-
-    \section1 Examples
-
-    \list
-        \li \l {Qt Protobuf Examples}
-    \endlist
-*/
-
-/*!
-    \module QtProtobuf
-    \modulestate Technical Preview
-    \title Qt Protobuf C++ Classes
-    \qtcmakepackage Protobuf
-    \since 6.5
-    \brief Provides protocol buffers support in Qt.
-*/
-
-/*!
-    \group qtprotobuf-examples
-    \keyword Qt Protobuf Examples
-    \title Qt Protobuf Examples
-    \brief A collection of examples for \l {Qt Protobuf}
-
-    These examples demonstrate how to generate code using the protobuf schema
-    and use it in your projects.
 */

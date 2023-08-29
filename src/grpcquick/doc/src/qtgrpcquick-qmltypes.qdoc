@@ -26,7 +26,7 @@
     \list
         \li \l {magic8ball} {Qt GRPC QML example}
         \li \l {The qtgrpcgen Tool} {Qt GRPC QML-types generation}
-        \li \l {QML-types support}{Qt Protobuf QML-types generation}
+        \li \l{Qt Protobuf QML types} {Qt Protobuf QML-types generation}
     \endlist
 
     \noautolist
