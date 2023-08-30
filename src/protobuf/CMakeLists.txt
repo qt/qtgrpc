@@ -28,6 +28,7 @@ qt_internal_add_docs(Protobuf
 )
 
 # TODO: Remove this and fix it in qtbase's qt_internal_find_tool directly
-if(QT_HOST_PATH AND Qt6::qtprotobufgen IN_LIST Qt6ProtobufTools_TARGET AND NOT QT_FORCE_BUILD_TOOLS)
+if(QT_HOST_PATH AND Qt6::qtprotobufgen IN_LIST Qt6ProtobufTools_TARGETS
+    AND NOT QT_FORCE_BUILD_TOOLS)
     qt_record_extra_qt_main_tools_package_dependency(Protobuf ProtobufTools "${PROJECT_VERSION}")
 endif()
