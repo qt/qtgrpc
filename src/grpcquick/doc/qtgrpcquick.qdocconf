@@ -10,7 +10,7 @@ url.examples = "https://code.qt.io/cgit/qt/qtgrpc.git/tree/examples/\1?h=$QT_VER
 
 qhp.projects = QtGrpcQuick
 
-qhp.QtGrpcQuick.file = QtGrpcQuick.qhp
+qhp.QtGrpcQuick.file = qtgrpcquick.qhp
 qhp.QtGrpcQuick.namespace = org.qt-project.qtgrpcquick.$QT_VERSION_TAG
 qhp.QtGrpcQuick.virtualFolder = qtgrpcquick
 qhp.QtGrpcQuick.indexTitle = Qt GRPC Quick
