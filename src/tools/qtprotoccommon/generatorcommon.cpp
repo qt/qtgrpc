@@ -268,7 +268,7 @@ TypeMap common::produceEnumTypeMap(const EnumDescriptor *type, const Descriptor 
     std::string exportMacro = Options::instance().exportMacro();
     exportMacro = common::buildExportMacro(exportMacro);
 
-    std::string initializer = scopeName + "::" + type->value(0)->name();
+    std::string initializer = scopeName + "::" + utils::capitalizeAsciiName(type->value(0)->name());
     return { { "classname", name },
              { "classname_low_case", utils::deCapitalizeAsciiName(name) },
              { "type", name },
