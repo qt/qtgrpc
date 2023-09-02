@@ -55,7 +55,8 @@ std::string common::getNestedNamespace(const Descriptor *type, std::string_view 
     const Descriptor *containingType = type->containing_type();
     while (containingType) {
         nestingNamespaces.insert(0,
-                                 std::string(separator) + containingType->name()
+                                 std::string(separator)
+                                         + utils::capitalizeAsciiName(containingType->name())
                                          + CommonTemplates::QtProtobufNestedNamespace());
         containingType = containingType->containing_type();
     }

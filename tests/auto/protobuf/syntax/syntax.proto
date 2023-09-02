@@ -45,7 +45,17 @@ message MessageUpperCaseReserved {
 }
 
 message lowerCaseMessageName {
+    message nestedLowerCaseMessage {
+        sint32 testField = 1;
+    }
+    message NestedUpperCaseMessage {
+        sint32 testField = 1;
+    }
+    enum nestedLowerCaseEnum {
+        val0 = 0;
+    }
     sint32 testField = 1;
+    nestedLowerCaseMessage testField1 = 2;
 }
 
 message LowerCaseFieldMessageName {
