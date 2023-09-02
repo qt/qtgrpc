@@ -345,7 +345,7 @@ void MessageDeclarationPrinter::printQEnums()
         Indent();
         for (int j = 0; j < enumDescr->value_count(); ++j) {
             const auto *valueDescr = enumDescr->value(j);
-            m_printer->Print({ { "enumvalue", utils::capitalizeAsciiName(valueDescr->name()) },
+            m_printer->Print({ { "enumvalue", common::qualifiedCppName(valueDescr->name()) },
                                { "value", std::to_string(valueDescr->number()) } },
                              CommonTemplates::EnumFieldTemplate());
         }

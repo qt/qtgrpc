@@ -269,7 +269,7 @@ TypeMap common::produceEnumTypeMap(const EnumDescriptor *type, const Descriptor 
     std::string exportMacro = Options::instance().exportMacro();
     exportMacro = common::buildExportMacro(exportMacro);
 
-    std::string initializer = scopeName + "::" + type->value(0)->name();
+    std::string initializer = scopeName + "::" + common::qualifiedCppName(type->value(0)->name());
     return { { "classname", enumGadget },
              { "classname_low_case", utils::deCapitalizeAsciiName(enumGadget) },
              { "type", name },
@@ -471,7 +471,7 @@ PropertyMap common::producePropertyMap(const OneofDescriptor *oneof, const Descr
     assert(oneof != nullptr);
 
     PropertyMap propertyMap;
-    propertyMap["optional_property_name"] = oneof->name();
+    propertyMap["optional_property_name"] = qualifiedCppName(qualifiedQmlName(oneof->name()));
     propertyMap["optional_property_name_cap"] = utils::capitalizeAsciiName(oneof->name());
     auto scopeTypeMap = produceMessageTypeMap(scope, nullptr);
     propertyMap["classname"] = scope != nullptr ? scopeTypeMap["classname"] : "";
@@ -496,7 +496,8 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
         scriptable = "false";
     }
 
-    std::string propertyName = qualifiedName(utils::deCapitalizeAsciiName(field->camelcase_name()));
+    std::string propertyName = qualifiedCppName(
+            qualifiedQmlName(utils::deCapitalizeAsciiName(field->camelcase_name())));
     std::string propertyNameCap = utils::capitalizeAsciiName(propertyName);
 
     propertyMap["property_name"] = propertyName;
@@ -511,7 +512,8 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
     propertyMap["number"] = std::to_string(field->number());
 
     if (common::isOneofField(field)) {
-        propertyMap["optional_property_name"] = field->containing_oneof()->name();
+        propertyMap["optional_property_name"] =
+                qualifiedCppName(qualifiedQmlName(field->containing_oneof()->name()));
         propertyMap["optional_property_name_cap"] =
                 utils::capitalizeAsciiName(field->containing_oneof()->name());
     }
@@ -531,7 +533,12 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
     return propertyMap;
 }
 
-std::string common::qualifiedName(const std::string &name)
+std::string common::qualifiedCppName(const std::string &name)
+{
+    return utils::contains(CommonTemplates::ListOfCppExceptions(), name) ? name + "_" : name;
+}
+
+std::string common::qualifiedQmlName(const std::string &name)
 {
     std::string fieldName(name);
     const std::vector<std::string> &searchExceptions = CommonTemplates::ListOfQmlExceptions();
