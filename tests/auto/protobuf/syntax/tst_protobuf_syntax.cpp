@@ -20,6 +20,7 @@ private slots:
     void ReservedUpperCaseTest();
     void ReservedEnumTest();
     void LowerCaseEnumTest();
+    void UpperCaseEnumTest();
 };
 
 using namespace qtprotobufnamespace::tests;
@@ -90,6 +91,24 @@ void QtProtobufSyntaxTest::LowerCaseEnumTest()
     for (int i = 0; i < metaObject.enumeratorCount(); i++) {
         QMetaEnum tmp = metaObject.enumerator(i);
         if (QString(tmp.name()) == QString("LowerCaseEnum")) {
+            simpleEnum = tmp;
+            break;
+        }
+    }
+    QVERIFY(simpleEnum.isValid());
+    QCOMPARE(simpleEnum.key(0), "enumValue0");
+    QCOMPARE(simpleEnum.key(1), "enumValue1");
+    QCOMPARE(simpleEnum.key(2), "enumValue2");
+}
+
+void QtProtobufSyntaxTest::UpperCaseEnumTest()
+{
+    const auto &metaObject = MessageEnumReserved_QtProtobufNested::staticMetaObject;
+    QVERIFY(metaObject.enumeratorCount() > 0);
+    QMetaEnum simpleEnum;
+    for (int i = 0; i < metaObject.enumeratorCount(); i++) {
+        QMetaEnum tmp = metaObject.enumerator(i);
+        if (QString(tmp.name()) == QString("UpperCaseEnum")) {
             simpleEnum = tmp;
             break;
         }
