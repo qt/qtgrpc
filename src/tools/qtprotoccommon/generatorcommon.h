@@ -14,6 +14,7 @@
 #include <cassert>
 
 #include "commontemplates.h"
+#include "utils.h"
 
 #include <google/protobuf/descriptor.h>
 
@@ -52,7 +53,22 @@ struct common {
     {
         if (type == nullptr)
             return {};
-        return getFullNamespace(type->full_name(), separator);
+
+        std::string nestingNamespaces;
+        if constexpr (std::is_same<T, Descriptor>::value
+                      || std::is_same<T, EnumDescriptor>::value) {
+            const Descriptor *containingType = type->containing_type();
+            while (containingType) {
+                nestingNamespaces.insert(
+                        0,
+                        std::string(separator)
+                                + utils::capitalizeAsciiName(containingType->name()));
+                containingType = containingType->containing_type();
+            }
+        }
+
+        return getFullNamespace(type->file()->package() + nestingNamespaces + '.' + type->name(),
+                                separator);
     }
 
     template<typename T>
@@ -76,7 +92,8 @@ struct common {
         std::string nestingNamespaces;
         bool first = true;
         while (containingType) {
-            nestingNamespaces.insert(0, containingType->name() + suffix);
+            nestingNamespaces.insert(0,
+                                     utils::capitalizeAsciiName(containingType->name()) + suffix);
             // Scope is detected as parent, it doesn't make sense to go deeper.
             if (containingType == scope)
                 break;
