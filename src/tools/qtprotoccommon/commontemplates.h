@@ -6,6 +6,7 @@
 #define QTPROTOCCOMMON_TEMPLATES_H
 
 #include <unordered_map>
+#include <set>
 #include <string>
 #include <google/protobuf/descriptor.h>
 
@@ -15,6 +16,7 @@ class CommonTemplates
 {
 public:
     static const std::vector<std::string> &ListOfQmlExceptions();
+    static const std::set<std::string_view> &ListOfCppExceptions();
     static const char *ProtoSuffix();
     static const char *DefaultProtobufIncludesTemplate();
     static const char *DefaultSystemIncludesTemplate();

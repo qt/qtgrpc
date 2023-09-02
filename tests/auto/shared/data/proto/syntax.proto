@@ -95,3 +95,31 @@ message MessageEnumReserved {
         _EnumUnderscoreValue1 = 1;
     }
 }
+
+message CppKeywords {
+    bool private = 1;
+    bool if = 2;
+    bool else = 3;
+    bool for = 4;
+    bool while = 5;
+    bool switch = 6;
+    bool case = 7;
+    bool do = 8;
+    bool goto = 9;
+}
+
+message int {
+    enum long {
+        bool = 0;
+        char = 1;
+        float = 2;
+        double = 3;
+        unsigned = 4;
+    }
+
+    long enum = 1;
+}
+
+message if {
+    bool else = 1;
+}

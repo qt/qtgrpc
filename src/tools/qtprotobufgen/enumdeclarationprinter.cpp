@@ -43,7 +43,7 @@ void EnumDeclarationPrinter::printEnum()
     int numValues = m_descriptor->value_count();
     for (int j = 0; j < numValues; ++j) {
         const EnumValueDescriptor *valueDescr = m_descriptor->value(j);
-        m_printer->Print({ { "enumvalue", valueDescr->name() },
+        m_printer->Print({ { "enumvalue", common::qualifiedCppName(valueDescr->name()) },
                            { "value", std::to_string(valueDescr->number()) } },
                          CommonTemplates::EnumFieldTemplate());
     }
