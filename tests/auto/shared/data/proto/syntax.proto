@@ -69,14 +69,4 @@ message MessageEnumReserved {
         _enumUnderscoreValue0 = 0;
         _EnumUnderscoreValue1 = 1;
     }
-
-    enum lowerCaseEnumName {
-        val0 = 0;
-        val1 = 1;
-    }
-
-    ReservedEnum enumField1 = 1;
-    LowerCaseEnum enumField2 = 2;
-    UnderScoreEnum enumField3 = 3;
-    lowerCaseEnumName enumField4 = 4;
 }
