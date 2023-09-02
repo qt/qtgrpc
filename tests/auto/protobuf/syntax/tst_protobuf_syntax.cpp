@@ -93,9 +93,9 @@ void QtProtobufSyntaxTest::LowerCaseEnumTest()
         }
     }
     QVERIFY(simpleEnum.isValid());
-    QCOMPARE(simpleEnum.key(0), "EnumValue0");
-    QCOMPARE(simpleEnum.key(1), "EnumValue1");
-    QCOMPARE(simpleEnum.key(2), "EnumValue2");
+    QCOMPARE(simpleEnum.key(0), "enumValue0");
+    QCOMPARE(simpleEnum.key(1), "enumValue1");
+    QCOMPARE(simpleEnum.key(2), "enumValue2");
 }
 
 QTEST_MAIN(QtProtobufSyntaxTest)

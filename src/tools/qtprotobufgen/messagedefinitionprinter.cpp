@@ -263,7 +263,7 @@ void MessageDefinitionPrinter::printInitializationList()
                 break;
             case FieldDescriptor::TYPE_ENUM:
                 propertyMap["initializer"] = propertyMap["scope_type"]
-                        + "::" + field->enum_type()->value(0)->name();
+                        + "::" +common::qualifiedCppName(field->enum_type()->value(0)->name());
                 break;
             default:
                 propertyMap["initializer"] = "";
