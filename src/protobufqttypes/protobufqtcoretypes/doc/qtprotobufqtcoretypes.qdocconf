@@ -21,3 +21,6 @@ depends += qtdoc qtcore qtprotobuf
 {headerdirs,sourcedirs} += ..
 
 navigation.cppclassespage = "Protobuf Qt Core types module"
+
+# Enforce zero documentation warnings
+warninglimit = 0

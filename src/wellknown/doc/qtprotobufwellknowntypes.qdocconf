@@ -1,11 +1,8 @@
 include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
-include($QT_INSTALL_DOCS/config/exampleurl-qtbase.qdocconf)
 
 project                 = QtProtobufWellKnownTypes
 description             = Qt Protobuf Well-known Types Reference Documentation
 version                 = $QT_VERSION
-
-includepaths           += ./include
 
 examplesinstallpath     = protobufwellknowntypes
 
@@ -20,12 +17,12 @@ qhp.QtProtobufWellKnownTypes.indexRoot           =
 qhp.QtProtobufWellKnownTypes.subprojects         = classes
 qhp.QtProtobufWellKnownTypes.subprojects.classes.title = C++ Classes
 qhp.QtProtobufWellKnownTypes.subprojects.classes.indexTitle = Qt Protobuf Well-known Types C++ Classes
-qhp.QtProtobufWellKnownTypes.subprojects.classes.selectors = class fake:headerfile
+qhp.QtProtobufWellKnownTypes.subprojects.classes.selectors = class doc:headerfile
 qhp.QtProtobufWellKnownTypes.subprojects.classes.sortPages = true
 
-tagfile                 = ../../../doc/qtprotobufwellknowntypes/qtprotobufwellknowntypes.tags
+tagfile                 = qtprotobufwellknowntypes.tags
 
-depends                 = qtprotobuf
+depends                 = qtdoc qtprotobuf
 
 headerdirs  += ..
 
@@ -39,3 +36,6 @@ defines += QT_BUILD_PROTOBUFWELLKNOWNTYPES_LIB
 
 navigation.landingpage = "Qt Protobuf Well-known Types"
 navigation.cppclassespage = "Qt Protobuf Well-known Types C++ Classes"
+
+# Enforce zero documentation warnings
+warninglimit = 0

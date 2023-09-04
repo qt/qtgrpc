@@ -46,3 +46,6 @@ navigation.cppclassespage = "Qt GRPC C++ Classes"
 navigation.qmltypespage = "Qt GRPC QML Types"
 
 tagfile                 = qtgrpc.tags
+
+# Enforce zero documentation warnings
+warninglimit = 0

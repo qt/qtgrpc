@@ -4,6 +4,7 @@
     \module QtProtobufWellKnownTypes
     \modulestate Technical Preview
     \title Qt Protobuf Well-Known Types C++ Classes
+    \keyword Qt Protobuf Well-known Types
     \ingroup frameworks-technologies
     \qtcmakepackage ProtobufWellKnownTypes
     \qtvariable protobufwellknowntypes

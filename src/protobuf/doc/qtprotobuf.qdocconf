@@ -46,3 +46,6 @@ navigation.cppclassespage = "Qt Protobuf C++ Classes"
 #navigation.qmltypespage = "Qt Protobuf QML Types"
 
 tagfile                 = qtprotobuf.tags
+
+# Enforce zero documentation warnings
+warninglimit = 0

@@ -36,3 +36,6 @@ navigation.landingpage = "Qt GRPC Quick"
 navigation.qmltypespage = "Qt GRPC Quick Types"
 
 tagfile = qtgrpcquick.tags
+
+# Enforce zero documentation warnings
+warninglimit = 0
