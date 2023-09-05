@@ -81,16 +81,6 @@ static QByteArray buildRpcName(QLatin1StringView service, QLatin1StringView meth
     return '/' % QByteArrayView(service) % '/' % QByteArrayView(method);
 }
 
-static std::optional<std::chrono::milliseconds> deadlineForCall(
-        const QGrpcChannelOptions &channelOptions, const QGrpcCallOptions &callOptions)
-{
-    if (callOptions.deadline())
-        return *callOptions.deadline();
-    if (channelOptions.deadline())
-        return *channelOptions.deadline();
-    return std::nullopt;
-}
-
 QGrpcChannelStream::QGrpcChannelStream(grpc::Channel *channel, QLatin1StringView method,
                                        QByteArrayView data)
 {
@@ -196,22 +186,21 @@ void QGrpcChannelCall::waitForFinished(const QDeadlineTimer &deadline)
 
 QGrpcChannelPrivate::QGrpcChannelPrivate(const QGrpcChannelOptions &channelOptions,
                                          QGrpcChannel::NativeGrpcChannelCredentials credentialsType)
-    : m_channelOptions(channelOptions)
 {
     switch (credentialsType) {
     case QGrpcChannel::InsecureChannelCredentials:
         m_credentials = grpc::InsecureChannelCredentials();
-        m_channel = grpc::CreateChannel(m_channelOptions.host().toString().toStdString(),
+        m_channel = grpc::CreateChannel(channelOptions.host().toString().toStdString(),
                                         m_credentials);
         break;
     case QGrpcChannel::GoogleDefaultCredentials:
         m_credentials = grpc::GoogleDefaultCredentials();
-        m_channel = grpc::CreateChannel(m_channelOptions.host().toString().toStdString(),
+        m_channel = grpc::CreateChannel(channelOptions.host().toString().toStdString(),
                                         m_credentials);
         break;
     case QGrpcChannel::SslDefaultCredentials:
 #if QT_CONFIG(ssl)
-        if (auto maybeSslConfig = m_channelOptions.sslConfiguration()) {
+        if (auto maybeSslConfig = channelOptions.sslConfiguration()) {
             grpc::SslCredentialsOptions options;
             auto accumulateSslCert = [](const std::string &lhs, const QSslCertificate &rhs) {
                 return lhs + rhs.toPem().toStdString();
@@ -230,7 +219,7 @@ QGrpcChannelPrivate::QGrpcChannelPrivate(const QGrpcChannelOptions &channelOptio
 #else
         m_credentials = grpc::SslCredentials(grpc::SslCredentialsOptions());
 #endif
-        m_channel = grpc::CreateChannel(m_channelOptions.host().toString().toStdString(),
+        m_channel = grpc::CreateChannel(channelOptions.host().toString().toStdString(),
                                         m_credentials);
         break;
     }
@@ -242,8 +231,9 @@ void QGrpcChannelPrivate::call(std::shared_ptr<QGrpcChannelOperation> channelOpe
 {
     const QByteArray rpcName =
             buildRpcName(channelOperation->service(), channelOperation->method());
-    QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(
-            m_channel.get(), QLatin1StringView(rpcName), channelOperation->arg()));
+    QSharedPointer<QGrpcChannelCall> call(new QGrpcChannelCall(m_channel.get(),
+                                                               QLatin1StringView(rpcName),
+                                                               channelOperation->argument()));
     auto connection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
 
@@ -266,8 +256,6 @@ void QGrpcChannelPrivate::call(std::shared_ptr<QGrpcChannelOperation> channelOpe
                                         });
 
     call->start();
-    if (auto deadline = deadlineForCall(m_channelOptions, channelOperation->options()))
-        QTimer::singleShot(*deadline, call.get(), [call] { call->cancel(); });
 }
 
 void QGrpcChannelPrivate::startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
@@ -275,8 +263,9 @@ void QGrpcChannelPrivate::startServerStream(std::shared_ptr<QGrpcChannelOperatio
     const QByteArray rpcName =
             buildRpcName(channelOperation->service(), channelOperation->method());
 
-    QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(
-            m_channel.get(), QLatin1StringView(rpcName), channelOperation->arg()));
+    QSharedPointer<QGrpcChannelStream> sub(new QGrpcChannelStream(m_channel.get(),
+                                                                  QLatin1StringView(rpcName),
+                                                                  channelOperation->argument()));
 
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
     auto readConnection = std::make_shared<QMetaObject::Connection>();
@@ -314,8 +303,6 @@ void QGrpcChannelPrivate::startServerStream(std::shared_ptr<QGrpcChannelOperatio
                              });
 
     sub->start();
-    if (auto deadline = deadlineForCall(m_channelOptions, channelOperation->options()))
-        QTimer::singleShot(*deadline, sub.get(), [sub] { sub->cancel(); });
 }
 
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcChannelPrivate::serializer() const
@@ -329,7 +316,8 @@ std::shared_ptr<QAbstractProtobufSerializer> QGrpcChannelPrivate::serializer() c
 */
 QGrpcChannel::QGrpcChannel(const QGrpcChannelOptions &options,
                            NativeGrpcChannelCredentials credentialsType)
-    : QAbstractGrpcChannel(), dPtr(std::make_unique<QGrpcChannelPrivate>(options, credentialsType))
+    : QAbstractGrpcChannel(options),
+      dPtr(std::make_unique<QGrpcChannelPrivate>(options, credentialsType))
 {
 }
 

@@ -89,7 +89,6 @@ struct QGrpcChannelPrivate
 {
     std::shared_ptr<grpc::Channel> m_channel;
     std::shared_ptr<grpc::ChannelCredentials> m_credentials;
-    QGrpcChannelOptions m_channelOptions;
 
     explicit QGrpcChannelPrivate(const QGrpcChannelOptions &channelOptions,
                                  QGrpcChannel::NativeGrpcChannelCredentials credentialsType);

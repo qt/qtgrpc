@@ -26,9 +26,8 @@ QT_BEGIN_NAMESPACE
     The signal is emitted when the stream receives an updated value from server.
 */
 
-QGrpcServerStream::QGrpcServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
-                                     std::shared_ptr<QAbstractProtobufSerializer> serializer)
-    : QGrpcOperation(std::move(channelOperation), std::move(serializer))
+QGrpcServerStream::QGrpcServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
+    : QGrpcOperation(std::move(channelOperation))
 {
     QObject::connect(QGrpcOperation::channelOperation(), &QGrpcChannelOperation::dataReady, this,
                      [this] { emit messageReceived(); });
@@ -53,10 +52,8 @@ QGrpcServerStream::~QGrpcServerStream() = default;
     The function serializes and sends the \a message to the server.
 */
 
-QGrpcClientStream::QGrpcClientStream(
-        std::shared_ptr<QGrpcChannelOperation> channelOperation,
-        std::shared_ptr<QAbstractProtobufSerializer> serializer)
-    : QGrpcOperation(std::move(channelOperation), std::move(serializer))
+QGrpcClientStream::QGrpcClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
+    : QGrpcOperation(std::move(channelOperation))
 {
 }
 
@@ -94,9 +91,8 @@ void QGrpcClientStream::sendMessage(const QByteArray &data)
     The function serializes and sends the \a message to the server.
 */
 
-QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
-                                            std::shared_ptr<QAbstractProtobufSerializer> serializer)
-    : QGrpcOperation(std::move(channelOperation), std::move(serializer))
+QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
+    : QGrpcOperation(std::move(channelOperation))
 {
     QObject::connect(QGrpcOperation::channelOperation(), &QGrpcChannelOperation::dataReady, this,
                      [this] { emit messageReceived(); });

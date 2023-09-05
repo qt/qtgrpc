@@ -7,6 +7,7 @@
 #include "qgrpccalloptions.h"
 
 #include <QtCore/private/qobject_p.h>
+#include <QtProtobuf/QProtobufSerializer>
 
 QT_BEGIN_NAMESPACE
 
@@ -90,8 +91,10 @@ class QGrpcChannelOperationPrivate : public QObjectPrivate
     Q_DECLARE_PUBLIC(QGrpcChannelOperation)
 public:
     QGrpcChannelOperationPrivate(QLatin1StringView _method, QLatin1StringView _service,
-                                 QByteArrayView _arg, QGrpcCallOptions _options)
-        : method(_method), service(_service), arg(_arg.toByteArray()), options(_options)
+                                 QByteArrayView _arg, QGrpcCallOptions _options,
+                                 std::shared_ptr<QAbstractProtobufSerializer> _serializer)
+        : method(_method), service(_service), arg(_arg.toByteArray()), options(_options),
+          serializer(std::move(_serializer))
     {
     }
 
@@ -99,12 +102,16 @@ public:
     QLatin1StringView service;
     QByteArray arg;
     QGrpcCallOptions options;
+    std::shared_ptr<QAbstractProtobufSerializer> serializer;
     QGrpcMetadata serverMetadata;
 };
 
 QGrpcChannelOperation::QGrpcChannelOperation(QLatin1StringView method, QLatin1StringView service,
-                                             QByteArrayView arg, const QGrpcCallOptions &options)
-    : QObject(*new QGrpcChannelOperationPrivate(method, service, arg, options))
+                                             QByteArrayView arg, const QGrpcCallOptions &options,
+                                             std::shared_ptr<QAbstractProtobufSerializer>
+                                                 serializer)
+    : QObject(*new QGrpcChannelOperationPrivate(method, service, arg, options,
+                                                std::move(serializer)))
 {
 }
 
@@ -125,9 +132,9 @@ QLatin1StringView QGrpcChannelOperation::service() const
 }
 
 /*!
-    Returns the initial arguments that are used for this operation.
+    Returns the serialized arguments that are used for this operation.
 */
-QByteArrayView QGrpcChannelOperation::arg() const
+QByteArrayView QGrpcChannelOperation::argument() const
 {
     return d_func()->arg;
 }
@@ -141,6 +148,14 @@ const QGrpcCallOptions &QGrpcChannelOperation::options() const
 }
 
 /*!
+    Return the serializer that is assigned to this operation.
+*/
+std::shared_ptr<const QAbstractProtobufSerializer> QGrpcChannelOperation::serializer() const
+{
+    return d_func()->serializer;
+}
+
+/*!
     Returns the metadata that is received from server.
 
     The method is used implicitly by \l QGrpcOperation counterpart.
@@ -148,6 +163,26 @@ const QGrpcCallOptions &QGrpcChannelOperation::options() const
 const QGrpcMetadata &QGrpcChannelOperation::serverMetadata() const
 {
     return d_func()->serverMetadata;
+}
+
+/*!
+    Updates the arg attribute that will be used for this operation.
+
+    The method expects \a arg to be serialized data.
+*/
+void QGrpcChannelOperation::setArgument(QByteArrayView arg)
+{
+    Q_D(QGrpcChannelOperation);
+    d->arg = arg.toByteArray();
+}
+
+/*!
+    Updates the call \a options attribute.
+*/
+void QGrpcChannelOperation::setOptions(QGrpcCallOptions &options)
+{
+    Q_D(QGrpcChannelOperation);
+    d->options = options;
 }
 
 /*!
@@ -172,4 +207,28 @@ void QGrpcChannelOperation::setServerMetadata(QGrpcMetadata &&metadata)
     d->serverMetadata = std::move(metadata);
 }
 
+/*!
+    Updates client metadata in the QGrpcCallOptions attribute.
+
+    The \a metadata then can be processed on the server side.
+*/
+void QGrpcChannelOperation::setClientMetadata(const QGrpcMetadata &metadata)
+{
+    Q_D(QGrpcChannelOperation);
+    d->options.withMetadata(metadata);
+}
+
+/*!
+    Updates client metadata in the QGrpcCallOptions attribute.
+
+    The \a metadata then can be processed on the server side.
+*/
+void QGrpcChannelOperation::setClientMetadata(QGrpcMetadata &&metadata)
+{
+    Q_D(QGrpcChannelOperation);
+    d->options.withMetadata(std::move(metadata));
+}
+
 QT_END_NAMESPACE
+
+#include "moc_qgrpcchanneloperation.cpp"

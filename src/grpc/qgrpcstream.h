@@ -22,8 +22,7 @@ class Q_GRPC_EXPORT QGrpcServerStream final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
-                               std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    explicit QGrpcServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
     ~QGrpcServerStream() override;
 
 Q_SIGNALS:
@@ -35,8 +34,7 @@ class Q_GRPC_EXPORT QGrpcClientStream final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
-                               std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    explicit QGrpcClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
     ~QGrpcClientStream() override;
 
     template<typename T>
@@ -54,8 +52,7 @@ class Q_GRPC_EXPORT QGrpcBidirStream final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
-                              std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    explicit QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
     ~QGrpcBidirStream() override;
 
     template<typename T>

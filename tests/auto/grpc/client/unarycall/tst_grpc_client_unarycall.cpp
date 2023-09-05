@@ -8,6 +8,7 @@
 #include <QtCore/QTimer>
 
 #include <QtGrpc/QGrpcCallOptions>
+#include <QtGrpc/QGrpcClientInterceptorManager>
 #include <QtGrpc/QGrpcMetadata>
 
 #include <QtTest/QSignalSpy>
@@ -19,9 +20,10 @@
 #  include <grpcpp/security/credentials.h>
 #endif
 
-#include <testservice_client.grpc.qpb.h>
+#include <interceptormocks.h>
 #include <message_latency_defs.h>
 #include <server_proc_runner.h>
+#include <testservice_client.grpc.qpb.h>
 
 using namespace Qt::Literals::StringLiterals;
 using namespace qtgrpc::tests;
@@ -52,6 +54,9 @@ private slots:
     void Metadata();
     void Deadline_data();
     void Deadline();
+    void Interceptor();
+    void CancelledInterceptor();
+    void InterceptResponse();
 };
 
 void QtGrpcClientUnaryCallTest::Blocking()
@@ -122,6 +127,8 @@ void QtGrpcClientUnaryCallTest::ImmediateCancel()
     QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 0, FailTimeout);
 
     QCOMPARE_EQ(result.testFieldString(), "Result not changed by echo");
+    QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(),
+                QGrpcStatus::Cancelled);
 }
 
 void QtGrpcClientUnaryCallTest::DeferredCancel()
@@ -345,6 +352,110 @@ void QtGrpcClientUnaryCallTest::Deadline()
         // cancel the call, that might affect other tests.
         reply->cancel();
     }
+}
+
+void QtGrpcClientUnaryCallTest::Interceptor()
+{
+    if (channelType().testFlag(GrpcClientTestBase::Channel::Native))
+        QSKIP("Unimplemented in the reference gRPC channel.");
+
+    constexpr QLatin1StringView clientMetadataKey = "client_header"_L1;
+    constexpr QLatin1StringView serverMetadataKey = "server_header"_L1;
+    constexpr QLatin1StringView interceptor1Id = "inter1"_L1;
+    constexpr QLatin1StringView interceptor2Id = "inter2"_L1;
+
+    auto modifyFunc = [clientMetadataKey](std::shared_ptr<QGrpcChannelOperation> operation,
+                                          QLatin1StringView id) {
+        auto metadata = operation->options().metadata();
+        if (auto it = metadata.find(clientMetadataKey.latin1()); it != metadata.end()) {
+            it->second += id;
+        } else {
+            metadata.insert({ clientMetadataKey.latin1(), id.latin1() });
+        }
+        operation->setClientMetadata(metadata);
+    };
+    auto manager = QGrpcClientInterceptorManager();
+    manager.registerInterceptors({ std::make_shared<MockInterceptor>(interceptor1Id, modifyFunc),
+                                   std::make_shared<MockInterceptor>(interceptor2Id, modifyFunc) });
+    auto channel = client()->channel();
+    channel->addInterceptorManager(manager);
+    client()->attachChannel(channel);
+
+    auto reply = client()->testMetadata({});
+
+    QSignalSpy callFinishedSpy(reply.get(), &QGrpcCallReply::finished);
+    QVERIFY(callFinishedSpy.isValid());
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(callFinishedSpy.count(), 1, MessageLatencyWithThreshold);
+    const auto serverMetadata = reply->metadata();
+    const auto it = serverMetadata.find(serverMetadataKey.latin1());
+
+    QVERIFY(it != serverMetadata.end());
+    QCOMPARE_EQ(it->second, "inter1inter2"_ba);
+}
+
+void QtGrpcClientUnaryCallTest::CancelledInterceptor()
+{
+    constexpr QLatin1StringView interceptor1Id = "inter1"_L1;
+
+    auto manager = QGrpcClientInterceptorManager();
+    manager.registerInterceptors({ std::make_shared<NoContinuationInterceptor>(interceptor1Id) });
+    auto channel = client()->channel();
+    channel->addInterceptorManager(manager);
+    client()->attachChannel(channel);
+
+    SimpleStringMessage result;
+    SimpleStringMessage request;
+    request.setTestFieldString("sleep");
+
+    std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
+
+    result.setTestFieldString("Result not changed by echo");
+    QObject::connect(reply.get(), &QGrpcCallReply::finished, this,
+                     [&result, reply] { result = reply->read<SimpleStringMessage>(); });
+
+    QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
+    QSignalSpy replyFinishedSpy(reply.get(), &QGrpcCallReply::finished);
+    QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
+
+    QVERIFY(replyErrorSpy.isValid());
+    QVERIFY(replyFinishedSpy.isValid());
+    QVERIFY(clientErrorSpy.isValid());
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyErrorSpy.count(), 1, FailTimeout);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 0, FailTimeout);
+
+    QCOMPARE_EQ(result.testFieldString(), "Result not changed by echo");
+}
+
+void QtGrpcClientUnaryCallTest::InterceptResponse()
+{
+    SimpleStringMessage serverResponse;
+    auto interceptFunc =
+        [this, &serverResponse](std::shared_ptr<QGrpcChannelOperation> operation,
+                                std::shared_ptr<QGrpcCallReply> response,
+                                QGrpcInterceptorContinuation<QGrpcCallReply> &continuation,
+                                QLatin1StringView) {
+            QObject::connect(response.get(), &QGrpcCallReply::finished, this,
+                             [&serverResponse, response] {
+                                 serverResponse = response->read<SimpleStringMessage>();
+                             });
+            continuation(std::move(response), std::move(operation));
+        };
+
+    auto manager = QGrpcClientInterceptorManager();
+    manager.registerInterceptor(std::make_shared<CallInterceptor>("inter1"_L1, interceptFunc));
+    auto channel = client()->channel();
+    channel->addInterceptorManager(manager);
+    client()->attachChannel(channel);
+
+    SimpleStringMessage request;
+    request.setTestFieldString("Hello Qt!");
+    auto result = std::make_shared<SimpleStringMessage>();
+    QCOMPARE_EQ(client()->testMethod(request, result.get()), QGrpcStatus::Ok);
+    QCOMPARE_EQ(serverResponse.testFieldString(), "Hello Qt!");
+    QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
 }
 
 QTEST_MAIN(QtGrpcClientUnaryCallTest)

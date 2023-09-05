@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 add_subdirectory(shared)
 
+add_subdirectory(interceptor)
 add_subdirectory(unattached_channel)
 add_subdirectory(no_channel)
 add_subdirectory(unarycall)

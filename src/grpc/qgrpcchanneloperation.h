@@ -5,11 +5,11 @@
 #define QGRPCCHANNELOPERATION_H
 
 #include <QtCore/QObject>
-#include <QtGrpc/qtgrpcglobal.h>
 #include <QtGrpc/qgrpcmetadata.h>
-
+#include <QtGrpc/qtgrpcglobal.h>
 QT_BEGIN_NAMESPACE
 
+class QAbstractProtobufSerializer;
 class QGrpcCallOptions;
 class QGrpcChannelOperationPrivate;
 class QGrpcStatus;
@@ -19,15 +19,23 @@ class Q_GRPC_EXPORT QGrpcChannelOperation : public QObject
     Q_OBJECT
 public:
     explicit QGrpcChannelOperation(QLatin1StringView method, QLatin1StringView service,
-                                   QByteArrayView arg, const QGrpcCallOptions &options);
+                                   QByteArrayView arg, const QGrpcCallOptions &options,
+                                   std::shared_ptr<QAbstractProtobufSerializer> serializer);
 
     QLatin1StringView method() const;
     QLatin1StringView service() const;
-    QByteArrayView arg() const;
+    QByteArrayView argument() const;
     const QGrpcCallOptions &options() const;
+    std::shared_ptr<const QAbstractProtobufSerializer> serializer() const;
 
+    const QGrpcMetadata &clientMetadata() const;
     const QGrpcMetadata &serverMetadata() const;
 
+    void setArgument(QByteArrayView arg);
+    void setOptions(QGrpcCallOptions &options);
+
+    void setClientMetadata(const QGrpcMetadata &metadata);
+    void setClientMetadata(QGrpcMetadata &&metadata);
     void setServerMetadata(const QGrpcMetadata &metadata);
     void setServerMetadata(QGrpcMetadata &&metadata);
 

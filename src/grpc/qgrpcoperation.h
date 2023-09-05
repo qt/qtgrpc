@@ -35,18 +35,19 @@ public:
     QLatin1StringView method() const;
 
     void cancel();
+    bool isFinished() const;
+    QGrpcStatus waitForFinished() const;
 
 Q_SIGNALS:
     void finished();
     void errorOccurred(const QGrpcStatus &status) const;
 
 protected:
-    explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation,
-                            std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation);
     ~QGrpcOperation() override;
 
     const QGrpcChannelOperation *channelOperation() const;
-    std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
+    std::shared_ptr<const QAbstractProtobufSerializer> serializer() const;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)

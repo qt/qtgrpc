@@ -4,9 +4,12 @@
 
 #include "qabstractgrpcchannel.h"
 #include "qabstractgrpcchannel_p.h"
-#include "qgrpcchanneloperation.h"
 #include "qgrpccallreply.h"
+#include "qgrpcchanneloperation.h"
+#include "qgrpcclientinterceptor.h"
 #include "qgrpcstream.h"
+
+#include <QtCore/QTimer>
 
 QT_BEGIN_NAMESPACE
 
@@ -83,10 +86,39 @@ QT_BEGIN_NAMESPACE
     stream. The implementation must be asynchronous and must not block the
     thread where the function was called.
 */
-QAbstractGrpcChannel::QAbstractGrpcChannel() : dPtr(std::make_unique<QAbstractGrpcChannelPrivate>())
+
+static std::optional<std::chrono::milliseconds>
+deadlineForCall(const QGrpcChannelOptions &channelOptions, const QGrpcCallOptions &callOptions)
+{
+    if (callOptions.deadline())
+        return *callOptions.deadline();
+    if (channelOptions.deadline())
+        return *channelOptions.deadline();
+    return std::nullopt;
+}
+
+QAbstractGrpcChannel::QAbstractGrpcChannel(const QGrpcChannelOptions &options)
+    : dPtr(std::make_unique<QAbstractGrpcChannelPrivate>(std::move(options)))
 {
 }
 QAbstractGrpcChannel::~QAbstractGrpcChannel() = default;
+
+/*!
+    Sets the interceptor \a manager for the channel.
+*/
+void QAbstractGrpcChannel::addInterceptorManager(const QGrpcClientInterceptorManager &manager)
+{
+    dPtr->interceptorManager = manager;
+}
+
+/*!
+    \internal
+    Returns QGrpcChannelOptions used by the channel.
+*/
+const QGrpcChannelOptions &QAbstractGrpcChannel::channelOptions() const
+{
+    return dPtr->channelOptions;
+}
 
 /*!
     \internal
@@ -102,16 +134,29 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
                                                            QByteArrayView arg,
                                                            const QGrpcCallOptions &options)
 {
-    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options);
-    QObject::connect(channelOperation.get(), &QGrpcChannelOperation::sendData,
-                     channelOperation.get(), []() {
-        Q_ASSERT_X(false, "QAbstractGrpcChannel::call",
-                   "QAbstractGrpcChannel::call disallows sendData signal from "
-                   "QGrpcChannelOperation");
+    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options,
+                                                                    serializer());
+    auto reply = std::make_shared<QGrpcCallReply>(channelOperation);
+
+    QTimer::singleShot(0, channelOperation.get(), [this, reply, channelOperation]() mutable {
+        using Continuation = QGrpcInterceptorContinuation<QGrpcCallReply>;
+        Continuation finalCall([this](Continuation::ReplyType response,
+                                      Continuation::ParamType operation) {
+            QObject::
+                connect(operation.get(), &QGrpcChannelOperation::sendData, operation.get(), []() {
+                    Q_ASSERT_X(false, "QAbstractGrpcChannel::call",
+                               "QAbstractGrpcChannel::call disallows sendData signal from "
+                               "QGrpcChannelOperation");
+                });
+
+            call(operation);
+            return response;
+        });
+        dPtr->interceptorManager.run(finalCall, reply, channelOperation);
     });
-    std::shared_ptr<QGrpcCallReply> reply(new QGrpcCallReply(channelOperation, serializer()),
-                                          [](QGrpcCallReply *reply) { reply->deleteLater(); });
-    call(channelOperation);
+
+    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->options()))
+        QTimer::singleShot(*deadline, reply.get(), &QGrpcCallReply::cancel);
     return reply;
 }
 
@@ -128,17 +173,29 @@ std::shared_ptr<QGrpcServerStream>
 QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringView service,
                                         QByteArrayView arg, const QGrpcCallOptions &options)
 {
-    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options);
-    QObject::connect(channelOperation.get(), &QGrpcChannelOperation::sendData,
-                     channelOperation.get(), []() {
-        Q_ASSERT_X(false, "QAbstractGrpcChannel::startServerStream",
-                   "QAbstractGrpcChannel::startServerStream disallows sendData signal from "
-                   "QGrpcChannelOperation");
+    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options,
+                                                                    serializer());
+    auto stream = std::make_shared<QGrpcServerStream>(channelOperation);
+
+    QTimer::singleShot(0, channelOperation.get(), [this, stream, channelOperation]() mutable {
+        using Continuation = QGrpcInterceptorContinuation<QGrpcServerStream>;
+        Continuation finalStream([this](Continuation::ReplyType response,
+                                        Continuation::ParamType operation) {
+            QObject::connect(operation.get(), &QGrpcChannelOperation::sendData, operation.get(),
+                             []() {
+                                 Q_ASSERT_X(false, "QAbstractGrpcChannel::startServerStream",
+                                            "QAbstractGrpcChannel::startServerStream disallows "
+                                            "sendData signal from "
+                                            "QGrpcChannelOperation");
+                             });
+            startServerStream(operation);
+            return response;
+        });
+        dPtr->interceptorManager.run(finalStream, stream, channelOperation);
     });
 
-    std::shared_ptr<QGrpcServerStream> stream(
-            new QGrpcServerStream(channelOperation, serializer()));
-    startServerStream(channelOperation);
+    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->options()))
+        QTimer::singleShot(*deadline, stream.get(), &QGrpcServerStream::cancel);
     return stream;
 }
 
@@ -155,9 +212,22 @@ std::shared_ptr<QGrpcClientStream>
 QAbstractGrpcChannel::startClientStream(QLatin1StringView method, QLatin1StringView service,
                                         QByteArrayView arg, const QGrpcCallOptions &options)
 {
-    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options);
-    auto stream = std::make_shared<QGrpcClientStream>(channelOperation, serializer());
-    startClientStream(channelOperation);
+    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options,
+                                                                    serializer());
+    auto stream = std::make_shared<QGrpcClientStream>(channelOperation);
+
+    QTimer::singleShot(0, channelOperation.get(), [this, stream, channelOperation]() mutable {
+        using Continuation = QGrpcInterceptorContinuation<QGrpcClientStream>;
+        Continuation finalStream([this](Continuation::ReplyType response,
+                                        Continuation::ParamType operation) {
+            startClientStream(operation);
+            return response;
+        });
+        dPtr->interceptorManager.run(finalStream, stream, channelOperation);
+    });
+
+    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->options()))
+        QTimer::singleShot(*deadline, stream.get(), &QGrpcClientStream::cancel);
     return stream;
 }
 
@@ -174,9 +244,22 @@ std::shared_ptr<QGrpcBidirStream>
 QAbstractGrpcChannel::startBidirStream(QLatin1StringView method, QLatin1StringView service,
                                        QByteArrayView arg, const QGrpcCallOptions &options)
 {
-    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options);
-    auto stream = std::make_shared<QGrpcBidirStream>(channelOperation, serializer());
-    startBidirStream(channelOperation);
+    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options,
+                                                                    serializer());
+    auto stream = std::make_shared<QGrpcBidirStream>(channelOperation);
+
+    QTimer::singleShot(0, channelOperation.get(), [this, stream, channelOperation]() mutable {
+        using Continuation = QGrpcInterceptorContinuation<QGrpcBidirStream>;
+        Continuation finalStream([this](Continuation::ReplyType response,
+                                        Continuation::ParamType operation) {
+            startBidirStream(operation);
+            return response;
+        });
+        dPtr->interceptorManager.run(finalStream, stream, channelOperation);
+    });
+
+    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->options()))
+        QTimer::singleShot(*deadline, stream.get(), &QGrpcBidirStream::cancel);
     return stream;
 }
 

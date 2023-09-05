@@ -7,8 +7,10 @@
 #include "qtgrpcglobal_p.h"
 #include "qgrpcchanneloperation.h"
 
-#include <QtCore/qpointer.h>
+#include <QtCore/QAtomicInteger>
 #include <QtCore/private/qobject_p.h>
+#include <QtCore/qpointer.h>
+#include <QtCore/qeventloop.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -37,7 +39,7 @@ using namespace Qt::StringLiterals;
 
     This signal indicates the end of communication for this call.
 
-    If signal emitted by stream this means that stream is successfully
+    If this signal is emitted by the stream then this stream is successfully
     closed either by client or server.
 */
 
@@ -54,20 +56,18 @@ class QGrpcOperationPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGrpcOperation)
 public:
-    QGrpcOperationPrivate(std::shared_ptr<QGrpcChannelOperation> _channelOperation,
-                          std::shared_ptr<QAbstractProtobufSerializer> _serializer)
-        : channelOperation(std::move(_channelOperation)), serializer(std::move(_serializer))
+    QGrpcOperationPrivate(std::shared_ptr<QGrpcChannelOperation> _channelOperation)
+        : channelOperation(std::move(_channelOperation))
     {
     }
 
     QByteArray data;
     std::shared_ptr<QGrpcChannelOperation> channelOperation;
-    std::shared_ptr<QAbstractProtobufSerializer> serializer;
+    QAtomicInteger<bool> isFinished{ false };
 };
 
-QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation,
-                               std::shared_ptr<QAbstractProtobufSerializer> serializer)
-    : QObject(*new QGrpcOperationPrivate(std::move(channelOperation), std::move(serializer)))
+QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation)
+    : QObject(*new QGrpcOperationPrivate(std::move(channelOperation)))
 {
     [[maybe_unused]] bool valid =
             QObject::connect(d_func()->channelOperation.get(), &QGrpcChannelOperation::dataReady,
@@ -80,12 +80,18 @@ QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOpe
 
     valid = QObject::connect(d_func()->channelOperation.get(),
                              &QGrpcChannelOperation::errorOccurred, this,
-                             &QGrpcOperation::errorOccurred);
+                             [this](const auto &status) {
+                                 d_func()->isFinished.storeRelaxed(true);
+                                 emit this->errorOccurred(status);
+                             });
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'errorOccurred' signal");
 
     valid = QObject::connect(d_func()->channelOperation.get(), &QGrpcChannelOperation::finished,
-                             this, &QGrpcOperation::finished);
+                             this, [this]() {
+                                 d_func()->isFinished.storeRelaxed(true);
+                                 emit this->finished();
+                             });
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'finished' signal");
 }
@@ -131,21 +137,57 @@ const QGrpcChannelOperation *QGrpcOperation::channelOperation() const
     \internal
     Getter of the serializer that QGrpcOperation was constructed with.
 */
-std::shared_ptr<QAbstractProtobufSerializer> QGrpcOperation::serializer() const
+std::shared_ptr<const QAbstractProtobufSerializer> QGrpcOperation::serializer() const
 {
-    return d_func()->serializer;
+    return d_func()->channelOperation->serializer();
 }
 
 void QGrpcOperation::cancel()
 {
+    d_func()->isFinished.storeRelaxed(true);
     emit d_func()->channelOperation->cancelled();
     emit errorOccurred({ QGrpcStatus::Cancelled, "Operation is cancelled by client"_L1 });
+}
+
+/*!
+    Returns true when QGrpcOperation finished its workflow,
+    meaning it was finished, canceled, or error occurred, otherwise returns false.
+*/
+bool QGrpcOperation::isFinished() const
+{
+    return d_func()->isFinished.loadRelaxed();
+}
+
+/*!
+    Waits for the call to either finish or return an error. Returns the
+    resulting QGrpcStatus of the call. If the call was successful, the received
+    response can be read using the QGrpcCallReply::read method.
+
+    To control the maximum waiting time, use \c QGrpcChannelOptions or
+    \c QGrpcCallOptions, otherwise the call may be suspended indefinitely.
+*/
+QGrpcStatus QGrpcOperation::waitForFinished() const
+{
+    QEventLoop loop;
+    QGrpcStatus status;
+    if (isFinished()) {
+        return status;
+    }
+    QObject::connect(this, &QGrpcOperation::errorOccurred, this,
+                     [&status, &loop](const QGrpcStatus &error) {
+                         status = error;
+                         loop.quit();
+                     });
+    QObject::connect(this, &QGrpcOperation::finished, &loop, &QEventLoop::quit);
+
+    loop.exec();
+    return status;
 }
 
 QGrpcStatus QGrpcOperation::deserializationError() const
 {
     QGrpcStatus status;
-    switch (d_func()->serializer->deserializationError()) {
+    switch (serializer()->deserializationError()) {
     case QAbstractProtobufSerializer::InvalidHeaderError: {
         const QLatin1StringView errStr("Response deserialization failed: invalid field found.");
         status = { QGrpcStatus::InvalidArgument, errStr };

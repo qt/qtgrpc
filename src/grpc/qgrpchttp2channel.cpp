@@ -103,16 +103,6 @@ static QGrpcMetadata collectMetadata(QNetworkReply *networkReply)
                          networkReply->rawHeaderPairs().end());
 }
 
-static std::optional<std::chrono::milliseconds> deadlineForCall(
-        const QGrpcChannelOptions &channelOptions, const QGrpcCallOptions &callOptions)
-{
-    if (callOptions.deadline())
-        return *callOptions.deadline();
-    if (channelOptions.deadline())
-        return *channelOptions.deadline();
-    return std::nullopt;
-}
-
 struct QGrpcHttp2ChannelPrivate
 {
     struct ExpectedData
@@ -122,7 +112,6 @@ struct QGrpcHttp2ChannelPrivate
     };
 
     QNetworkAccessManager nm;
-    QGrpcChannelOptions channelOptions;
 #if QT_CONFIG(ssl)
     QSslConfiguration sslConfig;
 #endif
@@ -130,9 +119,10 @@ struct QGrpcHttp2ChannelPrivate
     QObject lambdaContext;
 
     QNetworkReply *post(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
+                        const QGrpcChannelOptions &channelOptions,
                         const QGrpcCallOptions &callOptions)
     {
-        QUrl callUrl = channelOptions.host();
+        QUrl callUrl = getFixedHost(channelOptions);
         callUrl.setPath("/%1/%2"_L1.arg(service, method));
 
         qGrpcDebug() << "Service call url:" << callUrl;
@@ -142,7 +132,10 @@ struct QGrpcHttp2ChannelPrivate
         request.setRawHeader(AcceptEncodingHeader, "identity,gzip");
         request.setRawHeader(TEHeader, "trailers");
 #if QT_CONFIG(ssl)
-        request.setSslConfiguration(sslConfig);
+        if (callUrl.scheme() == "https"_L1) {
+            Q_ASSERT(channelOptions.sslConfiguration());
+            request.setSslConfiguration(*channelOptions.sslConfiguration());
+        }
 #endif
 
         addMetadataToRequest(&request, channelOptions.metadata(), callOptions.metadata());
@@ -166,11 +159,7 @@ struct QGrpcHttp2ChannelPrivate
                              QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
                          });
 #endif
-        if (auto deadline = deadlineForCall(channelOptions, callOptions)) {
-            QTimer::singleShot(*deadline, networkReply, [networkReply] {
-                QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
-            });
-        }
+
         return networkReply;
     }
 
@@ -200,29 +189,22 @@ struct QGrpcHttp2ChannelPrivate
         return networkReply->readAll().mid(GrpcMessageSizeHeaderSize);
     }
 
-    QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &options) : channelOptions(options)
-    {
-#if QT_CONFIG(ssl)
-        if (channelOptions.host().scheme() == "https"_L1) {
-            // HTTPS connection requested but not ssl configuration provided.
-            Q_ASSERT(channelOptions.sslConfiguration());
-            sslConfig = *channelOptions.sslConfiguration();
-        } else if (channelOptions.host().scheme().isEmpty()) {
-            auto tmpHost = channelOptions.host();
-            tmpHost.setScheme("http"_L1);
-            channelOptions.withHost(tmpHost);
-        }
-#else
-        auto tmpHost = channelOptions.host();
-        tmpHost.setScheme("http"_L1);
-        channelOptions.withHost(tmpHost);
-#endif
-    }
-
     static int getExpectedDataSize(QByteArrayView container)
     {
         return qFromBigEndian(*reinterpret_cast<const quint32 *>(container.data() + 1))
-                + GrpcMessageSizeHeaderSize;
+            + GrpcMessageSizeHeaderSize;
+    }
+
+    static QUrl getFixedHost(const QGrpcChannelOptions &channelOptions)
+    {
+        QUrl fixedHost = channelOptions.host();
+#if QT_CONFIG(ssl)
+        if (channelOptions.host().scheme().isEmpty())
+            fixedHost.setScheme("http"_L1);
+#else
+        fixedHost.setScheme("http"_L1);
+#endif
+        return fixedHost;
     }
 };
 
@@ -230,7 +212,7 @@ struct QGrpcHttp2ChannelPrivate
     QGrpcHttp2Channel constructs QGrpcHttp2Channel with \a options.
 */
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QGrpcChannelOptions &options)
-    : QAbstractGrpcChannel(), dPtr(std::make_unique<QGrpcHttp2ChannelPrivate>(options))
+    : QAbstractGrpcChannel(options), dPtr(std::make_unique<QGrpcHttp2ChannelPrivate>())
 {
 }
 
@@ -245,9 +227,10 @@ QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
 */
 void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    QNetworkReply *networkReply =
-            dPtr->post(channelOperation->method(), channelOperation->service(),
-                       channelOperation->arg(), channelOperation->options());
+    QNetworkReply *networkReply = dPtr->post(channelOperation->method(),
+                                             channelOperation->service(),
+                                             channelOperation->argument(), channelOptions(),
+                                             channelOperation->options());
 
     auto connection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();
@@ -290,9 +273,10 @@ void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcChannelOperation> channelOpera
 */
 void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    QNetworkReply *networkReply =
-            dPtr->post(channelOperation->method(), channelOperation->service(),
-                       channelOperation->arg(), channelOperation->options());
+    QNetworkReply *networkReply = dPtr->post(channelOperation->method(),
+                                             channelOperation->service(),
+                                             channelOperation->argument(), channelOptions(),
+                                             channelOperation->options());
 
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     auto abortConnection = std::make_shared<QMetaObject::Connection>();

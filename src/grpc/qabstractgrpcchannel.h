@@ -24,10 +24,13 @@ class QGrpcClientStream;
 class QGrpcBidirStream;
 class QGrpcCallReply;
 class QGrpcChannelOperation;
+class QGrpcChannelOptions;
+class QGrpcClientInterceptorManager;
 
 class Q_GRPC_EXPORT QAbstractGrpcChannel
 {
 public:
+    void addInterceptorManager(const QGrpcClientInterceptorManager &manager);
     virtual std::shared_ptr<QAbstractProtobufSerializer> serializer() const = 0;
 
 protected:
@@ -49,8 +52,10 @@ protected:
     virtual void startClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
     virtual void startBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
 
+    const QGrpcChannelOptions &channelOptions() const;
+
     friend class QAbstractGrpcClient;
-    QAbstractGrpcChannel();
+    QAbstractGrpcChannel(const QGrpcChannelOptions &options);
     virtual ~QAbstractGrpcChannel();
 
 private:
