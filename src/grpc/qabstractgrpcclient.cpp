@@ -63,13 +63,13 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 /*!
     \fn template<typename ParamType, typename StreamType> std::shared_ptr<StreamType> QAbstractGrpcClient::startStream(QLatin1StringView method, const QProtobufMessage &arg, const QGrpcCallOptions &options)
 
-    Starts the stream \a method of the \a StreamType type with the message
+    Starts the stream \a method of the \e StreamType type with the message
     argument \a arg to the attached channel.
 
     Uses \a options argument to set additional parameter in the stream
     communication.
 
-    The implementation is only available for \a StreamType:
+    The implementation is only available for \e StreamType:
     QGrpcServerStream, QGrpcClientStream, and QGrpcBidirStream.
 */
 
