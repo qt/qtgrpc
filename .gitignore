@@ -80,6 +80,9 @@ tags
 # Vim temporary files
 .*.swp
 
+# clangd generated files
+/.cache
+
 # Visual Studio generated files
 *.ib_pdb_index
 *.idb
@@ -134,6 +137,7 @@ CMakeCache.txt
 cmake_install.cmake
 CTestTestfile.cmake
 CMakeLists.txt.user
+/build
 
 #vscode specifi
 .vscode
