@@ -25,3 +25,5 @@ target_link_libraries(tst_grpc_client_test_common PRIVATE
     Qt::Test
     Qt::Grpc
 )
+
+qt_autogen_tools_initial_setup(tst_grpc_client_test_common)
