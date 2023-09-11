@@ -225,10 +225,9 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
     return reply;
 }
 
-template<>
 std::shared_ptr<QGrpcServerStream>
-QAbstractGrpcClient::startStream<QGrpcServerStream>(QLatin1StringView method, QByteArrayView arg,
-                                                    const QGrpcCallOptions &options)
+QAbstractGrpcClient::startServerStream(QLatin1StringView method, QByteArrayView arg,
+                                       const QGrpcCallOptions &options)
 {
     Q_D(QAbstractGrpcClient);
 
@@ -244,10 +243,9 @@ QAbstractGrpcClient::startStream<QGrpcServerStream>(QLatin1StringView method, QB
     return grpcStream;
 }
 
-template<>
 std::shared_ptr<QGrpcClientStream>
-QAbstractGrpcClient::startStream<QGrpcClientStream>(QLatin1StringView method, QByteArrayView arg,
-                                                    const QGrpcCallOptions &options)
+QAbstractGrpcClient::startClientStream(QLatin1StringView method, QByteArrayView arg,
+                                       const QGrpcCallOptions &options)
 {
     Q_D(QAbstractGrpcClient);
 
@@ -263,10 +261,9 @@ QAbstractGrpcClient::startStream<QGrpcClientStream>(QLatin1StringView method, QB
     return grpcStream;
 }
 
-template<>
 std::shared_ptr<QGrpcBidirStream>
-QAbstractGrpcClient::startStream<QGrpcBidirStream>(QLatin1StringView method, QByteArrayView arg,
-                                                   const QGrpcCallOptions &options)
+QAbstractGrpcClient::startBidirStream(QLatin1StringView method, QByteArrayView arg,
+                                      const QGrpcCallOptions &options)
 {
     Q_D(QAbstractGrpcClient);
 

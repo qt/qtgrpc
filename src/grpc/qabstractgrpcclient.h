@@ -74,23 +74,39 @@ protected:
         return call(method, *argData, options);
     }
 
-    template<typename ParamType, typename StreamType>
+    template <typename ParamType, typename StreamType,
+              std::enable_if_t<std::is_same_v<StreamType, QGrpcServerStream>
+                                       || std::is_same_v<StreamType, QGrpcClientStream>
+                                       || std::is_same_v<StreamType, QGrpcBidirStream>,
+                               bool> = true>
     std::shared_ptr<StreamType> startStream(QLatin1StringView method, const QProtobufMessage &arg,
                                             const QGrpcCallOptions &options)
     {
         std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
         if (!argData)
             return {};
-        return startStream<StreamType>(method, *argData, options);
+        if constexpr (std::is_same_v<StreamType, QGrpcServerStream>) {
+            return startServerStream(method, *argData, options);
+        } else if constexpr (std::is_same_v<StreamType, QGrpcClientStream>) {
+            return startClientStream(method, *argData, options);
+        } else if constexpr (std::is_same_v<StreamType, QGrpcBidirStream>) {
+            return startBidirStream(method, *argData, options);
+        }
+        return {};
     }
 
 private:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg,
                                          const QGrpcCallOptions &options);
 
-    template<typename StreamType>
-    std::shared_ptr<StreamType> startStream(QLatin1StringView method, QByteArrayView arg,
-                                            const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcServerStream> startServerStream(QLatin1StringView method,
+                                                         QByteArrayView arg,
+                                                         const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcClientStream> startClientStream(QLatin1StringView method,
+                                                         QByteArrayView arg,
+                                                         const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcBidirStream> startBidirStream(QLatin1StringView method, QByteArrayView arg,
+                                                       const QGrpcCallOptions &options);
 
     template <typename ParamType>
     std::optional<QByteArray> trySerialize(const QProtobufMessage &arg)
@@ -110,19 +126,6 @@ private:
     Q_DISABLE_COPY_MOVE(QAbstractGrpcClient)
     Q_DECLARE_PRIVATE(QAbstractGrpcClient)
 };
-
-template<>
-Q_GRPC_EXPORT std::shared_ptr<QGrpcServerStream>
-QAbstractGrpcClient::startStream<QGrpcServerStream>(QLatin1StringView method, QByteArrayView arg,
-                                                    const QGrpcCallOptions &options);
-template<>
-Q_GRPC_EXPORT std::shared_ptr<QGrpcClientStream>
-QAbstractGrpcClient::startStream<QGrpcClientStream>(QLatin1StringView method, QByteArrayView arg,
-                                                    const QGrpcCallOptions &options);
-template<>
-Q_GRPC_EXPORT std::shared_ptr<QGrpcBidirStream>
-QAbstractGrpcClient::startStream<QGrpcBidirStream>(QLatin1StringView method, QByteArrayView arg,
-                                                   const QGrpcCallOptions &options);
 
 QT_END_NAMESPACE
 
