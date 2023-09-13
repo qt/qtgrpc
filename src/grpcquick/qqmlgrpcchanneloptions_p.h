@@ -16,15 +16,18 @@
 //
 
 #include "qtgrpcquickexports.h"
-#include "qqmlgrpcmetadata_p.h"
-
 #include <QtCore/QMetaType>
-#include <QtCore/QtGlobal>
-#include <QtQml/qqml.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
+#include <QtQml/qqml.h>
+
+#if QT_CONFIG(ssl)
+#include <QtQmlNetwork/private/qqmlsslconfiguration_p.h>
+#endif // QT_CONFIG(ssl)
 
 QT_BEGIN_NAMESPACE
 
+class QQmlGrpcMetadata;
+class QQmlGrpcChannelOptionsPrivate;
 class Q_GRPCQUICK_EXPORT QQmlGrpcChannelOptions : public QObject
 {
     Q_OBJECT
@@ -34,6 +37,10 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcChannelOptions : public QObject
     Q_PROPERTY(QUrl host READ host WRITE setHost NOTIFY hostChanged REQUIRED)
     Q_PROPERTY(qint64 deadline READ deadline WRITE setDeadline NOTIFY deadlineChanged)
     Q_PROPERTY(QQmlGrpcMetadata *metadata READ metadata WRITE setMetadata NOTIFY metadataChanged)
+#if QT_CONFIG(ssl)
+    Q_PROPERTY(QQmlSslConfiguration sslConfiguration READ sslConfiguration
+                       WRITE setSslConfiguration NOTIFY sslConfigurationChanged)
+#endif // QT_CONFIG(ssl)
 
 public:
     QQmlGrpcChannelOptions(QObject *parent = nullptr);
@@ -45,15 +52,22 @@ public:
     void setDeadline(qint64 value);
     QQmlGrpcMetadata *metadata() const;
     void setMetadata(QQmlGrpcMetadata *value);
+#if QT_CONFIG(ssl)
+    QQmlSslConfiguration sslConfiguration() const;
+    void setSslConfiguration(const QQmlSslConfiguration &config);
+#endif // QT_CONFIG(ssl)
 
 signals:
     void hostChanged();
     void deadlineChanged();
     void metadataChanged();
+#if QT_CONFIG(ssl)
+    void sslConfigurationChanged();
+#endif // QT_CONFIG(ssl)
 
 private:
-    QGrpcChannelOptions m_options;
-    QQmlGrpcMetadata *m_metadata;
+    QQmlGrpcChannelOptionsPrivate *d_ptr;
+    Q_DECLARE_PRIVATE(QQmlGrpcChannelOptions)
 };
 
 QT_END_NAMESPACE

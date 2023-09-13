@@ -14,6 +14,7 @@ qt_internal_add_test(tst_options_qml
     LIBRARIES
         Qt::Qml
         Qt::GrpcQuick
+        Qt::QmlNetwork
 )
 
 qt_policy(SET QTP0001 NEW)

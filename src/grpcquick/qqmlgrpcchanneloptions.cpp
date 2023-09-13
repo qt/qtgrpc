@@ -2,58 +2,101 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
 #include "qqmlgrpcchanneloptions_p.h"
+#include "qqmlgrpcmetadata_p.h"
+#include <QtCore/private/qobject_p.h>
 #include <chrono>
 
 QT_BEGIN_NAMESPACE
 
+class QQmlGrpcChannelOptionsPrivate : public QObjectPrivate
+{
+    Q_DECLARE_PUBLIC(QQmlGrpcChannelOptions)
+
+public:
+    QQmlGrpcChannelOptionsPrivate();
+
+    QGrpcChannelOptions m_options;
+    QQmlGrpcMetadata *m_metadata;
+#if QT_CONFIG(ssl)
+    QQmlSslConfiguration m_configuration;
+#endif // QT_CONFIG(ssl)
+};
+
+QQmlGrpcChannelOptionsPrivate::QQmlGrpcChannelOptionsPrivate()
+    : QObjectPrivate(),
+      m_options(QUrl())
+{
+}
+
 QQmlGrpcChannelOptions::QQmlGrpcChannelOptions(QObject *parent)
     : QObject(parent),
-      m_options(QUrl())
+      d_ptr(new QQmlGrpcChannelOptionsPrivate())
 {
 }
 
 QUrl QQmlGrpcChannelOptions::host() const
 {
-    return m_options.host();
+    return d_func()->m_options.host();
 }
 
 void QQmlGrpcChannelOptions::setHost(const QUrl &newUrl)
 {
-    m_options.withHost(newUrl);
+    Q_D(QQmlGrpcChannelOptions);
+    d->m_options.withHost(newUrl);
     emit hostChanged();
 }
 
 qint64 QQmlGrpcChannelOptions::deadline() const
 {
-    std::chrono::milliseconds ms = m_options.deadline().value_or(std::chrono::milliseconds(0));
+    std::chrono::milliseconds ms
+            = d_func()->m_options.deadline().value_or(std::chrono::milliseconds(0));
     return ms.count();
 }
 
 void QQmlGrpcChannelOptions::setDeadline(qint64 value)
 {
+    Q_D(QQmlGrpcChannelOptions);
     std::chrono::milliseconds ms(value);
-    m_options.withDeadline(ms);
+    d->m_options.withDeadline(ms);
     emit deadlineChanged();
 }
 
 const QGrpcChannelOptions &QQmlGrpcChannelOptions::options() const
 {
-    return m_options;
+    return d_func()->m_options;
 }
 
 QQmlGrpcMetadata *QQmlGrpcChannelOptions::metadata() const
 {
-    return m_metadata;
+    return d_func()->m_metadata;
 }
 
 void QQmlGrpcChannelOptions::setMetadata(QQmlGrpcMetadata *value)
 {
-    if (m_metadata != value) {
-        m_metadata = value;
-        if (m_metadata)
-            m_options.withMetadata(m_metadata->metadata());
+    Q_D(QQmlGrpcChannelOptions);
+    if (d->m_metadata != value) {
+        d->m_metadata = value;
+        if (d->m_metadata)
+            d->m_options.withMetadata(d->m_metadata->metadata());
         emit metadataChanged();
     }
 }
+
+#if QT_CONFIG(ssl)
+QQmlSslConfiguration QQmlGrpcChannelOptions::sslConfiguration() const
+{
+    return d_func()->m_configuration;
+}
+
+void QQmlGrpcChannelOptions::setSslConfiguration(const QQmlSslConfiguration &config)
+{
+    Q_D(QQmlGrpcChannelOptions);
+    if (d->m_configuration != config) {
+        d->m_configuration = config;
+        d->m_options.withSslConfiguration(d->m_configuration.configuration());
+        emit sslConfigurationChanged();
+    }
+}
+#endif // QT_CONFIG(ssl)
 
 QT_END_NAMESPACE
