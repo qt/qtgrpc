@@ -34,8 +34,10 @@ std::string GeneratorBase::generateBaseName(const FileDescriptor *file, const st
     std::string outFileBasename;
     if (Options::instance().isFolder()) {
         outFileBasename = file->package();
-        outFileBasename = utils::replace(outFileBasename, ".", "/");
-        outFileBasename += '/';
+        if (!outFileBasename.empty()) {
+            outFileBasename = utils::replace(outFileBasename, ".", "/");
+            outFileBasename += '/';
+        }
     }
     outFileBasename += name;
 
