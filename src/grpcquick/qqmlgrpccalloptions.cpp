@@ -14,17 +14,6 @@ QQmlGrpcCallOptions::QQmlGrpcCallOptions(QObject *parent)
 
 QQmlGrpcCallOptions::~QQmlGrpcCallOptions() = default;
 
-qint64 QQmlGrpcCallOptions::maxRetryAttempts() const
-{
-    return m_options.maxRetryAttempts().value_or(1);
-}
-
-void QQmlGrpcCallOptions::setMaxRetryAttempts(qint64 value)
-{
-    m_options.withMaxRetryAttempts(value);
-    emit maxRetryAttemptsChanged();
-}
-
 qint64 QQmlGrpcCallOptions::deadline() const
 {
     std::chrono::milliseconds ms = m_options.deadline().value_or(std::chrono::milliseconds(0));

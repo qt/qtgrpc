@@ -32,8 +32,6 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcCallOptions : public QObject
     QML_ADDED_IN_VERSION(6, 7)
 
     Q_PROPERTY(qint64 deadline READ deadline WRITE setDeadline NOTIFY deadlineChanged)
-    Q_PROPERTY(qint64 maxRetryAttempts READ maxRetryAttempts
-                       WRITE setMaxRetryAttempts NOTIFY maxRetryAttemptsChanged)
     Q_PROPERTY(QQmlGrpcMetadata *metadata READ metadata WRITE setMetadata NOTIFY metadataChanged)
 
 public:
@@ -41,7 +39,6 @@ public:
     ~QQmlGrpcCallOptions();
 
     QGrpcCallOptions options() const;
-    qint64 maxRetryAttempts() const;
     void setMaxRetryAttempts(qint64 value);
     qint64 deadline() const;
     void setDeadline(qint64 value);
@@ -50,7 +47,6 @@ public:
 
 signals:
     void deadlineChanged();
-    void maxRetryAttemptsChanged();
     void metadataChanged();
 
 private:

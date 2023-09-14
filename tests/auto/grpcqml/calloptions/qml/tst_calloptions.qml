@@ -13,14 +13,12 @@ TestCase {
     GrpcCallOptions {
         id : options
         metadata: grpcData
-        maxRetryAttempts: { 10 }
         deadline: { 1000 }
     }
 
     GrpcCallOptions {
         id : options_dup
         metadata: options.metadata
-        maxRetryAttempts: options.maxRetryAttempts
         deadline: options.deadline
     }
 
@@ -49,8 +47,6 @@ TestCase {
 
     function test_ChannelOptions_data() {
         return [
-                    { tag: "options.maxRetryAttempts == 10",
-                        field: options.maxRetryAttempts, answer: 10 },
                     { tag: "options.metadata == grpcData",
                         field: options.metadata, answer: grpcData },
                     { tag: "options.metadata.data == grpcData.data",

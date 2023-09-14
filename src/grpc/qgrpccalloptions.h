@@ -26,11 +26,9 @@ public:
     QGrpcCallOptions &operator=(const QGrpcCallOptions &other);
 
     QGrpcCallOptions &withDeadline(std::chrono::milliseconds deadline);
-    QGrpcCallOptions &withMaxRetryAttempts(qint64 maxRetryAttempts);
     QGrpcCallOptions &withMetadata(const QGrpcMetadata &metadata);
 
     std::optional<std::chrono::milliseconds> deadline() const;
-    std::optional<qint64> maxRetryAttempts() const;
     QGrpcMetadata metadata() const;
 
 private:

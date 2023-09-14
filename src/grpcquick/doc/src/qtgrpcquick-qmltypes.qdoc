@@ -51,12 +51,6 @@
 */
 
 /*!
-    \qmlproperty int QQmlGrpcCallOptions::maxRetryAttempts
-    Holds maximum retry attempts value for a call.
-    \sa QGrpcCallOptions::maxRetryAttempts
-*/
-
-/*!
     \qmlproperty QQmlGrpcMetadata QQmlGrpcCallOptions::metadata
     Holds a pointer to the metadata used for a call.
     \sa QQmlGrpcMetadata, QGrpcMetadata

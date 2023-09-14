@@ -24,7 +24,6 @@ public:
     std::optional<QUrl> host;
     std::optional<std::chrono::milliseconds> deadline;
     QGrpcMetadata metadata;
-    std::optional<qint64> maxRetryAttempts;
 };
 
 /*!
@@ -67,15 +66,6 @@ QGrpcCallOptions &QGrpcCallOptions::withDeadline(std::chrono::milliseconds deadl
 }
 
 /*!
-    Sets maximum retry attempts value with \a maxRetryAttempts and returns updated QGrpcCallOptions object.
-*/
-QGrpcCallOptions &QGrpcCallOptions::withMaxRetryAttempts(qint64 maxRetryAttempts)
-{
-    dPtr->maxRetryAttempts = maxRetryAttempts;
-    return *this;
-}
-
-/*!
     Sets \a metadata for a call and returns updated QGrpcCallOptions object.
 
     For HTTP2-based channels, \a metadata is converted into HTTP/2 headers, that
@@ -99,19 +89,6 @@ QGrpcCallOptions &QGrpcCallOptions::withMetadata(const QGrpcMetadata &metadata)
 std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadline() const
 {
     return dPtr->deadline;
-}
-
-/*!
-    Returns maximum retry attempts value for a call.
-
-    The value controls the maximum number of call or stream attempts,
-    including the original attempt.
-
-    If value was not set returns empty std::optional.
-*/
-std::optional<qint64> QGrpcCallOptions::maxRetryAttempts() const
-{
-    return dPtr->maxRetryAttempts;
 }
 
 /*!
