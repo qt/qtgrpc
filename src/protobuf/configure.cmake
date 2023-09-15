@@ -57,7 +57,8 @@ qt_feature("protobuf-qtcoretypes" PUBLIC
     LABEL "Qt Core types support"
     AUTODETECT TRUE
     CONDITION TARGET WrapProtoc::WrapProtoc AND
-        (TARGET Qt6::qtprotobufgen OR (QT_FEATURE_qtprotobufgen AND NOT CMAKE_CROSSCOMPILING))
+        ( TARGET Qt6::qtprotobufgen OR Qt6::qtprotobufgen IN_LIST Qt6ProtobufTools_TARGETS OR
+            ( QT_FEATURE_qtprotobufgen AND NOT CMAKE_CROSSCOMPILING ) )
 )
 
 qt_feature("protobuf-qtguitypes" PUBLIC
@@ -65,7 +66,8 @@ qt_feature("protobuf-qtguitypes" PUBLIC
     LABEL "Qt Gui types support"
     AUTODETECT TRUE
     CONDITION TARGET WrapProtoc::WrapProtoc AND
-        (TARGET Qt6::qtprotobufgen OR (QT_FEATURE_qtprotobufgen AND NOT CMAKE_CROSSCOMPILING))
+        ( TARGET Qt6::qtprotobufgen OR Qt6::qtprotobufgen IN_LIST Qt6ProtobufTools_TARGETS OR
+            ( QT_FEATURE_qtprotobufgen AND NOT CMAKE_CROSSCOMPILING ) )
 )
 
 qt_feature("protobuf-wellknowntypes" PUBLIC
@@ -74,7 +76,8 @@ qt_feature("protobuf-wellknowntypes" PUBLIC
     AUTODETECT TRUE
     CONDITION TARGET WrapProtoc::WrapProtoc AND
         (TARGET WrapProtobuf::WrapLibProtobuf OR QT_PROTOBUF_WELL_KNOWN_TYPES_PROTO_DIR) AND
-        (TARGET Qt6::qtprotobufgen OR (QT_FEATURE_qtprotobufgen AND NOT CMAKE_CROSSCOMPILING))
+        ( TARGET Qt6::qtprotobufgen OR Qt6::qtprotobufgen IN_LIST Qt6ProtobufTools_TARGETS OR
+            ( QT_FEATURE_qtprotobufgen AND NOT CMAKE_CROSSCOMPILING ) )
 )
 
 qt_configure_add_summary_section(NAME "Qt Protobuf")
