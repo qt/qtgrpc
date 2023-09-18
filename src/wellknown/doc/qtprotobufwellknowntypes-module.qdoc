@@ -8,7 +8,7 @@
     \ingroup frameworks-technologies
     \qtcmakepackage ProtobufWellKnownTypes
     \qtvariable protobufwellknowntypes
-    \since 6.5
+    \since 6.6
 
     \brief The Qt Protobuf Well-Known Types module provides support for some of
     the types available from the
