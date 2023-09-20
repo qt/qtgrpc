@@ -12,7 +12,7 @@ using namespace Qt::StringLiterals;
 /*!
     \class QGrpcCallOptions
     \inmodule QtGrpc
-    \brief The QGrpcCallOptions is an storage class used by set additional call options.
+    \brief The QGrpcCallOptions is an storage class used to set additional call options.
 
     QGrpcCallOptions provides a set of functions to access the call options
     that are used by gRPC channels to communicate with the services.
