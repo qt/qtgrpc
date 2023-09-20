@@ -36,7 +36,7 @@
     \qmltype QQmlGrpcCallOptions
     \inqmlmodule QtGrpcQuick
     \instantiates QGrpcCallOptions
-    \brief The QQmlGrpcCallOptions is a storage class used by set
+    \brief The QQmlGrpcCallOptions is a storage class used to set
            additional call options.
 
     Provides a set of properties to access the call options
@@ -60,7 +60,7 @@
     \qmltype QQmlGrpcChannelOptions
     \inqmlmodule QtGrpcQuick
     \instantiates QGrpcChannelOptions
-    \brief  The QQmlGrpcChannelOptions is an storage class used by set
+    \brief  The QQmlGrpcChannelOptions is an storage class used to set
             additional channel options.
 
     Provides a set of properties to access the channel
