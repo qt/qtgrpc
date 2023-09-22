@@ -74,14 +74,14 @@ class QAbstractGrpcClientPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QAbstractGrpcClient)
 public:
-    QAbstractGrpcClientPrivate(QLatin1StringView service) : service(service.data(), service.size())
+    QAbstractGrpcClientPrivate(QLatin1StringView service) : service(service)
     {
     }
 
     QGrpcStatus checkThread(QLatin1StringView warningPreamble);
 
     std::shared_ptr<QAbstractGrpcChannel> channel;
-    const std::string service;
+    const QLatin1StringView service;
     std::vector<std::shared_ptr<QGrpcStream>> activeStreams;
 };
 
