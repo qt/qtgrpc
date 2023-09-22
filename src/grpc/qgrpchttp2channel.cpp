@@ -404,13 +404,11 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                 }
             });
 
-    std::weak_ptr<QGrpcStream> weakGrpcStream(grpcStream);
     *finishConnection = QObject::connect(
             networkReply, &QNetworkReply::finished, grpcStream.get(),
-            [weakGrpcStream, service, networkReply, abortConnection, readConnection,
+            [grpcStream, service, networkReply, abortConnection, readConnection,
              finishConnection, this]() {
-                const QString errorString = networkReply->errorString();
-                const QNetworkReply::NetworkError networkError = networkReply->error();
+                QObject::disconnect(*finishConnection);
                 QObject::disconnect(*readConnection);
                 QObject::disconnect(*abortConnection);
 
@@ -418,11 +416,8 @@ std::shared_ptr<QGrpcStream> QGrpcHttp2Channel::startStream(QLatin1StringView me
                 QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
                 networkReply->deleteLater();
 
-                auto grpcStream = weakGrpcStream.lock();
-                if (!grpcStream) {
-                    qGrpcWarning() << "Could not lock gRPC stream pointer.";
-                    return;
-                }
+                const QString errorString = networkReply->errorString();
+                const QNetworkReply::NetworkError networkError = networkReply->error();
                 qGrpcWarning() << grpcStream->method() << "call" << service
                                << "stream finished:" << errorString;
                 grpcStream->setMetadata(collectMetadata(networkReply));
