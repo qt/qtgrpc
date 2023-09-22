@@ -354,23 +354,17 @@ void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcChannelOperation>
                 }
             });
 
-    std::weak_ptr<QGrpcChannelOperation> weakChannelOperation(channelOperation);
     *finishConnection = QObject::connect(
             networkReply, &QNetworkReply::finished, channelOperation.get(),
-            [weakChannelOperation, networkReply, abortConnection, readConnection, finishConnection,
+            [channelOperation, networkReply, abortConnection, readConnection, finishConnection,
              this]() {
+                QObject::disconnect(*finishConnection);
                 QObject::disconnect(*readConnection);
                 QObject::disconnect(*abortConnection);
 
                 dPtr->activeStreamReplies.erase(networkReply);
                 QGrpcHttp2ChannelPrivate::abortNetworkReply(networkReply);
                 networkReply->deleteLater();
-
-                auto channelOperation = weakChannelOperation.lock();
-                if (!channelOperation) {
-                    qGrpcWarning() << "Could not lock gRPC stream pointer.";
-                    return;
-                }
 
                 const QString errorString = networkReply->errorString();
                 qGrpcWarning() << channelOperation->method() << "call"
@@ -395,7 +389,7 @@ void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcChannelOperation>
 
     *abortConnection = QObject::connect(
             channelOperation.get(), &QGrpcChannelOperation::cancelled, networkReply,
-            [networkReply, finishConnection, abortConnection, readConnection, channelOperation] {
+            [networkReply, finishConnection, abortConnection, readConnection] {
                 QObject::disconnect(*finishConnection);
                 QObject::disconnect(*readConnection);
                 QObject::disconnect(*abortConnection);
