@@ -31,16 +31,427 @@ TestCase {
     property simpleBytesMessage bytesMessage;
 
     function test_1initialization() {
+        // 32 size
         int32Msg.testFieldInt = 2147483647
         sint32Msg.testFieldInt = 2147483647
         uint32Msg.testFieldInt = 4294967295
         fixed32Msg.testFieldFixedInt32 = 4294967295
         sfixed32Msg.testFieldFixedInt32 = 2147483647
+
+        // 64 size
+        int64Msg.testFieldInt = 2147483647
+        sint64Msg.testFieldInt = 2147483647
+        uint64Msg.testFieldInt = 4294967295
+        fixed64Msg.testFieldFixedInt64 = 4294967295
+        sfixed64Msg.testFieldFixedInt64 = 2147483647
+
+        // strings
         stringMsg.testFieldString = "Test string"
         outerMessage.testFieldString = "outer"
         innerMessage.testFieldString = "inner"
         complexMsg.testComplexField = innerMessage
         complexMsg.testComplexField.testFieldString = "inner"
+    }
+
+    function test_basicTypesOperations_data() {
+        return [
+                    // int32
+                    {
+                        tag: "int32 '=' operation",
+                        field: int32Msg.testFieldInt = 10,
+                        answer: 10
+                    },
+                    {
+                        tag: "int32 '-' operation",
+                        field: int32Msg.testFieldInt
+                               = int32Msg.testFieldInt - int32Msg.testFieldInt,
+                        answer: 0
+                    },
+                    {
+                        tag: "int32 '+' operation",
+                        field: int32Msg.testFieldInt = int32Msg.testFieldInt + 10,
+                        answer: 10
+                    },
+                    {
+                        tag: "int32 '/' operation",
+                        field: int32Msg.testFieldInt
+                               = int32Msg.testFieldInt / int32Msg.testFieldInt,
+                        answer: 1
+                    },
+                    {
+                        tag: "int32 '*' operation",
+                        field: int32Msg.testFieldInt = int32Msg.testFieldInt * 10,
+                        answer: 10
+                    },
+                    {
+                        tag: "int32 '--' operation",
+                        field: --int32Msg.testFieldInt,
+                        answer: 9
+                    },
+                    {
+                        tag: "int32 '++' operation",
+                        field: ++int32Msg.testFieldInt,
+                        answer: 10
+                    },
+                    // sint32
+                    {
+                        tag: "sint32 '=' operation",
+                        field: sint32Msg.testFieldInt = 100,
+                        answer: 100
+                    },
+                    {
+                        tag: "sint32 '-' operation",
+                        field: sint32Msg.testFieldInt
+                               = sint32Msg.testFieldInt - sint32Msg.testFieldInt,
+                        answer: 0
+                    },
+                    {
+                        tag: "sint32 '+' operation",
+                        field: sint32Msg.testFieldInt
+                               = sint32Msg.testFieldInt + 100,
+                        answer: 100
+                    },
+                    {
+                        tag: "sint32 '/' operation",
+                        field: sint32Msg.testFieldInt
+                               = sint32Msg.testFieldInt / sint32Msg.testFieldInt,
+                        answer: 1
+                    },
+                    {
+                        tag: "sint32 '*' operation",
+                        field: sint32Msg.testFieldInt = sint32Msg.testFieldInt * 10,
+                        answer: 10
+                    },
+                    {
+                        tag: "sint32 '--' operation",
+                        field: --sint32Msg.testFieldInt,
+                        answer: 9
+                    },
+                    {
+                        tag: "sint32 '++' operation",
+                        field: ++sint32Msg.testFieldInt,
+                        answer: 10
+                    },
+                    // uint32
+                    {
+                        tag: "uint32 '=' operation",
+                        field: uint32Msg.testFieldInt = 100,
+                        answer: 100
+                    },
+                    {
+                        tag: "uint32 '-' operation",
+                        field: uint32Msg.testFieldInt
+                               = uint32Msg.testFieldInt - uint32Msg.testFieldInt,
+                        answer: 0
+                    },
+                    {
+                        tag: "uint32 '+' operation",
+                        field: uint32Msg.testFieldInt
+                               = uint32Msg.testFieldInt + 100,
+                        answer: 100
+                    },
+                    {
+                        tag: "uint32 '/' operation",
+                        field: uint32Msg.testFieldInt
+                               = uint32Msg.testFieldInt / uint32Msg.testFieldInt,
+                        answer: 1
+                    },
+                    {
+                        tag: "uint32 '*' operation",
+                        field: uint32Msg.testFieldInt = uint32Msg.testFieldInt * 10,
+                        answer: 10
+                    },
+                    {
+                        tag: "uint32 '--' operation",
+                        field: --uint32Msg.testFieldInt,
+                        answer: 9
+                    },
+                    {
+                        tag: "uint32 '++' operation",
+                        field: ++uint32Msg.testFieldInt,
+                        answer: 10
+                    },
+                    // fixedInt32
+                    {
+                        tag: "fixedInt32 '=' operation",
+                        field: fixed32Msg.testFieldFixedInt32 = 1000,
+                        answer: 1000
+                    },
+                    {
+                        tag: "fixedInt32 '-' operation",
+                        field: fixed32Msg.testFieldFixedInt32
+                               = fixed32Msg.testFieldFixedInt32 - fixed32Msg.testFieldFixedInt32,
+                        answer: 0
+                    },
+                    {
+                        tag: "fixedInt32 '+' operation",
+                        field: fixed32Msg.testFieldFixedInt32
+                               = fixed32Msg.testFieldFixedInt32 + 1000,
+                        answer: 1000
+                    },
+                    {
+                        tag: "fixedInt32 '/' operation",
+                        field: fixed32Msg.testFieldFixedInt32
+                               = fixed32Msg.testFieldFixedInt32 / fixed32Msg.testFieldFixedInt32,
+                        answer: 1
+                    },
+                    {
+                        tag: "fixedInt32 '*' operation",
+                        field: fixed32Msg.testFieldFixedInt32
+                               = fixed32Msg.testFieldFixedInt32 * 10000,
+                        answer: 10000
+                    },
+                    {
+                        tag: "fixedInt32 '--' operation",
+                        field: --fixed32Msg.testFieldFixedInt32,
+                        answer: 9999
+                    },
+                    {
+                        tag: "fixedInt32 '++' operation",
+                        field: ++fixed32Msg.testFieldFixedInt32,
+                        answer: 10000
+                    },
+                    // sfixed32
+                    {
+                        tag: "sfixed32 '=' operation",
+                        field: sfixed32Msg.testFieldFixedInt32 = 1000,
+                        answer: 1000
+                    },
+                    {
+                        tag: "sfixed32 '-' operation",
+                        field: sfixed32Msg.testFieldFixedInt32
+                               = sfixed32Msg.testFieldFixedInt32 - sfixed32Msg.testFieldFixedInt32,
+                        answer: 0
+                    },
+                    {
+                        tag: "sfixed32 '+' operation",
+                        field: sfixed32Msg.testFieldFixedInt32
+                               = sfixed32Msg.testFieldFixedInt32 + 1000,
+                        answer: 1000
+                    },
+                    {
+                        tag: "sfixed32 '/' operation",
+                        field: sfixed32Msg.testFieldFixedInt32
+                               = sfixed32Msg.testFieldFixedInt32 / sfixed32Msg.testFieldFixedInt32,
+                        answer: 1
+                    },
+                    {
+                        tag: "sfixed32 '*' operation",
+                        field: sfixed32Msg.testFieldFixedInt32
+                               = sfixed32Msg.testFieldFixedInt32 * 10000,
+                        answer: 10000
+                    },
+                    {
+                        tag: "sfixed32 '--' operation",
+                        field: --sfixed32Msg.testFieldFixedInt32,
+                        answer: 9999
+                    },
+                    {
+                        tag: "sfixed32 '++' operation",
+                        field: ++sfixed32Msg.testFieldFixedInt32,
+                        answer: 10000
+                    },
+                    // int64
+                    {
+                        tag: "int64 '=' operation",
+                        field: int64Msg.testFieldInt = 1000,
+                        answer: 1000
+                    },
+                    {
+                        tag: "int64 '-' operation",
+                        field: int64Msg.testFieldInt
+                               = int64Msg.testFieldInt - int64Msg.testFieldInt,
+                        answer: 0
+                    },
+                    {
+                        tag: "int64 '+' operation",
+                        field: int64Msg.testFieldInt = int64Msg.testFieldInt + 1010,
+                        answer: 1010
+                    },
+                    {
+                        tag: "int64 '/' operation",
+                        field: int64Msg.testFieldInt
+                               = int64Msg.testFieldInt / int64Msg.testFieldInt,
+                        answer: 1
+                    },
+                    {
+                        tag: "int64 '*' operation",
+                        field: int64Msg.testFieldInt = int64Msg.testFieldInt * 10,
+                        answer: 10
+                    },
+                    {
+                        tag: "int64 '--' operation",
+                        field: --int64Msg.testFieldInt,
+                        answer: 9
+                    },
+                    {
+                        tag: "int64 '++' operation",
+                        field: ++int64Msg.testFieldInt,
+                        answer: 10
+                    },
+                    // sint64
+                    {
+                        tag: "sint64 '=' operation",
+                        field: sint64Msg.testFieldInt = 100,
+                        answer: 100
+                    },
+                    {
+                        tag: "sint64 '-' operation",
+                        field: sint64Msg.testFieldInt
+                               = sint64Msg.testFieldInt - sint64Msg.testFieldInt,
+                        answer: 0
+                    },
+                    {
+                        tag: "sint64 '+' operation",
+                        field: sint64Msg.testFieldInt
+                               = sint64Msg.testFieldInt + 100,
+                        answer: 100
+                    },
+                    {
+                        tag: "sint64 '/' operation",
+                        field: sint64Msg.testFieldInt
+                               = sint64Msg.testFieldInt / sint64Msg.testFieldInt,
+                        answer: 1
+                    },
+                    {
+                        tag: "sint64 '*' operation",
+                        field: sint64Msg.testFieldInt = sint64Msg.testFieldInt * 10,
+                        answer: 10
+                    },
+                    {
+                        tag: "sint64 '--' operation",
+                        field: --sint64Msg.testFieldInt,
+                        answer: 9
+                    },
+                    {
+                        tag: "sint64 '++' operation",
+                        field: ++sint64Msg.testFieldInt,
+                        answer: 10
+                    },
+                    // uint64
+                    {
+                        tag: "uint64 '=' operation",
+                        field: uint64Msg.testFieldInt = 100,
+                        answer: 100
+                    },
+                    {
+                        tag: "uint64 '-' operation",
+                        field: uint64Msg.testFieldInt
+                               = uint64Msg.testFieldInt - uint64Msg.testFieldInt,
+                        answer: 0
+                    },
+                    {
+                        tag: "uint64 '+' operation",
+                        field: uint64Msg.testFieldInt
+                               = uint64Msg.testFieldInt + 100,
+                        answer: 100
+                    },
+                    {
+                        tag: "uint64 '/' operation",
+                        field: uint64Msg.testFieldInt
+                               = uint64Msg.testFieldInt / uint64Msg.testFieldInt,
+                        answer: 1
+                    },
+                    {
+                        tag: "uint64 '*' operation",
+                        field: uint64Msg.testFieldInt = uint64Msg.testFieldInt * 10,
+                        answer: 10
+                    },
+                    {
+                        tag: "uint64 '--' operation",
+                        field: --uint64Msg.testFieldInt,
+                        answer: 9
+                    },
+                    {
+                        tag: "uint64 '++' operation",
+                        field: ++uint64Msg.testFieldInt,
+                        answer: 10
+                    },
+                    // fixedInt64
+                    {
+                        tag: "fixedInt64 '=' operation",
+                        field: fixed64Msg.testFieldFixedInt64 = 1000,
+                        answer: 1000
+                    },
+                    {
+                        tag: "fixedInt64 '-' operation",
+                        field: fixed64Msg.testFieldFixedInt64
+                               = fixed64Msg.testFieldFixedInt64 - fixed64Msg.testFieldFixedInt64,
+                        answer: 0
+                    },
+                    {
+                        tag: "fixedInt64 '+' operation",
+                        field: fixed64Msg.testFieldFixedInt64
+                               = fixed64Msg.testFieldFixedInt64 + 1000,
+                        answer: 1000
+                    },
+                    {
+                        tag: "fixedInt64 '/' operation",
+                        field: fixed64Msg.testFieldFixedInt64
+                               = fixed64Msg.testFieldFixedInt64 / fixed64Msg.testFieldFixedInt64,
+                        answer: 1
+                    },
+                    {
+                        tag: "fixedInt64 '*' operation",
+                        field: fixed64Msg.testFieldFixedInt64
+                               = fixed64Msg.testFieldFixedInt64 * 10000,
+                        answer: 10000
+                    },
+                    {
+                        tag: "fixedInt64 '--' operation",
+                        field: --fixed64Msg.testFieldFixedInt64,
+                        answer: 9999
+                    },
+                    {
+                        tag: "fixedInt64 '++' operation",
+                        field: ++fixed64Msg.testFieldFixedInt64,
+                        answer: 10000
+                    },
+                    // sfixed64
+                    {
+                        tag: "sfixed64 '=' operation",
+                        field: sfixed64Msg.testFieldFixedInt64 = 1000,
+                        answer: 1000
+                    },
+                    {
+                        tag: "sfixed64 '-' operation",
+                        field: sfixed64Msg.testFieldFixedInt64
+                               = sfixed64Msg.testFieldFixedInt64 - sfixed64Msg.testFieldFixedInt64,
+                        answer: 0
+                    },
+                    {
+                        tag: "sfixed64 '+' operation",
+                        field: sfixed64Msg.testFieldFixedInt64
+                               = sfixed64Msg.testFieldFixedInt64 + 1000,
+                        answer: 1000
+                    },
+                    {
+                        tag: "sfixed64 '/' operation",
+                        field: sfixed64Msg.testFieldFixedInt64
+                               = sfixed64Msg.testFieldFixedInt64 / sfixed64Msg.testFieldFixedInt64,
+                        answer: 1
+                    },
+                    {
+                        tag: "sfixed64 '*' operation",
+                        field: sfixed64Msg.testFieldFixedInt64
+                               = sfixed64Msg.testFieldFixedInt64 * 10000,
+                        answer: 10000
+                    },
+                    {
+                        tag: "sfixed64 '--' operation",
+                        field: --sfixed64Msg.testFieldFixedInt64,
+                        answer: 9999
+                    },
+                    {
+                        tag: "sfixed64 '++' operation",
+                        field: ++sfixed64Msg.testFieldFixedInt64,
+                        answer: 10000
+                    }
+                ]
+    }
+
+    function test_basicTypesOperations(data) {
+        compare(data.field, data.answer)
     }
 
     function test_protobufTypesTypeCheck_data() {
