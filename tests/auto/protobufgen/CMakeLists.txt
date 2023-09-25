@@ -80,4 +80,9 @@ if(TARGET Qt6::Qml)
     )
     qt_autogen_tools_initial_setup(tst_qtprotobufgen_nopackage_qml_gen)
     qt_autogen_tools_initial_setup(tst_qtprotobufgen_nopackage_qml_genplugin)
+
+    add_dependencies(tst_qtprotobufgen
+        tst_qtprotobufgen_qml_gen
+        tst_qtprotobufgen_nopackage_qml_gen
+    )
 endif()
