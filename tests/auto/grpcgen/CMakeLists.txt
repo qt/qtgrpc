@@ -59,4 +59,6 @@ if(TARGET Qt6::Qml)
     if(QT_BUILD_STANDALONE_TESTS)
         qt_import_qml_plugins(tst_qtgrpcgen_plugin)
     endif()
+
+    add_dependencies(tst_qtgrpcgen tst_qtgrpcgen_plugin)
 endif()
