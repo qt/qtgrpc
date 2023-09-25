@@ -25,7 +25,6 @@ public:
     static const char *DisclaimerTemplate();
     static const char *InternalIncludeTemplate();
     static const char *ExternalIncludeTemplate();
-    static const char *GlobalEnumIncludeTemplate();
     static const char *MetaTypeRegistrationDeclaration();
     static const char *EnumRegistrationDeclaration();
     static const char *EnumRegistrationDeclarationNoExport();
@@ -34,14 +33,12 @@ public:
     static const char *MetaTypeRegistrationGlobalEnumTemplate();
     static const char *UsingMessageTemplate();
     static const char *UsingMapTemplate();
-    static const char *UsingMapMessageTemplate();
     static const char *UsingNestedMessageTemplate();
     static const char *UsingRepeatedEnumTemplate();
     static const char *UsingEnumTemplate();
     static const char *NamespaceTemplate();
     static const char *NamespaceClosingTemplate();
     static const char *EnumGadgetDeclarationTemplate();
-    static const char *EnumGadgetDeclarationNoExportTemplate();
     static const char *QNamespaceDeclarationTemplate();
     static const char *QNamespaceDeclarationNoExportTemplate();
     static const char *ClassMessageForwardDeclarationTemplate();
@@ -53,7 +50,6 @@ public:
     static const char *ClassMessageDataBeginDeclarationTemplate();
     static const char *ConstructorMessageDataDefinitionTemplate();
     static const char *CopyConstructorMessageDataDefinitionTemplate();
-    static const char *EmptyConstructorTemplate();
 
     static const char *UseNamespace();
 
@@ -87,22 +83,8 @@ public:
     static const char *MoveConstructorDeclarationTemplate();
     static const char *CopyConstructorDefinitionTemplate();
     static const char *MoveConstructorDefinitionTemplate();
-    static const char *DeletedCopyConstructorTemplate();
-    static const char *DeletedMoveConstructorTemplate();
-    static const char *CopyMemberTemplate();
-    static const char *AssignMemberMessageTemplate();
-    static const char *CopyMemberOneofTemplate();
-    static const char *AssignMemberOneofTemplate();
-    static const char *MoveMemberMessageTemplate();
-    static const char *MoveAssignMemberMessageTemplate();
-    static const char *MoveAssignMemberOneofTemplate();
-    static const char *MoveAssignMemberComplexTemplate();
-    static const char *MoveConstructorMemberComplexTemplate();
-    static const char *MoveMemberTemplate();
-    static const char *MoveMemberEnumTemplate();
     static const char *AssignmentOperatorDeclarationTemplate();
     static const char *AssignmentOperatorDefinitionTemplate();
-    static const char *AssignmentOperatorReturnTemplate();
     static const char *MoveAssignmentOperatorDeclarationTemplate();
     static const char *MoveAssignmentOperatorDefinitionTemplate();
     static const char *EqualOperatorDeclarationTemplate();
@@ -135,12 +117,9 @@ public:
     static const char *GetterNonScriptableDefinitionTemplate();
     static const char *GetterComplexDeclarationTemplate();
     static const char *GetterComplexDefinitionTemplate();
-    static const char *GetterQmlListDeclarationTemplate();
-    static const char *GetterQmlListDefinitionTemplate();
     static const char *PrivateSetterMessageDeclarationTemplate();
     static const char *PrivateSetterMessageDefinitionTemplate();
     static const char *SetterMessageDeclarationTemplate();
-    static const char *SetterMessageQmlDeclarationTemplate();
     static const char *SetterMessageDefinitionTemplate();
     static const char *SetterComplexDeclarationTemplate();
     static const char *SetterComplexDefinitionTemplate();
@@ -150,17 +129,12 @@ public:
     static const char *SetterNonScriptableDefinitionTemplate();
     static const char *SetterOneofDeclarationTemplate();
     static const char *SetterOneofDefinitionTemplate();
-    static const char *SetterOneofMessageDefinitionTemplate();
     static const char *PrivateSetterOneofDeclarationTemplate();
     static const char *PrivateSetterOneofDefinitionTemplate();
     static const char *PrivateSetterOneofMessageDeclarationTemplate();
     static const char *PrivateSetterOneofMessageDefinitionTemplate();
     static const char *ClearOneofDeclarationTemplate();
     static const char *ClearOneofDefinitionTemplate();
-    static const char *SignalsBlockTemplate();
-    static const char *SignalTemplate();
-    static const char *MetaDataUintDataEntryTemplate();
-    static const char *MetaDataCharDataEntryTemplate();
     static const char *JsonNameOffsetsUintDataTemplate();
     static const char *FieldNumbersUintDataTemplate();
     static const char *QtPropertyIndicesUintDataTemplate();
@@ -171,23 +145,19 @@ public:
     static const char *SimpleBlockEnclosureTemplate();
     static const char *SemicolonBlockEnclosureTemplate();
     static const char *InitializerMemberTemplate();
-    static const char *InitializerMemberMessageTemplate();
     static const char *CopyInitializerMemberTemplate();
     static const char *CopyInitializerMemberMessageTemplate();
     static const char *CopyInitializerMemberOneofTemplate();
     static const char *EmptyBracesTemplate();
     static const char *DeclareMetaTypeTemplate();
-    static const char *DeclareMetaTypeMapTemplate();
     static const char *MetaTypeRegistrationLocalEnumTemplate();
     static const char *MetaTypeRegistrationMapTemplate();
     static const char *QEnumNSTemplate();
     static const char *RegisterEnumSerializersTemplate();
     static const char *RegistrarTemplate();
     static const char *RegistrarEnumTemplate();
-    static const char *QmlRegisterTypeTemplate();
     static const char *QmlRegisterGlobalEnumTypeTemplate();
     static const char *QmlRegisterMessageTypeTemplate();
-    static const char *QmlRegisterProtobufTypes();
 
     static const char *RepeatedSuffix();
     static const char *ProtoFileSuffix();
@@ -208,13 +178,6 @@ public:
     static const char *ExportMacroTemplate();
 
     static const char *QmlNamedElement();
-
-    static const char *QmlPluginExportMacroTemplate();
-    static const char *QmlExtensionPluginPreamble();
-    static const char *QmlExtensionPluginClass();
-    static const char *QmlExtensionPluginClassNoExport();
-    static const char *QmlExtensionPluginClassBody();
-
     static const char *QObjectConstructorMessageDeclarationTemplate();
     static const char *MocIncludeTemplate();
 };
