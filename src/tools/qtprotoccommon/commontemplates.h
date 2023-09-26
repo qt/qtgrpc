@@ -57,7 +57,6 @@ public:
     static const char *PropertyRepeatedTemplate();
     static const char *PropertyRepeatedMessageTemplate();
     static const char *PropertyNonScriptableTemplate();
-    static const char *PropertyNonScriptableAliasTemplate();
     static const char *PropertyMessageTemplate();
     static const char *PropertyQmlMessageTemplate();
     static const char *PropertyOneofTemplate();
@@ -116,8 +115,6 @@ public:
     static const char *GetterOneofMessageDefinitionTemplate();
     static const char *GetterDeclarationTemplate();
     static const char *GetterDefinitionTemplate();
-    static const char *GetterNonScriptableDeclarationTemplate();
-    static const char *GetterNonScriptableDefinitionTemplate();
     static const char *GetterComplexDeclarationTemplate();
     static const char *GetterComplexDefinitionTemplate();
     static const char *PrivateSetterMessageDeclarationTemplate();
@@ -128,8 +125,6 @@ public:
     static const char *SetterComplexDefinitionTemplate();
     static const char *SetterDeclarationTemplate();
     static const char *SetterDefinitionTemplate();
-    static const char *SetterNonScriptableDeclarationTemplate();
-    static const char *SetterNonScriptableDefinitionTemplate();
     static const char *SetterOneofDeclarationTemplate();
     static const char *SetterOneofDefinitionTemplate();
     static const char *SetterOptionalDefinitionTemplate();

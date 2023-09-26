@@ -314,21 +314,6 @@ TypeMap common::produceSimpleTypeMap(FieldDescriptor::Type type)
     if (type != FieldDescriptor::TYPE_STRING && type != FieldDescriptor::TYPE_BYTES)
         fullListName = CommonTemplates::QtProtobufNamespace() + "::"s + listName;
     std::string scopeListName = fullListName;
-
-    std::string qmlAliasType;
-    switch (type) {
-    case FieldDescriptor::TYPE_INT32:
-    case FieldDescriptor::TYPE_SFIXED32:
-        qmlAliasType = "int";
-        break;
-    case FieldDescriptor::TYPE_FIXED32:
-        qmlAliasType = "unsigned int";
-        break;
-    default:
-        qmlAliasType = fullName;
-        break;
-    }
-
     const std::string initializer(getInitializerByFieldType(type));
     return { { "type", name },
              { "full_type", fullName },
@@ -339,7 +324,6 @@ TypeMap common::produceSimpleTypeMap(FieldDescriptor::Type type)
              { "scope_namespaces", namespaces },
              { "qml_package", qmlPackage },
              { "property_type", fullName },
-             { "qml_alias_type", qmlAliasType },
              { "property_list_type", fullListName },
              { "getter_type", fullName },
              { "setter_type", fullName },

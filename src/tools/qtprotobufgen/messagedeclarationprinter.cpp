@@ -228,8 +228,6 @@ void MessageDeclarationPrinter::printProperties()
 
         if (common::isPureMessage(field)) {
             propertyTemplate = CommonTemplates::PropertyMessageTemplate();
-        } else if (common::hasQmlAlias(field)) {
-            propertyTemplate = CommonTemplates::PropertyNonScriptableTemplate();
         } else if (field->is_repeated() && !field->is_map()) {
             // Non-message list properties don't require an extra QQmlListProperty to access
             // their data, so the property name should not contain the 'Data' suffix
@@ -248,16 +246,6 @@ void MessageDeclarationPrinter::printProperties()
             if (common::isPureMessage(field)) {
                 m_printer->Print(common::producePropertyMap(field, m_descriptor),
                                  CommonTemplates::PropertyQmlMessageTemplate());
-            }
-        }
-
-
-        // Generate extra QmlListProperty that is mapped to list
-        for (int i = 0; i < numFields; ++i) {
-            const FieldDescriptor *field = m_descriptor->field(i);
-            if (common::hasQmlAlias(field)) {
-                m_printer->Print(common::producePropertyMap(field, m_descriptor),
-                                 CommonTemplates::PropertyNonScriptableAliasTemplate());
             }
         }
     }
@@ -370,8 +358,6 @@ void MessageDeclarationPrinter::printPrivateGetters()
                 } else if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap,
                                     CommonTemplates::PrivateGetterMessageDeclarationTemplate());
-                } else if (common::hasQmlAlias(field)) {
-                    m_printer->Print(propertyMap, CommonTemplates::GetterNonScriptableDeclarationTemplate());
                 }
             });
     Outdent();
@@ -395,8 +381,6 @@ void MessageDeclarationPrinter::printPrivateSetters()
                 } else if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap,
                                     CommonTemplates::PrivateSetterMessageDeclarationTemplate());
-                } else if (common::hasQmlAlias(field)) {
-                    m_printer->Print(propertyMap, CommonTemplates::SetterNonScriptableDeclarationTemplate());
                 }
             });
     Outdent();

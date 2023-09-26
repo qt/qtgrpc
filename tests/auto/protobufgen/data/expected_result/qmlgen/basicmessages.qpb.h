@@ -207,8 +207,7 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleIntMessage : public QProtobufMe
     Q_PROTOBUF_OBJECT
     Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleIntMessage)
     QML_VALUE_TYPE(simpleIntMessage)
-    Q_PROPERTY(QtProtobuf::int32 testFieldInt_p READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
-    Q_PROPERTY(int testFieldInt READ testFieldInt_p WRITE setTestFieldInt_p SCRIPTABLE true)
+    Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleIntMessage_QtProtobufNested::QtProtobufFieldEnum;
@@ -226,8 +225,6 @@ public:
     static void registerTypes();
 
 private:
-    int testFieldInt_p() const;
-    void setTestFieldInt_p(const int &testFieldInt);
     QExplicitlySharedDataPointer<SimpleIntMessage_QtProtobufData> dptr;
 };
 namespace SimpleIntMessage_QtProtobufNested {
@@ -590,8 +587,7 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFixedInt32Message : public QPro
     Q_PROTOBUF_OBJECT
     Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixedInt32Message)
     QML_VALUE_TYPE(simpleFixedInt32Message)
-    Q_PROPERTY(QtProtobuf::fixed32 testFieldFixedInt32_p READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE false)
-    Q_PROPERTY(unsigned int testFieldFixedInt32 READ testFieldFixedInt32_p WRITE setTestFieldFixedInt32_p SCRIPTABLE true)
+    Q_PROPERTY(QtProtobuf::fixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleFixedInt32Message_QtProtobufNested::QtProtobufFieldEnum;
@@ -609,8 +605,6 @@ public:
     static void registerTypes();
 
 private:
-    unsigned int testFieldFixedInt32_p() const;
-    void setTestFieldFixedInt32_p(const unsigned int &testFieldFixedInt32);
     QExplicitlySharedDataPointer<SimpleFixedInt32Message_QtProtobufData> dptr;
 };
 namespace SimpleFixedInt32Message_QtProtobufNested {
@@ -669,8 +663,7 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSFixedInt32Message : public QPr
     Q_PROTOBUF_OBJECT
     Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixedInt32Message)
     QML_VALUE_TYPE(simpleSFixedInt32Message)
-    Q_PROPERTY(QtProtobuf::sfixed32 testFieldFixedInt32_p READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE false)
-    Q_PROPERTY(int testFieldFixedInt32 READ testFieldFixedInt32_p WRITE setTestFieldFixedInt32_p SCRIPTABLE true)
+    Q_PROPERTY(QtProtobuf::sfixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleSFixedInt32Message_QtProtobufNested::QtProtobufFieldEnum;
@@ -688,8 +681,6 @@ public:
     static void registerTypes();
 
 private:
-    int testFieldFixedInt32_p() const;
-    void setTestFieldFixedInt32_p(const int &testFieldFixedInt32);
     QExplicitlySharedDataPointer<SimpleSFixedInt32Message_QtProtobufData> dptr;
 };
 namespace SimpleSFixedInt32Message_QtProtobufNested {
@@ -748,10 +739,9 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT ComplexMessage : public QProtobufMess
     Q_PROTOBUF_OBJECT
     Q_DECLARE_PROTOBUF_SERIALIZERS(ComplexMessage)
     QML_VALUE_TYPE(complexMessage)
-    Q_PROPERTY(QtProtobuf::int32 testFieldInt_p READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
+    Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage *testComplexField_p READ testComplexField_p WRITE setTestComplexField_p)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage testComplexField READ testComplexField WRITE setTestComplexField)
-    Q_PROPERTY(int testFieldInt READ testFieldInt_p WRITE setTestFieldInt_p SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = ComplexMessage_QtProtobufNested::QtProtobufFieldEnum;
@@ -774,9 +764,7 @@ public:
     static void registerTypes();
 
 private:
-    int testFieldInt_p() const;
     SimpleStringMessage *testComplexField_p() const;
-    void setTestFieldInt_p(const int &testFieldInt);
     void setTestComplexField_p(SimpleStringMessage *testComplexField);
     QExplicitlySharedDataPointer<ComplexMessage_QtProtobufData> dptr;
 };

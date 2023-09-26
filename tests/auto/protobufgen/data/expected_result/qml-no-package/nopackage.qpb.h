@@ -107,8 +107,7 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage : public Q
     Q_PROTOBUF_OBJECT
     Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleIntMessage)
     QML_VALUE_TYPE(simpleIntMessage)
-    Q_PROPERTY(QtProtobuf::int32 testFieldInt_p READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
-    Q_PROPERTY(int testFieldInt READ testFieldInt_p WRITE setTestFieldInt_p SCRIPTABLE true)
+    Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleIntMessage_QtProtobufNested::QtProtobufFieldEnum;
@@ -126,8 +125,6 @@ public:
     static void registerTypes();
 
 private:
-    int testFieldInt_p() const;
-    void setTestFieldInt_p(const int &testFieldInt);
     QExplicitlySharedDataPointer<SimpleIntMessage_QtProtobufData> dptr;
 };
 namespace SimpleIntMessage_QtProtobufNested {

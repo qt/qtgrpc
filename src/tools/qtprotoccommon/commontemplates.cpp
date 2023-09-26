@@ -242,11 +242,7 @@ const char *CommonTemplates::PropertyNonScriptableTemplate()
     return "Q_PROPERTY($property_type$ $property_name$_p READ $property_name$ WRITE "
            "set$property_name_cap$ SCRIPTABLE false)\n";
 }
-const char *CommonTemplates::PropertyNonScriptableAliasTemplate()
-{
-    return "Q_PROPERTY($qml_alias_type$ $property_name$ READ $property_name$_p WRITE "
-           "set$property_name_cap$_p SCRIPTABLE true)\n";
-}
+
 const char *CommonTemplates::PropertyMessageTemplate()
 {
     return "Q_PROPERTY($property_type$ *$property_name$_p READ $property_name$_p WRITE "
@@ -577,18 +573,6 @@ const char *CommonTemplates::GetterDefinitionTemplate()
            "}\n\n";
 }
 
-const char *CommonTemplates::GetterNonScriptableDeclarationTemplate()
-{
-    return "$qml_alias_type$ $property_name$_p() const;\n";
-}
-
-const char *CommonTemplates::GetterNonScriptableDefinitionTemplate()
-{
-    return "$qml_alias_type$ $classname$::$property_name$_p() const\n{\n"
-           "    return dptr->m_$property_name$;\n"
-           "}\n\n";
-}
-
 const char *CommonTemplates::GetterComplexDeclarationTemplate()
 {
     return "$getter_type$ &$property_name$();\n";
@@ -739,22 +723,6 @@ const char *CommonTemplates::SetterDeclarationTemplate()
 const char *CommonTemplates::SetterDefinitionTemplate()
 {
     return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n"
-           "{\n"
-           "    if (dptr->m_$property_name$ != $property_name$) {\n"
-           "        dptr.detach();\n"
-           "        dptr->m_$property_name$ = $property_name$;\n"
-           "    }\n"
-           "}\n\n";
-}
-
-const char *CommonTemplates::SetterNonScriptableDeclarationTemplate()
-{
-    return "void set$property_name_cap$_p(const $qml_alias_type$ &$property_name$);\n";
-}
-
-const char *CommonTemplates::SetterNonScriptableDefinitionTemplate()
-{
-    return "void $classname$::set$property_name_cap$_p(const $qml_alias_type$ &$property_name$)\n"
            "{\n"
            "    if (dptr->m_$property_name$ != $property_name$) {\n"
            "        dptr.detach();\n"

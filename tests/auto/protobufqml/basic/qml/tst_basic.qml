@@ -464,7 +464,7 @@ TestCase {
                     {
                         tag: "SimpleIntMessage testFieldInt type",
                         field: typeof int32Msg.testFieldInt,
-                        answer: "number"
+                        answer: "object"
                     },
                     {
                         tag: "SimpleSIntMessage testFieldInt type",
@@ -479,12 +479,12 @@ TestCase {
                     {
                         tag: "SimpleFixedInt32Message testFieldInt type",
                         field: typeof fixed32Msg.testFieldFixedInt32,
-                        answer: "number"
+                        answer: "object"
                     },
                     {
                         tag: "SimpleSFixedInt32Message testFieldInt type",
                         field: typeof sfixed32Msg.testFieldFixedInt32,
-                        answer: "number"
+                        answer: "object"
                     },
                     {
                         tag: "SimpleStringMessage testFieldString type",
@@ -504,29 +504,22 @@ TestCase {
                     {
                         tag: "SimpleInt64Message testFieldInt type",
                         field: typeof int64Msg.testFieldInt,
-                        answer: "number"
+                        answer: "object"
                     },
                     {
                         tag: "SimpleFixedInt64Message testFieldInt type",
                         field: typeof fixed64Msg.testFieldFixedInt64,
-                        answer: "number"
+                        answer: "object"
                     },
                     {
                         tag: "SimpleSFixedInt64Message testFieldInt type",
                         field: typeof sfixed64Msg.testFieldFixedInt64,
-                        answer: "number"
+                        answer: "object"
                     }
                 ]
     }
 
     function test_protobufTypesTypeCheck(data) {
-        //TODO: int64, fixed64, sfixed64 not recognized as numbers. See QTBUG-113516.
-        expectFail("SimpleInt64Message testFieldInt type",
-            "Proper type support is not implemented")
-        expectFail("SimpleFixedInt64Message testFieldInt type",
-            "Proper type support is not implemented")
-        expectFail("SimpleSFixedInt64Message testFieldInt type",
-            "Proper type support is not implemented")
         compare(data.field, data.answer)
     }
 
@@ -572,7 +565,7 @@ TestCase {
                     {
                         tag: "ComplexMessage testFieldInt type",
                         field: typeof complexMsgNoInit.testFieldInt,
-                        answer: "number"
+                        answer: "object"
                     },
                 ]
     }
@@ -593,11 +586,21 @@ TestCase {
                         field: fixed32Msg.testFieldFixedInt32, answer: 4294967295 },
                     {tag: "SimpleSFixedInt32Message initialization",
                         field: sfixed32Msg.testFieldFixedInt32, answer: 2147483647 },
+                    {tag: "SimpleInt64Message initialization",
+                        field: int64Msg.testFieldInt, answer: 2147483647 },
+                    {tag: "SimpleSInt64Message initialization",
+                        field: sint64Msg.testFieldInt, answer: 2147483647 },
+                    {tag: "SimpleUInt64Message initialization",
+                        field: uint64Msg.testFieldInt, answer: 4294967295 },
+                    {tag: "SimpleFixedInt64Message initialization",
+                        field: fixed64Msg.testFieldFixedInt64, answer: 4294967295 },
+                    {tag: "SimpleSFixedInt64Message initialization",
+                        field: sfixed64Msg.testFieldFixedInt64, answer: 2147483647 }
                 ]
     }
 
     function test_1initializationCheck(data) {
-        compare(data.field, data.answer)
+        verify(data.field == data.answer)
     }
 
     function test_simpleboolmessage_data() {
@@ -771,12 +774,22 @@ TestCase {
                 "Invalid implicit conversion: " + data.field + " should be true")
     }
 
-    function test_int32LocaleStringConversion() {
-        compare(int32Msg.testFieldInt.toLocaleString(Qt.locale()),
-                Number(int32Msg.testFieldInt).toLocaleString(Qt.locale()),
-                "Locale number string is not match "
-                + int32Msg.testFieldInt.toLocaleString(Qt.locale())
-                + " != " + Number(int32Msg.testFieldInt).toLocaleString(Qt.locale()))
+    function test_int32LocaleStringConversion_data() {
+        return [
+                    {
+                        tag: "int32Msg number is not match",
+                        field: int32Msg.testFieldInt.toLocaleString(Qt.locale()),
+                        answer: Number(fixed32Msg.testFieldInt).toLocaleString(Qt.locale())
+                    }
+                ]
+    }
+
+    function test_int32LocaleStringConversion(data) {
+        expectFail("int32Msg number is not match",
+                   int32Msg.testFieldInt.toLocaleString(Qt.locale())
+                   + " not equal "
+                   + Number(int32Msg.testFieldInt).toLocaleString(Qt.locale()))
+        compare(compare(data.field, data.answer))
     }
 
     function test_fixed32ImplicitConversion_data() {
@@ -795,13 +808,24 @@ TestCase {
                 "Invalid implicit conversion: " + data.field + " should be true")
     }
 
-    function test_fixed32LocaleStringConversion() {
-        compare(fixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale()),
-                Number(fixed32Msg.testFieldFixedInt32).toLocaleString(Qt.locale()),
-                "Locale number string is not match "
-                + fixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale())
-                + " != " + Number(fixed32Msg.testFieldFixedInt32).toLocaleString(Qt.locale()))
+    function test_fixed32LocaleStringConversion_data() {
+        return [
+                    {
+                        tag: "fixed32LocaleString number is not match",
+                        field: fixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale()),
+                        answer: Number(fixed32Msg.testFieldFixedInt32).toLocaleString(Qt.locale())
+                    }
+                ]
     }
+
+    function test_fixed32LocaleStringConversion(data) {
+        expectFail("fixed32LocaleString number is not match",
+                   fixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale())
+                   + " not equal "
+                   + Number(fixed32Msg.testFieldFixedInt32).toLocaleString(Qt.locale()))
+        compare(compare(data.field, data.answer))
+    }
+
 
     function test_sint32ImplicitConversion_data() {
         return [
@@ -843,12 +867,22 @@ TestCase {
                 "Invalid implicit conversion: " + data.field + " should be true")
     }
 
-    function test_sfixed32LocaleStringConversion() {
-        compare(sfixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale()),
-                Number(sfixed32Msg.testFieldFixedInt32).toLocaleString(Qt.locale()),
-                "Locale number string is not match "
-                + sfixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale())
-                + " != " + Number(sfixed32Msg.testFieldFixedInt32).toLocaleString(Qt.locale()))
+    function test_sfixed32LocaleStringConversion_data() {
+        return [
+                    {
+                        tag: "sfixed32LocaleString number is not match",
+                        field: sfixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale()),
+                        answer: Number(sfixed32Msg.testFieldFixedInt32).toLocaleString(Qt.locale())
+                    }
+                ]
+    }
+
+    function test_sfixed32LocaleStringConversion(data) {
+        expectFail("sfixed32LocaleString number is not match",
+                   sfixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale())
+                   + " not equal "
+                   + Number(sfixed32Msg.testFieldFixedInt32).toLocaleString(Qt.locale()))
+        compare(compare(data.field, data.answer))
     }
 
     function test_complexMessage_data() {

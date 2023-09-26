@@ -406,10 +406,6 @@ void MessageDefinitionPrinter::printGetters()
                     return;
                 }
 
-                if (common::hasQmlAlias(field)) {
-                    m_printer->Print(propertyMap, CommonTemplates::GetterNonScriptableDefinitionTemplate());
-                }
-
                 if (common::isPureMessage(field)) {
                     m_printer->Print(propertyMap,
                                      CommonTemplates::PrivateGetterMessageDefinitionTemplate());
@@ -437,6 +433,7 @@ void MessageDefinitionPrinter::printGetters()
                                     : CommonTemplates::PrivateSetterOneofDefinitionTemplate());
                     return;
                 }
+
                 if (common::isOptionalField(field)) {
                     m_printer->Print(propertyMap,
                                      CommonTemplates::SetterOptionalDefinitionTemplate());
@@ -446,9 +443,7 @@ void MessageDefinitionPrinter::printGetters()
                                      CommonTemplates::ClearOptionalDefinitionTemplate());
                     return;
                 }
-                if (common::hasQmlAlias(field)) {
-                    m_printer->Print(propertyMap, CommonTemplates::SetterNonScriptableDefinitionTemplate());
-                }
+
                 switch (field->type()) {
                 case FieldDescriptor::TYPE_MESSAGE:
                     if (common::isPureMessage(field)) {

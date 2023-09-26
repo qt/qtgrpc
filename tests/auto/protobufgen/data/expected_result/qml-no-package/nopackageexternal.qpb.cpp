@@ -107,22 +107,9 @@ bool SimpleIntMessageExt::operator !=(const SimpleIntMessageExt &other) const
     return !this->operator ==(other);
 }
 
-int SimpleIntMessageExt::testFieldInt_p() const
-{
-    return dptr->m_testFieldInt;
-}
-
 QtProtobuf::int32 SimpleIntMessageExt::testFieldInt() const
 {
     return dptr->m_testFieldInt;
-}
-
-void SimpleIntMessageExt::setTestFieldInt_p(const int &testFieldInt)
-{
-    if (dptr->m_testFieldInt != testFieldInt) {
-        dptr.detach();
-        dptr->m_testFieldInt = testFieldInt;
-    }
 }
 
 void SimpleIntMessageExt::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
