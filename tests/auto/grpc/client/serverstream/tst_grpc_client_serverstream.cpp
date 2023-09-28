@@ -59,6 +59,8 @@ void QtGrpcClientServerStreamTest::Valid()
     QVERIFY(streamErrorSpy.isValid());
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QVERIFY(streamFinishedSpy.isValid());
+
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream] {
         SimpleStringMessage ret = stream->read<SimpleStringMessage>();
         result.setTestFieldString(result.testFieldString() + ret.testFieldString());

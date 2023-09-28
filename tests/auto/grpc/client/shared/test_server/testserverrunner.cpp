@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QString>
+#include <QThread>
 
 #include "testservice.grpc.pb.h"
 #include <message_latency_defs.h>

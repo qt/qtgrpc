@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QObject>
 #include <QProcess>
+#include <QTimer>
 
 #include <chrono>
 #include <memory>
@@ -34,25 +35,34 @@ private:
     void start()
     {
         if (serverPath.isEmpty()) {
-            qInfo() << "testserver binary is missing";
+            qInfo() << "testserver binary is missing.";
             return;
         }
         serverProc = std::make_unique<QProcess>();
         QObject::connect(serverProc.get(), &QProcess::readyReadStandardOutput, this,
                          [this] { qInfo() << serverProc->readAllStandardOutput(); });
+
         serverProc->start(serverPath);
-        serverProc->waitForStarted(waitForServerLatency.count());
+        if (!serverProc->waitForStarted(waitForServerLatency.count())) {
+            qInfo() << "Failed to start the server" << serverPath
+                    << QString::number(serverProc->exitCode(), 16);
+            return;
+        }
         // Wait for the 'Server listening' log from the server
-        serverProc->waitForReadyRead(waitForServerRead.count());
+        if (!serverProc->waitForReadyRead(waitForServerRead.count())) {
+            qInfo() << "Could not wait for ready read from the server" << serverPath;
+            return;
+        }
         auto serverData = serverProc->readAllStandardError();
         if (!serverData.startsWith("Server listening")) {
-            qInfo() << "The server was not ready within the deadline.";
+            qInfo() << "The server was not ready within the deadline" << serverPath;
             return;
         }
 
         // Connect remaining error logs to the server
         QObject::connect(serverProc.get(), &QProcess::readyReadStandardError, this,
                          [this] { qInfo() << serverProc->readAllStandardError(); });
+        qInfo() << "Testserver started" << serverPath;
     }
     void stop()
     {
@@ -60,6 +70,7 @@ private:
             serverProc->kill();
             serverProc->waitForFinished(waitForServerLatency.count());
         }
+        qInfo() << "Testserver stopped" << serverPath;
     }
 
     const QString serverPath;

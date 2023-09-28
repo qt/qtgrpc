@@ -4,8 +4,6 @@
 #ifndef TEST_SERVER_H
 #define TEST_SERVER_H
 
-#include <QThread>
-
 class SecureTestServer
 {
 public:
