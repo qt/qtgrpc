@@ -11,6 +11,7 @@
 #include <QtCore/qstring.h>
 #include <QtProtobuf/qprotobufoneof.h>
 #include <optional>
+#include "tst_qtprotobufgen_gen_exports.qpb.h"
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
@@ -34,7 +35,7 @@ enum class QtProtobufFieldEnum;
 
 
 class TestStringMessage_QtProtobufData;
-class TestStringMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -60,7 +61,7 @@ private:
     QExplicitlySharedDataPointer<TestStringMessage_QtProtobufData> dptr;
 };
 namespace TestStringMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     StringFieldProtoFieldNumber = 2,
@@ -70,7 +71,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace TestStringMessage_QtProtobufNested
 
 class OptionalMessage_QtProtobufData;
-class OptionalMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OptionalMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -160,7 +161,7 @@ private:
     QExplicitlySharedDataPointer<OptionalMessage_QtProtobufData> dptr;
 };
 namespace OptionalMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestFieldProtoFieldNumber = 1,

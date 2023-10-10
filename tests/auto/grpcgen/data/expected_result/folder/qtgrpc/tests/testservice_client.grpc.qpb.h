@@ -15,7 +15,6 @@
 
 #include "qtgrpc/tests/testservice.qpb.h"
 
-
 namespace qtgrpc::tests {
 namespace TestService {
 

@@ -38,7 +38,7 @@ qt_add_protobuf(tst_qtprotobufgen
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/extra-namespace"
 )
 
-qt_add_protobuf(tst_qtprotobufgen
+qt_add_protobuf(tst_qtprotobufgen_gen
     PROTO_FILES
         ../shared/data/proto/basicmessages.proto
         ../shared/data/proto/mapmessages.proto
@@ -48,6 +48,7 @@ qt_add_protobuf(tst_qtprotobufgen
     GENERATE_PACKAGE_SUBFOLDERS
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/folder"
 )
+qt_autogen_tools_initial_setup(tst_qtprotobufgen_gen)
 
 qt_add_protobuf(tst_qtprotobufgen
     PROTO_FILES
@@ -58,6 +59,7 @@ qt_autogen_tools_initial_setup(tst_qtprotobufgen)
 
 if(MINGW)
     target_compile_options(tst_qtprotobufgen PRIVATE "-Wa,-mbig-obj")
+    target_compile_options(tst_qtprotobufgen_gen PRIVATE "-Wa,-mbig-obj")
 endif()
 
 if(TARGET Qt6::Qml)

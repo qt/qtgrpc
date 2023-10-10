@@ -310,6 +310,7 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
     QTest::addColumn<QString>("folder");
     QTest::addColumn<QString>("extension");
     QTest::addColumn<QString>("generatedFolderStructure");
+    QTest::addColumn<QString>("exportMacro");
 
     const QLatin1StringView extensions[]
             = {cppExtension, headerExtension};
@@ -320,63 +321,68 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
                 << "GENERATE_PACKAGE_SUBFOLDERS"
                 << "/folder/"
                 << QString(extension)
-                << "qtprotobufnamespace/tests/";
+                << "qtprotobufnamespace/tests/"
+                << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
 
         QTest::addRow("mapmessages%s", extension.data())
                 << "mapmessages"
                 << "GENERATE_PACKAGE_SUBFOLDERS"
                 << "/folder/"
                 << QString(extension)
-                << "qtprotobufnamespace/tests/";
+                << "qtprotobufnamespace/tests/"
+                << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
 
         QTest::addRow("oneofmessages%s", extension.data())
                 << "oneofmessages"
                 << "GENERATE_PACKAGE_SUBFOLDERS"
                 << "/folder/"
                 << QString(extension)
-                << "qtprotobufnamespace/tests/";
+                << "qtprotobufnamespace/tests/"
+                << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
 
         QTest::addRow("optional%s", extension.data())
                 << "optional"
                 << "GENERATE_PACKAGE_SUBFOLDERS"
                 << "/folder/"
                 << QString(extension)
-                << "qtprotobufnamespace/optional/tests/";
+                << "qtprotobufnamespace/optional/tests/"
+                << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
 
         QTest::addRow("repeatedmessages%s", extension.data())
                 << "repeatedmessages"
                 << "GENERATE_PACKAGE_SUBFOLDERS"
                 << "/folder/"
                 << QString(extension)
-                << "qtprotobufnamespace/tests/";
+                << "qtprotobufnamespace/tests/"
+                << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
 
         QTest::addRow("annotation%s", extension.data())
                 << "annotation"
                 << "COPY_COMMENTS"
                 << "/comments/"
                 << QString(extension)
-                << "";
+                << "" << "";
 
         QTest::addRow("fieldindexrange%s", extension.data())
                 << "fieldindexrange"
                 << ""
                 << "/fieldenum/"
                 << QString(extension)
-                << "";
+                << "" << "";
 
         QTest::addRow("extranamespace%s", extension.data())
                 << "extranamespace"
                 << "EXTRA_NAMESPACE=MyTopLevelNamespace"
                 << "/extra-namespace/"
                 << QString(extension)
-                << "";
+                << "" << "";
 #ifdef HAVE_QML
         QTest::addRow("nopackage%s", extension.data())
                 << "nopackage"
                 << "QML_URI=nopackage.uri.test;EXPORT_MACRO=TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN"
                 << "/qml-no-package/"
                 << QString(extension)
-                << "";
+                << "" << "";
 #endif
     }
 }
@@ -388,20 +394,29 @@ void tst_qtprotobufgen::cmdLineGeneratedFile()
     QFETCH(QString, folder);
     QFETCH(QString, extension);
     QFETCH(QString, generatedFolderStructure);
+    QFETCH(QString, exportMacro);
 
     QProcess process;
     process.setWorkingDirectory(m_commandLineGenerated);
-
     /* Call command:
          protoc --plugin=protoc-gen-qtprotobuf=<path/to/bin/>qtprotobufgen \
          --qtprotobuf_opt=<option> \
          --qtprotobuf_out=<output_dir> [-I/extra/proto/include/path] <protofile>.proto */
-    process.startCommand(protocolBufferCompiler + QString(" ")
-                         + protocGenQtprotobufKey + m_protobufgen
-                         + optKey + generatingOption
-                         + outputKey + m_commandLineGenerated + folder
-                         + includeKey + m_protoFiles
-                         + " " + fileName + ".proto");
+    if (exportMacro.isEmpty()) {
+        process.startCommand(protocolBufferCompiler + QString(" ")
+                             + protocGenQtprotobufKey + m_protobufgen
+                             + optKey + generatingOption
+                             + outputKey + m_commandLineGenerated + folder
+                             + includeKey + m_protoFiles
+                             + " " + fileName + ".proto");
+    } else {
+        process.startCommand(protocolBufferCompiler + QString(" ")
+                             + protocGenQtprotobufKey + m_protobufgen
+                             + optKey + generatingOption + ";" + exportMacro
+                             + outputKey + m_commandLineGenerated + folder
+                             + includeKey + m_protoFiles
+                             + " " + fileName + ".proto");
+    }
 
     QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
     if (!process.waitForFinished()) {

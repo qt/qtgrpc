@@ -30,6 +30,8 @@ using namespace ::google::protobuf;
 using namespace ::google::protobuf::io;
 using namespace ::google::protobuf::compiler;
 
+static std::string ExportStr("_exports.qpb");
+
 QProtobufGenerator::QProtobufGenerator() : GeneratorBase()
 {}
 
@@ -124,6 +126,17 @@ bool QProtobufGenerator::GenerateAll(const std::vector<const FileDescriptor *> &
     assert(generatorContext != nullptr);
 
     Options::setFromString(parameter);
+    if (!Options::instance().exportMacro().empty()) {
+        std::string exportMacroName = Options::instance().exportMacro();
+        utils::asciiToLower(exportMacroName);
+        std::unique_ptr<io::ZeroCopyOutputStream> headerStream(
+                generatorContext->Open(exportMacroName + ExportStr + ".h"));
+        std::shared_ptr<Printer> headerPrinter(new Printer(headerStream.get(), '$'));
+        printDisclaimer(headerPrinter.get());
+        headerPrinter->Print({ { "export_macro", Options::instance().exportMacro() } },
+                             CommonTemplates::ExportMacroTemplate());
+        headerPrinter->PrintRaw("\n");
+    }
     return CodeGenerator::GenerateAll(files, parameter, generatorContext, error);
 }
 
@@ -150,6 +163,11 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
                    fileNameToUpper.begin(), utils::toAsciiUpper);
 
     headerPrinter->Print({{"filename", fileNameToUpper}}, CommonTemplates::PreambleTemplate());
+    if (!Options::instance().exportMacro().empty()) {
+        std::string exportMacroName = Options::instance().exportMacro();
+        utils::asciiToLower(exportMacroName);
+        internalIncludes.insert(exportMacroName + ExportStr);
+    }
 
     headerPrinter->Print(CommonTemplates::DefaultProtobufIncludesTemplate());
     if (Options::instance().hasQml()) {
@@ -229,12 +247,7 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
 
     headerPrinter->Print(CommonTemplates::DefaultQtIncludesTemplate());
     headerPrinter->Print(CommonTemplates::DefaultSystemIncludesTemplate());
-
     headerPrinter->PrintRaw("\n");
-    if (!Options::instance().exportMacro().empty()) {
-        headerPrinter->Print({ { "export_macro", Options::instance().exportMacro() } },
-                             CommonTemplates::ExportMacroTemplate());
-    }
     OpenFileNamespaces(file, headerPrinter.get());
 
     for (int i = 0; i < file->enum_type_count(); ++i) {

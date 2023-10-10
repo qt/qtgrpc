@@ -32,15 +32,6 @@ static const std::set<std::string> externalIncludes = {"QtGrpc/qabstractgrpcclie
                                                        "QtGrpc/qgrpccallreply.h",
                                                        "QtGrpc/qgrpcstream.h"};
 
-static void printExportMacro(std::shared_ptr<::google::protobuf::io::Printer> printer)
-{
-    printer->PrintRaw("\n");
-    if (!Options::instance().exportMacro().empty()) {
-        printer->Print({ { "export_macro", Options::instance().exportMacro() } },
-                       CommonTemplates::ExportMacroTemplate());
-    }
-}
-
 static std::string stringToUpper(std::string str)
 {
     std::transform(str.begin(), str.end(),
@@ -194,7 +185,6 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
         clientHeaderPrinter->Print({ { "include", include } },
                                    CommonTemplates::InternalIncludeTemplate());
     }
-    printExportMacro(clientHeaderPrinter);
     QGrpcGenerator::RunPrinter<ClientDeclarationPrinter>(file, clientHeaderPrinter);
     QGrpcGenerator::RunPrinter<ClientDefinitionPrinter>(file, clientSourcePrinter);
     clientHeaderPrinter->Print({ { "filename", fileNameToUpper } },
@@ -242,7 +232,6 @@ bool QGrpcGenerator::GenerateServerServices(const FileDescriptor *file,
         serverHeaderPrinter->Print({ { "include", include } },
                                    CommonTemplates::InternalIncludeTemplate());
     }
-    printExportMacro(serverHeaderPrinter);
     QGrpcGenerator::RunPrinter<ServerDeclarationPrinter>(file, serverHeaderPrinter);
     serverHeaderPrinter->Print({ { "filename", filename + "_service" } },
                                CommonTemplates::FooterTemplate());

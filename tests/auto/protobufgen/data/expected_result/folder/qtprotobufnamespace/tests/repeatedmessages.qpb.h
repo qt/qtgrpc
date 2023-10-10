@@ -10,6 +10,7 @@
 #include <QtCore/qbytearray.h>
 #include <QtCore/qstring.h>
 #include "basicmessages.qpb.h"
+#include "tst_qtprotobufgen_gen_exports.qpb.h"
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
@@ -117,7 +118,7 @@ enum class QtProtobufFieldEnum;
 
 
 class RepeatedStringMessage_QtProtobufData;
-class RepeatedStringMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedStringMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -144,7 +145,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedStringMessage_QtProtobufData> dptr;
 };
 namespace RepeatedStringMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedStringProtoFieldNumber = 1,
@@ -154,7 +155,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedStringMessage_QtProtobufNested
 
 class RepeatedDoubleMessage_QtProtobufData;
-class RepeatedDoubleMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedDoubleMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -181,7 +182,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedDoubleMessage_QtProtobufData> dptr;
 };
 namespace RepeatedDoubleMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedDoubleProtoFieldNumber = 1,
@@ -191,7 +192,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedDoubleMessage_QtProtobufNested
 
 class RepeatedBytesMessage_QtProtobufData;
-class RepeatedBytesMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedBytesMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -218,7 +219,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedBytesMessage_QtProtobufData> dptr;
 };
 namespace RepeatedBytesMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedBytesProtoFieldNumber = 1,
@@ -228,7 +229,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedBytesMessage_QtProtobufNested
 
 class RepeatedFloatMessage_QtProtobufData;
-class RepeatedFloatMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedFloatMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -255,7 +256,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedFloatMessage_QtProtobufData> dptr;
 };
 namespace RepeatedFloatMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedFloatProtoFieldNumber = 1,
@@ -265,7 +266,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedFloatMessage_QtProtobufNested
 
 class RepeatedComplexMessage_QtProtobufData;
-class RepeatedComplexMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedComplexMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -292,7 +293,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedComplexMessage_QtProtobufData> dptr;
 };
 namespace RepeatedComplexMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedComplexProtoFieldNumber = 1,
@@ -302,7 +303,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedComplexMessage_QtProtobufNested
 
 class RepeatedSIntMessage_QtProtobufData;
-class RepeatedSIntMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedSIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -329,7 +330,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedSIntMessage_QtProtobufData> dptr;
 };
 namespace RepeatedSIntMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedIntProtoFieldNumber = 1,
@@ -339,7 +340,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedSIntMessage_QtProtobufNested
 
 class RepeatedIntMessage_QtProtobufData;
-class RepeatedIntMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -366,7 +367,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedIntMessage_QtProtobufData> dptr;
 };
 namespace RepeatedIntMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedIntProtoFieldNumber = 1,
@@ -376,7 +377,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedIntMessage_QtProtobufNested
 
 class RepeatedUIntMessage_QtProtobufData;
-class RepeatedUIntMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedUIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -403,7 +404,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedUIntMessage_QtProtobufData> dptr;
 };
 namespace RepeatedUIntMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedIntProtoFieldNumber = 1,
@@ -413,7 +414,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedUIntMessage_QtProtobufNested
 
 class RepeatedSInt64Message_QtProtobufData;
-class RepeatedSInt64Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedSInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -440,7 +441,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedSInt64Message_QtProtobufData> dptr;
 };
 namespace RepeatedSInt64Message_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedIntProtoFieldNumber = 1,
@@ -450,7 +451,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedSInt64Message_QtProtobufNested
 
 class RepeatedInt64Message_QtProtobufData;
-class RepeatedInt64Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -477,7 +478,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedInt64Message_QtProtobufData> dptr;
 };
 namespace RepeatedInt64Message_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedIntProtoFieldNumber = 1,
@@ -487,7 +488,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedInt64Message_QtProtobufNested
 
 class RepeatedUInt64Message_QtProtobufData;
-class RepeatedUInt64Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedUInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -514,7 +515,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedUInt64Message_QtProtobufData> dptr;
 };
 namespace RepeatedUInt64Message_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedIntProtoFieldNumber = 1,
@@ -524,7 +525,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedUInt64Message_QtProtobufNested
 
 class RepeatedFixedIntMessage_QtProtobufData;
-class RepeatedFixedIntMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedFixedIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -551,7 +552,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedFixedIntMessage_QtProtobufData> dptr;
 };
 namespace RepeatedFixedIntMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedIntProtoFieldNumber = 1,
@@ -561,7 +562,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedFixedIntMessage_QtProtobufNested
 
 class RepeatedSFixedIntMessage_QtProtobufData;
-class RepeatedSFixedIntMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedSFixedIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -588,7 +589,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedSFixedIntMessage_QtProtobufData> dptr;
 };
 namespace RepeatedSFixedIntMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedIntProtoFieldNumber = 1,
@@ -598,7 +599,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedSFixedIntMessage_QtProtobufNested
 
 class RepeatedFixedInt64Message_QtProtobufData;
-class RepeatedFixedInt64Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -625,7 +626,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedFixedInt64Message_QtProtobufData> dptr;
 };
 namespace RepeatedFixedInt64Message_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedIntProtoFieldNumber = 1,
@@ -635,7 +636,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedFixedInt64Message_QtProtobufNested
 
 class RepeatedSFixedInt64Message_QtProtobufData;
-class RepeatedSFixedInt64Message : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedSFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -662,7 +663,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedSFixedInt64Message_QtProtobufData> dptr;
 };
 namespace RepeatedSFixedInt64Message_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedIntProtoFieldNumber = 1,
@@ -672,7 +673,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedSFixedInt64Message_QtProtobufNested
 
 class RepeatedBoolMessage_QtProtobufData;
-class RepeatedBoolMessage : public QProtobufMessage
+class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedBoolMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
@@ -699,7 +700,7 @@ private:
     QExplicitlySharedDataPointer<RepeatedBoolMessage_QtProtobufData> dptr;
 };
 namespace RepeatedBoolMessage_QtProtobufNested {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
 
 enum class QtProtobufFieldEnum {
     TestRepeatedBoolProtoFieldNumber = 1,
