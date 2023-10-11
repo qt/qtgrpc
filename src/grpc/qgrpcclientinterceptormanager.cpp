@@ -16,6 +16,8 @@ QT_BEGIN_NAMESPACE
 
     The QGrpcClientInterceptorManager class provides methods for registering and executing
     QGrpcClientInterceptor interceptors.
+
+    \sa {Qt GRPC Client Interceptors}
 */
 
 /*!

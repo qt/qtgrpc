@@ -57,6 +57,8 @@ QT_BEGIN_NAMESPACE
     The QGrpcClientInterceptor class provides a base for creating custom QtGRPC client interceptors.
     It defines methods for intercepting different types of QtGRPC calls and streams. Users can it
     to implement specific interception behavior.
+
+    \sa {Qt GRPC Client Interceptors}
 */
 
 /*!

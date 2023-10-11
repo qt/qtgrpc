@@ -53,6 +53,7 @@ private slots:
     void Interceptor();
     void CancelledInterceptor();
     void InterceptResponse();
+    void CacheIntercept();
 };
 
 void QtGrpcClientUnaryCallTest::AsyncWithSubscribe()
@@ -404,6 +405,42 @@ void QtGrpcClientUnaryCallTest::InterceptResponse()
     QTRY_COMPARE_EQ_WITH_TIMEOUT(serverResponse.testFieldString(),
                                  "Hello Qt!", MessageLatencyWithThreshold);
     QCOMPARE_EQ(result.testFieldString(), "Hello Qt!");
+}
+
+void QtGrpcClientUnaryCallTest::CacheIntercept()
+{
+    SimpleStringMessage serverResponse;
+    auto interceptFunc =
+        [](std::shared_ptr<QGrpcChannelOperation> operation, std::shared_ptr<QGrpcCallReply>,
+           QGrpcInterceptorContinuation<QGrpcCallReply> &, QLatin1StringView id) {
+            SimpleStringMessage deserializedArg;
+            if (!operation->serializer()->deserialize(&deserializedArg, operation->argument())) {
+                QFAIL("Deserialization of arg failed.");
+                return;
+            }
+            SimpleStringMessage cachedValue;
+            cachedValue.setTestFieldString(id);
+            const auto serializedValue =
+                operation->serializer()->serialize<SimpleStringMessage>(&cachedValue);
+            emit operation->dataReady(serializedValue);
+            emit operation->finished();
+        };
+
+    auto manager = QGrpcClientInterceptorManager();
+    manager.registerInterceptor(std::make_shared<CallInterceptor>("inter1"_L1, interceptFunc));
+    auto channel = client()->channel();
+    channel->addInterceptorManager(manager);
+    client()->attachChannel(channel);
+
+    SimpleStringMessage request;
+    SimpleStringMessage result;
+    request.setTestFieldString("Hello Qt!");
+    client()->testMethod(request, client().get(), [&result](std::shared_ptr<QGrpcCallReply> reply) {
+        result = reply->read<SimpleStringMessage>();
+    });
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(result.testFieldString(),
+                                 "inter1", MessageLatencyWithThreshold);
 }
 
 QTEST_MAIN(QtGrpcClientUnaryCallTest)
