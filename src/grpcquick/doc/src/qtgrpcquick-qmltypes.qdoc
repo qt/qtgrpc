@@ -106,7 +106,8 @@
 
 /*!
     \qmlproperty QVariantMap QQmlGrpcMetadata::data
-    Provides access to metadata container and holds it in QVariantMap format in QML.
+    Provides access to metadata container and holds it in QVariantMap format
+    in QML.
     \note Use the comma symbol to set several values by the same key.
           See example below:
     \code
@@ -121,11 +122,26 @@
 /*!
     \qmltype QQmlAbstractGrpcChannel
     \inqmlmodule QtGrpcQuick
-    \brief The QQmlAbstractGrpcChannel class is an interface that imports
-           gRPC channel in QML.
+    \brief The QQmlAbstractGrpcChannel class is interface that represents
+           common gRPC channel functionality in QML.
 
-    You may implement this interface to create your own QML channels
-    for gRPC transport.
+    You may implement this interface to create your own channels for gRPC
+    transport.
+    QQmlAbstractGrpcChannel is not creatable in QML,
+    but it can be used for custom channel implementation.
+    \note QQmlGrpcHttp2Channel, which are full implementations of
+          QQmlAbstractGrpcChannel, is recommended to use for HTTP2 protocol.
+    \sa QAbstractGrpcChannel, QQmlGrpcHttp2Channel
+*/
+
+/*!
+    \qmlmethod std::shared_ptr<QAbstractGrpcChannel> QQmlAbstractGrpcChannel::getChannel() = 0
+
+    This function returns the pointer to the gRPC channel object.
+    This is a pure virtual function. You may override that function
+    in the derived class.
+
+    \sa QAbstractGrpcChannel, QQmlGrpcHttp2Channel
 */
 
 /*!
@@ -136,7 +152,7 @@
 
     Implements QQmlAbstractGrpcChannel interface for HTTP2 channel type.
     It allows to set QQmlGrpcChannelOptions options required for a channel
-    creation and holds a pointer to the QAbstractGrpcChannel-based object.
+    creation and returns a pointer to the QAbstractGrpcChannel-based object.
     \note You can inherit from QQmlGrpcChannelOptions for importing custom
           channel in QML.
     \sa QQmlAbstractGrpcChannel, QGrpcHttp2Channel
@@ -144,7 +160,16 @@
 
 /*!
     \qmlproperty QQmlGrpcChannelOptions QQmlGrpcHttp2Channel::options
-    Holds a pointer to the QQmlGrpcChannelOptions object.
+    Returns a pointer to the QQmlGrpcChannelOptions object.
     \note options is \c REQUIRED property. It must be set for object creation.
     \sa QQmlGrpcChannelOptions
+*/
+
+/*!
+    \qmlmethod std::shared_ptr<QAbstractGrpcChannel> QQmlGrpcHttp2Channel::getChannel()
+
+    This function is virtual. It returns the pointer to
+    the QGrpcHttp2Channel object.
+
+    \sa QAbstractGrpcChannel, QGrpcHttp2Channel
 */
