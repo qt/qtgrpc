@@ -45,6 +45,8 @@ navigation.landingpage = "Qt GRPC"
 navigation.cppclassespage = "Qt GRPC C++ Classes"
 navigation.qmltypespage = "Qt GRPC QML Types"
 
+manifestmeta.highlighted.names = "QtGrpc/Magic 8 Ball"
+
 tagfile                 = qtgrpc.tags
 
 # Fail the documentation build if there are more warnings than the limit
