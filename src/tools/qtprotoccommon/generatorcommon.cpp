@@ -581,7 +581,7 @@ bool common::isOneofField(const FieldDescriptor *field)
 bool common::isOptionalField(const FieldDescriptor *field)
 {
 #ifdef HAVE_PROTOBUF_SYNC_PIPER
-    bool hasOptional = field->has_optional_keyword();
+    bool hasOptional = field->has_presence() && !field->real_containing_oneof();
 #else
     bool hasOptional = file->syntax() == FileDescriptor::SYNTAX_PROTO2 && field->is_optional()
             && !field->containing_oneof();

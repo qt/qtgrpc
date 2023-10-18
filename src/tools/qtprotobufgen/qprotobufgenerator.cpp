@@ -196,12 +196,8 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
                                                 + "/" + field->message_type()->name());
                         qtTypesSet.insert(field->message_type()->file()->package());
                     }
-#ifdef HAVE_PROTOBUF_SYNC_PIPER
-                    if (field->has_optional_keyword())
-#else
-                    if (file->syntax() == FileDescriptor::SYNTAX_PROTO2 && field->is_optional()
-                        && !field->containing_oneof())
-#endif
+
+                    if (common::isOptionalField(field))
                         hasOptionalFields = true;
                 }
             });
