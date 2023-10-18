@@ -45,6 +45,8 @@ navigation.landingpage = "Qt Protobuf"
 navigation.cppclassespage = "Qt Protobuf C++ Classes"
 #navigation.qmltypespage = "Qt Protobuf QML Types"
 
+manifestmeta.highlighted.names = "QtProtobuf/Sensors"
+
 tagfile                 = qtprotobuf.tags
 
 # Enforce zero documentation warnings
