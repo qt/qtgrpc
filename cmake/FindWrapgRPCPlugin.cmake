@@ -8,6 +8,8 @@ endif()
 
 find_program(__WrapgRPCPlugin_plugin_imported_location
         NAMES grpc_cpp_plugin grpc_cpp_plugin.exe
+        # Support for vcpkg-based directory layout
+        PATH_SUFFIXES tools/grpc
         HINTS "$ENV{gRPC_ROOT}/bin")
 
 set(WrapgRPCPlugin_FOUND FALSE)
