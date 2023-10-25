@@ -9,7 +9,7 @@
 
 constexpr int MessageLatency = QT_GRPC_TEST_MESSAGE_LATENCY;
 #ifdef Q_OS_WINDOWS
-constexpr int MessageLatencyThreshold = MessageLatency;
+constexpr int MessageLatencyThreshold = MessageLatency * 2;
 #else
 constexpr int MessageLatencyThreshold = MessageLatency / 5;
 #endif

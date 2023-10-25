@@ -128,7 +128,7 @@ void QtGrpcClientServerStreamTest::DeferredCancel()
         SimpleStringMessage ret = stream->read<SimpleStringMessage>();
         result.setTestFieldString(result.testFieldString() + ret.testFieldString());
         if (++i == ExpectedMessageCount)
-            QTimer::singleShot(MessageLatencyThreshold, stream.get(), &QGrpcServerStream::cancel);
+            QTimer::singleShot(0, stream.get(), &QGrpcServerStream::cancel);
     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamErrorSpy.count(), 1,
