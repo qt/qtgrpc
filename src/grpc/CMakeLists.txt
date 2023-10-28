@@ -20,6 +20,7 @@ qt_internal_add_module(Grpc
     GENERATE_CPP_EXPORTS
     LIBRARIES
         Qt::CorePrivate
+        Qt::NetworkPrivate
     PUBLIC_LIBRARIES
         Qt::Core
         Qt::Protobuf
