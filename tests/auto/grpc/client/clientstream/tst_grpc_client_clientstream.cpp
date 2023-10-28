@@ -28,6 +28,9 @@ private slots:
 
 void QtGrpcClientClientStreamTest::Valid()
 {
+    if (channelType().testFlag(GrpcClientTestBase::Channel::Native))
+        QSKIP("Unimplemented in the reference gRPC channel.");
+
     const int ExpectedMessageCount = 4;
 
     SimpleStringMessage request;

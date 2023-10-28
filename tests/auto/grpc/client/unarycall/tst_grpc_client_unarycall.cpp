@@ -67,15 +67,15 @@ void QtGrpcClientUnaryCallTest::AsyncWithSubscribe()
     SimpleStringMessage request;
     SimpleStringMessage result;
     request.setTestFieldString("Hello Qt!");
-    QEventLoop waiter;
 
+    bool waitForReply = false;
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
-    reply->subscribe(this, [reply, &result, &waiter] {
+    reply->subscribe(this, [reply, &result, &waitForReply] {
         result = reply->read<SimpleStringMessage>();
-        waiter.quit();
+        waitForReply = true;
     });
 
-    waiter.exec();
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(waitForReply, true, MessageLatency);
     QCOMPARE_EQ(result.testFieldString(), "Hello Qt!");
 }
 
@@ -84,13 +84,14 @@ void QtGrpcClientUnaryCallTest::AsyncWithLambda()
     SimpleStringMessage result;
     SimpleStringMessage request;
     request.setTestFieldString("Hello Qt!");
-    QEventLoop waiter;
-    client()->testMethod(request, this, [&result, &waiter](std::shared_ptr<QGrpcCallReply> reply) {
-        result = reply->read<SimpleStringMessage>();
-        waiter.quit();
-    });
+    bool waitForReply = false;
+    client()->testMethod(request, this,
+                         [&result, &waitForReply](std::shared_ptr<QGrpcCallReply> reply) {
+                             result = reply->read<SimpleStringMessage>();
+                             waitForReply = true;
+                         });
 
-    waiter.exec();
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(waitForReply, true, MessageLatency);
     QCOMPARE_EQ(result.testFieldString(), "Hello Qt!");
 }
 
@@ -134,8 +135,10 @@ void QtGrpcClientUnaryCallTest::DeferredCancel()
     result.setTestFieldString("Result not changed by echo");
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
 
-    QObject::connect(reply.get(), &QGrpcCallReply::finished, this,
-                     [reply, &result] { result = reply->read<SimpleStringMessage>(); });
+    QObject::connect(reply.get(), &QGrpcCallReply::finished, this, [reply, &result] {
+        QVERIFY(false);
+        result = reply->read<SimpleStringMessage>();
+    });
 
     QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
     QVERIFY(replyErrorSpy.isValid());

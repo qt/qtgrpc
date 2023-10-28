@@ -10,7 +10,7 @@ qt_feature("grpc" PUBLIC
     SECTION "Utilities"
     LABEL "gRPC support"
     PURPOSE "Provides support for serializing and deserializing gRPC services using Qt."
-    CONDITION TARGET Qt6::Network
+    CONDITION TARGET Qt6::Network AND QT_FEATURE_http
 )
 
 qt_feature("qtgrpcgen" PRIVATE
