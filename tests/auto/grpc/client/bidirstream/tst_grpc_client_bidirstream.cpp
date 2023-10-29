@@ -28,6 +28,9 @@ private slots:
 
 void QtGrpcClientBidirStreamTest::Valid()
 {
+    if (channelType().testFlag(GrpcClientTestBase::Channel::Native))
+        QSKIP("Unimplemented in the reference gRPC channel.");
+
     const int ExpectedMessageCount = 4;
 
     SimpleStringMessage request;
@@ -48,11 +51,6 @@ void QtGrpcClientBidirStreamTest::Valid()
     QVERIFY(streamFinishedSpy.isValid());
     QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
     QVERIFY(streamErrorSpy.isValid());
-
-    // TODO: Bidirectional streaming is not implemented by any of the existing
-    // grpc channels.
-    // It's expected that the test is failing.
-    QEXPECT_FAIL("", "Bidirectional streaming is not implemented", Abort);
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
