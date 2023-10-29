@@ -533,11 +533,7 @@ void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcChannelOperation>
 */
 void QGrpcHttp2Channel::startClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    QTimer::singleShot(0, channelOperation.get(), [channelOperation] {
-        emit channelOperation->errorOccurred(
-                { QGrpcStatus::Unknown,
-                  "Client-side streaming support is not implemented in QGrpcChannel"_L1 });
-    });
+    dPtr->processOperation(std::move(channelOperation));
 }
 
 /*!
@@ -546,11 +542,7 @@ void QGrpcHttp2Channel::startClientStream(std::shared_ptr<QGrpcChannelOperation>
 */
 void QGrpcHttp2Channel::startBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    QTimer::singleShot(0, channelOperation.get(), [channelOperation] {
-        emit channelOperation->errorOccurred(
-                { QGrpcStatus::Unknown,
-                  "Bidirectional streaming support is not implemented in QGrpcChannel"_L1 });
-    });
+    dPtr->processOperation(std::move(channelOperation));
 }
 
 /*!

@@ -53,11 +53,6 @@ void QtGrpcClientClientStreamTest::Valid()
     QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
     QVERIFY(streamErrorSpy.isValid());
 
-    // TODO: Client-side streaming is not implemented by any of the existing
-    // grpc channels.
-    // It's expected that the test is failing.
-    QEXPECT_FAIL("", "Client-side streaming is not implemented", Abort);
-
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
     QCOMPARE(streamErrorSpy.count(), 0);
