@@ -44,7 +44,7 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 */
 
 /*!
-    \fn template<typename ParamType, typename StreamType> std::shared_ptr<StreamType> QAbstractGrpcClient::startStream(QLatin1StringView method, const QProtobufMessage &arg, const QGrpcCallOptions &options)
+    \fn template <typename ParamType, typename StreamType, std::enable_if_t<std::is_same_v<StreamType, QGrpcServerStream> || std::is_same_v<StreamType, QGrpcClientStream> || std::is_same_v<StreamType, QGrpcBidirStream>, bool> = true> std::shared_ptr<StreamType> QAbstractGrpcClient::startStream(QLatin1StringView method, const QProtobufMessage &arg, const QGrpcCallOptions &options)
 
     Starts the stream \a method of the \e StreamType type with the message
     argument \a arg to the attached channel.
