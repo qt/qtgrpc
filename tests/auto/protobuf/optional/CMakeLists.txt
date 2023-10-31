@@ -18,7 +18,6 @@ qt_internal_add_test(tst_protobuf_optional
 )
 qt_autogen_tools_initial_setup(tst_protobuf_optional)
 
-get_target_property(protoc_version WrapProtoc::WrapProtoc _qt_internal_protobuf_version)
 qt6_add_protobuf(tst_protobuf_optional
     PROTO_FILES
         ../../shared/data/proto/optional.proto

@@ -3,6 +3,8 @@
 
 # Basic functionality
 if(TARGET Qt6::qtprotobufgen)
+    get_target_property(protoc_version WrapProtoc::WrapProtoc _qt_internal_protobuf_version)
+
     add_subdirectory(basic)
     add_subdirectory(syntax)
     add_subdirectory(nopackage)
