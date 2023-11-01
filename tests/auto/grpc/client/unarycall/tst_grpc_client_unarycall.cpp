@@ -139,7 +139,7 @@ void QtGrpcClientUnaryCallTest::DeferredCancel()
     QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
     QVERIFY(replyErrorSpy.isValid());
 
-    QTimer::singleShot(0, reply.get(), &QGrpcCallReply::cancel);
+    QTimer::singleShot(MessageLatencyThreshold, reply.get(), &QGrpcCallReply::cancel);
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(replyErrorSpy.count(), 1, FailTimeout);
     QCOMPARE_EQ(result.testFieldString(), "Result not changed by echo");
