@@ -2,7 +2,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if(NOT QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC)
-    set(QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC 300)
+    if (WIN32)
+        set(QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC 1000)
+    else()
+        set(QT_INTERNAL_GRPC_TEST_MESSAGE_LATENCY_MSEC 300)
+    endif()
 endif()
 
 # Set the default message latency for the gRPC tests in milliseconds.
