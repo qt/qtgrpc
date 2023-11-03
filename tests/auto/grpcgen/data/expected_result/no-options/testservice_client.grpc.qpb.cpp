@@ -11,10 +11,6 @@ Client::Client(QObject *parent)
 {
 }
 
-QGrpcStatus Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, qtgrpc::tests::SimpleStringMessage *ret, const QGrpcCallOptions &options)
-{
-    return call<qtgrpc::tests::SimpleStringMessage>("testMethod"_L1, arg, ret, options);
-}
 
 std::shared_ptr<QGrpcCallReply> Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {

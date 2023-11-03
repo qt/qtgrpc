@@ -44,23 +44,6 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 */
 
 /*!
-    \fn template <typename ParamType> QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method,
-    const QProtobufMessage &arg, const QGrpcCallOptions &options);
-
-    Synchronously calls the given \a method of this service client,
-    with argument \a arg.
-    Uses \a options argument to set additional parameter for the call.
-*/
-
-/*!
-    \fn template <typename ParamType, typename ReturnType> QGrpcStatus QAbstractGrpcClient::call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType *ret, const QGrpcCallOptions &options)
-
-    Synchronously calls the given \a method of this service client,
-    with argument \a arg and fills \a ret with gRPC reply.
-    Uses \a options argument to set additional parameter for the call.
-*/
-
-/*!
     \fn template<typename ParamType, typename StreamType> std::shared_ptr<StreamType> QAbstractGrpcClient::startStream(QLatin1StringView method, const QProtobufMessage &arg, const QGrpcCallOptions &options)
 
     Starts the stream \a method of the \e StreamType type with the message

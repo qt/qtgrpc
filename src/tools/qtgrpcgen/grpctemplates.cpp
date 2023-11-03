@@ -16,12 +16,6 @@ const char *GrpcTemplates::ClientQmlDeclarationTemplate()
     return "    QML_ELEMENT\n";
 }
 
-const char *GrpcTemplates::ClientMethodDeclarationSyncTemplate()
-{
-    return "QGrpcStatus $method_name$(const $param_type$ &$param_name$, "
-           "$return_type$ *$return_name$, const QGrpcCallOptions &options = {});\n";
-}
-
 const char *GrpcTemplates::ClientMethodDeclarationAsyncTemplate()
 {
     return "std::shared_ptr<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$, const "
@@ -65,16 +59,6 @@ const char *GrpcTemplates::ClientQmlConstructorDefinitionTemplate()
            "    : $parent_class$(parent)\n"
            "{\n"
            "}\n\n";
-}
-
-const char *GrpcTemplates::ClientMethodDefinitionSyncTemplate()
-{
-    return "QGrpcStatus $classname$::$method_name$(const $param_type$ &$param_name$, "
-           "$return_type$ *$return_name$, const QGrpcCallOptions &options)\n"
-           "{\n"
-           "    return call<$param_type$>(\"$method_name$\"_L1, $param_name$, $return_name$, "
-           "options);\n"
-           "}\n";
 }
 
 const char *GrpcTemplates::ClientMethodDefinitionAsyncTemplate()

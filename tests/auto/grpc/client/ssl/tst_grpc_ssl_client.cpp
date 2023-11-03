@@ -20,6 +20,8 @@
 #include <QtCore/qsysinfo.h>
 #include <QtNetwork/QSslConfiguration>
 
+#include "message_latency_defs.h"
+
 #include "testservice_client.grpc.qpb.h"
 
 using namespace qtgrpc::tests;
@@ -97,8 +99,15 @@ void QtGrpcSslClientTest::Http2ChannelIncorrectSecureCredentialsTest()
 
     SimpleStringMessage expected;
     expected.setTestFieldString("Hello Qt!");
-    auto result = std::make_shared<SimpleStringMessage>();
-    QVERIFY(testClient.testMethod(expected, result.get()) != QGrpcStatus::Ok);
+
+    SimpleStringMessage result;
+    QSignalSpy errorSpy(&testClient, &TestService::Client::errorOccurred);
+    testClient.testMethod(expected, &testClient, [&result](std::shared_ptr<QGrpcCallReply> reply) {
+        result = reply->read<SimpleStringMessage>();
+    });
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(errorSpy.count(), 1, MessageLatencyWithThreshold);
+    QCOMPARE_EQ(result.testFieldString(), "");
 }
 
 #if QT_CONFIG(native_grpc)
@@ -114,8 +123,15 @@ void QtGrpcSslClientTest::GrpcHttpChannelIncorrectSecureCredentialsTest()
 
     SimpleStringMessage expected;
     expected.setTestFieldString("Hello Qt!");
-    auto result = std::make_shared<SimpleStringMessage>();
-    QVERIFY(testClient.testMethod(expected, result.get()) != QGrpcStatus::Ok);
+
+    SimpleStringMessage result;
+    QSignalSpy errorSpy(&testClient, &TestService::Client::errorOccurred);
+    testClient.testMethod(expected, &testClient, [&result](std::shared_ptr<QGrpcCallReply> reply) {
+        result = reply->read<SimpleStringMessage>();
+    });
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(errorSpy.count(), 1, MessageLatencyWithThreshold);
+    QCOMPARE_EQ(result.testFieldString(), "");
 }
 
 #  ifndef Q_OS_WINDOWS
@@ -128,8 +144,15 @@ void QtGrpcSslClientTest::GrpcSocketChannelIncorrectSecureCredentialsTest()
 
     SimpleStringMessage expected;
     expected.setTestFieldString("Hello Qt!");
-    auto result = std::make_shared<SimpleStringMessage>();
-    QVERIFY(testClient.testMethod(expected, result.get()) != QGrpcStatus::Ok);
+
+    SimpleStringMessage result;
+    QSignalSpy errorSpy(&testClient, &TestService::Client::errorOccurred);
+    testClient.testMethod(expected, &testClient, [&result](std::shared_ptr<QGrpcCallReply> reply) {
+        result = reply->read<SimpleStringMessage>();
+    });
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(errorSpy.count(), 1, MessageLatencyWithThreshold);
+    QCOMPARE_EQ(result.testFieldString(), "");
 }
 #  endif
 #endif

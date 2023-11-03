@@ -36,7 +36,6 @@ public:
 
     void cancel();
     bool isFinished() const;
-    QGrpcStatus waitForFinished() const;
 
 Q_SIGNALS:
     void finished();

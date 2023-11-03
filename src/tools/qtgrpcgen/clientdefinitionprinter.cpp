@@ -52,7 +52,6 @@ void ClientDefinitionPrinter::printMethod(const MethodDescriptor *method)
     if (method->client_streaming() || method->server_streaming()) {
         m_printer->Print(parameters, GrpcTemplates::ClientMethodStreamDefinitionTemplate());
     } else {
-        m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionSyncTemplate());
         m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionAsyncTemplate());
         m_printer->Print(parameters, GrpcTemplates::ClientMethodDefinitionAsync2Template());
     }

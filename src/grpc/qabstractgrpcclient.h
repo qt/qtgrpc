@@ -41,29 +41,6 @@ protected:
     explicit QAbstractGrpcClient(QLatin1StringView service, QObject *parent = nullptr);
     ~QAbstractGrpcClient() override;
 
-    template <typename ParamType, typename ReturnType>
-    QGrpcStatus call(QLatin1StringView method, const QProtobufMessage &arg, ReturnType *ret,
-                     const QGrpcCallOptions &options)
-    {
-        Q_ASSERT(ret != nullptr);
-
-        using namespace Qt::StringLiterals;
-        QGrpcStatus status{ QGrpcStatus::Unknown,
-                            "Serializing failed. Serializer is not ready."_L1 };
-
-        std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
-        if (argData) {
-            std::shared_ptr<QGrpcCallReply> reply = call(method, *argData, options);
-            if (!reply)
-                return QGrpcStatus{ QGrpcStatus::Unknown, "No channel(s) attached."_L1 };
-
-            status = reply->waitForFinished();
-            if (status == QGrpcStatus::Ok)
-                *ret = reply->read<ReturnType>();
-        }
-        return status;
-    }
-
     template <typename ParamType>
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg,
                                          const QGrpcCallOptions &options)

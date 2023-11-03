@@ -39,16 +39,12 @@ public:
     }
 
 private slots:
-    void Blocking();
     void AsyncWithSubscribe();
     void AsyncWithLambda();
     void ImmediateCancel();
     void DeferredCancel();
     void AsyncClientStatusMessage();
-    void BlockingClientStatusMessage();
     void AsyncStatusMessage();
-    void BlockingStatusMessage();
-    void NonCompatibleArgRet();
     void InThread();
     void AsyncInThread();
     void Metadata();
@@ -58,15 +54,6 @@ private slots:
     void CancelledInterceptor();
     void InterceptResponse();
 };
-
-void QtGrpcClientUnaryCallTest::Blocking()
-{
-    SimpleStringMessage request;
-    auto result = std::make_shared<SimpleStringMessage>();
-    request.setTestFieldString("Hello Qt!");
-    QCOMPARE_EQ(client()->testMethod(request, result.get()), QGrpcStatus::Ok);
-    QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
-}
 
 void QtGrpcClientUnaryCallTest::AsyncWithSubscribe()
 {
@@ -168,23 +155,6 @@ void QtGrpcClientUnaryCallTest::AsyncClientStatusMessage()
              request.testFieldString());
 }
 
-void QtGrpcClientUnaryCallTest::BlockingClientStatusMessage()
-{
-    SimpleStringMessage request;
-    request.setTestFieldString("Some status message");
-    auto result = std::make_shared<SimpleStringMessage>();
-
-    QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
-    QVERIFY(clientErrorSpy.isValid());
-
-    client()->testMethodStatusMessage(request, result.get());
-
-    QTRY_COMPARE_GE_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
-
-    QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).message(),
-             request.testFieldString());
-}
-
 void QtGrpcClientUnaryCallTest::AsyncStatusMessage()
 {
     SimpleStringMessage request;
@@ -200,49 +170,23 @@ void QtGrpcClientUnaryCallTest::AsyncStatusMessage()
              request.testFieldString());
 }
 
-
-void QtGrpcClientUnaryCallTest::BlockingStatusMessage()
-{
-    SimpleStringMessage request;
-    request.setTestFieldString("Some status message");
-    auto result = std::make_shared<SimpleStringMessage>();
-
-    QGrpcStatus status = client()->testMethodStatusMessage(request, result.get());
-
-    QCOMPARE_EQ(status.message(), request.testFieldString());
-}
-
-void QtGrpcClientUnaryCallTest::NonCompatibleArgRet()
-{
-    const QtProtobuf::sint32 TestValue = 2048;
-    const QString TestValueString = QString::number(TestValue);
-
-    SimpleIntMessage request;
-    request.setTestField(TestValue);
-    auto result = std::make_shared<SimpleStringMessage>();
-    QCOMPARE_EQ(client()->testMethodNonCompatibleArgRet(request, result.get()), QGrpcStatus::Ok);
-    QCOMPARE_EQ(result->testFieldString(), TestValueString);
-}
-
 void QtGrpcClientUnaryCallTest::InThread()
 {
     SimpleStringMessage request;
-    auto result = std::make_shared<SimpleStringMessage>();
 
     request.setTestFieldString("Hello Qt from thread!");
 
     QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
     QVERIFY(clientErrorSpy.isValid());
 
-    bool ok = false;
+    std::shared_ptr<QGrpcCallReply> reply;
     const std::unique_ptr<QThread> thread(QThread::create(
-            [&] { ok = client()->testMethod(request, result.get()) == QGrpcStatus::Ok; }));
+        [&] { reply = client()->testMethod(request); }));
 
     thread->start();
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, MessageLatencyWithThreshold);
-    QVERIFY(!ok);
-    QVERIFY(result->testFieldString().isEmpty());
+    QVERIFY(reply == nullptr);
     QVERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
                     .message()
                     .startsWith("QAbstractGrpcClient::call is called from a different thread."));
@@ -451,11 +395,15 @@ void QtGrpcClientUnaryCallTest::InterceptResponse()
     client()->attachChannel(channel);
 
     SimpleStringMessage request;
+    SimpleStringMessage result;
     request.setTestFieldString("Hello Qt!");
-    auto result = std::make_shared<SimpleStringMessage>();
-    QCOMPARE_EQ(client()->testMethod(request, result.get()), QGrpcStatus::Ok);
-    QCOMPARE_EQ(serverResponse.testFieldString(), "Hello Qt!");
-    QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
+    client()->testMethod(request, client().get(), [&result](std::shared_ptr<QGrpcCallReply> reply) {
+        result = reply->read<SimpleStringMessage>();
+    });
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(serverResponse.testFieldString(),
+                                 "Hello Qt!", MessageLatencyWithThreshold);
+    QCOMPARE_EQ(result.testFieldString(), "Hello Qt!");
 }
 
 QTEST_MAIN(QtGrpcClientUnaryCallTest)

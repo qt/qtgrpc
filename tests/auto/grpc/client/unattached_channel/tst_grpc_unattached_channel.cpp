@@ -22,8 +22,6 @@ private slots:
     void initTestCase() { qRegisterProtobufTypes(); }
 
     void CheckMethodsGeneration();
-    void ClientSyncTestUnattachedChannel();
-    void ClientSyncTestUnattachedChannelSignal();
     void AttachChannelThreadTest();
 };
 
@@ -34,42 +32,10 @@ void QtGrpcUnattachedChannelClientTest::CheckMethodsGeneration()
     QGrpcChannelOptions channelOptions{ QUrl() };
     client.attachChannel(std::make_shared<QGrpcHttp2Channel>(channelOptions));
     SimpleStringMessage request;
-    auto result = std::make_shared<SimpleStringMessage>();
-    client.testMethod(request, result.get());
     client.testMethod(request);
     client.testMethod(request, &client, [](std::shared_ptr<QGrpcCallReply>) {});
 }
 
-void QtGrpcUnattachedChannelClientTest::ClientSyncTestUnattachedChannel()
-{
-    TestService::Client client;
-    SimpleStringMessage request;
-    request.setTestFieldString("Some status message");
-    auto result = std::make_shared<SimpleStringMessage>();
-
-    QGrpcStatus status = client.testMethodStatusMessage(request, result.get());
-
-    QCOMPARE_EQ(status.code(), QGrpcStatus::Unknown);
-    QCOMPARE_EQ("Serializing failed. Serializer is not ready.", status.message());
-}
-
-void QtGrpcUnattachedChannelClientTest::ClientSyncTestUnattachedChannelSignal()
-{
-    TestService::Client client;
-    SimpleStringMessage request;
-    request.setTestFieldString("Some status message");
-    auto result = std::make_shared<SimpleStringMessage>();
-
-    QSignalSpy clientErrorSpy(&client, &TestService::Client::errorOccurred);
-    QVERIFY(clientErrorSpy.isValid());
-
-    client.testMethodStatusMessage(request, result.get());
-
-    QTRY_COMPARE_EQ(clientErrorSpy.count(), 1);
-    QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(), QGrpcStatus::Unknown);
-    QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).message(),
-             "Serializing failed. Serializer is not ready.");
-}
 
 void QtGrpcUnattachedChannelClientTest::AttachChannelThreadTest()
 {
