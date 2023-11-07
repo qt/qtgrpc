@@ -46,6 +46,14 @@ qt_add_protobuf(MyMessagesPlugin
         /path/to/proto/include
 )
 
+qt_add_protobuf(MyApp
+    QML
+    PROTO_FILES
+        path/to/internal_message.proto
+    PROTO_INCLUDES
+        /path/to/proto/include
+)
+
 qt_add_qml_module(MyApp
     URI example.uri
     VERSION 1.0
@@ -56,12 +64,15 @@ qt_add_executable(MyApp main.cpp)
 target_link_libraries(MyApp PRIVATE Quick)
 \endcode
 
-In the QML extended example above, we generate a QML module called
-\c{MyMessagesPlugin}, which contains the message types defined in
-the paths passed to the \c{PROTO_FILES} option. We use the \c QML option,
-that enables proto message types registration in the \c QML context.
-The registered types will be available in \c QML by importing a path
-that is set by the \c QML_URI.
+In the QML extended example above, by the first \c qt_add_protobuf call,
+we generate a QML module called \c{MyMessagesPlugin}, which contains
+the message types defined in the paths passed to the \c{PROTO_FILES} option.
+We use the \c QML option, that enables proto message types registration
+in the \c QML context. The registered types will be available in \c QML
+by importing a path that is set by the \c QML_URI.
+By second \c qt_add_protobuf call we add
+auto-generated code into the existing \c{MyApp} QML module.
+The \c QML_URI is not required in such cases.
 Finally, we create a target for an executable called \c{MyApp}, which
 has a QML module for the graphical part and loads \c MyMessagesPlugin
 into the main.qml file via the \c{my.messages.module.uri} import.
