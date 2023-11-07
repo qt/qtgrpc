@@ -7,6 +7,9 @@ if(NOT QT_BUILD_STANDALONE_TESTS AND NOT QT_BUILDING_QT)
     find_package(Qt6BuildInternals REQUIRED COMPONENTS STANDALONE_TEST)
 endif()
 
+set(CMAKE_AUTOMOC TRUE)
+qt_policy(SET QTP0001 NEW)
+
 qt_internal_add_test(tst_protobuf_basictypes_qml
     QMLTEST
     SOURCES
@@ -16,7 +19,14 @@ qt_internal_add_test(tst_protobuf_basictypes_qml
         Qt::Protobuf
 )
 
-qt_add_protobuf(tst_protobuf_basictypes_qml_gen
+qt_add_qml_module(tst_protobuf_basictypes_qml
+    URI QmlTestUri
+    VERSION 1.0
+    QML_FILES
+        qml/tst_basic.qml
+)
+
+qt_add_protobuf(tst_protobuf_basictypes_qml
     PROTO_FILES
         ../../shared/data/proto/basicmessages.proto
     QML
@@ -25,18 +35,7 @@ qt_add_protobuf(tst_protobuf_basictypes_qml_gen
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 
-qt_policy(SET QTP0001 NEW)
-
-qt_add_qml_module(tst_protobuf_basictypes_qml
-    URI QmlTestUri
-    VERSION 1.0
-    QML_FILES
-        qml/tst_basic.qml
-)
-
 qt_autogen_tools_initial_setup(tst_protobuf_basictypes_qml)
-qt_autogen_tools_initial_setup(tst_protobuf_basictypes_qml_gen)
-qt_autogen_tools_initial_setup(tst_protobuf_basictypes_qml_genplugin)
 if(QT_BUILD_STANDALONE_TESTS)
     qt_import_qml_plugins(tst_protobuf_basictypes_qml)
 endif()
