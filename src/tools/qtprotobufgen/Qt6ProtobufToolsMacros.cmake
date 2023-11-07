@@ -303,12 +303,44 @@ function(qt6_add_protobuf target)
             "${output_directory}/${package_full_path}${basename}_protobuftyperegistrations.cpp")
     endforeach()
 
+    if(TARGET ${target})
+        get_target_property(existing_proto_packages ${target} QT_PROTOBUF_PACKAGES)
+        if(NOT existing_proto_packages)
+            set(existing_proto_packages "")
+        endif()
+    else()
+        set(existing_proto_packages "")
+    endif()
+
+    list(APPEND existing_proto_packages ${proto_packages})
+    list(REMOVE_DUPLICATES existing_proto_packages)
+
     set(qml_sources "")
     if(arg_QML)
-        if(arg_QML_URI)
+        if(TARGET ${target})
+            get_target_property(existing_uri ${target} QT_QML_MODULE_URI)
+        else()
+            set(existing_uri "")
+        endif()
+
+        if(existing_uri)
+            if(arg_QML_URI AND NOT "${existing_uri}" STREQUAL "${arg_QML_URI}")
+                message(WARNING "qt_add_protobuf is called with QML argument and for the existing"
+                " QML module target ${target}.The Protobuf generator will use the URI provided"
+                " by the QML module target: ${existing_uri}, instead of the manually specified"
+                " QML_URI: ${arg_QML_URIs}")
+            endif()
+
+            # Prevent mixing multiple protobuf packages in single QML module
+            if(existing_proto_packages)
+                _qt_internal_protobuf_package_qml_uri(dummy ${existing_proto_packages})
+            endif()
+
+            set(qml_uri "${existing_uri}")
+        elseif(arg_QML_URI)
             set(qml_uri "${arg_QML_URI}")
-        elseif(proto_packages)
-            _qt_internal_protobuf_package_qml_uri(qml_uri ${proto_packages})
+        elseif(existing_proto_packages)
+            _qt_internal_protobuf_package_qml_uri(qml_uri ${existing_proto_packages})
         else()
             message(FATAL_ERROR ".proto files of ${target} don't specify a package."
                 " Please, set QML_URI when using .proto without package name."
@@ -331,6 +363,8 @@ function(qt6_add_protobuf target)
             list(APPEND ${arg_OUTPUT_TARGETS} "${target}")
         endif()
     endif()
+
+    set_target_properties(${target} PROPERTIES QT_PROTOBUF_PACKAGES "${existing_proto_packages}")
 
     foreach(f ${proto_files})
         _qt_internal_expose_source_file_to_ide(${target} ${f})
@@ -430,7 +464,7 @@ function(qt6_add_protobuf target)
         target_sources(${target} PRIVATE ${type_registrations})
     endif()
 
-    if(arg_QML)
+    if(arg_QML AND NOT existing_uri)
         string(REPLACE "." "/" qml_module_output_path "${qml_uri}")
         set(qml_module_output_full_path "${CMAKE_CURRENT_BINARY_DIR}/${qml_module_output_path}")
 
