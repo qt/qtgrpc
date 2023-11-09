@@ -479,6 +479,7 @@ void OneofComplexMessage::setTestOneofComplexField_p(ComplexMessage *testOneofCo
         dptr.detach();
         dptr->m_testOneof.setValue(value, 3);
     }
+    delete testOneofComplexField;
 }
 
 void OneofComplexMessage::setTestOneofSecondComplexField(const ComplexMessage &testOneofSecondComplexField)
@@ -496,6 +497,7 @@ void OneofComplexMessage::setTestOneofSecondComplexField_p(ComplexMessage *testO
         dptr.detach();
         dptr->m_testOneof.setValue(value, 4);
     }
+    delete testOneofSecondComplexField;
 }
 
 void OneofComplexMessage::setSecondFieldInt(const QtProtobuf::int32 &secondFieldInt)
@@ -529,6 +531,7 @@ void OneofComplexMessage::setSecondComplexField_p(ComplexMessage *secondComplexF
         dptr.detach();
         dptr->m_secondOneof.setValue(value, 5);
     }
+    delete secondComplexField;
 }
 
 void OneofComplexMessage::setSecondSecondComplexField(const ComplexMessage &secondSecondComplexField)
@@ -546,6 +549,7 @@ void OneofComplexMessage::setSecondSecondComplexField_p(ComplexMessage *secondSe
         dptr.detach();
         dptr->m_secondOneof.setValue(value, 6);
     }
+    delete secondSecondComplexField;
 }
 
 void OneofComplexMessage::setTestSnakeCaseField(const QtProtobuf::int32 &testSnakeCaseField)

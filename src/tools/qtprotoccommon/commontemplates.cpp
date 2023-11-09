@@ -665,6 +665,7 @@ const char *CommonTemplates::PrivateSetterOneofMessageDefinitionTemplate()
            "        dptr.detach();\n"
            "        dptr->m_$optional_property_name$.setValue(value, $number$);\n"
            "    }\n"
+           "    delete $property_name$;\n"
            "}\n\n";
 }
 
