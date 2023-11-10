@@ -109,4 +109,17 @@
     \list
         \li \l {Qt GRPC Examples}
     \endlist
+
+    \section1 Licenses and Attributions
+
+    The Qt GRPC module is available under commercial licenses from \l{The Qt Company}.
+    In addition, it is available under free software licenses:
+    The \l{GNU Lesser General Public License, version 3}, or
+    the \l{GNU General Public License, version 2}.
+    See \l{Qt Licensing} for further details.
+
+    Furthermore, Qt GRPC in Qt \QtVersion may contain third party
+    modules under the following permissive licenses:
+
+    \generatelist{groupsbymodule attributions-qtgrpc-tools}
 */
