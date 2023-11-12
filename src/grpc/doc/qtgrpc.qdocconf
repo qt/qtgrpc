@@ -17,22 +17,26 @@ qhp.QtGrpc.indexTitle          = Qt GRPC
 qhp.QtGrpc.indexRoot           =
 
 qhp.QtGrpc.subprojects = qmltypes examples classes
+
 qhp.QtGrpc.subprojects.qmltypes.title = QML Types
 qhp.QtGrpc.subprojects.qmltypes.indexTitle = Qt GRPC QML Types
 qhp.QtGrpc.subprojects.qmltypes.selectors = qmlclass
 qhp.QtGrpc.subprojects.qmltypes.sortPages = true
+
 qhp.QtGrpc.subprojects.examples.title = Examples
 qhp.QtGrpc.subprojects.examples.indexTitle = Qt GRPC Examples
 qhp.QtGrpc.subprojects.examples.selectors = doc:example
+
 qhp.QtGrpc.subprojects.classes.title      = C++ Classes
 qhp.QtGrpc.subprojects.classes.indexTitle = Qt GRPC C++ Classes
 qhp.QtGrpc.subprojects.classes.selectors  = class doc:headerfile
 qhp.QtGrpc.subprojects.classes.sortPages  = true
 
-depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake qtqml qtgrpcquick
+depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake qtqml
 
 {headerdirs,sourcedirs}  += .. \
-                            ../../tools/doc/src
+                            ../../tools/doc/src \
+                            ../../grpcquick
 
 
 exampledirs +=  ../../tools/doc/src/snippets \

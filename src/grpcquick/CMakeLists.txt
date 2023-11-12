@@ -21,10 +21,6 @@ qt_internal_add_qml_module(GrpcQuick
     GENERATE_PRIVATE_CPP_EXPORTS
 )
 
-qt_internal_add_docs(GrpcQuick
-    doc/qtgrpcquick.qdocconf
-)
-
 qt_internal_extend_target(GrpcQuick CONDITION QT_FEATURE_qml_ssl
     LIBRARIES
         Qt::QmlNetwork

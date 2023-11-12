@@ -106,7 +106,7 @@
 
     \section1 References
     \list
-        \li \l{Qt GRPC Quick}
+        \li \l{Qt GRPC QML Types}{Qt GRPC Quick}
         \li \l{Qt GRPC C++ Classes}{C++ Classes}
     \endlist
 

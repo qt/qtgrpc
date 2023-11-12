@@ -3,7 +3,7 @@
 
 /*!
     \qmlmodule QtGrpc
-    \title Qt GRPC Quick Types
+    \title Qt GRPC QML Types
     \since 6.7
     \ingroup qmlmodules
     \brief Provides Qt GRPC functionality in QML.
