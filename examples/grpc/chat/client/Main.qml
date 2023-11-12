@@ -118,16 +118,15 @@ ApplicationWindow {
     }
 
     Text {
-        id: authFailedText
+        id: errorText
         visible: false
         anchors.top: loginControl.bottom
         anchors.topMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter
-        text: qsTr("This username with this password doesn't exists.")
         font.pointSize: 14
         color: "#f3f3f4"
         onVisibleChanged: {
-            if (authFailedText.visible) {
+            if (errorText.visible) {
                 fadeOutTimer.restart()
             } else {
                 fadeOutTimer.stop()
@@ -137,7 +136,7 @@ ApplicationWindow {
         Timer {
             id: fadeOutTimer
             onTriggered: {
-                authFailedText.visible = false
+                errorText.visible = false
             }
         }
     }
@@ -145,7 +144,12 @@ ApplicationWindow {
     Connections {
         target: SimpleChatEngine
         function onAuthFailed() {
-            authFailedText.visible = true;
+            errorText.text = qsTr("This username with this password doesn't exists.")
+            errorText.visible = true;
+        }
+        function onNetworkError(errorString) {
+            errorText.text = errorString;
+            errorText.visible = true;
         }
     }
 }
