@@ -4,7 +4,7 @@
 /*!
     \module QtProtobufQtGuiTypes
     \modulestate Technical Preview
-    \title Protobuf Qt GUI types module
+    \title Protobuf Qt GUI Types Module
     \ingroup frameworks-technologies
     \qtcmakepackage ProtobufQtGuiTypes
     \qtvariable protobufqtguitypes

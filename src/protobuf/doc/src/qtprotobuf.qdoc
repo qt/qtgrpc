@@ -43,7 +43,7 @@
         \li Integrated QML-types support for generated protobuf messages.
             See \l{Qt Protobuf QML types}
         \li Enabled using Qt Core and Qt GUI types as a part of *.proto schema.
-            See \l {Protobuf Qt Core types module} and
+            See \l {Protobuf Qt Core Types Module} and
             \l {Protobuf Qt GUI types module}.
     \endlist
 
@@ -87,8 +87,8 @@
     \section1 Articles and Guides
     \list
         \li \l {CMake Commands in Qt6 Protobuf}
-        \li \l {Protobuf Qt Core types module} {Protobuf Qt Core types}
-        \li \l {Protobuf Qt GUI types module} {Protobuf Qt GUI types}
+        \li \l {Protobuf Qt Core Types Module} {Protobuf Qt Core Types}
+        \li \l {Protobuf Qt GUI Types Module} {Protobuf Qt GUI Types}
         \li \l {Qt Protobuf Well-Known Types C++ Classes} {Qt Protobuf Well-Known types}
     \endlist
 

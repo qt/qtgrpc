@@ -4,7 +4,7 @@
 /*!
     \module QtProtobufQtCoreTypes
     \modulestate Technical Preview
-    \title Protobuf Qt Core types module
+    \title Protobuf Qt Core Types Module
     \ingroup frameworks-technologies
     \qtcmakepackage ProtobufQtCoreTypes
     \qtvariable protobufqtcoretypes

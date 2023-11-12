@@ -24,7 +24,3 @@ qt_internal_add_protobuf_wellknown_types(ProtobufWellKnownTypes
     # type
     # api
 )
-
-qt_internal_add_docs(ProtobufWellKnownTypes
-    doc/qtprotobufwellknowntypes.qdocconf
-)
