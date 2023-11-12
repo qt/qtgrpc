@@ -21,10 +21,12 @@ qhp.QtProtobuf.subprojects.qmltypes.title = QML Types
 qhp.QtProtobuf.subprojects.qmltypes.indexTitle = Qt Protobuf QML Types
 qhp.QtProtobuf.subprojects.qmltypes.selectors = qmlclass
 qhp.QtProtobuf.subprojects.qmltypes.sortPages = true
+
 qhp.QtProtobuf.subprojects.examples.title = Examples
 qhp.QtProtobuf.subprojects.examples.indexTitle = Qt Protobuf Examples and Tutorials
 qhp.QtProtobuf.subprojects.examples.selectors = doc:example
 qhp.QtProtobuf.subprojects.classes.title      = C++ Classes
+
 qhp.QtProtobuf.subprojects.classes.indexTitle = Qt Protobuf C++ Classes
 qhp.QtProtobuf.subprojects.classes.selectors  = class doc:headerfile
 qhp.QtProtobuf.subprojects.classes.sortPages  = true

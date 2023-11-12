@@ -41,7 +41,7 @@
         \li Integrated properties mechanism for generated protobuf messages.
         \li Integrated gRPC-client support (see \l {Qt GRPC}{QtGrpc module}).
         \li Integrated QML-types support for generated protobuf messages.
-            See \l{Qt Protobuf QML types}
+            See \l{Qt Protobuf QML Types}
         \li Enabled using Qt Core and Qt GUI types as a part of *.proto schema.
             See \l {Protobuf Qt Core types module} and
             \l {Protobuf Qt GUI types module}.
@@ -95,7 +95,7 @@
     \section1 References
     \list
         \li \l {Qt Protobuf C++ Classes}{Qt Protobuf C++ Classes}
-        \li \l {Qt Protobuf QML types}
+        \li \l {Qt Protobuf QML Types}
     \endlist
 
     \section1 Examples
@@ -125,8 +125,8 @@
 
 /*!
     \group QtProtobuf
-    \keyword Qt Protobuf QML types
-    \title Qt Protobuf QML types
+    \keyword Qt Protobuf QML Types
+    \title Qt Protobuf QML Types
     \brief A collection of examples for \l {Qt Protobuf}
 
     With the \l{The qtprotobufgen Tool}{generator plugin}, you can register
