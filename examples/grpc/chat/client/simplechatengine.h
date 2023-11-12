@@ -55,6 +55,7 @@ public:
     SimpleChatEngine::State state() const;
 
 Q_SIGNALS:
+    void networkError(const QString &);
     void authFailed();
     void clipBoardContentTypeChanged();
     void userNameChanged();
