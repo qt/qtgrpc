@@ -20,7 +20,3 @@ qt_internal_add_protobuf_module(ProtobufQtGuiTypes
     PRIVATE_HEADER_FILTERS
         ".*\\.qpb\\.h"
 )
-
-qt_internal_add_docs(ProtobufQtGuiTypes
-    doc/qtprotobufqtguitypes.qdocconf
-)
