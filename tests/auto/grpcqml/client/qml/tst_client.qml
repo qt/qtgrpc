@@ -28,19 +28,19 @@ Item {
     property var errorCallback: function() { root.calbackCalled = true }
 
     function createClientItem() {
-        return Qt.createQmlObject("import QtQuick; import QtGrpcQuick; \
+        return Qt.createQmlObject("import QtQuick; import QtGrpc; \
                                    import qtgrpc.tests; QmlClient {}", root)
     }
 
     function createGrpcChannelItem() {
-        return Qt.createQmlObject("import QtQuick; import QtGrpcQuick; GrpcHttp2Channel { \
+        return Qt.createQmlObject("import QtQuick; import QtGrpc; GrpcHttp2Channel { \
                                    options: GrpcChannelOptions { \
                                    host: \"http://localhost:50051\"; \
                                    deadline: { 2000 } } }", root)
     }
 
     function createGrpcChannelWithDeadlineItem() {
-        return Qt.createQmlObject("import QtQuick; import QtGrpcQuick; GrpcHttp2Channel { \
+        return Qt.createQmlObject("import QtQuick; import QtGrpc; GrpcHttp2Channel { \
                                    options: GrpcChannelOptions { \
                                    host: \"http://localhost:50051\"; \
                                    deadline: { 1000 } }  }", root)

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 qt_internal_add_qml_module(GrpcQuick
-    URI QtGrpcQuick
+    URI QtGrpc
     VERSION ${CMAKE_PROJECT_VERSION}
     PLUGIN_TARGET grpcquickplugin
     CLASS_NAME GrpcQuickPlugin

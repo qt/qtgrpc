@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
 
 /*!
-    \qmlmodule QtGrpcQuick
+    \qmlmodule QtGrpc
     \title Qt GRPC Quick Types
     \since 6.7
     \ingroup qmlmodules
@@ -14,12 +14,12 @@
     following import statement in your .qml file:
 
     \qml
-    import QtGrpcQuick
+    import QtGrpc
     \endqml
 
     \section1 QML Types
 
-    \generatelist {qmltypesbymodule QtGrpcQuick}
+    \generatelist {qmltypesbymodule QtGrpc}
 
     \section1 Related Information
 
@@ -34,7 +34,7 @@
 
 /*!
     \qmltype QQmlGrpcCallOptions
-    \inqmlmodule QtGrpcQuick
+    \inqmlmodule QtGrpc
     \instantiates QGrpcCallOptions
     \brief The QQmlGrpcCallOptions is a storage class used to set
            additional call options.
@@ -58,7 +58,7 @@
 
 /*!
     \qmltype QQmlGrpcChannelOptions
-    \inqmlmodule QtGrpcQuick
+    \inqmlmodule QtGrpc
     \instantiates QGrpcChannelOptions
     \brief  The QQmlGrpcChannelOptions is an storage class used to set
             additional channel options.
@@ -90,7 +90,7 @@
 
 /*!
     \qmltype QQmlGrpcMetadata
-    \inqmlmodule QtGrpcQuick
+    \inqmlmodule QtGrpc
     \brief  The QQmlGrpcMetadata is a class that stores metadata in unordered
             multimap container.
 
@@ -121,7 +121,7 @@
 
 /*!
     \qmltype QQmlAbstractGrpcChannel
-    \inqmlmodule QtGrpcQuick
+    \inqmlmodule QtGrpc
     \brief The QQmlAbstractGrpcChannel class is interface that represents
            common gRPC channel functionality in QML.
 
@@ -146,7 +146,7 @@
 
 /*!
     \qmltype QQmlGrpcHttp2Channel
-    \inqmlmodule QtGrpcQuick
+    \inqmlmodule QtGrpc
     \instantiates QGrpcHttp2Channel
     \brief Implements QQmlAbstractGrpcChannel class in QML.
 

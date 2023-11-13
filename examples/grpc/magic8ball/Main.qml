@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
 import QtQuick
-import QtGrpcQuick
+import QtGrpc
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Shapes

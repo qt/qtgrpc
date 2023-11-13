@@ -87,7 +87,7 @@
 
     \section2 QML API
 
-    \include {module-use.qdocinc} {using the qml api} {QtGrpcQuick}
+    \include {module-use.qdocinc} {using the qml api} {QtGrpc}
 
     \section2 C++ API
 

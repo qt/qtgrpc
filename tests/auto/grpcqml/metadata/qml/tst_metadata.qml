@@ -3,7 +3,7 @@
 
 import QtQuick
 import QtTest
-import QtGrpcQuick
+import QtGrpc
 import QmlTestUri
 
 TestCase {
