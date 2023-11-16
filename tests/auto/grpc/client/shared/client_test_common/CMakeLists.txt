@@ -8,9 +8,11 @@ qt6_add_library(tst_grpc_client_test_common STATIC
     ${CMAKE_CURRENT_LIST_DIR}/grpcclienttestbase.cpp
 )
 
-target_compile_definitions(tst_grpc_client_test_common PRIVATE
-        TEST_GRPC_SERVER_PATH="$<TARGET_FILE:grpc_testserver>"
-)
+if(TARGET grpc_testserver)
+    target_compile_definitions(tst_grpc_client_test_common PRIVATE
+            TEST_GRPC_SERVER_PATH="$<TARGET_FILE:grpc_testserver>"
+    )
+endif()
 
 if(qt_internal_grpc_use_golang_test_server)
     target_compile_definitions(tst_grpc_client_test_common PRIVATE
