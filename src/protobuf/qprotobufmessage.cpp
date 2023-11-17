@@ -148,7 +148,11 @@ QProtobufMessage::QProtobufMessage(const QProtobufMessage &other)
 */
 QProtobufMessage &QProtobufMessage::operator=(const QProtobufMessage &other)
 {
-    if (this != &other)
+    if (!other.d_ptr)
+        delete std::exchange(d_ptr, {}); // delete d_ptr if other.d_ptr is null
+    else if (!d_ptr)
+        d_ptr = new QProtobufMessagePrivate(*other.d_ptr);
+    else if (this != &other)
         *d_ptr = *other.d_ptr;
     return *this;
 }

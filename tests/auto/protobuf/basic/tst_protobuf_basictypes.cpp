@@ -62,6 +62,18 @@ void QtProtobufTypesGenerationTest::EmptyMessageTest()
     QProtobufMessagePointer rawMessage(
             QProtobufMessage::constructByName("qtprotobufnamespace.tests.EmptyMessage"));
     QVERIFY(reinterpret_cast<qtprotobufnamespace::tests::EmptyMessage*>(rawMessage.get()) != nullptr);
+
+    // Move from and reuse. This should compile and run:
+    qtprotobufnamespace::tests::EmptyMessage from;
+    qtprotobufnamespace::tests::EmptyMessage to = std::move(from);
+    from = to;
+    QCOMPARE(from, to);
+
+    qtprotobufnamespace::tests::EmptyMessage bucket = std::move(to);
+    bucket = std::move(from);
+
+    from = to;
+    QCOMPARE(from, to);
 }
 
 void QtProtobufTypesGenerationTest::BoolMessageTest()
@@ -77,6 +89,20 @@ void QtProtobufTypesGenerationTest::BoolMessageTest()
     QCOMPARE(int(SimpleBoolMessage::QtProtobufFieldEnum::TestFieldBoolProtoFieldNumber), 1);
     QCOMPARE(test.propertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.SimpleBoolMessage");
+
+    // Move from and reuse
+    qtprotobufnamespace::tests::SimpleBoolMessage from;
+    qtprotobufnamespace::tests::SimpleBoolMessage to = std::move(from);
+    from = to;
+    QCOMPARE(from.testFieldBool(), to.testFieldBool());
+    // Changes in one should not be visible in the other:
+    to.setTestFieldBool(!to.testFieldBool());
+    QCOMPARE_NE(from.testFieldBool(), to.testFieldBool());
+
+    from = to;
+    to.setProperty(propertyName, QVariant::fromValue(!to.testFieldBool()));
+    QCOMPARE_NE(from.testFieldBool(), to.testFieldBool());
+
 }
 
 void QtProtobufTypesGenerationTest::IntMessageTest()
