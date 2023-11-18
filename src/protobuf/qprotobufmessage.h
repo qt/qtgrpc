@@ -33,6 +33,9 @@ public:
     Q_REQUIRED_RESULT
     Q_PROTOBUF_EXPORT static QProtobufMessagePointer constructByName(const QString &messageType);
 
+    Q_PROTOBUF_EXPORT QList<qint32> unknownFieldNumbers() const;
+    Q_PROTOBUF_EXPORT QList<QByteArray> unknownFieldData(qint32 field) const;
+
 protected:
     Q_PROTOBUF_EXPORT explicit QProtobufMessage(const QMetaObject *metaObject);
     Q_PROTOBUF_EXPORT ~QProtobufMessage();

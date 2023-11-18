@@ -276,6 +276,26 @@ bool QProtobufMessage::setProperty(const QtProtobufPrivate::QProtobufPropertyOrd
     return mp->writeOnGadget(this, std::move(value));
 }
 
+/*!
+    Returns the field numbers that were not known to QtProtobuf during
+    deserialization.
+    \since 6.7
+ */
+QList<qint32> QProtobufMessage::unknownFieldNumbers() const
+{
+    return d_func()->unknownEntries.keys();
+}
+
+/*!
+    Returns the unknown \a field values sorted as they were received from the
+    wire.
+    \since 6.7
+*/
+QList<QByteArray> QProtobufMessage::unknownFieldData(qint32 field) const
+{
+    return d_func()->unknownEntries.value(field);
+}
+
 QT_END_NAMESPACE
 
 #include "moc_qprotobufmessage.cpp"
