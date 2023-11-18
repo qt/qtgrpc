@@ -12,7 +12,7 @@
 
 QT_BEGIN_NAMESPACE
 
-static std::string nul_terminate(QLatin1StringView l1) noexcept
+static std::string nullTerminate(QLatin1StringView l1) noexcept
 {
     return l1.isNull() ? std::string{} : std::string{l1.data(), size_t(l1.size())};
 }
@@ -58,7 +58,7 @@ int QProtobufMessagePrivate::getPropertyIndex(QAnyStringView propertyName) const
         } else if constexpr (std::is_same_v<QUtf8StringView, decltype(propertyName)>) {
             return metaObject->indexOfProperty(propertyName.toString().toLatin1().constData());
         } else if constexpr (std::is_same_v<QLatin1StringView, decltype(propertyName)>) {
-            return metaObject->indexOfProperty(nul_terminate(propertyName).data());
+            return metaObject->indexOfProperty(nullTerminate(propertyName).data());
         }
         return -1;
     });
