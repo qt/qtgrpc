@@ -37,6 +37,12 @@ message RepeatedMessage {
     repeated int32 repeatedField = 3;
 }
 
+message RepeatedMessageNonPacked {
+    int32 aaa = 1;
+    int64 timestamp = 2;
+    repeated int32 repeatedField = 3 [packed = false];
+}
+
 message PartialMessage {
     int32 aaa = 1;
     int64 timestamp = 2;

@@ -64,9 +64,9 @@ int QProtobufMessagePrivate::getPropertyIndex(QAnyStringView propertyName) const
     });
 }
 
-void QProtobufMessagePrivate::storeUnknownEntry(QByteArrayView entry)
+void QProtobufMessagePrivate::storeUnknownEntry(QByteArrayView entry, int fieldNumber)
 {
-    ++unknownEntries[entry.toByteArray()];
+    unknownEntries[fieldNumber].append(entry.toByteArray());
 }
 
 std::optional<QMetaProperty> QProtobufMessagePrivate::metaProperty(QAnyStringView name) const

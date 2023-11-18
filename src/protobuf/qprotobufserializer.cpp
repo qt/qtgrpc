@@ -303,8 +303,8 @@ QByteArray QProtobufSerializer::serializeMessage(
 
     // Restore any unknown fields we have stored away:
     const QProtobufMessagePrivate *messagePrivate = QProtobufMessagePrivate::get(message);
-    for (const auto &[bytes, occurrences] : messagePrivate->unknownEntries.asKeyValueRange())
-        result += bytes.repeated(occurrences);
+    for (const auto &fields : messagePrivate->unknownEntries)
+        result += fields.join();
 
     return result;
 }
@@ -690,7 +690,8 @@ bool QProtobufSerializerPrivate::deserializeProperty(
         }
 
         QProtobufMessagePrivate *messagePrivate = QProtobufMessagePrivate::get(message);
-        messagePrivate->storeUnknownEntry(QByteArrayView(itBeforeHeader.data(), length));
+        messagePrivate->storeUnknownEntry(QByteArrayView(itBeforeHeader.data(), length),
+                                          fieldNumber);
         return true;
     }
 
