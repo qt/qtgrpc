@@ -78,6 +78,7 @@ public:
     bool deserializeEnumList(QList<QtProtobuf::int64> &value,
                              QtProtobufPrivate::QProtobufSelfcheckIterator &it) const;
 
+    void shouldPreserveUnknownFields(bool preserveUnknownFields);
 private:
     std::unique_ptr<QProtobufSerializerPrivate> d_ptr;
 };

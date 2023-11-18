@@ -301,10 +301,12 @@ QByteArray QProtobufSerializer::serializeMessage(
         result.append(d_ptr->serializeProperty(propertyValue, fieldInfo));
     }
 
-    // Restore any unknown fields we have stored away:
-    const QProtobufMessagePrivate *messagePrivate = QProtobufMessagePrivate::get(message);
-    for (const auto &fields : messagePrivate->unknownEntries)
-        result += fields.join();
+    if (d_ptr->preserveUnknownFields) {
+        // Restore any unknown fields we have stored away:
+        const QProtobufMessagePrivate *messagePrivate = QProtobufMessagePrivate::get(message);
+        for (const auto &fields : messagePrivate->unknownEntries)
+            result += fields.join();
+    }
 
     return result;
 }
@@ -689,9 +691,11 @@ bool QProtobufSerializerPrivate::deserializeProperty(
             return false;
         }
 
-        QProtobufMessagePrivate *messagePrivate = QProtobufMessagePrivate::get(message);
-        messagePrivate->storeUnknownEntry(QByteArrayView(itBeforeHeader.data(), length),
-                                          fieldNumber);
+        if (preserveUnknownFields) {
+            QProtobufMessagePrivate *messagePrivate = QProtobufMessagePrivate::get(message);
+            messagePrivate->storeUnknownEntry(QByteArrayView(itBeforeHeader.data(), length),
+                                              fieldNumber);
+        }
         return true;
     }
 
@@ -824,6 +828,17 @@ void QProtobufSerializerPrivate::setDeserializationError(
 {
     deserializationError = error;
     deserializationErrorString = errorString;
+}
+
+/*!
+    Controls whether the unknown fields received from the wire should be
+    stored in the resulting message or if it should be omitted, based
+    on \a preserveUnknownFields.
+    \since 6.7
+*/
+void QProtobufSerializer::shouldPreserveUnknownFields(bool preserveUnknownFields)
+{
+    d_ptr->preserveUnknownFields = preserveUnknownFields;
 }
 
 QT_END_NAMESPACE

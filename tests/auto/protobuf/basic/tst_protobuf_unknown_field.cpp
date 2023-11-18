@@ -21,6 +21,7 @@ private slots:
     void unknownMapField();
     void unknownRepeatedField();
     void unknownRepeatedFieldNonPacked();
+    void nonPreserveUnknownFieldsSerializer();
 };
 
 // Deserialize a full known message into a type for which one of the fields is
@@ -136,6 +137,25 @@ void tst_protobuf_unknown_field::unknownRepeatedFieldNonPacked()
     QList<QtProtobuf::int32> expected{ 1, 1, 2, 3, 5, -1, -5, -3, -2, -1 };
     QCOMPARE(mm.extraField(), expected);
 }
+
+void tst_protobuf_unknown_field::nonPreserveUnknownFieldsSerializer()
+{
+    QProtobufSerializer serializer;
+    serializer.shouldPreserveUnknownFields(false);
+    qtproto::tests::PartialMessage pm;
+    pm.deserialize(&serializer, QByteArray::fromHex("0802102a18f201"));
+
+    QVERIFY(pm.unknownFieldNumbers().isEmpty());
+    QCOMPARE(pm.serialize(&serializer).toHex(), "0802102a");
+
+    serializer.shouldPreserveUnknownFields(true);
+    pm.deserialize(&serializer, QByteArray::fromHex("0802102a18f201"));
+
+    serializer.shouldPreserveUnknownFields(false);
+    QVERIFY(!pm.unknownFieldNumbers().isEmpty());
+    QCOMPARE(pm.serialize(&serializer).toHex(), "0802102a");
+}
+
 
 QTEST_MAIN(tst_protobuf_unknown_field)
 #include "tst_protobuf_unknown_field.moc"

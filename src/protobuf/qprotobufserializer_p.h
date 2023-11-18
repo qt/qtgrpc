@@ -519,6 +519,7 @@ public:
             QAbstractProtobufSerializer::NoDeserializerError;
     QString deserializationErrorString;
 
+    bool preserveUnknownFields = true;
 private:
     Q_DISABLE_COPY_MOVE(QProtobufSerializerPrivate)
     QProtobufSerializer *q_ptr;
