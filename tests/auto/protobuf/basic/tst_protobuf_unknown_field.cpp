@@ -20,6 +20,7 @@ private slots:
     void unknownIntField();
     void unknownMapField();
     void unknownRepeatedField();
+    void unknownRepeatedFieldNonPacked();
 };
 
 // Deserialize a full known message into a type for which one of the fields is
@@ -97,14 +98,27 @@ void tst_protobuf_unknown_field::unknownMapField()
 
 void tst_protobuf_unknown_field::unknownRepeatedField()
 {
-    // "2, 42, [1, 1, 2, 3, 5, -5, -3, -2, -1, -1]"
-    QByteArray payload = QByteArray::fromHex("0802102a1a370101020305fbffffffffffffffff01fdfffffffff"
-                                             "fffffff01feffffffffffffffff01ffffffffffffffffff01ffff"
-                                             "ffffffffffffff01");
+    // "2, 42, [1, 1, 2, 3, 5, -1, -5, -3, -2, -1]"
+    QByteArray payload = QByteArray::fromHex("0802102a1a370101020305ffffffffffffffffff01"
+                                                  "fbffffffffffffffff01fdffffffffffffffff01"
+                                                  "feffffffffffffffff01ffffffffffffffffff01");
     qtproto::tests::RepeatedMessage mm;
     partialMessageRoundtrip<>(payload, &mm);
 
-    QList<QtProtobuf::int32> expected{ 1, 1, 2, 3, 5, -5, -3, -2, -1, -1 };
+    QList<QtProtobuf::int32> expected{ 1, 1, 2, 3, 5, -1, -5, -3, -2, -1 };
+    QCOMPARE(mm.repeatedField(), expected);
+}
+
+void tst_protobuf_unknown_field::unknownRepeatedFieldNonPacked()
+{
+    // "2, 42, [1, 1, 2, 3, 5, -1, -5, -3, -2, -1]"
+    QByteArray payload = QByteArray::fromHex("0802102a1801180118021803180518ffffffffffffffffff01"
+                                             "18fbffffffffffffffff0118fdffffffffffffffff01"
+                                             "18feffffffffffffffff0118ffffffffffffffffff01");
+    qtproto::tests::RepeatedMessageNonPacked mm;
+    partialMessageRoundtrip<>(payload, &mm);
+
+    QList<QtProtobuf::int32> expected{ 1, 1, 2, 3, 5, -1, -5, -3, -2, -1 };
     QCOMPARE(mm.repeatedField(), expected);
 }
 

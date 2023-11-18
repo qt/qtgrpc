@@ -32,15 +32,12 @@ class QMetaProperty;
 class QProtobufMessagePrivate
 {
 public:
-    // QHash of form <bytes, occurrences>. A non-packed array is serialized as
-    // the (field index + wiretype) + bytes, which, if the serialized data is
-    // the same, will just be a bunch of identical segments, all of which we
-    // need.
-    QHash<QByteArray, qint32> unknownEntries;
+    // QHash of form <field index, data>.
+    QHash<qint32, QByteArrayList> unknownEntries;
     const QMetaObject *metaObject = nullptr;
 
     int getPropertyIndex(QAnyStringView propertyName) const;
-    void storeUnknownEntry(QByteArrayView entry);
+    void storeUnknownEntry(QByteArrayView entry, int fieldNumber);
 
     std::optional<QMetaProperty> metaProperty(QAnyStringView name) const;
     std::optional<QMetaProperty>
