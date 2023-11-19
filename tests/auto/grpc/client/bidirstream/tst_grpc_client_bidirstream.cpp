@@ -39,9 +39,9 @@ void QtGrpcClientBidirStreamTest::Valid()
     auto stream = client()->streamTestMethodBiStream(request);
 
     QString fullResponse;
+    int i = 0;
     QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, this,
-                     [stream, &request, &fullResponse]() {
-                         static int i = 0;
+                     [stream, &request, &fullResponse, &i]() {
                          SimpleStringMessage rsp = stream->read<SimpleStringMessage>();
                          fullResponse += rsp.testFieldString() + QString::number(++i);
                          stream->sendMessage(request);

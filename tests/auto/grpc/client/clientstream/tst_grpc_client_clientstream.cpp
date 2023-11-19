@@ -38,9 +38,9 @@ void QtGrpcClientClientStreamTest::Valid()
 
     auto stream = client()->streamTestMethodClientStream(request);
 
+    int i = 0;
     QTimer sendTimer;
     QObject::connect(&sendTimer, &QTimer::timeout, this, [&]() {
-        static int i = 0;
         stream->sendMessage(request);
         if (++i == ExpectedMessageCount)
             sendTimer.stop();
