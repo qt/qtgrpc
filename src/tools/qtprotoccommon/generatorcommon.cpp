@@ -583,8 +583,8 @@ bool common::isOptionalField(const FieldDescriptor *field)
 #ifdef HAVE_PROTOBUF_SYNC_PIPER
     bool hasOptional = field->has_presence() && !field->real_containing_oneof();
 #else
-    bool hasOptional = file->syntax() == FileDescriptor::SYNTAX_PROTO2 && field->is_optional()
-            && !field->containing_oneof();
+    bool hasOptional = field->file()->syntax() == FileDescriptor::SYNTAX_PROTO2
+        && field->is_optional() && !field->containing_oneof();
 #endif
     return field->type() != FieldDescriptor::TYPE_MESSAGE && hasOptional;
 }
