@@ -18,6 +18,7 @@
 
 #include <grpcpp/channel.h>
 #include <grpcpp/create_channel.h>
+#include <grpcpp/completion_queue.h>
 #include <grpcpp/impl/codegen/byte_buffer.h>
 #include <grpcpp/impl/codegen/client_unary_call.h>
 #include <grpcpp/impl/codegen/rpc_method.h>
