@@ -18,7 +18,6 @@ qt_internal_add_qml_module(GrpcQuick
     PUBLIC_LIBRARIES
         Qt::Quick
     GENERATE_CPP_EXPORTS
-    GENERATE_PRIVATE_CPP_EXPORTS
 )
 
 qt_internal_extend_target(GrpcQuick CONDITION QT_FEATURE_qml_ssl
