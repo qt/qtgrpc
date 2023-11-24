@@ -13,6 +13,7 @@
 #include <QtCore/qvariant.h>
 #include <QtCore/qreadwritelock.h>
 
+#include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/private/qprotobufserializer_p.h>
 #include <QtProtobuf/private/qprotobufmessage_p.h>
 
@@ -97,33 +98,6 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
 
     Returns a human-readable string describing the last deserialization error.
     If there was no error, an empty string is returned.
-*/
-
-/*!
-    \relates QProtobufSerializer
-    \fn template<typename T> inline void qRegisterProtobufType()
-
-    Registers a Protobuf type \e T.
-    This function is normally called by generated code.
-*/
-
-/*!
-    \relates QProtobufSerializer
-    \fn template<typename K, typename V> inline void qRegisterProtobufMapType();
-
-    Registers a Protobuf map type \c K and \c V.
-    \c V must be a QProtobufMessage.
-    This function is normally called by generated code.
-*/
-
-/*!
-    \relates QProtobufSerializer
-    \fn template<typename T> inline void qRegisterProtobufEnumType();
-
-    Registers serializers for enumeration type \c T in QtProtobuf global
-    serializers registry.
-
-    This function is normally called by generated code.
 */
 
 using namespace Qt::StringLiterals;
@@ -386,66 +360,81 @@ bool QProtobufSerializer::deserializeObject(QProtobufMessage *message,
 }
 
 /*!
-    This function is called to serialize \a message as a part of list property
+    This function is called to serialize \a messageList as a list of messages one by one
     with \a ordering and \a fieldInfo.
 
     You should not call this function directly.
 */
 QByteArray QProtobufSerializer::serializeListObject(
-        const QProtobufMessage *message,
-        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-        const QProtobufPropertyOrderingInfo &fieldInfo) const
+    const QList<const QProtobufMessage*> &messageList,
+    const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+    const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
-    return serializeObject(message, ordering, fieldInfo);
+    QByteArray result;
+    for (const auto &message : messageList)
+        result.append(serializeObject(message, ordering, fieldInfo));
+    return result;
 }
 
 /*!
     This function deserializes an \a message from byte stream as part of list property, with
     \a ordering from a QProtobufSelfcheckIterator \a it.
-    Returns \c true if deserialization was successful, otherwise \c false.
+    Returns \c Serialized if deserialization was successful,
+    otherwise \c SerializationError.
 
     You should not call this function directly.
 */
-bool QProtobufSerializer::deserializeListObject(QProtobufMessage *message,
+QProtobufBaseSerializer::Status QProtobufSerializer::deserializeListObject(QProtobufMessage *message,
         const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
         QProtobufSelfcheckIterator &it) const
 {
-    return deserializeObject(message, ordering, it);
+    if (deserializeObject(message, ordering, it))
+        return QProtobufBaseSerializer::Serialized;
+    else
+        return QProtobufBaseSerializer::SerializationError;
 }
 
 /*!
-    This function serializes QMap pair of \a key and \a value with
+    This function serializes \a list of pairs, each pair has a key and a value with
     \a fieldInfo to a QByteArray
 
     You should not call this function directly.
 */
 QByteArray
-QProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
+QProtobufSerializer::serializeMapPair(const QList<QPair<QVariant, QVariant>> &list,
                                       const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
-    auto keyHandler = findIntegratedTypeHandler(key.metaType(), false);
-    Q_ASSERT_X(keyHandler, "QProtobufSerializer", "Map key is not an integrated type.");
+    QByteArray result;
+    for (const auto &element : list) {
+        const QVariant &key = element.first;
+        auto keyHandler = findIntegratedTypeHandler(key.metaType(), false);
+        Q_ASSERT_X(keyHandler, "QProtobufSerializer", "Map key is not an integrated type.");
 
-    QByteArray result = QProtobufSerializerPrivate::encodeHeader(
-            fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited);
+        result.append(QProtobufSerializerPrivate::encodeHeader(
+            fieldInfo.getFieldNumber(), QtProtobuf::WireTypes::LengthDelimited));
 
-    result.append(QProtobufSerializerPrivate::prependLengthDelimitedSize(
+        result.append(QProtobufSerializerPrivate::prependLengthDelimitedSize(
             keyHandler->serializer(
-                    key, QProtobufSerializerPrivate::encodeHeader(1, keyHandler->wireType))
-            + d_ptr->serializeProperty(value, fieldInfo.infoForMapValue())));
+                key, QProtobufSerializerPrivate::encodeHeader(1, keyHandler->wireType))
+            + d_ptr->serializeProperty(element.second, fieldInfo.infoForMapValue())));
+    }
     return result;
 }
 
 /*!
     This function deserializes QMap pair of \a key and \a value from a
     QProtobufSelfcheckIterator \a it.
-    Returns \c true if deserialization was successful, otherwise \c false.
+    Returns \c Serialized if deserialization was successful,
+    otherwise \c SerializationError.
 
     You should not call this function directly.
 */
-bool QProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value, QProtobufSelfcheckIterator &it) const
+QProtobufBaseSerializer::Status QProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value, QProtobufSelfcheckIterator &it) const
 {
-    return d_ptr->deserializeMapPair(key, value, it);
+    if (d_ptr->deserializeMapPair(key, value, it))
+        return QProtobufBaseSerializer::Serialized;
+    else
+        return QProtobufBaseSerializer::SerializationError;
 }
 
 /*!
@@ -742,10 +731,12 @@ bool QProtobufSerializerPrivate::deserializeProperty(
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (!handler.deserializer) {
             qProtoWarning() << "No deserializer for type" << metaType.name();
+            QString error
+                = QString::fromUtf8("No deserializer is registered for type %1")
+                                .arg(QString::fromUtf8(metaType.name()));
             setDeserializationError(
                     QAbstractProtobufSerializer::NoDeserializerError,
-                    QCoreApplication::translate("QtProtobuf",
-                                         "No deserializer is registered for type %1"));
+                QCoreApplication::translate("QtProtobuf", error.toUtf8().data()));
             return false;
         }
         handler.deserializer(q_ptr, it, newPropertyValue);

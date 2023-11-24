@@ -24,7 +24,7 @@ public:
     static AnyPrivate *get(const Any *any) { return any->d_ptr; }
 };
 
-static void serializerProxy(const QProtobufSerializer *serializer, const QVariant &object,
+static void serializerProxy(const QProtobufBaseSerializer *serializer, const QVariant &object,
                             const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &output)
 {
     if (object.isNull())
@@ -41,20 +41,31 @@ static void serializerProxy(const QProtobufSerializer *serializer, const QVarian
                                               fieldInfo));
 }
 
-static void listSerializerProxy(const QProtobufSerializer *serializer, const QVariant &object,
-                                const QProtobufPropertyOrderingInfo &fieldInfo, QByteArray &output)
+static void listSerializerProxy(const QProtobufBaseSerializer *serializer,
+                                const QVariant &object,
+                                const QProtobufPropertyOrderingInfo &fieldInfo,
+                                QByteArray &output)
 {
-    const auto anyList = object.value<QList<Any>>();
+    const QList<Any> anyList = object.value<QList<Any>>();
+    QList<const QProtobufMessage*> msgList;
+    msgList.reserve(anyList.size());
+    QList<google::protobuf::Any> msgAny;
+    msgAny.reserve(anyList.size());
     for (const Any &any : anyList) {
         google::protobuf::Any realAny;
         realAny.setValue(any.value());
         realAny.setTypeUrl(any.typeUrl());
-        output.append(serializer->serializeListObject(&realAny,
-                google::protobuf::Any::propertyOrdering, fieldInfo));
+        msgAny.append(realAny);
     }
+    for (const google::protobuf::Any &any : msgAny) {
+        msgList.append(&any);
+    }
+    output.append(serializer->serializeListObject(msgList,
+                                                  google::protobuf::Any::propertyOrdering,
+                                                  fieldInfo));
 }
 
-static void listDeserializerProxy(const QProtobufSerializer *deserializer,
+static void listDeserializerProxy(const QProtobufBaseSerializer *deserializer,
                               QProtobufSelfcheckIterator &it, QVariant &object)
 {
     auto anyList = object.value<QList<Any>>();
@@ -71,7 +82,7 @@ static void listDeserializerProxy(const QProtobufSerializer *deserializer,
     object.setValue(std::move(anyList));
 }
 
-static void deserializerProxy(const QProtobufSerializer *deserializer,
+static void deserializerProxy(const QProtobufBaseSerializer *deserializer,
                               QProtobufSelfcheckIterator &it, QVariant &object)
 {
     google::protobuf::Any realAny;

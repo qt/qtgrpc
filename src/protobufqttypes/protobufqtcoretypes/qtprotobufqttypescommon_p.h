@@ -41,7 +41,7 @@ void registerQtTypeHandler()
 {
     registerHandler(
             QMetaType::fromType<QType>(),
-            { [](const QProtobufSerializer *serializer, const QVariant &value,
+            { [](const QProtobufBaseSerializer *serializer, const QVariant &value,
                  const QProtobufPropertyOrderingInfo &info, QByteArray &buffer) {
                  auto do_convert = [](const QType &qtype) {
                      auto res = convert(qtype);
@@ -60,7 +60,7 @@ void registerQtTypeHandler()
                      warnTypeConversionError();
                  }
               },
-              [](const QProtobufSerializer *serializer, QProtobufSelfcheckIterator &it,
+              [](const QProtobufBaseSerializer *serializer, QProtobufSelfcheckIterator &it,
                  QVariant &value) {
                   PType object;
                   serializer->deserializeObject(&object, PType::propertyOrdering, it);
