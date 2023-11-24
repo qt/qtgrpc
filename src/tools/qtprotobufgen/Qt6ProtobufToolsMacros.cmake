@@ -117,7 +117,15 @@ function(_qt_internal_protoc_generate target generator output_directory)
     else()
         set(generation_options_string "")
     endif()
+
+    set(extra_protoc_args "")
+    get_target_property(protoc_version WrapProtoc::WrapProtoc _qt_internal_protobuf_version)
+    if(protoc_version VERSION_GREATER_EQUAL "3.12" AND protoc_version VERSION_LESS "3.15")
+        list(APPEND extra_protoc_args "--experimental_allow_proto3_optional")
+    endif()
+
     string(JOIN "\\$<SEMICOLON>" protoc_arguments
+        ${extra_protoc_args}
         "--plugin=protoc-gen-${generator}=${generator_file}"
         "--${generator}_out=${tmp_output_directory}"
         "--${generator}_opt=${generation_options_string}"
