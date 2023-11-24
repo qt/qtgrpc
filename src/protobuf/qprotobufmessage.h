@@ -62,8 +62,9 @@ private:
 
     friend class QProtobufSerializer;
     friend class QAbstractProtobufSerializer;
+    friend class QProtobufBaseSerializer;
     friend class QProtobufSerializerPrivate;
-    friend class QAbstractProtobufSerializer;
+    friend class QProtobufJsonSerializerPrivate;
     friend struct QProtobufMessageDeleter;
 
     QProtobufMessagePrivate *d_ptr;
