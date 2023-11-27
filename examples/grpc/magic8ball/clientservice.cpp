@@ -3,6 +3,7 @@
 
 #include "clientservice.h"
 
+#include <QDebug>
 #include <QGrpcHttp2Channel>
 
 using namespace qtgrpc::examples;
