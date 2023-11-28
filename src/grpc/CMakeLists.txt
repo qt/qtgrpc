@@ -16,7 +16,6 @@ qt_internal_add_module(Grpc
         qgrpcdefs.h qgrpcmetadata.cpp
         qtgrpcglobal.h qtgrpcglobal_p.h  qtgrpcglobal.cpp
         qgrpcserializationformat.h qgrpcserializationformat.cpp
-    GENERATE_CPP_EXPORTS
     LIBRARIES
         Qt::CorePrivate
         Qt::NetworkPrivate
