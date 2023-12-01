@@ -7,4 +7,4 @@ add_subdirectory(nopackage)
 add_subdirectory(syntax)
 add_subdirectory(nested)
 add_subdirectory(messagelists)
-
+add_subdirectory(oneof)
