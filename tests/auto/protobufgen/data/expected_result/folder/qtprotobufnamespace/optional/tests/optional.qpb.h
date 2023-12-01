@@ -88,8 +88,8 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OptionalMessage : public QProtobufMessage
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
     Q_PROPERTY(QString testFieldStringOpt READ testFieldStringOpt_p WRITE setTestFieldStringOpt_p)
     Q_PROPERTY(bool hasTestFieldStringOpt READ hasTestFieldStringOpt)
-    Q_PROPERTY(qtprotobufnamespace::optional::tests::TestStringMessage *testFieldMessage_p READ testFieldMessage_p WRITE setTestFieldMessage_p)
-    Q_PROPERTY(qtprotobufnamespace::optional::tests::TestStringMessage *testFieldMessageOpt_p READ testFieldMessageOpt_p WRITE setTestFieldMessageOpt_p)
+    Q_PROPERTY(qtprotobufnamespace::optional::tests::TestStringMessage *testFieldMessage_p READ testFieldMessage_p WRITE setTestFieldMessage_p SCRIPTABLE false)
+    Q_PROPERTY(qtprotobufnamespace::optional::tests::TestStringMessage *testFieldMessageOpt_p READ testFieldMessageOpt_p WRITE setTestFieldMessageOpt_p SCRIPTABLE false)
 
 public:
     using QtProtobufFieldEnum = OptionalMessage_QtProtobufNested::QtProtobufFieldEnum;
