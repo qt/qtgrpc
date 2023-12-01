@@ -280,8 +280,8 @@ const char *CommonTemplates::PropertyOneofTemplate()
 }
 const char *CommonTemplates::PropertyOneofMessageTemplate()
 {
-    return "Q_PROPERTY($property_type$ *$property_name$ "
-           "READ $property_name$_p WRITE set$property_name_cap$_p)\n";
+    return "Q_PROPERTY($property_type$ *$property_name$_p "
+           "READ $property_name$_p WRITE set$property_name_cap$_p SCRIPTABLE false)\n";
 }
 const char *CommonTemplates::PropertyHasOneofTemplate()
 {
