@@ -585,7 +585,7 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT ComplexMessage : public QProtobufMess
     Q_DECLARE_PROTOBUF_SERIALIZERS(ComplexMessage)
     QML_VALUE_TYPE(complexMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt_p READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
-    Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage *testComplexField_p READ testComplexField_p WRITE setTestComplexField_p)
+    Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage *testComplexField_p READ testComplexField_p WRITE setTestComplexField_p SCRIPTABLE false)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage testComplexField READ testComplexField WRITE setTestComplexField)
     Q_PROPERTY(int testFieldInt READ testFieldInt_p WRITE setTestFieldInt_p SCRIPTABLE true)
 

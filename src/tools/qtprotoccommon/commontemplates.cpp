@@ -240,7 +240,7 @@ const char *CommonTemplates::PropertyNonScriptableAliasTemplate()
 const char *CommonTemplates::PropertyMessageTemplate()
 {
     return "Q_PROPERTY($property_type$ *$property_name$_p READ $property_name$_p WRITE "
-           "set$property_name_cap$_p)\n";
+           "set$property_name_cap$_p SCRIPTABLE false)\n";
 }
 const char *CommonTemplates::PropertyQmlMessageTemplate()
 {
