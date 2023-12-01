@@ -288,8 +288,8 @@ void tst_qtprotobufgen::cmakeGeneratedFile()
     QFile expectedResultFile(m_expectedResult + folder + fileName + extension);
     QFile generatedFile(m_cmakeGenerated + folder + fileName + extension);
 
-    QVERIFY(expectedResultFile.exists());
-    QVERIFY(generatedFile.exists());
+    QVERIFY2(expectedResultFile.exists(), qPrintable(expectedResultFile.fileName()));
+    QVERIFY2(generatedFile.exists(), qPrintable(expectedResultFile.fileName()));
 
     QVERIFY2(expectedResultFile.open(QIODevice::ReadOnly | QIODevice::Text),
              msgCannotReadFile(expectedResultFile).constData());
