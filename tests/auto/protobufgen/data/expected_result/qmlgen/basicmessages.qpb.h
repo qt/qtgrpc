@@ -750,7 +750,7 @@ public:
 
     bool hasTestComplexField() const;
     SimpleStringMessage &testComplexField() const;
-    void clearTestComplexField();
+    Q_INVOKABLE void clearTestComplexField();
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     void setTestComplexField(const SimpleStringMessage &testComplexField);
     static void registerTypes();

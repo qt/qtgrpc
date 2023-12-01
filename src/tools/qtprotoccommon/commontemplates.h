@@ -99,6 +99,7 @@ public:
     static const char *PrivateGetterMessageDeclarationTemplate();
     static const char *PrivateGetterMessageDefinitionTemplate();
     static const char *ClearMessageDeclarationTemplate();
+    static const char *ClearQmlMessageDeclarationTemplate();
     static const char *ClearMessageDefinitionTemplate();
     static const char *GetterMessageDeclarationTemplate();
     static const char *GetterMessageDefinitionTemplate();
@@ -135,6 +136,7 @@ public:
     static const char *PrivateSetterOneofMessageDeclarationTemplate();
     static const char *PrivateSetterOneofMessageDefinitionTemplate();
     static const char *ClearOneofDeclarationTemplate();
+    static const char *ClearQmlOneofDeclarationTemplate();
     static const char *ClearOneofDefinitionTemplate();
     static const char *ClearOptionalDefinitionTemplate();
     static const char *JsonNameOffsetsUintDataTemplate();

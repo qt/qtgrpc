@@ -278,7 +278,9 @@ void MessageDeclarationPrinter::printGetters()
                     m_printer->Print(propertyMap,
                                      CommonTemplates::GetterMessageDeclarationTemplate());
                     m_printer->Print(propertyMap,
-                                     CommonTemplates::ClearMessageDeclarationTemplate());
+                                     Options::instance().hasQml()
+                                         ? CommonTemplates::ClearQmlMessageDeclarationTemplate()
+                                         : CommonTemplates::ClearMessageDeclarationTemplate());
                 } else {
                     m_printer->Print(propertyMap, CommonTemplates::GetterDeclarationTemplate());
                 }
@@ -309,7 +311,10 @@ void MessageDeclarationPrinter::printSetters()
                 if (common::isOptionalField(field)) {
                     m_printer->Print(propertyMap,
                                      CommonTemplates::SetterOneofDeclarationTemplate());
-                    m_printer->Print(propertyMap, CommonTemplates::ClearOneofDeclarationTemplate());
+                    m_printer->Print(propertyMap,
+                                     Options::instance().hasQml()
+                                         ? CommonTemplates::ClearQmlOneofDeclarationTemplate()
+                                         : CommonTemplates::ClearOneofDeclarationTemplate());
                     return;
                 }
 
@@ -333,10 +338,14 @@ void MessageDeclarationPrinter::printSetters()
                     break;
                 }
             });
-    common::iterateOneofFields(
-            m_descriptor, [&](const OneofDescriptor *, const PropertyMap &propertyMap) {
-                m_printer->Print(propertyMap, CommonTemplates::ClearOneofDeclarationTemplate());
-            });
+    common::
+        iterateOneofFields(m_descriptor,
+                           [&](const OneofDescriptor *, const PropertyMap &propertyMap) {
+                               m_printer->Print(propertyMap,
+                                           Options::instance().hasQml()
+                                               ? CommonTemplates::ClearQmlOneofDeclarationTemplate()
+                                               : CommonTemplates::ClearOneofDeclarationTemplate());
+                           });
     Outdent();
 }
 

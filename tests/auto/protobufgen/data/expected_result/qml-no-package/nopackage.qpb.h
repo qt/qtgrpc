@@ -153,7 +153,7 @@ public:
 
     bool hasTestField() const;
     SimpleIntMessageExt &testField() const;
-    void clearTestField();
+    Q_INVOKABLE void clearTestField();
     void setTestField(const SimpleIntMessageExt &testField);
     static void registerTypes();
 
@@ -196,7 +196,7 @@ public:
 
     bool hasTestField() const;
     SimpleIntMessage &testField() const;
-    void clearTestField();
+    Q_INVOKABLE void clearTestField();
     void setTestField(const SimpleIntMessage &testField);
     static void registerTypes();
 

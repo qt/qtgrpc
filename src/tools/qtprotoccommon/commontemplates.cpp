@@ -468,6 +468,11 @@ const char *CommonTemplates::ClearMessageDeclarationTemplate()
     return "void clear$property_name_cap$();\n";
 }
 
+const char *CommonTemplates::ClearQmlMessageDeclarationTemplate()
+{
+    return "Q_INVOKABLE void clear$property_name_cap$();\n";
+}
+
 const char *CommonTemplates::ClearMessageDefinitionTemplate()
 {
     return "void $classname$::clear$property_name_cap$()\n{\n"
@@ -691,6 +696,10 @@ const char *CommonTemplates::PrivateSetterOptionalDefinitionTemplate()
 const char *CommonTemplates::ClearOneofDeclarationTemplate()
 {
     return "void clear$optional_property_name_cap$();\n";
+}
+const char *CommonTemplates::ClearQmlOneofDeclarationTemplate()
+{
+    return "Q_INVOKABLE void clear$optional_property_name_cap$();\n";
 }
 const char *CommonTemplates::ClearOneofDefinitionTemplate()
 {

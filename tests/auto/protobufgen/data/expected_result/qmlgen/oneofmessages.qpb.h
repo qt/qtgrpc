@@ -72,7 +72,7 @@ public:
     TestOneofFields testOneofField() const;
     void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
     void setTestOneofFieldSecondInt(const QtProtobuf::int32 &testOneofFieldSecondInt);
-    void clearTestOneof();
+    Q_INVOKABLE void clearTestOneof();
     static void registerTypes();
 
 private:
@@ -173,8 +173,8 @@ public:
     void setSecondComplexField(const ComplexMessage &secondComplexField);
     void setSecondSecondComplexField(const ComplexMessage &secondSecondComplexField);
     void setTestSnakeCaseField(const QtProtobuf::int32 &testSnakeCaseField);
-    void clearTestOneof();
-    void clearSecondOneof();
+    Q_INVOKABLE void clearTestOneof();
+    Q_INVOKABLE void clearSecondOneof();
     static void registerTypes();
 
 private:
