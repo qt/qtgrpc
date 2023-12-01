@@ -262,12 +262,6 @@ const char *CommonTemplates::PropertyRepeatedMessageTemplate()
     return "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
            "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
 }
-const char *CommonTemplates::PropertyNonScriptableTemplate()
-{
-    return "Q_PROPERTY($property_type$ $property_name$_p READ $property_name$ WRITE "
-           "set$property_name_cap$ SCRIPTABLE false)\n";
-}
-
 const char *CommonTemplates::PropertyMessageTemplate()
 {
     return "Q_PROPERTY($property_type$ *$property_name$_p READ $property_name$_p WRITE "
