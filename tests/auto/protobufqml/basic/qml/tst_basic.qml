@@ -27,6 +27,8 @@ TestCase {
     property simpleFixedInt64Message fixed64Msg;
     property simpleSFixedInt64Message sfixed64Msg;
 
+    property complexMessage clearComplexMsg;
+
     // Messages with fields not compatible with QML
     property simpleBytesMessage bytesMessage;
 
@@ -903,5 +905,21 @@ TestCase {
 
     function test_complexMessage(data) {
         compare(data.field, data.answer)
+    }
+
+    function test_clearMessageMethod() {
+        // strings
+        outerMessage.testFieldString = "outer"
+        clearComplexMsg.testComplexField = outerMessage
+        compare(clearComplexMsg.testComplexField.testFieldString, "outer")
+        compare(outerMessage.testFieldString, "outer")
+
+        clearComplexMsg.testComplexField.testFieldString = "inner"
+        compare(clearComplexMsg.testComplexField.testFieldString, "inner")
+        compare(outerMessage.testFieldString, "outer")
+
+        clearComplexMsg.clearTestComplexField()
+        compare(clearComplexMsg.testComplexField.testFieldString, "")
+        compare(outerMessage.testFieldString, "outer")
     }
 }
