@@ -265,6 +265,10 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
                 << "basicmessages"
                 << "/qmlgen/"
                 << QString(extension);
+        QTest::addRow("oneofmessages%s with QML option", extension.data())
+                << "oneofmessages"
+                << "/qmlgen/"
+                << QString(extension);
     }
 #endif
 }

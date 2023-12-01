@@ -72,6 +72,7 @@ if(TARGET Qt6::Qml)
         PROTO_FILES
         ../shared/data/proto/basicmessages.proto
         ../shared/data/proto/repeatedmessages.proto
+        ../shared/data/proto/oneofmessages.proto
         ../protobuf/enums/enummessages.proto
         QML
         OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/qmlgen"
