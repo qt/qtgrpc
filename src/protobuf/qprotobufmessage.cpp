@@ -272,7 +272,7 @@ bool QProtobufMessage::setProperty(const QtProtobufPrivate::QProtobufPropertyOrd
     const auto mp = d->metaProperty(info);
     if (!mp)
         return false;
-    return mp->writeOnGadget(this, value);
+    return mp->writeOnGadget(this, std::move(value));
 }
 
 QT_END_NAMESPACE
