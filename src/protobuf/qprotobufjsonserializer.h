@@ -10,6 +10,8 @@
 
 #include <QtCore/QMetaObject>
 
+#include <memory>
+
 QT_BEGIN_NAMESPACE
 
 class QProtobufJsonSerializerPrivate;
@@ -24,6 +26,7 @@ public:
     QAbstractProtobufSerializer::DeserializationError deserializationError() const override;
     QString deserializationErrorString() const override;
 
+private:
     QByteArray serializeMessage(const QProtobufMessage *message,
                                 const QtProtobufPrivate::QProtobufPropertyOrdering &ordering
                                 ) const override;
@@ -32,74 +35,59 @@ public:
                             const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                             QByteArrayView data) const override;
 
-    QByteArray serializeObject(const QProtobufMessage *message,
-                               const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-                               const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo
-                               ) const override;
-    bool deserializeObject(QProtobufMessage *message,
-                           const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-                           QtProtobufPrivate::QProtobufSelfcheckIterator &it) const override;
+    void serializeObject(const QProtobufMessage *message,
+                         const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                         const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+        const override;
+    bool
+    deserializeObject(QProtobufMessage *message,
+                      const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const override;
 
-    QByteArray
-    serializeListObject(const QList<const QProtobufMessage *> &messageList,
-                        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-                        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo
-                        ) const override;
+    void serializeListObject(const QProtobufMessage *message,
+                             const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                             const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+        const override;
 
-    QProtobufBaseSerializer::Status
-    deserializeListObject(QProtobufMessage *message,
-                          const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-                          QtProtobufPrivate::QProtobufSelfcheckIterator &it) const override;
+    bool deserializeListObject(QProtobufMessage *message,
+                               const QtProtobufPrivate::QProtobufPropertyOrdering &ordering)
+        const override;
 
-    QByteArray
-    serializeMapPair(const QList<QPair<QVariant, QVariant>> &list,
-                     const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo
-                     ) const override;
+    void serializeMapPair(const QVariant &key, const QVariant &value,
+                          const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+        const override;
 
-    QProtobufBaseSerializer::Status
-    deserializeMapPair(QVariant &key, QVariant &value,
-                       QtProtobufPrivate::QProtobufSelfcheckIterator &it) const override
+    bool deserializeMapPair(QVariant &key, QVariant &value) const override
     {
         Q_UNUSED(key);
         Q_UNUSED(value);
-        Q_UNUSED(it);
-        return QProtobufBaseSerializer::SerializationError;
+        return false;
     }
 
-    QByteArray
+    void
     serializeEnum(QtProtobuf::int64 value,
                   const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const override
     {
         Q_UNUSED(value);
         Q_UNUSED(fieldInfo);
-        return QByteArray();
     }
 
-    QByteArray
-    serializeEnumList(const QList<QtProtobuf::int64> &value,
-                      const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo
-                      ) const override
+    void serializeEnumList(const QList<QtProtobuf::int64> &value,
+                           const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+        const override
     {
         Q_UNUSED(value);
         Q_UNUSED(fieldInfo);
-        return QByteArray();
     }
 
-    Q_REQUIRED_RESULT
-    bool deserializeEnum(QtProtobuf::int64 &value,
-                         QtProtobufPrivate::QProtobufSelfcheckIterator &it) const override
+    bool deserializeEnum(QtProtobuf::int64 &value) const override
     {
         Q_UNUSED(value);
-        Q_UNUSED(it);
         return false;
     }
 
-    Q_REQUIRED_RESULT bool
-    deserializeEnumList(QList<QtProtobuf::int64> &value,
-                        QtProtobufPrivate::QProtobufSelfcheckIterator &it) const override
+    bool deserializeEnumList(QList<QtProtobuf::int64> &value) const override
     {
         Q_UNUSED(value);
-        Q_UNUSED(it);
         return false;
     }
 

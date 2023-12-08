@@ -4,9 +4,9 @@
 //#include "basicmessages.qpb.h"
 #include "repeatedmessages.qpb.h"
 
-#include <QObject>
-#include <QTest>
+#include <QJsonDocument>
 #include <QProtobufJsonSerializer>
+#include <QTest>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -215,10 +215,6 @@ void QtProtobufRepeatedTypesJsonDeserializationTest::RepeatedComplexMessageTest(
                                        "{\"testFieldString\":\"\"}}]}"_ba);
 
     QCOMPARE(test.testRepeatedComplex().count(), 3);
-    for (auto element: test.testRepeatedComplex()) {
-        qWarning() << "testFieldInt = " << element.testFieldInt()
-                   << "testFieldString = " << element.testComplexField().testFieldString();
-    }
     QCOMPARE(test.testRepeatedComplex().at(0).testFieldInt(), 21);
     QCOMPARE(test.testRepeatedComplex().at(0).testComplexField().testFieldString(), QString("12345"));
     QCOMPARE(test.testRepeatedComplex().at(1).testFieldInt(), 22);

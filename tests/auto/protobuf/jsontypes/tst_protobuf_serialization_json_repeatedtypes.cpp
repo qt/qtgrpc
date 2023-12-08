@@ -87,7 +87,9 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedInt64MessageTest()
     RepeatedInt64Message test;
     test.setTestRepeatedInt({1, 321, -65999, 12324523123123, -3, 0, 3});
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[1,321,-65999,12324523123123,-3,0,3]}"_ba);
+    QCOMPARE(
+        result,
+        "{\"testRepeatedInt\":[\"1\",\"321\",\"-65999\",\"12324523123123\",\"-3\",\"0\",\"3\"]}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 
     test.setTestRepeatedInt(QtProtobuf::int64List());
@@ -101,7 +103,9 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedSInt64MessageTest()
     RepeatedSInt64Message test;
     test.setTestRepeatedInt({1, 321, -65999, 12324523123123, 0, -3, 3});
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[1,321,-65999,12324523123123,0,-3,3]}"_ba);
+    QCOMPARE(
+        result,
+        "{\"testRepeatedInt\":[\"1\",\"321\",\"-65999\",\"12324523123123\",\"0\",\"-3\",\"3\"]}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 
     test.setTestRepeatedInt(QtProtobuf::sint64List());
@@ -115,7 +119,9 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedUInt64MessageTest()
     RepeatedUInt64Message test;
     test.setTestRepeatedInt({1, 321, 0, 65999, 123245, 123245324235425234, 3});
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[1,321,0,65999,123245,123245324235425234,3]}"_ba);
+    QCOMPARE(
+        result,
+        "{\"testRepeatedInt\":[\"1\",\"321\",\"0\",\"65999\",\"123245\",\"123245324235425234\",\"3\"]}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 
     test.setTestRepeatedInt(QtProtobuf::uint64List());
@@ -157,7 +163,9 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedFixedInt64MessageTest
     RepeatedFixedInt64Message test;
     test.setTestRepeatedInt({1, 321, 65999, 123245324235425234, 3, 3, 0});
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[1,321,65999,123245324235425234,3,3,0]}"_ba);
+    QCOMPARE(
+        result,
+        "{\"testRepeatedInt\":[\"1\",\"321\",\"65999\",\"123245324235425234\",\"3\",\"3\",\"0\"]}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 
     test.setTestRepeatedInt(QtProtobuf::fixed64List());
@@ -171,7 +179,9 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedSFixedInt64MessageTes
     RepeatedSFixedInt64Message test;
     test.setTestRepeatedInt({1, 321, -65999, 123245324235425234, -3, 3, 0});
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[1,321,-65999,123245324235425234,-3,3,0]}"_ba);
+    QCOMPARE(
+        result,
+        "{\"testRepeatedInt\":[\"1\",\"321\",\"-65999\",\"123245324235425234\",\"-3\",\"3\",\"0\"]}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 
     test.setTestRepeatedInt(QtProtobuf::sfixed64List());
@@ -198,10 +208,10 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedStringMessageTest()
 void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedFloatMessageTest()
 {
     RepeatedFloatMessage test;
-    test.setTestRepeatedFloat({0.4f, 1.2f, 0.5f, 3.912348f, 0.6f});
+    test.setTestRepeatedFloat({ 0.4f, 1.2f, 0.5f, 3.91235f, 0.6f });
     QByteArray result = test.serialize(m_serializer.get());
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
-    QCOMPARE(result, "{\"testRepeatedFloat\":[0.4,1.2,0.5,3.912348,0.6]}"_ba);
+    QCOMPARE(result, "{\"testRepeatedFloat\":[0.4,1.2,0.5,3.91235,0.6]}"_ba);
 
     test.setTestRepeatedFloat(QtProtobuf::floatList());
     result = test.serialize(m_serializer.get());
@@ -261,16 +271,14 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedComplexMessageTest()
     test.setTestRepeatedComplex({msg, msg, msg});
     QByteArray result = test.serialize(m_serializer.get());
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
-    QCOMPARE(result,
-             "{\"testRepeatedComplex\":[{\"testFieldInt\":25,\"testComplexField\":"
-             "{\"testFieldString\":\"qwerty\"}},{\"testFieldInt\":25,\"testComplexField\":"
-             "{\"testFieldString\":\"qwerty\"}},{\"testFieldInt\":25,\"testComplexField\":"
-             "{\"testFieldString\":\"qwerty\"}}]}"_ba);
+    QCOMPARE(
+        result,
+        "{\"testRepeatedComplex\":[{\"testComplexField\":{\"testFieldString\":\"qwerty\"},\"testFieldInt\":25},{\"testComplexField\":{\"testFieldString\":\"qwerty\"},\"testFieldInt\":25},{\"testComplexField\":{\"testFieldString\":\"qwerty\"},\"testFieldInt\":25}]}"_ba);
 
     test.setTestRepeatedComplex({});
     result = test.serialize(m_serializer.get());
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
-    QCOMPARE(result, "{\"testRepeatedComplex\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
 }
 
 void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedBoolMessageTest()
