@@ -23,18 +23,16 @@
 #include <QtCore/qendian.h>
 #include <QtCore/qvariant.h>
 
-#include <QtProtobuf/qprotobufselfcheckiterator.h>
-#include <QtProtobuf/qprotobufserializer.h>
-#include <QtProtobuf/qtprotobuftypes.h>
+#include <QtProtobuf/private/qprotobufselfcheckiterator_p.h>
 #include <QtProtobuf/private/qtprotobuflogging_p.h>
 #include <QtProtobuf/qabstractprotobufserializer.h>
+#include <QtProtobuf/qprotobufserializer.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 
 #include <optional>
 #include <type_traits>
 
 QT_BEGIN_NAMESPACE
-
-using QtProtobufPrivate::QProtobufSelfcheckIterator;
 
 class QProtobufSerializerPrivate
 {
@@ -500,12 +498,14 @@ public:
     static void skipVarint(QProtobufSelfcheckIterator &it);
     static void skipLengthDelimited(QProtobufSelfcheckIterator &it);
 
-    QByteArray serializeProperty(const QVariant &propertyValue,
-                                 const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo);
+    void serializeMessage(const QProtobufMessage *message,
+                          const QtProtobufPrivate::QProtobufPropertyOrdering &ordering);
+
+    void serializeProperty(const QVariant &propertyValue,
+                           const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo);
     Q_REQUIRED_RESULT
     bool deserializeProperty(QProtobufMessage *message,
-                             const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-                             QProtobufSelfcheckIterator &it);
+                             const QtProtobufPrivate::QProtobufPropertyOrdering &ordering);
 
     void setDeserializationError(QAbstractProtobufSerializer::DeserializationError error,
                                  const QString &errorString);
@@ -513,11 +513,14 @@ public:
     void setUnexpectedEndOfStreamError();
 
     Q_REQUIRED_RESULT
-    bool deserializeMapPair(QVariant &key, QVariant &value, QProtobufSelfcheckIterator &it);
+    bool deserializeMapPair(QVariant &key, QVariant &value);
 
     QAbstractProtobufSerializer::DeserializationError deserializationError =
             QAbstractProtobufSerializer::NoDeserializerError;
     QString deserializationErrorString;
+
+    QProtobufSelfcheckIterator it;
+    QByteArray result;
 
     bool preserveUnknownFields = true;
 private:

@@ -9,7 +9,7 @@ qt_internal_add_module(Protobuf
         qprotobufmessage.cpp qprotobufmessage.h qprotobufmessage_p.h
         qprotobuflazymessagepointer.h
         qprotobufobject.h
-        qprotobufselfcheckiterator.h
+        qprotobufselfcheckiterator_p.h
         qprotobufserializer.cpp qprotobufserializer.h qprotobufserializer_p.h
         qprotobufjsonserializer.cpp qprotobufjsonserializer.h
         qtprotobuflogging.cpp qtprotobuflogging_p.h

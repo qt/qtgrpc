@@ -2,11 +2,22 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
-#ifndef QPROTOBUFSELFCHECKITERATOR_H
-#define QPROTOBUFSELFCHECKITERATOR_H
+#ifndef QPROTOBUFSELFCHECKITERATOR_P_H
+#define QPROTOBUFSELFCHECKITERATOR_P_H
 
-#include <QtProtobuf/qtprotobufglobal.h>
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+
 #include <QtCore/qnumeric.h>
+#include <QtProtobuf/qtprotobufglobal.h>
 
 #include <QtCore/QByteArray>
 
@@ -14,7 +25,6 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QtProtobufPrivate {
 class QProtobufSelfcheckIterator
 {
 public:
@@ -23,6 +33,8 @@ public:
     using value_type = QByteArray::value_type;
     using pointer = QByteArray::pointer;
     using reference = QByteArray::reference;
+
+    QProtobufSelfcheckIterator() = default;
 
     static QProtobufSelfcheckIterator fromView(QByteArrayView container)
     {
@@ -104,8 +116,7 @@ public:
 
 private:
     explicit QProtobufSelfcheckIterator(QByteArrayView container)
-        : m_containerBegin(container.begin()),
-          m_containerEnd(container.end()),
+        : m_containerBegin(container.begin()), m_containerEnd(container.end()),
           m_it(container.begin())
     {
     }
@@ -162,8 +173,7 @@ inline QProtobufSelfcheckIterator operator-(const QProtobufSelfcheckIterator &it
     copy -= length;
     return copy;
 }
-} // namespace QtProtobufPrivate
 
 QT_END_NAMESPACE
 
-#endif // QPROTOBUFSELFCHECKITERATOR_H
+#endif // QPROTOBUFSELFCHECKITERATOR_P_H
