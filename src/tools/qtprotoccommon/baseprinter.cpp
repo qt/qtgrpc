@@ -1,5 +1,5 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>, Tatyana Borisova <tanusshhka@mail.ru>
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial WITH Qt-GPL-exception-1.0
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial
 
 #include "baseprinter.h"
 #include "utils.h"
