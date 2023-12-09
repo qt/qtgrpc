@@ -16,7 +16,7 @@ QT_BEGIN_NAMESPACE
 
 class QProtobufMessage;
 class QProtobufSerializerPrivate;
-class Q_PROTOBUF_EXPORT QProtobufSerializer : public QProtobufBaseSerializer
+class Q_PROTOBUF_EXPORT QProtobufSerializer final : public QProtobufBaseSerializer
 {
     Q_DISABLE_COPY_MOVE(QProtobufSerializer)
 public:
