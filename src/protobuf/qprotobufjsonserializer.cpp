@@ -322,8 +322,7 @@ public:
 
     static QVariant deserializeInt32(const QJsonValue &value, bool &ok)
     {
-        auto val = value.toInt();
-        ok = value.isDouble();
+        auto val = value.toVariant().toInt(&ok);
         return QVariant::fromValue(val);
     }
 
@@ -479,7 +478,8 @@ public:
                 QVariant newPropertyValue = message->property(iter->second);
                 auto store = activeValue;
                 activeValue = activeObject.value(key);
-                while (!activeValue.isNull()) {
+                while (!activeValue.isNull()
+                       && deserializationError == QAbstractProtobufSerializer::NoError) {
                     newPropertyValue = deserializeValue(newPropertyValue, ok);
                 }
                 activeValue = store;
@@ -511,6 +511,14 @@ public:
                                                             "Unexpected end of stream"));
     }
 
+    void setInvalidFormatError()
+    {
+        setDeserializationError(QAbstractProtobufSerializer::InvalidFormatError,
+                                QCoreApplication::
+                                    translate("QtProtobuf",
+                                              "One or more fields have invalid format"));
+    }
+
     void clearError();
 
     QAbstractProtobufSerializer::DeserializationError deserializationError =
@@ -518,8 +526,9 @@ public:
     QString deserializationErrorString;
     QJsonValue activeValue;
 
-private:
     static SerializerRegistry handlers;
+
+private:
     QProtobufJsonSerializer *qPtr;
 };
 
@@ -640,9 +649,70 @@ bool QProtobufJsonSerializer::deserializeListObject(QProtobufMessage *message,
 void QProtobufJsonSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
                                                const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
-    Q_UNUSED(fieldInfo);
-    QByteArray result;
-    qProtoWarning() << "Map pair serialization will be done soon:" << key << value;
+    const QString fieldName = fieldInfo.getJsonName().toString();
+    auto store = d_ptr->activeValue.toObject();
+    QJsonObject mapObject = store.value(fieldName).toObject();
+    d_ptr->activeValue = QJsonObject();
+    d_ptr->serializeProperty(value, fieldInfo.infoForMapValue());
+    mapObject.insert(key.toString(), d_ptr->activeValue.toObject().value(fieldName));
+    store.insert(fieldName, mapObject);
+    d_ptr->activeValue = store;
+}
+
+bool QProtobufJsonSerializer::deserializeMapPair(QVariant &key, QVariant &value) const
+{
+    if (!d_ptr->activeValue.isObject()) {
+        d_ptr->setUnexpectedEndOfStreamError();
+        return false;
+    }
+
+    QJsonObject activeObject = d_ptr->activeValue.toObject();
+    if (activeObject.isEmpty()) {
+        d_ptr->activeValue = {};
+        return false;
+    }
+
+    QString jsonKey = activeObject.keys().at(0);
+    QJsonValue jsonValue = activeObject.take(jsonKey);
+
+    auto it = d_ptr->handlers.find(key.userType());
+    if (it == d_ptr->handlers.end()) {
+        d_ptr->setInvalidFormatError();
+        return false;
+    }
+
+    bool ok = false;
+    key = it->second.deserializer(QJsonValue(jsonKey), ok);
+    if (!ok) {
+        d_ptr->setInvalidFormatError();
+        return false;
+    }
+
+    it = d_ptr->handlers.find(value.userType());
+    if (it != d_ptr->handlers.end()) {
+        ok = false;
+        value = it->second.deserializer(jsonValue, ok);
+        if (!ok) {
+            d_ptr->setInvalidFormatError();
+            return false;
+        }
+    } else {
+        auto handler = QtProtobufPrivate::findHandler(value.metaType());
+        if (handler.deserializer) {
+            d_ptr->activeValue = jsonValue;
+            handler.deserializer(this, value);
+        } else {
+            d_ptr->setInvalidFormatError();
+            return false;
+        }
+    }
+
+    if (!activeObject.isEmpty())
+        d_ptr->activeValue = activeObject;
+    else
+        d_ptr->activeValue = {};
+
+    return true;
 }
 
 QT_END_NAMESPACE
