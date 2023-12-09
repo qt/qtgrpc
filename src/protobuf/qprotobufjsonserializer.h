@@ -56,12 +56,7 @@ private:
                           const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
         const override;
 
-    bool deserializeMapPair(QVariant &key, QVariant &value) const override
-    {
-        Q_UNUSED(key);
-        Q_UNUSED(value);
-        return false;
-    }
+    bool deserializeMapPair(QVariant &key, QVariant &value) const override;
 
     void
     serializeEnum(QtProtobuf::int64 value,

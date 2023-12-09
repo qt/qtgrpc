@@ -25,6 +25,7 @@ public:
         InvalidHeaderError,
         NoDeserializerError,
         UnexpectedEndOfStreamError,
+        InvalidFormatError,
     };
 
     template<typename T>

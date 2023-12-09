@@ -90,3 +90,15 @@ qt_internal_add_test(tst_protobuf_serialization_json_maptypes
         tst_protobuf_json_basic_types_gen
         tst_protobuf_json_maptypes_gen
 )
+
+qt_internal_add_test(tst_protobuf_deserialization_json_maptypes
+    SOURCES
+        tst_protobuf_deserialization_json_maptypes.cpp
+    INCLUDE_DIRECTORIES
+        ../shared
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_json_basic_types_gen
+        tst_protobuf_json_maptypes_gen
+)
