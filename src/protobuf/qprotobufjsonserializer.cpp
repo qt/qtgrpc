@@ -715,4 +715,51 @@ bool QProtobufJsonSerializer::deserializeMapPair(QVariant &key, QVariant &value)
     return true;
 }
 
+void QProtobufJsonSerializer::serializeEnum(QtProtobuf::int64 value, const QMetaEnum &metaEnum,
+                                            const QtProtobufPrivate::QProtobufPropertyOrderingInfo
+                                                &fieldInfo) const
+{
+    QJsonObject activeObject = d_ptr->activeValue.toObject();
+    activeObject.insert(fieldInfo.getJsonName().toString(), QString::fromUtf8(metaEnum.key(value)));
+    d_ptr->activeValue = activeObject;
+}
+
+void QProtobufJsonSerializer::
+    serializeEnumList(const QList<QtProtobuf::int64> &values, const QMetaEnum &metaEnum,
+                      const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+{
+    QJsonArray arr;
+    for (const auto value : values)
+        arr.append(QString::fromUtf8(metaEnum.key(value)));
+
+    QJsonObject activeObject = d_ptr->activeValue.toObject();
+    activeObject.insert(fieldInfo.getJsonName().toString(), arr);
+    d_ptr->activeValue = activeObject;
+}
+
+bool QProtobufJsonSerializer::deserializeEnum(QtProtobuf::int64 &value,
+                                              const QMetaEnum &metaEnum) const
+{
+    QString enumKey = d_ptr->activeValue.toString();
+    bool ok = false;
+    value = metaEnum.keyToValue(enumKey.toUtf8().data(), &ok);
+    d_ptr->activeValue = {};
+    return ok;
+}
+
+bool QProtobufJsonSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value,
+                                                  const QMetaEnum &metaEnum) const
+{
+    QJsonArray arr = d_ptr->activeValue.toArray();
+    bool ok = false;
+    for (const auto &val : arr) {
+        QString enumKey = val.toString();
+        value.append(metaEnum.keyToValue(enumKey.toUtf8().data(), &ok));
+        if (!ok)
+            break;
+    }
+    d_ptr->activeValue = {};
+    return ok;
+}
+
 QT_END_NAMESPACE

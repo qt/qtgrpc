@@ -59,32 +59,17 @@ private:
     bool deserializeMapPair(QVariant &key, QVariant &value) const override;
 
     void
-    serializeEnum(QtProtobuf::int64 value,
-                  const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const override
-    {
-        Q_UNUSED(value);
-        Q_UNUSED(fieldInfo);
-    }
+    serializeEnum(QtProtobuf::int64 value, const QMetaEnum &metaEnum,
+                  const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const override;
 
-    void serializeEnumList(const QList<QtProtobuf::int64> &value,
+    void serializeEnumList(const QList<QtProtobuf::int64> &value, const QMetaEnum &metaEnum,
                            const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
-        const override
-    {
-        Q_UNUSED(value);
-        Q_UNUSED(fieldInfo);
-    }
+        const override;
 
-    bool deserializeEnum(QtProtobuf::int64 &value) const override
-    {
-        Q_UNUSED(value);
-        return false;
-    }
+    bool deserializeEnum(QtProtobuf::int64 &value, const QMetaEnum &metaEnum) const override;
 
-    bool deserializeEnumList(QList<QtProtobuf::int64> &value) const override
-    {
-        Q_UNUSED(value);
-        return false;
-    }
+    bool deserializeEnumList(QList<QtProtobuf::int64> &value,
+                             const QMetaEnum &metaEnum) const override;
 
 private:
     std::unique_ptr<QProtobufJsonSerializerPrivate> d_ptr;
