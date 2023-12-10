@@ -104,9 +104,11 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \fn void QProtobufBaseSerializer::serializeEnum(QtProtobuf::int64 value,
+        const QMetaEnum &metaEnum,
         const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
 
     This function serializes \a value from enum associated with property \a fieldInfo.
+    \a metaEnum helps to encode the enum value.
 
     You should not call this function directly.
 
@@ -114,9 +116,11 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn bool QProtobufBaseSerializer::deserializeEnum(QtProtobuf::int64 &value) const
+    \fn bool QProtobufBaseSerializer::deserializeEnum(QtProtobuf::int64 &value,
+        const QMetaEnum &metaEnum) const
 
-    This function deserializes an enum \a value from a wire.
+    This function deserializes an enum \a value from a wire. \a metaEnum helps to decode the enum
+    value.
     Returns \c true if deserialization was successful, otherwise \c false.
 
     You should not call this function directly.
@@ -126,9 +130,11 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \fn void QProtobufBaseSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
+        const QMetaEnum &metaEnum,
         const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
 
     This function serializes a list, \a value, for enum list associated with property \a fieldInfo.
+    \a metaEnum helps to encode the enum value.
 
     You should not call this function directly.
 
@@ -136,9 +142,11 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn bool QProtobufSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value) const
+    \fn bool QProtobufBaseSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value,
+        const QMetaEnum &metaEnum) const
 
-    This function deserializes a list of enum \a value from a wire.
+    This function deserializes a list of enum \a value from a wire. \a metaEnum helps to decode
+    the enum value.
     Returns \c true if deserialization was successful, otherwise \c false.
 
     You should not call this function directly.

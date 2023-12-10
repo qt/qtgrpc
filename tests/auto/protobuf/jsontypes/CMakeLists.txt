@@ -102,3 +102,32 @@ qt_internal_add_test(tst_protobuf_deserialization_json_maptypes
         tst_protobuf_json_basic_types_gen
         tst_protobuf_json_maptypes_gen
 )
+
+qt6_add_protobuf(tst_protobuf_json_enumtypes_gen
+    PROTO_FILES
+        ../enums/enummessages.proto
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
+)
+qt_autogen_tools_initial_setup(tst_protobuf_json_enumtypes_gen)
+
+qt_internal_add_test(tst_protobuf_serialization_json_enumtypes
+    SOURCES
+        tst_protobuf_serialization_json_enumtypes.cpp
+    INCLUDE_DIRECTORIES
+        ../shared
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_json_enumtypes_gen
+)
+
+qt_internal_add_test(tst_protobuf_deserialization_json_enumtypes
+    SOURCES
+        tst_protobuf_deserialization_json_enumtypes.cpp
+    INCLUDE_DIRECTORIES
+        ../shared
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_json_enumtypes_gen
+)

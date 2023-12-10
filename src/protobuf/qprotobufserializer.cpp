@@ -387,7 +387,7 @@ bool QProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value) con
     return d_ptr->deserializeMapPair(key, value);
 }
 
-void QProtobufSerializer::serializeEnum(QtProtobuf::int64 value,
+void QProtobufSerializer::serializeEnum(QtProtobuf::int64 value, const QMetaEnum &,
                                         const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
     if (value == 0 && !isOneofOrOptionalField(fieldInfo))
@@ -400,6 +400,7 @@ void QProtobufSerializer::serializeEnum(QtProtobuf::int64 value,
 }
 
 void QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
+                                            const QMetaEnum &,
                                             const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
     if (value.isEmpty())
@@ -418,7 +419,7 @@ void QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &valu
                     + QProtobufSerializerPrivate::serializeListType<QtProtobuf::int64>(value));
 }
 
-bool QProtobufSerializer::deserializeEnum(QtProtobuf::int64 &value) const
+bool QProtobufSerializer::deserializeEnum(QtProtobuf::int64 &value, const QMetaEnum &) const
 {
     QVariant variantValue;
     if (!QProtobufSerializerPrivate::deserializeBasic<QtProtobuf::int64>(d_ptr->it, variantValue)) {
@@ -429,7 +430,8 @@ bool QProtobufSerializer::deserializeEnum(QtProtobuf::int64 &value) const
     return true;
 }
 
-bool QProtobufSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value) const
+bool QProtobufSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value,
+                                              const QMetaEnum &) const
 {
     QVariant variantValue;
     if (!QProtobufSerializerPrivate::deserializeList<QtProtobuf::int64>(d_ptr->it, variantValue)) {
