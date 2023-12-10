@@ -49,13 +49,10 @@ private slots:
     void DefaultConstructedComplexTypeSerializeTest();
     void EmptyBytesMessageTest();
     void EmptyStringMessageTest();
-
-    /* TBD: Add ANY type support for Json Serializer
-        void OneofMessageEmptyTest();
-        void OneofMessageClearTest();
-        void OneofMessageIntTest();
-        void OneofMessageComplexTest();
-    */
+    void OneofMessageEmptyTest();
+    void OneofMessageClearTest();
+    void OneofMessageIntTest();
+    void OneofMessageComplexTest();
 
 private:
     std::unique_ptr<QProtobufJsonSerializer> m_serializer;
@@ -69,7 +66,7 @@ void QtProtobufTypesJsonSerializationTest::BoolMessageSerializeTest_data()
     QTest::addColumn<QByteArray>("expectedData");
 
     QTest::newRow("True") << true << "{\"testFieldBool\":true}"_ba;
-    QTest::newRow("False") << false << "{\"testFieldBool\":false}"_ba;
+    QTest::newRow("False") << false << "{}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::BoolMessageSerializeTest()
@@ -90,7 +87,7 @@ void QtProtobufTypesJsonSerializationTest::IntMessageSerializeTest_data()
     QTest::addColumn<QByteArray>("expectedData");
 
     QTest::newRow("555") << 555 << "{\"testFieldInt\":555}"_ba;
-    QTest::newRow("0") << 0 << "{\"testFieldInt\":0}"_ba;
+    QTest::newRow("0") << 0 << "{}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::IntMessageSerializeTest()
@@ -333,7 +330,7 @@ void QtProtobufTypesJsonSerializationTest::FloatMessageSerializeTest_data()
     QTest::newRow("float_value_max")
         << std::numeric_limits<float>::max() << "{\"testFieldFloat\":3.40282e+38}"_ba;
     QTest::newRow("float_neg_value_4_2") << -4.2f << "{\"testFieldFloat\":-4.2}"_ba;
-    QTest::newRow("float_neg_value_0_0") << (float)-0.0f << "{\"testFieldFloat\":0}"_ba;
+    QTest::newRow("float_neg_value_0_0") << (float)-0.0f << "{}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::FloatMessageSerializeTest()
@@ -363,8 +360,7 @@ void QtProtobufTypesJsonSerializationTest::DoubleMessageSerializeTest_data()
         << "{\"testFieldDouble\":1.7976931348623157e+308}"_ba;
     QTest::newRow("double_neg_value_4_2") << -4.2
                                           << "{\"testFieldDouble\":-4.2}"_ba;
-    QTest::newRow("double_value_0_0") << 0.0
-                                      << "{\"testFieldDouble\":0}"_ba;
+    QTest::newRow("double_value_0_0") << 0.0 << "{}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::DoubleMessageSerializeTest()
@@ -390,7 +386,7 @@ void QtProtobufTypesJsonSerializationTest::StringMessageSerializeTest()
 
     test.setTestFieldString("");
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testFieldString\":\"\"}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 
     test.setTestFieldString("null");
@@ -420,15 +416,13 @@ void QtProtobufTypesJsonSerializationTest::ComplexTypeSerializeTest_data()
     QTest::addColumn<QString>("stringField");
     QTest::addColumn<QByteArray>("expectedData");
 
-    QTest::newRow("empty_value")
-        << 0 << ""
-        << "{\"testComplexField\":{\"testFieldString\":\"\"},\"testFieldInt\":0}"_ba;
-    QTest::newRow("value_only_int")
-        << 42 << ""
-        << "{\"testComplexField\":{\"testFieldString\":\"\"},\"testFieldInt\":42}"_ba;
+    QTest::newRow("empty_value") << 0 << ""
+                                 << "{\"testComplexField\":{}}"_ba;
+    QTest::newRow("value_only_int") << 42 << ""
+                                    << "{\"testComplexField\":{},\"testFieldInt\":42}"_ba;
     QTest::newRow("value_only_string")
         << 0 << "qwerty"
-        << "{\"testComplexField\":{\"testFieldString\":\"qwerty\"},\"testFieldInt\":0}"_ba;
+        << "{\"testComplexField\":{\"testFieldString\":\"qwerty\"}}"_ba;
     QTest::newRow("int_and_string")
         << 42 << "qwerty"
         << "{\"testComplexField\":{\"testFieldString\":\"qwerty\"},\"testFieldInt\":42}"_ba;
@@ -481,13 +475,10 @@ void QtProtobufTypesJsonSerializationTest::ResetComplexTypeSerializeTest_data()
     QTest::addColumn<QString>("stringField");
     QTest::addColumn<QByteArray>("expectedData");
 
-    QTest::newRow("empty_value") << 0 << u""_s << "{\"testComplexField\":{},\"testFieldInt\":0}"_ba;
-    QTest::newRow("value_only_int")
-        << 42 << u""_s << "{\"testComplexField\":{},\"testFieldInt\":42}"_ba;
-    QTest::newRow("value_only_string")
-        << 0 << u"qwerty"_s << "{\"testComplexField\":{},\"testFieldInt\":0}"_ba;
-    QTest::newRow("int_and_string")
-        << 42 << u"qwerty"_s << "{\"testComplexField\":{},\"testFieldInt\":42}"_ba;
+    QTest::newRow("empty_value") << 0 << u""_s << "{}"_ba;
+    QTest::newRow("value_only_int") << 42 << u""_s << "{\"testFieldInt\":42}"_ba;
+    QTest::newRow("value_only_string") << 0 << u"qwerty"_s << "{}"_ba;
+    QTest::newRow("int_and_string") << 42 << u"qwerty"_s << "{\"testFieldInt\":42}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::ResetComplexTypeSerializeTest()
@@ -513,7 +504,7 @@ void QtProtobufTypesJsonSerializationTest::DefaultConstructedComplexTypeSerializ
 {
     ComplexMessage test;
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testComplexField\":{},\"testFieldInt\":0}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -521,7 +512,7 @@ void QtProtobufTypesJsonSerializationTest::EmptyBytesMessageTest()
 {
     SimpleBytesMessage msg;
     QByteArray result = msg.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testFieldBytes\":\"\"}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -529,27 +520,78 @@ void QtProtobufTypesJsonSerializationTest::EmptyStringMessageTest()
 {
     SimpleStringMessage msg;
     QByteArray result = msg.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testFieldString\":\"\"}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
-/* TBD: Add ANY type support for Json Serializer
 void QtProtobufTypesJsonSerializationTest::OneofMessageEmptyTest()
 {
+    OneofMessage test;
+    QByteArray result = test.serialize(m_serializer.get());
+    QCOMPARE(result, "{}");
 }
 
 void QtProtobufTypesJsonSerializationTest::OneofMessageIntTest()
 {
+    OneofMessage test;
+    test.setTestFieldInt(-45);
+    test.setTestOneofFieldInt(-45);
+    QByteArray result = test.serialize(m_serializer.get());
+    QCOMPARE(result, "{\"testFieldInt\":-45,\"testOneofFieldInt\":-45}"_ba);
+
+    test.setTestFieldInt(0);
+    test.setTestOneofFieldInt(0);
+    result = test.serialize(m_serializer.get());
+    QCOMPARE(result, "{\"testOneofFieldInt\":0}");
 }
 
 void QtProtobufTypesJsonSerializationTest::OneofMessageClearTest()
 {
+    OneofMessage test;
+    test.setTestFieldInt(-45);
+    test.setTestOneofFieldInt(-45);
+
+    test.clearTestOneof();
+    QByteArray result = test.serialize(m_serializer.get());
+    QCOMPARE(result, "{\"testFieldInt\":-45}");
 }
 
 void QtProtobufTypesJsonSerializationTest::OneofMessageComplexTest()
 {
+    ComplexMessage complexField;
+    SimpleStringMessage stringField;
+    stringField.setTestFieldString("qwerty");
+    complexField.setTestFieldInt(42);
+    complexField.setTestComplexField(stringField);
+
+    OneofMessage test;
+    test.setTestOneofComplexField(complexField);
+    QByteArray result = test.serialize(m_serializer.get());
+    QCOMPARE(result,
+             "{\"testOneofComplexField\":{\"testComplexField\":{\"testFieldString\":\"qwerty\"},"
+             "\"testFieldInt\":42}}");
+
+    test.clearTestOneof();
+
+    test.setTestOneofComplexField({});
+    result = test.serialize(m_serializer.get());
+    QCOMPARE(result, "{\"testOneofComplexField\":{}}");
+
+    test.setSecondComplexField({});
+    result = test.serialize(m_serializer.get());
+    QCOMPARE(result, "{\"secondComplexField\":{},\"testOneofComplexField\":{}}");
+
+    // Check that partially intialized complex field doesn't apply its 'oneof'
+    // peculiarity to the child fields.
+    complexField.setTestComplexField({});
+    complexField.setTestFieldInt(42);
+    test.setTestOneofComplexField(complexField);
+    test.setSecondComplexField({});
+    result = test.serialize(m_serializer.get());
+    QCOMPARE(result,
+             "{\"secondComplexField\":{},\"testOneofComplexField\":{\"testComplexField\":{},"
+             "\"testFieldInt\":42}}");
 }
-*/
 
 QTEST_MAIN(QtProtobufTypesJsonSerializationTest)
 #include "tst_protobuf_serialization_json_basictypes.moc"

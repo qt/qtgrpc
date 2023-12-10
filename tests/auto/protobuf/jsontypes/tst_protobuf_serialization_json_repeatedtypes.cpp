@@ -50,7 +50,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedIntMessageTest()
 
     test.setTestRepeatedInt(QtProtobuf::int32List());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -64,7 +64,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedSIntMessageTest()
 
     test.setTestRepeatedInt(QtProtobuf::sint32List());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -78,7 +78,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedUIntMessageTest()
 
     test.setTestRepeatedInt(QtProtobuf::uint32List());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -94,7 +94,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedInt64MessageTest()
 
     test.setTestRepeatedInt(QtProtobuf::int64List());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -110,7 +110,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedSInt64MessageTest()
 
     test.setTestRepeatedInt(QtProtobuf::sint64List());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -126,7 +126,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedUInt64MessageTest()
 
     test.setTestRepeatedInt(QtProtobuf::uint64List());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -140,7 +140,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedFixedIntMessageTest()
 
     test.setTestRepeatedInt(QtProtobuf::fixed32List());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -154,7 +154,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedSFixedIntMessageTest(
 
     test.setTestRepeatedInt(QtProtobuf::sfixed32List());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -170,7 +170,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedFixedInt64MessageTest
 
     test.setTestRepeatedInt(QtProtobuf::fixed64List());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -186,7 +186,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedSFixedInt64MessageTes
 
     test.setTestRepeatedInt(QtProtobuf::sfixed64List());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedInt\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -201,7 +201,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedStringMessageTest()
 
     test.setTestRepeatedString(QStringList());
     result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"testRepeatedString\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
 
@@ -216,7 +216,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedFloatMessageTest()
     test.setTestRepeatedFloat(QtProtobuf::floatList());
     result = test.serialize(m_serializer.get());
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
-    QCOMPARE(result, "{\"testRepeatedFloat\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
 }
 
 void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedDoubleMessageTest()
@@ -230,7 +230,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedDoubleMessageTest()
     test.setTestRepeatedDouble(QtProtobuf::doubleList());
     result = test.serialize(m_serializer.get());
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
-    QCOMPARE(result, "{\"testRepeatedDouble\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
 }
 
 void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedBytesMessageTest()
@@ -248,7 +248,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedBytesMessageTest()
     test.setTestRepeatedBytes(QByteArrayList());
     result = test.serialize(m_serializer.get());
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
-    QCOMPARE(result, "{\"testRepeatedBytes\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
 
     test.setTestRepeatedBytes({QByteArray::fromHex("010203040506"),
                                 QByteArray::fromHex(""),
@@ -294,7 +294,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedBoolMessageTest()
     boolMsg.setTestRepeatedBool(QtProtobuf::boolList());
     result = boolMsg.serialize(m_serializer.get());
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
-    QCOMPARE(result, "{\"testRepeatedBool\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
 }
 
 QTEST_MAIN(QtProtobufRepeatedTypesJsonSerializationTest)

@@ -49,6 +49,17 @@ QT_BEGIN_NAMESPACE
 using namespace Qt::StringLiterals;
 using namespace QtProtobufPrivate;
 
+namespace {
+
+inline bool
+isOneofOrOptionalField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+{
+    return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
+        || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
+}
+
+}
+
 class QProtobufJsonSerializerPrivate final
 {
     Q_DISABLE_COPY_MOVE(QProtobufJsonSerializerPrivate)
@@ -62,6 +73,7 @@ public:
         Serializer serializer;
         // deserializer assigned to class
         Deserializer deserializer;
+        QProtobufSerializerPrivate::IsPresentChecker isPresent;
     };
 
     // TBD Replace std::unordered_map to QHash
@@ -185,98 +197,146 @@ public:
         if (handlers.empty()) {
             handlers[qMetaTypeId<QtProtobuf::int32>()] = {
                 QProtobufJsonSerializerPrivate::serializeVarint<QtProtobuf::int32>,
-                QProtobufJsonSerializerPrivate::deserializeInt32
+                QProtobufJsonSerializerPrivate::deserializeInt32,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::int32>
             };
             handlers[qMetaTypeId<QtProtobuf::sfixed32>()] = {
                 QProtobufJsonSerializerPrivate::serializeVarint<QtProtobuf::sfixed32>,
-                QProtobufJsonSerializerPrivate::deserializeInt32
+                QProtobufJsonSerializerPrivate::deserializeInt32,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::sfixed32>
             };
-            handlers[qMetaTypeId<QtProtobuf::sint32>()]
-                    = {{}, QProtobufJsonSerializerPrivate::deserializeInt32};
-            handlers[qMetaTypeId<QtProtobuf::sint64>()]
-                = {serializeInt64Int<QtProtobuf::sint64>, QProtobufJsonSerializerPrivate::deserializeInt64};
+            handlers[qMetaTypeId<QtProtobuf::sint32>()] = {
+                {},
+                QProtobufJsonSerializerPrivate::deserializeInt32,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::sint32>
+            };
+            handlers[qMetaTypeId<QtProtobuf::uint32>()] = {
+                {},
+                QProtobufJsonSerializerPrivate::deserializeUInt32,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::uint32>
+            };
+            handlers[qMetaTypeId<QtProtobuf::fixed32>()] = {
+                QProtobufJsonSerializerPrivate::serializeVarint<QtProtobuf::fixed32>,
+                QProtobufJsonSerializerPrivate::deserializeUInt32,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::fixed32>
+            };
+            handlers[qMetaTypeId<QtProtobuf::sint64>()] = {
+                serializeInt64Int<QtProtobuf::sint64>,
+                QProtobufJsonSerializerPrivate::deserializeInt64,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::sint64>
+            };
             handlers[qMetaTypeId<QtProtobuf::int64>()] = {
                 serializeInt64Int<QtProtobuf::int64>,
-                QProtobufJsonSerializerPrivate::deserializeInt64
+                QProtobufJsonSerializerPrivate::deserializeInt64,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::int64>
             };
             handlers[qMetaTypeId<QtProtobuf::sfixed64>()] = {
                 serializeInt64Int<QtProtobuf::sfixed64>,
-                QProtobufJsonSerializerPrivate::deserializeInt64
+                QProtobufJsonSerializerPrivate::deserializeInt64,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::sfixed64>
             };
-            handlers[qMetaTypeId<QtProtobuf::uint32>()]
-                    = {{}, QProtobufJsonSerializerPrivate::deserializeUInt32};
-            handlers[qMetaTypeId<QtProtobuf::fixed32>()] = {
-                QProtobufJsonSerializerPrivate::serializeVarint<QtProtobuf::fixed32>,
-                QProtobufJsonSerializerPrivate::deserializeUInt32
+            handlers[qMetaTypeId<QtProtobuf::uint64>()] = {
+                serializeInt64Int<QtProtobuf::uint64>,
+                QProtobufJsonSerializerPrivate::deserializeUInt64,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::uint64>
             };
-            handlers[qMetaTypeId<QtProtobuf::uint64>()]
-                    = {serializeInt64Int<QtProtobuf::uint64>, QProtobufJsonSerializerPrivate::deserializeUInt64};
             handlers[qMetaTypeId<QtProtobuf::fixed64>()] = {
                 serializeInt64Int<QtProtobuf::fixed64>,
-                QProtobufJsonSerializerPrivate::deserializeUInt64
+                QProtobufJsonSerializerPrivate::deserializeUInt64,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::fixed64>
             };
-            handlers[qMetaTypeId<bool>()]
-                    = {{}, QProtobufJsonSerializerPrivate::deserializeBool};
-            handlers[QMetaType::Float] = {QProtobufJsonSerializerPrivate::serializeFloat,
-                                          QProtobufJsonSerializerPrivate::deserializeFloat};
-            handlers[QMetaType::Double] = {QProtobufJsonSerializerPrivate::serializeDouble,
-                                           QProtobufJsonSerializerPrivate::deserializeDouble};
-            handlers[QMetaType::QString]
-                    = {QProtobufJsonSerializerPrivate::serializeString,
-                       QProtobufJsonSerializerPrivate::deserializeString};
-            handlers[QMetaType::QByteArray]
-                    = {QProtobufJsonSerializerPrivate::serializeBytes,
-                       QProtobufJsonSerializerPrivate::deserializeByteArray};
-            handlers[qMetaTypeId<QtProtobuf::boolList>()]
-                    = {QProtobufJsonSerializerPrivate::serializeBoolList,
-                    QProtobufJsonSerializerPrivate::deserializeList<bool>};
-            handlers[qMetaTypeId<QtProtobuf::int32List>()]
-                    = {QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::int32List>,
-                    QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::int32>};
+            handlers[qMetaTypeId<bool>()] = { {},
+                                              QProtobufJsonSerializerPrivate::deserializeBool,
+                                              QProtobufSerializerPrivate::isPresent<bool> };
+            handlers[QMetaType::Float] = { QProtobufJsonSerializerPrivate::serializeFloat,
+                                           QProtobufJsonSerializerPrivate::deserializeFloat,
+                                           QProtobufSerializerPrivate::isPresent<float> };
+            handlers[QMetaType::Double] = { QProtobufJsonSerializerPrivate::serializeDouble,
+                                            QProtobufJsonSerializerPrivate::deserializeDouble,
+                                            QProtobufSerializerPrivate::isPresent<double> };
+            handlers[QMetaType::QString] = { QProtobufJsonSerializerPrivate::serializeString,
+                                             QProtobufJsonSerializerPrivate::deserializeString,
+                                             QProtobufSerializerPrivate::isPresent<QString> };
+            handlers[QMetaType::QByteArray] = {
+                QProtobufJsonSerializerPrivate::serializeBytes,
+                QProtobufJsonSerializerPrivate::deserializeByteArray,
+                QProtobufSerializerPrivate::isPresent<QByteArray>
+            };
+            handlers[qMetaTypeId<QtProtobuf::boolList>()] = {
+                QProtobufJsonSerializerPrivate::serializeBoolList,
+                QProtobufJsonSerializerPrivate::deserializeList<bool>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::boolList>
+            };
+            handlers[qMetaTypeId<QtProtobuf::int32List>()] = {
+                QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::int32List>,
+                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::int32>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::int32List>
+            };
             handlers[qMetaTypeId<QtProtobuf::int64List>()] = {
                 QProtobufJsonSerializerPrivate::serializeInt64bitList<QtProtobuf::int64List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::int64>
+                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::int64>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::int64List>
             };
-            handlers[qMetaTypeId<QtProtobuf::sint32List>()]
-                    = {QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::sint32List>,
-                    QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sint32>};
+            handlers[qMetaTypeId<QtProtobuf::sint32List>()] = {
+                QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::sint32List>,
+                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sint32>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::sint32List>
+            };
             handlers[qMetaTypeId<QtProtobuf::sint64List>()] = {
                 QProtobufJsonSerializerPrivate::serializeInt64bitList<QtProtobuf::sint64List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sint64>
+                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sint64>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::sint64List>
             };
-            handlers[qMetaTypeId<QtProtobuf::uint32List>()]
-                    = {QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::uint32List>,
-                    QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::uint32>};
+            handlers[qMetaTypeId<QtProtobuf::uint32List>()] = {
+                QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::uint32List>,
+                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::uint32>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::uint32List>
+            };
             handlers[qMetaTypeId<QtProtobuf::uint64List>()] = {
                 QProtobufJsonSerializerPrivate::serializeInt64bitList<QtProtobuf::uint64List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::uint64>
+                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::uint64>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::uint64List>
             };
-            handlers[qMetaTypeId<QtProtobuf::fixed32List>()]
-                    = {QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::fixed32List>,
-                    QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::fixed32>};
+            handlers[qMetaTypeId<QtProtobuf::fixed32List>()] = {
+                QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::fixed32List>,
+                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::fixed32>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::fixed32List>
+            };
             handlers[qMetaTypeId<QtProtobuf::fixed64List>()] = {
                 QProtobufJsonSerializerPrivate::serializeInt64bitList<QtProtobuf::fixed64List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::fixed64>
+                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::fixed64>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::fixed64List>
             };
-            handlers[qMetaTypeId<QtProtobuf::sfixed32List>()]
-                    = {QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::sfixed32List>,
-                    QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sfixed32>};
+            handlers[qMetaTypeId<QtProtobuf::sfixed32List>()] = {
+                QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::sfixed32List>,
+                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sfixed32>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::sfixed32List>
+            };
             handlers[qMetaTypeId<QtProtobuf::sfixed64List>()] = {
                 QProtobufJsonSerializerPrivate::serializeInt64bitList<QtProtobuf::sfixed64List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sfixed64>
+                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sfixed64>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::sfixed64List>
             };
-            handlers[qMetaTypeId<QtProtobuf::floatList>()]
-                    = {QProtobufJsonSerializerPrivate::serializeFloatList,
-                    QProtobufJsonSerializerPrivate::deserializeList<float>};
-            handlers[qMetaTypeId<QtProtobuf::doubleList>()]
-                    = {QProtobufJsonSerializerPrivate::serializeDoubleList,
-                    QProtobufJsonSerializerPrivate::deserializeList<double>};
-            handlers[qMetaTypeId<QStringList>()]
-                    = {QProtobufJsonSerializerPrivate::serializeStringList,
-                    QProtobufJsonSerializerPrivate::deserializeStringList};
-            handlers[qMetaTypeId<QByteArrayList>()]
-                    = {QProtobufJsonSerializerPrivate::serializeBytesList,
-                    QProtobufJsonSerializerPrivate::deserializeList<QByteArray>};
+            handlers[qMetaTypeId<QtProtobuf::floatList>()] = {
+                QProtobufJsonSerializerPrivate::serializeFloatList,
+                QProtobufJsonSerializerPrivate::deserializeList<float>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::floatList>
+            };
+            handlers[qMetaTypeId<QtProtobuf::doubleList>()] = {
+                QProtobufJsonSerializerPrivate::serializeDoubleList,
+                QProtobufJsonSerializerPrivate::deserializeList<double>,
+                QProtobufSerializerPrivate::isPresent<QtProtobuf::doubleList>
+            };
+            handlers[qMetaTypeId<QStringList>()] = {
+                QProtobufJsonSerializerPrivate::serializeStringList,
+                QProtobufJsonSerializerPrivate::deserializeStringList,
+                QProtobufSerializerPrivate::isPresent<QStringList>
+            };
+            handlers[qMetaTypeId<QByteArrayList>()] = {
+                QProtobufJsonSerializerPrivate::serializeBytesList,
+                QProtobufJsonSerializerPrivate::deserializeList<QByteArray>,
+                QProtobufSerializerPrivate::isPresent<QByteArrayList>
+            };
         }
     }
     ~QProtobufJsonSerializerPrivate() = default;
@@ -287,7 +347,7 @@ public:
         QMetaType metaType = propertyValue.metaType();
         auto userType = propertyValue.userType();
 
-        if (metaType.id() == QMetaType::UnknownType)
+        if (metaType.id() == QMetaType::UnknownType || propertyValue.isNull())
             return;
 
         auto handler = QtProtobufPrivate::findHandler(metaType);
@@ -296,8 +356,14 @@ public:
         } else {
             QJsonObject activeObject = activeValue.toObject();
             auto handler = handlers.find(userType);
+            if (handler == handlers.end())
+                return;
+
+            if (!handler->second.isPresent(propertyValue) && !isOneofOrOptionalField(fieldInfo))
+                return;
+
             activeObject.insert(fieldInfo.getJsonName().toString(),
-                                handler != handlers.end() && handler->second.serializer
+                                handler->second.serializer
                                     ? handler->second.serializer(propertyValue)
                                     : QJsonValue::fromVariant(propertyValue));
             activeValue = activeObject;
