@@ -22,14 +22,6 @@ qt_feature("qtgrpcgen" PRIVATE
         TARGET WrapProtoc::WrapProtoc AND TEST_libprotobuf AND TEST_libprotoc
 )
 
-qt_feature("native_grpc" PUBLIC
-    SECTION "Utilities"
-    LABEL "Native gRPC support"
-    DISABLE NOT QT_FEATURE_grpc
-    PURPOSE "Provides native implementation for gRPC channels and client and service code generation."
-    CONDITION TARGET WrapgRPC::WrapLibgRPC
-)
-
 qt_feature("grpcquick" PUBLIC
     SECTION "Utilities"
     LABEL "QML gRPC support"
@@ -40,7 +32,6 @@ qt_feature("grpcquick" PUBLIC
 qt_configure_add_summary_section(NAME "Qt GRPC")
 qt_configure_add_summary_entry(ARGS "grpc")
 qt_configure_add_summary_entry(ARGS "grpcquick")
-qt_configure_add_summary_entry(ARGS "native_grpc")
 qt_configure_end_summary_section()
 qt_configure_add_summary_section(NAME "Qt GRPC tools")
 qt_configure_add_summary_entry(ARGS "qtgrpcgen")

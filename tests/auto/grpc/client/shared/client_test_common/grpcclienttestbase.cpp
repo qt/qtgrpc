@@ -25,22 +25,6 @@ void GrpcClientTestBase::initTestCase_data()
 #endif
     }
 
-#if QT_CONFIG(native_grpc)
-    if (m_channels.testFlag(Channel::Native)) {
-#  ifndef Q_OS_WINDOWS
-        QTest::newRow("GrpcSocket")
-            << QFlags{ Channel::Native }
-            << std::shared_ptr<QAbstractGrpcChannel>(
-                   new QGrpcChannel(QGrpcChannelOptions{ QUrl("unix:///tmp/qtgrpc_test.sock") },
-                                    QGrpcChannel::InsecureChannelCredentials));
-#  endif
-        QTest::newRow("GrpcHttp") << QFlags{ Channel::Native }
-                                  << std::shared_ptr<QAbstractGrpcChannel>(new QGrpcChannel(
-                                             QGrpcChannelOptions{ QUrl("localhost:50051") },
-                                             QGrpcChannel::InsecureChannelCredentials));
-    }
-#endif
-
 #if QT_CONFIG(ssl)
     if (m_channels.testFlag(Channel::Ssl)) {
         QFile caCerificateFile(":/assets/cert.pem");
@@ -67,12 +51,6 @@ void GrpcClientTestBase::initTestCase_data()
         QTest::newRow("Http2ClientSSLNoCredentials")
             << QFlags{ Channel::Qt, Channel::SslNoCredentials }
             << std::shared_ptr<QAbstractGrpcChannel>(new QGrpcHttp2Channel(channelOptions));
-#  if QT_CONFIG(native_grpc)
-        QTest::newRow("GrpcHttpSSLNoCredentials")
-            << QFlags{ Channel::Native, Channel::SslNoCredentials }
-            << std::shared_ptr<QAbstractGrpcChannel>(new QGrpcChannel(channelOptions,
-                                                          QGrpcChannel::SslDefaultCredentials));
-#  endif
     }
 #endif
 
