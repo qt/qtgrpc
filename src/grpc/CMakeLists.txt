@@ -27,13 +27,6 @@ qt_internal_add_module(Grpc
         Qt::Network
 )
 
-qt_internal_extend_target(Grpc CONDITION QT_FEATURE_native_grpc
-    SOURCES
-        qgrpcchannel.h qgrpcchannel_p.h qgrpcchannel.cpp
-    PUBLIC_LIBRARIES
-        WrapgRPC::WrapLibgRPC
-)
-
 qt_internal_add_docs(Grpc
     doc/qtgrpc.qdocconf
 )

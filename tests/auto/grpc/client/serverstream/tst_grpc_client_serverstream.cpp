@@ -27,7 +27,7 @@ class QtGrpcClientServerStreamTest : public GrpcClientTestBase
 public:
     QtGrpcClientServerStreamTest()
         : GrpcClientTestBase(
-                { GrpcClientTestBase::Channel::Qt, GrpcClientTestBase::Channel::Native })
+                Channels{ GrpcClientTestBase::Channel::Qt })
     {
     }
 

@@ -18,7 +18,7 @@ class QtGrpcClientBidirStreamTest : public GrpcClientTestBase
 public:
     QtGrpcClientBidirStreamTest()
         : GrpcClientTestBase(
-                { GrpcClientTestBase::Channel::Qt, GrpcClientTestBase::Channel::Native })
+                Channels{ GrpcClientTestBase::Channel::Qt })
     {
     }
 
@@ -28,9 +28,6 @@ private slots:
 
 void QtGrpcClientBidirStreamTest::Valid()
 {
-    if (channelType().testFlag(GrpcClientTestBase::Channel::Native))
-        QSKIP("Unimplemented in the reference gRPC channel.");
-
     const int ExpectedMessageCount = 4;
 
     SimpleStringMessage request;

@@ -6,7 +6,6 @@
 
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
-#include <QtCore/qsystemdetection.h>
 
 #include <QtGrpc/QGrpcCallOptions>
 #include <QtGrpc/QGrpcClientInterceptorManager>
@@ -16,10 +15,6 @@
 #include <QtTest/QTest>
 
 #include <memory>
-
-#if QT_CONFIG(native_grpc)
-#  include <grpcpp/security/credentials.h>
-#endif
 
 #include <interceptormocks.h>
 #include <message_latency_defs.h>
@@ -36,7 +31,6 @@ public:
     QtGrpcClientUnaryCallTest()
         : GrpcClientTestBase(GrpcClientTestBase::Channels{
                 GrpcClientTestBase::Channel::Qt,
-                GrpcClientTestBase::Channel::Native,
 #if !defined(Q_OS_DARWIN) && !defined(Q_OS_WIN32)
                 GrpcClientTestBase::Channel::Ssl,
 #endif
@@ -260,8 +254,6 @@ void QtGrpcClientUnaryCallTest::Metadata()
     }
 
     QCOMPARE_EQ(clientErrorSpy.count(), 0);
-    if (channelType().testFlag(GrpcClientTestBase::Channel::Native))
-        QEXPECT_FAIL("", "Unimplemented in the reference gRPC channel", Abort);
     QCOMPARE_EQ(serverHeaderCount, 1);
     QCOMPARE_EQ(clientReturnHeader, "valid_value"_ba);
 }
@@ -310,9 +302,6 @@ void QtGrpcClientUnaryCallTest::Deadline()
 
 void QtGrpcClientUnaryCallTest::Interceptor()
 {
-    if (channelType().testFlag(GrpcClientTestBase::Channel::Native))
-        QSKIP("Unimplemented in the reference gRPC channel.");
-
     constexpr QLatin1StringView clientMetadataKey = "client_header"_L1;
     constexpr QLatin1StringView serverMetadataKey = "server_header"_L1;
     constexpr QLatin1StringView interceptor1Id = "inter1"_L1;
