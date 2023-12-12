@@ -22,6 +22,7 @@ protected:
         NoChannels = 0x0,
         Qt = 0x1,
         Ssl = 0x2,
+        Json = 0x4,
         SslNoCredentials = 0x8,
         WithChannelDeadline = 0x10,
     };
