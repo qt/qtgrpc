@@ -2,6 +2,7 @@
 
 #include "qtgrpc/tests/testservice.qpb.h"
 #include <QtProtobuf/qprotobufserializer.h>
+#include <cmath>
 
 namespace qtgrpc::tests {
 

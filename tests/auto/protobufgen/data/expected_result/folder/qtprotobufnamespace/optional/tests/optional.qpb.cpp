@@ -2,6 +2,7 @@
 
 #include "qtprotobufnamespace/optional/tests/optional.qpb.h"
 #include <QtProtobuf/qprotobufserializer.h>
+#include <cmath>
 
 namespace qtprotobufnamespace::optional::tests {
 

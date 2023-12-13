@@ -2,6 +2,7 @@
 
 #include "qtprotobufnamespace/tests/basicmessages.qpb.h"
 #include <QtProtobuf/qprotobufserializer.h>
+#include <cmath>
 
 namespace qtprotobufnamespace::tests {
 
@@ -1136,7 +1137,8 @@ float SimpleFloatMessage::testFieldFloat() const
 
 void SimpleFloatMessage::setTestFieldFloat(const float &testFieldFloat)
 {
-    if (dptr->m_testFieldFloat != testFieldFloat) {
+    if (dptr->m_testFieldFloat != testFieldFloat ||
+        std::signbit(dptr->m_testFieldFloat) != std::signbit(testFieldFloat)) {
         dptr.detach();
         dptr->m_testFieldFloat = testFieldFloat;
     }
@@ -1252,7 +1254,8 @@ double SimpleDoubleMessage::testFieldDouble() const
 
 void SimpleDoubleMessage::setTestFieldDouble(const double &testFieldDouble)
 {
-    if (dptr->m_testFieldDouble != testFieldDouble) {
+    if (dptr->m_testFieldDouble != testFieldDouble ||
+        std::signbit(dptr->m_testFieldDouble) != std::signbit(testFieldDouble)) {
         dptr.detach();
         dptr->m_testFieldDouble = testFieldDouble;
     }

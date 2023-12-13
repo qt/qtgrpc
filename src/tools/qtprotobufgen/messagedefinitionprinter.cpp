@@ -461,6 +461,14 @@ void MessageDefinitionPrinter::printGetters()
                     m_printer->Print(propertyMap,
                                      CommonTemplates::SetterComplexDefinitionTemplate());
                     break;
+                case FieldDescriptor::TYPE_FLOAT:
+                case FieldDescriptor::TYPE_DOUBLE:
+                    if (!field->is_repeated()) {
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::SetterFloatingPointDefinitionTemplate());
+                        break;
+                    }
+                    // fall through
                 default:
                     m_printer->Print(propertyMap, CommonTemplates::SetterDefinitionTemplate());
                     break;

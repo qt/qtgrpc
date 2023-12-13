@@ -14,6 +14,7 @@
 
 #include <map>
 #include <unordered_map>
+#include <cmath>
 
 QT_BEGIN_NAMESPACE
 
@@ -76,6 +77,15 @@ public:
         QProtobufSerializerPrivate::IsPresentChecker isPresent;
     };
 
+    template<typename T,
+              std::enable_if_t<std::is_same_v<T, float> || std::is_same_v<T, double>, bool> = true>
+    static bool isPresent(const QVariant &value)
+    {
+        const T val = value.value<T>();
+        return val != 0 || std::signbit(val);
+    }
+
+
     // TBD Replace std::unordered_map to QHash
     using SerializerRegistry = std::unordered_map<int/*metatypeid*/, SerializationHandlers>;
 
@@ -95,7 +105,11 @@ public:
     {
         // TODO: this is weak approach to no have some precision loss. Not sure why this happens,
         // should be converted without the conversion to string.
-        return QJsonValue(QString::number(propertyValue.toFloat()).toDouble());
+        float f = propertyValue.toFloat();
+        double d = QString::number(f).toDouble();
+        if (d == 0 && std::signbit(f))
+            d = -0.0;
+        return QJsonValue(d);
     }
 
     static QJsonValue serializeDouble(const QVariant &propertyValue)
@@ -250,10 +264,10 @@ public:
                                               QProtobufSerializerPrivate::isPresent<bool> };
             handlers[QMetaType::Float] = { QProtobufJsonSerializerPrivate::serializeFloat,
                                            QProtobufJsonSerializerPrivate::deserializeFloat,
-                                           QProtobufSerializerPrivate::isPresent<float> };
+                                           QProtobufJsonSerializerPrivate::isPresent<float> };
             handlers[QMetaType::Double] = { QProtobufJsonSerializerPrivate::serializeDouble,
                                             QProtobufJsonSerializerPrivate::deserializeDouble,
-                                            QProtobufSerializerPrivate::isPresent<double> };
+                                            QProtobufJsonSerializerPrivate::isPresent<double> };
             handlers[QMetaType::QString] = { QProtobufJsonSerializerPrivate::serializeString,
                                              QProtobufJsonSerializerPrivate::deserializeString,
                                              QProtobufSerializerPrivate::isPresent<QString> };
