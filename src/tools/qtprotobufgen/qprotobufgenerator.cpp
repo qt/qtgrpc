@@ -92,6 +92,9 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
                              CommonTemplates::ExternalIncludeTemplate());
     }
 
+    sourcePrinter->Print({{"include", "cmath"}},
+                         CommonTemplates::ExternalIncludeTemplate());
+
     OpenFileNamespaces(file, sourcePrinter.get());
     OpenFileNamespaces(file, registrationPrinter.get());
 

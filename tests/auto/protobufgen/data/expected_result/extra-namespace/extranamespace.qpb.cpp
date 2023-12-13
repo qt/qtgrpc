@@ -2,6 +2,7 @@
 
 #include "extranamespace.qpb.h"
 #include <QtProtobuf/qprotobufserializer.h>
+#include <cmath>
 
 namespace MyTopLevelNamespace::qtprotobufnamespace::tests {
 

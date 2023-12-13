@@ -330,8 +330,9 @@ void QtProtobufTypesJsonSerializationTest::FloatMessageSerializeTest_data()
     QTest::newRow("float_value_max")
         << std::numeric_limits<float>::max() << "{\"testFieldFloat\":3.40282e+38}"_ba;
     QTest::newRow("float_neg_value_4_2") << -4.2f << "{\"testFieldFloat\":-4.2}"_ba;
-    QTest::newRow("float_neg_value_0_0") << (float)-0.0f << "{}"_ba;
-}
+    QTest::newRow("float_neg_value_0_0") << (float)-0.0f << "{\"testFieldFloat\":-0}"_ba;
+    QTest::newRow("float_value_0_0") << (float)0.0f << "{}"_ba;
+ }
 
 void QtProtobufTypesJsonSerializationTest::FloatMessageSerializeTest()
 {
@@ -341,6 +342,8 @@ void QtProtobufTypesJsonSerializationTest::FloatMessageSerializeTest()
     SimpleFloatMessage test;
     test.setTestFieldFloat(value);
     QByteArray result = test.serialize(m_serializer.get());
+    QEXPECT_FAIL("float_neg_value_0_0", "QJsonValue ignores sign bit when serializing floating"
+                                        " point values", Continue);
     QCOMPARE(result, expectedData);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }
@@ -360,6 +363,7 @@ void QtProtobufTypesJsonSerializationTest::DoubleMessageSerializeTest_data()
         << "{\"testFieldDouble\":1.7976931348623157e+308}"_ba;
     QTest::newRow("double_neg_value_4_2") << -4.2
                                           << "{\"testFieldDouble\":-4.2}"_ba;
+    QTest::newRow("double_neg_value_0_0") << -0.0 << "{\"testFieldDouble\":-0}"_ba;
     QTest::newRow("double_value_0_0") << 0.0 << "{}"_ba;
 }
 
@@ -371,6 +375,8 @@ void QtProtobufTypesJsonSerializationTest::DoubleMessageSerializeTest()
     SimpleDoubleMessage test;
     test.setTestFieldDouble(value);
     QByteArray result = test.serialize(m_serializer.get());
+    QEXPECT_FAIL("double_neg_value_0_0", "QJsonValue ignores sign bit when serializing floating"
+                                        " point values", Continue);
     QCOMPARE(result, expectedData);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 }

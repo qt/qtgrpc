@@ -7,6 +7,8 @@
 #include <QProtobufJsonSerializer>
 #include <QTest>
 
+#include <cmath>
+
 using namespace Qt::Literals::StringLiterals;
 
 class QtProtobufTypesJsonDeserializationTest : public QObject
@@ -310,7 +312,8 @@ void QtProtobufTypesJsonDeserializationTest::FloatMessageDeserializeTest_data()
     QTest::newRow("float_value_max") << std::numeric_limits<float>::max()
                                      << "{\"testFieldFloat\":3.40282e+38}"_ba;
     QTest::newRow("float_neg_value_4_2") << -4.2f << "{\"testFieldFloat\":-4.2}"_ba;
-    QTest::newRow("float_neg_value_0_0") << (float)-0.0f << "{\"testFieldFloat\":0}"_ba;
+    QTest::newRow("float_neg_value_0_0") << (float)-0.0f << "{\"testFieldFloat\":-0}"_ba;
+    QTest::newRow("float_value_0_0") << (float)0.0f << "{\"testFieldFloat\":0}"_ba;
 }
 
 void QtProtobufTypesJsonDeserializationTest::FloatMessageDeserializeTest()
@@ -322,6 +325,10 @@ void QtProtobufTypesJsonDeserializationTest::FloatMessageDeserializeTest()
     test.setTestFieldFloat(value);
     test.deserialize(serializer.get(), serializeData);
     QCOMPARE(test.testFieldFloat(), value);
+    // See QTBUG-120077
+    QEXPECT_FAIL("float_neg_value_0_0", "QJsonValue ignores sign bit when deserializing floating"
+                                        " point values", Continue);
+    QCOMPARE(std::signbit(test.testFieldFloat()), std::signbit(value));
 }
 
 void QtProtobufTypesJsonDeserializationTest::DoubleMessageDeserializeTest_data()
@@ -339,6 +346,7 @@ void QtProtobufTypesJsonDeserializationTest::DoubleMessageDeserializeTest_data()
     QTest::newRow("double_neg_value_4_2") << -4.2
                                           << "{\"testFieldDouble\":-4.2}"_ba;
     QTest::newRow("double_value_0_0") << 0.0 << "{\"testFieldDouble\":0}"_ba;
+    QTest::newRow("double_neg_value_0_0") << -0.0 << "{\"testFieldDouble\":-0}"_ba;
 }
 
 void QtProtobufTypesJsonDeserializationTest::DoubleMessageDeserializeTest()
@@ -350,6 +358,10 @@ void QtProtobufTypesJsonDeserializationTest::DoubleMessageDeserializeTest()
     test.setTestFieldDouble(value);
     test.deserialize(serializer.get(), serializeData);
     QCOMPARE(test.testFieldDouble(), value);
+    // See QTBUG-120077
+    QEXPECT_FAIL("double_neg_value_0_0", "QJsonValue ignores sign bit when deserializing floating"
+                                        " point values", Continue);
+    QCOMPARE(std::signbit(test.testFieldDouble()), std::signbit(value));
 }
 
 void QtProtobufTypesJsonDeserializationTest::StringMessageDeserializeTest()

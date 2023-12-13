@@ -127,6 +127,7 @@ public:
     static const char *SetterComplexDefinitionTemplate();
     static const char *SetterDeclarationTemplate();
     static const char *SetterDefinitionTemplate();
+    static const char *SetterFloatingPointDefinitionTemplate();
     static const char *SetterOneofDeclarationTemplate();
     static const char *SetterOneofDefinitionTemplate();
     static const char *SetterOptionalDefinitionTemplate();

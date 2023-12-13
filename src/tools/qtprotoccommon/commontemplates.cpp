@@ -760,6 +760,18 @@ const char *CommonTemplates::SetterDefinitionTemplate()
            "}\n\n";
 }
 
+const char *CommonTemplates::SetterFloatingPointDefinitionTemplate()
+{
+    return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n"
+           "{\n"
+           "    if (dptr->m_$property_name$ != $property_name$ ||\n"
+           "        std::signbit(dptr->m_$property_name$) != std::signbit($property_name$)) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$property_name$ = $property_name$;\n"
+           "    }\n"
+           "}\n\n";
+}
+
 const char *CommonTemplates::JsonNameOffsetsUintDataTemplate()
 {
     return "$json_name_offset$, /* = $json_name$ */\n";
