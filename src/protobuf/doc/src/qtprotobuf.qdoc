@@ -59,12 +59,15 @@
     For more information about the installation, see
     \l {https://grpc.io/docs/protoc-installation/}{Protoc Installation}.
 
-    Example of installation for Linux, using \e {apt}:
-    \badcode
-    apt install -y protobuf-compiler
-    protoc --version  # Ensure compiler version is 3+
-    \endcode
-    For more information about component API usage, see \e {CMake API}.
+    \section3
+    \list
+        \li Example of installation for Linux, using \e {apt}:
+            \badcode
+                apt install -y protobuf-compiler
+                protoc --version  # Ensure compiler version is 3+
+            \endcode
+        \li \l {Example of installation for Windows using vcpkg}
+    \endlist
 
     \section2 QML API
     The QML types of the module are available through the QML and QML_URI
@@ -134,6 +137,61 @@
 
     These examples demonstrate how to generate code using the protobuf schema
     and use it in your projects.
+*/
+
+/*!
+    \group Protobuf
+    \keyword Example of installation for Windows using vcpkg
+    \title Example of installation for Windows using vcpkg
+    \brief Installing instructions for Protobuf and gRPC on Windows.
+
+    You can install \c Protobuf and \c gRPC packages on Windows using
+    \e vcpkg.
+    \note As an alternative solution, you can build \c Protobuf and \c gRPC
+    packages manually. Build instructions can be found for
+    \l {https://github.com/protocolbuffers/protobuf/blob/main/cmake/README.md#windows-builds}{Protobuf}
+    and \l{https://github.com/grpc/grpc/blob/v1.60.0/BUILDING.md#windows}{gRPC}
+    respectively.
+
+    Windows installation prerequisites:
+    \list
+        \li \l {https://vcpkg.io/en/getting-started.html}
+            {The vcpkg package manager}
+        \li \l {https://visualstudio.microsoft.com/vs/features/cplusplus/}
+               {Microsoft Visual C++ compiler}
+        \li \l {Get and Install Qt}
+            {Qt 6.6 or later, including \e {Additional libraries}:
+            \e QtProtobuf and \e QtGrpc}
+    \endlist
+
+    The \c vcpkg is a cross-platform C/C++ package manager.
+    You can use the \c vcpkg for \c Protobuf, \c gRPC and its dependencies
+    installation:
+    \badcode
+        .\vcpkg.exe install protobuf protobuf:x64-windows
+        .\vcpkg.exe install grpc:x64-windows
+    \endcode
+
+    Finally, you can build and execute Qt-based projects with
+    \c Protobuf and \c gRPC support.
+    For instance, run \l {Magic 8 Ball} from your installed version
+    of Qt.
+    The example requires both packages to be installed, since \c {Magic 8 Ball}
+    uses native C++ source code generator plugin for the server part
+    of application.
+    Following steps are required to start \c {Magic 8 Ball} example:
+    \list
+        \li Find \l {Magic 8 Ball} in \c Examples section:
+            \image qt-creator.webp
+        \li Choose MSVC-based building kit from Qt-creator configuration
+            settings:
+            \image msvc-kit.webp
+        \li Add the paths to the installed \c Protobuf and \c gRPC packages
+            to the \c CMAKE_PREFIX_PATH environment variable inside
+            \c {Initial Configuration} settings block:
+            \image path-env-variable.webp
+        \li Build and Run.
+    \endlist
 */
 
 /*!
