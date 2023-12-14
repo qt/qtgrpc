@@ -523,6 +523,8 @@ public:
             auto handler = handlers.find(propertyData.userType());
             if (handler != handlers.end() && handler->second.deserializer) {
                 propertyData = handler->second.deserializer(activeValue, ok);
+                if (!ok)
+                    setInvalidFormatError();
                 activeValue = {};
             } else {
                 setDeserializationError(QAbstractProtobufSerializer::NoDeserializerError,
@@ -547,6 +549,8 @@ public:
         }
 
         if (!activeValue.isObject()) {
+            setInvalidFormatError();
+            activeValue = {};
             return false;
         }
         QJsonObject activeObject = activeValue.toObject();
@@ -558,15 +562,13 @@ public:
                 QVariant newPropertyValue = message->property(iter->second);
                 auto store = activeValue;
                 activeValue = activeObject.value(key);
-                while (!activeValue.isNull()
-                       && deserializationError == QAbstractProtobufSerializer::NoError) {
+                while (!activeValue.isNull()) {
                     newPropertyValue = deserializeValue(newPropertyValue, ok);
                 }
                 activeValue = store;
 
-                if (ok) {
+                if (ok)
                     message->setProperty(iter->second, newPropertyValue);
-                }
             }
         }
 
@@ -657,12 +659,15 @@ bool QProtobufJsonSerializer::deserializeMessage(QProtobufMessage *message,
     d_ptr->clearError();
     QJsonParseError err;
     auto document = QJsonDocument::fromJson(data.toByteArray(), &err);
-    if (err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError) {
+        d_ptr->setUnexpectedEndOfStreamError();
         return false;
+    }
 
-    if (!document.isObject())
+    if (!document.isObject()) {
+        d_ptr->setInvalidFormatError();
         return false;
-
+    }
     d_ptr->activeValue = document.object();
 
     return d_ptr->deserializeObject(message, ordering);

@@ -52,6 +52,8 @@ private slots:
     void EmptyBytesMessageTest();
     void EmptyStringMessageTest();
 
+    void MalformedJsonTest();
+    void InvalidTypeTest();
 private:
     std::unique_ptr<QProtobufJsonSerializer> serializer;
 };
@@ -501,6 +503,53 @@ void QtProtobufTypesJsonDeserializationTest::EmptyStringMessageTest()
     test.deserialize(serializer.get(), "{\"testFieldString\":\"\"}"_ba);
     QCOMPARE(test.testFieldString(), "");
 }
+
+void QtProtobufTypesJsonDeserializationTest::MalformedJsonTest()
+{
+    ComplexMessage msg;
+    // Closing brace is missing
+    msg.deserialize(serializer.get(),
+                    "{\"testFieldInt\":-45,"
+                    "\"testComplexField\":{\"testFieldString\":\"qwerty\"}"_ba);
+
+    QCOMPARE(msg.testFieldInt(), 0);
+    QCOMPARE(msg.testComplexField(), SimpleStringMessage());
+    QCOMPARE(serializer->deserializationError(),
+             QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
+
+    msg.deserialize(serializer.get(),
+                    "[{\"testFieldInt\":-45,"
+                    "\"testComplexField\":{\"testFieldString\":\"qwerty\"}}]"_ba);
+    QCOMPARE(msg.testFieldInt(), 0);
+    QCOMPARE(msg.testComplexField(), SimpleStringMessage());
+    QCOMPARE(serializer->deserializationError(),
+             QAbstractProtobufSerializer::InvalidFormatError);
+}
+
+void QtProtobufTypesJsonDeserializationTest::InvalidTypeTest()
+{
+    ComplexMessage msg;
+    // Closing brace is missing
+    msg.deserialize(serializer.get(),
+                    "{\"testFieldInt\":-45,"
+                    "\"testComplexField\":200}"_ba);
+
+    QCOMPARE(msg.testFieldInt(), -45);
+    QCOMPARE(msg.testComplexField(), SimpleStringMessage());
+    QCOMPARE(serializer->deserializationError(),
+             QAbstractProtobufSerializer::InvalidFormatError);
+
+    // Expected integer but the value is an array
+    msg.deserialize(serializer.get(),
+                    "{\"testFieldInt\":[],"
+                    "\"testComplexField\":{\"testFieldString\":\"qwerty\"}}"_ba);
+
+    QCOMPARE(msg.testFieldInt(), 0);
+    QCOMPARE(msg.testComplexField().testFieldString(), "qwerty"_L1);
+    QCOMPARE(serializer->deserializationError(),
+             QAbstractProtobufSerializer::InvalidFormatError);
+}
+
 
 QTEST_MAIN(QtProtobufTypesJsonDeserializationTest)
 #include "tst_protobuf_deserialization_json_basictypes.moc"
