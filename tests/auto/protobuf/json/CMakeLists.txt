@@ -14,7 +14,7 @@ qt6_add_protobuf(tst_protobuf_json_basic_types_gen
 )
 qt_autogen_tools_initial_setup(tst_protobuf_json_basic_types_gen)
 
-qt_internal_add_test(tst_protobuf_json_basic_types
+qt_internal_add_test(tst_protobuf_serialization_json_basic_types
     SOURCES
         tst_protobuf_serialization_json_basictypes.cpp
     LIBRARIES
@@ -49,7 +49,6 @@ qt_internal_add_test(tst_protobuf_serialization_json_repeatedtypes
     LIBRARIES
         Qt::Test
         Qt::Protobuf
-        tst_protobuf_json_basic_types_gen
         tst_protobuf_json_repeatedtypes_gen
 )
 
@@ -59,7 +58,6 @@ qt_internal_add_test(tst_protobuf_deserialization_json_repeatedtypes
     LIBRARIES
         Qt::Test
         Qt::Protobuf
-        tst_protobuf_json_basic_types_gen
         tst_protobuf_json_repeatedtypes_gen
 )
 
@@ -68,12 +66,7 @@ qt6_add_protobuf(tst_protobuf_json_maptypes_gen
         ../basic/proto/mapmessages.proto
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
-if(MINGW)
-    target_compile_options(tst_protobuf_json_maptypes_gen PRIVATE "-Wa,-mbig-obj")
-endif()
-
 qt_autogen_tools_initial_setup(tst_protobuf_json_maptypes_gen)
-
 target_link_libraries(tst_protobuf_json_maptypes_gen
     PUBLIC
         tst_protobuf_json_basic_types_gen
@@ -82,24 +75,18 @@ target_link_libraries(tst_protobuf_json_maptypes_gen
 qt_internal_add_test(tst_protobuf_serialization_json_maptypes
     SOURCES
         tst_protobuf_serialization_json_maptypes.cpp
-    INCLUDE_DIRECTORIES
-        ../shared
     LIBRARIES
         Qt::Test
         Qt::Protobuf
-        tst_protobuf_json_basic_types_gen
         tst_protobuf_json_maptypes_gen
 )
 
 qt_internal_add_test(tst_protobuf_deserialization_json_maptypes
     SOURCES
         tst_protobuf_deserialization_json_maptypes.cpp
-    INCLUDE_DIRECTORIES
-        ../shared
     LIBRARIES
         Qt::Test
         Qt::Protobuf
-        tst_protobuf_json_basic_types_gen
         tst_protobuf_json_maptypes_gen
 )
 
@@ -113,8 +100,6 @@ qt_autogen_tools_initial_setup(tst_protobuf_json_enumtypes_gen)
 qt_internal_add_test(tst_protobuf_serialization_json_enumtypes
     SOURCES
         tst_protobuf_serialization_json_enumtypes.cpp
-    INCLUDE_DIRECTORIES
-        ../shared
     LIBRARIES
         Qt::Test
         Qt::Protobuf
@@ -124,8 +109,6 @@ qt_internal_add_test(tst_protobuf_serialization_json_enumtypes
 qt_internal_add_test(tst_protobuf_deserialization_json_enumtypes
     SOURCES
         tst_protobuf_deserialization_json_enumtypes.cpp
-    INCLUDE_DIRECTORIES
-        ../shared
     LIBRARIES
         Qt::Test
         Qt::Protobuf
