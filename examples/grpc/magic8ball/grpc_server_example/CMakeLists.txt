@@ -1,6 +1,9 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
+cmake_minimum_required(VERSION 3.16)
+project(MagicServerRunner LANGUAGES CXX)
+
 # Qt6::Grpc module is not used directly in this project. But this allows to find Qt6::Grpc's
 # dependencies without setting extra cmake module paths.
 find_package(Qt6 COMPONENTS Grpc)
