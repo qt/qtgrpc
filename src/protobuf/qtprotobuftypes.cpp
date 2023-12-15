@@ -13,8 +13,8 @@
 #include "qtprotobuftypes.h"
 #include "qprotobufobject.h"
 
-#include <mutex>
 #include <limits>
+#include <mutex>
 
 QT_BEGIN_NAMESPACE
 

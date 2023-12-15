@@ -16,12 +16,12 @@
 // We mean it.
 //
 
+#include <QtCore/qendian.h>
 #include <QtCore/qstring.h>
 #include <QtCore/qbytearray.h>
-#include <QtCore/private/qbytearray_p.h>
 #include <QtCore/qhash.h>
-#include <QtCore/qendian.h>
 #include <QtCore/qvariant.h>
+#include <QtCore/private/qbytearray_p.h>
 
 #include <QtProtobuf/private/qprotobufselfcheckiterator_p.h>
 #include <QtProtobuf/private/qtprotobuflogging_p.h>

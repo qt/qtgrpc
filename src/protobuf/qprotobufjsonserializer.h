@@ -8,8 +8,6 @@
 #include <QtProtobuf/qtprotobuftypes.h>
 #include <QtProtobuf/qprotobufbaseserializer.h>
 
-#include <QtCore/QMetaObject>
-
 #include <memory>
 
 QT_BEGIN_NAMESPACE

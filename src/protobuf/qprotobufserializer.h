@@ -9,7 +9,6 @@
 #include <QtProtobuf/qprotobufbaseserializer.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
-#include <functional>
 #include <memory>
 
 QT_BEGIN_NAMESPACE
