@@ -13,7 +13,8 @@ private slots:
     void init() { m_serializer.reset(new QProtobufJsonSerializer); }
     void SimpleEnumMessageDeserializeTest();
     void RepeatedEnumMessageTest();
-
+    void MalformedJsonTest();
+    void InvalidTypeTest();
 private:
     std::unique_ptr<QProtobufJsonSerializer> m_serializer;
 };
@@ -47,6 +48,55 @@ void QtProtobufEnumTypesDeserializationTest::RepeatedEnumMessageTest()
                  RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE1,
                  RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE2,
                  RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE3 }));
+}
+
+void QtProtobufEnumTypesDeserializationTest::MalformedJsonTest()
+{
+    SimpleEnumMessage test;
+    // more braces
+    test.deserialize(m_serializer.get(), "{\"localEnum\":\"LOCAL_ENUM_VALUE2\"}}");
+
+    QCOMPARE(m_serializer->deserializationError(),
+             QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
+
+    RepeatedEnumMessage msg;
+    // no ']'
+    msg.deserialize(m_serializer.get(),
+                    "{\"localEnumList\":[\"LOCAL_ENUM_VALUE0\","
+                    "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
+                    "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
+                    "\"LOCAL_ENUM_VALUE3\"}");
+
+    QCOMPARE(m_serializer->deserializationError(),
+             QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
+}
+
+void QtProtobufEnumTypesDeserializationTest::InvalidTypeTest()
+{
+    // no LOCAL_ENUM_VALUE240
+    SimpleEnumMessage invalidTest;
+    invalidTest.deserialize(m_serializer.get(), "{\"localEnum\":\"LOCAL_ENUM_VALUE240\"}");
+    QCOMPARE(m_serializer->deserializationError(),
+             QAbstractProtobufSerializer::InvalidFormatError);
+
+    RepeatedEnumMessage msg, msg2;
+    // 'false'
+    msg.deserialize(m_serializer.get(),
+                    "{\"localEnumList\":[\"false\","
+                    "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
+                    "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
+                    "\"LOCAL_ENUM_VALUE3\"]}");
+    QCOMPARE(m_serializer->deserializationError(),
+             QAbstractProtobufSerializer::InvalidFormatError);
+
+    // no LOCAL_ENUM_VALUE_100
+    msg2.deserialize(m_serializer.get(),
+                     "{\"localEnumList\":[\"LOCAL_ENUM_VALUE_100\","
+                     "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
+                     "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
+                     "\"LOCAL_ENUM_VALUE3\"]}");
+    QCOMPARE(m_serializer->deserializationError(),
+             QAbstractProtobufSerializer::InvalidFormatError);
 }
 
 QTEST_MAIN(QtProtobufEnumTypesDeserializationTest)
