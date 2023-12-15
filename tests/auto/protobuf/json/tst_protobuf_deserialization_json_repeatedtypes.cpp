@@ -35,6 +35,8 @@ private slots:
     void RepeatedSFixedInt64MessageTest();
     void RepeatedComplexMessageTest();
     void RepeatedBoolMessageTest();
+    void MalformedJsonTest();
+    void InvalidTypeTest();
 private:
     std::unique_ptr<QProtobufJsonSerializer> serializer;
 };
@@ -235,6 +237,39 @@ void QtProtobufRepeatedTypesJsonDeserializationTest::RepeatedBoolMessageTest()
                                     false, false, false, false, false, true });
     QCOMPARE(boolMsg.testRepeatedBool().count(), 13);
     QCOMPARE(boolMsg.testRepeatedBool(), expected);
+}
+
+void QtProtobufRepeatedTypesJsonDeserializationTest::MalformedJsonTest()
+{
+    // no '['
+    RepeatedBoolMessage boolMsg;
+    boolMsg.deserialize(serializer.get(), "{\"testRepeatedBool\":true,true,true,false,false,false,false,false,false,false,false,false,true]}"_ba);
+    QVERIFY(boolMsg.testRepeatedBool().size() == 0);
+    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
+
+    // twice ]
+    RepeatedSInt64Message test;
+    test.deserialize(serializer.get(), "{\"testRepeatedInt\":[]1,321,-65999,12324523123123,-3,3]}"_ba);
+    QVERIFY(test.testRepeatedInt().size() == 0);
+    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
+
+}
+
+void QtProtobufRepeatedTypesJsonDeserializationTest::InvalidTypeTest()
+{
+    // expected sint, string is used
+    RepeatedSInt64Message test;
+    test.deserialize(serializer.get(), "{\"testRepeatedInt\":[1,321,\"abcd\",12324523123123,-3,3]}"_ba);
+    QVERIFY(test.testRepeatedInt().size() == 0);
+    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::InvalidFormatError);
+
+    // expected bool, float is used
+    RepeatedBoolMessage boolMsg;
+    boolMsg.deserialize(serializer.get(),
+                        "{\"testRepeatedBool\":[true,true,true,7.8,false,false,false,false,false,false,false,false,true]}"_ba);
+    QVERIFY(test.testRepeatedInt().size() == 0);
+    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::InvalidFormatError);
+
 }
 
 QTEST_MAIN(QtProtobufRepeatedTypesJsonDeserializationTest)

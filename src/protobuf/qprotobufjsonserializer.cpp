@@ -768,9 +768,14 @@ void QProtobufJsonSerializer::
 bool QProtobufJsonSerializer::deserializeEnum(QtProtobuf::int64 &value,
                                               const QMetaEnum &metaEnum) const
 {
-    QString enumKey = d_ptr->activeValue.toString();
     bool ok = false;
-    value = metaEnum.keyToValue(enumKey.toUtf8().data(), &ok);
+    if (d_ptr->activeValue.isString()) {
+        QString enumKey = d_ptr->activeValue.toString();
+        value = metaEnum.keyToValue(enumKey.toUtf8().data(), &ok);
+    }
+    // key is not defined or key is not a string
+    if (!ok)
+        d_ptr->setInvalidFormatError();
     d_ptr->activeValue = {};
     return ok;
 }
@@ -781,10 +786,17 @@ bool QProtobufJsonSerializer::deserializeEnumList(QList<QtProtobuf::int64> &valu
     QJsonArray arr = d_ptr->activeValue.toArray();
     bool ok = false;
     for (const auto &val : arr) {
-        QString enumKey = val.toString();
-        value.append(metaEnum.keyToValue(enumKey.toUtf8().data(), &ok));
-        if (!ok)
+        ok = false;
+        QtProtobuf::int64 raw;
+        if (val.isString()) {
+            QString enumKey = val.toString();
+            raw = metaEnum.keyToValue(enumKey.toUtf8().data(), &ok);
+        }
+        if (!ok) {
+            d_ptr->setInvalidFormatError();
             break;
+        }
+        value.append(raw);
     }
     d_ptr->activeValue = {};
     return ok;
