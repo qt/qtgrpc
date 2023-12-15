@@ -3,7 +3,8 @@
 
 #include "qprotobufmessage_p.h"
 #include "qprotobufmessage.h"
-#include "qprotobufoneof.h"
+
+#include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qassert.h>
 #include <QtCore/qmetaobject.h>

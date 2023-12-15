@@ -6,6 +6,7 @@
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
+#include <QtCore/QHash>
 #include <QtCore/QList>
 #include <QtCore/QMetaEnum>
 #include <QtCore/QMetaObject>

@@ -7,15 +7,12 @@
 
 #include <QtProtobuf/qtprotobufglobal.h>
 
-#include <QtCore/QList>
 #include <QtCore/QHash>
 #include <QtCore/QMetaType>
 #include <QtCore/QtEndian>
 #include <QtProtobuf/QProtobufMessage>
 
 #include <memory>
-#include <functional>
-#include <list>
 #include <type_traits>
 #include <utility>
 

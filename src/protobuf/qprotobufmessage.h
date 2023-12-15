@@ -7,7 +7,7 @@
 #include <QtProtobuf/qtprotobufglobal.h>
 #include <QtCore/qtconfigmacros.h>
 #include <QtCore/qtmetamacros.h>
-#include <QtCore/qmetatype.h>
+#include <QtCore/qmetaobject.h>
 
 QT_BEGIN_NAMESPACE
 

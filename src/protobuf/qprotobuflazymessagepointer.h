@@ -6,7 +6,6 @@
 #define QPROTOBUFLAZYMESSAGEPOINTER_H
 
 #include <QtProtobuf/qtprotobufglobal.h>
-
 #include <QtProtobuf/qprotobufmessage.h>
 
 #include <type_traits>

@@ -5,6 +5,9 @@
 #ifndef QABSTRACTPROTOBUFSERIALIZER_H
 #define QABSTRACTPROTOBUFSERIALIZER_H
 
+#include <QtCore/qbytearray.h>
+#include <QtCore/qbytearrayview.h>
+
 #include <QtProtobuf/qtprotobufglobal.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 #include <QtProtobuf/qprotobufmessage.h>

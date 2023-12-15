@@ -9,7 +9,6 @@
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
 #include <QtCore/QJsonArray>
-#include <QtCore/QtGlobal>
 #include <QtCore/QVariant>
 
 #include <map>
