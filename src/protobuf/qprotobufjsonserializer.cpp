@@ -207,8 +207,7 @@ public:
     QProtobufJsonSerializerPrivate(QProtobufJsonSerializer *q)
         : qPtr(q)
     {
-        // TBD Change to assigning the result of a lambda to a static variable
-        if (handlers.empty()) {
+        [[maybe_unused]] static bool initialized = []() -> bool {
             handlers[qMetaTypeId<QtProtobuf::int32>()] = {
                 QProtobufJsonSerializerPrivate::serializeVarint<QtProtobuf::int32>,
                 QProtobufJsonSerializerPrivate::deserializeInt32,
@@ -351,7 +350,8 @@ public:
                 QProtobufJsonSerializerPrivate::deserializeList<QByteArray>,
                 QProtobufSerializerPrivate::isPresent<QByteArrayList>
             };
-        }
+            return true;
+        }();
     }
     ~QProtobufJsonSerializerPrivate() = default;
 
