@@ -353,9 +353,14 @@ function(qt6_add_protobuf target)
         )
     endif()
 
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        target_compile_options(${target}
-            PRIVATE "/Zc:__cplusplus" "/permissive-" "/bigobj")
+    if(WIN32)
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+            target_compile_options(${target}
+                PRIVATE "/Zc:__cplusplus" "/permissive-" "/bigobj")
+        elseif(MINGW)
+            target_compile_options(${target}
+                PRIVATE "-Wa,-mbig-obj")
+        endif()
     endif()
 
     target_link_libraries(${target} PRIVATE
