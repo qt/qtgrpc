@@ -87,9 +87,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedInt64MessageTest()
     RepeatedInt64Message test;
     test.setTestRepeatedInt({1, 321, -65999, 12324523123123, -3, 0, 3});
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(
-        result,
-        "{\"testRepeatedInt\":[\"1\",\"321\",\"-65999\",\"12324523123123\",\"-3\",\"0\",\"3\"]}"_ba);
+    QCOMPARE(result, "{\"testRepeatedInt\":[1,321,-65999,12324523123123,-3,0,3]}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 
     test.setTestRepeatedInt(QtProtobuf::int64List());
@@ -103,9 +101,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedSInt64MessageTest()
     RepeatedSInt64Message test;
     test.setTestRepeatedInt({1, 321, -65999, 12324523123123, 0, -3, 3});
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(
-        result,
-        "{\"testRepeatedInt\":[\"1\",\"321\",\"-65999\",\"12324523123123\",\"0\",\"-3\",\"3\"]}"_ba);
+    QCOMPARE(result, "{\"testRepeatedInt\":[1,321,-65999,12324523123123,0,-3,3]}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 
     test.setTestRepeatedInt(QtProtobuf::sint64List());
@@ -179,9 +175,7 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedSFixedInt64MessageTes
     RepeatedSFixedInt64Message test;
     test.setTestRepeatedInt({1, 321, -65999, 123245324235425234, -3, 3, 0});
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(
-        result,
-        "{\"testRepeatedInt\":[\"1\",\"321\",\"-65999\",\"123245324235425234\",\"-3\",\"3\",\"0\"]}"_ba);
+    QCOMPARE(result, "{\"testRepeatedInt\":[1,321,-65999,123245324235425234,-3,3,0]}"_ba);
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
 
     test.setTestRepeatedInt(QtProtobuf::sfixed64List());
@@ -211,7 +205,9 @@ void QtProtobufRepeatedTypesJsonSerializationTest::RepeatedFloatMessageTest()
     test.setTestRepeatedFloat({ 0.4f, 1.2f, 0.5f, 3.91235f, 0.6f });
     QByteArray result = test.serialize(m_serializer.get());
     QVERIFY(!QJsonDocument::fromJson(result).isNull());
-    QCOMPARE(result, "{\"testRepeatedFloat\":[0.4,1.2,0.5,3.91235,0.6]}"_ba);
+    QCOMPARE(
+        result,
+        "{\"testRepeatedFloat\":[0.4000000059604645,1.2000000476837158,0.5,3.9123499393463135,0.6000000238418579]}"_ba);
 
     test.setTestRepeatedFloat(QtProtobuf::floatList());
     result = test.serialize(m_serializer.get());

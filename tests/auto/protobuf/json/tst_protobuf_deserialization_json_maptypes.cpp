@@ -31,6 +31,7 @@ private slots:
     void SimpleUInt64StringMapDeserializeTest();
     void SimpleStringStringMapDeserializeTest();
     void SimpleFixed32ComplexMapDeserializeTest();
+    void BoolBoolMapDeserializeTest();
 
 private:
     std::unique_ptr<QProtobufJsonSerializer> serializer;
@@ -39,12 +40,14 @@ private:
 void QtProtobufJsonMapTypesDeserializationTest::SimpleFixed32StringMapDeserializeTest()
 {
     SimpleFixed32StringMapMessage test;
-    test.deserialize(serializer.get(),
-                     "{\"mapField\":{\"10\":\"ten\",\"15\":\"fifteen\",\"42\":\"fourty two\"}}"_ba);
+    test.deserialize(
+        serializer.get(),
+        "{\"mapField\":{\"10\":\"ten\",\"15\":\"fifteen\",\"42\":\"fourty two\",\"0\":\"\"}}"_ba);
     QCOMPARE(test.mapField(),
              SimpleFixed32StringMapMessage::MapFieldEntry({ { 10, { "ten" } },
                                                             { 42, { "fourty two" } },
-                                                            { 15, { "fifteen" } } }));
+                                                            { 15, { "fifteen" } },
+                                                            { 0, { "" } } }));
 }
 
 void QtProtobufJsonMapTypesDeserializationTest::SimpleSFixed32StringMapDeserializeTest()
@@ -198,6 +201,16 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleFixed32ComplexMapDeseriali
     QCOMPARE(test.mapField()[10], expected1);
     QCOMPARE(test.mapField()[42], expected2);
     QCOMPARE(test.mapField()[65555], expected3);
+}
+
+void QtProtobufJsonMapTypesDeserializationTest::BoolBoolMapDeserializeTest()
+{
+    BoolBoolMessageMapMessage test;
+    test.deserialize(serializer.get(), "{\"mapField\":{\"true\":\"false\",\"false\":\"true\"}}");
+    QCOMPARE(QAbstractProtobufSerializer::NoError, serializer->deserializationError());
+
+    QCOMPARE(test.mapField()[true], false);
+    QCOMPARE(test.mapField()[false], true);
 }
 
 QTEST_MAIN(QtProtobufJsonMapTypesDeserializationTest)

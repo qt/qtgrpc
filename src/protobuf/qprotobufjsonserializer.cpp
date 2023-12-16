@@ -3,17 +3,19 @@
 
 #include "qprotobufjsonserializer.h"
 #include "qprotobufserializer_p.h"
-#include "qprotobufmessage_p.h"
 
 #include <QtCore/QCoreApplication>
+#include <QtCore/QJsonArray>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
-#include <QtCore/QJsonArray>
 #include <QtCore/QVariant>
+#include <QtCore/private/qnumeric_p.h>
 
-#include <map>
-#include <unordered_map>
 #include <cmath>
+#include <limits>
+#include <map>
+#include <type_traits>
+#include <unordered_map>
 
 QT_BEGIN_NAMESPACE
 
@@ -64,6 +66,37 @@ class QProtobufJsonSerializerPrivate final
 {
     Q_DISABLE_COPY_MOVE(QProtobufJsonSerializerPrivate)
 
+    // Tests if V is JSON compatible integer
+    // int32 | int64 | uint32 | sint32 | sint64 | fixed32 | sfixed32 | sfixed64
+    template <typename V>
+    struct IsJsonInt
+        : std::integral_constant<
+              bool,
+              std::is_same_v<V, QtProtobuf::int32> || std::is_same_v<V, QtProtobuf::int64>
+                  || std::is_same_v<V, QtProtobuf::uint32> || std::is_same_v<V, QtProtobuf::sint32>
+                  || std::is_same_v<V, QtProtobuf::sint64> || std::is_same_v<V, QtProtobuf::fixed32>
+                  || std::is_same_v<V, QtProtobuf::sfixed32>
+                  || std::is_same_v<V, QtProtobuf::sfixed64>>
+    {
+    };
+
+    // Tests if V is JSON incompatible 64-bit unsigned integer
+    // uint64 | fixed64
+    template <typename V>
+    struct IsJsonInt64
+        : std::integral_constant<
+              bool, std::is_same_v<V, QtProtobuf::uint64> || std::is_same_v<V, QtProtobuf::fixed64>>
+    {
+    };
+
+    // Tests if V is JSON compatible floating point number
+    // float | double
+    template <typename V>
+    struct IsJsonFloatingPoint
+        : std::integral_constant<bool, std::is_same_v<V, float> || std::is_same_v<V, double>>
+    {
+    };
+
 public:
     using Serializer = std::function<QJsonValue(const QVariant &)>;
     using Deserializer = std::function<QVariant(const QJsonValue&, bool &ok)>;
@@ -75,6 +108,22 @@ public:
         Deserializer deserializer;
         QProtobufSerializerPrivate::IsPresentChecker isPresent;
     };
+
+    template <typename T>
+    static SerializationHandlers createCommonHandler()
+    {
+        return { QProtobufJsonSerializerPrivate::serializeCommon<T>,
+                 QProtobufJsonSerializerPrivate::deserializeCommon<T>,
+                 QProtobufSerializerPrivate::isPresent<T> };
+    }
+
+    template <typename L, typename T>
+    static SerializationHandlers createCommonListHandler()
+    {
+        return { QProtobufJsonSerializerPrivate::serializeList<L>,
+                 QProtobufJsonSerializerPrivate::deserializeList<L, T>,
+                 QProtobufSerializerPrivate::isPresent<L> };
+    }
 
     template<typename T,
               std::enable_if_t<std::is_same_v<T, float> || std::is_same_v<T, double>, bool> = true>
@@ -89,41 +138,45 @@ public:
     using SerializerRegistry = std::unordered_map<int/*metatypeid*/, SerializationHandlers>;
 
     template <typename T>
-    static QJsonValue serializeVarint(const QVariant &propertyValue)
+    static QJsonValue serializeCommon(const QVariant &propertyValue)
     {
-        return QJsonValue(qint64(propertyValue.value<T>()));
+        return serialize(propertyValue.value<T>());
     }
 
-    template <typename T>
-    static QJsonValue serializeInt64Int(const QVariant &propertyValue)
+    template <typename T, std::enable_if_t<IsJsonInt<T>::value, bool> = true>
+    static QJsonValue serialize(T propertyValue)
     {
-        return QJsonValue(QString::number(propertyValue.value<T>()));
+        return QJsonValue(qint64(propertyValue));
     }
 
-    static QJsonValue serializeFloat(const QVariant &propertyValue)
+    template <typename T, std::enable_if_t<IsJsonInt64<T>::value, bool> = true>
+    static QJsonValue serialize(T propertyValue)
     {
-        // TODO: this is weak approach to no have some precision loss. Not sure why this happens,
-        // should be converted without the conversion to string.
-        float f = propertyValue.toFloat();
-        double d = QString::number(f).toDouble();
-        if (d == 0 && std::signbit(f))
-            d = -0.0;
-        return QJsonValue(d);
+        return QJsonValue(QString::number(propertyValue));
     }
 
-    static QJsonValue serializeDouble(const QVariant &propertyValue)
+    template <typename T, std::enable_if_t<IsJsonFloatingPoint<T>::value, bool> = true>
+    static QJsonValue serialize(T propertyValue)
     {
-        return QJsonValue(propertyValue.toDouble());
+        if (propertyValue == -std::numeric_limits<T>::infinity())
+            return QJsonValue("-infinity"_L1);
+
+        if (propertyValue == std::numeric_limits<T>::infinity())
+            return QJsonValue("infinity"_L1);
+
+        if (propertyValue != propertyValue)
+            return QJsonValue("nan"_L1);
+
+        return QJsonValue(propertyValue);
     }
 
-    static QJsonValue serializeString(const QVariant &propertyValue)
-    {
-        return QJsonValue(propertyValue.toString());
-    }
+    static QJsonValue serialize(bool propertyValue) { return QJsonValue(propertyValue); }
 
-    static QJsonValue serializeBytes(const QVariant &propertyValue)
+    static QJsonValue serialize(const QString &propertyValue) { return QJsonValue(propertyValue); }
+
+    static QJsonValue serialize(const QByteArray &propertyValue)
     {
-        return QJsonValue(QString::fromUtf8(propertyValue.toByteArray().toBase64()));
+        return QJsonValue(QString::fromUtf8(propertyValue.toBase64()));
     }
 
     template <typename L>
@@ -132,73 +185,7 @@ public:
         QJsonArray arr;
         L listValue = propertyValue.value<L>();
         for (const auto &value : listValue) {
-            arr.append(QJsonValue(qint64(value)));
-        }
-        return QJsonValue(arr);
-    }
-
-    template <typename L>
-    static QJsonValue serializeInt64bitList(const QVariant &propertyValue)
-    {
-        QJsonArray arr;
-        L listValue = propertyValue.value<L>();
-        for (const auto &value : listValue) {
-            arr.append(QJsonValue(QString::number(value)));
-        }
-        return QJsonValue(arr);
-    }
-
-    static QJsonValue serializeBoolList(const QVariant &propertyValue)
-    {
-        QJsonArray arr;
-        QtProtobuf::boolList listValue = propertyValue.value<QtProtobuf::boolList>();
-        for (const auto &value : listValue) {
-            arr.append(QJsonValue(value));
-        }
-        return QJsonValue(arr);
-    }
-
-    static QJsonValue serializeFloatList(const QVariant &propertyValue)
-    {
-        QJsonArray arr;
-        QtProtobuf::floatList listValue = propertyValue.value<QtProtobuf::floatList>();
-
-        for (const auto &value : listValue) {
-            // TODO: this is weak approach to not have some precision loss. Not sure why this
-            // happens, should be converted without the conversion to string.
-            arr.append(QJsonValue(QString::number(value).toDouble()));
-        }
-        return QJsonValue(arr);
-    }
-
-    static QJsonValue serializeStringList(const QVariant &propertyValue)
-    {
-        QJsonArray arr;
-        QStringList listValue = propertyValue.value<QStringList>();
-        for (const auto &value : listValue) {
-            arr.append(QJsonValue(value));
-        }
-
-        return QJsonValue(arr);
-    }
-
-    static QJsonValue serializeBytesList(const QVariant &propertyValue)
-    {
-        QByteArrayList listValue = propertyValue.value<QByteArrayList>();
-        QJsonArray arr;
-        for (const auto &value : listValue) {
-            arr.append(QJsonValue(QString::fromUtf8(value.toBase64())));
-        }
-
-        return QJsonValue(arr);
-    }
-
-    static QJsonValue serializeDoubleList(const QVariant &propertyValue)
-    {
-        QtProtobuf::doubleList listValue = propertyValue.value<QtProtobuf::doubleList>();
-        QJsonArray arr;
-        for (const auto &value : listValue) {
-            arr.append(QJsonValue(value));
+            arr.append(serialize(value));
         }
         return QJsonValue(arr);
     }
@@ -207,148 +194,61 @@ public:
         : qPtr(q)
     {
         [[maybe_unused]] static bool initialized = []() -> bool {
-            handlers[qMetaTypeId<QtProtobuf::int32>()] = {
-                QProtobufJsonSerializerPrivate::serializeVarint<QtProtobuf::int32>,
-                QProtobufJsonSerializerPrivate::deserializeInt32,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::int32>
-            };
-            handlers[qMetaTypeId<QtProtobuf::sfixed32>()] = {
-                QProtobufJsonSerializerPrivate::serializeVarint<QtProtobuf::sfixed32>,
-                QProtobufJsonSerializerPrivate::deserializeInt32,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::sfixed32>
-            };
-            handlers[qMetaTypeId<QtProtobuf::sint32>()] = {
-                {},
-                QProtobufJsonSerializerPrivate::deserializeInt32,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::sint32>
-            };
-            handlers[qMetaTypeId<QtProtobuf::uint32>()] = {
-                {},
-                QProtobufJsonSerializerPrivate::deserializeUInt32,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::uint32>
-            };
-            handlers[qMetaTypeId<QtProtobuf::fixed32>()] = {
-                QProtobufJsonSerializerPrivate::serializeVarint<QtProtobuf::fixed32>,
-                QProtobufJsonSerializerPrivate::deserializeUInt32,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::fixed32>
-            };
-            handlers[qMetaTypeId<QtProtobuf::sint64>()] = {
-                serializeInt64Int<QtProtobuf::sint64>,
-                QProtobufJsonSerializerPrivate::deserializeInt64,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::sint64>
-            };
-            handlers[qMetaTypeId<QtProtobuf::int64>()] = {
-                serializeInt64Int<QtProtobuf::int64>,
-                QProtobufJsonSerializerPrivate::deserializeInt64,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::int64>
-            };
-            handlers[qMetaTypeId<QtProtobuf::sfixed64>()] = {
-                serializeInt64Int<QtProtobuf::sfixed64>,
-                QProtobufJsonSerializerPrivate::deserializeInt64,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::sfixed64>
-            };
-            handlers[qMetaTypeId<QtProtobuf::uint64>()] = {
-                serializeInt64Int<QtProtobuf::uint64>,
-                QProtobufJsonSerializerPrivate::deserializeUInt64,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::uint64>
-            };
-            handlers[qMetaTypeId<QtProtobuf::fixed64>()] = {
-                serializeInt64Int<QtProtobuf::fixed64>,
-                QProtobufJsonSerializerPrivate::deserializeUInt64,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::fixed64>
-            };
-            handlers[qMetaTypeId<bool>()] = { {},
-                                              QProtobufJsonSerializerPrivate::deserializeBool,
-                                              QProtobufSerializerPrivate::isPresent<bool> };
-            handlers[QMetaType::Float] = { QProtobufJsonSerializerPrivate::serializeFloat,
-                                           QProtobufJsonSerializerPrivate::deserializeFloat,
+            handlers[qMetaTypeId<QtProtobuf::int32>()] = createCommonHandler<QtProtobuf::int32>();
+            handlers[qMetaTypeId<QtProtobuf::sfixed32>()] = createCommonHandler<
+                QtProtobuf::sfixed32>();
+            handlers[qMetaTypeId<QtProtobuf::sint32>()] = createCommonHandler<QtProtobuf::sint32>();
+            handlers[qMetaTypeId<QtProtobuf::uint32>()] = createCommonHandler<QtProtobuf::uint32>();
+            handlers[qMetaTypeId<QtProtobuf::fixed32>()] = createCommonHandler<
+                QtProtobuf::fixed32>();
+            handlers[qMetaTypeId<QtProtobuf::sint64>()] = createCommonHandler<QtProtobuf::sint64>();
+            handlers[qMetaTypeId<QtProtobuf::int64>()] = createCommonHandler<QtProtobuf::int64>();
+            handlers[qMetaTypeId<QtProtobuf::sfixed64>()] = createCommonHandler<
+                QtProtobuf::sfixed64>();
+            handlers[qMetaTypeId<QtProtobuf::uint64>()] = createCommonHandler<QtProtobuf::uint64>();
+            handlers[qMetaTypeId<QtProtobuf::fixed64>()] = createCommonHandler<
+                QtProtobuf::fixed64>();
+            handlers[qMetaTypeId<bool>()] = createCommonHandler<bool>();
+            handlers[QMetaType::QString] = createCommonHandler<QString>();
+            handlers[QMetaType::QByteArray] = createCommonHandler<QByteArray>();
+            handlers[QMetaType::Float] = { QProtobufJsonSerializerPrivate::serializeCommon<float>,
+                                           QProtobufJsonSerializerPrivate::deserializeCommon<float>,
                                            QProtobufJsonSerializerPrivate::isPresent<float> };
-            handlers[QMetaType::Double] = { QProtobufJsonSerializerPrivate::serializeDouble,
-                                            QProtobufJsonSerializerPrivate::deserializeDouble,
-                                            QProtobufJsonSerializerPrivate::isPresent<double> };
-            handlers[QMetaType::QString] = { QProtobufJsonSerializerPrivate::serializeString,
-                                             QProtobufJsonSerializerPrivate::deserializeString,
-                                             QProtobufSerializerPrivate::isPresent<QString> };
-            handlers[QMetaType::QByteArray] = {
-                QProtobufJsonSerializerPrivate::serializeBytes,
-                QProtobufJsonSerializerPrivate::deserializeByteArray,
-                QProtobufSerializerPrivate::isPresent<QByteArray>
+            handlers[QMetaType::Double] = {
+                QProtobufJsonSerializerPrivate::serializeCommon<double>,
+                QProtobufJsonSerializerPrivate::deserializeCommon<double>,
+                QProtobufJsonSerializerPrivate::isPresent<double>
             };
-            handlers[qMetaTypeId<QtProtobuf::boolList>()] = {
-                QProtobufJsonSerializerPrivate::serializeBoolList,
-                QProtobufJsonSerializerPrivate::deserializeList<bool>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::boolList>
-            };
-            handlers[qMetaTypeId<QtProtobuf::int32List>()] = {
-                QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::int32List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::int32>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::int32List>
-            };
-            handlers[qMetaTypeId<QtProtobuf::int64List>()] = {
-                QProtobufJsonSerializerPrivate::serializeInt64bitList<QtProtobuf::int64List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::int64>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::int64List>
-            };
-            handlers[qMetaTypeId<QtProtobuf::sint32List>()] = {
-                QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::sint32List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sint32>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::sint32List>
-            };
-            handlers[qMetaTypeId<QtProtobuf::sint64List>()] = {
-                QProtobufJsonSerializerPrivate::serializeInt64bitList<QtProtobuf::sint64List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sint64>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::sint64List>
-            };
-            handlers[qMetaTypeId<QtProtobuf::uint32List>()] = {
-                QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::uint32List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::uint32>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::uint32List>
-            };
-            handlers[qMetaTypeId<QtProtobuf::uint64List>()] = {
-                QProtobufJsonSerializerPrivate::serializeInt64bitList<QtProtobuf::uint64List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::uint64>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::uint64List>
-            };
-            handlers[qMetaTypeId<QtProtobuf::fixed32List>()] = {
-                QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::fixed32List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::fixed32>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::fixed32List>
-            };
-            handlers[qMetaTypeId<QtProtobuf::fixed64List>()] = {
-                QProtobufJsonSerializerPrivate::serializeInt64bitList<QtProtobuf::fixed64List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::fixed64>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::fixed64List>
-            };
-            handlers[qMetaTypeId<QtProtobuf::sfixed32List>()] = {
-                QProtobufJsonSerializerPrivate::serializeList<QtProtobuf::sfixed32List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sfixed32>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::sfixed32List>
-            };
-            handlers[qMetaTypeId<QtProtobuf::sfixed64List>()] = {
-                QProtobufJsonSerializerPrivate::serializeInt64bitList<QtProtobuf::sfixed64List>,
-                QProtobufJsonSerializerPrivate::deserializeList<QtProtobuf::sfixed64>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::sfixed64List>
-            };
-            handlers[qMetaTypeId<QtProtobuf::floatList>()] = {
-                QProtobufJsonSerializerPrivate::serializeFloatList,
-                QProtobufJsonSerializerPrivate::deserializeList<float>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::floatList>
-            };
-            handlers[qMetaTypeId<QtProtobuf::doubleList>()] = {
-                QProtobufJsonSerializerPrivate::serializeDoubleList,
-                QProtobufJsonSerializerPrivate::deserializeList<double>,
-                QProtobufSerializerPrivate::isPresent<QtProtobuf::doubleList>
-            };
-            handlers[qMetaTypeId<QStringList>()] = {
-                QProtobufJsonSerializerPrivate::serializeStringList,
-                QProtobufJsonSerializerPrivate::deserializeStringList,
-                QProtobufSerializerPrivate::isPresent<QStringList>
-            };
-            handlers[qMetaTypeId<QByteArrayList>()] = {
-                QProtobufJsonSerializerPrivate::serializeBytesList,
-                QProtobufJsonSerializerPrivate::deserializeList<QByteArray>,
-                QProtobufSerializerPrivate::isPresent<QByteArrayList>
-            };
+
+            handlers[qMetaTypeId<QtProtobuf::boolList>()] = createCommonListHandler<
+                QtProtobuf::boolList, bool>();
+            handlers[qMetaTypeId<QtProtobuf::int32List>()] = createCommonListHandler<
+                QtProtobuf::int32List, QtProtobuf::int32>();
+            handlers[qMetaTypeId<QtProtobuf::int64List>()] = createCommonListHandler<
+                QtProtobuf::int64List, QtProtobuf::int64>();
+            handlers[qMetaTypeId<QtProtobuf::sint32List>()] = createCommonListHandler<
+                QtProtobuf::sint32List, QtProtobuf::sint32>();
+            handlers[qMetaTypeId<QtProtobuf::sint64List>()] = createCommonListHandler<
+                QtProtobuf::sint64List, QtProtobuf::sint64>();
+            handlers[qMetaTypeId<QtProtobuf::uint32List>()] = createCommonListHandler<
+                QtProtobuf::uint32List, QtProtobuf::uint32>();
+            handlers[qMetaTypeId<QtProtobuf::uint64List>()] = createCommonListHandler<
+                QtProtobuf::uint64List, QtProtobuf::uint64>();
+            handlers[qMetaTypeId<QtProtobuf::fixed32List>()] = createCommonListHandler<
+                QtProtobuf::fixed32List, QtProtobuf::fixed32>();
+            handlers[qMetaTypeId<QtProtobuf::fixed64List>()] = createCommonListHandler<
+                QtProtobuf::fixed64List, QtProtobuf::fixed64>();
+            handlers[qMetaTypeId<QtProtobuf::sfixed32List>()] = createCommonListHandler<
+                QtProtobuf::sfixed32List, QtProtobuf::sfixed32>();
+            handlers[qMetaTypeId<QtProtobuf::sfixed64List>()] = createCommonListHandler<
+                QtProtobuf::sfixed64List, QtProtobuf::sfixed64>();
+            handlers[qMetaTypeId<QtProtobuf::floatList>()] = createCommonListHandler<
+                QtProtobuf::floatList, float>();
+            handlers[qMetaTypeId<QtProtobuf::doubleList>()] = createCommonListHandler<
+                QtProtobuf::doubleList, double>();
+            handlers[qMetaTypeId<QStringList>()] = createCommonListHandler<QStringList, QString>();
+            handlers[qMetaTypeId<QByteArrayList>()] = createCommonListHandler<QByteArrayList,
+                                                                              QByteArray>();
             return true;
         }();
     }
@@ -399,120 +299,152 @@ public:
         }
     }
 
-    static QVariant deserializeInt32(const QJsonValue &value, bool &ok)
+    template <typename T>
+    static QVariant deserializeCommon(const QJsonValue &value, bool &ok)
     {
-        auto val = value.toVariant().toInt(&ok);
-        return QVariant::fromValue(val);
+        ok = false;
+        return QVariant::fromValue<T>(deserialize<T>(value, ok));
     }
 
-    static QVariant deserializeUInt32(const QJsonValue &value, bool &ok)
+    template <typename T, std::enable_if_t<IsJsonInt<T>::value, bool> = true>
+    static T deserialize(const QJsonValue &value, bool &ok)
     {
-        auto val = value.toVariant().toUInt(&ok);
-        return QVariant::fromValue(val);
-    }
-
-    static QVariant deserializeInt64(const QJsonValue &value, bool &ok)
-    {
-        auto val = value.toVariant().toLongLong(&ok);
-        return QVariant::fromValue(val);
-    }
-
-    static QVariant deserializeUInt64(const QJsonValue &value, bool &ok)
-    {
-        auto val = value.toVariant().toULongLong(&ok);
-        return QVariant::fromValue(val);
-    }
-
-    static QVariant deserializeFloat(const QJsonValue &value, bool &ok)
-    {
-        QByteArray data = value.toVariant().toByteArray();
-        if (data == "NaN" || data == "Infinity" || data == "-Infinity") {
-            ok = true;
-            return QVariant(data);
+        auto variantValue = value.toVariant();
+        qint64 raw = 0;
+        switch (variantValue.metaType().id()) {
+        case QMetaType::QString: // TODO: check if string has prepending/appending whitespaces.
+        case QMetaType::LongLong:
+            raw = variantValue.toLongLong(&ok);
+            break;
+        case QMetaType::Double: {
+            double d = value.toDouble();
+            ok = convertDoubleTo(d, &raw) && double(raw) == d;
+        } break;
+        default:
+            break;
         }
-        auto val = data.toFloat(&ok);
-        return QVariant::fromValue(val);
-    }
 
-    static QVariant deserializeDouble(const QJsonValue &value, bool &ok)
-    {
-        QByteArray data = value.toVariant().toByteArray();
-        if (data == "NaN" || data == "Infinity" || data == "-Infinity") {
-            ok = true;
-            return QVariant(data);
+        // For types that "smaller" than qint64 we need to check if the value fits its limits range
+        if constexpr (sizeof(T) != sizeof(qint64)) {
+            if (ok) {
+                if constexpr (std::is_same_v<T, QtProtobuf::sfixed32>
+                              || std::is_same_v<T, QtProtobuf::int32>) {
+                    using limits = std::numeric_limits<qint32>;
+                    ok = raw >= limits::min() && raw <= limits::max();
+                } else if constexpr (std::is_same_v<T, QtProtobuf::fixed32>) {
+                    using limits = std::numeric_limits<quint32>;
+                    ok = raw >= limits::min() && raw <= limits::max();
+                } else {
+                    using limits = std::numeric_limits<T>;
+                    ok = raw >= limits::min() && raw <= limits::max();
+                }
+            }
         }
-        auto val = data.toDouble(&ok);
-        return QVariant::fromValue(val);
+
+        return T(raw);
     }
 
-    static QVariant deserializeBool(const QJsonValue &value, bool &ok)
+    template <typename T, std::enable_if_t<IsJsonInt64<T>::value, bool> = true>
+    static T deserialize(const QJsonValue &value, bool &ok)
     {
-        ok = value.isBool();
-        return (value.isBool()) ? QVariant(value.toBool()) : QVariant();
+        quint64 raw = 0;
+        auto variantValue = value.toVariant();
+        switch (variantValue.metaType().id()) {
+        case QMetaType::QString:
+        case QMetaType::LongLong:
+            // Here we attempt converting the value to ULongLong
+            raw = variantValue.toULongLong(&ok);
+            break;
+        case QMetaType::Double: {
+            double d = value.toDouble();
+            ok = convertDoubleTo(d, &raw) && double(raw) == d;
+        } break;
+        default:
+            break;
+        }
+        return T(raw);
     }
 
-    static QVariant deserializeString(const QJsonValue &value, bool &ok)
+    template <typename T, std::enable_if_t<IsJsonFloatingPoint<T>::value, bool> = true>
+    static T deserialize(const QJsonValue &value, bool &ok)
+    {
+        ok = true;
+        QByteArray data = value.toVariant().toByteArray();
+        if (data.toLower() == "-infinity"_ba)
+            return -std::numeric_limits<T>::infinity();
+
+        if (data.toLower() == "infinity"_ba)
+            return std::numeric_limits<T>::infinity();
+
+        if (data.toLower() == "nan"_ba)
+            return T(NAN);
+
+        if constexpr (std::is_same_v<T, float>)
+            return data.toFloat(&ok);
+        else
+            return data.toDouble(&ok);
+    }
+
+    template <typename T, std::enable_if_t<std::is_same_v<T, bool>, bool> = true>
+    static bool deserialize(const QJsonValue &value, bool &ok)
+    {
+        if (value.isBool()) {
+            ok = true;
+            return value.toBool();
+        } else if (value.isString()) {
+            if (value.toString() == "true"_L1) {
+                ok = true;
+                return true;
+            } else if (value.toString() == "false"_L1) {
+                ok = true;
+                return false;
+            }
+        }
+        return false;
+    }
+
+    template <typename T, std::enable_if_t<std::is_same_v<T, QString>, bool> = true>
+    static QString deserialize(const QJsonValue &value, bool &ok)
     {
         ok = value.isString();
         return value.toString();
     }
 
-    static QVariant deserializeByteArray(const QJsonValue &value, bool &ok)
+    template <typename T, std::enable_if_t<std::is_same_v<T, QByteArray>, bool> = true>
+    static QByteArray deserialize(const QJsonValue &value, bool &ok)
     {
         QByteArray data = value.toVariant().toByteArray();
         if (value.isString()) {
             ok = true;
-            return QVariant::fromValue(QByteArray::fromBase64(data));
+            return QByteArray::fromBase64(data);
         }
-        ok = false;
-        return QVariant();
+        return {};
     }
 
-    template<typename T>
+    template <typename L /*list*/, typename T /*element*/>
     static QVariant deserializeList(const QJsonValue &value, bool &ok)
     {
         if (!value.isArray()) {
             ok = false;
-            return QVariant();
+            return {};
         }
-        ok = true;
-        QList<T> list;
+
+        L list;
         QJsonArray array = value.toArray();
-        auto handler = handlers.find(qMetaTypeId<T>());
-        if (handler == handlers.end() || !handler->second.deserializer) {
-            qProtoWarning() << "Unable to deserialize simple type list."
-                               "Could not find deserializer for type"
-                            << QMetaType::fromType<T>().name();
-            return QVariant::fromValue(list);
-        }
-
         for (auto arrayValue : array) {
-            bool valueOk = false;
-            QVariant newValue = handler->second.deserializer(arrayValue, valueOk);
-            list.append(newValue.value<T>());
-        }
-        return QVariant::fromValue(list);
-    }
-
-    static QVariant deserializeStringList(const QJsonValue &value, bool &ok)
-    {
-        if (!value.isArray()) {
             ok = false;
-            return QVariant();
-        }
-        QStringList list;
-        if (value.isArray()) {
-            QJsonArray array = value.toArray();
-            for (auto arrayValue : array) {
-                QVariant newValue = deserializeString(arrayValue, ok);
-                list.append(newValue.value<QString>());
-            }
+            T value = deserialize<T>(arrayValue, ok);
+            if (!ok)
+                break;
+            list.append(value);
         }
         return QVariant::fromValue(list);
     }
 
     QVariant deserializeValue(QVariant propertyData, bool &ok)
     {
+        ok = false;
+
         auto handler = QtProtobufPrivate::findHandler(propertyData.metaType());
         if (handler.deserializer) {
             handler.deserializer(qPtr, propertyData);
@@ -529,7 +461,8 @@ public:
                 setDeserializationError(QAbstractProtobufSerializer::NoDeserializerError,
                                         QCoreApplication::
                                             translate("QtProtobuf",
-                                                      "No deserializer is registered for type %1").arg(userType));
+                                                      "No deserializer is registered for type %1")
+                                                .arg(userType));
             }
         }
         return propertyData;
@@ -537,7 +470,6 @@ public:
 
     bool deserializeObject(QProtobufMessage *message, const QProtobufPropertyOrdering &ordering)
     {
-        bool ok = false;
         std::map<QString, QProtobufPropertyOrderingInfo> msgContainer; // map<key, fieldInfo>
         for (int index = 0; index < ordering.fieldCount(); ++index) {
             int fieldIndex = ordering.getFieldNumber(index);
@@ -561,7 +493,11 @@ public:
                 QVariant newPropertyValue = message->property(iter->second);
                 auto store = activeValue;
                 activeValue = activeObject.value(key);
-                while (!activeValue.isNull()) {
+
+                bool ok = false;
+
+                while (!activeValue.isNull()
+                       && deserializationError == QAbstractProtobufSerializer::NoError) {
                     newPropertyValue = deserializeValue(newPropertyValue, ok);
                 }
                 activeValue = store;
@@ -575,7 +511,7 @@ public:
         // to deserialize
         activeValue = {};
 
-        return ok;
+        return true;
     }
 
     void setDeserializationError(QAbstractProtobufSerializer::DeserializationError error,
@@ -589,7 +525,7 @@ public:
     {
         setDeserializationError(QAbstractProtobufSerializer::UnexpectedEndOfStreamError,
                                 QCoreApplication::translate("QtProtobuf",
-                                                            "Unexpected end of stream"));
+                                                            "JSON: Unexpected end of stream"));
     }
 
     void setInvalidFormatError()
@@ -597,7 +533,7 @@ public:
         setDeserializationError(QAbstractProtobufSerializer::InvalidFormatError,
                                 QCoreApplication::
                                     translate("QtProtobuf",
-                                              "One or more fields have invalid format"));
+                                              "JSON: One or more fields have invalid format"));
     }
 
     void clearError();
@@ -721,6 +657,8 @@ bool QProtobufJsonSerializer::deserializeListObject(QProtobufMessage *message,
         d_ptr->activeValue = val;
         deserializeObject(message, ordering);
         result = true;
+    } else {
+        d_ptr->setInvalidFormatError();
     }
 
     if (!array.isEmpty())
@@ -804,6 +742,9 @@ void QProtobufJsonSerializer::serializeEnum(QtProtobuf::int64 value, const QMeta
                                             const QtProtobufPrivate::QProtobufPropertyOrderingInfo
                                                 &fieldInfo) const
 {
+    if (value == 0 && !isOneofOrOptionalField(fieldInfo))
+        return;
+
     QJsonObject activeObject = d_ptr->activeValue.toObject();
     activeObject.insert(fieldInfo.getJsonName().toString(), QString::fromUtf8(metaEnum.key(value)));
     d_ptr->activeValue = activeObject;
@@ -813,10 +754,12 @@ void QProtobufJsonSerializer::
     serializeEnumList(const QList<QtProtobuf::int64> &values, const QMetaEnum &metaEnum,
                       const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
 {
+    if (values.isEmpty())
+        return;
+
     QJsonArray arr;
     for (const auto value : values)
         arr.append(QString::fromUtf8(metaEnum.key(value)));
-
     QJsonObject activeObject = d_ptr->activeValue.toObject();
     activeObject.insert(fieldInfo.getJsonName().toString(), arr);
     d_ptr->activeValue = activeObject;

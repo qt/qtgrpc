@@ -174,6 +174,12 @@ void QtProtobufTypesJsonDeserializationTest::UInt64MessageDeserializeTest_data()
     QTest::newRow("15") << (uint64_t)15 << "{\"testFieldInt\":15}"_ba;
     QTest::newRow("300") << (uint64_t)300 << "{\"testFieldInt\":300}"_ba;
     QTest::newRow("65545") << (uint64_t)65545 << "{\"testFieldInt\":65545}"_ba;
+    QTest::newRow("18446744073709549568")
+        << uint64_t(18446744073709549568u) << "{\"testFieldInt\":18446744073709549568}"_ba;
+    QTest::newRow("123245324235425234")
+        << uint64_t(123245324235425234u) << "{\"testFieldInt\":123245324235425234}"_ba;
+    QTest::newRow("123245324235425234_string")
+        << uint64_t(123245324235425234u) << "{\"testFieldInt\":\"123245324235425234\"}"_ba;
 }
 
 void QtProtobufTypesJsonDeserializationTest::UInt64MessageDeserializeTest()
@@ -316,6 +322,9 @@ void QtProtobufTypesJsonDeserializationTest::FloatMessageDeserializeTest_data()
     QTest::newRow("float_neg_value_4_2") << -4.2f << "{\"testFieldFloat\":-4.2}"_ba;
     QTest::newRow("float_neg_value_0_0") << (float)-0.0f << "{\"testFieldFloat\":-0}"_ba;
     QTest::newRow("float_value_0_0") << (float)0.0f << "{\"testFieldFloat\":0}"_ba;
+    QTest::newRow("float_nan") << NAN << "{\"testFieldFloat\":\"NaN\"}"_ba;
+    QTest::newRow("float_infinity") << INFINITY << "{\"testFieldFloat\":\"Infinity\"}"_ba;
+    QTest::newRow("float_neg_infinity") << -INFINITY << "{\"testFieldFloat\":\"-Infinity\"}"_ba;
 }
 
 void QtProtobufTypesJsonDeserializationTest::FloatMessageDeserializeTest()
@@ -349,6 +358,10 @@ void QtProtobufTypesJsonDeserializationTest::DoubleMessageDeserializeTest_data()
                                           << "{\"testFieldDouble\":-4.2}"_ba;
     QTest::newRow("double_value_0_0") << 0.0 << "{\"testFieldDouble\":0}"_ba;
     QTest::newRow("double_neg_value_0_0") << -0.0 << "{\"testFieldDouble\":-0}"_ba;
+    QTest::newRow("double_nan") << double(NAN) << "{\"testFieldDouble\":\"NaN\"}"_ba;
+    QTest::newRow("double_infinity") << double(INFINITY) << "{\"testFieldDouble\":\"Infinity\"}"_ba;
+    QTest::newRow("double_neg_infinity")
+        << double(-INFINITY) << "{\"testFieldDouble\":\"-Infinity\"}"_ba;
 }
 
 void QtProtobufTypesJsonDeserializationTest::DoubleMessageDeserializeTest()
@@ -534,7 +547,7 @@ void QtProtobufTypesJsonDeserializationTest::InvalidTypeTest()
                     "{\"testFieldInt\":-45,"
                     "\"testComplexField\":200}"_ba);
 
-    QCOMPARE(msg.testFieldInt(), -45);
+    QCOMPARE(msg.testFieldInt(), 0);
     QCOMPARE(msg.testComplexField(), SimpleStringMessage());
     QCOMPARE(serializer->deserializationError(),
              QAbstractProtobufSerializer::InvalidFormatError);
@@ -548,6 +561,20 @@ void QtProtobufTypesJsonDeserializationTest::InvalidTypeTest()
     QCOMPARE(msg.testComplexField().testFieldString(), "qwerty"_L1);
     QCOMPARE(serializer->deserializationError(),
              QAbstractProtobufSerializer::InvalidFormatError);
+
+    SimpleIntMessage intMsg;
+    intMsg.deserialize(serializer.get(), "{\"testFieldInt\": 0.5}");
+    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::InvalidFormatError);
+    QCOMPARE(intMsg.testFieldInt(), 0);
+
+    intMsg.deserialize(serializer.get(), "{\"testFieldInt\":4294967296}");
+    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::InvalidFormatError);
+    QCOMPARE(intMsg.testFieldInt(), 0);
+
+    SimpleUIntMessage uintMsg;
+    uintMsg.deserialize(serializer.get(), "{\"testFieldInt\":4294967296}");
+    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::InvalidFormatError);
+    QCOMPARE(uintMsg.testFieldInt(), 0u);
 }
 
 

@@ -45,9 +45,15 @@ private:
 void QtProtobufJsonMapTypesSerializationTest::SimpleFixed32StringMapSerializeTest()
 {
     SimpleFixed32StringMapMessage test;
-    test.setMapField({ { 10, { "ten" } }, { 42, { "fourty two" } }, { 15, { "fifteen" } } });
+    test.setMapField({ { 10, { "ten" } },
+                       { 42, { "fourty two" } },
+                       { 15, { "fifteen" } },
+                       { 0, { "" } } });
     QByteArray result = test.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"mapField\":{\"10\":\"ten\",\"15\":\"fifteen\",\"42\":\"fourty two\"}}"_ba);
+    QEXPECT_FAIL("", "Map value with no presence are ignored by json serializer.", Continue);
+    QCOMPARE(
+        result,
+        "{\"mapField\":{\"0\":\"\",\"10\":\"ten\",\"15\":\"fifteen\",\"42\":\"fourty two\"}}"_ba);
 }
 
 void QtProtobufJsonMapTypesSerializationTest::SimpleSFixed32StringMapSerializeTest()

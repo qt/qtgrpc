@@ -47,7 +47,7 @@ void QtProtobufEnumTypesJsonSerializationTest::RepeatedEnumMessageTest()
              "\"LOCAL_ENUM_VALUE3\"]}"_ba);
     msg.setLocalEnumList({});
     result = msg.serialize(m_serializer.get());
-    QCOMPARE(result, "{\"localEnumList\":[]}"_ba);
+    QCOMPARE(result, "{}"_ba);
 }
 
 QTEST_MAIN(QtProtobufEnumTypesJsonSerializationTest)

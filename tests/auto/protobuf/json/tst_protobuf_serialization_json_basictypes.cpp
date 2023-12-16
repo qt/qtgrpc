@@ -155,13 +155,13 @@ void QtProtobufTypesJsonSerializationTest::Int64MessageSerializeTest_data()
     QTest::addColumn<int64_t>("value");
     QTest::addColumn<QByteArray>("expectedData");
 
-    QTest::newRow("15") << (int64_t)15 << "{\"testFieldInt\":\"15\"}"_ba;
-    QTest::newRow("300") << (int64_t)300 << "{\"testFieldInt\":\"300\"}"_ba;
-    QTest::newRow("65545") << (int64_t)65545 << "{\"testFieldInt\":\"65545\"}"_ba;
+    QTest::newRow("15") << (int64_t)15 << "{\"testFieldInt\":15}"_ba;
+    QTest::newRow("300") << (int64_t)300 << "{\"testFieldInt\":300}"_ba;
+    QTest::newRow("65545") << (int64_t)65545 << "{\"testFieldInt\":65545}"_ba;
 
-    QTest::newRow("-1") << (int64_t)-1 << "{\"testFieldInt\":\"-1\"}"_ba;
-    QTest::newRow("-462") << (int64_t)-462 << "{\"testFieldInt\":\"-462\"}"_ba;
-    QTest::newRow("-63585") << (int64_t)-63585 << "{\"testFieldInt\":\"-63585\"}"_ba;
+    QTest::newRow("-1") << (int64_t)-1 << "{\"testFieldInt\":-1}"_ba;
+    QTest::newRow("-462") << (int64_t)-462 << "{\"testFieldInt\":-462}"_ba;
+    QTest::newRow("-63585") << (int64_t)-63585 << "{\"testFieldInt\":-63585}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::Int64MessageSerializeTest()
@@ -184,6 +184,10 @@ void QtProtobufTypesJsonSerializationTest::UInt64MessageSerializeTest_data()
     QTest::newRow("15") << (uint64_t)15 << "{\"testFieldInt\":\"15\"}"_ba;
     QTest::newRow("300") << (uint64_t)300 << "{\"testFieldInt\":\"300\"}"_ba;
     QTest::newRow("65545") << (uint64_t)65545 << "{\"testFieldInt\":\"65545\"}"_ba;
+    QTest::newRow("18446744073709549568")
+        << uint64_t(18446744073709549568u) << "{\"testFieldInt\":\"18446744073709549568\"}"_ba;
+    QTest::newRow("123245324235425234")
+        << uint64_t(123245324235425234u) << "{\"testFieldInt\":\"123245324235425234\"}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::UInt64MessageSerializeTest()
@@ -203,13 +207,13 @@ void QtProtobufTypesJsonSerializationTest::SInt64MessageSerializeTest_data()
     QTest::addColumn<int64_t>("value");
     QTest::addColumn<QByteArray>("expectedData");
 
-    QTest::newRow("15") << (int64_t)15 << "{\"testFieldInt\":\"15\"}"_ba;
-    QTest::newRow("300") << (int64_t)300 << "{\"testFieldInt\":\"300\"}"_ba;
-    QTest::newRow("65545") << (int64_t)65545 << "{\"testFieldInt\":\"65545\"}"_ba;
+    QTest::newRow("15") << (int64_t)15 << "{\"testFieldInt\":15}"_ba;
+    QTest::newRow("300") << (int64_t)300 << "{\"testFieldInt\":300}"_ba;
+    QTest::newRow("65545") << (int64_t)65545 << "{\"testFieldInt\":65545}"_ba;
 
-    QTest::newRow("-1") << (int64_t)-1 << "{\"testFieldInt\":\"-1\"}"_ba;
-    QTest::newRow("-462") << (int64_t)-462 << "{\"testFieldInt\":\"-462\"}"_ba;
-    QTest::newRow("-63585") << (int64_t)-63585 << "{\"testFieldInt\":\"-63585\"}"_ba;
+    QTest::newRow("-1") << (int64_t)-1 << "{\"testFieldInt\":-1}"_ba;
+    QTest::newRow("-462") << (int64_t)-462 << "{\"testFieldInt\":-462}"_ba;
+    QTest::newRow("-63585") << (int64_t)-63585 << "{\"testFieldInt\":-63585}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::SInt64MessageSerializeTest()
@@ -298,13 +302,13 @@ void QtProtobufTypesJsonSerializationTest::SFixedInt64MessageSerializeTest_data(
     QTest::addColumn<int64_t>("value");
     QTest::addColumn<QByteArray>("expectedData");
 
-    QTest::newRow("15") << (int64_t)15 << "{\"testFieldFixedInt64\":\"15\"}"_ba;
-    QTest::newRow("300") << (int64_t)300 << "{\"testFieldFixedInt64\":\"300\"}"_ba;
-    QTest::newRow("65545") << (int64_t)65545 << "{\"testFieldFixedInt64\":\"65545\"}"_ba;
+    QTest::newRow("15") << (int64_t)15 << "{\"testFieldFixedInt64\":15}"_ba;
+    QTest::newRow("300") << (int64_t)300 << "{\"testFieldFixedInt64\":300}"_ba;
+    QTest::newRow("65545") << (int64_t)65545 << "{\"testFieldFixedInt64\":65545}"_ba;
 
-    QTest::newRow("-1") << (int64_t)-1 << "{\"testFieldFixedInt64\":\"-1\"}"_ba;
-    QTest::newRow("-462") << (int64_t)-462 << "{\"testFieldFixedInt64\":\"-462\"}"_ba;
-    QTest::newRow("-63585") << (int64_t)-63585 << "{\"testFieldFixedInt64\":\"-63585\"}"_ba;
+    QTest::newRow("-1") << (int64_t)-1 << "{\"testFieldFixedInt64\":-1}"_ba;
+    QTest::newRow("-462") << (int64_t)-462 << "{\"testFieldFixedInt64\":-462}"_ba;
+    QTest::newRow("-63585") << (int64_t)-63585 << "{\"testFieldFixedInt64\":-63585}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::SFixedInt64MessageSerializeTest()
@@ -324,15 +328,18 @@ void QtProtobufTypesJsonSerializationTest::FloatMessageSerializeTest_data()
     QTest::addColumn<float>("value");
     QTest::addColumn<QByteArray>("expectedData");
 
-    QTest::newRow("float_value_0_1") << 0.1f << "{\"testFieldFloat\":0.1}"_ba;
+    QTest::newRow("float_value_0_1") << 0.1f << "{\"testFieldFloat\":0.10000000149011612}"_ba;
     QTest::newRow("float_value_min")
-        << std::numeric_limits<float>::min() << "{\"testFieldFloat\":1.17549e-38}"_ba;
+        << std::numeric_limits<float>::min() << "{\"testFieldFloat\":1.1754943508222875e-38}"_ba;
     QTest::newRow("float_value_max")
-        << std::numeric_limits<float>::max() << "{\"testFieldFloat\":3.40282e+38}"_ba;
-    QTest::newRow("float_neg_value_4_2") << -4.2f << "{\"testFieldFloat\":-4.2}"_ba;
+        << std::numeric_limits<float>::max() << "{\"testFieldFloat\":3.4028234663852886e+38}"_ba;
+    QTest::newRow("float_neg_value_4_2") << -4.2f << "{\"testFieldFloat\":-4.199999809265137}"_ba;
     QTest::newRow("float_neg_value_0_0") << (float)-0.0f << "{\"testFieldFloat\":-0}"_ba;
     QTest::newRow("float_value_0_0") << (float)0.0f << "{}"_ba;
- }
+    QTest::newRow("float_nan") << NAN << "{\"testFieldFloat\":\"nan\"}"_ba;
+    QTest::newRow("float_infinity") << INFINITY << "{\"testFieldFloat\":\"infinity\"}"_ba;
+    QTest::newRow("float_neg_infinity") << -INFINITY << "{\"testFieldFloat\":\"-infinity\"}"_ba;
+}
 
 void QtProtobufTypesJsonSerializationTest::FloatMessageSerializeTest()
 {
@@ -365,6 +372,10 @@ void QtProtobufTypesJsonSerializationTest::DoubleMessageSerializeTest_data()
                                           << "{\"testFieldDouble\":-4.2}"_ba;
     QTest::newRow("double_neg_value_0_0") << -0.0 << "{\"testFieldDouble\":-0}"_ba;
     QTest::newRow("double_value_0_0") << 0.0 << "{}"_ba;
+    QTest::newRow("double_nan") << double(NAN) << "{\"testFieldDouble\":\"nan\"}"_ba;
+    QTest::newRow("double_infinity") << double(INFINITY) << "{\"testFieldDouble\":\"infinity\"}"_ba;
+    QTest::newRow("double_neg_infinity")
+        << double(-INFINITY) << "{\"testFieldDouble\":\"-infinity\"}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::DoubleMessageSerializeTest()
