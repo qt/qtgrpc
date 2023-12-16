@@ -428,9 +428,14 @@ function(qt6_add_protobuf target)
         )
     endif()
 
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        target_compile_options(${target}
-            PRIVATE "/Zc:__cplusplus" "/permissive-" "/bigobj")
+    if(WIN32)
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+            target_compile_options(${target}
+                PRIVATE "/Zc:__cplusplus" "/permissive-" "/bigobj")
+        elseif(MINGW)
+            target_compile_options(${target}
+                PRIVATE "-Wa,-mbig-obj")
+        endif()
     endif()
 
     # TODO: adding these include paths might cause the ambiguous include handling if
