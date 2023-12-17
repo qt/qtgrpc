@@ -108,6 +108,48 @@ using SerializerRegistryType =
         std::array<QProtobufSerializerPrivate::ProtobufSerializationHandler, N>;
 
 namespace {
+
+static constexpr struct {
+    QtProtobufPrivate::QProtobufPropertyOrdering::Data data;
+    const std::array<uint, 9> qt_protobuf_Maptest_uint_data;
+    const char qt_protobuf_Maptest_char_data[23];
+} qt_protobuf_Maptest_metadata {
+    // data
+    {
+        0, /* = version */
+        2, /* = num fields */
+        3, /* = field number offset */
+        5, /* = property index offset */
+        7, /* = field flags offset */
+        4, /* = message full name length */
+    },
+    // uint_data
+    {
+        // JSON name offsets:
+        5, /* = key */
+        9, /* = value */
+        15, /* = end-of-string-marker */
+        // Field numbers:
+        1, /* = key */
+        2, /* = value */
+        // Property indices:
+        0, /* = key */
+        2, /* = value */
+        // Field flags:
+        QtProtobufPrivate::Optional, /* = key */
+        QtProtobufPrivate::Optional, /* = value */
+    },
+    // char_data
+    /* metadata char_data: */
+    "pair\0" /* = full message name */
+    /* field char_data: */
+    "key\0value\0"
+};
+
+const QtProtobufPrivate::QProtobufPropertyOrdering mapPropertyOrdering = {
+    &qt_protobuf_Maptest_metadata.data
+};
+
 #define QT_CONSTRUCT_PROTOBUF_SERIALIZATION_HANDLER(Type, WireType)          \
   {                                                                          \
     QMetaType::fromType<Type>(),                                             \
@@ -266,6 +308,10 @@ QByteArray QProtobufSerializer::serializeMessage(
     return d_ptr->result;
 }
 
+const QProtobufPropertyOrderingInfo QProtobufSerializerPrivate::mapValueOrdering{
+    mapPropertyOrdering, 1
+};
+
 void QProtobufSerializerPrivate::serializeMessage(const QProtobufMessage *message,
                                                   const QtProtobufPrivate::QProtobufPropertyOrdering
                                                       &ordering)
@@ -375,7 +421,7 @@ void QProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &
                     ->serializer(key,
                                  QProtobufSerializerPrivate::encodeHeader(1,
                                                                           keyHandler->wireType)));
-    d_ptr->serializeProperty(value, fieldInfo.infoForMapValue());
+    d_ptr->serializeProperty(value, QProtobufSerializerPrivate::mapValueOrdering);
     store.append(QProtobufSerializerPrivate::encodeHeader(fieldInfo.getFieldNumber(),
                                                           QtProtobuf::WireTypes::LengthDelimited));
     store.append(QProtobufSerializerPrivate::serializeVarintCommon<uint32_t>(d_ptr->result.size()));

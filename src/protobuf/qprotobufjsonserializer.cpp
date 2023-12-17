@@ -676,8 +676,8 @@ void QProtobufJsonSerializer::serializeMapPair(const QVariant &key, const QVaria
     auto store = d_ptr->activeValue.toObject();
     QJsonObject mapObject = store.value(fieldName).toObject();
     d_ptr->activeValue = QJsonObject();
-    d_ptr->serializeProperty(value, fieldInfo.infoForMapValue());
-    mapObject.insert(key.toString(), d_ptr->activeValue.toObject().value(fieldName));
+    d_ptr->serializeProperty(value, QProtobufSerializerPrivate::mapValueOrdering);
+    mapObject.insert(key.toString(), d_ptr->activeValue.toObject().value("value"_L1));
     store.insert(fieldName, mapObject);
     d_ptr->activeValue = store;
 }
