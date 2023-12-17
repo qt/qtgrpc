@@ -260,6 +260,7 @@ QByteArray QProtobufSerializer::serializeMessage(
         const QProtobufMessage *message,
         const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
 {
+    d_ptr->clearError();
     d_ptr->result = {};
     d_ptr->serializeMessage(message, ordering);
     return d_ptr->result;

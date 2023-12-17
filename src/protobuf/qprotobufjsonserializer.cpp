@@ -643,6 +643,7 @@ QByteArray
 QProtobufJsonSerializer::serializeMessage(const QProtobufMessage *message,
                                           const QProtobufPropertyOrdering &ordering) const
 {
+    d_ptr->clearError();
     d_ptr->activeValue = QJsonObject();
     d_ptr->serializeObject(message, ordering);
     QJsonDocument doc;
