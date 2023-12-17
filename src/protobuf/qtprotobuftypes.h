@@ -68,10 +68,6 @@ struct QProtobufPropertyOrderingInfo
     int getPropertyIndex() const { return ordering.getPropertyIndex(index); }
     uint getFieldFlags() const { return ordering.getFieldFlags(index); }
 
-    // Needed for maps, which uses field number 1 and 2 for key and value respectively
-    QProtobufPropertyOrderingInfo infoForMapKey() const { return { ordering, index, 1 }; }
-    QProtobufPropertyOrderingInfo infoForMapValue() const { return { ordering, index, 2 }; }
-
 private:
     QProtobufPropertyOrderingInfo(QProtobufPropertyOrdering ord, int ind, int fieldNumber)
         : ordering(ord), index(ind), overrideFieldNumber(fieldNumber)
