@@ -24,14 +24,14 @@ private:
     QProtobufSerializer m_protoSerializer;
     QProtobufJsonSerializer m_jsonSerializer;
 
-    std::unique_ptr<QSocketNotifier> m_stdinNofifier;
+    std::unique_ptr<QSocketNotifier> m_stdinNotifier;
 };
 
 ConformaceServer::ConformaceServer()
     : QObject(),
-      m_stdinNofifier(std::make_unique<QSocketNotifier>(fileno(stdin), QSocketNotifier::Read, this))
+      m_stdinNotifier(std::make_unique<QSocketNotifier>(fileno(stdin), QSocketNotifier::Read, this))
 {
-    connect(m_stdinNofifier.get(), &QSocketNotifier::activated, this, &ConformaceServer::readStdin);
+    connect(m_stdinNotifier.get(), &QSocketNotifier::activated, this, &ConformaceServer::readStdin);
 }
 
 void ConformaceServer::readStdin(int, QSocketNotifier::Type)
