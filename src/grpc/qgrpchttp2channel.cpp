@@ -90,6 +90,11 @@ const static std::unordered_map<quint32, QGrpcStatus::StatusCode> StatusCodeMap 
     { QNetworkReply::UnknownServerError, QGrpcStatus::Unknown }
 };
 
+constexpr QByteArrayView AuthorityHeader(":authority");
+constexpr QByteArrayView MethodHeader(":method");
+constexpr QByteArrayView PathHeader(":path");
+constexpr QByteArrayView SchemeHeader(":scheme");
+
 constexpr QByteArrayView ContentTypeHeader("content-type");
 constexpr QByteArrayView AcceptEncodingHeader("accept-encoding");
 constexpr QByteArrayView TEHeader("te");
@@ -493,10 +498,11 @@ void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperati
     QByteArray method{ channelOperation->method().data(), channelOperation->method().size() };
 
     HPack::HttpHeader requestHeaders = HPack::HttpHeader{
-        { ":authority"_ba, m_channelOptions.host().host().toLatin1() },
-        { ":method"_ba, "POST"_ba },
-        { ":path"_ba, QByteArray('/' + service + '/' + method) },
-        { ":scheme"_ba, m_isLocalSocket ? "http"_ba : m_channelOptions.host().scheme().toLatin1() },
+        { AuthorityHeader.toByteArray(), m_channelOptions.host().host().toLatin1() },
+        { MethodHeader.toByteArray(), "POST"_ba },
+        { PathHeader.toByteArray(), QByteArray('/' + service + '/' + method) },
+        { SchemeHeader.toByteArray(),
+          m_isLocalSocket ? "http"_ba : m_channelOptions.host().scheme().toLatin1() },
         { ContentTypeHeader.toByteArray(), "application/grpc"_ba },
         { GrpcServiceNameHeader.toByteArray(), { service } },
         { GrpcAcceptEncodingHeader.toByteArray(), "identity,deflate,gzip"_ba },
@@ -506,7 +512,13 @@ void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperati
 
     auto iterateMetadata = [&requestHeaders](const auto &metadata) {
         for (const auto &[key, value] : std::as_const(metadata)) {
-            requestHeaders.push_back({ key, value });
+            auto lowerKey = key.toLower();
+            if (lowerKey == AuthorityHeader ||
+                lowerKey == MethodHeader ||
+                lowerKey == PathHeader ||
+                lowerKey == SchemeHeader)
+                continue;
+            requestHeaders.push_back({ lowerKey, value });
         }
     };
 
