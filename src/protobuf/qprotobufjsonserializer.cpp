@@ -9,13 +9,13 @@
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
 #include <QtCore/QVariant>
+#include <QtCore/QHash>
 #include <QtCore/private/qnumeric_p.h>
 
 #include <cmath>
 #include <limits>
 #include <map>
 #include <type_traits>
-#include <unordered_map>
 
 QT_BEGIN_NAMESPACE
 
@@ -133,9 +133,7 @@ public:
         return val != 0 || std::signbit(val);
     }
 
-
-    // TBD Replace std::unordered_map to QHash
-    using SerializerRegistry = std::unordered_map<int/*metatypeid*/, SerializationHandlers>;
+    using SerializerRegistry = QHash<int/*metatypeid*/, SerializationHandlers>;
 
     template <typename T>
     static QJsonValue serializeCommon(const QVariant &propertyValue)
@@ -268,16 +266,16 @@ public:
             handler.serializer(qPtr, propertyValue, fieldInfo);
         } else {
             QJsonObject activeObject = activeValue.toObject();
-            auto handler = handlers.find(userType);
-            if (handler == handlers.end())
+            auto iter = handlers.constFind(userType);
+            if (iter == handlers.constEnd())
                 return;
-
-            if (!handler->second.isPresent(propertyValue) && !isOneofOrOptionalField(fieldInfo))
+            const auto &handler = iter.value();
+            if (!handler.isPresent(propertyValue) && !isOneofOrOptionalField(fieldInfo))
                 return;
 
             activeObject.insert(fieldInfo.getJsonName().toString(),
-                                handler->second.serializer
-                                    ? handler->second.serializer(propertyValue)
+                                handler.serializer
+                                    ? handler.serializer(propertyValue)
                                     : QJsonValue::fromVariant(propertyValue));
             activeValue = activeObject;
         }
@@ -477,9 +475,9 @@ public:
             ok = propertyData.isValid();
         } else {
             int userType = propertyData.userType();
-            auto handler = handlers.find(propertyData.userType());
-            if (handler != handlers.end() && handler->second.deserializer) {
-                propertyData = handler->second.deserializer(activeValue, ok);
+            auto handler = handlers.constFind(userType);
+            if (handler != handlers.constEnd() && handler.value().deserializer) {
+                propertyData = handler.value().deserializer(activeValue, ok);
                 if (!ok)
                     setInvalidFormatError();
                 activeValue = {};
@@ -724,23 +722,23 @@ bool QProtobufJsonSerializer::deserializeMapPair(QVariant &key, QVariant &value)
     QString jsonKey = activeObject.keys().at(0);
     QJsonValue jsonValue = activeObject.take(jsonKey);
 
-    auto it = d_ptr->handlers.find(key.userType());
-    if (it == d_ptr->handlers.end()) {
+    auto it = d_ptr->handlers.constFind(key.userType());
+    if (it == d_ptr->handlers.constEnd() || !it.value().deserializer) {
         d_ptr->setInvalidFormatError();
         return false;
     }
 
     bool ok = false;
-    key = it->second.deserializer(QJsonValue(jsonKey), ok);
+    key = it.value().deserializer(QJsonValue(jsonKey), ok);
     if (!ok) {
         d_ptr->setInvalidFormatError();
         return false;
     }
 
-    it = d_ptr->handlers.find(value.userType());
-    if (it != d_ptr->handlers.end()) {
+    it = d_ptr->handlers.constFind(value.userType());
+    if (it != d_ptr->handlers.constEnd()) {
         ok = false;
-        value = it->second.deserializer(jsonValue, ok);
+        value = it.value().deserializer(jsonValue, ok);
         if (!ok) {
             d_ptr->setInvalidFormatError();
             return false;
