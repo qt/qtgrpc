@@ -441,6 +441,32 @@ public:
         return QVariant::fromValue(list);
     }
 
+    static QtProtobuf::int64 deserializeEnum(const QJsonValue &value, const QMetaEnum &metaEnum,
+                                             bool &ok)
+    {
+        QtProtobuf::int64 result = 0;
+        if (value.isString()) {
+            QString enumKey = value.toString();
+            result = metaEnum.keyToValue(enumKey.toUtf8().data(), &ok);
+        }
+        if (ok)
+            return result;
+
+        result = deserialize<QtProtobuf::int64>(value, ok);
+        if (ok) {
+            ok = false;
+            // Make sure that it's the known enum value
+            for (int i = 0; i < metaEnum.keyCount(); ++i) {
+                if (metaEnum.value(i) == result) {
+                    ok = true;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
     QVariant deserializeValue(QVariant propertyData, bool &ok)
     {
         ok = false;
@@ -769,11 +795,7 @@ bool QProtobufJsonSerializer::deserializeEnum(QtProtobuf::int64 &value,
                                               const QMetaEnum &metaEnum) const
 {
     bool ok = false;
-    if (d_ptr->activeValue.isString()) {
-        QString enumKey = d_ptr->activeValue.toString();
-        value = metaEnum.keyToValue(enumKey.toUtf8().data(), &ok);
-    }
-    // key is not defined or key is not a string
+    value = d_ptr->deserializeEnum(d_ptr->activeValue, metaEnum, ok);
     if (!ok)
         d_ptr->setInvalidFormatError();
     d_ptr->activeValue = {};
@@ -787,11 +809,7 @@ bool QProtobufJsonSerializer::deserializeEnumList(QList<QtProtobuf::int64> &valu
     bool ok = false;
     for (const auto &val : arr) {
         ok = false;
-        QtProtobuf::int64 raw;
-        if (val.isString()) {
-            QString enumKey = val.toString();
-            raw = metaEnum.keyToValue(enumKey.toUtf8().data(), &ok);
-        }
+        QtProtobuf::int64 raw = d_ptr->deserializeEnum(val, metaEnum, ok);
         if (!ok) {
             d_ptr->setInvalidFormatError();
             break;
