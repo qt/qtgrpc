@@ -53,6 +53,22 @@ using namespace QtProtobufPrivate;
 
 namespace {
 
+inline QString convertJsonKeyToJsonName(QStringView name)
+{
+    QString result;
+    result.reserve(name.size());
+    bool nextUpperCase = false;
+    for (const auto &c : name) {
+        if (c == QChar::fromLatin1('_')) {
+            nextUpperCase = true;
+            continue;
+        }
+        result.append(nextUpperCase ? c.toUpper() : c);
+        nextUpperCase = false;
+    }
+    return result;
+}
+
 inline bool
 isOneofOrOptionalField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
 {
@@ -513,6 +529,9 @@ public:
         for (auto &key : activeObject.keys()) {
             std::map<QString, QProtobufPropertyOrderingInfo>::iterator iter = msgContainer
                                                                                   .find(key);
+            if (iter == msgContainer.end())
+                iter = msgContainer.find(convertJsonKeyToJsonName(key));
+
             if (iter != msgContainer.end()) {
                 QVariant newPropertyValue = message->property(iter->second);
                 auto store = activeValue;
