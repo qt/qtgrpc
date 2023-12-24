@@ -18,6 +18,10 @@ class Q_GRPC_EXPORT QGrpcClientInterceptorManager
 {
 public:
     QGrpcClientInterceptorManager();
+    QGrpcClientInterceptorManager(const QGrpcClientInterceptorManager &other);
+    QGrpcClientInterceptorManager(QGrpcClientInterceptorManager &&other);
+    QGrpcClientInterceptorManager &operator=(const QGrpcClientInterceptorManager &other);
+    QGrpcClientInterceptorManager &operator=(QGrpcClientInterceptorManager &&other);
     ~QGrpcClientInterceptorManager();
 
     void registerInterceptor(std::shared_ptr<QGrpcClientInterceptor> next);
