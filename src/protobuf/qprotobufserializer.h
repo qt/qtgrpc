@@ -270,12 +270,13 @@ void deserializeMap(const QProtobufSerializer *serializer, QProtobufSelfcheckIte
     auto out = previous.value<QHash<K, V>>();
     QVariant key = QVariant::fromValue<K>(K());
     QVariant value = QVariant::fromValue<V *>(nullptr);
-
-    if (serializer->deserializeMapPair(key, value, it)) {
-        const auto valuePtr = value.value<V *>();
+    bool ok = serializer->deserializeMapPair(key, value, it);
+    V *valuePtr = value.value<V *>();
+    if (ok) {
         out[key.value<K>()] = valuePtr ? *valuePtr : V();
         previous = QVariant::fromValue<QHash<K, V>>(out);
     }
+    delete valuePtr;
 }
 
 /*!
