@@ -29,8 +29,7 @@ QQmlGrpcChannelOptionsPrivate::QQmlGrpcChannelOptionsPrivate()
 }
 
 QQmlGrpcChannelOptions::QQmlGrpcChannelOptions(QObject *parent)
-    : QObject(parent),
-      d_ptr(new QQmlGrpcChannelOptionsPrivate())
+    : QObject(*(new QQmlGrpcChannelOptionsPrivate()), parent)
 {
 }
 

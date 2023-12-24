@@ -66,7 +66,6 @@ signals:
 #endif // QT_CONFIG(ssl)
 
 private:
-    QQmlGrpcChannelOptionsPrivate *d_ptr;
     Q_DECLARE_PRIVATE(QQmlGrpcChannelOptions)
 };
 
