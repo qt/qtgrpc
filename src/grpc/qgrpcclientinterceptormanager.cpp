@@ -23,7 +23,10 @@ QT_BEGIN_NAMESPACE
 /*!
     The default destructor, destroyes QGrpcClientInterceptorManager object.
 */
-QGrpcClientInterceptorManager::~QGrpcClientInterceptorManager() = default;
+QGrpcClientInterceptorManager::~QGrpcClientInterceptorManager()
+{
+    delete d_ptr;
+}
 
 /*!
     The default constructor, creates QGrpcClientInterceptorManager object.
@@ -31,6 +34,33 @@ QGrpcClientInterceptorManager::~QGrpcClientInterceptorManager() = default;
 QGrpcClientInterceptorManager::QGrpcClientInterceptorManager()
     : d_ptr(new QGrpcClientInterceptorManagerPrivate())
 {
+}
+
+QGrpcClientInterceptorManager::QGrpcClientInterceptorManager(const QGrpcClientInterceptorManager
+                                                                 &other)
+    : d_ptr(new QGrpcClientInterceptorManagerPrivate(*other.d_ptr))
+{
+}
+
+QGrpcClientInterceptorManager::QGrpcClientInterceptorManager(QGrpcClientInterceptorManager &&other)
+    : d_ptr(std::exchange(other.d_ptr, nullptr))
+{
+}
+
+QGrpcClientInterceptorManager &
+QGrpcClientInterceptorManager::operator=(const QGrpcClientInterceptorManager &other)
+{
+    if (&other != this)
+        *d_ptr = *other.d_ptr;
+    return *this;
+}
+
+QGrpcClientInterceptorManager &
+QGrpcClientInterceptorManager::operator=(QGrpcClientInterceptorManager &&other)
+{
+    if (&other != this)
+        d_ptr = std::exchange(other.d_ptr, nullptr);
+    return *this;
 }
 
 /*!
