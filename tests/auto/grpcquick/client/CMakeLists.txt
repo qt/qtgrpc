@@ -3,11 +3,11 @@
 
 if(NOT QT_BUILD_STANDALONE_TESTS AND NOT QT_BUILDING_QT)
     cmake_minimum_required(VERSION 3.16)
-    project(tst_client_qml LANGUAGES CXX)
+    project(tst_grpc_client_unarycall_qml LANGUAGES CXX)
     find_package(Qt6BuildInternals REQUIRED COMPONENTS STANDALONE_TEST)
 endif()
 
-qt_internal_add_test(tst_client_qml
+qt_internal_add_test(tst_grpc_client_unarycall_qml
     QMLTEST
     SOURCES
         tst_client_qml.cpp
@@ -16,7 +16,7 @@ qt_internal_add_test(tst_client_qml
         Qt::Grpc
 )
 
-qt_add_grpc(tst_client_qml_gen CLIENT
+qt_add_grpc(tst_grpc_client_unarycall_qml_gen CLIENT
     PROTO_FILES
         ../../shared/data/proto/testservice.proto
     QML
@@ -24,7 +24,7 @@ qt_add_grpc(tst_client_qml_gen CLIENT
         "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated_qml"
 )
 
-qt_add_protobuf(tst_client_qml_gen
+qt_add_protobuf(tst_grpc_client_unarycall_qml_gen
     PROTO_FILES
         ../../shared/data/proto/testservice.proto
     QML
@@ -35,19 +35,19 @@ qt_add_protobuf(tst_client_qml_gen
 
 qt_policy(SET QTP0001 NEW)
 
-qt_add_qml_module(tst_client_qml
+qt_add_qml_module(tst_grpc_client_unarycall_qml
     URI QmlTestUri
     VERSION 1.0
     QML_FILES
         qml/tst_client.qml
 )
 
-qt_autogen_tools_initial_setup(tst_client_qml)
-qt_autogen_tools_initial_setup(tst_client_qml_gen)
-qt_autogen_tools_initial_setup(tst_client_qml_genplugin)
+qt_autogen_tools_initial_setup(tst_grpc_client_unarycall_qml)
+qt_autogen_tools_initial_setup(tst_grpc_client_unarycall_qml_gen)
+qt_autogen_tools_initial_setup(tst_grpc_client_unarycall_qml_genplugin)
 
 if(QT_BUILD_STANDALONE_TESTS)
-    qt_import_qml_plugins(tst_client_qml)
-    qt_import_qml_plugins(tst_client_qml_gen)
+    qt_import_qml_plugins(tst_grpc_client_unarycall_qml)
+    qt_import_qml_plugins(tst_grpc_client_unarycall_qml_gen)
 endif()
 
