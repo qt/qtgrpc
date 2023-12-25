@@ -29,7 +29,7 @@ Item {
 
     function createClientItem() {
         return Qt.createQmlObject("import QtQuick; import QtGrpc; \
-                                   import qtgrpc.tests; QmlClient {}", root)
+                                   import qtgrpc.tests; TestServiceClient {}", root)
     }
 
     function createGrpcChannelItem() {
