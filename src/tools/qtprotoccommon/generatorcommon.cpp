@@ -404,7 +404,7 @@ TypeMap common::produceQmlClientTypeMap(const ServiceDescriptor *service, const 
 {
     const std::string name = "QmlClient";
     const std::string fullName = "QmlClient";
-    const std::string scopeName = service->name();
+    const std::string serviceName = service->name();
     const std::string exportMacro = common::buildExportMacro(Options::instance().exportMacro());
 
     const std::string namespaces = getFullNamespace(service, "::");
@@ -414,7 +414,8 @@ TypeMap common::produceQmlClientTypeMap(const ServiceDescriptor *service, const 
     return { { "classname", name },
              { "classname_low_case", utils::deCapitalizeAsciiName(name) },
              { "full_type", fullName },
-             { "scope_type", scopeName },
+             { "scope_type", serviceName },
+             { "service_name", serviceName },
              { "scope_namespaces", scopeNamespaces },
              { "parent_class", "Client" },
              { "export_macro", exportMacro } };

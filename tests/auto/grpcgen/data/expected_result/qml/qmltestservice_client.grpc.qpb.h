@@ -15,7 +15,7 @@ namespace TestService {
 class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT QmlClient : public Client
 {
     Q_OBJECT
-    QML_ELEMENT
+    QML_NAMED_ELEMENT(TestServiceClient)
 
 public:
     explicit QmlClient(QObject *parent = nullptr);

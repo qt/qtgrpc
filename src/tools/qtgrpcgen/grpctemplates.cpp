@@ -13,7 +13,7 @@ const char *GrpcTemplates::ChildClassDeclarationTemplate()
 
 const char *GrpcTemplates::ClientQmlDeclarationTemplate()
 {
-    return "    QML_ELEMENT\n";
+    return "    QML_NAMED_ELEMENT($service_name$Client)\n";
 }
 
 const char *GrpcTemplates::ClientMethodDeclarationAsyncTemplate()
