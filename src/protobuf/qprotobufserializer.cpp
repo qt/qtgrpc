@@ -80,9 +80,9 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
            basic functions for serialization/deserialization.
 
     The QProtobufSerializer class registers serializers/deserializers for
-    classes implementing a protobuf message, inheriting QProtobufMessage. These
-    classes are generated automatically, based on a .proto file, using the cmake
-    build macro qt6_add_protobuf or by running qtprotobufgen directly.
+    classes implementing a protobuf message, inheriting \l QProtobufMessage. These
+    classes are generated automatically, based on a \c{.proto} file, using the CMake
+    function \l qt_add_protobuf or by running \l qtprotobufgen directly.
 */
 
 /*!
