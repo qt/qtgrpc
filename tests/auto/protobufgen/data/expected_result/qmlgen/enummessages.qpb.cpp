@@ -321,6 +321,9 @@ void NestedEnumHolder::registerTypes()
 {
     qRegisterMetaType<NestedEnumHolder>();
     qRegisterMetaType<NestedEnumHolderRepeated>();
+    qRegisterProtobufEnumType<NestedEnumHolder_QtProtobufNested::LocalEnum>();
+    qRegisterMetaType<LocalEnum>();
+    qRegisterMetaType<LocalEnumRepeated>();
 }
 
 NestedEnumHolder::NestedEnumHolder()
@@ -417,6 +420,9 @@ void NestedEnumHolderLevel2::registerTypes()
 {
     qRegisterMetaType<NestedEnumHolderLevel2>();
     qRegisterMetaType<NestedEnumHolderLevel2Repeated>();
+    qRegisterProtobufEnumType<NestedEnumHolderLevel2_QtProtobufNested::LocalEnum>();
+    qRegisterMetaType<LocalEnum>();
+    qRegisterMetaType<LocalEnumRepeated>();
 }
 
 NestedEnumHolderLevel2::NestedEnumHolderLevel2()
@@ -513,6 +519,9 @@ void NestedEnumHolderLevel1::registerTypes()
 {
     qRegisterMetaType<NestedEnumHolderLevel1>();
     qRegisterMetaType<NestedEnumHolderLevel1Repeated>();
+    qRegisterProtobufEnumType<NestedEnumHolderLevel1_QtProtobufNested::LocalEnum>();
+    qRegisterMetaType<LocalEnum>();
+    qRegisterMetaType<LocalEnumRepeated>();
 }
 
 NestedEnumHolderLevel1::NestedEnumHolderLevel1()
@@ -834,11 +843,11 @@ void MixedEnumUsageMessage::registerTypes()
 {
     qRegisterMetaType<MixedEnumUsageMessage>();
     qRegisterMetaType<MixedEnumUsageMessageRepeated>();
+    qRegisterMetaType<MixedEnumUsageMessage::LocalEnumMapEntry>();
+    qRegisterProtobufMapType<QString, MixedEnumUsageMessage_QtProtobufNested::LocalEnum>();
     qRegisterProtobufEnumType<MixedEnumUsageMessage_QtProtobufNested::LocalEnum>();
     qRegisterMetaType<LocalEnum>();
     qRegisterMetaType<LocalEnumRepeated>();
-    qRegisterMetaType<MixedEnumUsageMessage::LocalEnumMapEntry>();
-    qRegisterProtobufMapType<QString, MixedEnumUsageMessage_QtProtobufNested::LocalEnum>();
 }
 
 MixedEnumUsageMessage::MixedEnumUsageMessage()
@@ -1299,6 +1308,9 @@ void A::registerTypes()
 {
     qRegisterMetaType<A>();
     qRegisterMetaType<ARepeated>();
+    qRegisterProtobufEnumType<A_QtProtobufNested::AEnum>();
+    qRegisterMetaType<AEnum>();
+    qRegisterMetaType<AEnumRepeated>();
 }
 
 A::A()
@@ -1415,6 +1427,9 @@ void B::registerTypes()
 {
     qRegisterMetaType<B>();
     qRegisterMetaType<BRepeated>();
+    qRegisterProtobufEnumType<B_QtProtobufNested::BEnum>();
+    qRegisterMetaType<BEnum>();
+    qRegisterMetaType<BEnumRepeated>();
 }
 
 B::B()
