@@ -157,15 +157,17 @@ void MessageDefinitionPrinter::printRegisterBody()
                 if (utils::contains(registredMetaTypes, fullTypeName))
                     return;
                 registredMetaTypes.push_back(fullTypeName);
-                if (field->type() == FieldDescriptor::TYPE_ENUM
-                    && common::isLocalEnum(field->enum_type(), m_descriptor)) {
-                    m_printer->Print(propertyMap,
-                                     CommonTemplates::MetaTypeRegistrationLocalEnumTemplate());
-                } else if (field->is_map()) {
+                if (field->is_map()) {
                     m_printer->Print(propertyMap,
                                      CommonTemplates::MetaTypeRegistrationMapTemplate());
                 }
             });
+
+    int enumCount = m_descriptor->enum_type_count();
+    for (int i = 0; i < enumCount; ++i) {
+        m_printer->Print(common::produceEnumTypeMap(m_descriptor->enum_type(i), m_descriptor),
+                         CommonTemplates::MetaTypeRegistrationLocalEnumTemplate());
+    }
 
     Outdent();
     m_printer->Print(CommonTemplates::SimpleBlockEnclosureTemplate());

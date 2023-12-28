@@ -320,6 +320,9 @@ void NestedEnumHolder::registerTypes()
 {
     qRegisterMetaType<NestedEnumHolder>();
     qRegisterMetaType<NestedEnumHolderRepeated>();
+    qRegisterProtobufEnumType<NestedEnumHolder::LocalEnum>();
+    qRegisterMetaType<NestedEnumHolder::LocalEnum>();
+    qRegisterMetaType<NestedEnumHolder::LocalEnumRepeated>();
 }
 
 NestedEnumHolder::NestedEnumHolder()
@@ -416,6 +419,9 @@ void NestedEnumHolderLevel2::registerTypes()
 {
     qRegisterMetaType<NestedEnumHolderLevel2>();
     qRegisterMetaType<NestedEnumHolderLevel2Repeated>();
+    qRegisterProtobufEnumType<NestedEnumHolderLevel2::LocalEnum>();
+    qRegisterMetaType<NestedEnumHolderLevel2::LocalEnum>();
+    qRegisterMetaType<NestedEnumHolderLevel2::LocalEnumRepeated>();
 }
 
 NestedEnumHolderLevel2::NestedEnumHolderLevel2()
@@ -512,6 +518,9 @@ void NestedEnumHolderLevel1::registerTypes()
 {
     qRegisterMetaType<NestedEnumHolderLevel1>();
     qRegisterMetaType<NestedEnumHolderLevel1Repeated>();
+    qRegisterProtobufEnumType<NestedEnumHolderLevel1::LocalEnum>();
+    qRegisterMetaType<NestedEnumHolderLevel1::LocalEnum>();
+    qRegisterMetaType<NestedEnumHolderLevel1::LocalEnumRepeated>();
 }
 
 NestedEnumHolderLevel1::NestedEnumHolderLevel1()
@@ -833,11 +842,11 @@ void MixedEnumUsageMessage::registerTypes()
 {
     qRegisterMetaType<MixedEnumUsageMessage>();
     qRegisterMetaType<MixedEnumUsageMessageRepeated>();
+    qRegisterMetaType<MixedEnumUsageMessage::LocalEnumMapEntry>();
+    qRegisterProtobufMapType<QString, MixedEnumUsageMessage::LocalEnum>();
     qRegisterProtobufEnumType<MixedEnumUsageMessage::LocalEnum>();
     qRegisterMetaType<MixedEnumUsageMessage::LocalEnum>();
     qRegisterMetaType<MixedEnumUsageMessage::LocalEnumRepeated>();
-    qRegisterMetaType<MixedEnumUsageMessage::LocalEnumMapEntry>();
-    qRegisterProtobufMapType<QString, MixedEnumUsageMessage::LocalEnum>();
 }
 
 MixedEnumUsageMessage::MixedEnumUsageMessage()
