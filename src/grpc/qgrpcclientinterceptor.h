@@ -16,16 +16,10 @@
 QT_BEGIN_NAMESPACE
 
 template <typename T>
-struct QGrpcRpcInfo
-{
-    using ReplyType = std::shared_ptr<T>;
-};
-
-template <typename T>
 class Q_GRPC_EXPORT QGrpcInterceptorContinuation final
 {
 public:
-    using ReplyType = typename QGrpcRpcInfo<T>::ReplyType;
+    using ReplyType = typename std::shared_ptr<T>;
     using ParamType = std::shared_ptr<QGrpcChannelOperation>;
 
     QGrpcInterceptorContinuation(std::function<void(ReplyType, ParamType)> _func)
