@@ -27,6 +27,19 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
+    \typealias QGrpcInterceptorContinuation::ReplyType
+    \inmodule QtGrpc
+    \since 6.7
+    \internal
+*/
+
+/*!
+    \typealias QGrpcInterceptorContinuation::ParamType
+    \inmodule QtGrpc
+    \since 6.7
+    \internal
+*/
+/*!
     \class QGrpcInterceptorContinuation
     \inmodule QtGrpc
     \since 6.7
