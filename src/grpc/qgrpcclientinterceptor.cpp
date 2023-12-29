@@ -9,9 +9,21 @@ QT_BEGIN_NAMESPACE
     \inmodule QtGrpc
     \since 6.7
     \brief A class that defines response type for the specific QGrpcOperation.
+    \internal
 
-    The class defines \c responseType typedef, that serves as a mechanism to associate
-    specific reply types with different QtGRPC call/stream types.
+    The structure defines the \c ReplyType type alias, that serves as a mechanism
+    to associate specific reply types with different QtGRPC call/stream types.
+*/
+
+/*!
+    \typealias QGrpcRpcInfo::ReplyType
+    \inmodule QtGrpc
+    \since 6.7
+    \internal
+    \brief The alias for std::shared_ptr of the specific QGrpcOperation.
+
+    The alias serves as a mechanism to associate specific reply types with
+    different QtGRPC call/stream types.
 */
 
 /*!
