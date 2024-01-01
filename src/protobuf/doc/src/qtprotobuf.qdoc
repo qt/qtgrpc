@@ -161,7 +161,7 @@
                {Microsoft Visual C++ compiler}
         \li \l {Get and Install Qt}
             {Qt 6.6 or later, including \e {Additional libraries}:
-            \e QtProtobuf and \e Qt GRPC}
+            \l {Qt Protobuf} and \l {Qt GRPC}}
     \endlist
 
     The \c vcpkg is a cross-platform C/C++ package manager.

@@ -8,7 +8,7 @@
 \inmodule QtProtobuf
 \ingroup explanation
 
-The \c qtprotobufgen tool can be used to generate QtProtobuf classes from a
+The \c qtprotobufgen tool can be used to generate Qt Protobuf classes from a
 protobuf schema. The tool is provided by the CMake \c {Qt6::ProtobufTools}
 package. It works as an extension to Google's \c protoc tool.
 
