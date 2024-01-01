@@ -318,8 +318,8 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
     \value Varint           int32, int64, uint32, uint64, sint32, sint64, bool, enum
     \value Fixed64          fixed64, sfixed64, double
     \value LengthDelimited  string, bytes, embedded messages, packed repeated fields
-    \value StartGroup       groups. Deprecated in proto syntax 3. Not supported by QtProtobuf.
-    \value EndGroup         groups. Deprecated in proto syntax 3. Not supported by QtProtobuf.
+    \value StartGroup       groups. Deprecated in proto syntax 3. Not supported by Qt Protobuf.
+    \value EndGroup         groups. Deprecated in proto syntax 3. Not supported by Qt Protobuf.
     \value Fixed32          fixed32, sfixed32, float
 
     \sa {https://protobuf.dev/programming-guides/encoding} {encoding}
@@ -349,7 +349,7 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
 
 /*!
     \namespace QtProtobuf
-    \brief The QtProtobuf namespace contains type aliases and classes needed to support QtProtobuf.
+    \brief The QtProtobuf namespace contains type aliases and classes needed to support Qt Protobuf.
     \inmodule QtProtobuf
 */
 

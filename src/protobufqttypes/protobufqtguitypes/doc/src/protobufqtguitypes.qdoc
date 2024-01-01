@@ -66,7 +66,7 @@
         }
     \endcode
 
-    The QtProtobuf generator detects Qt GUI types, supplied by the
+    The Qt Protobuf generator detects Qt GUI types, supplied by the
     ProtobufQtGuiTypes package, and uses them directly. This gives
     you the flexibility to use these types without additional conversion.
 
