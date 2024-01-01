@@ -8,7 +8,7 @@
 \keyword Qt GRPC
 
 \section1 Logging Interceptor
-The Logging Interceptor can be a versatile tool for gaining insights into your QtGRPC requests.
+The Logging Interceptor can be a versatile tool for gaining insights into your Qt GRPC requests.
 By creating a custom interceptor, you can tailor the logging behavior to meet the specific requirements of your application.
 
 \section1 Creating a Logging Interceptor
@@ -84,7 +84,7 @@ protected:
 
 The LoggingInterceptor overrides two interception methods:
 QGrpcClientInterceptor::interceptCall() and QGrpcClientInterceptor::interceptServerStream().
-Each of these methods handles a specific type of QtGRPC interaction:
+Each of these methods handles a specific type of Qt GRPC interaction:
 Unary call and server streaming, respectively.
 Because QGrpcChannelOperation stores the argument in the serialized form,
 both methods need to deserialize the request, which can then be logged using
