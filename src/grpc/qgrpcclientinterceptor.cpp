@@ -43,11 +43,11 @@ QT_BEGIN_NAMESPACE
     \class QGrpcInterceptorContinuation
     \inmodule QtGrpc
     \since 6.7
-    \brief A template class for QtGRPC interceptor continuation.
+    \brief A template class for Qt GRPC interceptor continuation.
 
     The QGrpcInterceptorContinuation class is a helper class that wraps std::function,
     based on the QGrpcOperation type for the specific type of the call or stream. It is used
-    for managing the continuation of QtGRPC interceptor processing.
+    for managing the continuation of Qt GRPC interceptor processing.
 */
 
 /*!
@@ -65,11 +65,11 @@ QT_BEGIN_NAMESPACE
     \fn template <typename T, std::enable_if_t<std::is_base_of_v<QGrpcOperation, T>, bool> = true> void QGrpcClientInterceptor::intercept(std::shared_ptr<QGrpcChannelOperation> operation,
         typename QGrpcInterceptorContinuation<T>::ReplyType response, QGrpcInterceptorContinuation<T> &continuation)
 
-    Intercepts a QtGRPC call or stream operation.
+    Intercepts a Qt GRPC call or stream operation.
 
-    This method provides a generic interface for intercepting QtGRPC operations based on the
+    This method provides a generic interface for intercepting Qt GRPC operations based on the
     specified QGrpcOperation.
-    It delegates to specialized methods for different types of QtGRPC operations
+    It delegates to specialized methods for different types of Qt GRPC operations
     and passes \a operation, \a response, and \a continuation parameters to specialized method.
 */
 
@@ -77,10 +77,10 @@ QT_BEGIN_NAMESPACE
     \class QGrpcClientInterceptor
     \inmodule QtGrpc
     \since 6.7
-    \brief Base class for QtGRPC client interceptors.
+    \brief Base class for Qt GRPC client interceptors.
 
-    The QGrpcClientInterceptor class provides a base for creating custom QtGRPC client interceptors.
-    It defines methods for intercepting different types of QtGRPC calls and streams. Users can it
+    The QGrpcClientInterceptor class provides a base for creating custom Qt GRPC client interceptors.
+    It defines methods for intercepting different types of Qt GRPC calls and streams. Users can it
     to implement specific interception behavior.
 
     \sa {Qt GRPC Client Interceptors}
@@ -92,7 +92,7 @@ QT_BEGIN_NAMESPACE
 QGrpcClientInterceptor::~QGrpcClientInterceptor() = default;
 
 /*!
-    Intercepts a QtGRPC call operation.
+    Intercepts a Qt GRPC call operation.
 
     This method provides the default implementation of a virtual function. Users have the option
     to override this to offer specific functionality for QGrpcClientInterceptor.
@@ -113,7 +113,7 @@ void QGrpcClientInterceptor::interceptCall(std::shared_ptr<QGrpcChannelOperation
 }
 
 /*!
-    Intercepts a QtGRPC server streaming operation.
+    Intercepts a Qt GRPC server streaming operation.
 
     This method provides the default implementation of a virtual function. Users have the option
     to override this to offer specific functionality for QGrpcClientInterceptor.
@@ -134,7 +134,7 @@ void QGrpcClientInterceptor::interceptServerStream(std::shared_ptr<QGrpcChannelO
 }
 
 /*!
-    Intercepts a QtGRPC client streaming operation.
+    Intercepts a Qt GRPC client streaming operation.
 
     This method provides the default implementation of a virtual function. Users have the option
     to override this to offer specific functionality for QGrpcClientInterceptor.
@@ -155,7 +155,7 @@ void QGrpcClientInterceptor::interceptClientStream(std::shared_ptr<QGrpcChannelO
 }
 
 /*!
-    Intercepts a QtGRPC bidirectional streaming operation.
+    Intercepts a Qt GRPC bidirectional streaming operation.
 
     This method provides the default implementation of a virtual function. Users have the option
     to override this to offer specific functionality for QGrpcClientInterceptor.

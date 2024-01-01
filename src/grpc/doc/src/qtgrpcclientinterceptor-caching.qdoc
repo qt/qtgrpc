@@ -8,7 +8,7 @@
 \keyword Qt GRPC
 
 \section1 Caching Interceptor
-The Caching Interceptor can be a versatile tool for improving the performance of your QtGRPC connections.
+The Caching Interceptor can be a versatile tool for improving the performance of your Qt GRPC connections.
 By creating a custom interceptor, you can tailor the caching behavior to meet the specific requirements of your application.
 
 \section1 Creating a Caching Interceptor
@@ -124,7 +124,7 @@ protected:
 \endcode
 
 Both \c interceptCall() and \c interceptServerStream() methods in the CachingInterceptor class
-intercept QtGRPC calls and streams, implementing a caching mechanism for responses.
+intercept Qt GRPC calls and streams, implementing a caching mechanism for responses.
 They both establish connections to handle incoming messages and attempt to deserialize
 request arguments. Both methods check for cached responses and, if found, serialize, and emit
 correct signals to set the response data. The methods, if the response was found in the cache,

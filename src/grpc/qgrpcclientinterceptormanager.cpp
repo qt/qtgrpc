@@ -75,7 +75,7 @@ QGrpcClientInterceptorManager::operator=(QGrpcClientInterceptorManager &&other)
     \endcode
     will result in:
     \badcode
-        myInterceptor2 -> myInterceptor1 -> QtGRPC operation
+        myInterceptor2 -> myInterceptor1 -> Qt GRPC operation
     \endcode
     order of execution.
 */
@@ -100,7 +100,7 @@ void QGrpcClientInterceptorManager::registerInterceptor(std::shared_ptr<QGrpcCli
     \endcode
     will result in:
     \badcode
-        myInterceptor2 -> myInterceptor3 -> myInterceptor1 -> QtGRPC operation
+        myInterceptor2 -> myInterceptor3 -> myInterceptor1 -> Qt GRPC operation
     \endcode
     order of execution.
  */
@@ -117,7 +117,7 @@ void QGrpcClientInterceptorManager::
                                         typename QGrpcInterceptorContinuation<T>::ReplyType response,
                                         std::shared_ptr<QGrpcChannelOperation> operation,
                                         size_t pos)
-    Executes the QtGRPC interceptors in the chain for a specific QGrpcOperation type.
+    Executes the Qt GRPC interceptors in the chain for a specific QGrpcOperation type.
 
     The process initiates with the interceptor located at position
     \a pos in the QGrpcClientInterceptor chain.

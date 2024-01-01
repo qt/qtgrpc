@@ -42,8 +42,7 @@
         \li \l {OpenSSL Toolkit} may be needed.
     \endlist
     \note Check the \l {Example of installation for Windows using vcpkg}
-    to see how to install \c gRPC and \c Protobuf and to run QtGrpc-based
-    example.
+    to see how to install \c gRPC and \c Protobuf and to run Qt GRPC examples.
 
     To start working with the Qt GRPC functionality you should define
     required services and messages in a \c .proto file.

@@ -39,7 +39,7 @@
         \li No need to integrate generated code into project tree manually.
         \li Convenient serialization and deserialization API.
         \li Integrated properties mechanism for generated protobuf messages.
-        \li Integrated gRPC-client support (see \l {Qt GRPC}{QtGrpc module}).
+        \li Integrated gRPC-client support (see \l {Qt GRPC}{Qt GRPC module}).
         \li Integrated QML-types support for generated protobuf messages.
             See \l{Qt Protobuf QML Types}
         \li Enabled using Qt Core and Qt GUI types as a part of *.proto schema.
@@ -161,7 +161,7 @@
                {Microsoft Visual C++ compiler}
         \li \l {Get and Install Qt}
             {Qt 6.6 or later, including \e {Additional libraries}:
-            \e QtProtobuf and \e QtGrpc}
+            \e QtProtobuf and \e Qt GRPC}
     \endlist
 
     The \c vcpkg is a cross-platform C/C++ package manager.
