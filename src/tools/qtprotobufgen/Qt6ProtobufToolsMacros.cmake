@@ -444,12 +444,10 @@ function(qt6_add_protobuf target)
 
     target_sources(${target} PRIVATE ${cpp_sources} ${qml_sources})
 
-    if(is_static OR is_shared)
-        set_target_properties(${target}
-            PROPERTIES
-                AUTOMOC ON
-        )
-    endif()
+    set_target_properties(${target}
+        PROPERTIES
+            AUTOMOC ON
+    )
 
     if(WIN32)
         if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
