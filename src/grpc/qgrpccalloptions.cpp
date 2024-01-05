@@ -97,7 +97,7 @@ std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadline() const
 
     If value was not set returns empty QGrpcMetadata.
 */
-QGrpcMetadata QGrpcCallOptions::metadata() const
+const QGrpcMetadata &QGrpcCallOptions::metadata() const
 {
     return dPtr->metadata;
 }
