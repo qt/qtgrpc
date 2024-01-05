@@ -120,7 +120,7 @@ QUrl QGrpcChannelOptions::host() const
 
     If value was not set returns empty QGrpcMetadata.
 */
-QGrpcMetadata QGrpcChannelOptions::metadata() const
+const QGrpcMetadata &QGrpcChannelOptions::metadata() const
 {
     return dPtr->metadata;
 }

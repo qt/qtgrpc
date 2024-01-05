@@ -36,7 +36,7 @@ public:
 
     QUrl host() const;
     std::optional<std::chrono::milliseconds> deadline() const;
-    QGrpcMetadata metadata() const;
+    const QGrpcMetadata &metadata() const;
 
 #if QT_CONFIG(ssl)
     QGrpcChannelOptions &withSslConfiguration(const QSslConfiguration &sslConfiguration);
