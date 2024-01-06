@@ -6,6 +6,7 @@
 
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
+#include <QtCore/qsystemdetection.h>
 
 #include <QtGrpc/QGrpcCallOptions>
 #include <QtGrpc/QGrpcMetadata>
@@ -31,8 +32,13 @@ class QtGrpcClientUnaryCallTest : public GrpcClientTestBase
     Q_OBJECT
 public:
     QtGrpcClientUnaryCallTest()
-        : GrpcClientTestBase(
-                { GrpcClientTestBase::Channel::Qt, GrpcClientTestBase::Channel::Native })
+        : GrpcClientTestBase(GrpcClientTestBase::Channels{
+                GrpcClientTestBase::Channel::Qt,
+                GrpcClientTestBase::Channel::Native,
+#if !defined(Q_OS_DARWIN) && !defined(Q_OS_WIN32)
+                GrpcClientTestBase::Channel::Ssl,
+#endif
+                            })
     {
     }
 

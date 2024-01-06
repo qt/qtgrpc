@@ -57,7 +57,7 @@ public:
             return QUrl("http://localhost:50051", QUrl::StrictMode);
 #if QT_CONFIG(native_grpc)
         case GRPC_SOCKET:
-            return QUrl("unix:///tmp/test.sock");
+            return QUrl("unix:///tmp/qtgrpc_test.sock");
         case GRPC_HTTP:
             return QUrl("localhost:50051");
 #endif

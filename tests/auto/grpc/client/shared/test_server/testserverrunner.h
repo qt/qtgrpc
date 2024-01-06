@@ -4,18 +4,12 @@
 #ifndef TEST_SERVER_H
 #define TEST_SERVER_H
 
-#include <QThread>
-
-class SecureTestServer
-{
-public:
-    void run();
-};
+#include <QtTypes>
 
 class TestServer
 {
 public:
-    void run();
+    void run(qint64 latency);
 };
 
 #endif // TEST_SERVER_H

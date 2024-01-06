@@ -6,8 +6,10 @@
 #include <QDebug>
 #include <QFile>
 #include <QString>
+#include <QThread>
 
 #include "testservice.grpc.pb.h"
+
 #include <grpc++/grpc++.h>
 
 #include <memory>
@@ -28,6 +30,10 @@ using qtgrpc::tests::TestService;
 // Logic and data behind the server's behavior.
 class TestServiceServiceImpl final : public qtgrpc::tests::TestService::Service
 {
+public:
+    TestServiceServiceImpl(qint64 latency) : m_latency(latency) { }
+
+private:
     grpc::Status testMethod(grpc::ServerContext *, const SimpleStringMessage *request,
                             SimpleStringMessage *response) override;
 
@@ -44,6 +50,7 @@ class TestServiceServiceImpl final : public qtgrpc::tests::TestService::Service
     grpc::Status testMetadata(grpc::ServerContext *,
                                                 const Empty *,
                                                 qtgrpc::tests::Empty *) override;
+    qint64 m_latency;
 };
 }
 
@@ -53,7 +60,7 @@ Status TestServiceServiceImpl::testMethod(grpc::ServerContext *, const SimpleStr
     qInfo() << "testMethod called with: " << request->testfieldstring();
     response->set_testfieldstring(request->testfieldstring());
     if (request->testfieldstring() == "sleep") {
-        QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
+        QThread::msleep(m_latency);
     }
     return Status();
 }
@@ -67,22 +74,22 @@ Status TestServiceServiceImpl::testMethodServerStream(grpc::ServerContext *,
     SimpleStringMessage msg;
 
     msg.set_testfieldstring(request->testfieldstring() + "1");
-    QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
+    QThread::msleep(m_latency);
     qInfo() << "send back " << (request->testfieldstring() + "1");
     writer->Write(msg);
 
     msg.set_testfieldstring(request->testfieldstring() + "2");
-    QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
+    QThread::msleep(m_latency);
     qInfo() << "send back " << (request->testfieldstring() + "2");
     writer->Write(msg);
 
     msg.set_testfieldstring(request->testfieldstring() + "3");
-    QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
+    QThread::msleep(m_latency);
     qInfo() << "send back " << (request->testfieldstring() + "3");
     writer->Write(msg);
 
     msg.set_testfieldstring(request->testfieldstring() + "4");
-    QThread::msleep(QT_GRPC_TEST_MESSAGE_LATENCY);
+    QThread::msleep(m_latency);
     qInfo() << "send back " << (request->testfieldstring() + "4");
     writer->WriteLast(msg, grpc::WriteOptions());
 
@@ -138,28 +145,29 @@ Status TestServiceServiceImpl::testMetadata(grpc::ServerContext *ctx, const Empt
     return Status();
 }
 
-void SecureTestServer::run()
+void TestServer::run(qint64 latency)
 {
-    QString server_uri("localhost:60051");
+    TestServiceServiceImpl service(latency);
 
-    TestServiceServiceImpl service;
-
-    QFile cfile(":/keys/cert.pem");
+    grpc::ServerBuilder builder;
+    QFile cfile(":/assets/cert.pem");
     cfile.open(QFile::ReadOnly);
     QString cert = cfile.readAll();
 
-    QFile kfile(":/keys/key.pem");
+    QFile kfile(":/assets/key.pem");
     kfile.open(QFile::ReadOnly);
     QString key = kfile.readAll();
 
     grpc::SslServerCredentialsOptions opts(GRPC_SSL_DONT_REQUEST_CLIENT_CERTIFICATE);
     opts.pem_key_cert_pairs.push_back({ key.toStdString(), cert.toStdString() });
 
-    grpc::ServerBuilder builder;
-    builder.AddListeningPort(server_uri.toStdString(), grpc::SslServerCredentials(opts));
+    QString httpURI("127.0.0.1:50051");
+    builder.AddListeningPort(httpURI.toStdString(), grpc::InsecureServerCredentials());
+    QString httpsURI("127.0.0.1:50052");
+    builder.AddListeningPort(httpsURI.toStdString(), grpc::SslServerCredentials(opts));
 #ifndef Q_OS_WINDOWS
-    QString socket_uri("unix:///tmp/test.sock");
-    builder.AddListeningPort(socket_uri.toStdString(), grpc::SslServerCredentials(opts));
+    QString unixUri("unix:///tmp/qtgrpc_test.sock");
+    builder.AddListeningPort(unixUri.toStdString(), grpc::InsecureServerCredentials());
 #endif
     builder.RegisterService(&service);
 
@@ -169,36 +177,9 @@ void SecureTestServer::run()
         return;
     }
 #ifdef Q_OS_WINDOWS
-    qDebug() << "Server listening on " << server_uri;
+    qDebug() << "Server listening on " << httpURI << httpsURI;
 #else
-    qDebug() << "Server listening on " << server_uri << "and" << socket_uri;
-#endif
-
-    server->Wait();
-}
-
-void TestServer::run()
-{
-    QString server_uri("127.0.0.1:50051");
-    TestServiceServiceImpl service;
-
-    grpc::ServerBuilder builder;
-    builder.AddListeningPort(server_uri.toStdString(), grpc::InsecureServerCredentials());
-#ifndef Q_OS_WINDOWS
-    QString socket_uri("unix:///tmp/test.sock");
-    builder.AddListeningPort(socket_uri.toStdString(), grpc::InsecureServerCredentials());
-#endif
-    builder.RegisterService(&service);
-
-    std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
-    if (!server) {
-        qDebug() << "Creating grpc::Server failed.";
-        return;
-    }
-#ifdef Q_OS_WINDOWS
-    qDebug() << "Server listening on " << server_uri;
-#else
-    qDebug() << "Server listening on " << server_uri << "and" << socket_uri;
+    qDebug() << "Server listening on " << httpURI << httpsURI << "and" << unixUri;
 #endif
     server->Wait();
 }
