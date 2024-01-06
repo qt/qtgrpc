@@ -44,7 +44,8 @@ private:
         QObject::connect(serverProc.get(), &QProcess::readyReadStandardOutput, this,
                          [this] { qInfo() << serverProc->readAllStandardOutput(); });
 
-        serverProc->start(serverPath);
+        serverProc->start(serverPath,
+                          { "--latency", QString::number(QT_GRPC_TEST_MESSAGE_LATENCY) });
         if (!serverProc->waitForStarted(waitForServerLatency.count())) {
             qInfo() << "Failed to start the server" << serverPath
                     << QString::number(serverProc->exitCode(), 16);
