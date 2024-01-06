@@ -24,8 +24,8 @@ Item {
     property var clientQml
     property var grpcChannel
     property var grpcChannelDeadline
-    property var setResponse: function(value) { root.messageResponse = value }
-    property var errorCallback: function() { root.calbackCalled = true }
+    property var setResponse: function(value) { root.messageResponse = value; testCase.when = true; }
+    property var errorCallback: function() { root.calbackCalled = true; testCase.when = true; }
 
     function createClientItem() {
         return Qt.createQmlObject("import QtQuick; import QtGrpc; \
@@ -88,7 +88,8 @@ Item {
         when: false
 
         function test_testMethodCallCheck() {
-            verify(root.calbackCalled == true)
+            verify(root.messageResponse == root.messageArg)
+            verify(!root.calbackCalled)
         }
     }
 
