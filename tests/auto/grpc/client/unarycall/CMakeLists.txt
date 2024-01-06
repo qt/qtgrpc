@@ -11,7 +11,7 @@ if(NOT QT_BUILD_STANDALONE_TESTS AND NOT QT_BUILDING_QT)
     include("../shared/client_test_common/CMakeLists.txt")
 endif()
 
-if(NOT TARGET testserver)
+if(NOT TARGET grpc_testserver)
     return()
 endif()
 
@@ -21,7 +21,7 @@ qt_internal_add_test(tst_grpc_client_unarycall
     INCLUDE_DIRECTORIES
         ${CMAKE_CURRENT_SOURCE_DIR}/../../shared
     DEFINES
-        TEST_GRPC_SERVER_PATH="$<TARGET_FILE:testserver>"
+        TEST_GRPC_SERVER_PATH="$<TARGET_FILE:grpc_testserver>"
     LIBRARIES
         Qt::Test
         Qt::Core
@@ -30,4 +30,4 @@ qt_internal_add_test(tst_grpc_client_unarycall
         tst_grpc_client_test_common
 )
 
-add_dependencies(tst_grpc_client_unarycall testserver)
+add_dependencies(tst_grpc_client_unarycall grpc_testserver)

@@ -9,7 +9,7 @@ qt6_add_library(tst_grpc_client_test_common STATIC
 )
 
 target_compile_definitions(tst_grpc_client_test_common PRIVATE
-        TEST_GRPC_SERVER_PATH="$<TARGET_FILE:testserver>"
+        TEST_GRPC_SERVER_PATH="$<TARGET_FILE:grpc_testserver>"
 )
 
 target_include_directories(tst_grpc_client_test_common
@@ -24,6 +24,19 @@ target_link_libraries(tst_grpc_client_test_common PRIVATE
     Qt::Core
     Qt::Test
     Qt::Grpc
+)
+
+set(ssl_cert "${CMAKE_CURRENT_LIST_DIR}/../test_server/assets/cert.pem")
+
+set_source_files_properties(${ssl_cert}
+    PROPERTIES QT_RESOURCE_ALIAS assets/cert.pem)
+
+qt_add_resources(tst_grpc_client_test_common
+    "keys"
+    PREFIX
+        "/"
+    FILES
+        ${ssl_cert}
 )
 
 qt_autogen_tools_initial_setup(tst_grpc_client_test_common)

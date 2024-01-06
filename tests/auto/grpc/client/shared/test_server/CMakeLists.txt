@@ -35,34 +35,34 @@ add_custom_command(
 )
 
 set_source_files_properties(${generated_files} PROPERTIES GENERATED TRUE)
-add_library(TestServerRunner_grpc_gen STATIC ${generated_files})
-target_include_directories(TestServerRunner_grpc_gen
+add_library(grpc_testserverrunner_gen STATIC ${generated_files})
+target_include_directories(grpc_testserverrunner_gen
     PRIVATE
         ${out_dir}
         WrapgRPC_INCLUDE_PATH
 )
 
-target_link_libraries(TestServerRunner_grpc_gen
+target_link_libraries(grpc_testserverrunner_gen
     PRIVATE
         WrapProtobuf::WrapLibProtobuf
         WrapgRPC::WrapLibgRPC
 )
 
-add_library(TestServerRunner
+add_library(grpc_testserverrunner
     STATIC
         ${CMAKE_CURRENT_LIST_DIR}/testserverrunner.cpp
         ${CMAKE_CURRENT_LIST_DIR}/testserverrunner.h
 )
 
-target_include_directories(TestServerRunner
+target_include_directories(grpc_testserverrunner
     PRIVATE
         ${out_dir}
         ${CMAKE_CURRENT_LIST_DIR}/../../../shared
 )
 
-target_link_libraries(TestServerRunner
+target_link_libraries(grpc_testserverrunner
     PRIVATE
-        TestServerRunner_grpc_gen
+        grpc_testserverrunner_gen
         WrapgRPC::WrapLibgRPC
         Qt6::Core
 )
@@ -72,7 +72,7 @@ set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/assets/cert.pem"
 set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/assets/key.pem"
     PROPERTIES QT_RESOURCE_ALIAS assets/key.pem)
 
-qt_add_resources(TestServerRunner
+qt_add_resources(grpc_testserverrunner
     "keys"
     PREFIX
         "/"
@@ -81,20 +81,11 @@ qt_add_resources(TestServerRunner
         "${CMAKE_CURRENT_LIST_DIR}/assets/key.pem"
 )
 
-qt_internal_add_executable(testserver
+qt_internal_add_executable(grpc_testserver
     SOURCES
         ${CMAKE_CURRENT_LIST_DIR}/testserver.cpp
     LIBRARIES
-        TestServerRunner
-    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/"
-    INSTALL_DIRECTORY "${INSTALL_TESTSDIR}/shared"
-)
-
-qt_internal_add_executable(securetestserver
-    SOURCES
-        ${CMAKE_CURRENT_LIST_DIR}/securetestserver.cpp
-    LIBRARIES
-        TestServerRunner
+        grpc_testserverrunner
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/"
     INSTALL_DIRECTORY "${INSTALL_TESTSDIR}/shared"
 )
