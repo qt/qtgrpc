@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 syntax = "proto3";
 
+option go_package = "qtgrpc/tests";
 package qtgrpc.tests;
 
 message Empty {}

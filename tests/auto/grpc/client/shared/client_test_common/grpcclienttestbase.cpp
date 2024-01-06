@@ -27,6 +27,7 @@ void GrpcClientTestBase::initTestCase_data()
 #endif
     }
 
+#ifdef TEST_GRPC_SERVER_SUPPORTS_JSON
     if (m_channels.testFlag(Channel::Json)) {
         QGrpcMetadata md{ { "content-type"_ba, "application/grpc+json" } };
         QTest::newRow("Http2ClientJson")
@@ -41,6 +42,7 @@ void GrpcClientTestBase::initTestCase_data()
                    QUrl("unix:///tmp/qtgrpc_test.sock", QUrl::StrictMode) }
                                                                                .withMetadata(md)));
     }
+#endif
 
 #if QT_CONFIG(ssl)
     if (m_channels.testFlag(Channel::Ssl)) {

@@ -7,6 +7,8 @@
 #include <QObject>
 #include <QProcess>
 #include <QTimer>
+#include <QFileInfo>
+#include <QDir>
 
 #include <chrono>
 #include <memory>
@@ -44,8 +46,10 @@ private:
         QObject::connect(serverProc.get(), &QProcess::readyReadStandardOutput, this,
                          [this] { qInfo() << serverProc->readAllStandardOutput(); });
 
-        serverProc->start(serverPath,
-                          { "--latency", QString::number(QT_GRPC_TEST_MESSAGE_LATENCY) });
+        serverProc->setProgram(serverPath);
+        serverProc->setWorkingDirectory(QFileInfo(serverPath).dir().absolutePath());
+        serverProc->setArguments({ "--latency", QString::number(QT_GRPC_TEST_MESSAGE_LATENCY) });
+        serverProc->start();
         if (!serverProc->waitForStarted(waitForServerLatency.count())) {
             qInfo() << "Failed to start the server" << serverPath
                     << QString::number(serverProc->exitCode(), 16);
