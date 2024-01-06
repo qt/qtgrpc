@@ -39,6 +39,8 @@ private:
             return;
         }
         serverProc = std::make_unique<QProcess>();
+        serverProc->setReadChannel(QProcess::StandardError);
+
         QObject::connect(serverProc.get(), &QProcess::readyReadStandardOutput, this,
                          [this] { qInfo() << serverProc->readAllStandardOutput(); });
 
