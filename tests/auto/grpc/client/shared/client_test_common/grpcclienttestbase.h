@@ -26,7 +26,8 @@ protected:
         Qt = 0x1,
         Native = 0x2,
         Ssl = 0x4,
-        SslNoCredentials = 0x8
+        SslNoCredentials = 0x8,
+        WithChannelDeadline = 0x10,
     };
     Q_DECLARE_FLAGS(Channels, Channel)
 
