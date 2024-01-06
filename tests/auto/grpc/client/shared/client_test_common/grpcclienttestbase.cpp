@@ -5,6 +5,7 @@
 
 #include <QtGrpc/QGrpcChannelOptions>
 #include <QtNetwork/qtnetwork-config.h>
+#include <message_latency_defs.h>
 
 void GrpcClientTestBase::initTestCase_data()
 {
@@ -68,6 +69,17 @@ void GrpcClientTestBase::initTestCase_data()
 #  endif
     }
 #endif
+
+    if (m_channels.testFlag(Channel::WithChannelDeadline)) {
+        constexpr auto
+            channelTimeout = std::chrono::milliseconds(static_cast<int64_t>(MessageLatency * 0.25));
+        QTest::newRow("Http2ClientDeadline")
+            << QFlags{ Channel::Qt, Channel::WithChannelDeadline }
+            << std::shared_ptr<
+                   QAbstractGrpcChannel>(new QGrpcHttp2Channel(QGrpcChannelOptions{
+                   QUrl("http://localhost:50051", QUrl::StrictMode) }
+                                                                   .withDeadline(channelTimeout)));
+    }
 }
 
 void GrpcClientTestBase::init()

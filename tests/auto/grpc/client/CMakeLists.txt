@@ -4,7 +4,7 @@ add_subdirectory(shared)
 
 add_subdirectory(interceptor)
 add_subdirectory(unattached_channel)
-add_subdirectory(no_channel)
+add_subdirectory(deadline)
 add_subdirectory(unarycall)
 add_subdirectory(serverstream)
 add_subdirectory(clientstream)
