@@ -1,13 +1,14 @@
 [
     {
-        "Id": "protobuf-qtprotobufgen",
+        "Id": "protobuf",
         "Name": "protobuf",
         "QDocModule": "qtprotobuf",
-        "QtUsage": "Used in the qtprotobufgen generator.",
-        "QtParts": [ "tools" ],
+        "QtUsage": "Used in the qtprotobufgen generator and conformance test.",
+        "QtParts": [ "tools", "tests" ],
 
         "SecurityCritical": false,
         "Homepage": "https://protobuf.dev",
+        "Path": "tests/auto/protobuf/conformance/data",
         "License": "BSD 3-clause \"New\" or \"Revised\" License",
         "LicenseId": "BSD-3-Clause",
         "LicenseFile": "LICENSES/LicenseRef-protobuf.txt",
