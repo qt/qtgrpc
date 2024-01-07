@@ -659,6 +659,9 @@ const char *CommonTemplates::PrivateSetterOneofMessageDeclarationTemplate()
 const char *CommonTemplates::PrivateSetterOneofMessageDefinitionTemplate()
 {
     return "void $classname$::set$property_name_cap$_p($setter_type$ *$property_name$)\n{\n"
+           "    if (dptr->m_$optional_property_name$.holdsField($number$) &&\n"
+           "        dptr->m_$optional_property_name$.value<$setter_type$>() == $property_name$)\n"
+           "        return;\n"
            "    const $setter_type$ &value = *$property_name$;\n"
            "    if (!dptr->m_$optional_property_name$.isEqual(value, $number$)) {\n"
            "        dptr.detach();\n"
