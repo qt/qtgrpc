@@ -24,6 +24,11 @@ const QLatin1StringView protocGenQtprotobufKey(" --plugin=protoc-gen-qtprotobuf=
 const QLatin1StringView optKey(" --qtprotobuf_opt=");
 const QLatin1StringView outputKey(" --qtprotobuf_out=");
 const QLatin1StringView includeKey(" -I");
+#ifdef ALLOW_PROTO3_OPTIONAL
+const QLatin1StringView allow_proto3_optional(" --experimental_allow_proto3_optional");
+#else
+const QLatin1StringView allow_proto3_optional("");
+#endif // ALLOW_PROTO3_OPTIONAL
 #if defined(PROTOC_EXECUTABLE)
 const QLatin1StringView protocolBufferCompiler(XSTR(PROTOC_EXECUTABLE));
 #else
@@ -131,7 +136,6 @@ bool protocolCompilerAvailableToRun()
         protoc.kill();
         return false;
     }
-
     return protoc.exitStatus() == QProcess::NormalExit;
 }
 
@@ -412,7 +416,7 @@ void tst_qtprotobufgen::cmdLineGeneratedFile()
                          + optKey + generatingOption
                          + outputKey + m_commandLineGenerated + folder
                          + includeKey + m_protoFiles
-                         + " " + fileName + ".proto");
+                         + " " + fileName + ".proto" + allow_proto3_optional);
 
     QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
     if (!process.waitForFinished()) {
@@ -524,7 +528,7 @@ void tst_qtprotobufgen::cmdLineGeneratedNoOptions()
                          + protocGenQtprotobufKey + m_protobufgen
                          + outputKey + m_commandLineGenerated + folder
                          + includeKey + m_protoFiles
-                         + " " + fileName + ".proto");
+                         + " " + fileName + ".proto" + allow_proto3_optional);
 
     QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
     if (!process.waitForFinished()) {
