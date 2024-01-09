@@ -283,6 +283,15 @@ function(qt6_add_protobuf target)
         set(output_directory "${arg_OUTPUT_DIRECTORY}")
     endif()
 
+    if(TARGET ${target})
+        get_target_property(target_protos ${target} QT_PROTOBUF_PROTO_FILES)
+        if(NOT target_protos)
+            set(target_protos "")
+        endif()
+    else()
+        set(target_protos "")
+    endif()
+
     set(extra_include_directories "")
     set(cpp_sources "")
     set(idx 0)
@@ -300,6 +309,18 @@ function(qt6_add_protobuf target)
         else()
             set(package_full_path "")
         endif()
+
+        get_filename_component(proto_file_name "${f}" NAME)
+        foreach(proto_file_in_list IN LISTS target_protos)
+            if("${proto_file_in_list}" MATCHES "(^|/)${proto_file_name}($|;)")
+                message(FATAL_ERROR "The file name ${proto_file_name} is"
+                        " added more than once in the ${target}."
+                        " This is not supported by protoc."
+                        " Please, add a separate protobuf target to generate code from ${f}."
+                )
+            endif()
+        endforeach()
+        list(APPEND target_protos "${f}")
 
         get_filename_component(basename "${f}" NAME_WLE)
         list(APPEND cpp_sources
@@ -373,6 +394,8 @@ function(qt6_add_protobuf target)
     endif()
 
     set_target_properties(${target} PROPERTIES QT_PROTOBUF_PACKAGES "${existing_proto_packages}")
+
+    set_target_properties(${target} PROPERTIES QT_PROTOBUF_PROTO_FILES "${target_protos}")
 
     foreach(f ${proto_files})
         _qt_internal_expose_source_file_to_ide(${target} ${f})
