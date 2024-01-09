@@ -62,6 +62,14 @@ if(MINGW)
     target_compile_options(tst_qtprotobufgen_gen PRIVATE "-Wa,-mbig-obj")
 endif()
 
+get_target_property(protoc_version WrapProtoc::WrapProtoc _qt_internal_protobuf_version)
+if(protoc_version VERSION_GREATER_EQUAL "3.12" AND protoc_version VERSION_LESS "3.15")
+    qt_internal_extend_target(tst_qtprotobufgen
+        DEFINES
+            ALLOW_PROTO3_OPTIONAL
+    )
+endif()
+
 if(TARGET Qt6::Qml)
     qt_internal_extend_target(tst_qtprotobufgen
         DEFINES
