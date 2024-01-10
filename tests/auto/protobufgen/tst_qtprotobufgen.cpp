@@ -21,15 +21,10 @@ const QLatin1StringView protocGenQtprotobufKey(" --plugin=protoc-gen-qtprotobuf=
 const QLatin1StringView optKey(" --qtprotobuf_opt=");
 const QLatin1StringView outputKey(" --qtprotobuf_out=");
 const QLatin1StringView includeKey(" -I");
-#if defined(PROTOC_EXECUTABLE)
+#ifndef PROTOC_EXECUTABLE
+#  error PROTOC_EXECUTABLE definition must be set and point to the valid protoc executable
+#endif
 const QLatin1StringView protocolBufferCompiler(XSTR(PROTOC_EXECUTABLE));
-#else
-#if defined(Q_OS_WIN)
-const QLatin1StringView protocolBufferCompiler("protoc.exe");
-#else
-const QLatin1StringView protocolBufferCompiler("protoc");
-#endif
-#endif
 #if defined(Q_OS_WIN)
 const QLatin1StringView qtprotobufgen("/qtprotobufgen.exe");
 #else
