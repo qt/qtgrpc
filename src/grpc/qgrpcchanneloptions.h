@@ -19,6 +19,8 @@
 QT_BEGIN_NAMESPACE
 
 class QSslConfiguration;
+class QGrpcSerializationFormat;
+
 struct QGrpcChannelOptionsPrivate;
 
 class Q_GRPC_EXPORT QGrpcChannelOptions final
@@ -33,10 +35,12 @@ public:
     QGrpcChannelOptions &withHost(const QUrl &host);
     QGrpcChannelOptions &withDeadline(std::chrono::milliseconds deadline);
     QGrpcChannelOptions &withMetadata(const QGrpcMetadata &metadata);
+    QGrpcChannelOptions &withSerializationFormat(const QGrpcSerializationFormat &format);
 
     QUrl host() const;
     std::optional<std::chrono::milliseconds> deadline() const;
     const QGrpcMetadata &metadata() const;
+    const QGrpcSerializationFormat &serializationFormat() const;
 
 #if QT_CONFIG(ssl)
     QGrpcChannelOptions &withSslConfiguration(const QSslConfiguration &sslConfiguration);

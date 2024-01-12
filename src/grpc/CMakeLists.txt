@@ -17,6 +17,7 @@ qt_internal_add_module(Grpc
         qgrpcclientinterceptormanager.h qgrpcclientinterceptormanager_p.h qgrpcclientinterceptormanager.cpp
         qgrpcmetadata.h
         qtgrpcglobal.h qtgrpcglobal_p.h  qtgrpcglobal.cpp
+        qgrpcserializationformat.h qgrpcserializationformat.cpp
     GENERATE_CPP_EXPORTS
     LIBRARIES
         Qt::CorePrivate

@@ -4,6 +4,7 @@
 #include <qtgrpcglobal_p.h>
 
 #include "qgrpcchanneloptions.h"
+#include "qgrpcserializationformat.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -22,12 +23,16 @@ using namespace Qt::StringLiterals;
 struct QGrpcChannelOptionsPrivate
 {
 public:
-    QGrpcChannelOptionsPrivate(const QUrl &_host) : host(_host) { }
+    QGrpcChannelOptionsPrivate(const QUrl &_host)
+        : host(_host), serializationFormat(QGrpcSerializationFormat::Format::Default)
+    {
+    }
 
     QUrl host;
     std::optional<std::chrono::milliseconds> deadline;
     QGrpcMetadata metadata;
     std::optional<QStringList> credentialList;
+    QGrpcSerializationFormat serializationFormat;
 #if QT_CONFIG(ssl)
     std::optional<QSslConfiguration> sslConfiguration;
 #endif
@@ -95,6 +100,21 @@ QGrpcChannelOptions &QGrpcChannelOptions::withMetadata(const QGrpcMetadata &meta
 }
 
 /*!
+    \since 6.8
+    Sets the serialization \a format in the channel and returns updated
+    QGrpcChannelOptions object.
+
+    The serialization \a format should be considered in \l QAbstractGrpcChannel
+    implementations.
+*/
+QGrpcChannelOptions &
+QGrpcChannelOptions::withSerializationFormat(const QGrpcSerializationFormat &format)
+{
+    dPtr->serializationFormat = format;
+    return *this;
+}
+
+/*!
     Returns deadline value for setting up the channel.
 
     Deadline value controls the maximum execution time of any call or stream
@@ -123,6 +143,15 @@ QUrl QGrpcChannelOptions::host() const
 const QGrpcMetadata &QGrpcChannelOptions::metadata() const
 {
     return dPtr->metadata;
+}
+
+/*!
+    \since 6.8
+    Returns the serialization format used in \l QAbstractGrpcChannel implementations.
+ */
+const QGrpcSerializationFormat &QGrpcChannelOptions::serializationFormat() const
+{
+    return dPtr->serializationFormat;
 }
 
 #if QT_CONFIG(ssl)

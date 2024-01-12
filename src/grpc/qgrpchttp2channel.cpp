@@ -6,6 +6,7 @@
 
 #include "qabstractgrpcclient.h"
 #include "qgrpcchanneloperation.h"
+#include "qgrpcserializationformat.h"
 
 #include <QtCore/QMetaObject>
 #include <QtCore/QTimer>
@@ -51,6 +52,43 @@ using namespace Qt::StringLiterals;
     \l QGrpcCallOptions control channel parameters for the
     specific unary call or gRPC stream.
 
+    QGrpcHttp2Channel uses QGrpcChannelOptions to select the serialization
+    format for the protobuf messages. The serialization format can be set
+    either using the \c {content-type} metadata or by setting the
+    \l QGrpcChannelOptions::serializationFormat directly.
+
+    Using the following example you can create a QGrpcHttp2Channel with the
+    JSON serialization format using the \c {content-type} metadata:
+    \code
+        auto channelJson = std::make_shared<
+        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+                               .withMetadata({ { "content-type"_ba,
+                                                 "application/grpc+json"_ba } }));
+    \endcode
+
+    Also you can use own serializer and custom \c {content-type} as following:
+    \code
+        class DummySerializer : public QAbstractProtobufSerializer
+        {
+            ...
+        };
+        auto channel = std::make_shared<
+            QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+                               .withSerializationFormat({ "dummy",
+                                                          std::make_shared<DummySerializer>() }));
+    \endcode
+
+    QGrpcHttp2Channel will use the \c DummySerializer to serialize
+    and deserialize protobuf message and use the
+    \c { content-type: application/grpc+dummy } header when sending
+    HTTP/2 requests to server.
+
+    \l QGrpcChannelOptions::serializationFormat has higher priority and
+    if the \c {content-type} metadata suffix doesn't match the
+    \l QGrpcSerializationFormat::suffix of the specified
+    \l QGrpcChannelOptions::serializationFormat QGrpcHttp2Channel produces
+    warning.
+
     \sa QGrpcChannelOptions, QGrpcCallOptions, QSslConfiguration
 */
 
@@ -70,10 +108,7 @@ constexpr QByteArrayView GrpcAcceptEncodingHeader("grpc-accept-encoding");
 constexpr QByteArrayView GrpcStatusHeader("grpc-status");
 constexpr QByteArrayView GrpcStatusMessageHeader("grpc-message");
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
-
-static constexpr std::array<QByteArrayView, 3> KnownContentTypes{ "application/grpc",
-                                                                  "application/grpc+proto",
-                                                                  "application/grpc+json" };
+constexpr QByteArrayView DefaultContentType = "application/grpc";
 }
 
 class QGrpcSocketHandler;
@@ -86,6 +121,7 @@ struct QGrpcHttp2ChannelPrivate : public QObject
     void processOperation(std::shared_ptr<QGrpcChannelOperation> &&channelOperation);
 
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
+    QGrpcChannelOptions channelOptions;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcHttp2ChannelPrivate)
@@ -170,13 +206,12 @@ private:
     // with original https://github.com/grpc/grpc/blob/master/doc/statuscodes.md
     static std::unordered_map<quint32, QGrpcStatus::StatusCode> StatusCodeMap;
 
-    QGrpcChannelOptions m_channelOptions;
     std::unique_ptr<QIODevice> m_socket = nullptr;
     QHttp2Connection *m_connection = nullptr;
     std::vector<std::shared_ptr<QGrpcChannelOperation>> m_operations;
     QList<Http2Handler *> m_activeHandlers;
     bool m_isLocalSocket = false;
-    QByteArrayView m_contentType;
+    QByteArray m_contentType;
 };
 
 QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(QHttp2Stream *_stream)
@@ -261,7 +296,7 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::cancel()
 std::unordered_map<quint32, QGrpcStatus::StatusCode> QGrpcHttp2ChannelPrivate::StatusCodeMap;
 
 QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &options)
-    : m_channelOptions(options)
+    : channelOptions(options)
 {
     [[maybe_unused]] static bool statusCodeMapInitialized = []() -> bool {
         QGrpcHttp2ChannelPrivate::StatusCodeMap = {
@@ -302,26 +337,49 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &op
         return true;
     }();
 
-    if (auto it = m_channelOptions.metadata().find(ContentTypeHeader.toByteArray());
-        it != m_channelOptions.metadata().end()) {
-        if (it->second == "application/grpc+json") {
-            serializer = std::make_shared<QProtobufJsonSerializer>();
-            m_contentType = KnownContentTypes.at(JSON);
-        } else if (it->second == "application/grpc+proto" || it->second == "application/grpc") {
-            serializer = std::make_shared<QProtobufSerializer>();
-            m_contentType = KnownContentTypes.at(Protobuf);
+    const QByteArray formatSuffix = channelOptions.serializationFormat().suffix();
+    const QByteArray defaultContentType = DefaultContentType.toByteArray();
+    const QByteArray contentTypeFromOptions = !formatSuffix.isEmpty()
+        ? defaultContentType + '+' + formatSuffix
+        : defaultContentType;
+
+    bool warnAboutFormatConflict = !formatSuffix.isEmpty();
+    auto it = channelOptions.metadata().find(ContentTypeHeader.toByteArray());
+    if (it != channelOptions.metadata().end()) {
+        if (formatSuffix == "" && it->second != DefaultContentType) {
+            if (it->second == "application/grpc+json") {
+                channelOptions.withSerializationFormat({ QGrpcSerializationFormat::Format::Json });
+            } else if (it->second == "application/grpc+proto" || it->second == DefaultContentType) {
+                channelOptions
+                    .withSerializationFormat({ QGrpcSerializationFormat::Format::Protobuf });
+            } else {
+                qGrpcWarning() << "Cannot choose the serializer for " << ContentTypeHeader
+                               << it->second << ". Using protobuf format as the default one.";
+                channelOptions
+                    .withSerializationFormat({ QGrpcSerializationFormat::Format::Default });
+            }
+        } else if (it->second != contentTypeFromOptions) {
+            warnAboutFormatConflict = true;
         } else {
-            qGrpcWarning() << "Cannot choose the serializer for " << ContentTypeHeader << it->second
-                           << ". Using protobuf format as the default one.";
-            serializer = std::make_shared<QProtobufSerializer>();
-            m_contentType = KnownContentTypes.at(Default);
+            warnAboutFormatConflict = false;
         }
     } else {
-        serializer = std::make_shared<QProtobufSerializer>();
-        m_contentType = KnownContentTypes.at(Default);
+        warnAboutFormatConflict = false;
     }
 
-    QUrl url = m_channelOptions.host();
+    m_contentType = !channelOptions.serializationFormat().suffix().isEmpty()
+        ? defaultContentType + '+' + channelOptions.serializationFormat().suffix()
+        : defaultContentType;
+
+    if (warnAboutFormatConflict) {
+        qGrpcWarning()
+            << "Manually specified serialization format '%1' doesn't match the %2 header value "
+               "'%3'"_L1.arg(QString::fromLatin1(contentTypeFromOptions),
+                             QString::fromLatin1(ContentTypeHeader),
+                             QString::fromLatin1(it->second));
+    }
+
+    QUrl url = channelOptions.host();
     if (url.scheme() == "unix"_L1) {
         auto *localSocket = initSocket<QLocalSocket>();
         m_isLocalSocket = true;
@@ -541,12 +599,12 @@ void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperati
     QByteArray method{ channelOperation->method().data(), channelOperation->method().size() };
 
     HPack::HttpHeader requestHeaders = HPack::HttpHeader{
-        { AuthorityHeader.toByteArray(), m_channelOptions.host().host().toLatin1() },
+        { AuthorityHeader.toByteArray(), channelOptions.host().host().toLatin1() },
         { MethodHeader.toByteArray(), "POST"_ba },
         { PathHeader.toByteArray(), QByteArray('/' + service + '/' + method) },
         { SchemeHeader.toByteArray(),
-          m_isLocalSocket ? "http"_ba : m_channelOptions.host().scheme().toLatin1() },
-        { ContentTypeHeader.toByteArray(), m_contentType.toByteArray() },
+          m_isLocalSocket ? "http"_ba : channelOptions.host().scheme().toLatin1() },
+        { ContentTypeHeader.toByteArray(), m_contentType },
         { GrpcServiceNameHeader.toByteArray(), { service } },
         { GrpcAcceptEncodingHeader.toByteArray(), "identity,deflate,gzip"_ba },
         { AcceptEncodingHeader.toByteArray(), "identity,gzip"_ba },
@@ -566,7 +624,7 @@ void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperati
         }
     };
 
-    iterateMetadata(m_channelOptions.metadata());
+    iterateMetadata(channelOptions.metadata());
     iterateMetadata(channelOperation->options().metadata());
 
     if (!handler->stream->sendHEADERS(requestHeaders, false)) {
@@ -647,7 +705,7 @@ void QGrpcHttp2Channel::startBidirStream(std::shared_ptr<QGrpcChannelOperation> 
 */
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const
 {
-    return dPtr->serializer;
+    return dPtr->channelOptions.serializationFormat().serializer();
 }
 
 QT_END_NAMESPACE
