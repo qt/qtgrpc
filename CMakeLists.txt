@@ -11,6 +11,8 @@ project(QtGrpc
     LANGUAGES CXX C
 )
 
+set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS TRUE)
+
 find_package(Qt6 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS BuildInternals Core)
 # Try to find Qt6::qtprotobufgen and Qt6::qtgrpcgen targets from host tools
 # when cross-compiling.

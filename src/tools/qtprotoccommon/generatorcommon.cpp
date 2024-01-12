@@ -453,10 +453,21 @@ void common::iterateMessageFields(const Descriptor *message, const IterateMessag
 
 void common::iterateOneofFields(const Descriptor *message, const IterateOneofCallback &callback)
 {
-    int numFields = message->oneof_decl_count();
+    int numFields =
+#ifdef HAVE_REAL_ONEOF_DECL
+        message->real_oneof_decl_count();
+#else
+        message->oneof_decl_count();
+#endif
+
     for (int i = 0; i < numFields; ++i) {
-        const OneofDescriptor *field = message->oneof_decl(i);
-#ifdef HAVE_PROTOBUF_SYNC_PIPER
+        const OneofDescriptor *field =
+#ifdef HAVE_REAL_ONEOF_DECL
+            message->real_oneof_decl(i);
+#else
+            message->oneof_decl(i);
+#endif
+#if defined(HAVE_PROTOBUF_SYNC_PIPER) && !defined(HAVE_REAL_ONEOF_DECL)
         if (field->is_synthetic())
             continue;
 #endif
@@ -573,7 +584,7 @@ std::string common::qualifiedQmlName(const std::string &name)
 bool common::isOneofField(const FieldDescriptor *field)
 {
 #ifdef HAVE_PROTOBUF_SYNC_PIPER
-    return field->containing_oneof() != nullptr && !field->containing_oneof()->is_synthetic();
+    return field->real_containing_oneof() != nullptr;
 #else
     return field->containing_oneof() != nullptr;
 #endif
