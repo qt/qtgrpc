@@ -10,4 +10,9 @@
 #  define HAVE_PROTOBUF_SYNC_PIPER
 #endif
 
+#if GOOGLE_PROTOBUF_VERSION >= 4023000
+// Idicates that libprotoc has Descriptor::real_oneof_decl method
+#  define HAVE_REAL_ONEOF_DECL
+#endif
+
 #endif // QTPROTOCDEFS_H
