@@ -15,7 +15,7 @@ namespace {
 using namespace qtgrpc::tests;
 }
 
-class QtGrpcUnattachedChannelClientTest : public QObject
+class QGrpcHttp2ChannelTest : public QObject
 {
     Q_OBJECT
 private slots:
@@ -23,7 +23,7 @@ private slots:
     void AttachChannelThreadTest();
 };
 
-void QtGrpcUnattachedChannelClientTest::CheckMethodsGeneration()
+void QGrpcHttp2ChannelTest::CheckMethodsGeneration()
 {
     // Dummy compile time check of functions generation and interface compatibility
     TestService::Client client;
@@ -35,7 +35,7 @@ void QtGrpcUnattachedChannelClientTest::CheckMethodsGeneration()
 }
 
 
-void QtGrpcUnattachedChannelClientTest::AttachChannelThreadTest()
+void QGrpcHttp2ChannelTest::AttachChannelThreadTest()
 {
     std::shared_ptr<QGrpcHttp2Channel> channel;
     QGrpcChannelOptions channelOptions(QUrl("http://localhost:50051", QUrl::StrictMode));
@@ -61,6 +61,6 @@ void QtGrpcUnattachedChannelClientTest::AttachChannelThreadTest()
                                 "thread."));
 }
 
-QTEST_MAIN(QtGrpcUnattachedChannelClientTest)
+QTEST_MAIN(QGrpcHttp2ChannelTest)
 
-#include "tst_grpc_unattached_channel.moc"
+#include "tst_qgrpchttp2channel.moc"
