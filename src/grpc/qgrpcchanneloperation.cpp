@@ -14,6 +14,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \class QGrpcChannelOperation
     \inmodule QtGrpc
+    \since 6.7
     \brief The QGrpcChannelOperation class implements common logic to
            handle the gRPC communication from the channel side.
 */

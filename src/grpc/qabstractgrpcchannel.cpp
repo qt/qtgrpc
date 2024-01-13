@@ -36,6 +36,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \fn virtual void QAbstractGrpcChannel::call(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
+    \since 6.7
 
     This pure virtual function is called by public QAbstractGrpcChannel::call
     method when making unary gRPC call. The \a channelOperation is the
@@ -50,6 +51,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \fn virtual void QAbstractGrpcChannel::startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
+    \since 6.7
 
     This pure virtual function that the starts of the server-side stream. The
     \a channelOperation is the pointer to a channel side
@@ -63,6 +65,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \fn virtual void QAbstractGrpcChannel::startClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
+    \since 6.7
 
     This pure virtual function that the starts of the client-side stream. The
     \a channelOperation is the pointer to a channel side
@@ -76,6 +79,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \fn virtual void QAbstractGrpcChannel::startBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0
+    \since 6.7
 
     This pure virtual function that the starts of the bidirectional stream. The
     \a channelOperation is the pointer to a channel side
