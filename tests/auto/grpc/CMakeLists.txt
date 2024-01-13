@@ -7,4 +7,5 @@ add_compile_definitions(QT_GRPC_TEST_MESSAGE_LATENCY=${QT_INTERNAL_GRPC_TEST_MES
 if(TARGET WrapgRPC::WrapLibgRPC)
     add_subdirectory(client)
     add_subdirectory(server)
+    add_subdirectory(qgrpchttp2channel)
 endif()
