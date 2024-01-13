@@ -11,8 +11,6 @@
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
-#include <functional>
-
 QT_BEGIN_NAMESPACE
 
 class QAbstractGrpcClient;
