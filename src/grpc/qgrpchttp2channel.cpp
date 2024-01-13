@@ -30,13 +30,16 @@ using namespace Qt::StringLiterals;
     \brief The QGrpcHttp2Channel class is an HTTP/2 implementation of
     QAbstractGrpcChannel interface.
 
-    QGrpcHttp2Channel utilizes channel and call credentials.
-    Channel credential QGrpcHttp2Channel supports SslConfigCredential key.
-    When HTTPS is used, this key has to be explicitly specified and provide
-    QSslConfiguration and value. The QSslConfiguration provided will be used
-    to establish HTTP/2 secured connection. All keys passed as
-    QGrpcCallCredentials will be used as HTTP/2 headers with related
-    values assigned.
+    Uses \l QGrpcChannelOptions and \l QGrpcCallOptions
+    to control the HTTP/2 communication with the server.
+
+    Use \l QGrpcChannelOptions to set the SSL configuration,
+    application-specific HTTP/2 headers, and connection timeouts.
+
+    \l QGrpcCallOptions control channel parameters for the
+    specific unary call or gRPC stream.
+
+    \sa QGrpcChannelOptions, QGrpcCallOptions, QSslConfiguration
 */
 
 // This QNetworkReply::NetworkError -> QGrpcStatus::StatusCode mapping should be kept in sync
@@ -228,7 +231,7 @@ struct QGrpcHttp2ChannelPrivate
 };
 
 /*!
-    QGrpcHttp2Channel constructs QGrpcHttp2Channel with \a options.
+    Constructs QGrpcHttp2Channel with \a options.
 */
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QGrpcChannelOptions &options)
     : QAbstractGrpcChannel(), dPtr(std::make_unique<QGrpcHttp2ChannelPrivate>(options))
