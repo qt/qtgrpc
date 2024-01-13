@@ -13,6 +13,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \class QGrpcServerStream
     \inmodule QtGrpc
+    \since 6.7
 
     \brief The QGrpcServerStream class provides the interface to access the
     server-side gRPC stream functionality from gRPC client side.
@@ -41,6 +42,7 @@ QGrpcServerStream::~QGrpcServerStream() = default;
 /*!
     \class QGrpcClientStream
     \inmodule QtGrpc
+    \since 6.7
 
     \brief The QGrpcClientStream class provides the interface to access the
     client-side gRPC stream functionality from gRPC client side.
@@ -74,6 +76,7 @@ void QGrpcClientStream::sendMessage(const QByteArray &data)
 /*!
     \class QGrpcBidirStream
     \inmodule QtGrpc
+    \since 6.7
 
     \brief The QGrpcBidirStream class provides the interface to access the
     bidirectional gRPC stream functionality from gRPC client side.
