@@ -12,6 +12,7 @@ using namespace Qt::StringLiterals;
 /*!
     \class QGrpcChannelOptions
     \inmodule QtGrpc
+    \since 6.6
     \brief The QGrpcChannelOptions is an storage class used to set additional channel options.
 
     QGrpcChannelOptions provides a set of functions to set and access the channel and default call
