@@ -63,6 +63,17 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
     Indicates that a new channel is attached to the client.
 */
 
+/*!
+    \fn void QAbstractGrpcClient::errorOccurred(const QGrpcStatus &status);
+
+    Indicates that an error occurred during serialization.
+
+    This signal is emitted when an error with \a status occurs in the channel
+    or during serialization.
+
+    \sa QGrpcOperation::errorOccurred
+*/
+
 
 class QAbstractGrpcClientPrivate : public QObjectPrivate
 {
