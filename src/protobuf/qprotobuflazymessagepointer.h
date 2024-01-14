@@ -8,8 +8,6 @@
 #include <QtProtobuf/qtprotobufglobal.h>
 #include <QtProtobuf/qprotobufmessage.h>
 
-#include <type_traits>
-
 QT_BEGIN_NAMESPACE
 namespace QtProtobufPrivate {
 class QProtobufLazyMessagePointerBase
