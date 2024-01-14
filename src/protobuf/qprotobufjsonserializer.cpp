@@ -26,7 +26,6 @@ QT_BEGIN_NAMESPACE
     \brief The QProtobufJsonSerializer class is an interface that represents
            basic functions for serialization/deserialization of QProtobufMessage
            objects to JSON.
-    \reentrant
 
     The QProtobufJsonSerializer class registers serializers/deserializers for
     classes implementing a protobuf message, inheriting \l QProtobufMessage. These
