@@ -51,11 +51,15 @@ protected:
         return call(method, *argData, options);
     }
 
+#ifdef Q_QDOC
+    template <typename ParamType, typename StreamType>
+#else
     template <typename ParamType, typename StreamType,
               std::enable_if_t<std::is_same_v<StreamType, QGrpcServerStream>
                                        || std::is_same_v<StreamType, QGrpcClientStream>
                                        || std::is_same_v<StreamType, QGrpcBidirStream>,
                                bool> = true>
+#endif
     std::shared_ptr<StreamType> startStream(QLatin1StringView method, const QProtobufMessage &arg,
                                             const QGrpcCallOptions &options)
     {
