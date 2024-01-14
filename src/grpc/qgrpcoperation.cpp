@@ -50,6 +50,8 @@ using namespace Qt::StringLiterals;
 
     This signal is emitted when error with \a status occurs in channel
     or during serialization.
+
+    \sa QAbstractGrpcClient::errorOccurred
 */
 
 class QGrpcOperationPrivate : public QObjectPrivate
