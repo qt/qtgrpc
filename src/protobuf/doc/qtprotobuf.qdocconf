@@ -56,10 +56,11 @@ depends += qtdoc qtcore qtgui qtcmake qtgrpc qtwidgets qtqml
 {headerdirs,sourcedirs} += .. \
                            ../../protobufqttypes \
                            ../../wellknown
-sourcedirs += ../../tools/doc/src
+sourcedirs += ../../tools/doc/src \
+              ../../tools/qtprotobufgen/doc/src
 
 exampledirs +=  ../../../examples/protobuf \
-                ../../tools/doc/src/snippets
+                ../../tools/qtprotobufgen/doc/src/snippets
 
 imagedirs   += images \
     ../../../examples/protobuf/sensors/doc/images
