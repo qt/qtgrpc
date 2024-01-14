@@ -62,7 +62,7 @@ QT_BEGIN_NAMESPACE
     Invokes the continuation function with the given \a response and \a param parameter.
 */
 /*!
-    \fn template <typename T, std::enable_if_t<std::is_base_of_v<QGrpcOperation, T>, bool> = true> void QGrpcClientInterceptor::intercept(std::shared_ptr<QGrpcChannelOperation> operation,
+    \fn template <typename T> void QGrpcClientInterceptor::intercept(std::shared_ptr<QGrpcChannelOperation> operation,
         typename QGrpcInterceptorContinuation<T>::ReplyType response, QGrpcInterceptorContinuation<T> &continuation)
 
     Intercepts a Qt GRPC call or stream operation.

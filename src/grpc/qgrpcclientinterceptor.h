@@ -44,7 +44,11 @@ class Q_GRPC_EXPORT QGrpcClientInterceptor
 public:
     virtual ~QGrpcClientInterceptor();
 
+#ifdef Q_QDOC
+    template <typename T>
+#else
     template <typename T, std::enable_if_t<std::is_base_of_v<QGrpcOperation, T>, bool> = true>
+#endif
     void intercept(std::shared_ptr<QGrpcChannelOperation> operation,
                    typename QGrpcInterceptorContinuation<T>::ReplyType response,
                    QGrpcInterceptorContinuation<T> &continuation)
