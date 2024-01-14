@@ -31,6 +31,8 @@ public:
         return value;
     }
 
+    void read(QProtobufMessage *message) const;
+
     QGrpcMetadata metadata() const;
     QLatin1StringView method() const;
 

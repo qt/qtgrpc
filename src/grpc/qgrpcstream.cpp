@@ -65,6 +65,18 @@ QGrpcClientStream::QGrpcClientStream(std::shared_ptr<QGrpcChannelOperation> chan
 QGrpcClientStream::~QGrpcClientStream() = default;
 
 /*!
+    \since 6.8
+    Serializes \a message and sends it to the server.
+
+    \note This function has slower message serialization compared to its
+          template counterpart.
+*/
+void QGrpcClientStream::sendMessage(const QProtobufMessage *message)
+{
+    sendMessage(serializer()->serializeRawMessage(message));
+}
+
+/*!
     \internal
     Sends the serialized \a data to the server.
 */
@@ -105,6 +117,18 @@ QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channe
     Destroys the QGrpcBidirStream object.
 */
 QGrpcBidirStream::~QGrpcBidirStream() = default;
+
+/*!
+    \since 6.8
+    Serializes \a message and sends it to the server.
+
+    \note This function has slower message serialization compared to its
+          template counterpart.
+*/
+void QGrpcBidirStream::sendMessage(const QProtobufMessage *message)
+{
+    sendMessage(serializer()->serializeRawMessage(message));
+}
 
 /*!
     \internal

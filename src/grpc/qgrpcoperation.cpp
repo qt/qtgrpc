@@ -110,6 +110,29 @@ QByteArray QGrpcOperation::data() const
 }
 
 /*!
+    \since 6.8
+    Reads a message from a raw byte array stored in QGrpcOperation.
+
+    The function writes a deserialized value to \a message pointer.
+
+    If deserialization is not successful the \l QGrpcOperation::errorOccurred
+    signal is emitted.
+
+    \note This function has slower message deserialization compared to its
+          template counterpart.
+
+*/
+void QGrpcOperation::read(QProtobufMessage *message) const
+{
+    Q_ASSERT_X(message != nullptr, "QGrpcOperation::read",
+               "Can't read to nullptr QProtobufMessage");
+    if (auto ser = serializer(); ser) {
+        if (!ser->deserializeRawMessage(message, data()))
+            emit errorOccurred(deserializationError());
+    }
+}
+
+/*!
     Getter of the metadata received from the channel. For the HTTP2 channels it
     usually contains the HTTP headers received from the server.
 */

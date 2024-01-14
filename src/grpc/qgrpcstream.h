@@ -41,6 +41,8 @@ public:
         sendMessage(serializer()->serialize<T>(&message));
     }
 
+    void sendMessage(const QProtobufMessage *message);
+
 private:
     void sendMessage(const QByteArray &data);
 };
@@ -58,6 +60,8 @@ public:
     {
         sendMessage(serializer()->serialize<T>(&message));
     }
+
+    void sendMessage(const QProtobufMessage *message);
 
 Q_SIGNALS:
     void messageReceived();
