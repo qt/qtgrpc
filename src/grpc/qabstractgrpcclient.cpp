@@ -70,6 +70,18 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
     Uses \a options argument to set additional parameter for the call.
 */
 
+/*!
+    \fn void QAbstractGrpcClient::errorOccurred(const QGrpcStatus &status);
+
+    Indicates that an error occurred during serialization.
+
+    This signal is emitted when an error with \a status occurs in the channel
+    or during serialization.
+
+    \sa QGrpcOperation::errorOccurred
+*/
+
+
 class QAbstractGrpcClientPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QAbstractGrpcClient)
