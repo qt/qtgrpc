@@ -24,7 +24,7 @@ using namespace Qt::StringLiterals;
 */
 
 /*!
-    \fn template <typename T> T QGrpcOperation::read() const;
+    \fn template <typename T> T QGrpcOperation::read() const
 
     Reads message from raw byte array stored in QGrpcOperation.
 
