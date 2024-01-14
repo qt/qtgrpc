@@ -19,7 +19,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn template <typename T> T QGrpcOperation::read() const;
+    \fn template <typename T> T QGrpcOperation::read() const
 
     Reads message from raw byte array stored in QGrpcCallReply.
 
