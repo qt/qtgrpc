@@ -17,25 +17,29 @@ qhp.QtGrpc.indexTitle          = Qt GRPC
 qhp.QtGrpc.indexRoot           =
 
 qhp.QtGrpc.subprojects = qmltypes examples classes
+
 qhp.QtGrpc.subprojects.qmltypes.title = QML Types
 qhp.QtGrpc.subprojects.qmltypes.indexTitle = Qt GRPC QML Types
 qhp.QtGrpc.subprojects.qmltypes.selectors = qmlclass
 qhp.QtGrpc.subprojects.qmltypes.sortPages = true
+
 qhp.QtGrpc.subprojects.examples.title = Examples
 qhp.QtGrpc.subprojects.examples.indexTitle = Qt GRPC Examples
 qhp.QtGrpc.subprojects.examples.selectors = doc:example
+
 qhp.QtGrpc.subprojects.classes.title      = C++ Classes
 qhp.QtGrpc.subprojects.classes.indexTitle = Qt GRPC C++ Classes
 qhp.QtGrpc.subprojects.classes.selectors  = class doc:headerfile
 qhp.QtGrpc.subprojects.classes.sortPages  = true
 
-depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake
+depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake qtqml
 
 {headerdirs,sourcedirs}  += .. \
-                            ../../tools/doc/src
+                            ../../tools/doc/src \
+                            ../../tools/qtgrpcgen/doc/src
 
 
-exampledirs +=  ../../tools/doc/src/snippets \
+exampledirs +=  ../../tools/qtgrpcgen/doc/src/snippets \
                 ../../../examples/grpc
 
 imagedirs   += images \
@@ -49,6 +53,5 @@ manifestmeta.highlighted.names = "QtGrpc/Magic 8 Ball"
 
 tagfile                 = qtgrpc.tags
 
-# Fail the documentation build if there are more warnings than the limit
+# Enforce zero documentation warnings
 warninglimit = 0
-
