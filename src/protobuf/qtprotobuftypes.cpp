@@ -11,7 +11,6 @@
 #include <QtProtobuf/private/qtprotobuflogging_p.h>
 
 #include "qtprotobuftypes.h"
-#include "qprotobufobject.h"
 
 #include <limits>
 #include <mutex>
