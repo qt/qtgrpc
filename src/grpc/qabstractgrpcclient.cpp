@@ -56,6 +56,14 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
     QGrpcServerStream, QGrpcClientStream, and QGrpcBidirStream.
 */
 
+/*!
+    \fn void QAbstractGrpcClient::channelChanged()
+    \since 6.7
+
+    Indicates that a new channel is attached to the client.
+*/
+
+
 class QAbstractGrpcClientPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QAbstractGrpcClient)
@@ -175,9 +183,9 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
 }
 
 /*!
- * \brief channel is getter method.
- * \return pointer to currently attached channel.
- */
+    \since 6.7
+    Returns the channel attached to this client.
+*/
 const std::shared_ptr<QAbstractGrpcChannel> &QAbstractGrpcClient::channel()
 {
     Q_D(QAbstractGrpcClient);
