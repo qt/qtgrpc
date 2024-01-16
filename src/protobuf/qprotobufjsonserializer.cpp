@@ -30,7 +30,8 @@ QT_BEGIN_NAMESPACE
     The QProtobufJsonSerializer class registers serializers/deserializers for
     classes implementing a protobuf message, inheriting \l QProtobufMessage. These
     classes are generated automatically, based on a \c{.proto} file, using the CMake
-    function \l qt_add_protobuf or by running \l qtprotobufgen directly.
+    function \l qt_add_protobuf or by running
+    \l {The qtprotobufgen Tool} {qtprotobufgen} directly.
 */
 
 
