@@ -17,10 +17,6 @@ class QtProtobufMapTypesGenerationTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void initTestCase()
-    {
-        qRegisterProtobufTypes();
-    }
     void SInt32StringMapMessageTest();
     void StringStringMapMessageTest();
 
