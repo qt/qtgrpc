@@ -17,7 +17,8 @@ QT_BEGIN_NAMESPACE
     The QProtobufBaseSerializer class registers serializers/deserializers for
     classes implementing a protobuf message, inheriting \l QProtobufMessage. These
     classes are generated automatically, based on a \c{.proto} file, using the CMake
-    function \l qt_add_protobuf or by running \l qtprotobufgen directly.
+    function \l qt_add_protobuf or by running
+    \l {The qtprotobufgen Tool} {qtprotobufgen} directly.
 
     This class should be used as a base for specific serializers. The handlers
     property contains all message-specific serializers and should be used while
