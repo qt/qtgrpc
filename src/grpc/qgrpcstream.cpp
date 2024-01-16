@@ -51,7 +51,7 @@ QGrpcServerStream::~QGrpcServerStream() = default;
 /*!
     \fn template<typename T> void QGrpcClientStream::sendMessage(const T &message)
 
-    The function serializes and sends the \a message to the server.
+    Serializes \a message and sends it to the server.
 */
 
 QGrpcClientStream::QGrpcClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
@@ -103,7 +103,7 @@ void QGrpcClientStream::sendMessage(const QByteArray &data)
 /*!
     \fn template<typename T> void QGrpcBidirStream::sendMessage(const T &message)
 
-    The function serializes and sends the \a message to the server.
+    Serializes \a message and sends it to the server.
 */
 
 QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
