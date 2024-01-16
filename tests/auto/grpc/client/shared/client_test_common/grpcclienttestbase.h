@@ -38,7 +38,6 @@ protected:
 
 public slots:
     void initTestCase_data();
-    void initTestCase() { qRegisterProtobufTypes(); }
     void init();
 
 private:

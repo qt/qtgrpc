@@ -13,7 +13,7 @@ class QtProtobufTypesJsonSerializationTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void init() { qRegisterProtobufTypes(); m_serializer.reset(new QProtobufJsonSerializer); }
+    void init() { m_serializer.reset(new QProtobufJsonSerializer); }
 
     void BoolMessageSerializeTest_data();
     void BoolMessageSerializeTest();
