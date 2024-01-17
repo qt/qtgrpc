@@ -19,6 +19,7 @@ using QProtobufMessagePointer = std::unique_ptr<QProtobufMessage, QProtobufMessa
 
 namespace QtProtobufPrivate {
 struct QProtobufPropertyOrderingInfo;
+struct QProtobufPropertyOrdering;
 }
 
 class QProtobufMessagePrivate;
@@ -37,7 +38,9 @@ public:
     Q_PROTOBUF_EXPORT QList<QByteArray> unknownFieldData(qint32 field) const;
 
 protected:
-    Q_PROTOBUF_EXPORT explicit QProtobufMessage(const QMetaObject *metaObject);
+    Q_PROTOBUF_EXPORT explicit QProtobufMessage(const QMetaObject *metaObject,
+                                                const QtProtobufPrivate::QProtobufPropertyOrdering
+                                                    *ordering);
     Q_PROTOBUF_EXPORT ~QProtobufMessage();
     Q_PROTOBUF_EXPORT QProtobufMessage(const QProtobufMessage &other);
     Q_PROTOBUF_EXPORT QProtobufMessage &operator=(const QProtobufMessage &other);
@@ -47,6 +50,8 @@ protected:
         qt_ptr_swap(d_ptr, other.d_ptr);
         return *this;
     }
+
+    Q_PROTOBUF_EXPORT const QtProtobufPrivate::QProtobufPropertyOrdering *propertyOrdering() const;
 
     Q_PROTOBUF_EXPORT
     static bool isEqual(const QProtobufMessage &lhs, const QProtobufMessage &rhs) noexcept;

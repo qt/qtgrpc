@@ -70,7 +70,7 @@ void FieldIndexTest1Message::registerTypes()
 }
 
 FieldIndexTest1Message::FieldIndexTest1Message()
-    : QProtobufMessage(&FieldIndexTest1Message::staticMetaObject),
+    : QProtobufMessage(&FieldIndexTest1Message::staticMetaObject, &FieldIndexTest1Message::staticPropertyOrdering),
       dptr(new FieldIndexTest1Message_QtProtobufData)
 {
 }
@@ -186,7 +186,7 @@ void FieldIndexTest2Message::registerTypes()
 }
 
 FieldIndexTest2Message::FieldIndexTest2Message()
-    : QProtobufMessage(&FieldIndexTest2Message::staticMetaObject),
+    : QProtobufMessage(&FieldIndexTest2Message::staticMetaObject, &FieldIndexTest2Message::staticPropertyOrdering),
       dptr(new FieldIndexTest2Message_QtProtobufData)
 {
 }
@@ -302,7 +302,7 @@ void FieldIndexTest3Message::registerTypes()
 }
 
 FieldIndexTest3Message::FieldIndexTest3Message()
-    : QProtobufMessage(&FieldIndexTest3Message::staticMetaObject),
+    : QProtobufMessage(&FieldIndexTest3Message::staticMetaObject, &FieldIndexTest3Message::staticPropertyOrdering),
       dptr(new FieldIndexTest3Message_QtProtobufData)
 {
 }
@@ -418,7 +418,7 @@ void FieldIndexTest4Message::registerTypes()
 }
 
 FieldIndexTest4Message::FieldIndexTest4Message()
-    : QProtobufMessage(&FieldIndexTest4Message::staticMetaObject),
+    : QProtobufMessage(&FieldIndexTest4Message::staticMetaObject, &FieldIndexTest4Message::staticPropertyOrdering),
       dptr(new FieldIndexTest4Message_QtProtobufData)
 {
 }

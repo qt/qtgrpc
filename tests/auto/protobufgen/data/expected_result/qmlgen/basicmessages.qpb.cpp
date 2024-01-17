@@ -64,7 +64,7 @@ void EmptyMessage::registerTypes()
 }
 
 EmptyMessage::EmptyMessage()
-    : QProtobufMessage(&EmptyMessage::staticMetaObject),
+    : QProtobufMessage(&EmptyMessage::staticMetaObject, &EmptyMessage::staticPropertyOrdering),
       dptr(new EmptyMessage_QtProtobufData)
 {
 }
@@ -166,7 +166,7 @@ void SimpleBoolMessage::registerTypes()
 }
 
 SimpleBoolMessage::SimpleBoolMessage()
-    : QProtobufMessage(&SimpleBoolMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleBoolMessage::staticMetaObject, &SimpleBoolMessage::staticPropertyOrdering),
       dptr(new SimpleBoolMessage_QtProtobufData)
 {
 }
@@ -282,7 +282,7 @@ void SimpleIntMessage::registerTypes()
 }
 
 SimpleIntMessage::SimpleIntMessage()
-    : QProtobufMessage(&SimpleIntMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleIntMessage::staticMetaObject, &SimpleIntMessage::staticPropertyOrdering),
       dptr(new SimpleIntMessage_QtProtobufData)
 {
 }
@@ -398,7 +398,7 @@ void SimpleSIntMessage::registerTypes()
 }
 
 SimpleSIntMessage::SimpleSIntMessage()
-    : QProtobufMessage(&SimpleSIntMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSIntMessage::staticMetaObject, &SimpleSIntMessage::staticPropertyOrdering),
       dptr(new SimpleSIntMessage_QtProtobufData)
 {
 }
@@ -514,7 +514,7 @@ void SimpleUIntMessage::registerTypes()
 }
 
 SimpleUIntMessage::SimpleUIntMessage()
-    : QProtobufMessage(&SimpleUIntMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUIntMessage::staticMetaObject, &SimpleUIntMessage::staticPropertyOrdering),
       dptr(new SimpleUIntMessage_QtProtobufData)
 {
 }
@@ -630,7 +630,7 @@ void SimpleInt64Message::registerTypes()
 }
 
 SimpleInt64Message::SimpleInt64Message()
-    : QProtobufMessage(&SimpleInt64Message::staticMetaObject),
+    : QProtobufMessage(&SimpleInt64Message::staticMetaObject, &SimpleInt64Message::staticPropertyOrdering),
       dptr(new SimpleInt64Message_QtProtobufData)
 {
 }
@@ -746,7 +746,7 @@ void SimpleSInt64Message::registerTypes()
 }
 
 SimpleSInt64Message::SimpleSInt64Message()
-    : QProtobufMessage(&SimpleSInt64Message::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt64Message::staticMetaObject, &SimpleSInt64Message::staticPropertyOrdering),
       dptr(new SimpleSInt64Message_QtProtobufData)
 {
 }
@@ -862,7 +862,7 @@ void SimpleUInt64Message::registerTypes()
 }
 
 SimpleUInt64Message::SimpleUInt64Message()
-    : QProtobufMessage(&SimpleUInt64Message::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt64Message::staticMetaObject, &SimpleUInt64Message::staticPropertyOrdering),
       dptr(new SimpleUInt64Message_QtProtobufData)
 {
 }
@@ -977,7 +977,7 @@ void SimpleStringMessage::registerTypes()
 }
 
 SimpleStringMessage::SimpleStringMessage()
-    : QProtobufMessage(&SimpleStringMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleStringMessage::staticMetaObject, &SimpleStringMessage::staticPropertyOrdering),
       dptr(new SimpleStringMessage_QtProtobufData)
 {
 }
@@ -1093,7 +1093,7 @@ void SimpleFloatMessage::registerTypes()
 }
 
 SimpleFloatMessage::SimpleFloatMessage()
-    : QProtobufMessage(&SimpleFloatMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFloatMessage::staticMetaObject, &SimpleFloatMessage::staticPropertyOrdering),
       dptr(new SimpleFloatMessage_QtProtobufData)
 {
 }
@@ -1210,7 +1210,7 @@ void SimpleDoubleMessage::registerTypes()
 }
 
 SimpleDoubleMessage::SimpleDoubleMessage()
-    : QProtobufMessage(&SimpleDoubleMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleDoubleMessage::staticMetaObject, &SimpleDoubleMessage::staticPropertyOrdering),
       dptr(new SimpleDoubleMessage_QtProtobufData)
 {
 }
@@ -1326,7 +1326,7 @@ void SimpleBytesMessage::registerTypes()
 }
 
 SimpleBytesMessage::SimpleBytesMessage()
-    : QProtobufMessage(&SimpleBytesMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleBytesMessage::staticMetaObject, &SimpleBytesMessage::staticPropertyOrdering),
       dptr(new SimpleBytesMessage_QtProtobufData)
 {
 }
@@ -1442,7 +1442,7 @@ void SimpleFixedInt32Message::registerTypes()
 }
 
 SimpleFixedInt32Message::SimpleFixedInt32Message()
-    : QProtobufMessage(&SimpleFixedInt32Message::staticMetaObject),
+    : QProtobufMessage(&SimpleFixedInt32Message::staticMetaObject, &SimpleFixedInt32Message::staticPropertyOrdering),
       dptr(new SimpleFixedInt32Message_QtProtobufData)
 {
 }
@@ -1558,7 +1558,7 @@ void SimpleFixedInt64Message::registerTypes()
 }
 
 SimpleFixedInt64Message::SimpleFixedInt64Message()
-    : QProtobufMessage(&SimpleFixedInt64Message::staticMetaObject),
+    : QProtobufMessage(&SimpleFixedInt64Message::staticMetaObject, &SimpleFixedInt64Message::staticPropertyOrdering),
       dptr(new SimpleFixedInt64Message_QtProtobufData)
 {
 }
@@ -1673,7 +1673,7 @@ void SimpleSFixedInt32Message::registerTypes()
 }
 
 SimpleSFixedInt32Message::SimpleSFixedInt32Message()
-    : QProtobufMessage(&SimpleSFixedInt32Message::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixedInt32Message::staticMetaObject, &SimpleSFixedInt32Message::staticPropertyOrdering),
       dptr(new SimpleSFixedInt32Message_QtProtobufData)
 {
 }
@@ -1788,7 +1788,7 @@ void SimpleSFixedInt64Message::registerTypes()
 }
 
 SimpleSFixedInt64Message::SimpleSFixedInt64Message()
-    : QProtobufMessage(&SimpleSFixedInt64Message::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixedInt64Message::staticMetaObject, &SimpleSFixedInt64Message::staticPropertyOrdering),
       dptr(new SimpleSFixedInt64Message_QtProtobufData)
 {
 }
@@ -1913,7 +1913,7 @@ void ComplexMessage::registerTypes()
 }
 
 ComplexMessage::ComplexMessage()
-    : QProtobufMessage(&ComplexMessage::staticMetaObject),
+    : QProtobufMessage(&ComplexMessage::staticMetaObject, &ComplexMessage::staticPropertyOrdering),
       dptr(new ComplexMessage_QtProtobufData)
 {
 }

@@ -90,7 +90,7 @@ void SimpleEnumMessage::registerTypes()
 }
 
 SimpleEnumMessage::SimpleEnumMessage()
-    : QProtobufMessage(&SimpleEnumMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleEnumMessage::staticMetaObject, &SimpleEnumMessage::staticPropertyOrdering),
       dptr(new SimpleEnumMessage_QtProtobufData)
 {
 }
@@ -208,7 +208,7 @@ void RepeatedEnumMessage::registerTypes()
 }
 
 RepeatedEnumMessage::RepeatedEnumMessage()
-    : QProtobufMessage(&RepeatedEnumMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedEnumMessage::staticMetaObject, &RepeatedEnumMessage::staticPropertyOrdering),
       dptr(new RepeatedEnumMessage_QtProtobufData)
 {
 }
@@ -327,7 +327,7 @@ void NestedEnumHolder::registerTypes()
 }
 
 NestedEnumHolder::NestedEnumHolder()
-    : QProtobufMessage(&NestedEnumHolder::staticMetaObject),
+    : QProtobufMessage(&NestedEnumHolder::staticMetaObject, &NestedEnumHolder::staticPropertyOrdering),
       dptr(new NestedEnumHolder_QtProtobufData)
 {
 }
@@ -426,7 +426,7 @@ void NestedEnumHolderLevel2::registerTypes()
 }
 
 NestedEnumHolderLevel2::NestedEnumHolderLevel2()
-    : QProtobufMessage(&NestedEnumHolderLevel2::staticMetaObject),
+    : QProtobufMessage(&NestedEnumHolderLevel2::staticMetaObject, &NestedEnumHolderLevel2::staticPropertyOrdering),
       dptr(new NestedEnumHolderLevel2_QtProtobufData)
 {
 }
@@ -525,7 +525,7 @@ void NestedEnumHolderLevel1::registerTypes()
 }
 
 NestedEnumHolderLevel1::NestedEnumHolderLevel1()
-    : QProtobufMessage(&NestedEnumHolderLevel1::staticMetaObject),
+    : QProtobufMessage(&NestedEnumHolderLevel1::staticMetaObject, &NestedEnumHolderLevel1::staticPropertyOrdering),
       dptr(new NestedEnumHolderLevel1_QtProtobufData)
 {
 }
@@ -655,7 +655,7 @@ void NestedEnumMessage::registerTypes()
 }
 
 NestedEnumMessage::NestedEnumMessage()
-    : QProtobufMessage(&NestedEnumMessage::staticMetaObject),
+    : QProtobufMessage(&NestedEnumMessage::staticMetaObject, &NestedEnumMessage::staticPropertyOrdering),
       dptr(new NestedEnumMessage_QtProtobufData)
 {
 }
@@ -851,7 +851,7 @@ void MixedEnumUsageMessage::registerTypes()
 }
 
 MixedEnumUsageMessage::MixedEnumUsageMessage()
-    : QProtobufMessage(&MixedEnumUsageMessage::staticMetaObject),
+    : QProtobufMessage(&MixedEnumUsageMessage::staticMetaObject, &MixedEnumUsageMessage::staticPropertyOrdering),
       dptr(new MixedEnumUsageMessage_QtProtobufData)
 {
 }
@@ -1033,7 +1033,7 @@ void SimpleFileEnumMessage::registerTypes()
 }
 
 SimpleFileEnumMessage::SimpleFileEnumMessage()
-    : QProtobufMessage(&SimpleFileEnumMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFileEnumMessage::staticMetaObject, &SimpleFileEnumMessage::staticPropertyOrdering),
       dptr(new SimpleFileEnumMessage_QtProtobufData)
 {
 }
@@ -1175,7 +1175,7 @@ void StepChildEnumMessage::registerTypes()
 }
 
 StepChildEnumMessage::StepChildEnumMessage()
-    : QProtobufMessage(&StepChildEnumMessage::staticMetaObject),
+    : QProtobufMessage(&StepChildEnumMessage::staticMetaObject, &StepChildEnumMessage::staticPropertyOrdering),
       dptr(new StepChildEnumMessage_QtProtobufData)
 {
 }
@@ -1314,7 +1314,7 @@ void A::registerTypes()
 }
 
 A::A()
-    : QProtobufMessage(&A::staticMetaObject),
+    : QProtobufMessage(&A::staticMetaObject, &A::staticPropertyOrdering),
       dptr(new A_QtProtobufData)
 {
 }
@@ -1433,7 +1433,7 @@ void B::registerTypes()
 }
 
 B::B()
-    : QProtobufMessage(&B::staticMetaObject),
+    : QProtobufMessage(&B::staticMetaObject, &B::staticPropertyOrdering),
       dptr(new B_QtProtobufData)
 {
 }

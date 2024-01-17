@@ -70,7 +70,7 @@ void SimpleIntMessageExt::registerTypes()
 }
 
 SimpleIntMessageExt::SimpleIntMessageExt()
-    : QProtobufMessage(&SimpleIntMessageExt::staticMetaObject),
+    : QProtobufMessage(&SimpleIntMessageExt::staticMetaObject, &SimpleIntMessageExt::staticPropertyOrdering),
       dptr(new SimpleIntMessageExt_QtProtobufData)
 {
 }

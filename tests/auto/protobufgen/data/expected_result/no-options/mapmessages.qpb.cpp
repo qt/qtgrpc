@@ -71,7 +71,7 @@ void SimpleSInt32StringMapMessage::registerTypes()
 }
 
 SimpleSInt32StringMapMessage::SimpleSInt32StringMapMessage()
-    : QProtobufMessage(&SimpleSInt32StringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt32StringMapMessage::staticMetaObject, &SimpleSInt32StringMapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt32StringMapMessage_QtProtobufData)
 {
 }
@@ -194,7 +194,7 @@ void SimpleSInt64StringMapMessage::registerTypes()
 }
 
 SimpleSInt64StringMapMessage::SimpleSInt64StringMapMessage()
-    : QProtobufMessage(&SimpleSInt64StringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt64StringMapMessage::staticMetaObject, &SimpleSInt64StringMapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt64StringMapMessage_QtProtobufData)
 {
 }
@@ -317,7 +317,7 @@ void SimpleInt32StringMapMessage::registerTypes()
 }
 
 SimpleInt32StringMapMessage::SimpleInt32StringMapMessage()
-    : QProtobufMessage(&SimpleInt32StringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt32StringMapMessage::staticMetaObject, &SimpleInt32StringMapMessage::staticPropertyOrdering),
       dptr(new SimpleInt32StringMapMessage_QtProtobufData)
 {
 }
@@ -440,7 +440,7 @@ void SimpleInt64StringMapMessage::registerTypes()
 }
 
 SimpleInt64StringMapMessage::SimpleInt64StringMapMessage()
-    : QProtobufMessage(&SimpleInt64StringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt64StringMapMessage::staticMetaObject, &SimpleInt64StringMapMessage::staticPropertyOrdering),
       dptr(new SimpleInt64StringMapMessage_QtProtobufData)
 {
 }
@@ -563,7 +563,7 @@ void SimpleUInt32StringMapMessage::registerTypes()
 }
 
 SimpleUInt32StringMapMessage::SimpleUInt32StringMapMessage()
-    : QProtobufMessage(&SimpleUInt32StringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt32StringMapMessage::staticMetaObject, &SimpleUInt32StringMapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt32StringMapMessage_QtProtobufData)
 {
 }
@@ -686,7 +686,7 @@ void SimpleUInt64StringMapMessage::registerTypes()
 }
 
 SimpleUInt64StringMapMessage::SimpleUInt64StringMapMessage()
-    : QProtobufMessage(&SimpleUInt64StringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt64StringMapMessage::staticMetaObject, &SimpleUInt64StringMapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt64StringMapMessage_QtProtobufData)
 {
 }
@@ -809,7 +809,7 @@ void SimpleFixed32StringMapMessage::registerTypes()
 }
 
 SimpleFixed32StringMapMessage::SimpleFixed32StringMapMessage()
-    : QProtobufMessage(&SimpleFixed32StringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed32StringMapMessage::staticMetaObject, &SimpleFixed32StringMapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed32StringMapMessage_QtProtobufData)
 {
 }
@@ -932,7 +932,7 @@ void SimpleFixed64StringMapMessage::registerTypes()
 }
 
 SimpleFixed64StringMapMessage::SimpleFixed64StringMapMessage()
-    : QProtobufMessage(&SimpleFixed64StringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed64StringMapMessage::staticMetaObject, &SimpleFixed64StringMapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed64StringMapMessage_QtProtobufData)
 {
 }
@@ -1055,7 +1055,7 @@ void SimpleSFixed32StringMapMessage::registerTypes()
 }
 
 SimpleSFixed32StringMapMessage::SimpleSFixed32StringMapMessage()
-    : QProtobufMessage(&SimpleSFixed32StringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed32StringMapMessage::staticMetaObject, &SimpleSFixed32StringMapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed32StringMapMessage_QtProtobufData)
 {
 }
@@ -1178,7 +1178,7 @@ void SimpleSFixed64StringMapMessage::registerTypes()
 }
 
 SimpleSFixed64StringMapMessage::SimpleSFixed64StringMapMessage()
-    : QProtobufMessage(&SimpleSFixed64StringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed64StringMapMessage::staticMetaObject, &SimpleSFixed64StringMapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed64StringMapMessage_QtProtobufData)
 {
 }
@@ -1301,7 +1301,7 @@ void SimpleStringStringMapMessage::registerTypes()
 }
 
 SimpleStringStringMapMessage::SimpleStringStringMapMessage()
-    : QProtobufMessage(&SimpleStringStringMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleStringStringMapMessage::staticMetaObject, &SimpleStringStringMapMessage::staticPropertyOrdering),
       dptr(new SimpleStringStringMapMessage_QtProtobufData)
 {
 }
@@ -1424,7 +1424,7 @@ void SimpleSInt32SInt32MapMessage::registerTypes()
 }
 
 SimpleSInt32SInt32MapMessage::SimpleSInt32SInt32MapMessage()
-    : QProtobufMessage(&SimpleSInt32SInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt32SInt32MapMessage::staticMetaObject, &SimpleSInt32SInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt32SInt32MapMessage_QtProtobufData)
 {
 }
@@ -1547,7 +1547,7 @@ void SimpleSInt64SInt32MapMessage::registerTypes()
 }
 
 SimpleSInt64SInt32MapMessage::SimpleSInt64SInt32MapMessage()
-    : QProtobufMessage(&SimpleSInt64SInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt64SInt32MapMessage::staticMetaObject, &SimpleSInt64SInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt64SInt32MapMessage_QtProtobufData)
 {
 }
@@ -1670,7 +1670,7 @@ void SimpleInt32SInt32MapMessage::registerTypes()
 }
 
 SimpleInt32SInt32MapMessage::SimpleInt32SInt32MapMessage()
-    : QProtobufMessage(&SimpleInt32SInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt32SInt32MapMessage::staticMetaObject, &SimpleInt32SInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt32SInt32MapMessage_QtProtobufData)
 {
 }
@@ -1793,7 +1793,7 @@ void SimpleInt64SInt32MapMessage::registerTypes()
 }
 
 SimpleInt64SInt32MapMessage::SimpleInt64SInt32MapMessage()
-    : QProtobufMessage(&SimpleInt64SInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt64SInt32MapMessage::staticMetaObject, &SimpleInt64SInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt64SInt32MapMessage_QtProtobufData)
 {
 }
@@ -1916,7 +1916,7 @@ void SimpleUInt32SInt32MapMessage::registerTypes()
 }
 
 SimpleUInt32SInt32MapMessage::SimpleUInt32SInt32MapMessage()
-    : QProtobufMessage(&SimpleUInt32SInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt32SInt32MapMessage::staticMetaObject, &SimpleUInt32SInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt32SInt32MapMessage_QtProtobufData)
 {
 }
@@ -2039,7 +2039,7 @@ void SimpleUInt64SInt32MapMessage::registerTypes()
 }
 
 SimpleUInt64SInt32MapMessage::SimpleUInt64SInt32MapMessage()
-    : QProtobufMessage(&SimpleUInt64SInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt64SInt32MapMessage::staticMetaObject, &SimpleUInt64SInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt64SInt32MapMessage_QtProtobufData)
 {
 }
@@ -2162,7 +2162,7 @@ void SimpleFixed32SInt32MapMessage::registerTypes()
 }
 
 SimpleFixed32SInt32MapMessage::SimpleFixed32SInt32MapMessage()
-    : QProtobufMessage(&SimpleFixed32SInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed32SInt32MapMessage::staticMetaObject, &SimpleFixed32SInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed32SInt32MapMessage_QtProtobufData)
 {
 }
@@ -2285,7 +2285,7 @@ void SimpleFixed64SInt32MapMessage::registerTypes()
 }
 
 SimpleFixed64SInt32MapMessage::SimpleFixed64SInt32MapMessage()
-    : QProtobufMessage(&SimpleFixed64SInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed64SInt32MapMessage::staticMetaObject, &SimpleFixed64SInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed64SInt32MapMessage_QtProtobufData)
 {
 }
@@ -2408,7 +2408,7 @@ void SimpleSFixed32SInt32MapMessage::registerTypes()
 }
 
 SimpleSFixed32SInt32MapMessage::SimpleSFixed32SInt32MapMessage()
-    : QProtobufMessage(&SimpleSFixed32SInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed32SInt32MapMessage::staticMetaObject, &SimpleSFixed32SInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed32SInt32MapMessage_QtProtobufData)
 {
 }
@@ -2531,7 +2531,7 @@ void SimpleSFixed64SInt32MapMessage::registerTypes()
 }
 
 SimpleSFixed64SInt32MapMessage::SimpleSFixed64SInt32MapMessage()
-    : QProtobufMessage(&SimpleSFixed64SInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed64SInt32MapMessage::staticMetaObject, &SimpleSFixed64SInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed64SInt32MapMessage_QtProtobufData)
 {
 }
@@ -2654,7 +2654,7 @@ void SimpleStringSInt32MapMessage::registerTypes()
 }
 
 SimpleStringSInt32MapMessage::SimpleStringSInt32MapMessage()
-    : QProtobufMessage(&SimpleStringSInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleStringSInt32MapMessage::staticMetaObject, &SimpleStringSInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleStringSInt32MapMessage_QtProtobufData)
 {
 }
@@ -2777,7 +2777,7 @@ void SimpleSInt32SInt64MapMessage::registerTypes()
 }
 
 SimpleSInt32SInt64MapMessage::SimpleSInt32SInt64MapMessage()
-    : QProtobufMessage(&SimpleSInt32SInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt32SInt64MapMessage::staticMetaObject, &SimpleSInt32SInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt32SInt64MapMessage_QtProtobufData)
 {
 }
@@ -2900,7 +2900,7 @@ void SimpleSInt64SInt64MapMessage::registerTypes()
 }
 
 SimpleSInt64SInt64MapMessage::SimpleSInt64SInt64MapMessage()
-    : QProtobufMessage(&SimpleSInt64SInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt64SInt64MapMessage::staticMetaObject, &SimpleSInt64SInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt64SInt64MapMessage_QtProtobufData)
 {
 }
@@ -3023,7 +3023,7 @@ void SimpleInt32SInt64MapMessage::registerTypes()
 }
 
 SimpleInt32SInt64MapMessage::SimpleInt32SInt64MapMessage()
-    : QProtobufMessage(&SimpleInt32SInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt32SInt64MapMessage::staticMetaObject, &SimpleInt32SInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt32SInt64MapMessage_QtProtobufData)
 {
 }
@@ -3146,7 +3146,7 @@ void SimpleInt64SInt64MapMessage::registerTypes()
 }
 
 SimpleInt64SInt64MapMessage::SimpleInt64SInt64MapMessage()
-    : QProtobufMessage(&SimpleInt64SInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt64SInt64MapMessage::staticMetaObject, &SimpleInt64SInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt64SInt64MapMessage_QtProtobufData)
 {
 }
@@ -3269,7 +3269,7 @@ void SimpleUInt32SInt64MapMessage::registerTypes()
 }
 
 SimpleUInt32SInt64MapMessage::SimpleUInt32SInt64MapMessage()
-    : QProtobufMessage(&SimpleUInt32SInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt32SInt64MapMessage::staticMetaObject, &SimpleUInt32SInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt32SInt64MapMessage_QtProtobufData)
 {
 }
@@ -3392,7 +3392,7 @@ void SimpleUInt64SInt64MapMessage::registerTypes()
 }
 
 SimpleUInt64SInt64MapMessage::SimpleUInt64SInt64MapMessage()
-    : QProtobufMessage(&SimpleUInt64SInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt64SInt64MapMessage::staticMetaObject, &SimpleUInt64SInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt64SInt64MapMessage_QtProtobufData)
 {
 }
@@ -3515,7 +3515,7 @@ void SimpleFixed32SInt64MapMessage::registerTypes()
 }
 
 SimpleFixed32SInt64MapMessage::SimpleFixed32SInt64MapMessage()
-    : QProtobufMessage(&SimpleFixed32SInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed32SInt64MapMessage::staticMetaObject, &SimpleFixed32SInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed32SInt64MapMessage_QtProtobufData)
 {
 }
@@ -3638,7 +3638,7 @@ void SimpleFixed64SInt64MapMessage::registerTypes()
 }
 
 SimpleFixed64SInt64MapMessage::SimpleFixed64SInt64MapMessage()
-    : QProtobufMessage(&SimpleFixed64SInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed64SInt64MapMessage::staticMetaObject, &SimpleFixed64SInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed64SInt64MapMessage_QtProtobufData)
 {
 }
@@ -3761,7 +3761,7 @@ void SimpleSFixed32SInt64MapMessage::registerTypes()
 }
 
 SimpleSFixed32SInt64MapMessage::SimpleSFixed32SInt64MapMessage()
-    : QProtobufMessage(&SimpleSFixed32SInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed32SInt64MapMessage::staticMetaObject, &SimpleSFixed32SInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed32SInt64MapMessage_QtProtobufData)
 {
 }
@@ -3884,7 +3884,7 @@ void SimpleSFixed64SInt64MapMessage::registerTypes()
 }
 
 SimpleSFixed64SInt64MapMessage::SimpleSFixed64SInt64MapMessage()
-    : QProtobufMessage(&SimpleSFixed64SInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed64SInt64MapMessage::staticMetaObject, &SimpleSFixed64SInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed64SInt64MapMessage_QtProtobufData)
 {
 }
@@ -4007,7 +4007,7 @@ void SimpleStringSInt64MapMessage::registerTypes()
 }
 
 SimpleStringSInt64MapMessage::SimpleStringSInt64MapMessage()
-    : QProtobufMessage(&SimpleStringSInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleStringSInt64MapMessage::staticMetaObject, &SimpleStringSInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleStringSInt64MapMessage_QtProtobufData)
 {
 }
@@ -4130,7 +4130,7 @@ void SimpleSInt32UInt32MapMessage::registerTypes()
 }
 
 SimpleSInt32UInt32MapMessage::SimpleSInt32UInt32MapMessage()
-    : QProtobufMessage(&SimpleSInt32UInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt32UInt32MapMessage::staticMetaObject, &SimpleSInt32UInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt32UInt32MapMessage_QtProtobufData)
 {
 }
@@ -4253,7 +4253,7 @@ void SimpleSInt64UInt32MapMessage::registerTypes()
 }
 
 SimpleSInt64UInt32MapMessage::SimpleSInt64UInt32MapMessage()
-    : QProtobufMessage(&SimpleSInt64UInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt64UInt32MapMessage::staticMetaObject, &SimpleSInt64UInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt64UInt32MapMessage_QtProtobufData)
 {
 }
@@ -4376,7 +4376,7 @@ void SimpleInt32UInt32MapMessage::registerTypes()
 }
 
 SimpleInt32UInt32MapMessage::SimpleInt32UInt32MapMessage()
-    : QProtobufMessage(&SimpleInt32UInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt32UInt32MapMessage::staticMetaObject, &SimpleInt32UInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt32UInt32MapMessage_QtProtobufData)
 {
 }
@@ -4499,7 +4499,7 @@ void SimpleInt64UInt32MapMessage::registerTypes()
 }
 
 SimpleInt64UInt32MapMessage::SimpleInt64UInt32MapMessage()
-    : QProtobufMessage(&SimpleInt64UInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt64UInt32MapMessage::staticMetaObject, &SimpleInt64UInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt64UInt32MapMessage_QtProtobufData)
 {
 }
@@ -4622,7 +4622,7 @@ void SimpleUInt32UInt32MapMessage::registerTypes()
 }
 
 SimpleUInt32UInt32MapMessage::SimpleUInt32UInt32MapMessage()
-    : QProtobufMessage(&SimpleUInt32UInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt32UInt32MapMessage::staticMetaObject, &SimpleUInt32UInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt32UInt32MapMessage_QtProtobufData)
 {
 }
@@ -4745,7 +4745,7 @@ void SimpleUInt64UInt32MapMessage::registerTypes()
 }
 
 SimpleUInt64UInt32MapMessage::SimpleUInt64UInt32MapMessage()
-    : QProtobufMessage(&SimpleUInt64UInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt64UInt32MapMessage::staticMetaObject, &SimpleUInt64UInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt64UInt32MapMessage_QtProtobufData)
 {
 }
@@ -4868,7 +4868,7 @@ void SimpleFixed32UInt32MapMessage::registerTypes()
 }
 
 SimpleFixed32UInt32MapMessage::SimpleFixed32UInt32MapMessage()
-    : QProtobufMessage(&SimpleFixed32UInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed32UInt32MapMessage::staticMetaObject, &SimpleFixed32UInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed32UInt32MapMessage_QtProtobufData)
 {
 }
@@ -4991,7 +4991,7 @@ void SimpleFixed64UInt32MapMessage::registerTypes()
 }
 
 SimpleFixed64UInt32MapMessage::SimpleFixed64UInt32MapMessage()
-    : QProtobufMessage(&SimpleFixed64UInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed64UInt32MapMessage::staticMetaObject, &SimpleFixed64UInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed64UInt32MapMessage_QtProtobufData)
 {
 }
@@ -5114,7 +5114,7 @@ void SimpleSFixed32UInt32MapMessage::registerTypes()
 }
 
 SimpleSFixed32UInt32MapMessage::SimpleSFixed32UInt32MapMessage()
-    : QProtobufMessage(&SimpleSFixed32UInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed32UInt32MapMessage::staticMetaObject, &SimpleSFixed32UInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed32UInt32MapMessage_QtProtobufData)
 {
 }
@@ -5237,7 +5237,7 @@ void SimpleSFixed64UInt32MapMessage::registerTypes()
 }
 
 SimpleSFixed64UInt32MapMessage::SimpleSFixed64UInt32MapMessage()
-    : QProtobufMessage(&SimpleSFixed64UInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed64UInt32MapMessage::staticMetaObject, &SimpleSFixed64UInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed64UInt32MapMessage_QtProtobufData)
 {
 }
@@ -5360,7 +5360,7 @@ void SimpleStringUInt32MapMessage::registerTypes()
 }
 
 SimpleStringUInt32MapMessage::SimpleStringUInt32MapMessage()
-    : QProtobufMessage(&SimpleStringUInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleStringUInt32MapMessage::staticMetaObject, &SimpleStringUInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleStringUInt32MapMessage_QtProtobufData)
 {
 }
@@ -5483,7 +5483,7 @@ void SimpleSInt32UInt64MapMessage::registerTypes()
 }
 
 SimpleSInt32UInt64MapMessage::SimpleSInt32UInt64MapMessage()
-    : QProtobufMessage(&SimpleSInt32UInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt32UInt64MapMessage::staticMetaObject, &SimpleSInt32UInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt32UInt64MapMessage_QtProtobufData)
 {
 }
@@ -5606,7 +5606,7 @@ void SimpleSInt64UInt64MapMessage::registerTypes()
 }
 
 SimpleSInt64UInt64MapMessage::SimpleSInt64UInt64MapMessage()
-    : QProtobufMessage(&SimpleSInt64UInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt64UInt64MapMessage::staticMetaObject, &SimpleSInt64UInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt64UInt64MapMessage_QtProtobufData)
 {
 }
@@ -5729,7 +5729,7 @@ void SimpleInt32UInt64MapMessage::registerTypes()
 }
 
 SimpleInt32UInt64MapMessage::SimpleInt32UInt64MapMessage()
-    : QProtobufMessage(&SimpleInt32UInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt32UInt64MapMessage::staticMetaObject, &SimpleInt32UInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt32UInt64MapMessage_QtProtobufData)
 {
 }
@@ -5852,7 +5852,7 @@ void SimpleInt64UInt64MapMessage::registerTypes()
 }
 
 SimpleInt64UInt64MapMessage::SimpleInt64UInt64MapMessage()
-    : QProtobufMessage(&SimpleInt64UInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt64UInt64MapMessage::staticMetaObject, &SimpleInt64UInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt64UInt64MapMessage_QtProtobufData)
 {
 }
@@ -5975,7 +5975,7 @@ void SimpleUInt32UInt64MapMessage::registerTypes()
 }
 
 SimpleUInt32UInt64MapMessage::SimpleUInt32UInt64MapMessage()
-    : QProtobufMessage(&SimpleUInt32UInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt32UInt64MapMessage::staticMetaObject, &SimpleUInt32UInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt32UInt64MapMessage_QtProtobufData)
 {
 }
@@ -6098,7 +6098,7 @@ void SimpleUInt64UInt64MapMessage::registerTypes()
 }
 
 SimpleUInt64UInt64MapMessage::SimpleUInt64UInt64MapMessage()
-    : QProtobufMessage(&SimpleUInt64UInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt64UInt64MapMessage::staticMetaObject, &SimpleUInt64UInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt64UInt64MapMessage_QtProtobufData)
 {
 }
@@ -6221,7 +6221,7 @@ void SimpleFixed32UInt64MapMessage::registerTypes()
 }
 
 SimpleFixed32UInt64MapMessage::SimpleFixed32UInt64MapMessage()
-    : QProtobufMessage(&SimpleFixed32UInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed32UInt64MapMessage::staticMetaObject, &SimpleFixed32UInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed32UInt64MapMessage_QtProtobufData)
 {
 }
@@ -6344,7 +6344,7 @@ void SimpleFixed64UInt64MapMessage::registerTypes()
 }
 
 SimpleFixed64UInt64MapMessage::SimpleFixed64UInt64MapMessage()
-    : QProtobufMessage(&SimpleFixed64UInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed64UInt64MapMessage::staticMetaObject, &SimpleFixed64UInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed64UInt64MapMessage_QtProtobufData)
 {
 }
@@ -6467,7 +6467,7 @@ void SimpleSFixed32UInt64MapMessage::registerTypes()
 }
 
 SimpleSFixed32UInt64MapMessage::SimpleSFixed32UInt64MapMessage()
-    : QProtobufMessage(&SimpleSFixed32UInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed32UInt64MapMessage::staticMetaObject, &SimpleSFixed32UInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed32UInt64MapMessage_QtProtobufData)
 {
 }
@@ -6590,7 +6590,7 @@ void SimpleSFixed64UInt64MapMessage::registerTypes()
 }
 
 SimpleSFixed64UInt64MapMessage::SimpleSFixed64UInt64MapMessage()
-    : QProtobufMessage(&SimpleSFixed64UInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed64UInt64MapMessage::staticMetaObject, &SimpleSFixed64UInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed64UInt64MapMessage_QtProtobufData)
 {
 }
@@ -6713,7 +6713,7 @@ void SimpleStringUInt64MapMessage::registerTypes()
 }
 
 SimpleStringUInt64MapMessage::SimpleStringUInt64MapMessage()
-    : QProtobufMessage(&SimpleStringUInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleStringUInt64MapMessage::staticMetaObject, &SimpleStringUInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleStringUInt64MapMessage_QtProtobufData)
 {
 }
@@ -6836,7 +6836,7 @@ void SimpleSInt32Int32MapMessage::registerTypes()
 }
 
 SimpleSInt32Int32MapMessage::SimpleSInt32Int32MapMessage()
-    : QProtobufMessage(&SimpleSInt32Int32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt32Int32MapMessage::staticMetaObject, &SimpleSInt32Int32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt32Int32MapMessage_QtProtobufData)
 {
 }
@@ -6959,7 +6959,7 @@ void SimpleSInt64Int32MapMessage::registerTypes()
 }
 
 SimpleSInt64Int32MapMessage::SimpleSInt64Int32MapMessage()
-    : QProtobufMessage(&SimpleSInt64Int32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt64Int32MapMessage::staticMetaObject, &SimpleSInt64Int32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt64Int32MapMessage_QtProtobufData)
 {
 }
@@ -7082,7 +7082,7 @@ void SimpleInt32Int32MapMessage::registerTypes()
 }
 
 SimpleInt32Int32MapMessage::SimpleInt32Int32MapMessage()
-    : QProtobufMessage(&SimpleInt32Int32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt32Int32MapMessage::staticMetaObject, &SimpleInt32Int32MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt32Int32MapMessage_QtProtobufData)
 {
 }
@@ -7205,7 +7205,7 @@ void SimpleInt64Int32MapMessage::registerTypes()
 }
 
 SimpleInt64Int32MapMessage::SimpleInt64Int32MapMessage()
-    : QProtobufMessage(&SimpleInt64Int32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt64Int32MapMessage::staticMetaObject, &SimpleInt64Int32MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt64Int32MapMessage_QtProtobufData)
 {
 }
@@ -7328,7 +7328,7 @@ void SimpleUInt32Int32MapMessage::registerTypes()
 }
 
 SimpleUInt32Int32MapMessage::SimpleUInt32Int32MapMessage()
-    : QProtobufMessage(&SimpleUInt32Int32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt32Int32MapMessage::staticMetaObject, &SimpleUInt32Int32MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt32Int32MapMessage_QtProtobufData)
 {
 }
@@ -7451,7 +7451,7 @@ void SimpleUInt64Int32MapMessage::registerTypes()
 }
 
 SimpleUInt64Int32MapMessage::SimpleUInt64Int32MapMessage()
-    : QProtobufMessage(&SimpleUInt64Int32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt64Int32MapMessage::staticMetaObject, &SimpleUInt64Int32MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt64Int32MapMessage_QtProtobufData)
 {
 }
@@ -7574,7 +7574,7 @@ void SimpleFixed32Int32MapMessage::registerTypes()
 }
 
 SimpleFixed32Int32MapMessage::SimpleFixed32Int32MapMessage()
-    : QProtobufMessage(&SimpleFixed32Int32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed32Int32MapMessage::staticMetaObject, &SimpleFixed32Int32MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed32Int32MapMessage_QtProtobufData)
 {
 }
@@ -7697,7 +7697,7 @@ void SimpleFixed64Int32MapMessage::registerTypes()
 }
 
 SimpleFixed64Int32MapMessage::SimpleFixed64Int32MapMessage()
-    : QProtobufMessage(&SimpleFixed64Int32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed64Int32MapMessage::staticMetaObject, &SimpleFixed64Int32MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed64Int32MapMessage_QtProtobufData)
 {
 }
@@ -7820,7 +7820,7 @@ void SimpleSFixed32Int32MapMessage::registerTypes()
 }
 
 SimpleSFixed32Int32MapMessage::SimpleSFixed32Int32MapMessage()
-    : QProtobufMessage(&SimpleSFixed32Int32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed32Int32MapMessage::staticMetaObject, &SimpleSFixed32Int32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed32Int32MapMessage_QtProtobufData)
 {
 }
@@ -7943,7 +7943,7 @@ void SimpleSFixed64Int32MapMessage::registerTypes()
 }
 
 SimpleSFixed64Int32MapMessage::SimpleSFixed64Int32MapMessage()
-    : QProtobufMessage(&SimpleSFixed64Int32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed64Int32MapMessage::staticMetaObject, &SimpleSFixed64Int32MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed64Int32MapMessage_QtProtobufData)
 {
 }
@@ -8066,7 +8066,7 @@ void SimpleStringInt32MapMessage::registerTypes()
 }
 
 SimpleStringInt32MapMessage::SimpleStringInt32MapMessage()
-    : QProtobufMessage(&SimpleStringInt32MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleStringInt32MapMessage::staticMetaObject, &SimpleStringInt32MapMessage::staticPropertyOrdering),
       dptr(new SimpleStringInt32MapMessage_QtProtobufData)
 {
 }
@@ -8189,7 +8189,7 @@ void SimpleSInt32Int64MapMessage::registerTypes()
 }
 
 SimpleSInt32Int64MapMessage::SimpleSInt32Int64MapMessage()
-    : QProtobufMessage(&SimpleSInt32Int64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt32Int64MapMessage::staticMetaObject, &SimpleSInt32Int64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt32Int64MapMessage_QtProtobufData)
 {
 }
@@ -8312,7 +8312,7 @@ void SimpleSInt64Int64MapMessage::registerTypes()
 }
 
 SimpleSInt64Int64MapMessage::SimpleSInt64Int64MapMessage()
-    : QProtobufMessage(&SimpleSInt64Int64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt64Int64MapMessage::staticMetaObject, &SimpleSInt64Int64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt64Int64MapMessage_QtProtobufData)
 {
 }
@@ -8435,7 +8435,7 @@ void SimpleInt32Int64MapMessage::registerTypes()
 }
 
 SimpleInt32Int64MapMessage::SimpleInt32Int64MapMessage()
-    : QProtobufMessage(&SimpleInt32Int64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt32Int64MapMessage::staticMetaObject, &SimpleInt32Int64MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt32Int64MapMessage_QtProtobufData)
 {
 }
@@ -8558,7 +8558,7 @@ void SimpleInt64Int64MapMessage::registerTypes()
 }
 
 SimpleInt64Int64MapMessage::SimpleInt64Int64MapMessage()
-    : QProtobufMessage(&SimpleInt64Int64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt64Int64MapMessage::staticMetaObject, &SimpleInt64Int64MapMessage::staticPropertyOrdering),
       dptr(new SimpleInt64Int64MapMessage_QtProtobufData)
 {
 }
@@ -8681,7 +8681,7 @@ void SimpleUInt32Int64MapMessage::registerTypes()
 }
 
 SimpleUInt32Int64MapMessage::SimpleUInt32Int64MapMessage()
-    : QProtobufMessage(&SimpleUInt32Int64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt32Int64MapMessage::staticMetaObject, &SimpleUInt32Int64MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt32Int64MapMessage_QtProtobufData)
 {
 }
@@ -8804,7 +8804,7 @@ void SimpleUInt64Int64MapMessage::registerTypes()
 }
 
 SimpleUInt64Int64MapMessage::SimpleUInt64Int64MapMessage()
-    : QProtobufMessage(&SimpleUInt64Int64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt64Int64MapMessage::staticMetaObject, &SimpleUInt64Int64MapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt64Int64MapMessage_QtProtobufData)
 {
 }
@@ -8927,7 +8927,7 @@ void SimpleFixed32Int64MapMessage::registerTypes()
 }
 
 SimpleFixed32Int64MapMessage::SimpleFixed32Int64MapMessage()
-    : QProtobufMessage(&SimpleFixed32Int64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed32Int64MapMessage::staticMetaObject, &SimpleFixed32Int64MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed32Int64MapMessage_QtProtobufData)
 {
 }
@@ -9050,7 +9050,7 @@ void SimpleFixed64Int64MapMessage::registerTypes()
 }
 
 SimpleFixed64Int64MapMessage::SimpleFixed64Int64MapMessage()
-    : QProtobufMessage(&SimpleFixed64Int64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed64Int64MapMessage::staticMetaObject, &SimpleFixed64Int64MapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed64Int64MapMessage_QtProtobufData)
 {
 }
@@ -9173,7 +9173,7 @@ void SimpleSFixed32Int64MapMessage::registerTypes()
 }
 
 SimpleSFixed32Int64MapMessage::SimpleSFixed32Int64MapMessage()
-    : QProtobufMessage(&SimpleSFixed32Int64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed32Int64MapMessage::staticMetaObject, &SimpleSFixed32Int64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed32Int64MapMessage_QtProtobufData)
 {
 }
@@ -9296,7 +9296,7 @@ void SimpleSFixed64Int64MapMessage::registerTypes()
 }
 
 SimpleSFixed64Int64MapMessage::SimpleSFixed64Int64MapMessage()
-    : QProtobufMessage(&SimpleSFixed64Int64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed64Int64MapMessage::staticMetaObject, &SimpleSFixed64Int64MapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed64Int64MapMessage_QtProtobufData)
 {
 }
@@ -9419,7 +9419,7 @@ void SimpleStringInt64MapMessage::registerTypes()
 }
 
 SimpleStringInt64MapMessage::SimpleStringInt64MapMessage()
-    : QProtobufMessage(&SimpleStringInt64MapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleStringInt64MapMessage::staticMetaObject, &SimpleStringInt64MapMessage::staticPropertyOrdering),
       dptr(new SimpleStringInt64MapMessage_QtProtobufData)
 {
 }
@@ -9542,7 +9542,7 @@ void SimpleSInt32ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleSInt32ComplexMessageMapMessage::SimpleSInt32ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleSInt32ComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt32ComplexMessageMapMessage::staticMetaObject, &SimpleSInt32ComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt32ComplexMessageMapMessage_QtProtobufData)
 {
 }
@@ -9665,7 +9665,7 @@ void SimpleSInt64ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleSInt64ComplexMessageMapMessage::SimpleSInt64ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleSInt64ComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSInt64ComplexMessageMapMessage::staticMetaObject, &SimpleSInt64ComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleSInt64ComplexMessageMapMessage_QtProtobufData)
 {
 }
@@ -9788,7 +9788,7 @@ void SimpleInt32ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleInt32ComplexMessageMapMessage::SimpleInt32ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleInt32ComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt32ComplexMessageMapMessage::staticMetaObject, &SimpleInt32ComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleInt32ComplexMessageMapMessage_QtProtobufData)
 {
 }
@@ -9911,7 +9911,7 @@ void SimpleInt64ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleInt64ComplexMessageMapMessage::SimpleInt64ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleInt64ComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleInt64ComplexMessageMapMessage::staticMetaObject, &SimpleInt64ComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleInt64ComplexMessageMapMessage_QtProtobufData)
 {
 }
@@ -10034,7 +10034,7 @@ void SimpleUInt32ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleUInt32ComplexMessageMapMessage::SimpleUInt32ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleUInt32ComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt32ComplexMessageMapMessage::staticMetaObject, &SimpleUInt32ComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt32ComplexMessageMapMessage_QtProtobufData)
 {
 }
@@ -10157,7 +10157,7 @@ void SimpleUInt64ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleUInt64ComplexMessageMapMessage::SimpleUInt64ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleUInt64ComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleUInt64ComplexMessageMapMessage::staticMetaObject, &SimpleUInt64ComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleUInt64ComplexMessageMapMessage_QtProtobufData)
 {
 }
@@ -10280,7 +10280,7 @@ void SimpleFixed32ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleFixed32ComplexMessageMapMessage::SimpleFixed32ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleFixed32ComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed32ComplexMessageMapMessage::staticMetaObject, &SimpleFixed32ComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed32ComplexMessageMapMessage_QtProtobufData)
 {
 }
@@ -10403,7 +10403,7 @@ void SimpleFixed64ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleFixed64ComplexMessageMapMessage::SimpleFixed64ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleFixed64ComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleFixed64ComplexMessageMapMessage::staticMetaObject, &SimpleFixed64ComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleFixed64ComplexMessageMapMessage_QtProtobufData)
 {
 }
@@ -10526,7 +10526,7 @@ void SimpleSFixed32ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleSFixed32ComplexMessageMapMessage::SimpleSFixed32ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleSFixed32ComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed32ComplexMessageMapMessage::staticMetaObject, &SimpleSFixed32ComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed32ComplexMessageMapMessage_QtProtobufData)
 {
 }
@@ -10649,7 +10649,7 @@ void SimpleSFixed64ComplexMessageMapMessage::registerTypes()
 }
 
 SimpleSFixed64ComplexMessageMapMessage::SimpleSFixed64ComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleSFixed64ComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleSFixed64ComplexMessageMapMessage::staticMetaObject, &SimpleSFixed64ComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleSFixed64ComplexMessageMapMessage_QtProtobufData)
 {
 }
@@ -10772,7 +10772,7 @@ void SimpleStringComplexMessageMapMessage::registerTypes()
 }
 
 SimpleStringComplexMessageMapMessage::SimpleStringComplexMessageMapMessage()
-    : QProtobufMessage(&SimpleStringComplexMessageMapMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleStringComplexMessageMapMessage::staticMetaObject, &SimpleStringComplexMessageMapMessage::staticPropertyOrdering),
       dptr(new SimpleStringComplexMessageMapMessage_QtProtobufData)
 {
 }

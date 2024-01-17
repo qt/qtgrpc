@@ -69,7 +69,7 @@ void RepeatedStringMessage::registerTypes()
 }
 
 RepeatedStringMessage::RepeatedStringMessage()
-    : QProtobufMessage(&RepeatedStringMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedStringMessage::staticMetaObject, &RepeatedStringMessage::staticPropertyOrdering),
       dptr(new RepeatedStringMessage_QtProtobufData)
 {
 }
@@ -190,7 +190,7 @@ void RepeatedDoubleMessage::registerTypes()
 }
 
 RepeatedDoubleMessage::RepeatedDoubleMessage()
-    : QProtobufMessage(&RepeatedDoubleMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedDoubleMessage::staticMetaObject, &RepeatedDoubleMessage::staticPropertyOrdering),
       dptr(new RepeatedDoubleMessage_QtProtobufData)
 {
 }
@@ -311,7 +311,7 @@ void RepeatedBytesMessage::registerTypes()
 }
 
 RepeatedBytesMessage::RepeatedBytesMessage()
-    : QProtobufMessage(&RepeatedBytesMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedBytesMessage::staticMetaObject, &RepeatedBytesMessage::staticPropertyOrdering),
       dptr(new RepeatedBytesMessage_QtProtobufData)
 {
 }
@@ -432,7 +432,7 @@ void RepeatedFloatMessage::registerTypes()
 }
 
 RepeatedFloatMessage::RepeatedFloatMessage()
-    : QProtobufMessage(&RepeatedFloatMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedFloatMessage::staticMetaObject, &RepeatedFloatMessage::staticPropertyOrdering),
       dptr(new RepeatedFloatMessage_QtProtobufData)
 {
 }
@@ -553,7 +553,7 @@ void RepeatedComplexMessage::registerTypes()
 }
 
 RepeatedComplexMessage::RepeatedComplexMessage()
-    : QProtobufMessage(&RepeatedComplexMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedComplexMessage::staticMetaObject, &RepeatedComplexMessage::staticPropertyOrdering),
       dptr(new RepeatedComplexMessage_QtProtobufData)
 {
 }
@@ -674,7 +674,7 @@ void RepeatedSIntMessage::registerTypes()
 }
 
 RepeatedSIntMessage::RepeatedSIntMessage()
-    : QProtobufMessage(&RepeatedSIntMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedSIntMessage::staticMetaObject, &RepeatedSIntMessage::staticPropertyOrdering),
       dptr(new RepeatedSIntMessage_QtProtobufData)
 {
 }
@@ -795,7 +795,7 @@ void RepeatedIntMessage::registerTypes()
 }
 
 RepeatedIntMessage::RepeatedIntMessage()
-    : QProtobufMessage(&RepeatedIntMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedIntMessage::staticMetaObject, &RepeatedIntMessage::staticPropertyOrdering),
       dptr(new RepeatedIntMessage_QtProtobufData)
 {
 }
@@ -916,7 +916,7 @@ void RepeatedUIntMessage::registerTypes()
 }
 
 RepeatedUIntMessage::RepeatedUIntMessage()
-    : QProtobufMessage(&RepeatedUIntMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedUIntMessage::staticMetaObject, &RepeatedUIntMessage::staticPropertyOrdering),
       dptr(new RepeatedUIntMessage_QtProtobufData)
 {
 }
@@ -1037,7 +1037,7 @@ void RepeatedSInt64Message::registerTypes()
 }
 
 RepeatedSInt64Message::RepeatedSInt64Message()
-    : QProtobufMessage(&RepeatedSInt64Message::staticMetaObject),
+    : QProtobufMessage(&RepeatedSInt64Message::staticMetaObject, &RepeatedSInt64Message::staticPropertyOrdering),
       dptr(new RepeatedSInt64Message_QtProtobufData)
 {
 }
@@ -1158,7 +1158,7 @@ void RepeatedInt64Message::registerTypes()
 }
 
 RepeatedInt64Message::RepeatedInt64Message()
-    : QProtobufMessage(&RepeatedInt64Message::staticMetaObject),
+    : QProtobufMessage(&RepeatedInt64Message::staticMetaObject, &RepeatedInt64Message::staticPropertyOrdering),
       dptr(new RepeatedInt64Message_QtProtobufData)
 {
 }
@@ -1279,7 +1279,7 @@ void RepeatedUInt64Message::registerTypes()
 }
 
 RepeatedUInt64Message::RepeatedUInt64Message()
-    : QProtobufMessage(&RepeatedUInt64Message::staticMetaObject),
+    : QProtobufMessage(&RepeatedUInt64Message::staticMetaObject, &RepeatedUInt64Message::staticPropertyOrdering),
       dptr(new RepeatedUInt64Message_QtProtobufData)
 {
 }
@@ -1400,7 +1400,7 @@ void RepeatedFixedIntMessage::registerTypes()
 }
 
 RepeatedFixedIntMessage::RepeatedFixedIntMessage()
-    : QProtobufMessage(&RepeatedFixedIntMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedFixedIntMessage::staticMetaObject, &RepeatedFixedIntMessage::staticPropertyOrdering),
       dptr(new RepeatedFixedIntMessage_QtProtobufData)
 {
 }
@@ -1521,7 +1521,7 @@ void RepeatedSFixedIntMessage::registerTypes()
 }
 
 RepeatedSFixedIntMessage::RepeatedSFixedIntMessage()
-    : QProtobufMessage(&RepeatedSFixedIntMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedSFixedIntMessage::staticMetaObject, &RepeatedSFixedIntMessage::staticPropertyOrdering),
       dptr(new RepeatedSFixedIntMessage_QtProtobufData)
 {
 }
@@ -1642,7 +1642,7 @@ void RepeatedFixedInt64Message::registerTypes()
 }
 
 RepeatedFixedInt64Message::RepeatedFixedInt64Message()
-    : QProtobufMessage(&RepeatedFixedInt64Message::staticMetaObject),
+    : QProtobufMessage(&RepeatedFixedInt64Message::staticMetaObject, &RepeatedFixedInt64Message::staticPropertyOrdering),
       dptr(new RepeatedFixedInt64Message_QtProtobufData)
 {
 }
@@ -1763,7 +1763,7 @@ void RepeatedSFixedInt64Message::registerTypes()
 }
 
 RepeatedSFixedInt64Message::RepeatedSFixedInt64Message()
-    : QProtobufMessage(&RepeatedSFixedInt64Message::staticMetaObject),
+    : QProtobufMessage(&RepeatedSFixedInt64Message::staticMetaObject, &RepeatedSFixedInt64Message::staticPropertyOrdering),
       dptr(new RepeatedSFixedInt64Message_QtProtobufData)
 {
 }
@@ -1884,7 +1884,7 @@ void RepeatedBoolMessage::registerTypes()
 }
 
 RepeatedBoolMessage::RepeatedBoolMessage()
-    : QProtobufMessage(&RepeatedBoolMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedBoolMessage::staticMetaObject, &RepeatedBoolMessage::staticPropertyOrdering),
       dptr(new RepeatedBoolMessage_QtProtobufData)
 {
 }

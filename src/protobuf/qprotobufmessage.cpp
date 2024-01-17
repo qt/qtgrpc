@@ -33,10 +33,12 @@ static std::string nullTerminate(QLatin1StringView l1) noexcept
     Used from generated classes to construct the QProtobufMessage base class.
     Internally the \a metaObject is used to query QMetaProperty
 */
-QProtobufMessage::QProtobufMessage(const QMetaObject *metaObject)
+QProtobufMessage::QProtobufMessage(const QMetaObject *metaObject,
+                                   const QtProtobufPrivate::QProtobufPropertyOrdering *ordering)
     : d_ptr(new QProtobufMessagePrivate)
 {
     d_ptr->metaObject = metaObject;
+    d_ptr->ordering = ordering;
 }
 
 /*!
@@ -164,6 +166,16 @@ QProtobufMessage &QProtobufMessage::operator=(const QProtobufMessage &other)
 QProtobufMessage::~QProtobufMessage()
 {
     delete d_ptr;
+}
+
+/*!
+    \internal
+    \since 6.8
+    Returns the pointer to the property ordering of the derived protobuf message.
+*/
+const QtProtobufPrivate::QProtobufPropertyOrdering *QProtobufMessage::propertyOrdering() const
+{
+    return d_ptr->ordering;
 }
 
 /*!

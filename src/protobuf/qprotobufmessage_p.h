@@ -35,6 +35,7 @@ public:
     // QHash of form <field index, data>.
     QHash<qint32, QByteArrayList> unknownEntries;
     const QMetaObject *metaObject = nullptr;
+    const QtProtobufPrivate::QProtobufPropertyOrdering *ordering = nullptr;
 
     int getPropertyIndex(QAnyStringView propertyName) const;
     void storeUnknownEntry(QByteArrayView entry, int fieldNumber);

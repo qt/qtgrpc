@@ -14,14 +14,16 @@ class TestMetaType : public QProtobufMessage
     Q_GADGET
     Q_PROTOBUF_OBJECT
 public:
-    TestMetaType() : QProtobufMessage(&staticMetaObject) { }
+    TestMetaType() : QProtobufMessage(&staticMetaObject, &TestMetaType::staticPropertyOrdering) { }
     ~TestMetaType() { ++m_destroyed; }
     explicit TestMetaType(int value)
-        : QProtobufMessage(&TestMetaType::staticMetaObject), m_value(value)
+        : QProtobufMessage(&TestMetaType::staticMetaObject, &TestMetaType::staticPropertyOrdering),
+          m_value(value)
     {
     }
     TestMetaType(const TestMetaType &other)
-        : QProtobufMessage(&TestMetaType::staticMetaObject), m_value(other.m_value)
+        : QProtobufMessage(&TestMetaType::staticMetaObject, &TestMetaType::staticPropertyOrdering),
+          m_value(other.m_value)
     {
         ++m_copied;
     }

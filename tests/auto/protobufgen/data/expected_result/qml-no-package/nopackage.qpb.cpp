@@ -71,7 +71,7 @@ void EmptyMessage::registerTypes()
 }
 
 EmptyMessage::EmptyMessage()
-    : QProtobufMessage(&EmptyMessage::staticMetaObject),
+    : QProtobufMessage(&EmptyMessage::staticMetaObject, &EmptyMessage::staticPropertyOrdering),
       dptr(new EmptyMessage_QtProtobufData)
 {
 }
@@ -173,7 +173,7 @@ void SimpleIntMessage::registerTypes()
 }
 
 SimpleIntMessage::SimpleIntMessage()
-    : QProtobufMessage(&SimpleIntMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleIntMessage::staticMetaObject, &SimpleIntMessage::staticPropertyOrdering),
       dptr(new SimpleIntMessage_QtProtobufData)
 {
 }
@@ -291,7 +291,7 @@ void NoPackageExternalMessage::registerTypes()
 }
 
 NoPackageExternalMessage::NoPackageExternalMessage()
-    : QProtobufMessage(&NoPackageExternalMessage::staticMetaObject),
+    : QProtobufMessage(&NoPackageExternalMessage::staticMetaObject, &NoPackageExternalMessage::staticPropertyOrdering),
       dptr(new NoPackageExternalMessage_QtProtobufData)
 {
 }
@@ -436,7 +436,7 @@ void NoPackageMessage::registerTypes()
 }
 
 NoPackageMessage::NoPackageMessage()
-    : QProtobufMessage(&NoPackageMessage::staticMetaObject),
+    : QProtobufMessage(&NoPackageMessage::staticMetaObject, &NoPackageMessage::staticPropertyOrdering),
       dptr(new NoPackageMessage_QtProtobufData)
 {
 }

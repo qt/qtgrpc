@@ -74,7 +74,7 @@ void OneofSimpleMessage::registerTypes()
 }
 
 OneofSimpleMessage::OneofSimpleMessage()
-    : QProtobufMessage(&OneofSimpleMessage::staticMetaObject),
+    : QProtobufMessage(&OneofSimpleMessage::staticMetaObject, &OneofSimpleMessage::staticPropertyOrdering),
       dptr(new OneofSimpleMessage_QtProtobufData)
 {
 }
@@ -285,7 +285,7 @@ void OneofComplexMessage::registerTypes()
 }
 
 OneofComplexMessage::OneofComplexMessage()
-    : QProtobufMessage(&OneofComplexMessage::staticMetaObject),
+    : QProtobufMessage(&OneofComplexMessage::staticMetaObject, &OneofComplexMessage::staticPropertyOrdering),
       dptr(new OneofComplexMessage_QtProtobufData)
 {
 }

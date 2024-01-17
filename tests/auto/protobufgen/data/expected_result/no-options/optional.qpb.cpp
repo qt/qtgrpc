@@ -69,7 +69,7 @@ void TestStringMessage::registerTypes()
 }
 
 TestStringMessage::TestStringMessage()
-    : QProtobufMessage(&TestStringMessage::staticMetaObject),
+    : QProtobufMessage(&TestStringMessage::staticMetaObject, &TestStringMessage::staticPropertyOrdering),
       dptr(new TestStringMessage_QtProtobufData)
 {
 }
@@ -243,7 +243,7 @@ void OptionalMessage::registerTypes()
 }
 
 OptionalMessage::OptionalMessage()
-    : QProtobufMessage(&OptionalMessage::staticMetaObject),
+    : QProtobufMessage(&OptionalMessage::staticMetaObject, &OptionalMessage::staticPropertyOrdering),
       dptr(new OptionalMessage_QtProtobufData)
 {
 }

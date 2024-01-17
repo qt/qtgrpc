@@ -348,7 +348,8 @@ const char *CommonTemplates::EnumFieldTemplate()
 const char *CommonTemplates::ConstructorMessageDefinitionTemplate()
 {
     return "$classname$::$classname$()\n"
-           "    : QProtobufMessage(&$classname$::staticMetaObject),\n"
+           "    : QProtobufMessage(&$classname$::staticMetaObject,"
+           " &$classname$::staticPropertyOrdering),\n"
            "      dptr(new $dataclassname$)";
 }
 

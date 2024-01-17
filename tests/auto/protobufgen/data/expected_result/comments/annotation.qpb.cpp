@@ -70,7 +70,7 @@ void AnnotatedMessage1::registerTypes()
 }
 
 AnnotatedMessage1::AnnotatedMessage1()
-    : QProtobufMessage(&AnnotatedMessage1::staticMetaObject),
+    : QProtobufMessage(&AnnotatedMessage1::staticMetaObject, &AnnotatedMessage1::staticPropertyOrdering),
       dptr(new AnnotatedMessage1_QtProtobufData)
 {
 }
@@ -186,7 +186,7 @@ void AnnotatedMessage2::registerTypes()
 }
 
 AnnotatedMessage2::AnnotatedMessage2()
-    : QProtobufMessage(&AnnotatedMessage2::staticMetaObject),
+    : QProtobufMessage(&AnnotatedMessage2::staticMetaObject, &AnnotatedMessage2::staticPropertyOrdering),
       dptr(new AnnotatedMessage2_QtProtobufData)
 {
 }
@@ -302,7 +302,7 @@ void AnnotatedMessage3::registerTypes()
 }
 
 AnnotatedMessage3::AnnotatedMessage3()
-    : QProtobufMessage(&AnnotatedMessage3::staticMetaObject),
+    : QProtobufMessage(&AnnotatedMessage3::staticMetaObject, &AnnotatedMessage3::staticPropertyOrdering),
       dptr(new AnnotatedMessage3_QtProtobufData)
 {
 }
@@ -418,7 +418,7 @@ void AnnotatedMessage4::registerTypes()
 }
 
 AnnotatedMessage4::AnnotatedMessage4()
-    : QProtobufMessage(&AnnotatedMessage4::staticMetaObject),
+    : QProtobufMessage(&AnnotatedMessage4::staticMetaObject, &AnnotatedMessage4::staticPropertyOrdering),
       dptr(new AnnotatedMessage4_QtProtobufData)
 {
 }
@@ -534,7 +534,7 @@ void AnnotatedMessage5::registerTypes()
 }
 
 AnnotatedMessage5::AnnotatedMessage5()
-    : QProtobufMessage(&AnnotatedMessage5::staticMetaObject),
+    : QProtobufMessage(&AnnotatedMessage5::staticMetaObject, &AnnotatedMessage5::staticPropertyOrdering),
       dptr(new AnnotatedMessage5_QtProtobufData)
 {
 }
@@ -650,7 +650,7 @@ void AnnotatedMessage6::registerTypes()
 }
 
 AnnotatedMessage6::AnnotatedMessage6()
-    : QProtobufMessage(&AnnotatedMessage6::staticMetaObject),
+    : QProtobufMessage(&AnnotatedMessage6::staticMetaObject, &AnnotatedMessage6::staticPropertyOrdering),
       dptr(new AnnotatedMessage6_QtProtobufData)
 {
 }
@@ -766,7 +766,7 @@ void AnnotatedMessage7::registerTypes()
 }
 
 AnnotatedMessage7::AnnotatedMessage7()
-    : QProtobufMessage(&AnnotatedMessage7::staticMetaObject),
+    : QProtobufMessage(&AnnotatedMessage7::staticMetaObject, &AnnotatedMessage7::staticPropertyOrdering),
       dptr(new AnnotatedMessage7_QtProtobufData)
 {
 }
@@ -882,7 +882,7 @@ void AnnotatedMessage8::registerTypes()
 }
 
 AnnotatedMessage8::AnnotatedMessage8()
-    : QProtobufMessage(&AnnotatedMessage8::staticMetaObject),
+    : QProtobufMessage(&AnnotatedMessage8::staticMetaObject, &AnnotatedMessage8::staticPropertyOrdering),
       dptr(new AnnotatedMessage8_QtProtobufData)
 {
 }
@@ -998,7 +998,7 @@ void AnnotatedMessage9::registerTypes()
 }
 
 AnnotatedMessage9::AnnotatedMessage9()
-    : QProtobufMessage(&AnnotatedMessage9::staticMetaObject),
+    : QProtobufMessage(&AnnotatedMessage9::staticMetaObject, &AnnotatedMessage9::staticPropertyOrdering),
       dptr(new AnnotatedMessage9_QtProtobufData)
 {
 }

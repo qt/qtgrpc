@@ -69,7 +69,7 @@ void AnyMessage::registerTypes()
 }
 
 AnyMessage::AnyMessage()
-    : QProtobufMessage(&AnyMessage::staticMetaObject),
+    : QProtobufMessage(&AnyMessage::staticMetaObject, &AnyMessage::staticPropertyOrdering),
       dptr(new AnyMessage_QtProtobufData)
 {
 }
@@ -184,7 +184,7 @@ void RepeatedAnyMessage::registerTypes()
 }
 
 RepeatedAnyMessage::RepeatedAnyMessage()
-    : QProtobufMessage(&RepeatedAnyMessage::staticMetaObject),
+    : QProtobufMessage(&RepeatedAnyMessage::staticMetaObject, &RepeatedAnyMessage::staticPropertyOrdering),
       dptr(new RepeatedAnyMessage_QtProtobufData)
 {
 }
@@ -311,7 +311,7 @@ void TwoAnyMessage::registerTypes()
 }
 
 TwoAnyMessage::TwoAnyMessage()
-    : QProtobufMessage(&TwoAnyMessage::staticMetaObject),
+    : QProtobufMessage(&TwoAnyMessage::staticMetaObject, &TwoAnyMessage::staticPropertyOrdering),
       dptr(new TwoAnyMessage_QtProtobufData)
 {
 }
@@ -467,7 +467,7 @@ void Example::registerTypes()
 }
 
 Example::Example()
-    : QProtobufMessage(&Example::staticMetaObject),
+    : QProtobufMessage(&Example::staticMetaObject, &Example::staticPropertyOrdering),
       dptr(new Example_QtProtobufData)
 {
 }
@@ -639,7 +639,7 @@ void SimpleMessage::registerTypes()
 }
 
 SimpleMessage::SimpleMessage()
-    : QProtobufMessage(&SimpleMessage::staticMetaObject),
+    : QProtobufMessage(&SimpleMessage::staticMetaObject, &SimpleMessage::staticPropertyOrdering),
       dptr(new SimpleMessage_QtProtobufData)
 {
 }

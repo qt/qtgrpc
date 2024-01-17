@@ -106,7 +106,9 @@ void Any::registerTypes()
 /*!
     Constructs a defaulted, empty, instance of Any.
 */
-Any::Any() : QProtobufMessage(&Any::staticMetaObject), d_ptr(new AnyPrivate())
+Any::Any()
+    : QProtobufMessage(&Any::staticMetaObject, &google::protobuf::Any::staticPropertyOrdering),
+      d_ptr(new AnyPrivate())
 {
 }
 
