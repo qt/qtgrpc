@@ -16,5 +16,6 @@ static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarRepeatedNonPackedBoolMes
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarRepeatedNonPackedDoubleMessage(qRegisterProtobufType<RepeatedNonPackedDoubleMessage>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarRepeatedNonPackedFloatMessage(qRegisterProtobufType<RepeatedNonPackedFloatMessage>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarNonPackedIntMessageWithExtraMember(qRegisterProtobufType<NonPackedIntMessageWithExtraMember>);
+static bool RegisterRepeatednonpackedmessagesProtobufTypes = [](){ qRegisterProtobufTypes(); return true; }();
 } // namespace qtprotobufnamespace::tests
 

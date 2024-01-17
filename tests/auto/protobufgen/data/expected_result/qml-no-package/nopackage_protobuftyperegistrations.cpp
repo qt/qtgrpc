@@ -5,4 +5,5 @@ static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarEmptyMessage(qRegisterPr
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleIntMessage(qRegisterProtobufType<SimpleIntMessage>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarNoPackageExternalMessage(qRegisterProtobufType<NoPackageExternalMessage>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarNoPackageMessage(qRegisterProtobufType<NoPackageMessage>);
+static bool RegisterNopackageProtobufTypes = [](){ qRegisterProtobufTypes(); return true; }();
 

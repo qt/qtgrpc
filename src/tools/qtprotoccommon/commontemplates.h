@@ -179,6 +179,7 @@ public:
     static const char *QEnumNSTemplate();
     static const char *RegisterEnumSerializersTemplate();
     static const char *RegistrarTemplate();
+    static const char *ProtobufTypeRegistrarTemplate();
     static const char *RegistrarEnumTemplate();
     static const char *QmlRegisterTypeTemplate();
     static const char *QmlRegisterGlobalEnumTypeTemplate();

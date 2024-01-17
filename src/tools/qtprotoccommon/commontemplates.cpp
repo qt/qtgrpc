@@ -932,6 +932,11 @@ const char *CommonTemplates::RegistrarTemplate()
     return "static QtProtobuf::ProtoTypeRegistrar "
            "ProtoTypeRegistrar$classname$(qRegisterProtobufType<$classname$>);\n";
 }
+const char *CommonTemplates::ProtobufTypeRegistrarTemplate()
+{
+    return "static bool Register$proto_name$ProtobufTypes"
+           " = [](){ qRegisterProtobufTypes(); return true; }();\n";
+}
 const char *CommonTemplates::RegistrarEnumTemplate()
 {
     return "static QtProtobuf::ProtoTypeRegistrar "
