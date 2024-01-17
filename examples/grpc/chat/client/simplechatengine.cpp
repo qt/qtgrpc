@@ -23,10 +23,10 @@ SimpleChatEngine::SimpleChatEngine(QObject *parent)
       m_client(new qtgrpc::examples::chat::SimpleChat::Client),
       m_clipBoard(QGuiApplication::clipboard())
 {
-    qRegisterProtobufTypes();
-    if (m_clipBoard)
+    if (m_clipBoard) {
         QObject::connect(m_clipBoard, &QClipboard::dataChanged, this,
                          &SimpleChatEngine::clipBoardContentTypeChanged);
+    }
 }
 
 SimpleChatEngine::~SimpleChatEngine()

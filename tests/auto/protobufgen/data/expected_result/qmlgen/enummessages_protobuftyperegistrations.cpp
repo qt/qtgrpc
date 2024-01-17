@@ -17,5 +17,6 @@ static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleFileEnumMessage(qR
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarStepChildEnumMessage(qRegisterProtobufType<StepChildEnumMessage>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarA(qRegisterProtobufType<A>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarB(qRegisterProtobufType<B>);
+static bool RegisterEnummessagesProtobufTypes = [](){ qRegisterProtobufTypes(); return true; }();
 } // namespace qtprotobufnamespace::tests
 

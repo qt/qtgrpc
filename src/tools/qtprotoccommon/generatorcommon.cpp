@@ -241,7 +241,7 @@ TypeMap common::produceEnumTypeMap(const EnumDescriptor *type, const Descriptor 
     std::string namespaces = getFullNamespace(type, "::");
 
     std::string name = utils::capitalizeAsciiName(type->name());
-    // qml package should consist only from proto spackage
+    // qml package should consist only from proto package
     std::string qmlPackage = getFullNamespace(type, ".");
     if (qmlPackage.empty())
         qmlPackage = "QtProtobuf";
