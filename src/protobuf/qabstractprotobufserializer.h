@@ -36,7 +36,7 @@ public:
     {
         static_assert(QtProtobufPrivate::HasProtobufPropertyOrdering<T>,
                       "T must have the Q_PROTOBUF_OBJECT macro");
-        return doSerialize(message, T::propertyOrdering);
+        return doSerialize(message, T::staticPropertyOrdering);
     }
 
     template<typename T>
@@ -49,7 +49,7 @@ public:
         // Initialize default object first and make copy afterwards, it's necessary to set default
         // values of properties that was not stored in data.
         T newValue;
-        bool success = doDeserialize(&newValue, T::propertyOrdering, data);
+        bool success = doDeserialize(&newValue, T::staticPropertyOrdering, data);
         *object = newValue;
         return success;
     }

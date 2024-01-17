@@ -53,7 +53,7 @@ void registerQtTypeHandler()
 
                          std::optional<PType> object = do_convert(value.value<QType>());
                          if (object) {
-                             serializer->serializeObject(&(object.value()), PType::propertyOrdering,
+                             serializer->serializeObject(&(object.value()), PType::staticPropertyOrdering,
                                                          info);
                          } else {
                              warnTypeConversionError();
@@ -61,7 +61,7 @@ void registerQtTypeHandler()
                      },
                       [](const QProtobufBaseSerializer *serializer, QVariant &value) {
                           PType object;
-                          serializer->deserializeObject(&object, PType::propertyOrdering);
+                          serializer->deserializeObject(&object, PType::staticPropertyOrdering);
                           auto res = convert(object);
                           if constexpr (is_optional_v<decltype(res)>) {
                               if (!res)

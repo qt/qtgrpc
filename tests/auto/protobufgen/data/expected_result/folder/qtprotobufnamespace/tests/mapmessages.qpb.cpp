@@ -58,7 +58,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32StringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32StringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt32StringMapMessage_metadata.data
 };
 
@@ -181,7 +181,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64StringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64StringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt64StringMapMessage_metadata.data
 };
 
@@ -304,7 +304,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32StringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32StringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt32StringMapMessage_metadata.data
 };
 
@@ -427,7 +427,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64StringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64StringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt64StringMapMessage_metadata.data
 };
 
@@ -550,7 +550,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32StringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32StringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt32StringMapMessage_metadata.data
 };
 
@@ -673,7 +673,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64StringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64StringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt64StringMapMessage_metadata.data
 };
 
@@ -796,7 +796,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32StringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32StringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed32StringMapMessage_metadata.data
 };
 
@@ -919,7 +919,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64StringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64StringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed64StringMapMessage_metadata.data
 };
 
@@ -1042,7 +1042,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32StringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32StringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed32StringMapMessage_metadata.data
 };
 
@@ -1165,7 +1165,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64StringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64StringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed64StringMapMessage_metadata.data
 };
 
@@ -1288,7 +1288,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringStringMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringStringMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleStringStringMapMessage_metadata.data
 };
 
@@ -1411,7 +1411,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32SInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32SInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt32SInt32MapMessage_metadata.data
 };
 
@@ -1534,7 +1534,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64SInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64SInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt64SInt32MapMessage_metadata.data
 };
 
@@ -1657,7 +1657,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32SInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32SInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt32SInt32MapMessage_metadata.data
 };
 
@@ -1780,7 +1780,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64SInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64SInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt64SInt32MapMessage_metadata.data
 };
 
@@ -1903,7 +1903,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32SInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32SInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt32SInt32MapMessage_metadata.data
 };
 
@@ -2026,7 +2026,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64SInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64SInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt64SInt32MapMessage_metadata.data
 };
 
@@ -2149,7 +2149,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32SInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32SInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed32SInt32MapMessage_metadata.data
 };
 
@@ -2272,7 +2272,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64SInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64SInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed64SInt32MapMessage_metadata.data
 };
 
@@ -2395,7 +2395,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32SInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32SInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed32SInt32MapMessage_metadata.data
 };
 
@@ -2518,7 +2518,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64SInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64SInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed64SInt32MapMessage_metadata.data
 };
 
@@ -2641,7 +2641,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringSInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringSInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleStringSInt32MapMessage_metadata.data
 };
 
@@ -2764,7 +2764,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32SInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32SInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt32SInt64MapMessage_metadata.data
 };
 
@@ -2887,7 +2887,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64SInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64SInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt64SInt64MapMessage_metadata.data
 };
 
@@ -3010,7 +3010,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32SInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32SInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt32SInt64MapMessage_metadata.data
 };
 
@@ -3133,7 +3133,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64SInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64SInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt64SInt64MapMessage_metadata.data
 };
 
@@ -3256,7 +3256,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32SInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32SInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt32SInt64MapMessage_metadata.data
 };
 
@@ -3379,7 +3379,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64SInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64SInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt64SInt64MapMessage_metadata.data
 };
 
@@ -3502,7 +3502,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32SInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32SInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed32SInt64MapMessage_metadata.data
 };
 
@@ -3625,7 +3625,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64SInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64SInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed64SInt64MapMessage_metadata.data
 };
 
@@ -3748,7 +3748,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32SInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32SInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed32SInt64MapMessage_metadata.data
 };
 
@@ -3871,7 +3871,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64SInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64SInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed64SInt64MapMessage_metadata.data
 };
 
@@ -3994,7 +3994,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringSInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringSInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleStringSInt64MapMessage_metadata.data
 };
 
@@ -4117,7 +4117,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32UInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32UInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt32UInt32MapMessage_metadata.data
 };
 
@@ -4240,7 +4240,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64UInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64UInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt64UInt32MapMessage_metadata.data
 };
 
@@ -4363,7 +4363,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32UInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32UInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt32UInt32MapMessage_metadata.data
 };
 
@@ -4486,7 +4486,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64UInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64UInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt64UInt32MapMessage_metadata.data
 };
 
@@ -4609,7 +4609,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32UInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32UInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt32UInt32MapMessage_metadata.data
 };
 
@@ -4732,7 +4732,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64UInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64UInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt64UInt32MapMessage_metadata.data
 };
 
@@ -4855,7 +4855,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32UInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32UInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed32UInt32MapMessage_metadata.data
 };
 
@@ -4978,7 +4978,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64UInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64UInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed64UInt32MapMessage_metadata.data
 };
 
@@ -5101,7 +5101,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32UInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32UInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed32UInt32MapMessage_metadata.data
 };
 
@@ -5224,7 +5224,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64UInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64UInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed64UInt32MapMessage_metadata.data
 };
 
@@ -5347,7 +5347,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringUInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringUInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleStringUInt32MapMessage_metadata.data
 };
 
@@ -5470,7 +5470,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32UInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32UInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt32UInt64MapMessage_metadata.data
 };
 
@@ -5593,7 +5593,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64UInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64UInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt64UInt64MapMessage_metadata.data
 };
 
@@ -5716,7 +5716,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32UInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32UInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt32UInt64MapMessage_metadata.data
 };
 
@@ -5839,7 +5839,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64UInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64UInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt64UInt64MapMessage_metadata.data
 };
 
@@ -5962,7 +5962,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32UInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32UInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt32UInt64MapMessage_metadata.data
 };
 
@@ -6085,7 +6085,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64UInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64UInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt64UInt64MapMessage_metadata.data
 };
 
@@ -6208,7 +6208,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32UInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32UInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed32UInt64MapMessage_metadata.data
 };
 
@@ -6331,7 +6331,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64UInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64UInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed64UInt64MapMessage_metadata.data
 };
 
@@ -6454,7 +6454,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32UInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32UInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed32UInt64MapMessage_metadata.data
 };
 
@@ -6577,7 +6577,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64UInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64UInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed64UInt64MapMessage_metadata.data
 };
 
@@ -6700,7 +6700,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringUInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringUInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleStringUInt64MapMessage_metadata.data
 };
 
@@ -6823,7 +6823,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32Int32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32Int32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt32Int32MapMessage_metadata.data
 };
 
@@ -6946,7 +6946,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64Int32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64Int32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt64Int32MapMessage_metadata.data
 };
 
@@ -7069,7 +7069,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32Int32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32Int32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt32Int32MapMessage_metadata.data
 };
 
@@ -7192,7 +7192,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64Int32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64Int32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt64Int32MapMessage_metadata.data
 };
 
@@ -7315,7 +7315,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32Int32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32Int32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt32Int32MapMessage_metadata.data
 };
 
@@ -7438,7 +7438,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64Int32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64Int32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt64Int32MapMessage_metadata.data
 };
 
@@ -7561,7 +7561,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32Int32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32Int32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed32Int32MapMessage_metadata.data
 };
 
@@ -7684,7 +7684,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64Int32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64Int32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed64Int32MapMessage_metadata.data
 };
 
@@ -7807,7 +7807,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32Int32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32Int32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed32Int32MapMessage_metadata.data
 };
 
@@ -7930,7 +7930,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64Int32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64Int32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed64Int32MapMessage_metadata.data
 };
 
@@ -8053,7 +8053,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringInt32MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringInt32MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleStringInt32MapMessage_metadata.data
 };
 
@@ -8176,7 +8176,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32Int64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32Int64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt32Int64MapMessage_metadata.data
 };
 
@@ -8299,7 +8299,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64Int64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64Int64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt64Int64MapMessage_metadata.data
 };
 
@@ -8422,7 +8422,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32Int64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32Int64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt32Int64MapMessage_metadata.data
 };
 
@@ -8545,7 +8545,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64Int64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64Int64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt64Int64MapMessage_metadata.data
 };
 
@@ -8668,7 +8668,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32Int64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32Int64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt32Int64MapMessage_metadata.data
 };
 
@@ -8791,7 +8791,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64Int64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64Int64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt64Int64MapMessage_metadata.data
 };
 
@@ -8914,7 +8914,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32Int64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32Int64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed32Int64MapMessage_metadata.data
 };
 
@@ -9037,7 +9037,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64Int64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64Int64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed64Int64MapMessage_metadata.data
 };
 
@@ -9160,7 +9160,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32Int64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32Int64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed32Int64MapMessage_metadata.data
 };
 
@@ -9283,7 +9283,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64Int64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64Int64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed64Int64MapMessage_metadata.data
 };
 
@@ -9406,7 +9406,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringInt64MapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringInt64MapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleStringInt64MapMessage_metadata.data
 };
 
@@ -9529,7 +9529,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32ComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt32ComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt32ComplexMessageMapMessage_metadata.data
 };
 
@@ -9652,7 +9652,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64ComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSInt64ComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSInt64ComplexMessageMapMessage_metadata.data
 };
 
@@ -9775,7 +9775,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32ComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt32ComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt32ComplexMessageMapMessage_metadata.data
 };
 
@@ -9898,7 +9898,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64ComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleInt64ComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleInt64ComplexMessageMapMessage_metadata.data
 };
 
@@ -10021,7 +10021,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32ComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt32ComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt32ComplexMessageMapMessage_metadata.data
 };
 
@@ -10144,7 +10144,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64ComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleUInt64ComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleUInt64ComplexMessageMapMessage_metadata.data
 };
 
@@ -10267,7 +10267,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32ComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed32ComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed32ComplexMessageMapMessage_metadata.data
 };
 
@@ -10390,7 +10390,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64ComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFixed64ComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFixed64ComplexMessageMapMessage_metadata.data
 };
 
@@ -10513,7 +10513,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32ComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed32ComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed32ComplexMessageMapMessage_metadata.data
 };
 
@@ -10636,7 +10636,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64ComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleSFixed64ComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleSFixed64ComplexMessageMapMessage_metadata.data
 };
 
@@ -10759,7 +10759,7 @@ static constexpr struct {
     "mapField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringComplexMessageMapMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringComplexMessageMapMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleStringComplexMessageMapMessage_metadata.data
 };
 

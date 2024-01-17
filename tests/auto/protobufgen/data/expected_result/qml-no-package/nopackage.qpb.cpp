@@ -60,7 +60,7 @@ static constexpr struct {
     ""
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering EmptyMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering EmptyMessage::staticPropertyOrdering = {
     &qt_protobuf_EmptyMessage_metadata.data
 };
 
@@ -162,7 +162,7 @@ static constexpr struct {
     "testFieldInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleIntMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleIntMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleIntMessage_metadata.data
 };
 
@@ -280,7 +280,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering NoPackageExternalMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering NoPackageExternalMessage::staticPropertyOrdering = {
     &qt_protobuf_NoPackageExternalMessage_metadata.data
 };
 
@@ -425,7 +425,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering NoPackageMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering NoPackageMessage::staticPropertyOrdering = {
     &qt_protobuf_NoPackageMessage_metadata.data
 };
 

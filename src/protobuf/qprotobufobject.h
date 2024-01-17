@@ -28,7 +28,7 @@
 
 #define Q_PROTOBUF_OBJECT\
     public:\
-        static const QtProtobufPrivate::QProtobufPropertyOrdering propertyOrdering;\
+        static const QtProtobufPrivate::QProtobufPropertyOrdering staticPropertyOrdering;\
     private:
 
 #endif // QPROTOBUFOBJECT_H

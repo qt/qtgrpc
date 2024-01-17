@@ -29,7 +29,7 @@ static constexpr struct {
     ""
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering EmptyMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering EmptyMessage::staticPropertyOrdering = {
     &qt_protobuf_EmptyMessage_metadata.data
 };
 
@@ -83,7 +83,7 @@ static constexpr struct {
     "testFieldString\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleStringMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleStringMessage_metadata.data
 };
 
@@ -166,7 +166,7 @@ static constexpr struct {
     "testFieldInt\0testComplexField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering ComplexMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering ComplexMessage::staticPropertyOrdering = {
     &qt_protobuf_ComplexMessage_metadata.data
 };
 

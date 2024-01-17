@@ -58,7 +58,7 @@ static constexpr struct {
     "field\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering AnyMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering AnyMessage::staticPropertyOrdering = {
     &qt_protobuf_AnyMessage_metadata.data
 };
 
@@ -173,7 +173,7 @@ static constexpr struct {
     "anys\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedAnyMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedAnyMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedAnyMessage_metadata.data
 };
 
@@ -300,7 +300,7 @@ static constexpr struct {
     "one\0two\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering TwoAnyMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering TwoAnyMessage::staticPropertyOrdering = {
     &qt_protobuf_TwoAnyMessage_metadata.data
 };
 
@@ -456,7 +456,7 @@ static constexpr struct {
     "str\0i\0j\0h\0str2\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering Example::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering Example::staticPropertyOrdering = {
     &qt_protobuf_Example_metadata.data
 };
 
@@ -628,7 +628,7 @@ static constexpr struct {
     "i\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleMessage_metadata.data
 };
 

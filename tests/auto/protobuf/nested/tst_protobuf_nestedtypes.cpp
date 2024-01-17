@@ -110,9 +110,9 @@ void QtProtobufNestedTest::SimpleTest()
              level2);
     QCOMPARE(test2.nested2(), level2);
 
-    QCOMPARE(test.propertyOrdering.getMessageFullName(),
+    QCOMPARE(test.staticPropertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.nested.NestedFieldMessage");
-    QCOMPARE(nestedMsg.propertyOrdering.getMessageFullName(),
+    QCOMPARE(nestedMsg.staticPropertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.nested.NestedFieldMessage.NestedMessage");
 }
 
@@ -223,7 +223,7 @@ void QtProtobufNestedTest::NeighborTest()
              level2);
     QCOMPARE(test.neighborNested2(), level2);
 
-    QCOMPARE(level2.propertyOrdering.getMessageFullName(),
+    QCOMPARE(level2.staticPropertyOrdering.getMessageFullName(),
              "qtprotobufnamespace.tests.nested.NestedFieldMessage2.NestedMessageLevel1."
              "NestedMessageLevel2");
 }

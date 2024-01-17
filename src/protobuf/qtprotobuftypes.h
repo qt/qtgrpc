@@ -84,7 +84,7 @@ template<typename T, typename = void>
 [[maybe_unused]] static constexpr bool HasProtobufPropertyOrdering = false;
 template<typename T>
 [[maybe_unused]] static constexpr bool
-        HasProtobufPropertyOrdering<T, sfinae<decltype(T::propertyOrdering)>> = true;
+        HasProtobufPropertyOrdering<T, sfinae<decltype(T::staticPropertyOrdering)>> = true;
 } // namespace QtProtobufPrivate
 
 namespace QtProtobuf {

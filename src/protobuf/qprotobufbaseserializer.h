@@ -81,7 +81,7 @@ void serializeObject(const QProtobufBaseSerializer *serializer, const QVariant &
                      const QProtobufPropertyOrderingInfo &fieldInfo)
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
-    serializer->serializeObject(value.value<T *>(), T::propertyOrdering, fieldInfo);
+    serializer->serializeObject(value.value<T *>(), T::staticPropertyOrdering, fieldInfo);
 }
 
 /*!
@@ -95,7 +95,7 @@ void serializeList(const QProtobufBaseSerializer *serializer, const QVariant &li
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     for (const auto &value : listValue.value<QList<V>>()) {
-        serializer->serializeListObject(&value, V::propertyOrdering, fieldInfo);
+        serializer->serializeListObject(&value, V::staticPropertyOrdering, fieldInfo);
     }
 }
 
@@ -181,7 +181,7 @@ void deserializeObject(const QProtobufBaseSerializer *serializer, QVariant &to)
         value = new T;
         to = QVariant::fromValue<T *>(value);
     }
-    serializer->deserializeObject(value, T::propertyOrdering);
+    serializer->deserializeObject(value, T::staticPropertyOrdering);
 }
 
 /*!
@@ -195,7 +195,7 @@ void deserializeList(const QProtobufBaseSerializer *serializer, QVariant &previo
     Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
 
     V newValue;
-    serializer->deserializeListObject(&newValue, V::propertyOrdering);
+    serializer->deserializeListObject(&newValue, V::staticPropertyOrdering);
     QList<V> list = previous.value<QList<V>>();
     list.append(newValue);
     previous.setValue(list);
@@ -286,7 +286,7 @@ template<typename T>
 inline void qRegisterProtobufType()
 {
     T::registerTypes();
-    QtProtobufPrivate::registerOrdering(QMetaType::fromType<T>(), T::propertyOrdering);
+    QtProtobufPrivate::registerOrdering(QMetaType::fromType<T>(), T::staticPropertyOrdering);
     QtProtobufPrivate::registerHandler(
             QMetaType::fromType<T *>(),
             { QtProtobufPrivate::serializeObject<T>, QtProtobufPrivate::deserializeObject<T> });

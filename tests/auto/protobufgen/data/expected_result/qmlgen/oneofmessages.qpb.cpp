@@ -63,7 +63,7 @@ static constexpr struct {
     "testOneofFieldInt\0testOneofFieldSecondInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering OneofSimpleMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering OneofSimpleMessage::staticPropertyOrdering = {
     &qt_protobuf_OneofSimpleMessage_metadata.data
 };
 
@@ -274,7 +274,7 @@ static constexpr struct {
     "secondComplexField\0secondSecondComplexField\0testSnakeCaseField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering OneofComplexMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering OneofComplexMessage::staticPropertyOrdering = {
     &qt_protobuf_OneofComplexMessage_metadata.data
 };
 

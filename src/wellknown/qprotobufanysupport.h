@@ -58,7 +58,7 @@ public:
             static_assert(QtProtobufPrivate::HasProtobufPropertyOrdering<T>,
                           "T must have the Q_PROTOBUF_OBJECT macro");
             T obj;
-            if (asImpl(serializer, &obj, T::propertyOrdering))
+            if (asImpl(serializer, &obj, T::staticPropertyOrdering))
                 return { std::move(obj) };
         }
         return std::nullopt;
@@ -73,7 +73,7 @@ public:
 
         static_assert(QtProtobufPrivate::HasProtobufPropertyOrdering<T>,
                       "T must have the Q_PROTOBUF_OBJECT macro");
-        return fromMessageImpl(serializer, &message, T::propertyOrdering, typeUrlPrefix);
+        return fromMessageImpl(serializer, &message, T::staticPropertyOrdering, typeUrlPrefix);
     }
 
 private:

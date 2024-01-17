@@ -59,7 +59,7 @@ static constexpr struct {
     "testFieldInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleIntMessageExt::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleIntMessageExt::staticPropertyOrdering = {
     &qt_protobuf_SimpleIntMessageExt_metadata.data
 };
 

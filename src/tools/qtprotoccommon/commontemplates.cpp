@@ -819,7 +819,7 @@ const char *CommonTemplates::PropertyOrderingDataClosingTemplate()
 }
 const char *CommonTemplates::PropertyOrderingDefinitionTemplate()
 {
-    return "const QtProtobufPrivate::QProtobufPropertyOrdering $type$::propertyOrdering = {\n"
+    return "const QtProtobufPrivate::QProtobufPropertyOrdering $type$::staticPropertyOrdering = {\n"
            "    &qt_protobuf_$classname$_metadata.data\n"
            "};\n\n";
 }

@@ -59,7 +59,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage1::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage1::staticPropertyOrdering = {
     &qt_protobuf_AnnotatedMessage1_metadata.data
 };
 
@@ -175,7 +175,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage2::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage2::staticPropertyOrdering = {
     &qt_protobuf_AnnotatedMessage2_metadata.data
 };
 
@@ -291,7 +291,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage3::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage3::staticPropertyOrdering = {
     &qt_protobuf_AnnotatedMessage3_metadata.data
 };
 
@@ -407,7 +407,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage4::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage4::staticPropertyOrdering = {
     &qt_protobuf_AnnotatedMessage4_metadata.data
 };
 
@@ -523,7 +523,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage5::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage5::staticPropertyOrdering = {
     &qt_protobuf_AnnotatedMessage5_metadata.data
 };
 
@@ -639,7 +639,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage6::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage6::staticPropertyOrdering = {
     &qt_protobuf_AnnotatedMessage6_metadata.data
 };
 
@@ -755,7 +755,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage7::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage7::staticPropertyOrdering = {
     &qt_protobuf_AnnotatedMessage7_metadata.data
 };
 
@@ -871,7 +871,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage8::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage8::staticPropertyOrdering = {
     &qt_protobuf_AnnotatedMessage8_metadata.data
 };
 
@@ -987,7 +987,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage9::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering AnnotatedMessage9::staticPropertyOrdering = {
     &qt_protobuf_AnnotatedMessage9_metadata.data
 };
 

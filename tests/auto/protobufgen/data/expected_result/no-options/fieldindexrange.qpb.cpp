@@ -59,7 +59,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering FieldIndexTest1Message::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering FieldIndexTest1Message::staticPropertyOrdering = {
     &qt_protobuf_FieldIndexTest1Message_metadata.data
 };
 
@@ -175,7 +175,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering FieldIndexTest2Message::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering FieldIndexTest2Message::staticPropertyOrdering = {
     &qt_protobuf_FieldIndexTest2Message_metadata.data
 };
 
@@ -291,7 +291,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering FieldIndexTest3Message::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering FieldIndexTest3Message::staticPropertyOrdering = {
     &qt_protobuf_FieldIndexTest3Message_metadata.data
 };
 
@@ -407,7 +407,7 @@ static constexpr struct {
     "testField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering FieldIndexTest4Message::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering FieldIndexTest4Message::staticPropertyOrdering = {
     &qt_protobuf_FieldIndexTest4Message_metadata.data
 };
 

@@ -76,7 +76,7 @@ static constexpr struct {
     "localEnum\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleEnumMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleEnumMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleEnumMessage_metadata.data
 };
 
@@ -194,7 +194,7 @@ static constexpr struct {
     "localEnumList\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedEnumMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedEnumMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedEnumMessage_metadata.data
 };
 
@@ -313,7 +313,7 @@ static constexpr struct {
     ""
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumHolder::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumHolder::staticPropertyOrdering = {
     &qt_protobuf_NestedEnumHolder_metadata.data
 };
 
@@ -412,7 +412,7 @@ static constexpr struct {
     ""
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumHolderLevel2::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumHolderLevel2::staticPropertyOrdering = {
     &qt_protobuf_NestedEnumHolderLevel2_metadata.data
 };
 
@@ -511,7 +511,7 @@ static constexpr struct {
     ""
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumHolderLevel1::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumHolderLevel1::staticPropertyOrdering = {
     &qt_protobuf_NestedEnumHolderLevel1_metadata.data
 };
 
@@ -644,7 +644,7 @@ static constexpr struct {
     "localEnumField\0localEnumField2\0localEnumField3\0localEnumField4\0localEnumField5\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering NestedEnumMessage::staticPropertyOrdering = {
     &qt_protobuf_NestedEnumMessage_metadata.data
 };
 
@@ -835,7 +835,7 @@ static constexpr struct {
     "localEnum\0localEnumList\0localEnumMap\0msgList\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering MixedEnumUsageMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering MixedEnumUsageMessage::staticPropertyOrdering = {
     &qt_protobuf_MixedEnumUsageMessage_metadata.data
 };
 
@@ -1022,7 +1022,7 @@ static constexpr struct {
     "globalEnum\0globalEnumList\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFileEnumMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering SimpleFileEnumMessage::staticPropertyOrdering = {
     &qt_protobuf_SimpleFileEnumMessage_metadata.data
 };
 
@@ -1164,7 +1164,7 @@ static constexpr struct {
     "localStepChildEnum\0localStepChildList\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering StepChildEnumMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering StepChildEnumMessage::staticPropertyOrdering = {
     &qt_protobuf_StepChildEnumMessage_metadata.data
 };
 
@@ -1300,7 +1300,7 @@ static constexpr struct {
     "val\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering A::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering A::staticPropertyOrdering = {
     &qt_protobuf_A_metadata.data
 };
 
@@ -1419,7 +1419,7 @@ static constexpr struct {
     "val\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering B::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering B::staticPropertyOrdering = {
     &qt_protobuf_B_metadata.data
 };
 

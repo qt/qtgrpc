@@ -40,7 +40,7 @@ private:
 };
 int TestMetaType::m_copied = 0;
 int TestMetaType::m_destroyed = 0;
-const QtProtobufPrivate::QProtobufPropertyOrdering TestMetaType::propertyOrdering{};
+const QtProtobufPrivate::QProtobufPropertyOrdering TestMetaType::staticPropertyOrdering{};
 
 class QProtobufOneofTest : public QObject
 {

@@ -58,7 +58,7 @@ static constexpr struct {
     "stringField\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering TestStringMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering TestStringMessage::staticPropertyOrdering = {
     &qt_protobuf_TestStringMessage_metadata.data
 };
 
@@ -232,7 +232,7 @@ static constexpr struct {
     "testFieldBytesOpt\0testFieldString\0testFieldStringOpt\0testFieldMessage\0testFieldMessageOpt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering OptionalMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering OptionalMessage::staticPropertyOrdering = {
     &qt_protobuf_OptionalMessage_metadata.data
 };
 

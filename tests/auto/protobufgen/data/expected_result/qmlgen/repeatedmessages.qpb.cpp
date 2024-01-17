@@ -59,7 +59,7 @@ static constexpr struct {
     "testRepeatedString\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedStringMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedStringMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedStringMessage_metadata.data
 };
 
@@ -180,7 +180,7 @@ static constexpr struct {
     "testRepeatedDouble\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedDoubleMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedDoubleMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedDoubleMessage_metadata.data
 };
 
@@ -301,7 +301,7 @@ static constexpr struct {
     "testRepeatedBytes\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedBytesMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedBytesMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedBytesMessage_metadata.data
 };
 
@@ -422,7 +422,7 @@ static constexpr struct {
     "testRepeatedFloat\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedFloatMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedFloatMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedFloatMessage_metadata.data
 };
 
@@ -543,7 +543,7 @@ static constexpr struct {
     "testRepeatedComplex\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedComplexMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedComplexMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedComplexMessage_metadata.data
 };
 
@@ -664,7 +664,7 @@ static constexpr struct {
     "testRepeatedInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedSIntMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedSIntMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedSIntMessage_metadata.data
 };
 
@@ -785,7 +785,7 @@ static constexpr struct {
     "testRepeatedInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedIntMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedIntMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedIntMessage_metadata.data
 };
 
@@ -906,7 +906,7 @@ static constexpr struct {
     "testRepeatedInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedUIntMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedUIntMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedUIntMessage_metadata.data
 };
 
@@ -1027,7 +1027,7 @@ static constexpr struct {
     "testRepeatedInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedSInt64Message::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedSInt64Message::staticPropertyOrdering = {
     &qt_protobuf_RepeatedSInt64Message_metadata.data
 };
 
@@ -1148,7 +1148,7 @@ static constexpr struct {
     "testRepeatedInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedInt64Message::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedInt64Message::staticPropertyOrdering = {
     &qt_protobuf_RepeatedInt64Message_metadata.data
 };
 
@@ -1269,7 +1269,7 @@ static constexpr struct {
     "testRepeatedInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedUInt64Message::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedUInt64Message::staticPropertyOrdering = {
     &qt_protobuf_RepeatedUInt64Message_metadata.data
 };
 
@@ -1390,7 +1390,7 @@ static constexpr struct {
     "testRepeatedInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedFixedIntMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedFixedIntMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedFixedIntMessage_metadata.data
 };
 
@@ -1511,7 +1511,7 @@ static constexpr struct {
     "testRepeatedInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedSFixedIntMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedSFixedIntMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedSFixedIntMessage_metadata.data
 };
 
@@ -1632,7 +1632,7 @@ static constexpr struct {
     "testRepeatedInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedFixedInt64Message::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedFixedInt64Message::staticPropertyOrdering = {
     &qt_protobuf_RepeatedFixedInt64Message_metadata.data
 };
 
@@ -1753,7 +1753,7 @@ static constexpr struct {
     "testRepeatedInt\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedSFixedInt64Message::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedSFixedInt64Message::staticPropertyOrdering = {
     &qt_protobuf_RepeatedSFixedInt64Message_metadata.data
 };
 
@@ -1874,7 +1874,7 @@ static constexpr struct {
     "testRepeatedBool\0"
 };
 
-const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedBoolMessage::propertyOrdering = {
+const QtProtobufPrivate::QProtobufPropertyOrdering RepeatedBoolMessage::staticPropertyOrdering = {
     &qt_protobuf_RepeatedBoolMessage_metadata.data
 };
 

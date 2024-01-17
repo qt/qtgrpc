@@ -21,7 +21,7 @@ private slots:
 
 void QtProtobufExtraNamespaceTest::EmptyMessageTest()
 {
-    QCOMPARE(EmptyMessage::propertyOrdering.fieldCount(), 0);
+    QCOMPARE(EmptyMessage::staticPropertyOrdering.fieldCount(), 0);
     QCOMPARE(EmptyMessage::staticMetaObject.propertyCount(), 0);
 }
 
