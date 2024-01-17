@@ -117,18 +117,16 @@ extern QtProtobufPrivate::QProtobufPropertyOrdering getOrderingByMetaType(QMetaT
 
 QByteArray QAbstractProtobufSerializer::serializeRawMessage(const QProtobufMessage *message) const
 {
-    Q_ASSERT(message != nullptr && message->metaObject() != nullptr);
-    auto ordering = QtProtobufPrivate::getOrderingByMetaType(message->metaObject()->metaType());
-    Q_ASSERT(ordering.data != nullptr);
-    return serializeMessage(message, ordering);
+    Q_ASSERT(message->propertyOrdering() != nullptr
+             && message->propertyOrdering()->data != nullptr);
+    return serializeMessage(message, *message->propertyOrdering());
 }
 
 bool QAbstractProtobufSerializer::deserializeRawMessage(QProtobufMessage *message, QByteArrayView data) const
 {
-    Q_ASSERT(message != nullptr && message->metaObject() != nullptr);
-    auto ordering = QtProtobufPrivate::getOrderingByMetaType(message->metaObject()->metaType());
-    Q_ASSERT(ordering.data != nullptr);
-    return deserializeMessage(message, ordering, data);
+    Q_ASSERT(message->propertyOrdering() != nullptr
+             && message->propertyOrdering()->data != nullptr);
+    return deserializeMessage(message, *message->propertyOrdering(), data);
 }
 
 QT_END_NAMESPACE
