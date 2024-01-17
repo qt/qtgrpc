@@ -11,5 +11,6 @@ static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarAnnotatedMessage6(qRegis
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarAnnotatedMessage7(qRegisterProtobufType<AnnotatedMessage7>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarAnnotatedMessage8(qRegisterProtobufType<AnnotatedMessage8>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarAnnotatedMessage9(qRegisterProtobufType<AnnotatedMessage9>);
+static bool RegisterAnnotationProtobufTypes = [](){ qRegisterProtobufTypes(); return true; }();
 } // namespace qtprotobufnamespace::tests
 

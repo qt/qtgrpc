@@ -111,6 +111,9 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
         messageDef.printClassRegistration(registrationPrinter.get());
     });
 
+    registrationPrinter->Print({{"proto_name", utils::capitalizeAsciiName(filename)}},
+                               CommonTemplates::ProtobufTypeRegistrarTemplate());
+
     CloseFileNamespaces(file, registrationPrinter.get());
     CloseFileNamespaces(file, sourcePrinter.get());
 

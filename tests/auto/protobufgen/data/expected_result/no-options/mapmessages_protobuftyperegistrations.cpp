@@ -90,5 +90,6 @@ static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleFixed64ComplexMess
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleSFixed32ComplexMessageMapMessage(qRegisterProtobufType<SimpleSFixed32ComplexMessageMapMessage>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleSFixed64ComplexMessageMapMessage(qRegisterProtobufType<SimpleSFixed64ComplexMessageMapMessage>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleStringComplexMessageMapMessage(qRegisterProtobufType<SimpleStringComplexMessageMapMessage>);
+static bool RegisterMapmessagesProtobufTypes = [](){ qRegisterProtobufTypes(); return true; }();
 } // namespace qtprotobufnamespace::tests
 

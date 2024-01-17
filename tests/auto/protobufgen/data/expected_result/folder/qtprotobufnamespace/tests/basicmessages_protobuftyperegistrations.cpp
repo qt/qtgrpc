@@ -19,5 +19,6 @@ static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleFixedInt64Message(
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleSFixedInt32Message(qRegisterProtobufType<SimpleSFixedInt32Message>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleSFixedInt64Message(qRegisterProtobufType<SimpleSFixedInt64Message>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarComplexMessage(qRegisterProtobufType<ComplexMessage>);
+static bool RegisterBasicmessagesProtobufTypes = [](){ qRegisterProtobufTypes(); return true; }();
 } // namespace qtprotobufnamespace::tests
 
