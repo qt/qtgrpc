@@ -16,10 +16,10 @@ using namespace Qt::StringLiterals;
 
 [[maybe_unused]] const QLatin1StringView
 qmlProtobufTypeRegistration("qtprotobufnamespace_testsplugin.cpp");
-const QLatin1StringView protobuftyperegistrations("_protobuftyperegistrations.cpp");
 [[maybe_unused]] const QLatin1StringView protobufQmlPlugin("_uri_testplugin.cpp");
 const QLatin1StringView cppExtension(".qpb.cpp");
 const QLatin1StringView headerExtension(".qpb.h");
+const QLatin1StringView cppRegistrationsExtension("_protobuftyperegistrations.cpp");
 const QLatin1StringView protocGenQtprotobufKey(" --plugin=protoc-gen-qtprotobuf=");
 const QLatin1StringView optKey(" --qtprotobuf_opt=");
 const QLatin1StringView outputKey(" --qtprotobuf_out=");
@@ -200,7 +200,7 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
     QTest::addColumn<QString>("extension");
 
     const QLatin1StringView extensions[]
-            = {protobuftyperegistrations, cppExtension, headerExtension};
+            = {cppRegistrationsExtension, cppExtension, headerExtension};
 
     for (const auto extension : extensions) {
         QTest::addRow("repeatednonpackedmessages%s", extension.data())
@@ -256,8 +256,8 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
             << QString(protobufQmlPlugin);
 
     const QLatin1StringView qmlExtensions[]
-            = {protobuftyperegistrations, cppExtension,
-                headerExtension};
+            = {cppRegistrationsExtension, cppExtension,
+               headerExtension};
 
     for (const auto extension : qmlExtensions) {
         QTest::addRow("enummessages%s with QML option", extension.data())
@@ -321,7 +321,7 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
     QTest::addColumn<QString>("generatedFolderStructure");
 
     const QLatin1StringView extensions[]
-            = {protobuftyperegistrations, cppExtension, headerExtension};
+            = {cppRegistrationsExtension, cppExtension, headerExtension};
 
     for (const auto extension : extensions) {
         QTest::addRow("basicmessages%s", extension.data())
@@ -457,7 +457,7 @@ void tst_qtprotobufgen::cmdLineGeneratedNoOptions_data()
     QTest::addColumn<QString>("extension");
 
     const QLatin1StringView extensions[]
-            = {protobuftyperegistrations, cppExtension, headerExtension};
+            = {cppRegistrationsExtension, cppExtension, headerExtension};
 
     for (const auto extension : extensions) {
         QTest::addRow("annotation%s", extension.data())
