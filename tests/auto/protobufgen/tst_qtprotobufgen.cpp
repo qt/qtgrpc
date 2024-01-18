@@ -16,6 +16,7 @@ using namespace Qt::StringLiterals;
 
 const QLatin1StringView cppExtension(".qpb.cpp");
 const QLatin1StringView headerExtension(".qpb.h");
+const QLatin1StringView cppRegistrationsExtension("_protobuftyperegistrations.cpp");
 const QLatin1StringView protocGenQtprotobufKey(" --plugin=protoc-gen-qtprotobuf=");
 const QLatin1StringView optKey(" --qtprotobuf_opt=");
 const QLatin1StringView outputKey(" --qtprotobuf_out=");
@@ -195,7 +196,9 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
     QTest::addColumn<QString>("folder");
     QTest::addColumn<QString>("extension");
 
-    const QLatin1StringView extensions[] = {cppExtension, headerExtension};
+    const QLatin1StringView extensions[] = {cppExtension,
+                                            headerExtension,
+                                            cppRegistrationsExtension};
 
     for (const auto extension : extensions) {
         QTest::addRow("repeatednonpackedmessages%s", extension.data())
@@ -252,7 +255,8 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
 #ifdef HAVE_QML
     const QLatin1StringView qmlExtensions[]
             = {cppExtension,
-                headerExtension};
+               headerExtension,
+               cppRegistrationsExtension};
 
     for (const auto extension : qmlExtensions) {
         QTest::addRow("enummessages%s with QML option", extension.data())
@@ -316,7 +320,7 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
     QTest::addColumn<QString>("exportMacro");
 
     const QLatin1StringView extensions[]
-            = {cppExtension, headerExtension};
+            = {cppExtension, headerExtension, cppRegistrationsExtension};
 
     for (const auto extension : extensions) {
         QTest::addRow("basicmessages%s", extension.data())
@@ -465,7 +469,7 @@ void tst_qtprotobufgen::cmdLineGeneratedNoOptions_data()
     QTest::addColumn<QString>("extension");
 
     const QLatin1StringView extensions[]
-            = {cppExtension, headerExtension};
+            = {cppExtension, headerExtension, cppRegistrationsExtension};
 
     for (const auto extension : extensions) {
         QTest::addRow("annotation%s", extension.data())
