@@ -198,7 +198,7 @@ void Any::setValue(const QByteArray &value)
 }
 
 /*!
-    \fn template <typename T> std::optional<T> Any::as(QAbstractProtobufSerializer *serializer) const
+    \fn template <typename T> std::optional<T> Any::unpack(QAbstractProtobufSerializer *serializer) const
 
     This function compares the message name of T with the value of typeUrl()
     before deserializing the data using \a serializer.
@@ -210,10 +210,10 @@ void Any::setValue(const QByteArray &value)
     \c{Q_PROTOBUF_OBJECT} macro or (for a nested Any message) be Any itself.
 */
 
-bool Any::asImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *message,
+bool Any::unpackImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *message,
                  QtProtobufPrivate::QProtobufPropertyOrdering ordering) const
 {
-    Q_ASSERT_X(serializer != nullptr, "Any::asImpl", "serializer is null");
+    Q_ASSERT_X(serializer != nullptr, "Any::unpackImpl", "serializer is null");
     QString tUrl = typeUrl();
     qsizetype lastSegmentIndex = tUrl.lastIndexOf(u'/') + 1;
     if (QStringView(tUrl).mid(lastSegmentIndex).compare(ordering.getMessageFullName()) != 0)
@@ -221,10 +221,10 @@ bool Any::asImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *mess
     return serializer->deserializeMessage(message, ordering, value());
 }
 
-std::optional<Any> Any::asAnyImpl(QAbstractProtobufSerializer *serializer) const
+std::optional<Any> Any::unpackAnyImpl(QAbstractProtobufSerializer *serializer) const
 {
     google::protobuf::Any realAny;
-    if (!asImpl(serializer, &realAny, google::protobuf::Any::staticPropertyOrdering))
+    if (!unpackImpl(serializer, &realAny, google::protobuf::Any::staticPropertyOrdering))
         return std::nullopt;
     Any any;
     any.setTypeUrl(realAny.typeUrl());

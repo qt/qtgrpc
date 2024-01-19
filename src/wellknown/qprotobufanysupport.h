@@ -50,15 +50,15 @@ public:
     void setValue(const QByteArray &value);
 
     template <typename T>
-    std::optional<T> as(QAbstractProtobufSerializer *serializer) const
+    std::optional<T> unpack(QAbstractProtobufSerializer *serializer) const
     {
         if constexpr (std::is_same_v<T, Any>) {
-            return asAnyImpl(serializer);
+            return unpackAnyImpl(serializer);
         } else {
             static_assert(QtProtobufPrivate::HasProtobufPropertyOrdering<T>,
                           "T must have the Q_PROTOBUF_OBJECT macro");
             T obj;
-            if (asImpl(serializer, &obj, T::staticPropertyOrdering))
+            if (unpackImpl(serializer, &obj, T::staticPropertyOrdering))
                 return { std::move(obj) };
         }
         return std::nullopt;
@@ -80,9 +80,9 @@ private:
     AnyPrivate *d_ptr;
     Q_DECLARE_PRIVATE(Any)
 
-    bool asImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *message,
+    bool unpackImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *message,
                 QtProtobufPrivate::QProtobufPropertyOrdering ordering) const;
-    std::optional<Any> asAnyImpl(QAbstractProtobufSerializer *serializer) const;
+    std::optional<Any> unpackAnyImpl(QAbstractProtobufSerializer *serializer) const;
     static Any fromMessageImpl(QAbstractProtobufSerializer *serializer,
                                const QProtobufMessage *message,
                                QtProtobufPrivate::QProtobufPropertyOrdering ordering,
