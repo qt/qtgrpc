@@ -37,7 +37,7 @@ protected:
     explicit operator bool() const noexcept { return message() != nullptr; }
 };
 
-template<typename T>
+template<typename T, std::enable_if_t<std::is_base_of_v<QProtobufMessage, T>, bool> = true>
 class QProtobufLazyMessagePointer : private QProtobufLazyMessagePointerBase
 {
     T *messageAsT() const { return static_cast<T *>(message()); }
