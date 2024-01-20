@@ -2,18 +2,14 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
-#include <QtProtobuf/qtprotobufglobal.h>
+#include "qtprotobuflogging_p.h"
+#include "qtprotobuftypes.h"
+#include "qprotobufregistration.h"
 
 #include <QtCore/qreadwritelock.h>
-#include <QtCore/qmutex.h>
 #include <QtCore/qpair.h>
 
-#include <QtProtobuf/private/qtprotobuflogging_p.h>
-
-#include "qtprotobuftypes.h"
-
 #include <limits>
-#include <mutex>
 
 QT_BEGIN_NAMESPACE
 
@@ -192,111 +188,6 @@ namespace QtProtobufPrivate {
                         << ". Message is not registered.";
         return pointer;
     }
-}
-
-namespace QtProtobuf {
-
-template<typename T>
-void registerBasicConverters()
-{
-    QMetaType::registerConverter<int32_t, T>(T::fromType);
-    QMetaType::registerConverter<T, int32_t>(T::toType);
-    QMetaType::registerConverter<int64_t, T>(T::fromType);
-    QMetaType::registerConverter<T, int64_t>(T::toType);
-    QMetaType::registerConverter<uint32_t, T>(T::fromType);
-    QMetaType::registerConverter<T, uint32_t>(T::toType);
-    QMetaType::registerConverter<uint64_t, T>(T::fromType);
-    QMetaType::registerConverter<T, uint64_t>(T::toType);
-    if constexpr (!std::is_same_v<long long, int64_t>) {
-        QMetaType::registerConverter<long long, T>(T::fromType);
-        QMetaType::registerConverter<T, long long>(T::toType);
-        QMetaType::registerConverter<unsigned long long, T>(T::fromType);
-        QMetaType::registerConverter<T, unsigned long long>(T::toType);
-    }
-    QMetaType::registerConverter<double, T>(T::fromType);
-    QMetaType::registerConverter<T, double>(T::toType);
-    QMetaType::registerConverter<T, QString>(T::toString);
-}
-
-Q_CONSTINIT QBasicMutex registerMutex;
-std::vector<QtProtobuf::RegisterFunction> &registerFunctions()
-{
-    // no need for implicit sharing etc, so stick with std::vector
-    static std::vector<QtProtobuf::RegisterFunction> registrationList;
-    return registrationList;
-}
-
-ProtoTypeRegistrar::ProtoTypeRegistrar(QtProtobuf::RegisterFunction initializer)
-{
-    std::scoped_lock lock(registerMutex);
-    QtProtobuf::registerFunctions().push_back(initializer);
-}
-
-} // namespace QtProtobuf
-
-static void qRegisterBaseTypes()
-{
-    [[maybe_unused]] // definitely unused
-    static bool registered = [] {
-        qRegisterMetaType<QtProtobuf::int32>();
-        qRegisterMetaType<QtProtobuf::int64>();
-        qRegisterMetaType<QtProtobuf::uint32>();
-        qRegisterMetaType<QtProtobuf::uint64>();
-        qRegisterMetaType<QtProtobuf::sint32>();
-        qRegisterMetaType<QtProtobuf::sint64>();
-        qRegisterMetaType<QtProtobuf::fixed32>();
-        qRegisterMetaType<QtProtobuf::fixed64>();
-        qRegisterMetaType<QtProtobuf::sfixed32>();
-        qRegisterMetaType<QtProtobuf::sfixed64>();
-        qRegisterMetaType<QtProtobuf::boolean>();
-
-        qRegisterMetaType<QtProtobuf::int32List>();
-        qRegisterMetaType<QtProtobuf::int64List>();
-        qRegisterMetaType<QtProtobuf::uint32List>();
-        qRegisterMetaType<QtProtobuf::uint64List>();
-        qRegisterMetaType<QtProtobuf::sint32List>();
-        qRegisterMetaType<QtProtobuf::sint64List>();
-        qRegisterMetaType<QtProtobuf::fixed32List>();
-        qRegisterMetaType<QtProtobuf::fixed64List>();
-        qRegisterMetaType<QtProtobuf::sfixed32List>();
-        qRegisterMetaType<QtProtobuf::sfixed64List>();
-
-        qRegisterMetaType<QtProtobuf::doubleList>();
-        qRegisterMetaType<QtProtobuf::floatList>();
-        qRegisterMetaType<QtProtobuf::boolList>();
-
-        QtProtobuf::registerBasicConverters<QtProtobuf::int32>();
-        QtProtobuf::registerBasicConverters<QtProtobuf::int64>();
-        QtProtobuf::registerBasicConverters<QtProtobuf::sfixed32>();
-        QtProtobuf::registerBasicConverters<QtProtobuf::sfixed64>();
-        QtProtobuf::registerBasicConverters<QtProtobuf::fixed32>();
-        QtProtobuf::registerBasicConverters<QtProtobuf::fixed64>();
-        return true;
-    }();
-}
-
-/*!
-    \relates QtProtobuf
-    Calling this function registers all, currently known, protobuf types with
-    the serializer registry.
-
-    \note You should not have to call this function manually, as it is called
-    automatically upon attempting serialization or deserialization of a protobuf
-    message.
-*/
-void qRegisterProtobufTypes()
-{
-    qRegisterBaseTypes();
-
-    std::vector<QtProtobuf::RegisterFunction> registrationList;
-    // Move the list to a local variable, emptying the global one.
-    {
-        std::scoped_lock lock(QtProtobuf::registerMutex);
-        registrationList.swap(QtProtobuf::registerFunctions());
-    }
-
-    for (QtProtobuf::RegisterFunction registerFunc : registrationList)
-        registerFunc();
 }
 
 QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::int32, QtProtobuf_int32)

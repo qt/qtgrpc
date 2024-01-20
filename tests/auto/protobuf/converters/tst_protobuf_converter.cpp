@@ -6,6 +6,7 @@
 
 #include <QVariant>
 #include <qtprotobuftypes.h>
+#include <qprotobufregistration.h>
 
 class QtProtobufConverterTest : public QObject
 {

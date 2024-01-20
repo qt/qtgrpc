@@ -4,7 +4,7 @@
 
 #include "qprotobufserializer.h"
 #include "qprotobufserializer_p.h"
-
+#include "qprotobufregistration.h"
 #include "qtprotobuftypes.h"
 
 #include <QtCore/qmetatype.h>
@@ -22,56 +22,14 @@ QT_BEGIN_NAMESPACE
 
 namespace {
 
-/*
-    \internal
-    \brief The HandlersRegistry is a container to store mapping between metatype
-    identifier and serialization handlers.
-*/
-struct HandlersRegistry
-{
-    void registerHandler(QMetaType type, const QtProtobufPrivate::SerializationHandler &handlers)
-    {
-        QWriteLocker locker(&m_lock);
-        m_registry[type] = handlers;
-    }
-
-    QtProtobufPrivate::SerializationHandler findHandler(QMetaType type)
-    {
-        QtProtobufPrivate::SerializationHandler handler;
-        QReadLocker locker(&m_lock);
-        auto it = m_registry.constFind(type);
-        if (it != m_registry.constEnd())
-            handler = it.value();
-        return handler;
-    }
-
-private:
-    QReadWriteLock m_lock;
-    QHash<QMetaType, QtProtobufPrivate::SerializationHandler> m_registry;
-};
-Q_GLOBAL_STATIC(HandlersRegistry, handlersRegistry)
-
 inline bool
 isOneofOrOptionalField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
 {
     return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
-            || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
+        || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
 }
 
 } // namespace
-
-void QtProtobufPrivate::registerHandler(QMetaType type,
-                                        const QtProtobufPrivate::SerializationHandler &handlers)
-{
-    handlersRegistry->registerHandler(type, handlers);
-}
-
-QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType type)
-{
-    if (!handlersRegistry.exists())
-        return {};
-    return handlersRegistry->findHandler(type);
-}
 
 /*!
     \class QProtobufSerializer

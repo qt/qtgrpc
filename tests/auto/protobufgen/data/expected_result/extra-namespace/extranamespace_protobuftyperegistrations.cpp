@@ -1,4 +1,4 @@
-#include <QtProtobuf/qprotobufserializer.h>
+#include <QtProtobuf/qprotobufregistration.h>
 #include "extranamespace.qpb.h"
 
 namespace MyTopLevelNamespace::qtprotobufnamespace::tests {

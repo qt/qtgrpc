@@ -6,6 +6,7 @@
 
 #include <QtProtobuf/qprotobufjsonserializer.h>
 #include <QtProtobuf/qprotobufserializer.h>
+#include <QtProtobuf/qprotobufregistration.h>
 
 #include <optional.qpb.h>
 

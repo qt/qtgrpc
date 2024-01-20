@@ -1,4 +1,4 @@
-#include <QtProtobuf/qprotobufserializer.h>
+#include <QtProtobuf/qprotobufregistration.h>
 #include "qtprotobufnamespace/optional/tests/optional.qpb.h"
 
 namespace qtprotobufnamespace::optional::tests {

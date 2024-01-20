@@ -3,8 +3,6 @@
 
 #include "qprotobufbaseserializer.h"
 
-#include <QtProtobuf/qprotobufmessage.h>
-
 QT_BEGIN_NAMESPACE
 
 /*!
@@ -153,33 +151,6 @@ QT_BEGIN_NAMESPACE
     You should not call this function directly.
 
    \sa QProtobufBaseSerializer::serializeEnumList()
-*/
-
-/*!
-    \relates QProtobufBaseSerializer
-    \fn template<typename T> inline void qRegisterProtobufType()
-
-    Registers a Protobuf type \e T.
-    This function is normally called by generated code.
-*/
-
-/*!
-    \relates QProtobufBaseSerializer
-    \fn template<typename K, typename V> inline void qRegisterProtobufMapType();
-
-    Registers a Protobuf map type \c K and \c V.
-    \c V must be a QProtobufMessage.
-    This function is normally called by generated code.
-*/
-
-/*!
-    \relates QProtobufBaseSerializer
-    \fn template<typename T> inline void qRegisterProtobufEnumType();
-
-    Registers serializers for enumeration type \c T in QtProtobuf global
-    serializers registry.
-
-    This function is normally called by generated code.
 */
 
 QT_END_NAMESPACE

@@ -1,4 +1,4 @@
-#include <QtProtobuf/qprotobufserializer.h>
+#include <QtProtobuf/qprotobufregistration.h>
 #include "fieldindexrange.qpb.h"
 
 namespace qtprotobufnamespace::tests {

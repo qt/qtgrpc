@@ -4,8 +4,9 @@
 #include "qprotobufmessage.h"
 #include "qprotobufmessage_p.h"
 #include "qabstractprotobufserializer.h"
+#include "qprotobufregistration.h"
+#include "qtprotobuftypes.h"
 
-#include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qassert.h>
 #include <QtCore/qmetaobject.h>

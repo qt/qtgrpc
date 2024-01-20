@@ -6,6 +6,8 @@
 
 #include <QGrpcHttp2Channel>
 
+#include <qprotobufregistration.h>
+
 #include <QDebug>
 #include <QFile>
 #include <QCryptographicHash>

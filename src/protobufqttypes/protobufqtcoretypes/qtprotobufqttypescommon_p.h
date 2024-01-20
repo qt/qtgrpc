@@ -18,6 +18,7 @@
 #include <QtProtobufQtCoreTypes/qtprotobufqtcoretypesexports.h>
 
 #include <QtProtobuf/qtprotobuftypes.h>
+#include <QtProtobuf/qprotobufregistration.h>
 #include <QtProtobuf/qprotobufserializer.h>
 
 #include <QtCore/QVariant>

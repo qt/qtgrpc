@@ -1,4 +1,4 @@
-#include <QtProtobuf/qprotobufserializer.h>
+#include <QtProtobuf/qprotobufregistration.h>
 #include "qtprotobufnamespace/tests/mapmessages.qpb.h"
 
 namespace qtprotobufnamespace::tests {

@@ -7,6 +7,7 @@
 #include <QtProtobuf/private/qprotobufserializer_p.h>
 
 #include "qprotobufanysupport.h"
+#include "qprotobufregistration.h"
 
 #include <google/protobuf/any.qpb.h>
 

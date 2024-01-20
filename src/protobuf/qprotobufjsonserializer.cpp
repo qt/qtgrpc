@@ -3,6 +3,7 @@
 
 #include "qprotobufjsonserializer.h"
 #include "qprotobufserializer_p.h"
+#include "qprotobufregistration.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QJsonArray>

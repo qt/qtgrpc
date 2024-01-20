@@ -67,7 +67,7 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
     sourcePrinter->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
                          CommonTemplates::InternalIncludeTemplate());
 
-    registrationPrinter->Print({{"include", "QtProtobuf/qprotobufserializer.h"}},
+    registrationPrinter->Print({{"include", "QtProtobuf/qprotobufregistration.h"}},
                                CommonTemplates::ExternalIncludeTemplate());
 
     registrationPrinter->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
@@ -85,7 +85,7 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
                              CommonTemplates::ExternalIncludeTemplate());
     }
 
-    sourcePrinter->Print({{"include", "QtProtobuf/qprotobufserializer.h"}},
+    sourcePrinter->Print({{"include", "QtProtobuf/qprotobufregistration.h"}},
                          CommonTemplates::ExternalIncludeTemplate());
 
     sourcePrinter->Print({{"include", "cmath"}},
