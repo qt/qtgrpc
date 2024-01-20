@@ -25,7 +25,7 @@ void QmlClient::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const 
         return;
     }
 
-    std::shared_ptr<QGrpcCallReply> reply = call<qtgrpc::tests::SimpleStringMessage>("testMethod"_L1, arg, options);
+    std::shared_ptr<QGrpcCallReply> reply = call("testMethod"_L1, arg, options);
     reply->subscribe(jsEngine, [reply, callback, jsEngine]() {
         auto result = qtgrpc::tests::SimpleStringMessage(reply->read<qtgrpc::tests::SimpleStringMessage>());
         QJSValue(callback).call(QJSValueList{jsEngine->toScriptValue(result)});

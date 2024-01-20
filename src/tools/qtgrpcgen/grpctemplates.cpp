@@ -66,7 +66,7 @@ const char *GrpcTemplates::ClientMethodDefinitionAsyncTemplate()
     return "\nstd::shared_ptr<QGrpcCallReply> $classname$::$method_name$(const $param_type$ "
            "&$param_name$, const QGrpcCallOptions &options)\n"
            "{\n"
-           "    return call<$param_type$>(\"$method_name$\"_L1, $param_name$, options);\n"
+           "    return call(\"$method_name$\"_L1, $param_name$, options);\n"
            "}\n";
 }
 
@@ -76,7 +76,7 @@ const char *GrpcTemplates::ClientMethodDefinitionAsync2Template()
            "*context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback, const "
            "QGrpcCallOptions &options)\n"
            "{\n"
-           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\"_L1, "
+           "    std::shared_ptr<QGrpcCallReply> reply = call(\"$method_name$\"_L1, "
            "$param_name$, options);\n"
            "    QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, "
            "callback]() "
@@ -104,7 +104,7 @@ const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
            "from JS engine context\";\n"
            "        return;\n"
            "    }\n\n"
-           "    std::shared_ptr<QGrpcCallReply> reply = call<$param_type$>(\"$method_name$\"_L1, "
+           "    std::shared_ptr<QGrpcCallReply> reply = call(\"$method_name$\"_L1, "
            "$param_name$, options);\n"
            "    reply->subscribe(jsEngine, [reply, callback, jsEngine]() {\n"
            "        auto result = $return_type$(reply->read<$return_type$>());\n"
@@ -126,7 +126,7 @@ const char *GrpcTemplates::ClientMethodStreamDefinitionTemplate()
     return "std::shared_ptr<$stream_type$> $classname$::stream$method_name_upper$("
            "const $param_type$ &$param_name$, const QGrpcCallOptions &options)\n"
            "{\n"
-           "    return startStream<$param_type$, $stream_type$>(\"$method_name$\"_L1, "
+           "    return startStream<$stream_type$>(\"$method_name$\"_L1, "
            "$param_name$, options);\n"
            "}\n\n";
 }

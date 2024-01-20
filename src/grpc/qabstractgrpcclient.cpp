@@ -44,7 +44,7 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 */
 
 /*!
-    \fn template <typename ParamType, typename StreamType> std::shared_ptr<StreamType> QAbstractGrpcClient::startStream(QLatin1StringView method, const QProtobufMessage &arg, const QGrpcCallOptions &options)
+    \fn template <typename StreamType> std::shared_ptr<StreamType> QAbstractGrpcClient::startStream(QLatin1StringView method, const QProtobufMessage &arg, const QGrpcCallOptions &options)
 
     Starts the stream \a method of the \e StreamType type with the message
     argument \a arg to the attached channel.
@@ -193,6 +193,16 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
     emit channelChanged();
 }
 
+std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView method,
+                                                          const QProtobufMessage &arg,
+                                                          const QGrpcCallOptions &options)
+{
+    std::optional<QByteArray> argData = trySerialize(arg);
+    if (!argData)
+        return {};
+    return call(method, *argData, options);
+}
+
 /*!
     \since 6.7
     Returns the channel attached to this client.
@@ -279,6 +289,18 @@ QAbstractGrpcClient::startBidirStream(QLatin1StringView method, QByteArrayView a
             d->channel->startBidirStream(method, QLatin1StringView(d->service), arg, options);
     d->addStream(std::static_pointer_cast<QGrpcOperation>(grpcStream));
     return grpcStream;
+}
+
+std::optional<QByteArray> QAbstractGrpcClient::trySerialize(const QProtobufMessage &arg)
+{
+    using namespace Qt::StringLiterals;
+    auto _serializer = serializer();
+    if (_serializer == nullptr) {
+        Q_EMIT errorOccurred({ QGrpcStatus::Unknown,
+                               "Serializing failed. Serializer is not ready."_L1 });
+        return std::nullopt;
+    }
+    return _serializer->serialize(&arg);
 }
 
 /*!

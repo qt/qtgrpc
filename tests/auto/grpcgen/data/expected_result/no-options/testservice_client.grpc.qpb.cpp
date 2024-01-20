@@ -14,12 +14,12 @@ Client::Client(QObject *parent)
 
 std::shared_ptr<QGrpcCallReply> Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
-    return call<qtgrpc::tests::SimpleStringMessage>("testMethod"_L1, arg, options);
+    return call("testMethod"_L1, arg, options);
 }
 
 void Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QObject *context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback, const QGrpcCallOptions &options)
 {
-    std::shared_ptr<QGrpcCallReply> reply = call<qtgrpc::tests::SimpleStringMessage>("testMethod"_L1, arg, options);
+    std::shared_ptr<QGrpcCallReply> reply = call("testMethod"_L1, arg, options);
     QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, callback]() {
         callback(reply);
     }, Qt::SingleShotConnection);
@@ -27,17 +27,17 @@ void Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QOb
 
 std::shared_ptr<QGrpcServerStream> Client::streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
-    return startStream<qtgrpc::tests::SimpleStringMessage, QGrpcServerStream>("testMethodServerStream"_L1, arg, options);
+    return startStream<QGrpcServerStream>("testMethodServerStream"_L1, arg, options);
 }
 
 std::shared_ptr<QGrpcClientStream> Client::streamTestMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
-    return startStream<qtgrpc::tests::SimpleStringMessage, QGrpcClientStream>("testMethodClientStream"_L1, arg, options);
+    return startStream<QGrpcClientStream>("testMethodClientStream"_L1, arg, options);
 }
 
 std::shared_ptr<QGrpcBidirStream> Client::streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
-    return startStream<qtgrpc::tests::SimpleStringMessage, QGrpcBidirStream>("testMethodBiStream"_L1, arg, options);
+    return startStream<QGrpcBidirStream>("testMethodBiStream"_L1, arg, options);
 }
 
 } // namespace TestService

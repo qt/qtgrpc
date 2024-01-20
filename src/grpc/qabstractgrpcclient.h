@@ -41,29 +41,22 @@ protected:
     explicit QAbstractGrpcClient(QLatin1StringView service, QObject *parent = nullptr);
     ~QAbstractGrpcClient() override;
 
-    template <typename ParamType>
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg,
-                                         const QGrpcCallOptions &options)
-    {
-        std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
-        if (!argData)
-            return {};
-        return call(method, *argData, options);
-    }
+                                         const QGrpcCallOptions &options);
 
 #ifdef Q_QDOC
-    template <typename ParamType, typename StreamType>
+    template <typename StreamType>
 #else
-    template <typename ParamType, typename StreamType,
+    template <typename StreamType,
               std::enable_if_t<std::is_same_v<StreamType, QGrpcServerStream>
-                                       || std::is_same_v<StreamType, QGrpcClientStream>
-                                       || std::is_same_v<StreamType, QGrpcBidirStream>,
+                                   || std::is_same_v<StreamType, QGrpcClientStream>
+                                   || std::is_same_v<StreamType, QGrpcBidirStream>,
                                bool> = true>
 #endif
     std::shared_ptr<StreamType> startStream(QLatin1StringView method, const QProtobufMessage &arg,
                                             const QGrpcCallOptions &options)
     {
-        std::optional<QByteArray> argData = trySerialize<ParamType>(arg);
+        std::optional<QByteArray> argData = trySerialize(arg);
         if (!argData)
             return {};
         if constexpr (std::is_same_v<StreamType, QGrpcServerStream>) {
@@ -89,19 +82,7 @@ private:
     std::shared_ptr<QGrpcBidirStream> startBidirStream(QLatin1StringView method, QByteArrayView arg,
                                                        const QGrpcCallOptions &options);
 
-    template <typename ParamType>
-    std::optional<QByteArray> trySerialize(const QProtobufMessage &arg)
-    {
-        using namespace Qt::StringLiterals;
-        auto _serializer = serializer();
-        if (_serializer == nullptr) {
-            Q_EMIT errorOccurred({ QGrpcStatus::Unknown,
-                                   "Serializing failed. Serializer is not ready."_L1 });
-            return std::nullopt;
-        }
-        return _serializer->serialize(&arg);
-    }
-
+    std::optional<QByteArray> trySerialize(const QProtobufMessage &arg);
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 
     Q_DISABLE_COPY_MOVE(QAbstractGrpcClient)
