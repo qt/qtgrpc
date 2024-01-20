@@ -5,9 +5,12 @@
 #define Q_PROTOBUF_MESSAGE_H
 
 #include <QtProtobuf/qtprotobufglobal.h>
+#include <QtProtobuf/qprotobufpropertyordering.h>
+
 #include <QtCore/qtconfigmacros.h>
 #include <QtCore/qtmetamacros.h>
 #include <QtCore/qmetaobject.h>
+
 
 QT_BEGIN_NAMESPACE
 
@@ -16,11 +19,6 @@ struct QProtobufMessageDeleter {
     Q_PROTOBUF_EXPORT void operator()(QProtobufMessage *ptr) noexcept;
 };
 using QProtobufMessagePointer = std::unique_ptr<QProtobufMessage, QProtobufMessageDeleter>;
-
-namespace QtProtobufPrivate {
-struct QProtobufPropertyOrderingInfo;
-struct QProtobufPropertyOrdering;
-}
 
 class QAbstractProtobufSerializer;
 class QProtobufMessagePrivate;

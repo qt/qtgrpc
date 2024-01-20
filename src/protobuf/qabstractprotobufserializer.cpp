@@ -5,6 +5,7 @@
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
 #include <QtProtobuf/qprotobufmessage.h>
+#include <QtProtobuf/qprotobufpropertyordering.h>
 
 QT_BEGIN_NAMESPACE
 

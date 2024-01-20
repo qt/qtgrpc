@@ -14,6 +14,7 @@ qt_internal_add_module(Protobuf
         qprotobufjsonserializer.cpp qprotobufjsonserializer.h
         qtprotobuflogging.cpp qtprotobuflogging_p.h
         qprotobufregistration.cpp qprotobufregistration.h
+        qprotobufpropertyordering.cpp qprotobufpropertyordering.h
         qtprotobuftypes.cpp qtprotobuftypes.h
         qprotobufoneof.cpp qprotobufoneof.h
     GENERATE_CPP_EXPORTS
