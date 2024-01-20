@@ -68,7 +68,6 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT EmptyMessage : public QProt
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(EmptyMessage)
     QML_VALUE_TYPE(emptyMessage)
 
 public:
@@ -97,7 +96,6 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage : public Q
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleIntMessage)
     QML_VALUE_TYPE(simpleIntMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
@@ -135,7 +133,6 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage : 
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(NoPackageExternalMessage)
     QML_VALUE_TYPE(noPackageExternalMessage)
     Q_PROPERTY(SimpleIntMessageExt *testField_p READ testField_p WRITE setTestField_p SCRIPTABLE false)
     Q_PROPERTY(SimpleIntMessageExt testField READ testField WRITE setTestField)
@@ -178,7 +175,6 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage : public Q
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(NoPackageMessage)
     QML_VALUE_TYPE(noPackageMessage)
     Q_PROPERTY(SimpleIntMessage *testField_p READ testField_p WRITE setTestField_p SCRIPTABLE false)
     Q_PROPERTY(SimpleIntMessage testField READ testField WRITE setTestField)

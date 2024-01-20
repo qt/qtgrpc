@@ -42,7 +42,6 @@ class EmptyMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(EmptyMessage)
 
 public:
     using QtProtobufFieldEnum = EmptyMessage_QtProtobufNested::QtProtobufFieldEnum;
@@ -69,7 +68,6 @@ class SimpleStringMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringMessage)
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
 
 public:
@@ -105,7 +103,6 @@ class ComplexMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(ComplexMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(MyTopLevelNamespace::qtprotobufnamespace::tests::SimpleStringMessage *testComplexField_p READ testComplexField_p WRITE setTestComplexField_p SCRIPTABLE false)
 

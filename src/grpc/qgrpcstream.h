@@ -38,7 +38,7 @@ public:
     template<typename T>
     void sendMessage(const T &message)
     {
-        sendMessage(serializer()->serialize<T>(&message));
+        sendMessage(serializer()->serialize(&message));
     }
 
     void sendMessage(const QProtobufMessage *message);
@@ -58,7 +58,7 @@ public:
     template<typename T>
     void sendMessage(const T &message)
     {
-        sendMessage(serializer()->serialize<T>(&message));
+        sendMessage(serializer()->serialize(&message));
     }
 
     void sendMessage(const QProtobufMessage *message);

@@ -54,47 +54,6 @@ QT_BEGIN_NAMESPACE
 QAbstractProtobufSerializer::~QAbstractProtobufSerializer() = default;
 
 /*!
-    \fn template<typename T> QAbstractProtobufSerializer::serialize(const QProtobufMessage *message) const
-
-    This function serializes a registered Protobuf message \a message into a
-    QByteArray. \a message must not be \nullptr.
-
-    For a given type, \c{T}, you should call the \c{serialize()} function on an
-    instance of that type, which in turn will call this function for you.
-
-    \sa deserialize()
-*/
-
-QByteArray QAbstractProtobufSerializer::doSerialize(const QProtobufMessage *message,
-        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
-{
-    Q_ASSERT(message);
-    return serializeMessage(message, ordering);
-}
-
-/*!
-    \fn template<typename T> QAbstractProtobufSerializer::deserialize(T *object, QByteArrayView data) const
-
-    This function deserializes a registered Protobuf message \a object from a
-    QByteArray \a data. \a object must not be \nullptr.
-    Returns \c true if deserialization was successful, otherwise \c false.
-
-    For a given type, \c{T}, you should call the \c{deserialize()} function on
-    an instance of that type, which in turn will call this function for you.
-
-    Unexpected/unknown properties in the \a data are skipped.
-
-    \sa serialize()
-*/
-
-bool QAbstractProtobufSerializer::doDeserialize(QProtobufMessage *message,
-        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering, QByteArrayView data) const
-{
-    Q_ASSERT(message);
-    return deserializeMessage(message, ordering, data);
-}
-
-/*!
     \fn QByteArray QAbstractProtobufSerializer::serializeMessage(const QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
 
     This is called by serialize() to serialize a registered Protobuf message
@@ -115,17 +74,38 @@ namespace QtProtobufPrivate {
 extern QtProtobufPrivate::QProtobufPropertyOrdering getOrderingByMetaType(QMetaType type);
 }
 
-QByteArray QAbstractProtobufSerializer::serializeRawMessage(const QProtobufMessage *message) const
+/*!
+    \fn QAbstractProtobufSerializer::serialize(const QProtobufMessage *message) const
+
+    Serializes a registered Protobuf message \a message into a QByteArray.
+    \a message must not be \nullptr.
+
+    \sa deserialize()
+*/
+QByteArray QAbstractProtobufSerializer::serialize(const QProtobufMessage *message) const
 {
-    Q_ASSERT(message->propertyOrdering() != nullptr
+    Q_ASSERT(message != nullptr && message->propertyOrdering() != nullptr
              && message->propertyOrdering()->data != nullptr);
     return serializeMessage(message, *message->propertyOrdering());
 }
 
-bool QAbstractProtobufSerializer::deserializeRawMessage(QProtobufMessage *message, QByteArrayView data) const
+/*!
+    \fn QAbstractProtobufSerializer::deserialize(QProtobufMessage *message, QByteArrayView data) const
+
+    Deserializes a registered Protobuf message \a message from a QByteArray
+    \a data. \a message must not be \nullptr.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    Unexpected/unknown properties in the \a data are skipped.
+
+    \sa serialize()
+*/
+bool QAbstractProtobufSerializer::deserialize(QProtobufMessage *message, QByteArrayView data) const
 {
-    Q_ASSERT(message->propertyOrdering() != nullptr
+    Q_ASSERT(message != nullptr && message->propertyOrdering() != nullptr
              && message->propertyOrdering()->data != nullptr);
+    // Wipe the message using the default constructor.
+    message->metaObject()->metaType().construct(message);
     return deserializeMessage(message, *message->propertyOrdering(), data);
 }
 

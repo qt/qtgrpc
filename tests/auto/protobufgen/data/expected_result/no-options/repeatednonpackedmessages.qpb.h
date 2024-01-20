@@ -108,7 +108,6 @@ class RepeatedNonPackedIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedIntMessage)
     Q_PROPERTY(QtProtobuf::int32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -145,7 +144,6 @@ class RepeatedNonPackedSIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedSIntMessage)
     Q_PROPERTY(QtProtobuf::sint32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -182,7 +180,6 @@ class RepeatedNonPackedUIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedUIntMessage)
     Q_PROPERTY(QtProtobuf::uint32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -219,7 +216,6 @@ class RepeatedNonPackedInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedInt64Message)
     Q_PROPERTY(QtProtobuf::int64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -256,7 +252,6 @@ class RepeatedNonPackedSInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedSInt64Message)
     Q_PROPERTY(QtProtobuf::sint64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -293,7 +288,6 @@ class RepeatedNonPackedUInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedUInt64Message)
     Q_PROPERTY(QtProtobuf::uint64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -330,7 +324,6 @@ class RepeatedNonPackedFixedIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedFixedIntMessage)
     Q_PROPERTY(QtProtobuf::fixed32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -367,7 +360,6 @@ class RepeatedNonPackedSFixedIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedSFixedIntMessage)
     Q_PROPERTY(QtProtobuf::sfixed32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -404,7 +396,6 @@ class RepeatedNonPackedFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedFixedInt64Message)
     Q_PROPERTY(QtProtobuf::fixed64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -441,7 +432,6 @@ class RepeatedNonPackedSFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedSFixedInt64Message)
     Q_PROPERTY(QtProtobuf::sfixed64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -478,7 +468,6 @@ class RepeatedNonPackedBoolMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedBoolMessage)
     Q_PROPERTY(QtProtobuf::boolList testRepeatedBool READ testRepeatedBool WRITE setTestRepeatedBool SCRIPTABLE true)
 
 public:
@@ -515,7 +504,6 @@ class RepeatedNonPackedDoubleMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedDoubleMessage)
     Q_PROPERTY(QtProtobuf::doubleList testRepeatedDouble READ testRepeatedDouble WRITE setTestRepeatedDouble SCRIPTABLE true)
 
 public:
@@ -552,7 +540,6 @@ class RepeatedNonPackedFloatMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedNonPackedFloatMessage)
     Q_PROPERTY(QtProtobuf::floatList testRepeatedFloat READ testRepeatedFloat WRITE setTestRepeatedFloat SCRIPTABLE true)
 
 public:
@@ -589,7 +576,6 @@ class NonPackedIntMessageWithExtraMember : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(NonPackedIntMessageWithExtraMember)
     Q_PROPERTY(QtProtobuf::int32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
     Q_PROPERTY(QString extra READ extra WRITE setExtra SCRIPTABLE true)
 

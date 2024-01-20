@@ -22,6 +22,7 @@ struct QProtobufPropertyOrderingInfo;
 struct QProtobufPropertyOrdering;
 }
 
+class QAbstractProtobufSerializer;
 class QProtobufMessagePrivate;
 class QProtobufMessage
 {
@@ -36,6 +37,10 @@ public:
 
     Q_PROTOBUF_EXPORT QList<qint32> unknownFieldNumbers() const;
     Q_PROTOBUF_EXPORT QList<QByteArray> unknownFieldData(qint32 field) const;
+
+    Q_PROTOBUF_EXPORT QByteArray serialize(QAbstractProtobufSerializer *serializer) const;
+    Q_PROTOBUF_EXPORT bool deserialize(QAbstractProtobufSerializer *serializer,
+                                       QByteArrayView data);
 
 protected:
     Q_PROTOBUF_EXPORT explicit QProtobufMessage(const QMetaObject *metaObject,

@@ -122,7 +122,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedStringMessage : public QProtobufM
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedStringMessage)
     Q_PROPERTY(QStringList testRepeatedString READ testRepeatedString WRITE setTestRepeatedString SCRIPTABLE true)
 
 public:
@@ -159,7 +158,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedDoubleMessage : public QProtobufM
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedDoubleMessage)
     Q_PROPERTY(QtProtobuf::doubleList testRepeatedDouble READ testRepeatedDouble WRITE setTestRepeatedDouble SCRIPTABLE true)
 
 public:
@@ -196,7 +194,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedBytesMessage : public QProtobufMe
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedBytesMessage)
     Q_PROPERTY(QByteArrayList testRepeatedBytes READ testRepeatedBytes WRITE setTestRepeatedBytes SCRIPTABLE true)
 
 public:
@@ -233,7 +230,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedFloatMessage : public QProtobufMe
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedFloatMessage)
     Q_PROPERTY(QtProtobuf::floatList testRepeatedFloat READ testRepeatedFloat WRITE setTestRepeatedFloat SCRIPTABLE true)
 
 public:
@@ -270,7 +266,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedComplexMessage : public QProtobuf
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedComplexMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::ComplexMessageRepeated testRepeatedComplexData READ testRepeatedComplex WRITE setTestRepeatedComplex SCRIPTABLE true)
 
 public:
@@ -307,7 +302,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedSIntMessage : public QProtobufMes
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedSIntMessage)
     Q_PROPERTY(QtProtobuf::sint32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -344,7 +338,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedIntMessage : public QProtobufMess
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedIntMessage)
     Q_PROPERTY(QtProtobuf::int32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -381,7 +374,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedUIntMessage : public QProtobufMes
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedUIntMessage)
     Q_PROPERTY(QtProtobuf::uint32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -418,7 +410,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedSInt64Message : public QProtobufM
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedSInt64Message)
     Q_PROPERTY(QtProtobuf::sint64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -455,7 +446,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedInt64Message : public QProtobufMe
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedInt64Message)
     Q_PROPERTY(QtProtobuf::int64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -492,7 +482,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedUInt64Message : public QProtobufM
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedUInt64Message)
     Q_PROPERTY(QtProtobuf::uint64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -529,7 +518,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedFixedIntMessage : public QProtobu
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedFixedIntMessage)
     Q_PROPERTY(QtProtobuf::fixed32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -566,7 +554,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedSFixedIntMessage : public QProtob
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedSFixedIntMessage)
     Q_PROPERTY(QtProtobuf::sfixed32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -603,7 +590,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedFixedInt64Message : public QProto
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedFixedInt64Message)
     Q_PROPERTY(QtProtobuf::fixed64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -640,7 +626,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedSFixedInt64Message : public QProt
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedSFixedInt64Message)
     Q_PROPERTY(QtProtobuf::sfixed64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
 public:
@@ -677,7 +662,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT RepeatedBoolMessage : public QProtobufMes
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedBoolMessage)
     Q_PROPERTY(QtProtobuf::boolList testRepeatedBool READ testRepeatedBool WRITE setTestRepeatedBool SCRIPTABLE true)
 
 public:

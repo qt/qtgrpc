@@ -12,20 +12,6 @@
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
-#define Q_DECLARE_PROTOBUF_SERIALIZERS(Type)\
-    public:\
-        QByteArray serialize(QAbstractProtobufSerializer *serializer) const {\
-            qRegisterProtobufTypes();\
-            Q_ASSERT_X(serializer != nullptr, "QProtobufObject", "Serializer is null");\
-            return serializer->serialize<Type>(this);\
-        }\
-        bool deserialize(QAbstractProtobufSerializer *serializer, QByteArrayView array) {\
-            qRegisterProtobufTypes();\
-            Q_ASSERT_X(serializer != nullptr, "QProtobufObject", "Serializer is null");\
-            return serializer->deserialize<Type>(this, array);\
-        }\
-    private:
-
 #define Q_PROTOBUF_OBJECT\
     public:\
         static const QtProtobufPrivate::QProtobufPropertyOrdering staticPropertyOrdering;\

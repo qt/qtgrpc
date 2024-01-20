@@ -127,7 +127,7 @@ void QGrpcOperation::read(QProtobufMessage *message) const
     Q_ASSERT_X(message != nullptr, "QGrpcOperation::read",
                "Can't read to nullptr QProtobufMessage");
     if (auto ser = serializer(); ser) {
-        if (!ser->deserializeRawMessage(message, data()))
+        if (!ser->deserialize(message, data()))
             emit errorOccurred(deserializationError());
     }
 }

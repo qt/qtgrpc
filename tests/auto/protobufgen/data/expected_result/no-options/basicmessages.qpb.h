@@ -126,7 +126,6 @@ class EmptyMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(EmptyMessage)
 
 public:
     using QtProtobufFieldEnum = EmptyMessage_QtProtobufNested::QtProtobufFieldEnum;
@@ -153,7 +152,6 @@ class SimpleBoolMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleBoolMessage)
     Q_PROPERTY(bool testFieldBool READ testFieldBool WRITE setTestFieldBool SCRIPTABLE true)
 
 public:
@@ -189,7 +187,6 @@ class SimpleIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleIntMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
@@ -225,7 +222,6 @@ class SimpleSIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSIntMessage)
     Q_PROPERTY(QtProtobuf::sint32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
@@ -261,7 +257,6 @@ class SimpleUIntMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUIntMessage)
     Q_PROPERTY(QtProtobuf::uint32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
@@ -297,7 +292,6 @@ class SimpleInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt64Message)
     Q_PROPERTY(QtProtobuf::int64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
 
 public:
@@ -333,7 +327,6 @@ class SimpleSInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt64Message)
     Q_PROPERTY(QtProtobuf::sint64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
 
 public:
@@ -369,7 +362,6 @@ class SimpleUInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt64Message)
     Q_PROPERTY(QtProtobuf::uint64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
@@ -405,7 +397,6 @@ class SimpleStringMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringMessage)
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
 
 public:
@@ -441,7 +432,6 @@ class SimpleFloatMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFloatMessage)
     Q_PROPERTY(float testFieldFloat READ testFieldFloat WRITE setTestFieldFloat SCRIPTABLE true)
 
 public:
@@ -477,7 +467,6 @@ class SimpleDoubleMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleDoubleMessage)
     Q_PROPERTY(double testFieldDouble READ testFieldDouble WRITE setTestFieldDouble SCRIPTABLE true)
 
 public:
@@ -513,7 +502,6 @@ class SimpleBytesMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleBytesMessage)
     Q_PROPERTY(QByteArray testFieldBytes READ testFieldBytes WRITE setTestFieldBytes SCRIPTABLE true)
 
 public:
@@ -549,7 +537,6 @@ class SimpleFixedInt32Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixedInt32Message)
     Q_PROPERTY(QtProtobuf::fixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
 
 public:
@@ -585,7 +572,6 @@ class SimpleFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixedInt64Message)
     Q_PROPERTY(QtProtobuf::fixed64 testFieldFixedInt64 READ testFieldFixedInt64 WRITE setTestFieldFixedInt64 SCRIPTABLE false)
 
 public:
@@ -621,7 +607,6 @@ class SimpleSFixedInt32Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixedInt32Message)
     Q_PROPERTY(QtProtobuf::sfixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
 
 public:
@@ -657,7 +642,6 @@ class SimpleSFixedInt64Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixedInt64Message)
     Q_PROPERTY(QtProtobuf::sfixed64 testFieldFixedInt64 READ testFieldFixedInt64 WRITE setTestFieldFixedInt64 SCRIPTABLE false)
 
 public:
@@ -693,7 +677,6 @@ class ComplexMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(ComplexMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage *testComplexField_p READ testComplexField_p WRITE setTestComplexField_p SCRIPTABLE false)
 

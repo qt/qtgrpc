@@ -55,7 +55,6 @@ class AnyMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnyMessage)
     Q_PROPERTY(QtProtobuf::Any field READ field WRITE setField SCRIPTABLE true)
 
 public:
@@ -91,7 +90,6 @@ class RepeatedAnyMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedAnyMessage)
     Q_PROPERTY(QList<QtProtobuf::Any> anysData READ anys WRITE setAnys SCRIPTABLE true)
 
 public:
@@ -128,7 +126,6 @@ class TwoAnyMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(TwoAnyMessage)
     Q_PROPERTY(QtProtobuf::Any one READ one WRITE setOne SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::Any two READ two WRITE setTwo SCRIPTABLE true)
 
@@ -169,7 +166,6 @@ class Example : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(Example)
     Q_PROPERTY(QString str READ str WRITE setStr SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::sint32 i READ i WRITE setI SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::sint32 j READ j WRITE setJ SCRIPTABLE true)
@@ -225,7 +221,6 @@ class SimpleMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleMessage)
     Q_PROPERTY(QtProtobuf::int32 i READ i WRITE setI SCRIPTABLE true)
 
 public:

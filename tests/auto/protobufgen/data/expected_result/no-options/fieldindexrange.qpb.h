@@ -48,7 +48,6 @@ class FieldIndexTest1Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(FieldIndexTest1Message)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
@@ -84,7 +83,6 @@ class FieldIndexTest2Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(FieldIndexTest2Message)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
@@ -120,7 +118,6 @@ class FieldIndexTest3Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(FieldIndexTest3Message)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
@@ -156,7 +153,6 @@ class FieldIndexTest4Message : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(FieldIndexTest4Message)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:

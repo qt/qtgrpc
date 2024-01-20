@@ -45,7 +45,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT OneofSimpleMessage : public QProtobuf
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(OneofSimpleMessage)
     QML_VALUE_TYPE(oneofSimpleMessage)
     Q_PROPERTY(QtProtobuf::int32 testOneofFieldInt READ testOneofFieldInt_p WRITE setTestOneofFieldInt_p)
     Q_PROPERTY(bool hasTestOneofFieldInt READ hasTestOneofFieldInt)
@@ -106,7 +105,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT OneofComplexMessage : public QProtobu
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(OneofComplexMessage)
     QML_VALUE_TYPE(oneofComplexMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::int32 testOneofFieldInt READ testOneofFieldInt_p WRITE setTestOneofFieldInt_p)

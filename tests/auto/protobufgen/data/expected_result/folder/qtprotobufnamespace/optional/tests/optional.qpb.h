@@ -39,7 +39,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage : public QProtobufMessa
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(TestStringMessage)
     Q_PROPERTY(QString stringField READ stringField WRITE setStringField SCRIPTABLE true)
 
 public:
@@ -75,7 +74,6 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OptionalMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(OptionalMessage)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::sint32 testFieldOpt READ testFieldOpt_p WRITE setTestFieldOpt_p)
     Q_PROPERTY(bool hasTestFieldOpt READ hasTestFieldOpt)

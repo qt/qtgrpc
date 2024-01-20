@@ -115,13 +115,13 @@ QByteArray ConformaceServer::runTest(const QByteArray &reqData)
     }
     QByteArray payload = isProtoInput ? request.protobufPayload() : request.jsonPayload().toUtf8();
 
-    if (!activeDeserializer->deserializeRawMessage(msg.get(), payload)
+    if (!activeDeserializer->deserialize(msg.get(), payload)
         || activeDeserializer->deserializationError() != QAbstractProtobufSerializer::NoError) {
         response.setParseError(activeDeserializer->deserializationErrorString());
         return response.serialize(&m_protoSerializer);
     }
 
-    QByteArray result = activeSerializer->serializeRawMessage(msg.get());
+    QByteArray result = activeSerializer->serialize(msg.get());
     if (isProtoOutput)
         response.setProtobufPayload(result);
     else {

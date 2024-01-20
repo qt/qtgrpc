@@ -199,7 +199,6 @@ class  SimpleSInt32StringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt32StringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -241,7 +240,6 @@ class  SimpleSInt64StringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt64StringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -283,7 +281,6 @@ class  SimpleInt32StringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt32StringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -325,7 +322,6 @@ class  SimpleInt64StringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt64StringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -367,7 +363,6 @@ class  SimpleUInt32StringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt32StringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -409,7 +404,6 @@ class  SimpleUInt64StringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt64StringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -451,7 +445,6 @@ class  SimpleFixed32StringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed32StringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -493,7 +486,6 @@ class  SimpleFixed64StringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed64StringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -535,7 +527,6 @@ class  SimpleSFixed32StringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed32StringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -577,7 +568,6 @@ class  SimpleSFixed64StringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed64StringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -619,7 +609,6 @@ class  SimpleStringStringMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringStringMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringStringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -661,7 +650,6 @@ class  SimpleSInt32SInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt32SInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -703,7 +691,6 @@ class  SimpleSInt64SInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt64SInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -745,7 +732,6 @@ class  SimpleInt32SInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt32SInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -787,7 +773,6 @@ class  SimpleInt64SInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt64SInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -829,7 +814,6 @@ class  SimpleUInt32SInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt32SInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -871,7 +855,6 @@ class  SimpleUInt64SInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt64SInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -913,7 +896,6 @@ class  SimpleFixed32SInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed32SInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -955,7 +937,6 @@ class  SimpleFixed64SInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed64SInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -997,7 +978,6 @@ class  SimpleSFixed32SInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed32SInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1039,7 +1019,6 @@ class  SimpleSFixed64SInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed64SInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1081,7 +1060,6 @@ class  SimpleStringSInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringSInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringSInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1123,7 +1101,6 @@ class  SimpleSInt32SInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt32SInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1165,7 +1142,6 @@ class  SimpleSInt64SInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt64SInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1207,7 +1183,6 @@ class  SimpleInt32SInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt32SInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1249,7 +1224,6 @@ class  SimpleInt64SInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt64SInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1291,7 +1265,6 @@ class  SimpleUInt32SInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt32SInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1333,7 +1306,6 @@ class  SimpleUInt64SInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt64SInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1375,7 +1347,6 @@ class  SimpleFixed32SInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed32SInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1417,7 +1388,6 @@ class  SimpleFixed64SInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed64SInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1459,7 +1429,6 @@ class  SimpleSFixed32SInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed32SInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1501,7 +1470,6 @@ class  SimpleSFixed64SInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed64SInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1543,7 +1511,6 @@ class  SimpleStringSInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringSInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringSInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1585,7 +1552,6 @@ class  SimpleSInt32UInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt32UInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1627,7 +1593,6 @@ class  SimpleSInt64UInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt64UInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1669,7 +1634,6 @@ class  SimpleInt32UInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt32UInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1711,7 +1675,6 @@ class  SimpleInt64UInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt64UInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1753,7 +1716,6 @@ class  SimpleUInt32UInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt32UInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1795,7 +1757,6 @@ class  SimpleUInt64UInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt64UInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1837,7 +1798,6 @@ class  SimpleFixed32UInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed32UInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1879,7 +1839,6 @@ class  SimpleFixed64UInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed64UInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1921,7 +1880,6 @@ class  SimpleSFixed32UInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed32UInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -1963,7 +1921,6 @@ class  SimpleSFixed64UInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed64UInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2005,7 +1962,6 @@ class  SimpleStringUInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringUInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringUInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2047,7 +2003,6 @@ class  SimpleSInt32UInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt32UInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2089,7 +2044,6 @@ class  SimpleSInt64UInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt64UInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2131,7 +2085,6 @@ class  SimpleInt32UInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt32UInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2173,7 +2126,6 @@ class  SimpleInt64UInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt64UInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2215,7 +2167,6 @@ class  SimpleUInt32UInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt32UInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2257,7 +2208,6 @@ class  SimpleUInt64UInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt64UInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2299,7 +2249,6 @@ class  SimpleFixed32UInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed32UInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2341,7 +2290,6 @@ class  SimpleFixed64UInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed64UInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2383,7 +2331,6 @@ class  SimpleSFixed32UInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed32UInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2425,7 +2372,6 @@ class  SimpleSFixed64UInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed64UInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2467,7 +2413,6 @@ class  SimpleStringUInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringUInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringUInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2509,7 +2454,6 @@ class  SimpleSInt32Int32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt32Int32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2551,7 +2495,6 @@ class  SimpleSInt64Int32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt64Int32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2593,7 +2536,6 @@ class  SimpleInt32Int32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt32Int32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2635,7 +2577,6 @@ class  SimpleInt64Int32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt64Int32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2677,7 +2618,6 @@ class  SimpleUInt32Int32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt32Int32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2719,7 +2659,6 @@ class  SimpleUInt64Int32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt64Int32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2761,7 +2700,6 @@ class  SimpleFixed32Int32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed32Int32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2803,7 +2741,6 @@ class  SimpleFixed64Int32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed64Int32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2845,7 +2782,6 @@ class  SimpleSFixed32Int32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed32Int32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2887,7 +2823,6 @@ class  SimpleSFixed64Int32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed64Int32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2929,7 +2864,6 @@ class  SimpleStringInt32MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringInt32MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -2971,7 +2905,6 @@ class  SimpleSInt32Int64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt32Int64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3013,7 +2946,6 @@ class  SimpleSInt64Int64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt64Int64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3055,7 +2987,6 @@ class  SimpleInt32Int64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt32Int64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3097,7 +3028,6 @@ class  SimpleInt64Int64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt64Int64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3139,7 +3069,6 @@ class  SimpleUInt32Int64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt32Int64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3181,7 +3110,6 @@ class  SimpleUInt64Int64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt64Int64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3223,7 +3151,6 @@ class  SimpleFixed32Int64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed32Int64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3265,7 +3192,6 @@ class  SimpleFixed64Int64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed64Int64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3307,7 +3233,6 @@ class  SimpleSFixed32Int64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed32Int64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3349,7 +3274,6 @@ class  SimpleSFixed64Int64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed64Int64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3391,7 +3315,6 @@ class  SimpleStringInt64MapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringInt64MapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3433,7 +3356,6 @@ class  SimpleSInt32ComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt32ComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3475,7 +3397,6 @@ class  SimpleSInt64ComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt64ComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3517,7 +3438,6 @@ class  SimpleInt32ComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt32ComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3559,7 +3479,6 @@ class  SimpleInt64ComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt64ComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3601,7 +3520,6 @@ class  SimpleUInt32ComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt32ComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3643,7 +3561,6 @@ class  SimpleUInt64ComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt64ComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3685,7 +3602,6 @@ class  SimpleFixed32ComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed32ComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3727,7 +3643,6 @@ class  SimpleFixed64ComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixed64ComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3769,7 +3684,6 @@ class  SimpleSFixed32ComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed32ComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3811,7 +3725,6 @@ class  SimpleSFixed64ComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixed64ComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:
@@ -3853,7 +3766,6 @@ class  SimpleStringComplexMessageMapMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringComplexMessageMapMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField NOTIFY mapFieldChanged SCRIPTABLE true)
 
 public:

@@ -434,8 +434,7 @@ void QtGrpcClientServerStreamTest::Interceptor()
         }
         SimpleStringMessage newArg;
         newArg.setTestFieldString(QString("%1%2").arg(oldArg.testFieldString()).arg(id));
-        auto rawMessage =
-            operation->serializer()->serialize<qtgrpc::tests::SimpleStringMessage>(&newArg);
+        auto rawMessage = operation->serializer()->serialize(&newArg);
         operation->setArgument(rawMessage);
     };
     auto manager = QGrpcClientInterceptorManager();

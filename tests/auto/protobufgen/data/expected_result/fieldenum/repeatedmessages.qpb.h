@@ -55,7 +55,6 @@ class  RepeatedStringMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedStringMessage)
     Q_PROPERTY(QStringList testRepeatedString READ testRepeatedString WRITE setTestRepeatedString NOTIFY testRepeatedStringChanged SCRIPTABLE true)
 
 public:
@@ -96,7 +95,6 @@ class  RepeatedDoubleMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedDoubleMessage)
     Q_PROPERTY(QtProtobuf::doubleList testRepeatedDouble READ testRepeatedDouble WRITE setTestRepeatedDouble NOTIFY testRepeatedDoubleChanged SCRIPTABLE true)
 
 public:
@@ -143,7 +141,6 @@ class  RepeatedBytesMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedBytesMessage)
     Q_PROPERTY(QByteArrayList testRepeatedBytes READ testRepeatedBytes WRITE setTestRepeatedBytes NOTIFY testRepeatedBytesChanged SCRIPTABLE true)
 
 public:
@@ -184,7 +181,6 @@ class  RepeatedFloatMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedFloatMessage)
     Q_PROPERTY(QtProtobuf::floatList testRepeatedFloat READ testRepeatedFloat WRITE setTestRepeatedFloat NOTIFY testRepeatedFloatChanged SCRIPTABLE true)
 
 public:
@@ -231,7 +227,6 @@ class  RepeatedComplexMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedComplexMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::ComplexMessageRepeated testRepeatedComplexData READ testRepeatedComplex WRITE setTestRepeatedComplex NOTIFY testRepeatedComplexChanged SCRIPTABLE true)
 
 public:
@@ -272,7 +267,6 @@ class  RepeatedSIntMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedSIntMessage)
     Q_PROPERTY(QtProtobuf::sint32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt NOTIFY testRepeatedIntChanged SCRIPTABLE true)
 
 public:
@@ -319,7 +313,6 @@ class  RepeatedIntMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedIntMessage)
     Q_PROPERTY(QtProtobuf::int32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt NOTIFY testRepeatedIntChanged SCRIPTABLE true)
 
 public:
@@ -366,7 +359,6 @@ class  RepeatedUIntMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedUIntMessage)
     Q_PROPERTY(QtProtobuf::uint32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt NOTIFY testRepeatedIntChanged SCRIPTABLE true)
 
 public:
@@ -413,7 +405,6 @@ class  RepeatedSInt64Message : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedSInt64Message)
     Q_PROPERTY(QtProtobuf::sint64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt NOTIFY testRepeatedIntChanged SCRIPTABLE true)
 
 public:
@@ -460,7 +451,6 @@ class  RepeatedInt64Message : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedInt64Message)
     Q_PROPERTY(QtProtobuf::int64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt NOTIFY testRepeatedIntChanged SCRIPTABLE true)
 
 public:
@@ -507,7 +497,6 @@ class  RepeatedUInt64Message : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedUInt64Message)
     Q_PROPERTY(QtProtobuf::uint64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt NOTIFY testRepeatedIntChanged SCRIPTABLE true)
 
 public:
@@ -554,7 +543,6 @@ class  RepeatedFixedIntMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedFixedIntMessage)
     Q_PROPERTY(QtProtobuf::fixed32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt NOTIFY testRepeatedIntChanged SCRIPTABLE true)
 
 public:
@@ -601,7 +589,6 @@ class  RepeatedSFixedIntMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedSFixedIntMessage)
     Q_PROPERTY(QtProtobuf::sfixed32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt NOTIFY testRepeatedIntChanged SCRIPTABLE true)
 
 public:
@@ -648,7 +635,6 @@ class  RepeatedFixedInt64Message : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedFixedInt64Message)
     Q_PROPERTY(QtProtobuf::fixed64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt NOTIFY testRepeatedIntChanged SCRIPTABLE true)
 
 public:
@@ -695,7 +681,6 @@ class  RepeatedSFixedInt64Message : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedSFixedInt64Message)
     Q_PROPERTY(QtProtobuf::sfixed64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt NOTIFY testRepeatedIntChanged SCRIPTABLE true)
 
 public:
@@ -742,7 +727,6 @@ class  RepeatedBoolMessage : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedBoolMessage)
     Q_PROPERTY(QtProtobuf::boolList testRepeatedBool READ testRepeatedBool WRITE setTestRepeatedBool NOTIFY testRepeatedBoolChanged SCRIPTABLE true)
 
 public:

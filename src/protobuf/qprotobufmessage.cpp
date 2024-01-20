@@ -1,8 +1,9 @@
 // Copyright (C) 2022 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
-#include "qprotobufmessage_p.h"
 #include "qprotobufmessage.h"
+#include "qprotobufmessage_p.h"
+#include "qabstractprotobufserializer.h"
 
 #include <QtProtobuf/qtprotobuftypes.h>
 
@@ -307,6 +308,32 @@ QList<qint32> QProtobufMessage::unknownFieldNumbers() const
 QList<QByteArray> QProtobufMessage::unknownFieldData(qint32 field) const
 {
     return d_func()->unknownEntries.value(field);
+}
+
+/*!
+    \since 6.8
+    Serializes this protobuf message into a QByteArray using \a serializer.
+
+    \sa deserialize()
+*/
+QByteArray QProtobufMessage::serialize(QAbstractProtobufSerializer *serializer) const
+{
+    qRegisterProtobufTypes();
+    return serializer->serialize(this);
+}
+
+/*!
+    \since 6.8
+    Deserializes this protobuf message from a QByteArray \a data using
+    \a serializer.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    \sa serialize()
+*/
+bool QProtobufMessage::deserialize(QAbstractProtobufSerializer *serializer, QByteArrayView data)
+{
+    qRegisterProtobufTypes();
+    return serializer->deserialize(this, data);
 }
 
 QT_END_NAMESPACE

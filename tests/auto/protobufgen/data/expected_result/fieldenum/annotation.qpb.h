@@ -58,7 +58,6 @@ class  AnnotatedMessage1 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage1)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -101,7 +100,6 @@ class  AnnotatedMessage2 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage2)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -144,7 +142,6 @@ class  AnnotatedMessage3 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage3)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -187,7 +184,6 @@ class  AnnotatedMessage4 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage4)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -230,7 +226,6 @@ class  AnnotatedMessage5 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage5)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -273,7 +268,6 @@ class  AnnotatedMessage6 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage6)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -316,7 +310,6 @@ class  AnnotatedMessage7 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage7)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -359,7 +352,6 @@ class  AnnotatedMessage8 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage8)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -402,7 +394,6 @@ class  AnnotatedMessage9 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage9)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -445,7 +436,6 @@ class  AnnotatedMessage10 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage10)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -488,7 +478,6 @@ class  AnnotatedMessage11 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage11)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -531,7 +520,6 @@ class  AnnotatedMessage12 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage12)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -574,7 +562,6 @@ class  AnnotatedMessage13 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage13)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -617,7 +604,6 @@ class  AnnotatedMessage14 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage14)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -660,7 +646,6 @@ class  AnnotatedMessage15 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage15)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -703,7 +688,6 @@ class  AnnotatedMessage16 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage16)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -746,7 +730,6 @@ class  AnnotatedMessage17 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage17)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:
@@ -789,7 +772,6 @@ class  AnnotatedMessage18 : public QObject
 {
     Q_OBJECT
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(AnnotatedMessage18)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField NOTIFY testFieldChanged SCRIPTABLE true)
 
 public:

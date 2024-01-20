@@ -215,8 +215,7 @@ const char *CommonTemplates::ClassMessageBeginDeclarationTemplate()
            "class $export_macro$ $classname$ : public QProtobufMessage\n"
            "{\n"
            "    Q_GADGET\n"
-           "    Q_PROTOBUF_OBJECT\n"
-           "    Q_DECLARE_PROTOBUF_SERIALIZERS($classname$)\n";
+           "    Q_PROTOBUF_OBJECT\n";
 }
 
 const char *CommonTemplates::ClassMessageBeginDeclarationTemplateEmptyMacros()
@@ -225,8 +224,7 @@ const char *CommonTemplates::ClassMessageBeginDeclarationTemplateEmptyMacros()
            "class $classname$ : public QProtobufMessage\n"
            "{\n"
            "    Q_GADGET\n"
-           "    Q_PROTOBUF_OBJECT\n"
-           "    Q_DECLARE_PROTOBUF_SERIALIZERS($classname$)\n";
+           "    Q_PROTOBUF_OBJECT\n";
 }
 
 const char *CommonTemplates::ClassMessageDataBeginDeclarationTemplate()

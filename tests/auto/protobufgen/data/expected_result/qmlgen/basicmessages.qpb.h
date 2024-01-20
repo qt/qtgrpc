@@ -130,7 +130,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT EmptyMessage : public QProtobufMessag
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(EmptyMessage)
     QML_VALUE_TYPE(emptyMessage)
 
 public:
@@ -159,7 +158,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleBoolMessage : public QProtobufM
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleBoolMessage)
     QML_VALUE_TYPE(simpleBoolMessage)
     Q_PROPERTY(bool testFieldBool READ testFieldBool WRITE setTestFieldBool SCRIPTABLE true)
 
@@ -197,7 +195,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleIntMessage : public QProtobufMe
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleIntMessage)
     QML_VALUE_TYPE(simpleIntMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
@@ -235,7 +232,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSIntMessage : public QProtobufM
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSIntMessage)
     QML_VALUE_TYPE(simpleSIntMessage)
     Q_PROPERTY(QtProtobuf::sint32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
@@ -273,7 +269,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleUIntMessage : public QProtobufM
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUIntMessage)
     QML_VALUE_TYPE(simpleUIntMessage)
     Q_PROPERTY(QtProtobuf::uint32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
@@ -311,7 +306,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleInt64Message : public QProtobuf
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleInt64Message)
     QML_VALUE_TYPE(simpleInt64Message)
     Q_PROPERTY(QtProtobuf::int64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
 
@@ -349,7 +343,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSInt64Message : public QProtobu
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSInt64Message)
     QML_VALUE_TYPE(simpleSInt64Message)
     Q_PROPERTY(QtProtobuf::sint64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
 
@@ -387,7 +380,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleUInt64Message : public QProtobu
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleUInt64Message)
     QML_VALUE_TYPE(simpleUInt64Message)
     Q_PROPERTY(QtProtobuf::uint64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
@@ -425,7 +417,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleStringMessage : public QProtobu
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleStringMessage)
     QML_VALUE_TYPE(simpleStringMessage)
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
 
@@ -463,7 +454,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFloatMessage : public QProtobuf
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFloatMessage)
     QML_VALUE_TYPE(simpleFloatMessage)
     Q_PROPERTY(float testFieldFloat READ testFieldFloat WRITE setTestFieldFloat SCRIPTABLE true)
 
@@ -501,7 +491,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleDoubleMessage : public QProtobu
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleDoubleMessage)
     QML_VALUE_TYPE(simpleDoubleMessage)
     Q_PROPERTY(double testFieldDouble READ testFieldDouble WRITE setTestFieldDouble SCRIPTABLE true)
 
@@ -539,7 +528,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleBytesMessage : public QProtobuf
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleBytesMessage)
     QML_VALUE_TYPE(simpleBytesMessage)
     Q_PROPERTY(QByteArray testFieldBytes READ testFieldBytes WRITE setTestFieldBytes SCRIPTABLE true)
 
@@ -577,7 +565,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFixedInt32Message : public QPro
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixedInt32Message)
     QML_VALUE_TYPE(simpleFixedInt32Message)
     Q_PROPERTY(QtProtobuf::fixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
 
@@ -615,7 +602,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFixedInt64Message : public QPro
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFixedInt64Message)
     QML_VALUE_TYPE(simpleFixedInt64Message)
     Q_PROPERTY(QtProtobuf::fixed64 testFieldFixedInt64 READ testFieldFixedInt64 WRITE setTestFieldFixedInt64 SCRIPTABLE false)
 
@@ -653,7 +639,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSFixedInt32Message : public QPr
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixedInt32Message)
     QML_VALUE_TYPE(simpleSFixedInt32Message)
     Q_PROPERTY(QtProtobuf::sfixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
 
@@ -691,7 +676,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSFixedInt64Message : public QPr
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleSFixedInt64Message)
     QML_VALUE_TYPE(simpleSFixedInt64Message)
     Q_PROPERTY(QtProtobuf::sfixed64 testFieldFixedInt64 READ testFieldFixedInt64 WRITE setTestFieldFixedInt64 SCRIPTABLE false)
 
@@ -729,7 +713,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT ComplexMessage : public QProtobufMess
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(ComplexMessage)
     QML_VALUE_TYPE(complexMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage *testComplexField_p READ testComplexField_p WRITE setTestComplexField_p SCRIPTABLE false)

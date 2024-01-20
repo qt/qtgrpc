@@ -426,8 +426,7 @@ void QtGrpcClientUnaryCallTest::CacheIntercept()
             }
             SimpleStringMessage cachedValue;
             cachedValue.setTestFieldString(id);
-            const auto serializedValue =
-                operation->serializer()->serialize<SimpleStringMessage>(&cachedValue);
+            const auto serializedValue = operation->serializer()->serialize(&cachedValue);
             emit operation->dataReady(serializedValue);
             emit operation->finished();
         };

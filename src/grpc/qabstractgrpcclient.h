@@ -99,7 +99,7 @@ private:
                                    "Serializing failed. Serializer is not ready."_L1 });
             return std::nullopt;
         }
-        return _serializer->serialize<ParamType>(&arg);
+        return _serializer->serialize(&arg);
     }
 
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const;

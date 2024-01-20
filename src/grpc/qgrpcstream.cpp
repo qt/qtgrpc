@@ -73,7 +73,7 @@ QGrpcClientStream::~QGrpcClientStream() = default;
 */
 void QGrpcClientStream::sendMessage(const QProtobufMessage *message)
 {
-    sendMessage(serializer()->serializeRawMessage(message));
+    sendMessage(serializer()->serialize(message));
 }
 
 /*!
@@ -127,7 +127,7 @@ QGrpcBidirStream::~QGrpcBidirStream() = default;
 */
 void QGrpcBidirStream::sendMessage(const QProtobufMessage *message)
 {
-    sendMessage(serializer()->serializeRawMessage(message));
+    sendMessage(serializer()->serialize(message));
 }
 
 /*!

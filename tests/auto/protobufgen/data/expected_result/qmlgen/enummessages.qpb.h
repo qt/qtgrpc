@@ -142,7 +142,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleEnumMessage : public QProtobufM
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleEnumMessage)
     QML_VALUE_TYPE(simpleEnumMessage)
     Q_PROPERTY(LocalEnum localEnum READ localEnum WRITE setLocalEnum SCRIPTABLE true)
 
@@ -191,7 +190,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT RepeatedEnumMessage : public QProtobu
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(RepeatedEnumMessage)
     QML_VALUE_TYPE(repeatedEnumMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::RepeatedEnumMessage::LocalEnumRepeated localEnumList READ localEnumList WRITE setLocalEnumList SCRIPTABLE true)
 
@@ -241,7 +239,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT MixedEnumUsageMessage : public QProto
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(MixedEnumUsageMessage)
     QML_VALUE_TYPE(mixedEnumUsageMessage)
     Q_PROPERTY(LocalEnum localEnum READ localEnum WRITE setLocalEnum SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::MixedEnumUsageMessage::LocalEnumRepeated localEnumList READ localEnumList WRITE setLocalEnumList SCRIPTABLE true)
@@ -314,7 +311,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumHolder : public QProtobufMe
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(NestedEnumHolder)
     QML_VALUE_TYPE(nestedEnumHolder)
 
 public:
@@ -354,7 +350,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumHolderLevel1 : public QProt
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(NestedEnumHolderLevel1)
     QML_VALUE_TYPE(nestedEnumHolderLevel1)
 
 public:
@@ -393,7 +388,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumHolderLevel2 : public QProt
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(NestedEnumHolderLevel2)
     QML_VALUE_TYPE(nestedEnumHolderLevel2)
 
 public:
@@ -432,7 +426,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumMessage : public QProtobufM
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(NestedEnumMessage)
     QML_VALUE_TYPE(nestedEnumMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::MixedEnumUsageMessage::LocalEnum localEnumField READ localEnumField WRITE setLocalEnumField SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::RepeatedEnumMessage::LocalEnum localEnumField2 READ localEnumField2 WRITE setLocalEnumField2 SCRIPTABLE true)
@@ -491,7 +484,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFileEnumMessage : public QProto
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(SimpleFileEnumMessage)
     QML_VALUE_TYPE(simpleFileEnumMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::TestEnumGadget::TestEnum globalEnum READ globalEnum WRITE setGlobalEnum SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::TestEnumGadget::TestEnumRepeated globalEnumList READ globalEnumList WRITE setGlobalEnumList SCRIPTABLE true)
@@ -535,7 +527,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT StepChildEnumMessage : public QProtob
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(StepChildEnumMessage)
     QML_VALUE_TYPE(stepChildEnumMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleEnumMessage::LocalEnum localStepChildEnum READ localStepChildEnum WRITE setLocalStepChildEnum SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleEnumMessage::LocalEnumRepeated localStepChildList READ localStepChildList WRITE setLocalStepChildList SCRIPTABLE true)
@@ -579,7 +570,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT A : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(A)
     QML_VALUE_TYPE(a)
     Q_PROPERTY(qtprotobufnamespace::tests::B::BEnum val READ val WRITE setVal SCRIPTABLE true)
 
@@ -626,7 +616,6 @@ class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT B : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(B)
     QML_VALUE_TYPE(b)
     Q_PROPERTY(qtprotobufnamespace::tests::A::AEnum val READ val WRITE setVal SCRIPTABLE true)
 

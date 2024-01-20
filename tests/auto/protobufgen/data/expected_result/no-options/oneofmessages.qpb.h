@@ -41,7 +41,6 @@ class OneofSimpleMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(OneofSimpleMessage)
     Q_PROPERTY(QtProtobuf::int32 testOneofFieldInt READ testOneofFieldInt_p WRITE setTestOneofFieldInt_p)
     Q_PROPERTY(bool hasTestOneofFieldInt READ hasTestOneofFieldInt)
     Q_PROPERTY(QtProtobuf::int32 testOneofFieldSecondInt READ testOneofFieldSecondInt_p WRITE setTestOneofFieldSecondInt_p)
@@ -100,7 +99,6 @@ class OneofComplexMessage : public QProtobufMessage
 {
     Q_GADGET
     Q_PROTOBUF_OBJECT
-    Q_DECLARE_PROTOBUF_SERIALIZERS(OneofComplexMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::int32 testOneofFieldInt READ testOneofFieldInt_p WRITE setTestOneofFieldInt_p)
     Q_PROPERTY(bool hasTestOneofFieldInt READ hasTestOneofFieldInt)
