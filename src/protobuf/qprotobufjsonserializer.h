@@ -6,14 +6,14 @@
 
 #include <QtProtobuf/qtprotobufglobal.h>
 #include <QtProtobuf/qtprotobuftypes.h>
-#include <QtProtobuf/qprotobufbaseserializer.h>
+#include <QtProtobuf/qabstractprotobufserializer.h>
 
 #include <memory>
 
 QT_BEGIN_NAMESPACE
 
 class QProtobufJsonSerializerPrivate;
-class Q_PROTOBUF_EXPORT QProtobufJsonSerializer final : public QProtobufBaseSerializer
+class Q_PROTOBUF_EXPORT QProtobufJsonSerializer final : public QAbstractProtobufSerializer
 {
     Q_DISABLE_COPY_MOVE(QProtobufJsonSerializer)
 

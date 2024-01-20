@@ -5,7 +5,6 @@ qt_internal_add_module(Protobuf
     SOURCES
         qtprotobufglobal.h
         qabstractprotobufserializer.cpp qabstractprotobufserializer.h
-        qprotobufbaseserializer.cpp qprotobufbaseserializer.h
         qprotobufmessage.cpp qprotobufmessage.h qprotobufmessage_p.h
         qprotobuflazymessagepointer.h
         qprotobufobject.h

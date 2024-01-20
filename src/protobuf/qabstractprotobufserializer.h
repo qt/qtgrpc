@@ -7,12 +7,13 @@
 
 #include <QtCore/qbytearray.h>
 #include <QtCore/qbytearrayview.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qmetaobject.h>
+#include <QtCore/qvariant.h>
 
 #include <QtProtobuf/qtprotobufglobal.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 #include <QtProtobuf/qprotobufmessage.h>
-
-#include <type_traits>
 
 QT_BEGIN_NAMESPACE
 
@@ -39,6 +40,37 @@ public:
     virtual QAbstractProtobufSerializer::DeserializationError deserializationError() const = 0;
     virtual QString deserializationErrorString() const = 0;
 
+    virtual void
+    serializeObject(const QProtobufMessage *message,
+                    const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                    const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const = 0;
+    virtual bool
+    deserializeObject(QProtobufMessage *message,
+                      const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const = 0;
+
+    virtual void serializeListObject(const QProtobufMessage *message,
+                                     const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+                                     const QtProtobufPrivate::QProtobufPropertyOrderingInfo
+                                         &fieldInfo) const = 0;
+    virtual bool
+    deserializeListObject(QProtobufMessage *message,
+                          const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const = 0;
+
+    virtual void
+    serializeMapPair(const QVariant &key, const QVariant &value,
+                     const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const = 0;
+    virtual bool deserializeMapPair(QVariant &key, QVariant &value) const = 0;
+
+    virtual void
+    serializeEnum(QtProtobuf::int64 value, const QMetaEnum &metaEnum,
+                  const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const = 0;
+    virtual void
+    serializeEnumList(const QList<QtProtobuf::int64> &value, const QMetaEnum &metaEnum,
+                      const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const = 0;
+
+    virtual bool deserializeEnum(QtProtobuf::int64 &value, const QMetaEnum &metaEnum) const = 0;
+    virtual bool deserializeEnumList(QList<QtProtobuf::int64> &value,
+                                     const QMetaEnum &metaEnum) const = 0;
 protected:
     virtual QByteArray
     serializeMessage(const QProtobufMessage *message,

@@ -6,7 +6,7 @@
 #define QPROTOBUFSERIALIZER_H
 
 #include <QtProtobuf/qtprotobufglobal.h>
-#include <QtProtobuf/qprotobufbaseserializer.h>
+#include <QtProtobuf/qabstractprotobufserializer.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
 #include <memory>
@@ -15,7 +15,7 @@ QT_BEGIN_NAMESPACE
 
 class QProtobufMessage;
 class QProtobufSerializerPrivate;
-class Q_PROTOBUF_EXPORT QProtobufSerializer final : public QProtobufBaseSerializer
+class Q_PROTOBUF_EXPORT QProtobufSerializer final : public QAbstractProtobufSerializer
 {
     Q_DISABLE_COPY_MOVE(QProtobufSerializer)
 public:

@@ -50,6 +50,134 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
+    \fn void QAbstractProtobufSerializer::serializeObject(const QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+
+    This function serializes a registered Protobuf message \a message
+    with defined \a ordering and \a fieldInfo, that is recognized
+    like an object, into a QByteArray. \a message must not be \nullptr.
+
+    You should not call this function directly.
+
+    \sa QAbstractProtobufSerializer::deserializeObject()
+*/
+
+/*!
+    \fn bool QAbstractProtobufSerializer::deserializeObject(QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
+
+    This function deserializes a registered Protobuf message \a message
+    with defined \a ordering. \a message must not be \nullptr.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    You should not call this function directly.
+
+    \sa QAbstractProtobufSerializer::serializeObject()
+*/
+
+/*!
+    \fn void QAbstractProtobufSerializer::serializeListObject(const QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
+        const QtProtobufPrivate::QProtobufPropertyOrderingInfo
+        &fieldInfo) const
+
+    This function serializes \a message as part of a list of messages one by one
+    with \a ordering and \a fieldInfo.
+
+    You should not call this function directly.
+
+    \sa QAbstractProtobufSerializer::deserializeListObject()
+*/
+
+/*!
+    \fn bool QAbstractProtobufSerializer::deserializeListObject(QProtobufMessage *message,
+        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
+
+    This function deserializes an \a message from byte stream as part of list property, with
+    the associated message \a ordering from a wire.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    You should not call this function directly.
+
+    \sa QAbstractProtobufSerializer::serializeListObject()
+*/
+
+/*!
+    \fn void QAbstractProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
+        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+
+    This function serializes pair of \a key and \a value, that belong as a protobuf map record,
+    according to \a fieldInfo.
+
+    You should not call this function directly.
+
+    \sa QAbstractProtobufSerializer::deserializeMapPair()
+*/
+
+/*!
+    \fn bool QAbstractProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value) const
+    This function deserializes a pair of \a key and \a value from a wire.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    You should not call this function directly.
+
+    \sa QAbstractProtobufSerializer::serializeMapPair()
+*/
+
+/*!
+    \fn void QAbstractProtobufSerializer::serializeEnum(QtProtobuf::int64 value,
+        const QMetaEnum &metaEnum,
+        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+
+    This function serializes \a value from enum associated with property \a fieldInfo.
+    \a metaEnum helps to encode the enum value.
+
+    You should not call this function directly.
+
+    \sa QAbstractProtobufSerializer::deserializeEnum()
+*/
+
+/*!
+    \fn bool QAbstractProtobufSerializer::deserializeEnum(QtProtobuf::int64 &value,
+        const QMetaEnum &metaEnum) const
+
+    This function deserializes an enum \a value from a wire. \a metaEnum helps to decode the enum
+    value.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    You should not call this function directly.
+
+    \sa QAbstractProtobufSerializer::serializeEnum()
+*/
+
+/*!
+    \fn void QAbstractProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
+        const QMetaEnum &metaEnum,
+        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+
+    This function serializes a list, \a value, for enum list associated with property \a fieldInfo.
+    \a metaEnum helps to encode the enum value.
+
+    You should not call this function directly.
+
+    \sa QAbstractProtobufSerializer::deserializeEnumList()
+*/
+
+/*!
+    \fn bool QAbstractProtobufSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value,
+        const QMetaEnum &metaEnum) const
+
+    This function deserializes a list of enum \a value from a wire. \a metaEnum helps to decode
+    the enum value.
+    Returns \c true if deserialization was successful, otherwise \c false.
+
+    You should not call this function directly.
+
+    \sa QAbstractProtobufSerializer::serializeEnumList()
+*/
+
+/*!
     Destroys this QAbstractProtobufSerializer.
 */
 QAbstractProtobufSerializer::~QAbstractProtobufSerializer() = default;

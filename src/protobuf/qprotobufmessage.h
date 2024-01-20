@@ -70,7 +70,6 @@ private:
 
     friend class QProtobufSerializer;
     friend class QAbstractProtobufSerializer;
-    friend class QProtobufBaseSerializer;
     friend class QProtobufSerializerPrivate;
     friend class QProtobufJsonSerializerPrivate;
     friend struct QProtobufMessageDeleter;

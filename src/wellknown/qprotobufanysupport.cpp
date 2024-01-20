@@ -3,7 +3,7 @@
 
 #include <QtProtobufWellKnownTypes/qtprotobufwellknowntypesglobal.h>
 
-#include <QtProtobuf/qprotobufbaseserializer.h>
+#include <QtProtobuf/qabstractprotobufserializer.h>
 #include <QtProtobuf/private/qprotobufserializer_p.h>
 
 #include "qprotobufanysupport.h"
@@ -25,7 +25,7 @@ public:
     static AnyPrivate *get(const Any *any) { return any->d_ptr; }
 };
 
-static void serializerProxy(const QProtobufBaseSerializer *serializer, const QVariant &object,
+static void serializerProxy(const QAbstractProtobufSerializer *serializer, const QVariant &object,
                             const QProtobufPropertyOrderingInfo &fieldInfo)
 {
     if (object.isNull())
@@ -41,7 +41,7 @@ static void serializerProxy(const QProtobufBaseSerializer *serializer, const QVa
     serializer->serializeObject(&realAny, google::protobuf::Any::staticPropertyOrdering, fieldInfo);
 }
 
-static void listSerializerProxy(const QProtobufBaseSerializer *serializer, const QVariant &object,
+static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, const QVariant &object,
                                 const QProtobufPropertyOrderingInfo &fieldInfo)
 {
     const auto anyList = object.value<QList<Any>>();
@@ -54,7 +54,7 @@ static void listSerializerProxy(const QProtobufBaseSerializer *serializer, const
     }
 }
 
-static void listDeserializerProxy(const QProtobufBaseSerializer *deserializer, QVariant &object)
+static void listDeserializerProxy(const QAbstractProtobufSerializer *deserializer, QVariant &object)
 {
     auto anyList = object.value<QList<Any>>();
     const auto &ordering = google::protobuf::Any::staticPropertyOrdering;
@@ -70,7 +70,7 @@ static void listDeserializerProxy(const QProtobufBaseSerializer *deserializer, Q
     object.setValue(std::move(anyList));
 }
 
-static void deserializerProxy(const QProtobufBaseSerializer *deserializer, QVariant &object)
+static void deserializerProxy(const QAbstractProtobufSerializer *deserializer, QVariant &object)
 {
     google::protobuf::Any realAny;
     if (deserializer->deserializeObject(&realAny, google::protobuf::Any::staticPropertyOrdering)) {

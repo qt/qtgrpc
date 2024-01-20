@@ -19,7 +19,7 @@
 
 #include <QtProtobuf/qtprotobuftypes.h>
 #include <QtProtobuf/qprotobufregistration.h>
-#include <QtProtobuf/qprotobufserializer.h>
+#include <QtProtobuf/qabstractprotobufserializer.h>
 
 #include <QtCore/QVariant>
 #include <QtCore/private/qglobal_p.h>
@@ -41,7 +41,7 @@ template<typename QType, typename PType>
 void registerQtTypeHandler()
 {
     registerHandler(QMetaType::fromType<QType>(),
-                    { [](const QProtobufBaseSerializer *serializer, const QVariant &value,
+                    { [](const QAbstractProtobufSerializer *serializer, const QVariant &value,
                          const QProtobufPropertyOrderingInfo &info) {
                          auto do_convert = [](const QType &qtype) {
                              auto res = convert(qtype);
@@ -60,7 +60,7 @@ void registerQtTypeHandler()
                              warnTypeConversionError();
                          }
                      },
-                      [](const QProtobufBaseSerializer *serializer, QVariant &value) {
+                      [](const QAbstractProtobufSerializer *serializer, QVariant &value) {
                           PType object;
                           serializer->deserializeObject(&object, PType::staticPropertyOrdering);
                           auto res = convert(object);

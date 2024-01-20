@@ -15,7 +15,7 @@
 
 #include <QtProtobuf/qtprotobufglobal.h>
 #include <QtProtobuf/qtprotobuftypes.h>
-#include <QtProtobuf/qprotobufbaseserializer.h>
+#include <QtProtobuf/qabstractprotobufserializer.h>
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufpropertyordering.h>
 
@@ -34,9 +34,9 @@ struct ProtoTypeRegistrar
 namespace QtProtobufPrivate {
 extern Q_PROTOBUF_EXPORT void registerOrdering(QMetaType type, QProtobufPropertyOrdering ordering);
 
-using Serializer = void (*)(const QProtobufBaseSerializer *, const QVariant &,
+using Serializer = void (*)(const QAbstractProtobufSerializer *, const QVariant &,
                             const QProtobufPropertyOrderingInfo &);
-using Deserializer = void (*)(const QProtobufBaseSerializer *, QVariant &);
+using Deserializer = void (*)(const QAbstractProtobufSerializer *, QVariant &);
 
 /*!
  \private
@@ -58,10 +58,10 @@ extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, const Serializatio
  */
 template <typename T,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, T>::value, int> = 0>
-void serializeObject(const QProtobufBaseSerializer *serializer, const QVariant &value,
+void serializeObject(const QAbstractProtobufSerializer *serializer, const QVariant &value,
                      const QProtobufPropertyOrderingInfo &fieldInfo)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
+    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
     serializer->serializeObject(value.value<T *>(), T::staticPropertyOrdering, fieldInfo);
 }
 
@@ -71,7 +71,7 @@ void serializeObject(const QProtobufBaseSerializer *serializer, const QVariant &
  */
 template <typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void serializeList(const QProtobufBaseSerializer *serializer, const QVariant &listValue,
+void serializeList(const QAbstractProtobufSerializer *serializer, const QVariant &listValue,
                    const QProtobufPropertyOrderingInfo &fieldInfo)
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
@@ -86,7 +86,7 @@ void serializeList(const QProtobufBaseSerializer *serializer, const QVariant &li
  */
 template <typename K, typename V,
           typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void serializeMap(const QProtobufBaseSerializer *serializer, const QVariant &value,
+void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant &value,
                   const QProtobufPropertyOrderingInfo &fieldInfo)
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
@@ -103,7 +103,7 @@ void serializeMap(const QProtobufBaseSerializer *serializer, const QVariant &val
  */
 template <typename K, typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void serializeMap(const QProtobufBaseSerializer *serializer, const QVariant &value,
+void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant &value,
                   const QProtobufPropertyOrderingInfo &fieldInfo)
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
@@ -118,10 +118,10 @@ void serializeMap(const QProtobufBaseSerializer *serializer, const QVariant &val
  \brief default serializer template for enum types
  */
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void serializeEnum(const QProtobufBaseSerializer *serializer, const QVariant &value,
+void serializeEnum(const QAbstractProtobufSerializer *serializer, const QVariant &value,
                    const QProtobufPropertyOrderingInfo &fieldInfo)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
+    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
     static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
     serializer->serializeEnum(QtProtobuf::int64(value.value<T>()), metaEnum,
                               fieldInfo);
@@ -132,10 +132,10 @@ void serializeEnum(const QProtobufBaseSerializer *serializer, const QVariant &va
  \brief default serializer template for enum list types
  */
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void serializeEnumList(const QProtobufBaseSerializer *serializer, const QVariant &value,
+void serializeEnumList(const QAbstractProtobufSerializer *serializer, const QVariant &value,
                        const QProtobufPropertyOrderingInfo &fieldInfo)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
+    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
     static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
     QList<QtProtobuf::int64> intList;
     for (auto enumValue : value.value<QList<T>>()) {
@@ -150,11 +150,11 @@ void serializeEnumList(const QProtobufBaseSerializer *serializer, const QVariant
  */
 template <typename T,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, T>::value, int> = 0>
-void deserializeObject(const QProtobufBaseSerializer *serializer, QVariant &to)
+void deserializeObject(const QAbstractProtobufSerializer *serializer, QVariant &to)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
+    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
     Q_ASSERT_X(to.isNull() || to.metaType() == QMetaType::fromType<T *>(),
-               "QProtobufBaseSerializer",
+               "QAbstractProtobufSerializer",
                "Property should be either uninitialized or contain a valid pointer");
 
     T *value = to.value<T *>();
@@ -171,9 +171,9 @@ void deserializeObject(const QProtobufBaseSerializer *serializer, QVariant &to)
  */
 template <typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void deserializeList(const QProtobufBaseSerializer *serializer, QVariant &previous)
+void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
+    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
 
     V newValue;
     serializer->deserializeListObject(&newValue, V::staticPropertyOrdering);
@@ -189,9 +189,9 @@ void deserializeList(const QProtobufBaseSerializer *serializer, QVariant &previo
  */
 template <typename K, typename V,
           typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void deserializeMap(const QProtobufBaseSerializer *serializer, QVariant &previous)
+void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
+    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
 
     QHash<K, V> out = previous.value<QHash<K, V>>();
     QVariant key = QVariant::fromValue<K>(K());
@@ -211,9 +211,9 @@ void deserializeMap(const QProtobufBaseSerializer *serializer, QVariant &previou
  */
 template <typename K, typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void deserializeMap(const QProtobufBaseSerializer *serializer, QVariant &previous)
+void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
+    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
 
     auto out = previous.value<QHash<K, V>>();
     QVariant key = QVariant::fromValue<K>(K());
@@ -234,9 +234,9 @@ void deserializeMap(const QProtobufBaseSerializer *serializer, QVariant &previou
  \brief default deserializer template for enum type T
  */
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void deserializeEnum(const QProtobufBaseSerializer *serializer, QVariant &to)
+void deserializeEnum(const QAbstractProtobufSerializer *serializer, QVariant &to)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
+    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
     static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
     QtProtobuf::int64 intValue;
     if (serializer->deserializeEnum(intValue, metaEnum))
@@ -249,9 +249,9 @@ void deserializeEnum(const QProtobufBaseSerializer *serializer, QVariant &to)
  \brief default deserializer template for enumList type T
  */
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void deserializeEnumList(const QProtobufBaseSerializer *serializer, QVariant &previous)
+void deserializeEnumList(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufBaseSerializer", "Serializer is null");
+    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
     static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
     QList<QtProtobuf::int64> intList;
     if (!serializer->deserializeEnumList(intList, metaEnum))
