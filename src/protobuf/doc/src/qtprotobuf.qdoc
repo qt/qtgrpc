@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
 
 /*!
-    \keyword Protobuf
     \page qtprotobuf-index.html
     \title Qt Protobuf
     \ingroup frameworks-technologies
@@ -132,7 +131,6 @@
 
 /*!
     \group qtprotobuf-examples
-    \keyword Qt Protobuf Examples
     \title Qt Protobuf Examples
     \brief A collection describes existing QML-types support for \l {Qt Protobuf}
 
@@ -142,7 +140,6 @@
 
 /*!
     \group Protobuf
-    \keyword Example of installation for Windows using vcpkg
     \title Example of installation for Windows using vcpkg
     \brief Installing instructions for Protobuf and gRPC on Windows.
 
@@ -197,7 +194,6 @@
 
 /*!
     \group QtProtobuf
-    \keyword Qt Protobuf QML Types
     \title Qt Protobuf QML Types
     \brief A collection of examples for \l {Qt Protobuf}
 

@@ -5,7 +5,6 @@
 \page qtgrpcclientinterceptor-caching.html
 \ingroup qtgrpc-client-interceptor
 \title QGrpcClientInterceptor caching example
-\keyword Qt GRPC
 
 \section1 Caching Interceptor
 The Caching Interceptor can be a versatile tool for improving the performance of your Qt GRPC connections.

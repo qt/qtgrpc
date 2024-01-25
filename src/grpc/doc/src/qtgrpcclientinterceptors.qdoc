@@ -4,7 +4,6 @@
 /*!
 \group qtgrpc-client-interceptor
 \title Qt GRPC Client Interceptors
-\keyword Qt GRPC
 
 \brief Using QGrpcClientInterceptor and QGrpcClientInterceptorManager in Qt GRPC
 
