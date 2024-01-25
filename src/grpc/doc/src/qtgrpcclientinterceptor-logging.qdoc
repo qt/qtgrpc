@@ -5,7 +5,6 @@
 \page qtgrpcclientinterceptor-logging.html
 \ingroup qtgrpc-client-interceptor
 \title QGrpcClientInterceptor logging example
-\keyword Qt GRPC
 
 \section1 Logging Interceptor
 The Logging Interceptor can be a versatile tool for gaining insights into your Qt GRPC requests.

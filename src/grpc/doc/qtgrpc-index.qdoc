@@ -3,7 +3,6 @@
 /*!
     \page qtgrpc-index.html
     \title Qt GRPC
-    \keyword Qt GRPC
     \ingroup frameworks-technologies
     \brief Provides support for communicating with gRPC services.
 
