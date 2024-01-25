@@ -220,7 +220,7 @@ ApplicationWindow {
         text: root.textError === "" ? "" : "Please, start server: ../magic8ball/SimpleGrpcServer"
     }
 
-    QmlClient {
+    ExampleServiceClient {
         id: grpcClient
         channel: grpcChannel.channel
     }
