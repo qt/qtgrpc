@@ -281,7 +281,7 @@ const char *CommonTemplates::PropertyOneofMessageTemplate()
     return "Q_PROPERTY($property_type$ *$property_name$_p "
            "READ $property_name$_p WRITE set$property_name_cap$_p SCRIPTABLE false)\n";
 }
-const char *CommonTemplates::PropertyHasOneofTemplate()
+const char *CommonTemplates::PropertyHasFieldTemplate()
 {
     return "Q_PROPERTY(bool has$property_name_cap$ "
            "READ has$property_name_cap$)\n";

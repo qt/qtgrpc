@@ -1892,7 +1892,7 @@ static constexpr struct {
         1, /* = testComplexField */
         // Field flags:
         QtProtobufPrivate::NoFlags, /* = testFieldInt */
-        QtProtobufPrivate::NoFlags, /* = testComplexField */
+        QtProtobufPrivate::ExplicitPresence, /* = testComplexField */
     },
     // char_data
     /* metadata char_data: */

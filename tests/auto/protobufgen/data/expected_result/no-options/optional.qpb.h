@@ -86,7 +86,9 @@ class OptionalMessage : public QProtobufMessage
     Q_PROPERTY(QString testFieldStringOpt READ testFieldStringOpt_p WRITE setTestFieldStringOpt_p)
     Q_PROPERTY(bool hasTestFieldStringOpt READ hasTestFieldStringOpt)
     Q_PROPERTY(qtprotobufnamespace::optional::tests::TestStringMessage *testFieldMessage_p READ testFieldMessage_p WRITE setTestFieldMessage_p SCRIPTABLE false)
+    Q_PROPERTY(bool hasTestFieldMessage READ hasTestFieldMessage)
     Q_PROPERTY(qtprotobufnamespace::optional::tests::TestStringMessage *testFieldMessageOpt_p READ testFieldMessageOpt_p WRITE setTestFieldMessageOpt_p SCRIPTABLE false)
+    Q_PROPERTY(bool hasTestFieldMessageOpt READ hasTestFieldMessageOpt)
 
 public:
     using QtProtobufFieldEnum = OptionalMessage_QtProtobufNested::QtProtobufFieldEnum;

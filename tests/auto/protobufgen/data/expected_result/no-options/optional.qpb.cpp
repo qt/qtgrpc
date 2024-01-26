@@ -215,18 +215,18 @@ static constexpr struct {
         9, /* = testFieldString */
         10, /* = testFieldStringOpt */
         12, /* = testFieldMessage */
-        13, /* = testFieldMessageOpt */
+        14, /* = testFieldMessageOpt */
         // Field flags:
         QtProtobufPrivate::NoFlags, /* = testField */
-        QtProtobufPrivate::Optional, /* = testFieldOpt */
+        QtProtobufPrivate::Optional | QtProtobufPrivate::ExplicitPresence, /* = testFieldOpt */
         QtProtobufPrivate::NoFlags, /* = testFieldBool */
-        QtProtobufPrivate::Optional, /* = testFieldBoolOpt */
+        QtProtobufPrivate::Optional | QtProtobufPrivate::ExplicitPresence, /* = testFieldBoolOpt */
         QtProtobufPrivate::NoFlags, /* = testFieldBytes */
-        QtProtobufPrivate::Optional, /* = testFieldBytesOpt */
+        QtProtobufPrivate::Optional | QtProtobufPrivate::ExplicitPresence, /* = testFieldBytesOpt */
         QtProtobufPrivate::NoFlags, /* = testFieldString */
-        QtProtobufPrivate::Optional, /* = testFieldStringOpt */
-        QtProtobufPrivate::NoFlags, /* = testFieldMessage */
-        QtProtobufPrivate::NoFlags, /* = testFieldMessageOpt */
+        QtProtobufPrivate::Optional | QtProtobufPrivate::ExplicitPresence, /* = testFieldStringOpt */
+        QtProtobufPrivate::ExplicitPresence, /* = testFieldMessage */
+        QtProtobufPrivate::ExplicitPresence, /* = testFieldMessageOpt */
     },
     // char_data
     /* metadata char_data: */

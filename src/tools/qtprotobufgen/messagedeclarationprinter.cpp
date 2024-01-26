@@ -209,26 +209,29 @@ void MessageDeclarationPrinter::printProperties()
     for (int i = 0; i < numFields; ++i) {
         const FieldDescriptor *field = m_descriptor->field(i);
         const char *propertyTemplate = CommonTemplates::PropertyTemplate();
+        const auto propertyMap = common::producePropertyMap(field, m_descriptor);
         if (common::isOneofField(field)) {
-            const auto propertyMap = common::producePropertyMap(field, m_descriptor);
             m_printer->Print(propertyMap,
                              common::isPureMessage(field)
                                      ? CommonTemplates::PropertyOneofMessageTemplate()
                                      : CommonTemplates::PropertyOneofTemplate());
-            m_printer->Print(propertyMap, CommonTemplates::PropertyHasOneofTemplate());
+            m_printer->Print(propertyMap, CommonTemplates::PropertyHasFieldTemplate());
             continue;
         }
 
         if (common::isOptionalField(field)) {
-            const auto propertyMap = common::producePropertyMap(field, m_descriptor);
             m_printer->Print(propertyMap, CommonTemplates::PropertyOneofTemplate());
-            m_printer->Print(propertyMap, CommonTemplates::PropertyHasOneofTemplate());
+            m_printer->Print(propertyMap, CommonTemplates::PropertyHasFieldTemplate());
             continue;
         }
 
         if (common::isPureMessage(field)) {
-            propertyTemplate = CommonTemplates::PropertyMessageTemplate();
-        } else if (field->is_repeated() && !field->is_map()) {
+            m_printer->Print(propertyMap,  CommonTemplates::PropertyMessageTemplate());
+            m_printer->Print(propertyMap, CommonTemplates::PropertyHasFieldTemplate());
+            continue;
+        }
+
+        if (field->is_repeated() && !field->is_map()) {
             // Non-message list properties don't require an extra QQmlListProperty to access
             // their data, so the property name should not contain the 'Data' suffix
             if (field->type() == FieldDescriptor::TYPE_MESSAGE)
@@ -236,7 +239,7 @@ void MessageDeclarationPrinter::printProperties()
             else
                 propertyTemplate = CommonTemplates::PropertyRepeatedTemplate();
         }
-        m_printer->Print(common::producePropertyMap(field, m_descriptor), propertyTemplate);
+        m_printer->Print(propertyMap, propertyTemplate);
     }
 
     // Generate extra QML property, that can be used in QML context

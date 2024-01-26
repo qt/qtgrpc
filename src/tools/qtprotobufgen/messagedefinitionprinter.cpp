@@ -255,7 +255,8 @@ void MessageDefinitionPrinter::printUintData(const char *templateString)
 
         // Oneof and optional properties generate additional has<FieldName> property next to the
         // field property one.
-        if (common::isOneofField(field) || common::isOptionalField(field))
+        if (common::isOneofField(field) || common::isOptionalField(field) ||
+            common::isPureMessage(field))
             ++propertyIndex;
 
         m_printer->Print(variables, templateString);

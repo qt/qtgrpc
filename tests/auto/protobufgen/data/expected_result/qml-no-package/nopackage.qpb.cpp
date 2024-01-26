@@ -270,7 +270,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        QtProtobufPrivate::ExplicitPresence, /* = testField */
     },
     // char_data
     /* metadata char_data: */
@@ -415,7 +415,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        QtProtobufPrivate::ExplicitPresence, /* = testField */
     },
     // char_data
     /* metadata char_data: */

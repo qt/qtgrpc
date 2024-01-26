@@ -262,12 +262,13 @@ QProtobufMessage::property(const QtProtobufPrivate::QProtobufPropertyOrderingInf
     if (!metaProperty.isValid())
         return {};
 
-    if (fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
-        || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional) {
+    if (fieldInfo.getFieldFlags() & QtProtobufPrivate::ExplicitPresence) {
         int hasPropertyIndex = propertyIndex + 1;
         QMetaProperty hasProperty = metaObject()->property(hasPropertyIndex);
         Q_ASSERT_X(hasProperty.isValid() && hasProperty.metaType().id() == QMetaType::Bool,
-                   "QProtobufMessage", "The 'oneof' field doesn't have the follow 'has' property.");
+                   "QProtobufMessage",
+                   "The field with the explicit presence requirement doesn't have the follow 'has' "
+                   "property.");
         if (!hasProperty.readOnGadget(this).toBool())
             return QVariant(metaProperty.metaType());
     }

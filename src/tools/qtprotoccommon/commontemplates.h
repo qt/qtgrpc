@@ -62,7 +62,7 @@ public:
     static const char *PropertyQmlMessageTemplate();
     static const char *PropertyOneofTemplate();
     static const char *PropertyOneofMessageTemplate();
-    static const char *PropertyHasOneofTemplate();
+    static const char *PropertyHasFieldTemplate();
 
     static const char *ConstructorMessageDeclarationTemplate();
     static const char *DestructorMessageDeclarationTemplate();

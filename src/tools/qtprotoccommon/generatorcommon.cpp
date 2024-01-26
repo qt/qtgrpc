@@ -736,6 +736,11 @@ std::string common::collectFieldFlags(const FieldDescriptor *field)
     if (common::isOptionalField(field))
         writeFlag("Optional");
 
+    if (common::isOneofField(field) || common::isOptionalField(field)
+        || common::isPureMessage(field)) {
+        writeFlag("ExplicitPresence");
+    }
+
     if (flags.empty())
         writeFlag("NoFlags");
 

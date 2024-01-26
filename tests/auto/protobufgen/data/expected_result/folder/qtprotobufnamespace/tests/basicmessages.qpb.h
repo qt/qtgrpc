@@ -680,6 +680,7 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ComplexMessage : public QProtobufMessage
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage *testComplexField_p READ testComplexField_p WRITE setTestComplexField_p SCRIPTABLE false)
+    Q_PROPERTY(bool hasTestComplexField READ hasTestComplexField)
 
 public:
     using QtProtobufFieldEnum = ComplexMessage_QtProtobufNested::QtProtobufFieldEnum;
