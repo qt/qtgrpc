@@ -257,7 +257,7 @@
             OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_gen1"
         )
 
-        ....................................
+        ...
 
         # qtprotobufnamespace1.nested QML module
         qt_add_protobuf(nestedspace_qml
@@ -274,9 +274,7 @@
         import qtprotobufnamespace as NestedFieldMessages
         import qtprotobufnamespace1.nested as FieldMessages_Nested1
 
-        .....................................
-        .....................................
-        .....................................
+        ...
 
         property NestedFieldMessages.nestedFieldMessage fieldMsg1;
         property FieldMessages_Nested1.nestedFieldMessage fieldMsg2;
