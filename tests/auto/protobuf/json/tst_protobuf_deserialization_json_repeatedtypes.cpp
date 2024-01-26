@@ -225,7 +225,7 @@ void QtProtobufRepeatedTypesJsonDeserializationTest::RepeatedComplexMessageTest(
     QCOMPARE(test.testRepeatedComplex().at(2).testComplexField().testFieldString(), QString(""));
 
     test.deserialize(serializer.get(), "{\"testRepeatedComplex\":[]}"_ba);
-    QVERIFY(!test.testRepeatedComplex().isEmpty());
+    QVERIFY(test.testRepeatedComplex().isEmpty());
 }
 
 void QtProtobufRepeatedTypesJsonDeserializationTest::RepeatedBoolMessageTest()
