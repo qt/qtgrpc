@@ -141,7 +141,7 @@
 */
 
 /*!
-    \group Protobuf
+    \page qtprotobuf-installation-windows-vcpkg.html
     \keyword Example of installation for Windows using vcpkg
     \title Example of installation for Windows using vcpkg
     \brief Installing instructions for Protobuf and gRPC on Windows.
@@ -196,7 +196,7 @@
 */
 
 /*!
-    \group QtProtobuf
+    \page qtprotobuf-qml-types.html
     \keyword Qt Protobuf QML types
     \title Qt Protobuf QML types
     \brief A collection of examples for \l {Qt Protobuf}
