@@ -40,6 +40,8 @@ public:
     Q_PROTOBUF_EXPORT bool deserialize(QAbstractProtobufSerializer *serializer,
                                        QByteArrayView data);
 
+    Q_PROTOBUF_EXPORT const QtProtobufPrivate::QProtobufPropertyOrdering *propertyOrdering() const;
+
 protected:
     Q_PROTOBUF_EXPORT explicit QProtobufMessage(const QMetaObject *metaObject,
                                                 const QtProtobufPrivate::QProtobufPropertyOrdering
@@ -53,8 +55,6 @@ protected:
         qt_ptr_swap(d_ptr, other.d_ptr);
         return *this;
     }
-
-    Q_PROTOBUF_EXPORT const QtProtobufPrivate::QProtobufPropertyOrdering *propertyOrdering() const;
 
     Q_PROTOBUF_EXPORT
     static bool isEqual(const QProtobufMessage &lhs, const QProtobufMessage &rhs) noexcept;

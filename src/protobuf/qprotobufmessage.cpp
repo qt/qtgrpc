@@ -176,7 +176,6 @@ QProtobufMessage::~QProtobufMessage()
 }
 
 /*!
-    \internal
     \since 6.8
     Returns the pointer to the property ordering of the derived protobuf message.
 */

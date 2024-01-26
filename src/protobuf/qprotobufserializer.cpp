@@ -245,13 +245,11 @@ QProtobufSerializer::QProtobufSerializer() : d_ptr(new QProtobufSerializerPrivat
 */
 QProtobufSerializer::~QProtobufSerializer() = default;
 
-QByteArray QProtobufSerializer::serializeMessage(
-        const QProtobufMessage *message,
-        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const
+QByteArray QProtobufSerializer::serializeMessage(const QProtobufMessage *message) const
 {
     d_ptr->clearError();
     d_ptr->result = {};
-    d_ptr->serializeMessage(message, ordering);
+    d_ptr->serializeMessage(message);
     return d_ptr->result;
 }
 
@@ -259,14 +257,17 @@ const QProtobufPropertyOrderingInfo QProtobufSerializerPrivate::mapValueOrdering
     mapPropertyOrdering, 1
 };
 
-void QProtobufSerializerPrivate::serializeMessage(const QProtobufMessage *message,
-                                                  const QtProtobufPrivate::QProtobufPropertyOrdering
-                                                      &ordering)
+void QProtobufSerializerPrivate::serializeMessage(const QProtobufMessage *message)
 {
-    for (int index = 0; index < ordering.fieldCount(); ++index) {
-        int fieldIndex = ordering.getFieldNumber(index);
+    Q_ASSERT(message != nullptr);
+
+    auto ordering = message->propertyOrdering();
+    Q_ASSERT(ordering != nullptr);
+
+    for (int index = 0; index < ordering->fieldCount(); ++index) {
+        int fieldIndex = ordering->getFieldNumber(index);
         Q_ASSERT_X(fieldIndex < 536870912 && fieldIndex > 0, "", "fieldIndex is out of range");
-        QProtobufPropertyOrderingInfo fieldInfo(ordering, index);
+        QProtobufPropertyOrderingInfo fieldInfo(*ordering, index);
         QVariant propertyValue = message->property(fieldInfo);
         serializeProperty(propertyValue, fieldInfo);
     }
@@ -291,14 +292,12 @@ void QProtobufSerializerPrivate::clearError()
     deserializationErrorString.clear();
 }
 
-bool QProtobufSerializer::deserializeMessage(
-        QProtobufMessage *message, const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-        QByteArrayView data) const
+bool QProtobufSerializer::deserializeMessage(QProtobufMessage *message, QByteArrayView data) const
 {
     d_ptr->clearError();
     d_ptr->it = QProtobufSelfcheckIterator::fromView(data);
     while (d_ptr->it.isValid() && d_ptr->it != data.end()) {
-        if (!d_ptr->deserializeProperty(message, ordering))
+        if (!d_ptr->deserializeProperty(message))
             return false;
     }
     if (!d_ptr->it.isValid())
@@ -307,13 +306,11 @@ bool QProtobufSerializer::deserializeMessage(
 }
 
 void QProtobufSerializer::serializeObject(const QProtobufMessage *message,
-                                          const QtProtobufPrivate::QProtobufPropertyOrdering
-                                              &ordering,
                                           const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
     auto store = d_ptr->result;
     d_ptr->result = {};
-    d_ptr->serializeMessage(message, ordering);
+    d_ptr->serializeMessage(message);
     store.append(QProtobufSerializerPrivate::encodeHeader(fieldInfo.getFieldNumber(),
                                                           QtProtobuf::WireTypes::LengthDelimited));
     store.append(QProtobufSerializerPrivate::serializeVarintCommon<uint32_t>(d_ptr->result.size()));
@@ -321,9 +318,7 @@ void QProtobufSerializer::serializeObject(const QProtobufMessage *message,
     d_ptr->result = store;
 }
 
-bool QProtobufSerializer::deserializeObject(QProtobufMessage *message,
-                                            const QtProtobufPrivate::QProtobufPropertyOrdering
-                                                &ordering) const
+bool QProtobufSerializer::deserializeObject(QProtobufMessage *message) const
 {
     if (d_ptr->it.bytesLeft() == 0) {
         d_ptr->setUnexpectedEndOfStreamError();
@@ -336,24 +331,20 @@ bool QProtobufSerializer::deserializeObject(QProtobufMessage *message,
         return false;
     }
     auto store = d_ptr->it;
-    bool result = deserializeMessage(message, ordering, array.value());
+    bool result = deserializeMessage(message, array.value());
     d_ptr->it = store;
     return result;
 }
 
 void QProtobufSerializer::serializeListObject(const QProtobufMessage *message,
-                                              const QtProtobufPrivate::QProtobufPropertyOrdering
-                                                  &ordering,
                                               const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
-    serializeObject(message, ordering, fieldInfo);
+    serializeObject(message, fieldInfo);
 }
 
-bool QProtobufSerializer::deserializeListObject(QProtobufMessage *message,
-                                                const QtProtobufPrivate::QProtobufPropertyOrdering
-                                                    &ordering) const
+bool QProtobufSerializer::deserializeListObject(QProtobufMessage *message) const
 {
-    return deserializeObject(message, ordering);
+    return deserializeObject(message);
 }
 
 void QProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
@@ -570,10 +561,9 @@ void QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue
     handler.serializer(q_ptr, propertyValue, fieldInfo);
 }
 
-bool QProtobufSerializerPrivate::
-    deserializeProperty(QProtobufMessage *message,
-                        const QtProtobufPrivate::QProtobufPropertyOrdering &ordering)
+bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
 {
+    Q_ASSERT(message != nullptr);
     Q_ASSERT(it.isValid() && it.bytesLeft() > 0);
     //Each iteration we expect iterator is setup to beginning of next chunk
     int fieldNumber = QtProtobuf::InvalidFieldNumber;
@@ -587,7 +577,10 @@ bool QProtobufSerializerPrivate::
         return false;
     }
 
-    int index = ordering.indexOfFieldNumber(fieldNumber);
+    auto ordering = message->propertyOrdering();
+    Q_ASSERT(ordering != nullptr);
+
+    int index = ordering->indexOfFieldNumber(fieldNumber);
     if (index == -1) {
         // This is an unknown field, it may have been added in a later revision
         // of the Message we are currently deserializing. We must store the
@@ -610,14 +603,14 @@ bool QProtobufSerializerPrivate::
         return true;
     }
 
-    QProtobufPropertyOrderingInfo fieldInfo(ordering, index);
+    QProtobufPropertyOrderingInfo fieldInfo(*ordering, index);
     QVariant newPropertyValue = message->property(fieldInfo);
     QMetaType metaType = newPropertyValue.metaType();
 
     qProtoDebug() << "wireType:" << wireType << "metaType:" << metaType.name()
                   << "currentByte:" << QString::number((*it), 16);
 
-    bool isNonPacked = ordering.getFieldFlags(index) & QtProtobufPrivate::NonPacked;
+    bool isNonPacked = ordering->getFieldFlags(index) & QtProtobufPrivate::NonPacked;
     auto basicHandler = findIntegratedTypeHandler(metaType, isNonPacked);
 
     if (basicHandler) {

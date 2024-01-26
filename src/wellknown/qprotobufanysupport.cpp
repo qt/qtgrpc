@@ -38,7 +38,7 @@ static void serializerProxy(const QAbstractProtobufSerializer *serializer, const
     google::protobuf::Any realAny;
     realAny.setValue(any.value());
     realAny.setTypeUrl(any.typeUrl());
-    serializer->serializeObject(&realAny, google::protobuf::Any::staticPropertyOrdering, fieldInfo);
+    serializer->serializeObject(&realAny, fieldInfo);
 }
 
 static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, const QVariant &object,
@@ -49,17 +49,15 @@ static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, c
         google::protobuf::Any realAny;
         realAny.setValue(any.value());
         realAny.setTypeUrl(any.typeUrl());
-        serializer->serializeListObject(&realAny, google::protobuf::Any::staticPropertyOrdering,
-                                        fieldInfo);
+        serializer->serializeListObject(&realAny, fieldInfo);
     }
 }
 
 static void listDeserializerProxy(const QAbstractProtobufSerializer *deserializer, QVariant &object)
 {
     auto anyList = object.value<QList<Any>>();
-    const auto &ordering = google::protobuf::Any::staticPropertyOrdering;
     google::protobuf::Any realAny;
-    if (deserializer->deserializeObject(&realAny, ordering)) {
+    if (deserializer->deserializeObject(&realAny)) {
         Any any;
         any.setTypeUrl(realAny.typeUrl());
         any.setValue(realAny.value());
@@ -73,7 +71,7 @@ static void listDeserializerProxy(const QAbstractProtobufSerializer *deserialize
 static void deserializerProxy(const QAbstractProtobufSerializer *deserializer, QVariant &object)
 {
     google::protobuf::Any realAny;
-    if (deserializer->deserializeObject(&realAny, google::protobuf::Any::staticPropertyOrdering)) {
+    if (deserializer->deserializeObject(&realAny)) {
         Any any;
         any.setTypeUrl(realAny.typeUrl());
         any.setValue(realAny.value());
@@ -211,21 +209,24 @@ void Any::setValue(const QByteArray &value)
     \c{Q_PROTOBUF_OBJECT} macro or (for a nested Any message) be Any itself.
 */
 
-bool Any::unpackImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *message,
-                 QtProtobufPrivate::QProtobufPropertyOrdering ordering) const
+bool Any::unpackImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *message) const
 {
     Q_ASSERT_X(serializer != nullptr, "Any::unpackImpl", "serializer is null");
     QString tUrl = typeUrl();
     qsizetype lastSegmentIndex = tUrl.lastIndexOf(u'/') + 1;
-    if (QStringView(tUrl).mid(lastSegmentIndex).compare(ordering.getMessageFullName()) != 0)
+    if (QStringView(tUrl)
+            .mid(lastSegmentIndex)
+            .compare(message->propertyOrdering()->getMessageFullName())
+        != 0) {
         return false;
-    return serializer->deserializeMessage(message, ordering, value());
+    }
+    return serializer->deserializeMessage(message, value());
 }
 
 std::optional<Any> Any::unpackAnyImpl(QAbstractProtobufSerializer *serializer) const
 {
     google::protobuf::Any realAny;
-    if (!unpackImpl(serializer, &realAny, google::protobuf::Any::staticPropertyOrdering))
+    if (!unpackImpl(serializer, &realAny))
         return std::nullopt;
     Any any;
     any.setTypeUrl(realAny.typeUrl());
@@ -240,7 +241,7 @@ std::optional<Any> Any::unpackAnyImpl(QAbstractProtobufSerializer *serializer) c
     This function serializes the given \a message as the value of the returned
     Any instance. This instance's typeUrl() is constructed from a prefix, a
     forward slash and the message name obtained from
-    \c{T::staticPropertyOrdering.getMessageFullName()} using \a serializer. If \a
+    \l{QProtobufMessage::propertyOrdering} using \a serializer. If \a
     typeUrlPrefix is supplied, it is used as prefix, otherwise
     \c{"type.googleapis.com"} is used.
 
@@ -249,12 +250,12 @@ std::optional<Any> Any::unpackAnyImpl(QAbstractProtobufSerializer *serializer) c
 */
 
 Any Any::fromMessageImpl(QAbstractProtobufSerializer *serializer, const QProtobufMessage *message,
-                         QtProtobufPrivate::QProtobufPropertyOrdering ordering,
                          QAnyStringView typeUrlPrefix)
 {
     Any any;
-    any.setValue(serializer->serializeMessage(message, ordering));
-    any.setTypeUrl(typeUrlPrefix.toString() + u'/' + ordering.getMessageFullName().toString());
+    any.setValue(serializer->serializeMessage(message));
+    any.setTypeUrl(typeUrlPrefix.toString() + u'/'
+                   + message->propertyOrdering()->getMessageFullName().toString());
     return { any };
 }
 
@@ -266,7 +267,7 @@ Any Any::fromAnyMessageImpl(QAbstractProtobufSerializer *serializer,
     RealAny realAny;
     realAny.setTypeUrl(message->typeUrl());
     realAny.setValue(message->value());
-    return fromMessageImpl(serializer, &realAny, RealAny::staticPropertyOrdering, typeUrlPrefix);
+    return fromMessageImpl(serializer, &realAny, typeUrlPrefix);
 }
 
 QAnyStringView Any::defaultUrlPrefix()

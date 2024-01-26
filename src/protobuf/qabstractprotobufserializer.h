@@ -42,19 +42,13 @@ public:
 
     virtual void
     serializeObject(const QProtobufMessage *message,
-                    const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                     const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const = 0;
-    virtual bool
-    deserializeObject(QProtobufMessage *message,
-                      const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const = 0;
+    virtual bool deserializeObject(QProtobufMessage *message) const = 0;
 
     virtual void serializeListObject(const QProtobufMessage *message,
-                                     const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                                      const QtProtobufPrivate::QProtobufPropertyOrderingInfo
                                          &fieldInfo) const = 0;
-    virtual bool
-    deserializeListObject(QProtobufMessage *message,
-                          const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const = 0;
+    virtual bool deserializeListObject(QProtobufMessage *message) const = 0;
 
     virtual void
     serializeMapPair(const QVariant &key, const QVariant &value,
@@ -72,12 +66,8 @@ public:
     virtual bool deserializeEnumList(QList<QtProtobuf::int64> &value,
                                      const QMetaEnum &metaEnum) const = 0;
 protected:
-    virtual QByteArray
-    serializeMessage(const QProtobufMessage *message,
-                     const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const = 0;
-    virtual bool deserializeMessage(QProtobufMessage *message,
-                                    const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-                                    QByteArrayView data) const = 0;
+    virtual QByteArray serializeMessage(const QProtobufMessage *message) const = 0;
+    virtual bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const = 0;
 
     friend class QtProtobuf::Any;
 };

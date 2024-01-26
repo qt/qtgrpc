@@ -62,7 +62,7 @@ void serializeObject(const QAbstractProtobufSerializer *serializer, const QVaria
                      const QProtobufPropertyOrderingInfo &fieldInfo)
 {
     Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
-    serializer->serializeObject(value.value<T *>(), T::staticPropertyOrdering, fieldInfo);
+    serializer->serializeObject(value.value<T *>(), fieldInfo);
 }
 
 /*!
@@ -76,7 +76,7 @@ void serializeList(const QAbstractProtobufSerializer *serializer, const QVariant
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     for (const auto &value : listValue.value<QList<V>>()) {
-        serializer->serializeListObject(&value, V::staticPropertyOrdering, fieldInfo);
+        serializer->serializeListObject(&value, fieldInfo);
     }
 }
 
@@ -162,7 +162,7 @@ void deserializeObject(const QAbstractProtobufSerializer *serializer, QVariant &
         value = new T;
         to = QVariant::fromValue<T *>(value);
     }
-    serializer->deserializeObject(value, T::staticPropertyOrdering);
+    serializer->deserializeObject(value);
 }
 
 /*!
@@ -176,7 +176,7 @@ void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &pr
     Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
 
     V newValue;
-    if (serializer->deserializeListObject(&newValue, V::staticPropertyOrdering)) {
+    if (serializer->deserializeListObject(&newValue)) {
         QList<V> list = previous.value<QList<V>>();
         list.append(newValue);
         previous.setValue(list);

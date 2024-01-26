@@ -58,7 +58,7 @@ public:
             static_assert(QtProtobufPrivate::HasProtobufPropertyOrdering<T>,
                           "T must have the Q_PROTOBUF_OBJECT macro");
             T obj;
-            if (unpackImpl(serializer, &obj, T::staticPropertyOrdering))
+            if (unpackImpl(serializer, &obj))
                 return { std::move(obj) };
         }
         return std::nullopt;
@@ -73,20 +73,17 @@ public:
 
         static_assert(QtProtobufPrivate::HasProtobufPropertyOrdering<T>,
                       "T must have the Q_PROTOBUF_OBJECT macro");
-        return fromMessageImpl(serializer, &message, T::staticPropertyOrdering, typeUrlPrefix);
+        return fromMessageImpl(serializer, &message, typeUrlPrefix);
     }
 
 private:
     AnyPrivate *d_ptr;
     Q_DECLARE_PRIVATE(Any)
 
-    bool unpackImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *message,
-                QtProtobufPrivate::QProtobufPropertyOrdering ordering) const;
+    bool unpackImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *message) const;
     std::optional<Any> unpackAnyImpl(QAbstractProtobufSerializer *serializer) const;
     static Any fromMessageImpl(QAbstractProtobufSerializer *serializer,
-                               const QProtobufMessage *message,
-                               QtProtobufPrivate::QProtobufPropertyOrdering ordering,
-                               QAnyStringView typeUrlPrefix);
+                               const QProtobufMessage *message, QAnyStringView typeUrlPrefix);
     static Any fromAnyMessageImpl(QAbstractProtobufSerializer *serializer,
                                   const Any *message, QAnyStringView typeUrlPrefix);
 

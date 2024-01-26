@@ -31,38 +31,32 @@ public:
 
 protected:
     virtual QByteArray
-    serializeMessage(const QProtobufMessage *,
-                     const QtProtobufPrivate::QProtobufPropertyOrdering &) const override
+    serializeMessage(const QProtobufMessage *) const override
     {
         return {};
     }
 
     virtual bool deserializeMessage(QProtobufMessage *,
-                                    const QtProtobufPrivate::QProtobufPropertyOrdering &,
                                     QByteArrayView) const override
     {
         return true;
     }
 
     void serializeObject(const QProtobufMessage *,
-                         const QtProtobufPrivate::QProtobufPropertyOrdering &,
                          const QtProtobufPrivate::QProtobufPropertyOrderingInfo &) const override
     {
     }
-    bool deserializeObject(QProtobufMessage *,
-                           const QtProtobufPrivate::QProtobufPropertyOrdering &) const override
+    bool deserializeObject(QProtobufMessage *) const override
     {
         return true;
     }
 
     void
     serializeListObject(const QProtobufMessage *,
-                        const QtProtobufPrivate::QProtobufPropertyOrdering &,
                         const QtProtobufPrivate::QProtobufPropertyOrderingInfo &) const override
     {
     }
-    bool deserializeListObject(QProtobufMessage *,
-                               const QtProtobufPrivate::QProtobufPropertyOrdering &) const override
+    bool deserializeListObject(QProtobufMessage *) const override
     {
         return true;
     }

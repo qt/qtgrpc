@@ -27,29 +27,18 @@ public:
 
     void shouldPreserveUnknownFields(bool preserveUnknownFields);
 private:
-    QByteArray
-    serializeMessage(const QProtobufMessage *message,
-                     const QtProtobufPrivate::QProtobufPropertyOrdering &ordering
-                     ) const override;
-    bool deserializeMessage(QProtobufMessage *message,
-                            const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
-                            QByteArrayView data) const override;
+    QByteArray serializeMessage(const QProtobufMessage *message) const override;
+    bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const override;
 
     void serializeObject(const QProtobufMessage *message,
-                         const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                          const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
         const override;
-    bool
-    deserializeObject(QProtobufMessage *message,
-                      const QtProtobufPrivate::QProtobufPropertyOrdering &ordering) const override;
+    bool deserializeObject(QProtobufMessage *message) const override;
 
     void serializeListObject(const QProtobufMessage *message,
-                             const QtProtobufPrivate::QProtobufPropertyOrdering &ordering,
                              const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
         const override;
-    bool deserializeListObject(QProtobufMessage *message,
-                               const QtProtobufPrivate::QProtobufPropertyOrdering &ordering)
-        const override;
+    bool deserializeListObject(QProtobufMessage *message) const override;
 
     void serializeMapPair(const QVariant &key, const QVariant &value,
                           const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
