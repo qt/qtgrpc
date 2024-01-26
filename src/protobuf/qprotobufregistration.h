@@ -176,10 +176,11 @@ void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &pr
     Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
 
     V newValue;
-    serializer->deserializeListObject(&newValue, V::staticPropertyOrdering);
-    QList<V> list = previous.value<QList<V>>();
-    list.append(newValue);
-    previous.setValue(list);
+    if (serializer->deserializeListObject(&newValue, V::staticPropertyOrdering)) {
+        QList<V> list = previous.value<QList<V>>();
+        list.append(newValue);
+        previous.setValue(list);
+    }
 }
 
 /*!
