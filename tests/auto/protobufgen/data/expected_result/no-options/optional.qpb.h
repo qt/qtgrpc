@@ -149,8 +149,8 @@ private:
     bool testFieldBoolOpt_p() const;
     QByteArray testFieldBytesOpt_p() const;
     QString testFieldStringOpt_p() const;
-    TestStringMessage *testFieldMessage_p() const;
-    TestStringMessage *testFieldMessageOpt_p() const;
+    TestStringMessage *testFieldMessage_p();
+    TestStringMessage *testFieldMessageOpt_p();
     void setTestFieldOpt_p(QtProtobuf::sint32 testFieldOpt);
     void setTestFieldBoolOpt_p(bool testFieldBoolOpt);
     void setTestFieldBytesOpt_p(QByteArray testFieldBytesOpt);

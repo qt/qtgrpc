@@ -334,9 +334,11 @@ QtProtobuf::int32 ComplexMessage::testFieldInt() const
     return dptr->m_testFieldInt;
 }
 
-SimpleStringMessage *ComplexMessage::testComplexField_p() const
+SimpleStringMessage *ComplexMessage::testComplexField_p()
 {
-    return dptr->m_testComplexField ? dptr->m_testComplexField.get() : nullptr;
+    if (!dptr->m_testComplexField)
+        dptr.detach();
+    return dptr->m_testComplexField.get();
 }
 
 bool ComplexMessage::hasTestComplexField() const

@@ -380,9 +380,11 @@ QString OptionalMessage::testFieldStringOpt() const
     return dptr->m_testFieldStringOpt.value();
 }
 
-TestStringMessage *OptionalMessage::testFieldMessage_p() const
+TestStringMessage *OptionalMessage::testFieldMessage_p()
 {
-    return dptr->m_testFieldMessage ? dptr->m_testFieldMessage.get() : nullptr;
+    if (!dptr->m_testFieldMessage)
+        dptr.detach();
+    return dptr->m_testFieldMessage.get();
 }
 
 bool OptionalMessage::hasTestFieldMessage() const
@@ -403,9 +405,11 @@ void OptionalMessage::clearTestFieldMessage()
     }
 }
 
-TestStringMessage *OptionalMessage::testFieldMessageOpt_p() const
+TestStringMessage *OptionalMessage::testFieldMessageOpt_p()
 {
-    return dptr->m_testFieldMessageOpt ? dptr->m_testFieldMessageOpt.get() : nullptr;
+    if (!dptr->m_testFieldMessageOpt)
+        dptr.detach();
+    return dptr->m_testFieldMessageOpt.get();
 }
 
 bool OptionalMessage::hasTestFieldMessageOpt() const

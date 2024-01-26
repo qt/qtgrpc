@@ -28,6 +28,16 @@ public:
         ++m_copied;
     }
 
+    TestMetaType &operator =(const TestMetaType &other)
+    {
+        if (this == &other)
+            return *this;
+
+        m_value = other.m_value;
+        ++m_copied;
+        return *this;
+    }
+
     void setIntValue(int value) { m_value = value; }
 
     int intValue() const { return m_value; }

@@ -156,7 +156,7 @@ public:
     static void registerTypes();
 
 private:
-    SimpleIntMessageExt *testField_p() const;
+    SimpleIntMessageExt *testField_p();
     void setTestField_p(SimpleIntMessageExt *testField);
     QExplicitlySharedDataPointer<NoPackageExternalMessage_QtProtobufData> dptr;
 };
@@ -199,7 +199,7 @@ public:
     static void registerTypes();
 
 private:
-    SimpleIntMessage *testField_p() const;
+    SimpleIntMessage *testField_p();
     void setTestField_p(SimpleIntMessage *testField);
     QExplicitlySharedDataPointer<NoPackageMessage_QtProtobufData> dptr;
 };

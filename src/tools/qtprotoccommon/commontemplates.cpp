@@ -453,12 +453,14 @@ const char *CommonTemplates::NotEqualOperatorDefinitionTemplate()
 
 const char *CommonTemplates::PrivateGetterMessageDeclarationTemplate()
 {
-    return "$getter_type$ *$property_name$_p() const;\n";
+    return "$getter_type$ *$property_name$_p();\n";
 }
 const char *CommonTemplates::PrivateGetterMessageDefinitionTemplate()
 {
-    return "$getter_type$ *$classname$::$property_name$_p() const\n{\n"
-           "    return dptr->m_$property_name$ ? dptr->m_$property_name$.get() : nullptr;\n"
+    return "$getter_type$ *$classname$::$property_name$_p()\n{\n"
+           "    if (!dptr->m_$property_name$)\n"
+           "        dptr.detach();\n"
+           "    return dptr->m_$property_name$.get();\n"
            "}\n\n";
 }
 
@@ -520,13 +522,14 @@ const char *CommonTemplates::PrivateGetterOptionalDefinitionTemplate()
 
 const char *CommonTemplates::PrivateGetterOneofMessageDeclarationTemplate()
 {
-    return "$getter_type$ *$property_name$_p() const;\n";
+    return "$getter_type$ *$property_name$_p();\n";
 }
 const char *CommonTemplates::PrivateGetterOneofMessageDefinitionTemplate()
 {
-    return "$getter_type$ *$classname$::$property_name$_p() const\n{\n"
-           "    return dptr->m_$optional_property_name$.holdsField($number$) ?\n"
-           "        dptr->m_$optional_property_name$.value<$getter_type$>() : nullptr;\n"
+    return "$getter_type$ *$classname$::$property_name$_p()\n{\n"
+           "    if (!dptr->m_$optional_property_name$.holdsField($number$))\n"
+           "        dptr.detach();\n"
+           "    return dptr->m_$optional_property_name$.value<$getter_type$>();\n"
            "}\n\n";
 }
 
@@ -658,15 +661,11 @@ const char *CommonTemplates::PrivateSetterOneofMessageDeclarationTemplate()
 const char *CommonTemplates::PrivateSetterOneofMessageDefinitionTemplate()
 {
     return "void $classname$::set$property_name_cap$_p($setter_type$ *$property_name$)\n{\n"
-           "    if (dptr->m_$optional_property_name$.holdsField($number$) &&\n"
-           "        dptr->m_$optional_property_name$.value<$setter_type$>() == $property_name$)\n"
-           "        return;\n"
            "    const $setter_type$ &value = *$property_name$;\n"
            "    if (!dptr->m_$optional_property_name$.isEqual(value, $number$)) {\n"
            "        dptr.detach();\n"
            "        dptr->m_$optional_property_name$.setValue(value, $number$);\n"
            "    }\n"
-           "    delete $property_name$;\n"
            "}\n\n";
 }
 

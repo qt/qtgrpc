@@ -59,7 +59,8 @@ protected:
     Q_PROTOBUF_EXPORT
     static bool isEqual(const QProtobufMessage &lhs, const QProtobufMessage &rhs) noexcept;
 
-    QVariant property(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const;
+    QVariant property(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
+                      bool allowInitialize = false) const;
     bool setProperty(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
                      const QVariant &value);
     bool setProperty(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,

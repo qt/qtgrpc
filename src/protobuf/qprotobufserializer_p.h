@@ -497,12 +497,15 @@ public:
     static void skipVarint(QProtobufSelfcheckIterator &it);
     static void skipLengthDelimited(QProtobufSelfcheckIterator &it);
 
+    void serializeObject(const QProtobufMessage *message,
+                         const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo);
+    bool deserializeObject(QProtobufMessage *message);
+
     void serializeMessage(const QProtobufMessage *message);
 
     void serializeProperty(const QVariant &propertyValue,
                            const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo);
-    Q_REQUIRED_RESULT
-    bool deserializeProperty(QProtobufMessage *message);
+    Q_REQUIRED_RESULT bool deserializeProperty(QProtobufMessage *message);
 
     void setDeserializationError(QAbstractProtobufSerializer::DeserializationError error,
                                  const QString &errorString);

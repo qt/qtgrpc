@@ -128,7 +128,7 @@ public:
     static void registerTypes();
 
 private:
-    SimpleStringMessage *testComplexField_p() const;
+    SimpleStringMessage *testComplexField_p();
     void setTestComplexField_p(SimpleStringMessage *testComplexField);
     QExplicitlySharedDataPointer<ComplexMessage_QtProtobufData> dptr;
 };

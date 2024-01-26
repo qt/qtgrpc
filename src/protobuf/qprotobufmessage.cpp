@@ -253,7 +253,8 @@ void QProtobufMessageDeleter::operator()(QProtobufMessage *ptr) noexcept
 }
 
 QVariant
-QProtobufMessage::property(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+QProtobufMessage::property(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
+                           bool allowInitialize) const
 {
     int propertyIndex = fieldInfo.getPropertyIndex() + metaObject()->propertyOffset();
     QMetaProperty metaProperty = metaObject()->property(propertyIndex);
@@ -261,7 +262,7 @@ QProtobufMessage::property(const QtProtobufPrivate::QProtobufPropertyOrderingInf
     if (!metaProperty.isValid())
         return {};
 
-    if (fieldInfo.getFieldFlags() & QtProtobufPrivate::ExplicitPresence) {
+    if (fieldInfo.getFieldFlags() & QtProtobufPrivate::ExplicitPresence && !allowInitialize) {
         int hasPropertyIndex = propertyIndex + 1;
         QMetaProperty hasProperty = metaObject()->property(hasPropertyIndex);
         Q_ASSERT_X(hasProperty.isValid() && hasProperty.metaType().id() == QMetaType::Bool,

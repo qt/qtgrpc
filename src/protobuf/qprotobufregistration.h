@@ -19,6 +19,8 @@
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufpropertyordering.h>
 
+#include <memory>
+
 QT_BEGIN_NAMESPACE
 
 namespace QtProtobuf {
@@ -51,19 +53,6 @@ struct SerializationHandler
 
 extern Q_PROTOBUF_EXPORT SerializationHandler findHandler(QMetaType type);
 extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, const SerializationHandler &handlers);
-
-/*!
- \private
- \brief default serializer template for type T that inherits from QProtobufMessage
- */
-template <typename T,
-          typename std::enable_if_t<std::is_base_of<QProtobufMessage, T>::value, int> = 0>
-void serializeObject(const QAbstractProtobufSerializer *serializer, const QVariant &value,
-                     const QProtobufPropertyOrderingInfo &fieldInfo)
-{
-    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
-    serializer->serializeObject(value.value<T *>(), fieldInfo);
-}
 
 /*!
  \private
@@ -146,27 +135,6 @@ void serializeEnumList(const QAbstractProtobufSerializer *serializer, const QVar
 
 /*!
  \private
- \brief default deserializer template for type T that inherits from QProtobufMessage
- */
-template <typename T,
-          typename std::enable_if_t<std::is_base_of<QProtobufMessage, T>::value, int> = 0>
-void deserializeObject(const QAbstractProtobufSerializer *serializer, QVariant &to)
-{
-    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
-    Q_ASSERT_X(to.isNull() || to.metaType() == QMetaType::fromType<T *>(),
-               "QAbstractProtobufSerializer",
-               "Property should be either uninitialized or contain a valid pointer");
-
-    T *value = to.value<T *>();
-    if (value == nullptr) {
-        value = new T;
-        to = QVariant::fromValue<T *>(value);
-    }
-    serializer->deserializeObject(value);
-}
-
-/*!
- \private
  \brief default deserializer template for list of type T objects that inherits from QProtobufMessage
  */
 template <typename V,
@@ -216,17 +184,16 @@ void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &pre
 {
     Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
 
+    std::unique_ptr<V> valuePtr = std::make_unique<V>();
     auto out = previous.value<QHash<K, V>>();
     QVariant key = QVariant::fromValue<K>(K());
-    QVariant value = QVariant::fromValue<V *>(nullptr);
+    QVariant value = QVariant::fromValue<V *>(valuePtr.get());
 
     bool ok = serializer->deserializeMapPair(key, value);
-    V *valuePtr = value.value<V *>();
     if (ok) {
-        out[key.value<K>()] = valuePtr ? *valuePtr : V();
+        out[key.value<K>()] = *(valuePtr.get());
         previous = QVariant::fromValue<QHash<K, V>>(out);
     }
-    delete valuePtr;
 }
 
 /*!
@@ -271,9 +238,6 @@ inline void qRegisterProtobufType()
 {
     T::registerTypes();
     QtProtobufPrivate::registerOrdering(QMetaType::fromType<T>(), T::staticPropertyOrdering);
-    QtProtobufPrivate::registerHandler(
-        QMetaType::fromType<T *>(),
-        { QtProtobufPrivate::serializeObject<T>, QtProtobufPrivate::deserializeObject<T> });
     QtProtobufPrivate::registerHandler(
         QMetaType::fromType<QList<T>>(),
         { QtProtobufPrivate::serializeList<T>, QtProtobufPrivate::deserializeList<T> });

@@ -271,6 +271,16 @@ public:
         if (metaType.id() == QMetaType::UnknownType || propertyValue.isNull())
             return;
 
+        if (metaType.flags() & QMetaType::IsPointer) {
+            auto store = activeValue.toObject();
+            activeValue = QJsonObject();
+            auto *messageProperty = propertyValue.value<QProtobufMessage *>();
+            serializeObject(messageProperty);
+            store.insert(fieldInfo.getJsonName().toString(), activeValue);
+            activeValue = store;
+            return;
+        }
+
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (handler.serializer) {
             handler.serializer(qPtr, propertyValue, fieldInfo);
@@ -480,8 +490,14 @@ public:
     QVariant deserializeValue(QVariant propertyData, bool &ok)
     {
         ok = false;
+        auto metaType = propertyData.metaType();
+        if (metaType.flags() & QMetaType::IsPointer) {
+            auto *messageProperty = propertyData.value<QProtobufMessage *>();
+            Q_ASSERT(messageProperty != nullptr);
+            return deserializeObject(messageProperty);
+        }
 
-        auto handler = QtProtobufPrivate::findHandler(propertyData.metaType());
+        auto handler = QtProtobufPrivate::findHandler(metaType);
         if (handler.deserializer) {
             handler.deserializer(qPtr, propertyData);
             ok = propertyData.isValid();
@@ -528,16 +544,19 @@ public:
         QJsonObject activeObject = activeValue.toObject();
         // Go through QJSON doc and find keys that are presented in msgContainer
         for (auto &key : activeObject.keys()) {
+            if (activeObject.value(key).isNull())
+                continue;
+
             std::map<QString, QProtobufPropertyOrderingInfo>::iterator iter = msgContainer
                                                                                   .find(key);
             if (iter == msgContainer.end())
                 iter = msgContainer.find(convertJsonKeyToJsonName(key));
 
             if (iter != msgContainer.end()) {
-                QVariant newPropertyValue = message->property(iter->second);
                 auto store = activeValue;
                 activeValue = activeObject.value(key);
 
+                QVariant newPropertyValue = message->property(iter->second, true);
                 bool ok = false;
 
                 while (!activeValue.isNull()
@@ -691,7 +710,7 @@ bool QProtobufJsonSerializer::deserializeListObject(QProtobufMessage *message) c
     bool result = false;
     if (val.isObject()) {
         d_ptr->activeValue = val;
-        deserializeObject(message);
+        d_ptr->deserializeObject(message);
         result = true;
     } else {
         d_ptr->setInvalidFormatError();
@@ -747,8 +766,13 @@ bool QProtobufJsonSerializer::deserializeMapPair(QVariant &key, QVariant &value)
         return false;
     }
 
-    it = d_ptr->handlers.constFind(value.userType());
-    if (it != d_ptr->handlers.constEnd()) {
+    QMetaType metaType = value.metaType();
+    if (metaType.flags() & QMetaType::IsPointer) {
+        auto *messageProperty = value.value<QProtobufMessage *>();
+        Q_ASSERT(messageProperty != nullptr);
+        d_ptr->activeValue = jsonValue;
+        deserializeObject(messageProperty);
+    } else if (it = d_ptr->handlers.constFind(value.userType()); it != d_ptr->handlers.constEnd()) {
         ok = false;
         value = it.value().deserializer(jsonValue, ok);
         if (!ok) {

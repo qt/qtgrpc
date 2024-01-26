@@ -73,7 +73,8 @@ public:
     template<typename T, IsProtobufMessageType<T> = 0>
     T *value() const
     {
-        Q_ASSERT(QMetaType::fromType<T>() == rawValue().metaType());
+        if (rawValue().isNull() || QMetaType::fromType<T>() != rawValue().metaType())
+            rawValue().setValue(T());
         return reinterpret_cast<T *>(rawValue().data());
     }
 

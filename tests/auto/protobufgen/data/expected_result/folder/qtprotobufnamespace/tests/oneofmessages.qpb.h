@@ -167,11 +167,11 @@ public:
 
 private:
     QtProtobuf::int32 testOneofFieldInt_p() const;
-    ComplexMessage *testOneofComplexField_p() const;
-    ComplexMessage *testOneofSecondComplexField_p() const;
+    ComplexMessage *testOneofComplexField_p();
+    ComplexMessage *testOneofSecondComplexField_p();
     QtProtobuf::int32 secondFieldInt_p() const;
-    ComplexMessage *secondComplexField_p() const;
-    ComplexMessage *secondSecondComplexField_p() const;
+    ComplexMessage *secondComplexField_p();
+    ComplexMessage *secondSecondComplexField_p();
     QtProtobuf::int32 testSnakeCaseField_p() const;
     void setTestOneofFieldInt_p(QtProtobuf::int32 testOneofFieldInt);
     void setTestOneofComplexField_p(ComplexMessage *testOneofComplexField);
