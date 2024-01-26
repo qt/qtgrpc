@@ -650,7 +650,6 @@ void QProtobufJsonSerializer::serializeObject(const QProtobufMessage *message,
                                               const QProtobufPropertyOrdering &ordering,
                                               const QProtobufPropertyOrderingInfo &fieldInfo) const
 {
-    Q_UNUSED(fieldInfo);
     auto store = d_ptr->activeValue.toObject();
     d_ptr->activeValue = QJsonObject();
     d_ptr->serializeObject(message, ordering);
