@@ -2,7 +2,6 @@
 
 #include "nopackage.qpb.h"
 #include <QtProtobuf/qprotobufserializer.h>
-#include <QtQml/qqmlengine.h>
 
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarTestEnumGadget(TestEnumGadget::registerTypes);
 void TestEnumGadget::registerTypes()

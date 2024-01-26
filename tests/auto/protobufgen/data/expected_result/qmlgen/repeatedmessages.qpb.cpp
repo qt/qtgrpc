@@ -2,7 +2,6 @@
 
 #include "repeatedmessages.qpb.h"
 #include <QtProtobuf/qprotobufserializer.h>
-#include <QtQml/qqmlengine.h>
 
 namespace qtprotobufnamespace::tests {
 

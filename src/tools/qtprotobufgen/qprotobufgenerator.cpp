@@ -73,10 +73,6 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
 
     sourcePrinter->Print({{"include", "QtProtobuf/qprotobufserializer.h"}},
                          CommonTemplates::ExternalIncludeTemplate());
-    if (Options::instance().hasQml()) {
-        sourcePrinter->Print({{"include", "QtQml/qqmlengine.h"}},
-                             CommonTemplates::ExternalIncludeTemplate());
-    }
 
     OpenFileNamespaces(file, sourcePrinter.get());
     OpenFileNamespaces(file, registrationPrinter.get());

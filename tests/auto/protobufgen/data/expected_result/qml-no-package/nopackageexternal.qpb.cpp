@@ -2,7 +2,6 @@
 
 #include "nopackageexternal.qpb.h"
 #include <QtProtobuf/qprotobufserializer.h>
-#include <QtQml/qqmlengine.h>
 
 
 class SimpleIntMessageExt_QtProtobufData : public QSharedData

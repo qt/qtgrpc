@@ -2,7 +2,6 @@
 
 #include "enummessages.qpb.h"
 #include <QtProtobuf/qprotobufserializer.h>
-#include <QtQml/qqmlengine.h>
 
 namespace qtprotobufnamespace::tests {
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarTestEnumGadget(TestEnumGadget::registerTypes);
