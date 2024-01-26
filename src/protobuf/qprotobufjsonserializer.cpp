@@ -499,8 +499,34 @@ public:
 
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (handler.deserializer) {
-            handler.deserializer(qPtr, propertyData);
-            ok = propertyData.isValid();
+            if (activeValue.isArray()) {
+                QJsonArray array = activeValue.toArray();
+                if (array.isEmpty()) {
+                    ok = true;
+                    activeValue = {};
+                    return propertyData;
+                }
+
+                if (!array.at(0).isObject()) { // Enum array
+                    handler.deserializer(qPtr, propertyData);
+                    ok = propertyData.isValid();
+                } else {
+                    while (!array.isEmpty() &&
+                           deserializationError == QAbstractProtobufSerializer::NoError) {
+                        activeValue = array.takeAt(0);
+                        handler.deserializer(qPtr, propertyData);
+                    }
+                    ok = propertyData.isValid();
+                }
+            } else {
+                // We should attempt deserializing property while the active value !isNull.
+                // This is required to deserialize the map fields.
+                while (!activeValue.isNull()
+                       && deserializationError == QAbstractProtobufSerializer::NoError) {
+                    handler.deserializer(qPtr, propertyData);
+                }
+                ok = propertyData.isValid();
+            }
         } else {
             int userType = propertyData.userType();
             auto handler = handlers.constFind(userType);
@@ -508,7 +534,6 @@ public:
                 propertyData = handler.value().deserializer(activeValue, ok);
                 if (!ok)
                     setInvalidFormatError();
-                activeValue = {};
             } else {
                 setDeserializationError(QAbstractProtobufSerializer::NoDeserializerError,
                                         QCoreApplication::
@@ -559,10 +584,7 @@ public:
                 QVariant newPropertyValue = message->property(iter->second, true);
                 bool ok = false;
 
-                while (!activeValue.isNull()
-                       && deserializationError == QAbstractProtobufSerializer::NoError) {
-                    newPropertyValue = deserializeValue(newPropertyValue, ok);
-                }
+                newPropertyValue = deserializeValue(newPropertyValue, ok);
                 activeValue = store;
 
                 if (ok)
@@ -700,28 +722,7 @@ bool QProtobufJsonSerializer::deserializeObject(QProtobufMessage *message) const
 
 bool QProtobufJsonSerializer::deserializeListObject(QProtobufMessage *message) const
 {
-    QJsonArray array = d_ptr->activeValue.toArray();
-    if (array.isEmpty()) {
-        d_ptr->activeValue = {};
-        return false;
-    }
-
-    auto val = array.takeAt(0);
-    bool result = false;
-    if (val.isObject()) {
-        d_ptr->activeValue = val;
-        d_ptr->deserializeObject(message);
-        result = true;
-    } else {
-        d_ptr->setInvalidFormatError();
-    }
-
-    if (!array.isEmpty())
-        d_ptr->activeValue = array;
-    else
-        d_ptr->activeValue = {};
-
-    return result;
+    return d_ptr->deserializeObject(message);
 }
 
 void QProtobufJsonSerializer::serializeMapPair(const QVariant &key, const QVariant &value,

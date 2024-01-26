@@ -547,7 +547,7 @@ void QtProtobufTypesJsonDeserializationTest::InvalidTypeTest()
                     "{\"testFieldInt\":-45,"
                     "\"testComplexField\":200}"_ba);
 
-    QCOMPARE(msg.testFieldInt(), 0);
+    QCOMPARE(msg.testFieldInt(), -45);
     QCOMPARE(msg.testComplexField(), SimpleStringMessage());
     QCOMPARE(serializer->deserializationError(),
              QAbstractProtobufSerializer::InvalidFormatError);
