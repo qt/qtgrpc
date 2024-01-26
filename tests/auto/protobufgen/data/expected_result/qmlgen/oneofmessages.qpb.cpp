@@ -2,7 +2,6 @@
 
 #include "oneofmessages.qpb.h"
 #include <QtProtobuf/qprotobufserializer.h>
-#include <QtQml/qqmlengine.h>
 #include <cmath>
 
 namespace qtprotobufnamespace::tests {
