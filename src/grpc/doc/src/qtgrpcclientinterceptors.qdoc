@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
 
 /*!
-\group qtgrpc-client-interceptor
+\page qtgrpc-client-interceptors.html
 \title Qt GRPC Client Interceptors
 
 \brief Using QGrpcClientInterceptor and QGrpcClientInterceptorManager in Qt GRPC
