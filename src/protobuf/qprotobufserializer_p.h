@@ -531,6 +531,13 @@ private:
     QProtobufSerializer *q_ptr;
 };
 
+inline bool
+isOneofOrOptionalField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+{
+    return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
+        || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
+}
+
 QT_END_NAMESPACE
 
 #endif // QPROTOBUFSERIALIZER_P_H

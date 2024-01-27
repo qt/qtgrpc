@@ -20,17 +20,6 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace {
-
-inline bool
-isOneofOrOptionalField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
-{
-    return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
-        || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
-}
-
-} // namespace
-
 /*!
     \class QProtobufSerializer
     \inmodule QtProtobuf
