@@ -5,12 +5,50 @@
 
 #include <QtProtobuf/qprotobufmessage.h>
 #include "testservice_client.grpc.qpb.h"
+#include <QtGrpcQuick/qqmlgrpcfunctionalhandlers.h>
+#include <QtGrpcQuick/qqmlgrpcstreamsender.h>
 #include <QtQml/qjsengine.h>
 #include <QtQml/qjsvalue.h>
 #include <QtQml/qqmlengine.h>
 
 namespace qtgrpc::tests {
 namespace TestService {
+class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodClientStreamSender : public
+#ifdef Q_MOC_RUN
+    QObject
+#else
+    QQmlGrpcStreamSender<QGrpcClientStream, qtgrpc::tests::SimpleStringMessage>
+#endif
+{
+    Q_OBJECT
+    QML_NAMED_ELEMENT(TestServiceTestMethodClientStreamSender)
+    QML_UNCREATABLE("TestServiceTestMethodClientStreamSender can only be created by gRPC client instance")
+public:
+    TestMethodClientStreamSender(std::shared_ptr<QGrpcClientStream> stream) : QQmlGrpcStreamSender(std::move(stream)) {}
+    Q_INVOKABLE void sendMessage(const qtgrpc::tests::SimpleStringMessage &arg)
+    {
+        sendMessageImpl(arg);
+    }
+};
+
+class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodBiStreamSender : public
+#ifdef Q_MOC_RUN
+    QObject
+#else
+    QQmlGrpcStreamSender<QGrpcBidirStream, qtgrpc::tests::SimpleStringMessage>
+#endif
+{
+    Q_OBJECT
+    QML_NAMED_ELEMENT(TestServiceTestMethodBiStreamSender)
+    QML_UNCREATABLE("TestServiceTestMethodBiStreamSender can only be created by gRPC client instance")
+public:
+    TestMethodBiStreamSender(std::shared_ptr<QGrpcBidirStream> stream) : QQmlGrpcStreamSender(std::move(stream)) {}
+    Q_INVOKABLE void sendMessage(const qtgrpc::tests::SimpleStringMessage &arg)
+    {
+        sendMessageImpl(arg);
+    }
+};
+
 
 class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT QmlClient : public Client
 {
@@ -20,6 +58,20 @@ class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT QmlClient : public Client
 public:
     explicit QmlClient(QObject *parent = nullptr);
     Q_INVOKABLE void testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QJSValue &callback, const QJSValue &errorCallback, const QGrpcCallOptions &options = {});
+    Q_INVOKABLE void testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg,
+                    const QJSValue &messageCallback,
+                    const QJSValue &finishCallback,
+                    const QJSValue &errorCallback,
+                    const QGrpcCallOptions &options = {});
+    Q_INVOKABLE TestMethodClientStreamSender *testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg,
+                    const QJSValue &finishCallback,
+                    const QJSValue &errorCallback,
+                    const QGrpcCallOptions &options = {});
+    Q_INVOKABLE TestMethodBiStreamSender *testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg,
+                    const QJSValue &messageCallback,
+                    const QJSValue &finishCallback,
+                    const QJSValue &errorCallback,
+                    const QGrpcCallOptions &options = {});
 };
 } // namespace TestService
 } // namespace qtgrpc::tests

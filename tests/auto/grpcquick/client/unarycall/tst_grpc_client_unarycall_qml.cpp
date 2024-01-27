@@ -12,6 +12,6 @@ private:
     ServerProcRunner m_serverProccess{ TEST_GRPC_SERVER_PATH };
 };
 
-QUICK_TEST_MAIN_WITH_SETUP(tst_client_qml, GrpcClientUnarycallQml)
+QUICK_TEST_MAIN_WITH_SETUP(tst_grpc_client_unarycall_qml, GrpcClientUnarycallQml)
 
-#include "tst_client_qml.moc"
+#include "tst_grpc_client_unarycall_qml.moc"

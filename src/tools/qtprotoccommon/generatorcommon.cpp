@@ -343,6 +343,13 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
     inputTypeName = utils::replace(inputTypeName, ".", "::");
     outputTypeName = utils::replace(outputTypeName, ".", "::");
 
+    std::string senderName = methodNameUpper;
+    senderName += "Sender";
+
+    //Make sure that we don't clash the same stream names from different services
+    std::string senderQmlName = method->service()->name();
+    senderQmlName += senderName;
+
     std::string streamType;
     if (method->client_streaming() && method->server_streaming()) {
         streamType = "QGrpcBidirStream";
@@ -352,15 +359,22 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
         streamType = "QGrpcClientStream";
     }
 
-    return { { "classname", scope },
-             { "return_type", outputTypeName },
-             { "classname_low_case", utils::deCapitalizeAsciiName(scope) },
-             { "method_name", methodName },
-             { "method_name_upper", methodNameUpper },
-             { "param_type", inputTypeName },
-             { "param_name", "arg" },
-             { "stream_type", streamType },
-             { "return_name", "ret" } };
+    const std::string exportMacro = common::buildExportMacro(Options::instance().exportMacro());
+
+    return {
+        {"classname",           scope                              },
+        { "sender_class_name",  senderName                         },
+        { "sender_qml_name",    senderQmlName                      },
+        { "return_type",        outputTypeName                     },
+        { "classname_low_case", utils::deCapitalizeAsciiName(scope)},
+        { "method_name",        methodName                         },
+        { "method_name_upper",  methodNameUpper                    },
+        { "param_type",         inputTypeName                      },
+        { "param_name",         "arg"                              },
+        { "stream_type",        streamType                         },
+        { "return_name",        "ret"                              },
+        { "export_macro",       exportMacro                        }
+    };
 }
 
 TypeMap common::produceServiceTypeMap(const ServiceDescriptor *service, const Descriptor *scope)

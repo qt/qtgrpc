@@ -13,6 +13,8 @@ qt_internal_add_qml_module(GrpcQuick
         qqmlgrpcchanneloptions_p.h qqmlgrpcchanneloptions.cpp
         qqmlgrpccalloptions_p.h qqmlgrpccalloptions.cpp
         qqmlgrpcmetadata_p.h qqmlgrpcmetadata.cpp
+        qqmlgrpcstreamsender.h qqmlgrpcstreamsender.cpp
+        qqmlgrpcfunctionalhandlers.h
     LIBRARIES
         Qt::Core
         Qt::Grpc

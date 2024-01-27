@@ -12,32 +12,72 @@ QmlClient::QmlClient(QObject *parent)
 }
 
 
-void QmlClient::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QJSValue &callback, const QJSValue &errorCallback,const QGrpcCallOptions &options)
+void QmlClient::testMethod(const qtgrpc::tests::SimpleStringMessage &arg,
+                const QJSValue &finishCallback,
+                const QJSValue &errorCallback,
+                const QGrpcCallOptions &options)
 {
-    if (!callback.isCallable()) {
-        qWarning() << "Unable to call QmlClient::testMethod, callback is not callable";
-        return;
-    }
-
     QJSEngine *jsEngine = qjsEngine(this);
     if (jsEngine == nullptr) {
         qWarning() << "Unable to call QmlClient::testMethod, it's only callable from JS engine context";
         return;
     }
 
-    std::shared_ptr<QGrpcCallReply> reply = call("testMethod"_L1, arg, options);
-    reply->subscribe(jsEngine, [reply, callback, jsEngine]() {
-        if (const auto result = reply->read<qtgrpc::tests::SimpleStringMessage>()) {
-            callback.call(QJSValueList{jsEngine->toScriptValue(*result)});
-            return;
-        }
-        QGrpcStatus::StatusCode code = QGrpcStatus::StatusCode::InvalidArgument;
-        if (reply->deserializationError() == QAbstractProtobufSerializer::UnexpectedEndOfStreamError)
-            code = QGrpcStatus::StatusCode::OutOfRange;
-        emit reply->errorOccurred(QGrpcStatus{ code, reply->deserializationErrorString() });
-    }, [errorCallback, jsEngine](const QGrpcStatus &status) {
-        errorCallback.call(QJSValueList{jsEngine->toScriptValue(status)});
-    });
+    QtGrpcQuickFunctional::makeCallConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
+                        call("testMethod"_L1, arg, options),                        finishCallback, errorCallback);
+}
+
+
+void QmlClient::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg,
+            const QJSValue &messageCallback,
+            const QJSValue &finishCallback,
+            const QJSValue &errorCallback,
+            const QGrpcCallOptions &options)
+{
+    QJSEngine *jsEngine = qjsEngine(this);
+    if (jsEngine == nullptr) {
+        qWarning() << "Unable to call QmlClient::testMethodServerStream, it's only callable from JS engine context";
+        return;
+    }
+
+    QtGrpcQuickFunctional::makeServerStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
+                        startStream<QGrpcServerStream>("testMethodServerStream"_L1, arg, options),
+                        messageCallback, finishCallback, errorCallback);
+}
+
+
+TestMethodClientStreamSender *QmlClient::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg,
+        const QJSValue &finishCallback,
+        const QJSValue &errorCallback,
+        const QGrpcCallOptions &options)
+{
+    QJSEngine *jsEngine = qjsEngine(this);
+    if (jsEngine == nullptr) {
+        qWarning() << "Unable to call QmlClient::testMethodClientStream, it's only callable from JS engine context";
+        return nullptr;
+    }
+
+    return QtGrpcQuickFunctional::makeClientStreamConnections<TestMethodClientStreamSender, qtgrpc::tests::SimpleStringMessage>(jsEngine,
+                        startStream<QGrpcClientStream>("testMethodClientStream"_L1, arg, options),
+                        finishCallback, errorCallback);
+}
+
+
+TestMethodBiStreamSender *QmlClient::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg,
+    const QJSValue &messageCallback,
+    const QJSValue &finishCallback,
+    const QJSValue &errorCallback,
+    const QGrpcCallOptions &options)
+{
+    QJSEngine *jsEngine = qjsEngine(this);
+    if (jsEngine == nullptr) {
+        qWarning() << "Unable to call QmlClient::testMethodBiStream, it's only callable from JS engine context";
+        return nullptr;
+    }
+
+    return QtGrpcQuickFunctional::makeBidirStreamConnections<TestMethodBiStreamSender, qtgrpc::tests::SimpleStringMessage>(jsEngine,
+                        startStream<QGrpcBidirStream>("testMethodBiStream"_L1, arg, options),
+                        messageCallback, finishCallback, errorCallback);
 }
 
 } // namespace TestService

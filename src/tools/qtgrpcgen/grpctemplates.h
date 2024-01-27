@@ -33,6 +33,17 @@ public:
     static const char *ClientMethodStreamDeclarationTemplate();
 
     static const char *ClientMethodStreamDefinitionTemplate();
+
+    static const char *StreamSenderDeclarationQmlTemplate();
+
+    static const char *ClientMethodServerStreamDeclarationQmlTemplate();
+    static const char *ClientMethodServerStreamDefinitionQmlTemplate();
+
+    static const char *ClientMethodClientStreamDeclarationQmlTemplate();
+    static const char *ClientMethodClientStreamDefinitionQmlTemplate();
+
+    static const char *ClientMethodBidirStreamDeclarationQmlTemplate();
+    static const char *ClientMethodBidirStreamDefinitionQmlTemplate();
 };
 
 } // namespace QtGrpc
