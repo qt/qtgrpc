@@ -69,13 +69,6 @@ inline QString convertJsonKeyToJsonName(QStringView name)
     return result;
 }
 
-inline bool
-isOneofOrOptionalField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
-{
-    return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
-        || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
-}
-
 }
 
 class QProtobufJsonSerializerPrivate final

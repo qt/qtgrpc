@@ -51,13 +51,6 @@ private:
 };
 Q_GLOBAL_STATIC(HandlersRegistry, handlersRegistry)
 
-inline bool
-isOneofOrOptionalField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
-{
-    return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
-            || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
-}
-
 } // namespace
 
 void QtProtobufPrivate::registerHandler(QMetaType type,
