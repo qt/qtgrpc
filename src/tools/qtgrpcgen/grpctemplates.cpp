@@ -107,10 +107,10 @@ const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
            "    std::shared_ptr<QGrpcCallReply> reply = call(\"$method_name$\"_L1, "
            "$param_name$, options);\n"
            "    reply->subscribe(jsEngine, [reply, callback, jsEngine]() {\n"
-           "        auto result = $return_type$(reply->read<$return_type$>());\n"
-           "        QJSValue(callback).call(QJSValueList{jsEngine->toScriptValue(result)});\n"
+           "        auto result = reply->read<$return_type$>();\n"
+           "        callback.call(QJSValueList{jsEngine->toScriptValue(result)});\n"
            "    }, [errorCallback, jsEngine](const QGrpcStatus &status) {\n"
-           "        QJSValue(errorCallback).call(QJSValueList{jsEngine->toScriptValue(status)});\n"
+           "        errorCallback.call(QJSValueList{jsEngine->toScriptValue(status)});\n"
            "    });\n"
            "}\n";
 }
