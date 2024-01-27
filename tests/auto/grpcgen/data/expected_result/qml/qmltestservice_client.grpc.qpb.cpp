@@ -27,10 +27,10 @@ void QmlClient::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const 
 
     std::shared_ptr<QGrpcCallReply> reply = call<qtgrpc::tests::SimpleStringMessage>("testMethod"_L1, arg, options);
     reply->subscribe(jsEngine, [reply, callback, jsEngine]() {
-        auto result = qtgrpc::tests::SimpleStringMessage(reply->read<qtgrpc::tests::SimpleStringMessage>());
-        QJSValue(callback).call(QJSValueList{jsEngine->toScriptValue(result)});
+        auto result = reply->read<qtgrpc::tests::SimpleStringMessage>();
+        callback.call(QJSValueList{jsEngine->toScriptValue(result)});
     }, [errorCallback, jsEngine](const QGrpcStatus &status) {
-        QJSValue(errorCallback).call(QJSValueList{jsEngine->toScriptValue(status)});
+        errorCallback.call(QJSValueList{jsEngine->toScriptValue(status)});
     });
 }
 
