@@ -133,7 +133,8 @@ function(_qt_internal_protoc_generate target generator output_directory)
         "${proto_includes_string}"
     )
 
-    unset(extra_copy_commands)
+    set(extra_copy_commands "")
+    set(temporary_files "")
     if(NOT tmp_output_directory STREQUAL output_directory)
         foreach(f IN LISTS generated_files)
             get_filename_component(filename "${f}" NAME)
@@ -145,9 +146,15 @@ function(_qt_internal_protoc_generate target generator output_directory)
                     calling _qt_internal_protoc_generate"
                 )
             endif()
+            list(APPEND temporary_files "${tmp_output_directory}/${f_rel}")
             list(APPEND extra_copy_commands COMMAND
                 ${CMAKE_COMMAND} -E copy_if_different "${tmp_output_directory}/${f_rel}" "${f}")
         endforeach()
+    endif()
+
+    set(byproducts "")
+    if(temporary_files)
+        set(byproducts BYPRODUCTS ${temporary_files})
     endif()
 
     add_custom_command(OUTPUT ${generated_files}
@@ -159,6 +166,7 @@ function(_qt_internal_protoc_generate target generator output_directory)
             -P
             ${__qt_protobuf_macros_module_base_dir}/QtProtocCommandWrapper.cmake
         ${extra_copy_commands}
+        ${byproducts}
         WORKING_DIRECTORY ${output_directory}
         DEPENDS
             ${QT_CMAKE_EXPORT_NAMESPACE}::${generator}
