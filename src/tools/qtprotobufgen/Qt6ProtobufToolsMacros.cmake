@@ -81,7 +81,8 @@ function(_qt_internal_protoc_generate target generator output_directory)
 
     get_filename_component(output_directory "${output_directory}" REALPATH)
     get_target_property(is_generator_imported ${QT_CMAKE_EXPORT_NAMESPACE}::${generator} IMPORTED)
-    if(QT_INTERNAL_AVOID_USING_PROTOBUF_TMP_OUTPUT_DIR OR is_generator_imported)
+    if(QT_INTERNAL_AVOID_USING_PROTOBUF_TMP_OUTPUT_DIR OR is_generator_imported
+        OR NOT CMAKE_GENERATOR MATCHES "^Ninja")
         set(tmp_output_directory "${output_directory}")
     else()
         set(tmp_output_directory "${output_directory}/.tmp")
