@@ -11,21 +11,36 @@ TestCase {
     name: "qtgrpcCallOptionsTest"
 
     GrpcCallOptions {
-        id : options
+        id: options
         metadata: grpcData
         deadline: { 1000 }
     }
 
     GrpcCallOptions {
-        id : options_dup
+        id: options_dup
         metadata: options.metadata
         deadline: options.deadline
     }
 
     GrpcMetadata {
-        id : grpcData
+        id: grpcData
         data: ({ "user-name": "localhost",
                  "user-password": "qwerty"})
+    }
+
+    GrpcCallOptions {
+        id: optionsWithChangedProperties
+        metadata: grpcData
+        deadline: { 2000 }
+    }
+
+    GrpcCallOptions {
+        id: optionsWithDefaultProperty
+    }
+
+    Component.onCompleted: {
+        optionsWithChangedProperties.metadata = null
+        optionsWithChangedProperties.deadline = 3000
     }
 
     function test_OptionTypes_data() {
@@ -58,7 +73,13 @@ TestCase {
                     { tag: "metadata deadline == 1000",
                         field: options.deadline, answer: 1000 },
                     { tag: "options == options_dup",
-                        field: options.metadata, answer: options_dup.metadata }
+                        field: options.metadata, answer: options_dup.metadata },
+                    { tag: "optionsWithChangedProperties.metadata == null",
+                        field: optionsWithChangedProperties.metadata, answer: null },
+                    { tag: "optionsWithChangedProperties.deadline == 3000",
+                        field: optionsWithChangedProperties.deadline, answer: 3000 },
+                    { tag: "optionsWithDefaultProperty.metadata == null",
+                        field: optionsWithDefaultProperty.metadata, answer: null }
                 ]
     }
 

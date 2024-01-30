@@ -24,6 +24,9 @@ Item {
             sslDynamicItem = root.createSslConfigurationItem()
             options.sslConfiguration = sslDynamicItem.defaultConfig
         }
+
+        optionsWithChangedProperties.metadata = null
+        optionsWithChangedProperties.deadline = 3000
     }
 
     GrpcChannelOptions {
@@ -35,6 +38,16 @@ Item {
             data: ({ "user-name": "localhost",
                      "user-password": "qwerty"})
         }
+    }
+
+    GrpcChannelOptions {
+        id: optionsWithChangedProperties
+        host: "http://localhost:50051"
+        metadata: GrpcMetadata {
+            data: ({ "user-name": "localhost",
+                       "user-password": "qwerty"})
+        }
+        deadline: { 1000 }
     }
 
     TestCase {
@@ -100,7 +113,11 @@ Item {
                         { tag: "options.metadata.data[user-password] == qwerty",
                             field: options.metadata.data["user-password"], answer: "qwerty" },
                         { tag: "metadata deadline = 1000",
-                            field: options.deadline, answer: 1000 }
+                            field: options.deadline, answer: 1000 },
+                        { tag: "optionsWithChangedProperties.metadata == null",
+                            field: optionsWithChangedProperties.metadata, answer: null },
+                        { tag: "optionsWithChangedProperties.deadline == 3000",
+                            field: optionsWithChangedProperties.deadline, answer: 3000 }
                     ]
         }
 
