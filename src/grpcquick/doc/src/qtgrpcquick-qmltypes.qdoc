@@ -108,6 +108,7 @@
     \qmlproperty QVariantMap QQmlGrpcMetadata::data
     Provides access to metadata container and holds it in QVariantMap format
     in QML.
+    \note Data is \c REQUIRED property. It must be set for object creation.
     \note Use the comma symbol to set several values by the same key.
           See example below:
     \code

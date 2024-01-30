@@ -31,7 +31,7 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcMetadata : public QObject
     QML_NAMED_ELEMENT(GrpcMetadata)
     QML_ADDED_IN_VERSION(6, 7)
 
-    Q_PROPERTY(QVariantMap data READ data WRITE setData NOTIFY dataChanged)
+    Q_PROPERTY(QVariantMap data READ data WRITE setData NOTIFY dataChanged REQUIRED)
 public:
     QQmlGrpcMetadata(QObject *parent = nullptr);
     ~QQmlGrpcMetadata();

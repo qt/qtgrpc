@@ -27,7 +27,7 @@ void QQmlGrpcCallOptions::setDeadline(qint64 value)
     emit deadlineChanged();
 }
 
-QGrpcCallOptions QQmlGrpcCallOptions::options() const
+const QGrpcCallOptions &QQmlGrpcCallOptions::options() const
 {
     return m_options;
 }

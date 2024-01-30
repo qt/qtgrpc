@@ -38,7 +38,7 @@ public:
     QQmlGrpcCallOptions(QObject *parent = nullptr);
     ~QQmlGrpcCallOptions();
 
-    QGrpcCallOptions options() const;
+    const QGrpcCallOptions &options() const;
     void setMaxRetryAttempts(qint64 value);
     qint64 deadline() const;
     void setDeadline(qint64 value);
