@@ -16,7 +16,7 @@ public:
     QQmlGrpcChannelOptionsPrivate();
 
     QGrpcChannelOptions m_options;
-    QQmlGrpcMetadata *m_metadata;
+    QQmlGrpcMetadata *m_metadata = nullptr;
 #if QT_CONFIG(ssl)
     QQmlSslConfiguration m_configuration;
 #endif // QT_CONFIG(ssl)
