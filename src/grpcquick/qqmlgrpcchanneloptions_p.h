@@ -16,6 +16,7 @@
 //
 
 #include <QtGrpcQuick/qtgrpcquickexports.h>
+#include <QtGrpcQuick/private/qqmlgrpcserializationformat_p.h>
 #include <QtCore/qobject.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtQml/qqmlregistration.h>
@@ -37,6 +38,9 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcChannelOptions : public QObject
     Q_PROPERTY(QUrl host READ host WRITE setHost NOTIFY hostChanged REQUIRED)
     Q_PROPERTY(qint64 deadline READ deadline WRITE setDeadline NOTIFY deadlineChanged)
     Q_PROPERTY(QQmlGrpcMetadata *metadata READ metadata WRITE setMetadata NOTIFY metadataChanged)
+    Q_PROPERTY(QQmlSerializationFormat::GrpcSerializationFormat serializationFormat
+                   READ serializationFormat WRITE setSerializationFormat
+                       NOTIFY serializationFormatChanged)
 #if QT_CONFIG(ssl)
     Q_PROPERTY(QQmlSslConfiguration sslConfiguration READ sslConfiguration
                        WRITE setSslConfiguration NOTIFY sslConfigurationChanged)
@@ -52,6 +56,8 @@ public:
     void setDeadline(qint64 value);
     QQmlGrpcMetadata *metadata() const;
     void setMetadata(QQmlGrpcMetadata *value);
+    QQmlSerializationFormat::GrpcSerializationFormat serializationFormat() const;
+    void setSerializationFormat(QQmlSerializationFormat::GrpcSerializationFormat format);
 #if QT_CONFIG(ssl)
     QQmlSslConfiguration sslConfiguration() const;
     void setSslConfiguration(const QQmlSslConfiguration &config);
@@ -61,6 +67,7 @@ signals:
     void hostChanged();
     void deadlineChanged();
     void metadataChanged();
+    void serializationFormatChanged();
 #if QT_CONFIG(ssl)
     void sslConfigurationChanged();
 #endif // QT_CONFIG(ssl)

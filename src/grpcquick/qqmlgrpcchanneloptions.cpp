@@ -16,6 +16,7 @@ public:
     QQmlGrpcChannelOptionsPrivate();
 
     QGrpcChannelOptions m_options;
+    QQmlSerializationFormat::GrpcSerializationFormat m_format = QQmlSerializationFormat::Default;
     QQmlGrpcMetadata *m_metadata = nullptr;
 #if QT_CONFIG(ssl)
     QQmlSslConfiguration m_configuration;
@@ -80,6 +81,24 @@ void QQmlGrpcChannelOptions::setMetadata(QQmlGrpcMetadata *value)
         else
             d->m_options.withMetadata(QGrpcMetadata());
         emit metadataChanged();
+    }
+}
+
+QQmlSerializationFormat::GrpcSerializationFormat
+QQmlGrpcChannelOptions::serializationFormat() const
+{
+    return d_func()->m_format;
+}
+
+void QQmlGrpcChannelOptions::setSerializationFormat(
+    QQmlSerializationFormat::GrpcSerializationFormat format)
+{
+    Q_D(QQmlGrpcChannelOptions);
+    if (d->m_format != format) {
+        d->m_format = format;
+        d->m_options.withSerializationFormat(
+            {static_cast<QGrpcSerializationFormat::Format>(format)} );
+        emit serializationFormatChanged();
     }
 }
 
