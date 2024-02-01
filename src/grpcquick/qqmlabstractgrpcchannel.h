@@ -4,13 +4,13 @@
 #ifndef QQMLABSTRACTGRPCCHANNEL_H
 #define QQMLABSTRACTGRPCCHANNEL_H
 
-#include <QtGrpcQuick/qtgrpcquickexports.h>
 #include <QtCore/qobject.h>
+#include <QtGrpc/QAbstractGrpcChannel>
+#include <QtGrpcQuick/qtgrpcquickexports.h>
 #include <memory>
 
 QT_BEGIN_NAMESPACE
 
-class QAbstractGrpcChannel;
 class Q_GRPCQUICK_EXPORT QQmlAbstractGrpcChannel : public QObject
 {
     Q_OBJECT
