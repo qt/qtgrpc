@@ -12,9 +12,17 @@ Item {
 
     property bool sslSupport: options.sslConfiguration !== undefined
 
+    property Item sslDynamicItem;
+
+    function createSslConfigurationItem() {
+        return Qt.createQmlObject("import QtQuick; import QtGrpc; import QtNetwork; Item { \
+                                   property sslConfiguration defaultConfig; }", root)
+    }
+
     Component.onCompleted: {
         if (sslSupport) {
-            options.sslConfiguration.setDefaultConfiguration()
+            sslDynamicItem = root.createSslConfigurationItem()
+            options.sslConfiguration = sslDynamicItem.defaultConfig
         }
     }
 
