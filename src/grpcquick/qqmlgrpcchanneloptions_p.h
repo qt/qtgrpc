@@ -15,10 +15,10 @@
 // We mean it.
 //
 
-#include "qtgrpcquickexports.h"
-#include <QtCore/QMetaType>
+#include <QtGrpcQuick/qtgrpcquickexports.h>
+#include <QtCore/qobject.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
-#include <QtQml/qqml.h>
+#include <QtQml/qqmlregistration.h>
 
 #if QT_CONFIG(ssl)
 #include <QtQmlNetwork/private/qqmlsslconfiguration_p.h>

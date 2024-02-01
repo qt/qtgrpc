@@ -15,13 +15,13 @@
 // We mean it.
 //
 
-#include "qtgrpcquickexports.h"
-#include "qqmlgrpcmetadata_p.h"
+#include <QtGrpcQuick/qtgrpcquickexports.h>
+#include <QtGrpcQuick/private/qqmlgrpcmetadata_p.h>
 
-#include <QtCore/QMetaType>
+#include <QtCore/qobject.h>
 #include <QtCore/QtGlobal>
-#include <QtQml/qqml.h>
 #include <QtGrpc/qgrpccalloptions.h>
+#include <QtQml/qqmlregistration.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -5,7 +5,7 @@
 #define QQMLABSTRACTGRPCCHANNEL_H
 
 #include <QtCore/qobject.h>
-#include <QtGrpc/QAbstractGrpcChannel>
+#include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpcQuick/qtgrpcquickexports.h>
 #include <memory>
 

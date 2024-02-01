@@ -16,10 +16,10 @@
 //
 
 #include <QtGrpcQuick/qtgrpcquickexports.h>
-#include <QtQml/qqml.h>
+#include <QtGrpcQuick/qqmlabstractgrpcchannel.h>
+#include <QtGrpcQuick/private/qqmlgrpcchanneloptions_p.h>
 
-#include "qqmlabstractgrpcchannel.h"
-#include "qqmlgrpcchanneloptions_p.h"
+#include <QtQml/qqmlregistration.h>
 
 QT_BEGIN_NAMESPACE
 
