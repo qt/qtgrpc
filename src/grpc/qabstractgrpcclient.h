@@ -17,6 +17,7 @@
 
 #include <memory>
 #include <optional>
+#include <type_traits>
 
 QT_BEGIN_NAMESPACE
 
@@ -54,11 +55,11 @@ protected:
 #ifdef Q_QDOC
     template <typename ParamType, typename StreamType>
 #else
-    template <typename ParamType, typename StreamType,
-              std::enable_if_t<std::is_same_v<StreamType, QGrpcServerStream>
-                                       || std::is_same_v<StreamType, QGrpcClientStream>
-                                       || std::is_same_v<StreamType, QGrpcBidirStream>,
-                               bool> = true>
+    template <
+        typename ParamType, typename StreamType,
+        typename IsCompatibleStream = std::disjunction<std::is_same<StreamType, QGrpcServerStream>,
+                                                       std::is_same<StreamType, QGrpcClientStream>,
+                                                       std::is_same<StreamType, QGrpcBidirStream>>>
 #endif
     std::shared_ptr<StreamType> startStream(QLatin1StringView method, const QProtobufMessage &arg,
                                             const QGrpcCallOptions &options)
