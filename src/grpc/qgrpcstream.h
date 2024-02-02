@@ -11,6 +11,8 @@
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
+#include <type_traits>
+
 QT_BEGIN_NAMESPACE
 
 class QAbstractGrpcClient;
@@ -35,7 +37,11 @@ public:
     explicit QGrpcClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
     ~QGrpcClientStream() override;
 
+#ifdef Q_QDOC
     template<typename T>
+#else
+    template<typename T, std::enable_if_t<!std::is_pointer_v<T>, bool> = true>
+#endif
     void sendMessage(const T &message)
     {
         sendMessage(serializer()->serialize(&message));
@@ -55,7 +61,11 @@ public:
     explicit QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
     ~QGrpcBidirStream() override;
 
+#ifdef Q_QDOC
     template<typename T>
+#else
+    template<typename T, std::enable_if_t<!std::is_pointer_v<T>, bool> = true>
+#endif
     void sendMessage(const T &message)
     {
         sendMessage(serializer()->serialize(&message));
