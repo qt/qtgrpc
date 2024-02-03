@@ -316,6 +316,8 @@ function(qt6_add_protobuf target)
             list(APPEND extra_include_directories
                 "$<BUILD_INTERFACE:${output_directory}/${package_full_path}>")
         else()
+            list(APPEND extra_include_directories
+                "$<BUILD_INTERFACE:${output_directory}>")
             set(package_full_path "")
         endif()
 
