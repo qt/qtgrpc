@@ -278,11 +278,17 @@ bool OptionalMessage::operator ==(const OptionalMessage &other) const
 {
     return QProtobufMessage::isEqual(*this, other)
         && dptr->m_testField == other.dptr->m_testField
+        && dptr->m_testFieldOpt == other.dptr->m_testFieldOpt
         && dptr->m_testFieldBool == other.dptr->m_testFieldBool
+        && dptr->m_testFieldBoolOpt == other.dptr->m_testFieldBoolOpt
         && dptr->m_testFieldBytes == other.dptr->m_testFieldBytes
+        && dptr->m_testFieldBytesOpt == other.dptr->m_testFieldBytesOpt
         && dptr->m_testFieldString == other.dptr->m_testFieldString
+        && dptr->m_testFieldStringOpt == other.dptr->m_testFieldStringOpt
         && (dptr->m_testFieldMessage == other.dptr->m_testFieldMessage
-            || *dptr->m_testFieldMessage == *other.dptr->m_testFieldMessage);
+            || *dptr->m_testFieldMessage == *other.dptr->m_testFieldMessage)
+        && (dptr->m_testFieldMessageOpt == other.dptr->m_testFieldMessageOpt
+            || *dptr->m_testFieldMessageOpt == *other.dptr->m_testFieldMessageOpt);
 }
 
 bool OptionalMessage::operator !=(const OptionalMessage &other) const
