@@ -12,5 +12,9 @@ namespace.
 \li \c EXPORT_MACRO is the base name of the symbol export macro used for
 the generated code. The generated macro name is constructed as
 \c QPB_<EXPORT_MACRO>_EXPORT. If the option is not set, the macro is not
-generated.
-
+generated. Since Qt 6.8, \c EXPORT_MACRO supports the following format:
+\c {EXPORT_MACRO=macro_name[:macro_output_file[:<true|false>]]}. The new format
+allows you to set the generated macro file name and explicitly enable or disable
+the generation of the file containing the macro definitions. If
+\c macro_output_file is not set, the option falls back to the old syntax
+handling.
