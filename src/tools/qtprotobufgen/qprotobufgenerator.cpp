@@ -30,8 +30,6 @@ using namespace ::google::protobuf;
 using namespace ::google::protobuf::io;
 using namespace ::google::protobuf::compiler;
 
-static std::string ExportStr("_exports.qpb");
-
 QProtobufGenerator::QProtobufGenerator() : GeneratorBase()
 {}
 
@@ -128,11 +126,15 @@ bool QProtobufGenerator::GenerateAll(const std::vector<const FileDescriptor *> &
     assert(generatorContext != nullptr);
 
     Options::setFromString(parameter);
-    if (!Options::instance().exportMacro().empty()) {
+    if (Options::instance().generateMacroExportFile()) {
         std::string exportMacroName = Options::instance().exportMacro();
-        utils::asciiToLower(exportMacroName);
-        std::unique_ptr<io::ZeroCopyOutputStream> headerStream(
-                generatorContext->Open(exportMacroName + ExportStr + ".h"));
+        std::string exportMacroFilename = Options::instance().exportMacroFilename();
+
+        assert(!exportMacroName.empty());
+        assert(!exportMacroFilename.empty());
+
+        std::unique_ptr<io::ZeroCopyOutputStream> headerStream(generatorContext
+                                                                   ->Open(exportMacroFilename));
         std::shared_ptr<Printer> headerPrinter(new Printer(headerStream.get(), '$'));
         printDisclaimer(headerPrinter.get());
         headerPrinter->Print({ { "export_macro", Options::instance().exportMacro() } },
@@ -165,10 +167,9 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
                    fileNameToUpper.begin(), utils::toAsciiUpper);
 
     headerPrinter->Print({{"filename", fileNameToUpper}}, CommonTemplates::PreambleTemplate());
-    if (!Options::instance().exportMacro().empty()) {
-        std::string exportMacroName = Options::instance().exportMacro();
-        utils::asciiToLower(exportMacroName);
-        internalIncludes.insert(exportMacroName + ExportStr);
+    if (!Options::instance().exportMacroFilename().empty()) {
+        std::string exportMacroFilename = Options::instance().exportMacroFilename();
+        internalIncludes.insert(utils::removeFileSuffix(exportMacroFilename));
     }
 
     headerPrinter->Print(CommonTemplates::DefaultProtobufIncludesTemplate());

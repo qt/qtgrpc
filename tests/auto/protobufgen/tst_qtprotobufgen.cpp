@@ -245,6 +245,16 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
                 << "extranamespace"
                 << "/extra-namespace/"
                 << QString(extension);
+
+        QTest::addRow("custom-exports/basicmessages%s", extension.data())
+            << "basicmessages"
+            << "/custom-exports/"
+            << QString(extension);
+
+        QTest::addRow("no-exports/basicmessages%s", extension.data())
+            << "basicmessages"
+            << "/no-exports/"
+            << QString(extension);
 #ifdef HAVE_QML
         QTest::addRow("nopackage%s", extension.data())
                 << "nopackage"
@@ -252,6 +262,19 @@ void tst_qtprotobufgen::cmakeGeneratedFile_data()
                 << QString(extension);
 #endif
     }
+
+    //Check the generating of cpp export files
+    QTest::addRow("cpp-exports")
+        << "tst_qtprotobufgen_gen_exports.qpb.h"
+        << "/folder/"
+        << QString();
+
+    QTest::addRow("custom-cpp-exports")
+        << "tst_qtprotobufgen_custom_exports_gen_exports.qpb.h"
+        << "/custom-exports/"
+        << QString();
+
+
 #ifdef HAVE_QML
     const QLatin1StringView qmlExtensions[]
             = {cppExtension,

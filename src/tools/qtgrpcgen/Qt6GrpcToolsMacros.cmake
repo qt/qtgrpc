@@ -148,15 +148,15 @@ function(qt6_add_grpc target type)
         message(FATAL_ERROR "Unsupported target type '${target_type}'.")
     endif()
 
-    if(is_static OR is_shared)
-        # Add EXPORT_MACRO if the target is, or we will create, a shared library
-        string(TOUPPER "${target}" target_upper)
-        if (is_shared)
-            list(APPEND generation_options "EXPORT_MACRO=${target_upper}")
+    if(is_shared)
+        set(generated_export "")
+        set(generated_export_options "")
+        _qt_internal_protoc_generate_cpp_exports(generated_export generated_export_options
+            ${target} "${arg_EXPORT_MACRO}")
+        if(generated_export)
+            list(APPEND cpp_sources "${generated_export}") # TODO: Unused, see QTBUG-121856
         endif()
-        # Define this so we can conditionally set the export macro
-        target_compile_definitions(${target}
-            PRIVATE "QT_BUILD_${target_upper}_LIB")
+        list(APPEND generation_options "${generated_export_options}")
     endif()
 
     set(output_directory "${CMAKE_CURRENT_BINARY_DIR}")
