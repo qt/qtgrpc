@@ -24,10 +24,6 @@ class QProtobufGenerator : public qtprotoccommon::GeneratorBase
 public:
     QProtobufGenerator();
     ~QProtobufGenerator();
-    bool GenerateAll(const std::vector<const ::google::protobuf::FileDescriptor *> &files,
-                     const std::string &parameter,
-                     ::google::protobuf::compiler::GeneratorContext *generatorContext,
-                     std::string *error) const override;
     bool Generate(const ::google::protobuf::FileDescriptor *file,
                   const std::string &parameter,
                   ::google::protobuf::compiler::GeneratorContext *generatorContext,

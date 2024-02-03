@@ -181,6 +181,11 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
     clientHeaderPrinter->Print("\n");
 
     std::set<std::string> internalIncludes = QGrpcGenerator::GetInternalIncludes(file);
+    if (!Options::instance().exportMacroFilename().empty()) {
+        std::string exportMacroFilename = Options::instance().exportMacroFilename();
+        internalIncludes.insert(utils::removeFileSuffix(exportMacroFilename));
+    }
+
     for (const auto &include : internalIncludes) {
         clientHeaderPrinter->Print({ { "include", include } },
                                    CommonTemplates::InternalIncludeTemplate());
@@ -243,5 +248,5 @@ bool QGrpcGenerator::GenerateAll(const std::vector<const FileDescriptor *> &file
                                  std::string *error) const
 {
     Options::setFromString(parameter, qtprotoccommon::Options::QtGrpcGen);
-    return CodeGenerator::GenerateAll(files, parameter, generatorContext, error);
+    return GeneratorBase::GenerateAll(files, parameter, generatorContext, error);
 }

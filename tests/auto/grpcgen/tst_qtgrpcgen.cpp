@@ -189,18 +189,36 @@ void tst_qtgrpcgen::cmakeGeneratedFile_data()
     QTest::addColumn<QString>("extension");
     QTest::addColumn<QString>("cmakeGenerationFolder");
 
-    const QLatin1StringView extensions[] = { cppProtobufGenExtension,
-                                             headerProtobufGenExtension,
-                                             cppExtension,
-                                             headerExtension };
+    const QLatin1StringView protobufExtensions[] = { cppProtobufGenExtension,
+                                                     headerProtobufGenExtension };
 
-    for (const auto extension : extensions) {
+    const QLatin1StringView grpcExtensions[] = { cppExtension, headerExtension };
+
+    for (const auto extension : grpcExtensions) {
         QTest::addRow("testservice%s", extension.data())
                 << "testservice"
                 << "/folder/qtgrpc/tests/"
                 << QString(extension)
                 << m_cmakeGenerated;
+
+        QTest::addRow("separate/grpc/testservice%s", extension.data())
+            << "testservice"
+            << "/separate/grpc/qtgrpc/tests/" << QString(extension) << m_cmakeGenerated;
     }
+
+    for (const auto extension : protobufExtensions) {
+        QTest::addRow("testservice%s", extension.data())
+            << "testservice"
+            << "/folder/qtgrpc/tests/" << QString(extension) << m_cmakeGenerated;
+
+        QTest::addRow("separate/protobuf/testservice%s", extension.data())
+            << "testservice"
+            << "/separate/protobuf/qtgrpc/tests/" << QString(extension) << m_cmakeGenerated;
+    }
+
+    QTest::addRow("tst_qtgrpcgen_client_grpc_only_exports.qpb.h")
+        << "tst_qtgrpcgen_client_grpc_only_exports.qpb.h"
+        << "/separate/grpc/" << QString() << m_cmakeGenerated;
 
 #ifdef HAVE_QML
     const QLatin1StringView qmlExtensions[] = { cppExtension,
@@ -226,7 +244,7 @@ void tst_qtgrpcgen::cmakeGeneratedFile()
     QFile expectedResultFile(m_expectedResult + folder + fileName + extension);
     QFile generatedFile(cmakeGenerationFolder + folder + fileName + extension);
 
-    QVERIFY(expectedResultFile.exists());
+    QVERIFY2(expectedResultFile.exists(), qPrintable(expectedResultFile.fileName()));
     QVERIFY(generatedFile.exists());
 
     QVERIFY2(expectedResultFile.open(QIODevice::ReadOnly | QIODevice::Text),

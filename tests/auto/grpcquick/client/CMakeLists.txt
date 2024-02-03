@@ -25,19 +25,19 @@ qt_internal_add_test(tst_grpc_client_unarycall_qml
         Qt::Grpc
 )
 
+qt_add_grpc(tst_grpc_client_unarycall_qml_gen CLIENT
+    PROTO_FILES
+        ../../shared/data/proto/testservice.proto
+    QML
+    OUTPUT_DIRECTORY
+        "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated_qml"
+)
+
 qt_add_protobuf(tst_grpc_client_unarycall_qml_gen
     PROTO_FILES
         ../../shared/data/proto/testservice.proto
     QML
     QML_URI qtgrpc.tests
-    OUTPUT_DIRECTORY
-        "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated_qml"
-)
-
-qt_add_grpc(tst_grpc_client_unarycall_qml_gen CLIENT
-    PROTO_FILES
-        ../../shared/data/proto/testservice.proto
-    QML
     OUTPUT_DIRECTORY
         "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated_qml"
 )

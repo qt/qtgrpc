@@ -118,32 +118,6 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
 
 }
 
-bool QProtobufGenerator::GenerateAll(const std::vector<const FileDescriptor *> &files,
-                                const std::string &parameter, GeneratorContext *generatorContext,
-                                std::string *error) const
-{
-    assert(!files.empty());
-    assert(generatorContext != nullptr);
-
-    Options::setFromString(parameter);
-    if (Options::instance().generateMacroExportFile()) {
-        std::string exportMacroName = Options::instance().exportMacro();
-        std::string exportMacroFilename = Options::instance().exportMacroFilename();
-
-        assert(!exportMacroName.empty());
-        assert(!exportMacroFilename.empty());
-
-        std::unique_ptr<io::ZeroCopyOutputStream> headerStream(generatorContext
-                                                                   ->Open(exportMacroFilename));
-        std::shared_ptr<Printer> headerPrinter(new Printer(headerStream.get(), '$'));
-        printDisclaimer(headerPrinter.get());
-        headerPrinter->Print({ { "export_macro", Options::instance().exportMacro() } },
-                             CommonTemplates::ExportMacroTemplate());
-        headerPrinter->PrintRaw("\n");
-    }
-    return CodeGenerator::GenerateAll(files, parameter, generatorContext, error);
-}
-
 void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
                                         GeneratorContext *generatorContext) const
 {

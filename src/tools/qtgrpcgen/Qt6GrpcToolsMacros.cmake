@@ -154,7 +154,7 @@ function(qt6_add_grpc target type)
         _qt_internal_protoc_generate_cpp_exports(generated_export generated_export_options
             ${target} "${arg_EXPORT_MACRO}")
         if(generated_export)
-            list(APPEND cpp_sources "${generated_export}") # TODO: Unused, see QTBUG-121856
+            list(APPEND generated_files "${generated_export}")
         endif()
         list(APPEND generation_options "${generated_export_options}")
     endif()
