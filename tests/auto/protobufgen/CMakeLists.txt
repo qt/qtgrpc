@@ -38,6 +38,7 @@ qt_add_protobuf(tst_qtprotobufgen
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/extra-namespace"
 )
 
+add_library(tst_qtprotobufgen_gen SHARED)
 qt_add_protobuf(tst_qtprotobufgen_gen
     PROTO_FILES
         ../shared/data/proto/basicmessages.proto
@@ -49,6 +50,24 @@ qt_add_protobuf(tst_qtprotobufgen_gen
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/folder"
 )
 qt_autogen_tools_initial_setup(tst_qtprotobufgen_gen)
+
+add_library(tst_qtprotobufgen_custom_exports_gen SHARED)
+qt_add_protobuf(tst_qtprotobufgen_custom_exports_gen
+    PROTO_FILES
+        ../shared/data/proto/basicmessages.proto
+    EXPORT_MACRO "CUSTOM_EXPORT_NAME"
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/custom-exports"
+)
+qt_autogen_tools_initial_setup(tst_qtprotobufgen_custom_exports_gen)
+
+add_library(tst_qtprotobufgen_no_exports_gen STATIC)
+qt_add_protobuf(tst_qtprotobufgen_no_exports_gen
+    PROTO_FILES
+        ../shared/data/proto/basicmessages.proto
+    EXPORT_MACRO "CUSTOM_EXPORT_NAME"
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/no-exports"
+)
+qt_autogen_tools_initial_setup(tst_qtprotobufgen_no_exports_gen)
 
 qt_add_protobuf(tst_qtprotobufgen
     PROTO_FILES
