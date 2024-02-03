@@ -19,6 +19,7 @@ class QtProtobufOptionalTest : public QObject
 private slots:
     void Copy();
     void Move();
+    void Equal();
 };
 
 void QtProtobufOptionalTest::Copy()
@@ -111,6 +112,28 @@ void QtProtobufOptionalTest::Move()
     QCOMPARE(other2.testFieldStringOpt(), msg.testFieldStringOpt());
     QCOMPARE(other2.testFieldBytesOpt(), msg.testFieldBytesOpt());
     QCOMPARE(other2.testFieldBytesOpt(), msg.testFieldBytesOpt());
+}
+
+void QtProtobufOptionalTest::Equal()
+{
+    qtprotobufnamespace::optional::tests::OptionalMessage msg1;
+    msg1.setTestFieldBoolOpt(true);
+    msg1.setTestFieldBytesOpt(QByteArray::fromHex("00ff00ff"));
+    msg1.setTestFieldStringOpt("Hello Qt!"_L1);
+    msg1.setTestFieldOpt(42);
+    msg1.setTestField(15);
+
+    qtprotobufnamespace::optional::tests::OptionalMessage msg2;
+    msg2.setTestFieldBoolOpt(true);
+    msg2.setTestFieldBytesOpt(QByteArray::fromHex("00ff00ff"));
+    msg2.setTestFieldStringOpt("Hello Qt!"_L1);
+    msg2.setTestFieldOpt(15);
+    msg2.setTestField(15);
+
+    QVERIFY(msg1 != msg2);
+
+    msg2.setTestFieldOpt(42);
+    QVERIFY(msg1 == msg2);
 }
 
 QTEST_MAIN(QtProtobufOptionalTest)

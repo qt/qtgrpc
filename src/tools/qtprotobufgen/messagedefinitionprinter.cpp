@@ -349,7 +349,7 @@ void MessageDefinitionPrinter::printComparisonOperators()
     Indent();
     common::iterateMessageFields(
                 m_descriptor, [&](const FieldDescriptor *field, PropertyMap &propertyMap) {
-        if (field->containing_oneof())
+        if (common::isOneofField(field))
             return;
         m_printer->Print("\n&& ");
         if (common::isPureMessage(field)) {
