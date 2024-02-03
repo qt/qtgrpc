@@ -720,7 +720,7 @@ const char *CommonTemplates::ClearOptionalDefinitionTemplate()
            "    if (dptr->m_$optional_property_name$.has_value()) {\n"
            "        dptr.detach();\n"
            "        dptr->m_$optional_property_name$.reset();\n"
-           "    }"
+           "    }\n"
            "}\n";
 }
 

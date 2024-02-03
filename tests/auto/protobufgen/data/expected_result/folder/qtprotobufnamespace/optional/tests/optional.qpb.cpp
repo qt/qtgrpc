@@ -136,9 +136,13 @@ public:
     OptionalMessage_QtProtobufData(const OptionalMessage_QtProtobufData &other)
         : QSharedData(other),
           m_testField(other.m_testField),
+          m_testFieldOpt(other.m_testFieldOpt),
           m_testFieldBool(other.m_testFieldBool),
+          m_testFieldBoolOpt(other.m_testFieldBoolOpt),
           m_testFieldBytes(other.m_testFieldBytes),
+          m_testFieldBytesOpt(other.m_testFieldBytesOpt),
           m_testFieldString(other.m_testFieldString),
+          m_testFieldStringOpt(other.m_testFieldStringOpt),
           m_testFieldMessage(other.m_testFieldMessage
                                                ? new TestStringMessage(*other.m_testFieldMessage)
                                                : nullptr),
@@ -445,7 +449,8 @@ void OptionalMessage::clearTestFieldOpt()
     if (dptr->m_testFieldOpt.has_value()) {
         dptr.detach();
         dptr->m_testFieldOpt.reset();
-    }}
+    }
+}
 void OptionalMessage::setTestFieldBool(const bool &testFieldBool)
 {
     if (dptr->m_testFieldBool != testFieldBool) {
@@ -475,7 +480,8 @@ void OptionalMessage::clearTestFieldBoolOpt()
     if (dptr->m_testFieldBoolOpt.has_value()) {
         dptr.detach();
         dptr->m_testFieldBoolOpt.reset();
-    }}
+    }
+}
 void OptionalMessage::setTestFieldBytes(const QByteArray &testFieldBytes)
 {
     if (dptr->m_testFieldBytes != testFieldBytes) {
@@ -505,7 +511,8 @@ void OptionalMessage::clearTestFieldBytesOpt()
     if (dptr->m_testFieldBytesOpt.has_value()) {
         dptr.detach();
         dptr->m_testFieldBytesOpt.reset();
-    }}
+    }
+}
 void OptionalMessage::setTestFieldString(const QString &testFieldString)
 {
     if (dptr->m_testFieldString != testFieldString) {
@@ -535,7 +542,8 @@ void OptionalMessage::clearTestFieldStringOpt()
     if (dptr->m_testFieldStringOpt.has_value()) {
         dptr.detach();
         dptr->m_testFieldStringOpt.reset();
-    }}
+    }
+}
 void OptionalMessage::setTestFieldMessage_p(TestStringMessage *testFieldMessage)
 {
     if (dptr->m_testFieldMessage.get() != testFieldMessage) {

@@ -87,7 +87,7 @@ void MessageDefinitionPrinter::printDataClassCopy()
     m_printer->Indent();
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-                if (common::isOneofField(field) || common::isOptionalField(field))
+                if (common::isOneofField(field))
                     return;
 
                 m_printer->Print(",\n");
