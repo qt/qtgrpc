@@ -1,6 +1,6 @@
 [
     {
-        "Id": "protobuf",
+        "Id": "protobuf-qtprotobufgen",
         "Name": "protobuf",
         "QDocModule": "qtprotobuf",
         "QtUsage": "Used in the qtprotobufgen generator.",
@@ -15,7 +15,7 @@
         "Version": "21.9"
     },
     {
-        "Id": "protobuf",
+        "Id": "protobuf-qtgrpcgen",
         "Name": "protobuf",
         "QDocModule": "qtgrpc",
         "QtUsage": "Used in the qtgrpcgen generator.",
