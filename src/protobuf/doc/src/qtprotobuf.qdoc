@@ -357,14 +357,13 @@
         }
     \endcode
 
-    \section2 Protobuf message duplicates
+    \section1 Protobuf message duplicates
     You should avoid declaration of protobuf message duplicates in your
-    \c *.proto files or do it wisely. In case your
-    application uses several identical protobuf message names declared inside
-    different protobuf packages, they can contradict each other in
-    auto-generated code.
-    In example below, 2 different proto packages \c qtprotobufnamespace and
-    \c qtprotobufnamespace1.nested use the same proto message
+    \c *.proto files or do it wisely. If your application uses several identical
+    protobuf message names declared inside different protobuf packages, they
+    might contradict each other in auto-generated code.
+    In the example below, two different proto packages, \c qtprotobufnamespace
+    and \c qtprotobufnamespace1.nested, use the same proto message
     \c NestedFieldMessage.
     The file \c nested.proto:
     \badcode
