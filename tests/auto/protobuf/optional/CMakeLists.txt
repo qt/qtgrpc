@@ -12,6 +12,8 @@ qt6_add_protobuf(tst_protobuf_optional_gen
         ../../shared/data/proto/optional.proto
 )
 
+qt_autogen_tools_initial_setup(tst_protobuf_optional_gen)
+
 qt_internal_add_test(tst_protobuf_optional
     SOURCES
         tst_protobuf_optional.cpp
