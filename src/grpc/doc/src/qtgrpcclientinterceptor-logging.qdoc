@@ -50,12 +50,14 @@ protected:
         qDebug() << "Request sent:" << requestArg.testFieldString();
 
         continuation(std::move(response), operation);
-        response->waitForFinished();
 
         // Intercept the response
-        SimpleStringMessage mess = response->read<SimpleStringMessage>();
-        qDebug() << "Response received:" << mess.testFieldString();
-
+        auto responsePtr = response.get();
+        QObject::connect(responsePtr, &QGrpcServerStream::messageReceived, responsePtr,
+                        [responsePtr]{
+                            SimpleStringMessage mess = responsePtr->read<SimpleStringMessage>();
+                            qDebug() << "Response received:" << mess.testFieldString();
+                        });
     }
 
     void interceptServerStream(std::shared_ptr<QGrpcChannelOperation> operation,
@@ -82,20 +84,16 @@ protected:
 \endcode
 
 The LoggingInterceptor overrides two interception methods:
-QGrpcClientInterceptor::interceptCall() and QGrpcClientInterceptor::interceptServerStream().
+\l{QGrpcClientInterceptor::interceptCall} and
+\l{QGrpcClientInterceptor::interceptServerStream}.
 Each of these methods handles a specific type of Qt GRPC interaction:
 Unary call and server streaming, respectively.
 Because QGrpcChannelOperation stores the argument in the serialized form,
 both methods need to deserialize the request, which can then be logged using
-qDebug().
+\c qDebug().
 
-However there are two ways to intercept the response:
-One involves calling a continuation() delegate and then awaiting the response.
-Then, the response can be deserialized, read, and logged.
-
-Alternatively, you can use QObject::connect() to establish a connection between the
-QGrpcServerStream::messageReceived() signal (QGrpcCallReply::finished in the unary call case).
-Then, the response can be logged the same way.
+Use \l{QObject::connect} to subscribe to the \l{QGrpcCallReply::finished} or
+\l{QGrpcServerStream::messageReceived} signals and log the response.
 
 \section1 Registering the Logging Interceptor
 Next, you'll need to register the Logging Interceptor with the QGrpcClientInterceptorManager.
