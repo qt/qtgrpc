@@ -144,6 +144,13 @@ std::shared_ptr<const QAbstractProtobufSerializer> QGrpcOperation::serializer() 
     return d_func()->channelOperation->serializer();
 }
 
+/*!
+    Attempts to cancel the operation in a channel and immediately emits
+    \l{QGrpcOperation::errorOccurred} with the \l{QGrpcStatus::Cancelled}
+    status code.
+
+    Any manipulation of the operation after this call has no effect.
+*/
 void QGrpcOperation::cancel()
 {
     d_func()->isFinished.storeRelaxed(true);
