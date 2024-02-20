@@ -241,12 +241,17 @@ function(_qt_internal_protobuf_package_qml_uri out_uri)
     set(${out_uri} ${qml_uri} PARENT_SCOPE)
 endfunction()
 
+function(_qt_internal_protoc_get_export_macro_filename out_filename target)
+    # Export filename is always based on target name.
+    string(TOLOWER "${target}" target_lower)
+    set(${out_filename} "${target_lower}_exports.qpb.h" PARENT_SCOPE)
+endfunction()
+
 function(_qt_internal_protoc_generate_cpp_exports out_generated_file out_generation_options target
     export_macro)
 
     # Add EXPORT_MACRO if the target is a shared library
     string(TOUPPER "${target}" target_upper)
-    string(TOLOWER "${target}" target_lower)
     get_target_property(export_macro_previous ${target} _qt_internal_protobuf_export_macro)
 
     # This is not the first time we enter this function for the target.
@@ -268,8 +273,7 @@ function(_qt_internal_protoc_generate_cpp_exports out_generated_file out_generat
         set(export_macro "${target_upper}")
     endif()
 
-    # Export filename is always based on target name.
-    set(export_macro_filename "${target_lower}_exports.qpb.h")
+    _qt_internal_protoc_get_export_macro_filename(export_macro_filename ${target})
 
     if(skip_generating)
         # Tell the generator that we have export macro but we don't want to generate exports,
@@ -528,11 +532,20 @@ function(qt6_add_protobuf target)
         ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
     )
 
+    if(is_shared)
+        _qt_internal_protoc_get_export_macro_filename(export_macro_filename ${target})
+        set(export_macro_file "${output_directory}/${export_macro_filename}")
+    endif()
+
     if(is_static OR (WIN32 AND NOT is_executable))
         if(TARGET ${target}_protobuf_registration)
             target_sources(${target}_protobuf_registration PRIVATE ${type_registrations})
         else()
             add_library(${target}_protobuf_registration OBJECT ${type_registrations})
+            if(export_macro_file)
+                target_sources(${target}_protobuf_registration PRIVATE ${export_macro_file})
+            endif()
+
             target_link_libraries(${target}
                 INTERFACE "$<TARGET_OBJECTS:$<TARGET_NAME:${target}_protobuf_registration>>")
             add_dependencies(${target} ${target}_protobuf_registration)
@@ -557,6 +570,9 @@ function(qt6_add_protobuf target)
         endif()
     else()
         target_sources(${target} PRIVATE ${type_registrations})
+        if(export_macro_file)
+            target_sources(${target} PRIVATE ${export_macro_file})
+        endif()
     endif()
 
     if(arg_QML AND NOT existing_uri)

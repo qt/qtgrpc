@@ -174,6 +174,10 @@ function(qt6_add_grpc target type)
     )
 
     target_sources(${target} PRIVATE ${generated_files})
+    if(is_shared)
+        _qt_internal_protoc_get_export_macro_filename(export_macro_filename ${target})
+        target_sources(${target} PRIVATE "${output_directory}/${export_macro_filename}")
+    endif()
 
     # Filter generated headers
     set(generated_headers "${generated_files}")
