@@ -37,6 +37,8 @@ public:
     const QMetaObject *metaObject = nullptr;
     const QtProtobufPrivate::QProtobufPropertyOrdering *ordering = nullptr;
 
+    QAtomicInt ref = {1};
+
     int getPropertyIndex(QAnyStringView propertyName) const;
     void storeUnknownEntry(QByteArrayView entry, int fieldNumber);
 

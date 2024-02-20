@@ -144,8 +144,9 @@ QVariant QProtobufMessage::property(QAnyStringView propertyName) const
     \internal
 */
 QProtobufMessage::QProtobufMessage(const QProtobufMessage &other)
-    : d_ptr(new QProtobufMessagePrivate(*other.d_ptr))
+    : d_ptr(other.d_ptr)
 {
+    d_ptr->ref.ref();
 }
 
 /*!
@@ -153,12 +154,15 @@ QProtobufMessage::QProtobufMessage(const QProtobufMessage &other)
 */
 QProtobufMessage &QProtobufMessage::operator=(const QProtobufMessage &other)
 {
-    if (!other.d_ptr)
-        delete std::exchange(d_ptr, {}); // delete d_ptr if other.d_ptr is null
-    else if (!d_ptr)
-        d_ptr = new QProtobufMessagePrivate(*other.d_ptr);
-    else if (this != &other)
-        *d_ptr = *other.d_ptr;
+    if (other.d_ptr == d_ptr)
+        return *this;
+
+    if (d_ptr && !d_ptr->ref.deref())
+        delete d_ptr; // delete d_ptr if it's the last reference
+    d_ptr = other.d_ptr;
+    if (d_ptr)
+        d_ptr->ref.ref();
+
     return *this;
 }
 
@@ -167,7 +171,8 @@ QProtobufMessage &QProtobufMessage::operator=(const QProtobufMessage &other)
 */
 QProtobufMessage::~QProtobufMessage()
 {
-    delete d_ptr;
+    if (d_ptr && !d_ptr->ref.deref())
+        delete d_ptr;
 }
 
 /*!
@@ -335,6 +340,16 @@ bool QProtobufMessage::deserialize(QAbstractProtobufSerializer *serializer, QByt
 {
     qRegisterProtobufTypes();
     return serializer->deserialize(this, data);
+}
+
+void QProtobufMessage::detachPrivate()
+{
+    if (d_ptr->ref.loadAcquire() == 1)
+        return;
+    QProtobufMessagePrivate *newD = new QProtobufMessagePrivate(*d_ptr);
+    if (!d_ptr->ref.deref())
+        delete d_ptr;
+    d_ptr = newD;
 }
 
 QT_END_NAMESPACE
