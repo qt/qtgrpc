@@ -36,6 +36,8 @@ public:
     QHash<qint32, QByteArrayList> unknownEntries;
     const QMetaObject *metaObject = nullptr;
 
+    QAtomicInt ref = {1};
+
     int getPropertyIndex(QAnyStringView propertyName) const;
     void storeUnknownEntry(QByteArrayView entry, int fieldNumber);
 

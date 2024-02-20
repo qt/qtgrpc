@@ -58,6 +58,8 @@ protected:
                      QVariant &&value);
 
 private:
+    void detachPrivate(); // Call before editing the private!
+
     const QMetaObject *metaObject() const;
 
     friend class QProtobufSerializer;

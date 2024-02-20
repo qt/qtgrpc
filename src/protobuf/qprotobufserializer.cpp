@@ -648,6 +648,7 @@ bool QProtobufSerializerPrivate::
         }
 
         if (preserveUnknownFields) {
+            message->detachPrivate();
             QProtobufMessagePrivate *messagePrivate = QProtobufMessagePrivate::get(message);
             messagePrivate->storeUnknownEntry(QByteArrayView(itBeforeHeader.data(), length),
                                               fieldNumber);
