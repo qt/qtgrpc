@@ -76,3 +76,58 @@ The \c QML_URI is not required in such cases.
 Finally, we create a target for an executable called \c{MyApp}, which
 has a QML module for the graphical part and loads \c MyMessagesPlugin
 into the main.qml file via the \c{my.messages.module.uri} import.
+
+\section2 Installing standalone Qt Protobuf library
+
+The \l{qt_add_protobuf} command also produces lists of artifacts for further
+installation. You can read these artifacts by specifying \c OUTPUT_HEADERS,
+and \c OUTPUT_TARGETS arguments as follows:
+\badcode
+qt_add_protobuf(MyProtoLib
+    PROTO_FILES
+        mylib.proto
+    OUTPUT_HEADERS
+        public_headers
+    OUTPUT_TARGETS
+        generated_targets
+)
+\endcode
+
+The command stores the list of the header files and targets produced by the
+\c qt_add_protobuf command to the \c public_headers and \c generated_targets
+variables accordingly.
+
+Use the standard CMake \c install command to install the artifacts and generate
+the \c config files for your library:
+\badcode
+include(GNUInstallDirs)
+set_target_properties(MyProtoLib PROPERTIES
+    PUBLIC_HEADER
+        "${public_headers}"
+    INTERFACE_INCLUDE_DIRECTORIES
+        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>"
+)
+install(TARGETS ${generated_targets} EXPORT MyProtoLibTargets
+    PUBLIC_HEADER
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
+install(EXPORT MyProtoLibTargets NAMESPACE MyProtoLib:: DESTINATION lib/cmake/MyProtoLib)
+\endcode
+
+Then use the generated \c MyProtoLibTargets config in the package config file.
+You can read more about the package creation process in the official
+\l {Creating CMake packages}{CMake documentation}.
+
+After installation the library is available as the standalone CMake package:
+\badcode
+find_package(Qt6 COMPONENTS Protobuf)
+find_package(MyProtoLib CONFIG)
+
+add_executable(MyApp main.cpp)
+target_link_libraries(MyApp PRIVATE MyProtoLib::MyProtoLib Qt6::Protobuf)
+\endcode
+
+\note qt_add_protobuf doesn't implicitly add \c {Qt Protobuf} module as the
+transitive dependency, neither for the \c MyProtoLib target nor for the
+\c MyProtoLib CMake package. Therefore, the \c {Qt Protobuf} module lookup and
+the explicit linking of \c MyApp to \c {Qt6::Protobuf} are mandatory.
