@@ -28,7 +28,7 @@ in the specified directories.
 We create a target for an executable called \c{MyApp}, which we link
 to the \c{MyMessages} library.
 
-\section2 QML extended protobuf example:
+\section2 QML extended protobuf example
 \badcode
 cmake_minimum_required(VERSION 3.16...3.22)
 project(MyThings)
