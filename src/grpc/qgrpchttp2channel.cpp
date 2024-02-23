@@ -24,6 +24,7 @@
 #include <QtProtobuf/qprotobufserializer.h>
 #include <qtgrpcglobal_p.h>
 
+#include <functional>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -80,6 +81,12 @@ struct QGrpcHttp2ChannelPrivate : public QObject
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcHttp2ChannelPrivate)
+
+    enum ConnectionState {
+        Connecting = 0,
+        Connected,
+        Error
+    };
 
     struct ExpectedData
     {
@@ -138,6 +145,7 @@ private:
     void sendRequest(QGrpcChannelOperation *channelOperation);
     void sendPendingRequests();
     void createHttp2Connection();
+    void handleSocketError();
 
     Http2Handler *createHandler(QHttp2Stream *stream);
     void deleteHandler(Http2Handler *handler);
@@ -161,6 +169,9 @@ private:
     std::vector<std::shared_ptr<QGrpcChannelOperation>> m_operations;
     QList<Http2Handler *> m_activeHandlers;
     bool m_isLocalSocket = false;
+    QByteArray m_contentType;
+    ConnectionState m_state = Connecting;
+    std::function<void()> m_reconnectFunction;
 };
 
 QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(QHttp2Stream *_stream)
@@ -299,8 +310,11 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &op
                                  << "Error occurred(" << error << "):"
                                  << static_cast<QLocalSocket *>(m_socket.get())->errorString()
                                  << url;
+                             handleSocketError();
                          });
-        localSocket->connectToServer(url.host() + url.path());
+        m_reconnectFunction = [localSocket, url] {
+            localSocket->connectToServer(url.host() + url.path());
+        };
     } else
 #if QT_CONFIG(ssl)
     if (url.scheme() == "https"_L1 || options.sslConfiguration()) {
@@ -320,8 +334,11 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &op
                                  << "Error occurred(" << error << "):"
                                  << static_cast<QAbstractSocket *>(m_socket.get())->errorString()
                                  << url;
+                             handleSocketError();
                          });
-        sslSocket->connectToHostEncrypted(url.host(), static_cast<quint16>(url.port()));
+        m_reconnectFunction = [sslSocket, url] {
+            sslSocket->connectToHostEncrypted(url.host(), static_cast<quint16>(url.port()));
+        };
     } else
 #endif
     {
@@ -338,9 +355,13 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &op
                                  << "Error occurred(" << error << "):"
                                  << static_cast<QAbstractSocket *>(m_socket.get())->errorString()
                                  << url;
+                             handleSocketError();
                          });
-        httpSocket->connectToHost(url.host(), static_cast<quint16>(url.port()));
+        m_reconnectFunction = [httpSocket, url] {
+            httpSocket->connectToHost(url.host(), static_cast<quint16>(url.port()));
+        };
     }
+    m_reconnectFunction();
 }
 
 QGrpcHttp2ChannelPrivate::~QGrpcHttp2ChannelPrivate()
@@ -374,6 +395,13 @@ void QGrpcHttp2ChannelPrivate::processOperation(std::shared_ptr<QGrpcChannelOper
         m_operations.emplace_back(channelOperation);
     else
         sendRequest(channelOperationPtr);
+
+    if (m_state == ConnectionState::Error) {
+        Q_ASSERT_X(m_reconnectFunction, "QGrpcHttp2ChannelPrivate::processOperation",
+                   "Socket reconnection function is not defined.");
+        m_reconnectFunction();
+        m_state = ConnectionState::Connecting;
+    }
 }
 
 void QGrpcHttp2ChannelPrivate::createHttp2Connection()
@@ -386,11 +414,20 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
     if (m_connection) {
         QObject::connect(m_socket.get(), &QAbstractSocket::readyRead, m_connection,
                          &QHttp2Connection::handleReadyRead);
+        m_state = ConnectionState::Connected;
     }
 
     for (const auto &operation : m_operations) {
         sendRequest(operation.get());
     }
+    m_operations.clear();
+}
+
+void QGrpcHttp2ChannelPrivate::handleSocketError()
+{
+    delete m_connection;
+    m_connection = nullptr;
+    m_state = ConnectionState::Error;
     m_operations.clear();
 }
 
