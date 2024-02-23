@@ -21,7 +21,6 @@
 #include <QtCore/qbytearray.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qvariant.h>
-#include <QtCore/private/qbytearray_p.h>
 
 #include <QtProtobuf/private/qprotobufselfcheckiterator_p.h>
 #include <QtProtobuf/private/qtprotobuflogging_p.h>
@@ -455,7 +454,7 @@ public:
         if (!opt)
             return std::nullopt;
         quint64 length = opt.value();
-        if (!it.isValid() || quint64(it.bytesLeft()) < length || length > quint64(MaxByteArraySize))
+        if (!it.isValid() || quint64(it.bytesLeft()) < length || length > quint64(QByteArray::max_size()))
             return std::nullopt;
         QByteArray result(it.data(), qsizetype(length));
         it += length;
