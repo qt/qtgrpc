@@ -143,11 +143,13 @@ void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &pr
 {
     Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
 
+    Q_ASSERT_X(previous.metaType() == QMetaType::fromType<QList<V>>() && previous.data(),
+               "QAbstractProtobufSerializer::deserializeList",
+               "Previous value metatype doesn't match the list metatype");
     V newValue;
     if (serializer->deserializeListObject(&newValue)) {
-        QList<V> list = previous.value<QList<V>>();
-        list.append(newValue);
-        previous.setValue(list);
+        QList<V> *list = reinterpret_cast<QList<V> *>(previous.data());
+        list->append(newValue);
     }
 }
 
@@ -161,14 +163,16 @@ template <typename K, typename V,
 void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
     Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
+    Q_ASSERT_X((previous.metaType() == QMetaType::fromType<QHash<K, V>>()) && previous.data(),
+               "QAbstractProtobufSerializer::deserializeMap",
+               "Previous value metatype doesn't match the map metatype");
 
-    QHash<K, V> out = previous.value<QHash<K, V>>();
     QVariant key = QVariant::fromValue<K>(K());
     QVariant value = QVariant::fromValue<V>(V());
 
     if (serializer->deserializeMapPair(key, value)) {
-        out[key.value<K>()] = value.value<V>();
-        previous = QVariant::fromValue<QHash<K, V>>(out);
+        QHash<K, V> *out = reinterpret_cast<QHash<K, V> *>(previous.data());
+        out->insert(key.value<K>(), value.value<V>());
     }
 }
 
@@ -183,16 +187,17 @@ template <typename K, typename V,
 void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
     Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
+    Q_ASSERT_X((previous.metaType() == QMetaType::fromType<QHash<K, V>>()) && previous.data(),
+               "QAbstractProtobufSerializer::deserializeMap",
+               "Previous value metatype doesn't match the map metatype");
 
     std::unique_ptr<V> valuePtr = std::make_unique<V>();
-    auto out = previous.value<QHash<K, V>>();
     QVariant key = QVariant::fromValue<K>(K());
     QVariant value = QVariant::fromValue<V *>(valuePtr.get());
 
-    bool ok = serializer->deserializeMapPair(key, value);
-    if (ok) {
-        out[key.value<K>()] = *(valuePtr.get());
-        previous = QVariant::fromValue<QHash<K, V>>(out);
+    if (serializer->deserializeMapPair(key, value)) {
+        QHash<K, V> *out = reinterpret_cast<QHash<K, V> *>(previous.data());
+        out->insert(key.value<K>(), *(valuePtr.get()));
     }
 }
 

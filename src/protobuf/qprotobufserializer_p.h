@@ -430,12 +430,14 @@ public:
                                                            QVariant &previousValue)
     {
         qProtoDebug("currentByte: 0x%x", *it);
+        Q_ASSERT_X(previousValue.metaType() == QMetaType::fromType<QList<V>>()
+                       && previousValue.data(),
+                   "QProtobufSerializerPrivate::deserializeNonPackedList",
+                   "Previous value metatype doesn't match the list metatype");
         QVariant variantValue;
         if (deserializeBasic<V>(it, variantValue)) {
-            auto out = previousValue.value<QList<V>>();
-            qProtoDebug() << out;
-            out.append(variantValue.value<V>());
-            previousValue.setValue(out);
+            QList<V> *out = reinterpret_cast<QList<V> *>(previousValue.data());
+            out->append(variantValue.value<V>());
             return true;
         }
         return false;
