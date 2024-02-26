@@ -1,3 +1,7 @@
+// Copyright (C) 2022 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
+
+//! [0]
 \li \c COPY_COMMENTS copies comments from \c .proto files. If provided in
 the parameter list, comments related to messages and fields are copied to
 generated header files.
@@ -18,3 +22,4 @@ allows you to set the generated macro file name and explicitly enable or disable
 the generation of the file containing the macro definitions. If
 \c macro_output_file is not set, the option falls back to the old syntax
 handling.
+//! [0]
