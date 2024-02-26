@@ -161,4 +161,5 @@ have the \c test_messages target as a transitive dependency.
 \section1 Example
 
 \include qt-add-protobuf-example.qdocinc 0
+\include qt-add-protobuf-example.qdocinc 1
 */

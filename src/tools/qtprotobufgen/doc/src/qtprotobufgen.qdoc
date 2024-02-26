@@ -34,7 +34,7 @@ The following CMake commands integrate a protobuf schema into a Qt project.
 \annotatedlist cmake-commands-qtprotobuf
 
 Usually \c qtprotobufgen would be invoked through CMake using the
-\c{qt_add_protobuf} macro, as shown in the following examples:
+\c{qt_add_protobuf} macro.
 
 \include qt-add-protobuf-example.qdocinc 0
 

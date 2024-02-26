@@ -16,7 +16,6 @@ target_link_libraries(mytarget PRIVATE Qt6::Protobuf)
 You can use the \l {qt_add_protobuf} CMake command
 to implicitly call Qt Protobuf code generation for your project.
 
-The macros usage examples:
 \include qt-add-protobuf-example.qdocinc 0
 
 \sa{CMake Command Reference}
