@@ -235,13 +235,19 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
 
 /*!
     \fn template<typename T> bool QtProtobuf::repeatedValueCompare(const QList<T> &a, const QList<T> &b)
-    \fn template<typename K, typename V> bool QtProtobuf::repeatedValueCompare(const QHash<K, V> &a, const QHash<K, V> &b)
 
     Compares two \c{repeated} fields (essentially a list) to each other.
-    Returns \c true if the two fields are equal, \c false otherwise.
+    Returns \c true if \a a is equal to \a b, \c false otherwise.
 
-    These functions are used in the generated code to implement operator==.
+    These functions are used in the generated code to implement \c {operator==}.
 */
 
+/*!
+    \fn template<typename K, typename V> bool QtProtobuf::repeatedValueCompare(const QHash<K, V> &a, const QHash<K, V> &b)
+    Compares two \c{map} fields to each other.
+    Returns \c true if \a a is equal to \a b, \c false otherwise.
+
+    These functions are used in the generated code to implement \c {operator==}.
+*/
 
 QT_END_NAMESPACE
