@@ -36,7 +36,7 @@ link to.
 
 \section1 Arguments
 \list
-    \include qtprotoccommon-options.qdocinc
+    \include qtprotoccommon-options.qdocinc 0
     \li \c QML enables QProtobufMessage types in QML context by registering
         them as a QML module.
         Protobuf types can extend an existing QML module.
@@ -96,8 +96,8 @@ link to.
         \c QML_URI or proto package name, because it leads to import error
         in QML context.
 
-    \include qtprotogen-options.qdocinc
-    \include qtprotogen-cmake-options.qdocinc
+    \include qtprotogen-options.qdocinc 0
+    \include qtprotogen-cmake-options.qdocinc 0
 \endlist
 
 \sa{The qtprotobufgen Tool}
@@ -160,5 +160,5 @@ have the \c test_messages target as a transitive dependency.
 
 \section1 Example
 
-\include qt-add-protobuf-example.qdocinc
+\include qt-add-protobuf-example.qdocinc 0
 */

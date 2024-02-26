@@ -15,7 +15,7 @@ target_link_libraries(mytarget PRIVATE Qt6::Grpc)
 
 To generate gRPC services using Qt GRPC and link them with your program
 consider the following example:
-\include qt-add-grpc-example.qdocinc
+\include qt-add-grpc-example.qdocinc 0
 
 \sa{CMake Command Reference}
 */

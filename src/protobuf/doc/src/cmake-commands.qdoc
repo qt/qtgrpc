@@ -17,7 +17,7 @@ You can use \e {qt-add-protobuf} CMake macros.
 The macros implicitly call Protobuf code generation for qt-project.
 
 The macros usage examples:
-\include qt-add-protobuf-example.qdocinc
+\include qt-add-protobuf-example.qdocinc 0
 
 \sa{CMake Command Reference}
 */

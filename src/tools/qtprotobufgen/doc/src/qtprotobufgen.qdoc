@@ -35,7 +35,7 @@ The following CMake commands integrate a protobuf schema into a Qt project.
 Usually \c qtprotobufgen would be invoked through CMake using the
 \c{qt_add_protobuf} macro, as shown in the following examples:
 
-\include qt-add-protobuf-example.qdocinc
+\include qt-add-protobuf-example.qdocinc 0
 
 \section2 Running manually
 
@@ -63,7 +63,7 @@ Options have direct aliases in the \l{qt_add_protobuf} function. The following
 options are supported:
 
 \list
-    \include qtprotoccommon-options.qdocinc
-    \include qtprotogen-options.qdocinc
+    \include qtprotoccommon-options.qdocinc 0
+    \include qtprotogen-options.qdocinc 0
 \endlist
 */
