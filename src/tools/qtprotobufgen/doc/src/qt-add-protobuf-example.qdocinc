@@ -1,3 +1,7 @@
+// Copyright (C) 2022 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
+
+//! [0]
 \badcode
 cmake_minimum_required(VERSION 3.16...3.22)
 project(MyThings)
@@ -131,3 +135,4 @@ target_link_libraries(MyApp PRIVATE MyProtoLib::MyProtoLib Qt6::Protobuf)
 transitive dependency, neither for the \c MyProtoLib target nor for the
 \c MyProtoLib CMake package. Therefore, the \c {Qt Protobuf} module lookup and
 the explicit linking of \c MyApp to \c {Qt6::Protobuf} are mandatory.
+//! [0]

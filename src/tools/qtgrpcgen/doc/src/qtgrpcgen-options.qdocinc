@@ -1,3 +1,7 @@
+// Copyright (C) 2022 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
+
+//! [0]
 \li \c QML enables a \c QmlClient generation. The class is inherited
     from the base \c CLIENT class, but extends it with \c QML_ELEMENT
     macro, QML properties, and \c Q_INVOKABLE methods. The result of
@@ -15,3 +19,4 @@
         )
     \endcode
     \note for Qt 6.7 only \c QmlClient source code generation is supported.
+//! [0]
