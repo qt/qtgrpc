@@ -34,7 +34,7 @@ The following CMake commands integrate a gRPC service into a Qt project.
 Usually \c qtgrpcgen would be invoked through CMake using the
 \c{qt_add_grpc} macro, as shown in the following example:
 
-\include qt-add-grpc-example.qdocinc
+\include qt-add-grpc-example.qdocinc 0
 
 \section2 Running \c qtgrpcgen manually
 
@@ -61,7 +61,7 @@ Options have direct aliases in the \l{qt_add_grpc} function. The following
 options are supported:
 
 \list
-    \include qtprotoccommon-options.qdocinc
-    \include qtgrpcgen-options.qdocinc
+    \include qtprotoccommon-options.qdocinc 0
+    \include qtgrpcgen-options.qdocinc 0
 \endlist
 */

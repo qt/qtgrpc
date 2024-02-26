@@ -18,7 +18,7 @@ to implicitly call Qt GRPC code generation for your project.
 
 To generate gRPC services using Qt GRPC and link them with your program
 consider the following example:
-\include qt-add-grpc-example.qdocinc
+\include qt-add-grpc-example.qdocinc 0
 
 \sa{CMake Command Reference}
 */
