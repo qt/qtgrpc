@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
 
 //! [0]
+\section2 Using qt_add_protobuf
+
 \badcode
 cmake_minimum_required(VERSION 3.16...3.22)
 project(MyThings)
@@ -31,7 +33,9 @@ to generate a folder structure for the generated files. And the
 in the specified directories.
 We create a target for an executable called \c{MyApp}, which we link
 to the \c{MyMessages} library.
+//! [0]
 
+//! [1]
 \section2 QML extended protobuf example
 \badcode
 cmake_minimum_required(VERSION 3.16...3.22)
@@ -135,4 +139,4 @@ target_link_libraries(MyApp PRIVATE MyProtoLib::MyProtoLib Qt6::Protobuf)
 transitive dependency, neither for the \c MyProtoLib target nor for the
 \c MyProtoLib CMake package. Therefore, the \c {Qt Protobuf} module lookup and
 the explicit linking of \c MyApp to \c {Qt6::Protobuf} are mandatory.
-//! [0]
+//! [1]
