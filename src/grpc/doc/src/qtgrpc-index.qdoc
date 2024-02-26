@@ -86,7 +86,7 @@
     As a result, the full example of a CMake project file,
     that uses Qt GRPC functionality shall be:
 
-    \include qt-add-grpc-example.qdocinc
+    \include qt-add-grpc-example.qdocinc 0
 
     \section1 Class Documentation
     \list

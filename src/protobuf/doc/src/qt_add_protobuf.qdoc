@@ -35,8 +35,8 @@ link to.
 
 \section1 Arguments
 \list
-    \include qtprotogen-options.qdocinc
-    \include qtprotogen-cmake-options.qdocinc
+    \include qtprotogen-options.qdocinc 0
+    \include qtprotogen-cmake-options.qdocinc 0
 \endlist
 
 \sa{The qtprotobufgen Tool}
@@ -99,5 +99,5 @@ have the \c test_messages target as a transitive dependency.
 
 \section1 Example
 
-\include qt-add-protobuf-example.qdocinc
+\include qt-add-protobuf-example.qdocinc 0
 */
