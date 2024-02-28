@@ -282,6 +282,10 @@ void tst_qtgrpcgen::cmdLineGeneratedFile_data()
                 << "testservice"
                 << "/no-options/"
                 << QString(extension);
+        QTest::addRow("testserivcenomessages%s", extension.data())
+                << "testserivcenomessages"
+                << "/no-options/"
+                << QString(extension);
     }
 }
 
