@@ -74,9 +74,9 @@ void GeneratorBase::OpenFileNamespaces(
     assert(printer != nullptr);
     assert(file != nullptr);
     const bool hasQtNamespace = (Options::instance().extraNamespace() == "QT_NAMESPACE");
-    const std::string scopeNamespaces = file->message_type_count() > 0
-            ? common::getFullNamespace(file->message_type(0), "::")
-            : common::getFullNamespace(file->enum_type(0), "::");
+
+    const std::string scopeNamespaces = common::getFullNamespace(file->package() + ".noop", "::");
+
     printer->Print("\n");
     if (hasQtNamespace || file->package() == "QtCore" || file->package() == "QtGui")
         printer->PrintRaw("QT_BEGIN_NAMESPACE\n");
@@ -92,9 +92,8 @@ void GeneratorBase::CloseFileNamespaces(
 {
     assert(printer != nullptr);
     const bool hasQtNamespace = (Options::instance().extraNamespace() == "QT_NAMESPACE");
-    const std::string scopeNamespaces = file->message_type_count() > 0
-            ? common::getFullNamespace(file->message_type(0), "::")
-            : common::getFullNamespace(file->enum_type(0), "::");
+
+    const std::string scopeNamespaces = common::getFullNamespace(file->package() + ".noop", "::");
     if (!scopeNamespaces.empty()) {
         printer->Print({ { "scope_namespaces", scopeNamespaces } },
                        CommonTemplates::NamespaceClosingTemplate());
