@@ -113,7 +113,7 @@ private:
         void processQueue();
         void cancel();
 
-        std::unique_ptr<QHttp2Stream> stream;
+        QPointer<QHttp2Stream> stream;
         QBuffer *buffer;
         QQueue<QByteArray> queue;
         ExpectedData expectedData;
@@ -181,6 +181,11 @@ QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(QHttp2Stream *_stream)
 
 QGrpcHttp2ChannelPrivate::Http2Handler::~Http2Handler()
 {
+    if (stream) {
+        QHttp2Stream *streamPtr = stream.get();
+        stream.clear();
+        delete streamPtr;
+    }
 }
 
 // Sends the errorOccured and finished signals asynchronously to make sure user connections work
@@ -425,6 +430,8 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
 
 void QGrpcHttp2ChannelPrivate::handleSocketError()
 {
+    qDeleteAll(m_activeHandlers);
+    m_activeHandlers.clear();
     delete m_connection;
     m_connection = nullptr;
     m_state = ConnectionState::Error;
