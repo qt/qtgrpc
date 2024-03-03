@@ -11,6 +11,8 @@
 
 #include <QtProtobuf/qtprotobufglobal.h>
 
+#include <iterator>
+
 #include <QtCore/qutf8stringview.h>
 
 #include <type_traits>
