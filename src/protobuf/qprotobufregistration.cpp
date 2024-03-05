@@ -179,12 +179,9 @@ void qRegisterProtobufTypes()
 {
     qRegisterBaseTypes();
 
+    std::scoped_lock lock(registerMutex);
     std::vector<QtProtobuf::RegisterFunction> registrationList;
-    // Move the list to a local variable, emptying the global one.
-    {
-        std::scoped_lock lock(registerMutex);
-        registrationList.swap(registerFunctions());
-    }
+    registrationList.swap(registerFunctions());
 
     for (QtProtobuf::RegisterFunction registerFunc : registrationList)
         registerFunc();
