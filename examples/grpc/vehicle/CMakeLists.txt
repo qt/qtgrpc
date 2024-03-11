@@ -80,7 +80,7 @@ target_link_libraries(vehicle_cluster PRIVATE
     vehiclelib
 )
 
-install(TARGETS vehicle_cluster
+install(TARGETS vehicle_cluster vehiclelib
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
