@@ -77,8 +77,8 @@ struct QGrpcHttp2ChannelPrivate : public QObject
     explicit QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &options);
     ~QGrpcHttp2ChannelPrivate();
 
-    void processOperation(std::shared_ptr<QGrpcChannelOperation> &&channelOperation);
-
+    void processOperation(std::shared_ptr<QGrpcChannelOperation> &&channelOperation,
+                          bool endStream = false);
 private:
     Q_DISABLE_COPY_MOVE(QGrpcHttp2ChannelPrivate)
 
@@ -109,7 +109,7 @@ private:
     {
         explicit Http2Handler(QHttp2Stream *_stream);
         ~Http2Handler();
-        void sendData(QByteArrayView data);
+        void sendData(QByteArrayView data, bool endStream = false);
         void processQueue();
         void cancel();
 
@@ -121,6 +121,23 @@ private:
 
     private:
         Q_DISABLE_COPY_MOVE(Http2Handler)
+    };
+
+    struct ChannelOperation
+    {
+        ChannelOperation(std::shared_ptr<QGrpcChannelOperation> &&_operation, bool _endStream)
+            : operation(_operation), endStream(_endStream)
+        {
+        }
+
+        ChannelOperation(ChannelOperation &&other) = default;
+        ChannelOperation &operator=(ChannelOperation &&other) = default;
+
+        std::shared_ptr<QGrpcChannelOperation> operation;
+        bool endStream = false;
+
+    private:
+        Q_DISABLE_COPY(ChannelOperation)
     };
 
     void channelOperationAsyncError(QGrpcChannelOperation *channelOperation,
@@ -142,7 +159,7 @@ private:
                          });
     }
 
-    void sendRequest(QGrpcChannelOperation *channelOperation);
+    void sendRequest(const ChannelOperation &channelOperation);
     void sendPendingRequests();
     void createHttp2Connection();
     void handleSocketError();
@@ -166,7 +183,7 @@ private:
     QGrpcChannelOptions m_channelOptions;
     std::unique_ptr<QIODevice> m_socket = nullptr;
     QHttp2Connection *m_connection = nullptr;
-    std::vector<std::shared_ptr<QGrpcChannelOperation>> m_operations;
+    std::vector<ChannelOperation> m_operations;
     QList<Http2Handler *> m_activeHandlers;
     bool m_isLocalSocket = false;
     QByteArray m_contentType;
@@ -210,10 +227,11 @@ void QGrpcHttp2ChannelPrivate::channelOperationAsyncError(QGrpcChannelOperation 
 
 // Do not send the data immediately, but put it to message queue, for further processing.
 // The data for cancelled stream is ignored.
-void QGrpcHttp2ChannelPrivate::Http2Handler::sendData(QByteArrayView data)
+void QGrpcHttp2ChannelPrivate::Http2Handler::sendData(QByteArrayView data, bool endStream)
 {
-    if (cancelled) {
-        qGrpcDebug("Attempt sending data in cancelled operation");
+    if (cancelled || stream->state() == QHttp2Stream::State::HalfClosedLocal
+        || stream->state() == QHttp2Stream::State::Closed) {
+        qGrpcDebug("Attempt sending data in ended operation");
         return;
     }
 
@@ -223,6 +241,13 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::sendData(QByteArrayView data)
     msg += data;
 
     queue.enqueue(msg);
+
+    // If the operation is the single-request operation such as unary call or server stream
+    // we should send the empty DATA frame with the END_STREAM flag as the end of transmission
+    // indicator.
+    if (endStream)
+        queue.enqueue({});
+
     processQueue();
 }
 
@@ -250,6 +275,11 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::cancel()
         return;
 
     cancelled = true;
+
+    // Stream is already is (half)closed, skip sending the cancellation DATA frame.
+    if (stream->state() == QHttp2Stream::State::HalfClosedLocal
+        || stream->state() == QHttp2Stream::State::Closed)
+        return;
 
     // Clear the existing queue and enqeue empty data. Data should contains at least the payload
     // size, even if payload is 0. Empty data is the explicit indicator for stream cancellation.
@@ -375,7 +405,8 @@ QGrpcHttp2ChannelPrivate::~QGrpcHttp2ChannelPrivate()
 }
 
 void QGrpcHttp2ChannelPrivate::processOperation(std::shared_ptr<QGrpcChannelOperation>
-                                                    &&channelOperation)
+                                                    &&channelOperation,
+                                                bool endStream)
 {
     auto *channelOperationPtr = channelOperation.get();
     Q_ASSERT_X(channelOperationPtr != nullptr, "QGrpcHttp2ChannelPrivate::processOperation",
@@ -396,10 +427,11 @@ void QGrpcHttp2ChannelPrivate::processOperation(std::shared_ptr<QGrpcChannelOper
                                              channelOperationPtr);
     }
 
+    ChannelOperation operation(std::move(channelOperation), endStream);
     if (m_connection == nullptr)
-        m_operations.emplace_back(channelOperation);
+        m_operations.emplace_back(std::move(operation));
     else
-        sendRequest(channelOperationPtr);
+        sendRequest(operation);
 
     if (m_state == ConnectionState::Error) {
         Q_ASSERT_X(m_reconnectFunction, "QGrpcHttp2ChannelPrivate::processOperation",
@@ -422,9 +454,9 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
         m_state = ConnectionState::Connected;
     }
 
-    for (const auto &operation : m_operations) {
-        sendRequest(operation.get());
-    }
+    for (const auto &operation : m_operations)
+        sendRequest(operation);
+
     m_operations.clear();
 }
 
@@ -438,13 +470,14 @@ void QGrpcHttp2ChannelPrivate::handleSocketError()
     m_operations.clear();
 }
 
-void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperation)
+void QGrpcHttp2ChannelPrivate::sendRequest(const ChannelOperation &channelOperation)
 {
-    Q_ASSERT_X(channelOperation != nullptr, "QGrpcHttp2ChannelPrivate::sendRequest",
+    Q_ASSERT_X(channelOperation.operation != nullptr, "QGrpcHttp2ChannelPrivate::sendRequest",
                "channelOperation is null");
 
+    auto channelOpPtr = channelOperation.operation.get();
     if (!m_connection) {
-        channelOperationAsyncError(channelOperation,
+        channelOperationAsyncError(channelOpPtr,
                                    { QGrpcStatus::Unavailable,
                                      "Unable to establish a HTTP/2 connection"_L1 });
         return;
@@ -452,19 +485,18 @@ void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperati
 
     const auto streamAttempt = m_connection->createStream();
     if (!streamAttempt.ok()) {
-        channelOperationAsyncError(channelOperation,
+        channelOperationAsyncError(channelOpPtr,
                                    { QGrpcStatus::Unavailable,
                                      "Unable to create a HTTP/2 stream"_L1 });
         return;
     }
     Http2Handler *handler = createHandler(streamAttempt.unwrap());
 
-    QObject::connect(handler->stream.get(), &QHttp2Stream::headersReceived, channelOperation,
+    QObject::connect(handler->stream.get(), &QHttp2Stream::headersReceived, channelOpPtr,
                      [handler,
-                      channelOperationPtr = QPointer(channelOperation)](const HPack::HttpHeader
-                                                                            &headers,
-                                                                        bool endStream) {
-                         QGrpcMetadata md = channelOperationPtr->serverMetadata();
+                      channelOpInnerPtr = QPointer(channelOpPtr)](const HPack::HttpHeader &headers,
+                                                                  bool endStream) {
+                         QGrpcMetadata md = channelOpInnerPtr->serverMetadata();
                          QGrpcStatus::StatusCode statusCode = QGrpcStatus::StatusCode::Ok;
                          QString statusMessage;
                          for (const auto &header : headers) {
@@ -478,22 +510,21 @@ void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperati
                                  statusMessage = QString::fromUtf8(header.value);
                          }
 
-                         channelOperationPtr->setServerMetadata(md);
+                         channelOpInnerPtr->setServerMetadata(md);
 
                          if (statusCode != QGrpcStatus::StatusCode::Ok)
-                             emit channelOperationPtr->errorOccurred({ statusCode, statusMessage });
+                             emit channelOpInnerPtr->errorOccurred({ statusCode, statusMessage });
 
                          // The errorOccured signal can remove the last channelOperation holder,
                          // and in the same time the last finished signal listener, so we need
-                         // to make sure that channelOperationPtr is still valid before
+                         // to make sure that channelOpInnerPtr is still valid before
                          // emitting the finished signal.
-                         if (endStream && !handler->cancelled && !channelOperationPtr.isNull())
-                             emit channelOperationPtr->finished();
+                         if (endStream && !handler->cancelled && !channelOpInnerPtr.isNull())
+                             emit channelOpInnerPtr->finished();
                      });
 
-    QObject::connect(handler->stream.get(), &QHttp2Stream::errorOccurred, channelOperation,
-                     [this, channelOperation, handler](quint32 errorCode,
-                                                       const QString &errorString) {
+    QObject::connect(handler->stream.get(), &QHttp2Stream::errorOccurred, channelOpPtr,
+                     [this, channelOpPtr, handler](quint32 errorCode, const QString &errorString) {
                          deleteHandler(handler);
                          if (errorCode == 0) {
                              return;
@@ -503,11 +534,11 @@ void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperati
                          if (it != StatusCodeMap.end()) {
                              code = it->second;
                          }
-                         emit channelOperation->errorOccurred({ code, errorString });
+                         emit channelOpPtr->errorOccurred({ code, errorString });
                      });
 
-    QObject::connect(handler->stream.get(), &QHttp2Stream::dataReceived, channelOperation,
-                     [channelOperation, handler](const QByteArray &data, bool endStream) {
+    QObject::connect(handler->stream.get(), &QHttp2Stream::dataReceived, channelOpPtr,
+                     [channelOpPtr, handler](const QByteArray &data, bool endStream) {
                          if (!handler->cancelled) {
                              handler->expectedData.container.append(data);
 
@@ -520,7 +551,7 @@ void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperati
                                      << "Full data received:" << data.size()
                                      << "dataContainer:" << handler->expectedData.container.size()
                                      << "capacity:" << handler->expectedData.expectedSize;
-                                 emit channelOperation
+                                 emit channelOpPtr
                                      ->dataReady(handler->expectedData.container
                                                      .mid(GrpcMessageSizeHeaderSize,
                                                           handler->expectedData.expectedSize
@@ -534,20 +565,20 @@ void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperati
                          }
 
                          if (endStream)
-                             emit channelOperation->finished();
+                             emit channelOpPtr->finished();
                      });
 
-    QObject::connect(channelOperation, &QGrpcChannelOperation::cancelled, handler->stream.get(),
+    QObject::connect(channelOpPtr, &QGrpcChannelOperation::cancelled, handler->stream.get(),
                      [handler]() { handler->cancel(); });
 
-    QObject::connect(channelOperation, &QGrpcChannelOperation::sendData, handler->stream.get(),
+    QObject::connect(channelOpPtr, &QGrpcChannelOperation::sendData, handler->stream.get(),
                      [handler](const QByteArray &data) { handler->sendData(data); });
 
     QObject::connect(handler->stream.get(), &QHttp2Stream::uploadFinished, handler->stream.get(),
                      [handler]() { handler->processQueue(); });
 
-    QByteArray service{ channelOperation->service().data(), channelOperation->service().size() };
-    QByteArray method{ channelOperation->method().data(), channelOperation->method().size() };
+    QByteArray service{ channelOpPtr->service().data(), channelOpPtr->service().size() };
+    QByteArray method{ channelOpPtr->method().data(), channelOpPtr->method().size() };
 
     HPack::HttpHeader requestHeaders = HPack::HttpHeader{
         { AuthorityHeader.toByteArray(), m_channelOptions.host().host().toLatin1() },
@@ -575,14 +606,15 @@ void QGrpcHttp2ChannelPrivate::sendRequest(QGrpcChannelOperation *channelOperati
     };
 
     iterateMetadata(m_channelOptions.metadata());
-    iterateMetadata(channelOperation->options().metadata());
+    iterateMetadata(channelOpPtr->options().metadata());
 
     if (!handler->stream->sendHEADERS(requestHeaders, false)) {
-        channelOperationAsyncError(channelOperation,
-                                  { QGrpcStatus::Unavailable, "Unable to create HTTP2 stream"_L1 });
+        channelOperationAsyncError(channelOpPtr,
+                                   { QGrpcStatus::Unavailable,
+                                     "Unable to create HTTP2 stream"_L1 });
         return;
     }
-    handler->sendData(channelOperation->argument());
+    handler->sendData(channelOpPtr->argument(), channelOperation.endStream);
 }
 
 QGrpcHttp2ChannelPrivate::Http2Handler *QGrpcHttp2ChannelPrivate::createHandler(QHttp2Stream *stream)
@@ -620,7 +652,7 @@ QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
 */
 void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    dPtr->processOperation(std::move(channelOperation));
+    dPtr->processOperation(std::move(channelOperation), true);
 }
 
 /*!
@@ -629,7 +661,7 @@ void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcChannelOperation> channelOpera
 */
 void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    dPtr->processOperation(std::move(channelOperation));
+    dPtr->processOperation(std::move(channelOperation), true);
 }
 
 /*!
