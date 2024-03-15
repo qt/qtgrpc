@@ -1,5 +1,5 @@
 # Copyright (C) 2023 The Qt Company Ltd.
-# SPDX-License-Identifier: BSD-3-Clause
+# SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
 # Pass 3rd party dependency locations to examples as external projects.
 if(NOT Protobuf_ROOT AND "$ENV{Protobuf_ROOT}")

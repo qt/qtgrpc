@@ -1,5 +1,5 @@
 // Copyright (C) 2024 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
 #include "navithread.h"
 #include <naviservice_client.grpc.qpb.h>
