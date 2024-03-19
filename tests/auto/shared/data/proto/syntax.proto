@@ -123,3 +123,9 @@ message int {
 message if {
     bool else = 1;
 }
+
+message QtCppKeywords {
+    sint32 slots = 1;
+    sint32 signals = 2;
+    bool emit = 3;
+}

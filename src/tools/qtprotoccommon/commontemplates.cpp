@@ -58,7 +58,9 @@ const std::set<std::string_view> &CommonTemplates::ListOfCppExceptions()
         "this",          "thread_local", "throw",     "true",       "try",
         "typedef",       "typeid",       "typename",  "union",      "unsigned",
         "using",         "virtual",      "void",      "volatile",   "wchar_t",
-        "while",         "xor",          "xor_eq"
+        "while",         "xor",          "xor_eq",
+        // block of Qt Cpp words:
+        "signals",       "slots",        "emit"
     };
 
     return cppExceptions;
