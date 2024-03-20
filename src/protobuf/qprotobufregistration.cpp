@@ -171,9 +171,9 @@ ProtoTypeRegistrar::ProtoTypeRegistrar(QtProtobuf::RegisterFunction initializer)
     Calling this function registers all, currently known, protobuf types with
     the serializer registry.
 
-    \note You should not have to call this function manually, as it is called
-    automatically upon attempting serialization or deserialization of a protobuf
-    message.
+    \note Only since Qt 6.6.3 version you don't have to call this function manually,
+    as it is called automatically. For earlier versions it's better to call it
+    before serialization/deserialization attempt.
 */
 void qRegisterProtobufTypes()
 {
