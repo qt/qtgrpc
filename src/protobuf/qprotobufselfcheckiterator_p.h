@@ -19,7 +19,7 @@
 #include <QtCore/qnumeric.h>
 #include <QtProtobuf/qtprotobufglobal.h>
 
-#include <QtCore/QByteArray>
+#include <QtCore/qbytearray.h>
 
 #include <iterator>
 

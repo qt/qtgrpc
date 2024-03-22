@@ -6,11 +6,11 @@
 #define QTPROTOBUFTYPES_H
 
 #include <QtProtobuf/qtprotobufglobal.h>
+#include <QtProtobuf/qprotobufmessage.h>
 
-#include <QtCore/QHash>
-#include <QtCore/QMetaType>
-#include <QtCore/QtEndian>
-#include <QtProtobuf/QProtobufMessage>
+#include <QtCore/qhash.h>
+#include <QtCore/qmetatype.h>
+#include <QtCore/qendian.h>
 
 #include <memory>
 #include <type_traits>
