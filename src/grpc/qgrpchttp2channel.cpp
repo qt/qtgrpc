@@ -7,9 +7,9 @@
 #include "qabstractgrpcclient.h"
 #include "qgrpcchanneloperation.h"
 
-#include <QtCore/QMetaObject>
-#include <QtCore/QTimer>
-#include <QtCore/QUrl>
+#include <QtCore/qmetaobject.h>
+#include <QtCore/qtimer.h>
+#include <QtCore/qurl.h>
 #include <QtCore/qendian.h>
 #include <QtCore/qiodevice.h>
 #include <QtCore/qlist.h>

@@ -4,7 +4,7 @@
 #ifndef QGRPCCHANNELOPERATION_H
 #define QGRPCCHANNELOPERATION_H
 
-#include <QtCore/QObject>
+#include <QtCore/qobject.h>
 #include <QtGrpc/qgrpcmetadata.h>
 #include <QtGrpc/qtgrpcglobal.h>
 QT_BEGIN_NAMESPACE

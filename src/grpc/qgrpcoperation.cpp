@@ -7,7 +7,7 @@
 #include "qtgrpcglobal_p.h"
 #include "qgrpcchanneloperation.h"
 
-#include <QtCore/QAtomicInteger>
+#include <QtCore/qatomic.h>
 #include <QtCore/private/qobject_p.h>
 #include <QtCore/qpointer.h>
 #include <QtCore/qeventloop.h>

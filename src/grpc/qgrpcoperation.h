@@ -5,7 +5,7 @@
 #ifndef QGRPCOPERATION_H
 #define QGRPCOPERATION_H
 
-#include <QtCore/QObject>
+#include <QtCore/qobject.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
 #include <QtGrpc/qgrpcmetadata.h>

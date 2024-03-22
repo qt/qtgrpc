@@ -5,8 +5,8 @@
 #ifndef QGRPCSTATUS_H
 #define QGRPCSTATUS_H
 
-#include <QtCore/QMetaType>
-#include <QtCore/QString>
+#include <QtCore/qmetatype.h>
+#include <QtCore/qstring.h>
 #include <QtCore/qobjectdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 

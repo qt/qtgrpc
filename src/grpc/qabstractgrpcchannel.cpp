@@ -9,7 +9,7 @@
 #include "qgrpcclientinterceptor.h"
 #include "qgrpcstream.h"
 
-#include <QtCore/QTimer>
+#include <QtCore/qtimer.h>
 
 QT_BEGIN_NAMESPACE
 

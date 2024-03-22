@@ -7,7 +7,7 @@
 #include "qgrpccalloptions.h"
 
 #include <QtCore/private/qobject_p.h>
-#include <QtProtobuf/QProtobufSerializer>
+#include <QtProtobuf/qprotobufserializer.h>
 
 QT_BEGIN_NAMESPACE
 
