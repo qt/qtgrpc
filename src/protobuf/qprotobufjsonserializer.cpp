@@ -5,12 +5,12 @@
 #include "qprotobufserializer_p.h"
 #include "qprotobufregistration.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QJsonArray>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
-#include <QtCore/QVariant>
-#include <QtCore/QHash>
+#include <QtCore/qcoreapplication.h>
+#include <QtCore/qjsonarray.h>
+#include <QtCore/qjsondocument.h>
+#include <QtCore/qjsonobject.h>
+#include <QtCore/qvariant.h>
+#include <QtCore/qhash.h>
 #include <QtCore/private/qnumeric_p.h>
 
 #include <cmath>
