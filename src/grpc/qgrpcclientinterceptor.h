@@ -6,8 +6,8 @@
 
 #include <QtCore/qtmetamacros.h>
 
-#include <QtGrpc/QAbstractGrpcChannel>
-#include <QtGrpc/QGrpcChannelOperation>
+#include <QtGrpc/qabstractgrpcchannel.h>
+#include <QtGrpc/qgrpcchanneloperation.h>
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
 

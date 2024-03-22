@@ -5,8 +5,8 @@
 #ifndef QABSTRACTGRPCCHANNEL_H
 #define QABSTRACTGRPCCHANNEL_H
 
-#include <QtCore/QString>
-#include <QtCore/QThread>
+#include <QtCore/qstring.h>
+#include <QtCore/qthread.h>
 #include <QtCore/qbytearray.h>
 #include <QtGrpc/qgrpccalloptions.h>
 #include <QtGrpc/qgrpcstatus.h>

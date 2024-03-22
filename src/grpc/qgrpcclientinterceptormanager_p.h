@@ -14,7 +14,7 @@
 //
 // We mean it.
 //
-#include <QtCore/QSharedData>
+#include <QtCore/qshareddata.h>
 
 #include <QtGrpc/qgrpcclientinterceptor.h>
 #include <QtGrpc/qtgrpcglobal.h>

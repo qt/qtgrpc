@@ -5,9 +5,8 @@
 #ifndef QABSTRACTGRPCLIENT_H
 #define QABSTRACTGRPCLIENT_H
 
-#include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QWeakPointer>
+#include <QtCore/qobject.h>
+#include <QtCore/qsharedpointer.h>
 #include <QtCore/qbytearray.h>
 #include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpc/qgrpccallreply.h>

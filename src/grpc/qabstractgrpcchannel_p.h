@@ -15,8 +15,8 @@
 // We mean it.
 //
 
-#include <QtGrpc/QGrpcChannelOptions>
-#include <QtGrpc/QGrpcClientInterceptorManager>
+#include <QtGrpc/qgrpcchanneloptions.h>
+#include <QtGrpc/qgrpcclientinterceptormanager.h>
 #include <QtGrpc/private/qtgrpcglobal_p.h>
 
 QT_BEGIN_NAMESPACE

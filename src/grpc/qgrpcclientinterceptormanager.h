@@ -4,7 +4,7 @@
 #ifndef QGRPCCLIENTINTERCEPTORMANAGER_H
 #define QGRPCCLIENTINTERCEPTORMANAGER_H
 
-#include <QtCore/QExplicitlySharedDataPointer>
+#include <QtCore/qshareddata.h>
 
 #include <QtGrpc/qgrpcclientinterceptor.h>
 #include <QtGrpc/qtgrpcglobal.h>

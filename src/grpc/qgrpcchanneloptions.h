@@ -4,12 +4,12 @@
 #ifndef QGRPCHANNELOPTIONS_H
 #define QGRPCHANNELOPTIONS_H
 
-#include <QtCore/QUrl>
+#include <QtCore/qurl.h>
 #include <QtGrpc/qgrpcmetadata.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 #if QT_CONFIG(ssl)
-#  include <QtNetwork/QSslConfiguration>
+#  include <QtNetwork/qsslconfiguration.h>
 #endif
 
 #include <chrono>

@@ -6,7 +6,7 @@
 
 #include "qgrpcchanneloperation.h"
 
-#include <QtCore/QThread>
+#include <QtCore/qthread.h>
 
 QT_BEGIN_NAMESPACE
 

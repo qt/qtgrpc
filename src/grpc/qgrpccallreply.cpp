@@ -5,8 +5,8 @@
 #include "qgrpccallreply.h"
 #include "qgrpcchanneloperation.h"
 
-#include <QtCore/QThread>
-#include <QtCore/QEventLoop>
+#include <QtCore/qthread.h>
+#include <QtCore/qeventloop.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -2,8 +2,8 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <QtCore/QThread>
-#include <QtCore/QTimer>
+#include <QtCore/qthread.h>
+#include <QtCore/qtimer.h>
 #include <QtGrpc/private/qabstractgrpcchannel_p.h>
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcstream.h>

@@ -4,7 +4,7 @@
 #ifndef QGRPCALLOPTIONS_H
 #define QGRPCALLOPTIONS_H
 
-#include <QtCore/QUrl>
+#include <QtCore/qurl.h>
 #include <QtGrpc/qgrpcmetadata.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
