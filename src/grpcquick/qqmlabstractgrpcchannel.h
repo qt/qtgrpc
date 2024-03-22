@@ -7,6 +7,7 @@
 #include <QtCore/qobject.h>
 #include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpcQuick/qtgrpcquickexports.h>
+
 #include <memory>
 
 QT_BEGIN_NAMESPACE

@@ -19,7 +19,7 @@
 #include <QtGrpcQuick/private/qqmlgrpcmetadata_p.h>
 
 #include <QtCore/qobject.h>
-#include <QtCore/QtGlobal>
+#include <QtCore/qglobal.h>
 #include <QtGrpc/qgrpccalloptions.h>
 #include <QtQml/qqmlregistration.h>
 
