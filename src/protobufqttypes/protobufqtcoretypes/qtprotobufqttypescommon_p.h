@@ -21,7 +21,7 @@
 #include <QtProtobuf/qprotobufregistration.h>
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
-#include <QtCore/QVariant>
+#include <QtCore/qvariant.h>
 #include <QtCore/private/qglobal_p.h>
 
 #include <optional>
