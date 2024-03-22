@@ -20,7 +20,7 @@
 #include <QtProtobuf/qtprotobuftypes.h>
 #include <QtProtobuf/qprotobufserializer.h>
 
-#include <QtCore/QVariant>
+#include <QtCore/qvariant.h>
 #include <QtCore/private/qglobal_p.h>
 
 #include <optional>
