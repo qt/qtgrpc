@@ -6,6 +6,6 @@
 #define QTPROTOBUFQTTYPESGLOBAL_H
 
 #include <QtProtobufQtGuiTypes/qtprotobufqtguitypesexports.h>
-#include <QtCore/QtGlobal>
+#include <QtCore/qglobal.h>
 
 #endif // QTPROTOBUFQTTYPESGLOBAL_H
