@@ -31,7 +31,8 @@ class Q_GRPC_EXPORT QAbstractGrpcChannel
 {
 public:
     void addInterceptorManager(const QGrpcClientInterceptorManager &manager);
-    virtual std::shared_ptr<QAbstractProtobufSerializer> serializer() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<QAbstractProtobufSerializer>
+    serializer() const noexcept = 0;
 
 protected:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
@@ -52,7 +53,7 @@ protected:
     virtual void startClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
     virtual void startBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
 
-    const QGrpcChannelOptions &channelOptions() const;
+    [[nodiscard]] const QGrpcChannelOptions &channelOptions() const noexcept;
 
     friend class QAbstractGrpcClient;
     QAbstractGrpcChannel(const QGrpcChannelOptions &options);

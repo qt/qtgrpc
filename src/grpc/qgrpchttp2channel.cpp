@@ -778,7 +778,7 @@ void QGrpcHttp2Channel::startBidirStream(std::shared_ptr<QGrpcChannelOperation> 
 /*!
     Returns the newly created QProtobufSerializer shared pointer.
 */
-std::shared_ptr<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const
+std::shared_ptr<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const noexcept
 {
     return dPtr->channelOptions.serializationFormat().serializer();
 }
