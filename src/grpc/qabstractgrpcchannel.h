@@ -61,7 +61,7 @@ protected:
     explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
 
 private:
-    Q_DISABLE_COPY(QAbstractGrpcChannel)
+    Q_DISABLE_COPY_MOVE(QAbstractGrpcChannel)
     std::unique_ptr<QAbstractGrpcChannelPrivate> dPtr;
 };
 
