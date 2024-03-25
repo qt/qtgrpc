@@ -119,7 +119,7 @@ void QAbstractGrpcChannel::addInterceptorManager(const QGrpcClientInterceptorMan
     \internal
     Returns QGrpcChannelOptions used by the channel.
 */
-const QGrpcChannelOptions &QAbstractGrpcChannel::channelOptions() const
+const QGrpcChannelOptions &QAbstractGrpcChannel::channelOptions() const noexcept
 {
     return dPtr->channelOptions;
 }
