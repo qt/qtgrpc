@@ -4,7 +4,6 @@
 
 #include "qgrpchttp2channel.h"
 
-#include "qgrpcclientbase.h"
 #include "qgrpcchanneloperation.h"
 #include "qgrpcserializationformat.h"
 
