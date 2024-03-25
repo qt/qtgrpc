@@ -58,6 +58,10 @@ QGrpcCallOptions &QGrpcCallOptions::operator=(const QGrpcCallOptions &other)
     return *this;
 }
 
+QGrpcCallOptions::QGrpcCallOptions(QGrpcCallOptions &&other) noexcept = default;
+
+QGrpcCallOptions &QGrpcCallOptions::operator=(QGrpcCallOptions &&other) noexcept = default;
+
 /*!
     Sets deadline value with \a deadline and returns updated QGrpcCallOptions object.
 */

@@ -24,6 +24,8 @@ public:
 
     QGrpcCallOptions(const QGrpcCallOptions &other);
     QGrpcCallOptions &operator=(const QGrpcCallOptions &other);
+    QGrpcCallOptions(QGrpcCallOptions &&other) noexcept;
+    QGrpcCallOptions &operator=(QGrpcCallOptions &&other) noexcept;
 
     QGrpcCallOptions &withDeadline(std::chrono::milliseconds deadline);
     QGrpcCallOptions &withMetadata(const QGrpcMetadata &metadata);
