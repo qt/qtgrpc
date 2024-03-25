@@ -16,8 +16,6 @@
 
 QT_BEGIN_NAMESPACE
 
-class QGrpcClientBase;
-
 class Q_GRPC_EXPORT QGrpcServerStream final : public QGrpcOperation
 {
     Q_OBJECT
