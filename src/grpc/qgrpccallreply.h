@@ -5,8 +5,13 @@
 #ifndef QGRPCCALLREPLY_H
 #define QGRPCCALLREPLY_H
 
+#include <QtCore/qobject.h>
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
+#include <QtGrpc/qgrpcchanneloperation.h>
+
+#include <memory>
+#include <utility>
 
 QT_BEGIN_NAMESPACE
 
