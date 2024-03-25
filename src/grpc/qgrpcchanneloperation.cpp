@@ -121,7 +121,7 @@ QGrpcChannelOperation::~QGrpcChannelOperation() = default;
 /*!
     Returns the method name that is assigned to this operation.
 */
-QLatin1StringView QGrpcChannelOperation::method() const
+QLatin1StringView QGrpcChannelOperation::method() const noexcept
 {
     return d_func()->method;
 }
@@ -129,7 +129,7 @@ QLatin1StringView QGrpcChannelOperation::method() const
 /*!
     Returns the service name that is assigned to this operation.
 */
-QLatin1StringView QGrpcChannelOperation::service() const
+QLatin1StringView QGrpcChannelOperation::service() const noexcept
 {
     return d_func()->service;
 }
@@ -137,7 +137,7 @@ QLatin1StringView QGrpcChannelOperation::service() const
 /*!
     Returns the serialized arguments that are used for this operation.
 */
-QByteArrayView QGrpcChannelOperation::argument() const
+QByteArrayView QGrpcChannelOperation::argument() const noexcept
 {
     return d_func()->arg;
 }
@@ -145,7 +145,7 @@ QByteArrayView QGrpcChannelOperation::argument() const
 /*!
     Return the options that are assigned to this operation.
 */
-const QGrpcCallOptions &QGrpcChannelOperation::options() const
+const QGrpcCallOptions &QGrpcChannelOperation::options() const noexcept
 {
     return d_func()->options;
 }
@@ -153,7 +153,8 @@ const QGrpcCallOptions &QGrpcChannelOperation::options() const
 /*!
     Return the serializer that is assigned to this operation.
 */
-std::shared_ptr<const QAbstractProtobufSerializer> QGrpcChannelOperation::serializer() const
+std::shared_ptr<const QAbstractProtobufSerializer>
+QGrpcChannelOperation::serializer() const noexcept
 {
     return d_func()->serializer;
 }
@@ -163,7 +164,7 @@ std::shared_ptr<const QAbstractProtobufSerializer> QGrpcChannelOperation::serial
 
     The method is used implicitly by \l QGrpcOperation counterpart.
 */
-const QGrpcMetadata &QGrpcChannelOperation::serverMetadata() const
+const QGrpcMetadata &QGrpcChannelOperation::serverMetadata() const noexcept
 {
     return d_func()->serverMetadata;
 }
