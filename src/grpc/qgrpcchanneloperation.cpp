@@ -116,6 +116,8 @@ QGrpcChannelOperation::QGrpcChannelOperation(QLatin1StringView method, QLatin1St
 {
 }
 
+QGrpcChannelOperation::~QGrpcChannelOperation() = default;
+
 /*!
     Returns the method name that is assigned to this operation.
 */
