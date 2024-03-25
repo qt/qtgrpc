@@ -56,8 +56,8 @@ protected:
     [[nodiscard]] const QGrpcChannelOptions &channelOptions() const noexcept;
 
     friend class QAbstractGrpcClient;
-    QAbstractGrpcChannel(const QGrpcChannelOptions &options);
     virtual ~QAbstractGrpcChannel();
+    explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
 
 private:
     Q_DISABLE_COPY(QAbstractGrpcChannel)
