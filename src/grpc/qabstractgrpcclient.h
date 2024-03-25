@@ -32,6 +32,7 @@ class Q_GRPC_EXPORT QAbstractGrpcClient : public QObject
 public:
     void attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel);
     const std::shared_ptr<QAbstractGrpcChannel> &channel();
+    ~QAbstractGrpcClient() override;
 
 Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status);
@@ -39,7 +40,6 @@ Q_SIGNALS:
 
 protected:
     explicit QAbstractGrpcClient(QLatin1StringView service, QObject *parent = nullptr);
-    ~QAbstractGrpcClient() override;
 
     template <typename ParamType>
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg,
