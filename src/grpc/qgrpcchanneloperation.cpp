@@ -91,11 +91,11 @@ class QGrpcChannelOperationPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGrpcChannelOperation)
 public:
-    QGrpcChannelOperationPrivate(QLatin1StringView _method, QLatin1StringView _service,
-                                 QByteArrayView _arg, QGrpcCallOptions _options,
-                                 std::shared_ptr<QAbstractProtobufSerializer> _serializer)
-        : method(_method), service(_service), arg(_arg.toByteArray()), options(_options),
-          serializer(std::move(_serializer))
+    QGrpcChannelOperationPrivate(QLatin1StringView method_, QLatin1StringView service_,
+                                 QByteArrayView arg_, QGrpcCallOptions options_,
+                                 std::shared_ptr<QAbstractProtobufSerializer> serializer_)
+        : method(method_), service(service_), arg(arg_.toByteArray()), options(std::move(options_)),
+          serializer(std::move(serializer_))
     {
     }
 
