@@ -26,6 +26,7 @@ public:
     explicit QGrpcChannelOperation(QLatin1StringView method, QLatin1StringView service,
                                    QByteArrayView arg, const QGrpcCallOptions &options,
                                    std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    ~QGrpcChannelOperation() override;
 
     QLatin1StringView method() const;
     QLatin1StringView service() const;
