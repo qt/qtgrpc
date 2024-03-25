@@ -29,7 +29,7 @@ QT_BEGIN_NAMESPACE
     is received from the server, and communication will be successfully
     finished. For server and bidir streams this signal should be called by
     channel to signalize that receiving of new message is completed and user
-    buisness logic now can process it at the client side.
+    business logic now can process it at the client side.
 
     The signal is implicitly connected to the QGrpcOperation counterpart.
 */
