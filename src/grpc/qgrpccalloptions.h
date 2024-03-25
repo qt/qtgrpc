@@ -28,8 +28,8 @@ public:
     QGrpcCallOptions &withDeadline(std::chrono::milliseconds deadline);
     QGrpcCallOptions &withMetadata(const QGrpcMetadata &metadata);
 
-    std::optional<std::chrono::milliseconds> deadline() const;
-    QGrpcMetadata metadata() const;
+    [[nodiscard]] std::optional<std::chrono::milliseconds> deadline() const noexcept;
+    [[nodiscard]] QGrpcMetadata metadata() const;
 
 private:
     std::unique_ptr<QGrpcCallOptionsPrivate> dPtr;
