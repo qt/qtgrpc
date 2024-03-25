@@ -28,14 +28,14 @@ public:
                                    std::shared_ptr<QAbstractProtobufSerializer> serializer);
     ~QGrpcChannelOperation() override;
 
-    QLatin1StringView method() const;
-    QLatin1StringView service() const;
-    QByteArrayView argument() const;
-    const QGrpcCallOptions &options() const;
-    std::shared_ptr<const QAbstractProtobufSerializer> serializer() const;
+    [[nodiscard]] QLatin1StringView method() const noexcept;
+    [[nodiscard]] QLatin1StringView service() const noexcept;
+    [[nodiscard]] QByteArrayView argument() const noexcept;
+    [[nodiscard]] const QGrpcCallOptions &options() const noexcept;
+    [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const noexcept;
 
-    const QGrpcMetadata &clientMetadata() const;
-    const QGrpcMetadata &serverMetadata() const;
+    [[nodiscard]] const QGrpcMetadata &clientMetadata() const noexcept;
+    [[nodiscard]] const QGrpcMetadata &serverMetadata() const noexcept;
 
     void setArgument(QByteArrayView arg);
     void setOptions(QGrpcCallOptions &options);
