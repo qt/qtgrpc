@@ -5,8 +5,13 @@
 #define QGRPCCHANNELOPERATION_H
 
 #include <QtCore/qobject.h>
+#include <QtCore/qlatin1stringview.h>
+#include <QtCore/qbytearrayview.h>
 #include <QtGrpc/qgrpcmetadata.h>
 #include <QtGrpc/qtgrpcglobal.h>
+
+#include <memory>
+
 QT_BEGIN_NAMESPACE
 
 class QAbstractProtobufSerializer;

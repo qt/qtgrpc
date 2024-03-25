@@ -1,13 +1,13 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include "qgrpcchanneloperation.h"
-
-#include "qgrpcstatus.h"
-#include "qgrpccalloptions.h"
+#include <QtGrpc/qgrpcchanneloperation.h>
+#include <QtGrpc/qgrpccalloptions.h>
 
 #include <QtCore/private/qobject_p.h>
 #include <QtProtobuf/qprotobufserializer.h>
+
+#include <utility>
 
 QT_BEGIN_NAMESPACE
 
