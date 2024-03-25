@@ -84,6 +84,17 @@ QGrpcCallOptions &QGrpcCallOptions::withMetadata(const QGrpcMetadata &metadata)
 }
 
 /*!
+    Sets \a metadata for a call and returns updated QGrpcCallOptions object.
+
+    \sa withMetadata()
+*/
+QGrpcCallOptions &QGrpcCallOptions::withMetadata(QGrpcMetadata &&metadata) noexcept
+{
+    dPtr->metadata = std::move(metadata);
+    return *this;
+}
+
+/*!
     Returns deadline value for a call.
 
     Deadline value controls the maximum execution time of an call or a stream.
