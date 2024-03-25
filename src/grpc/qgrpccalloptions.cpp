@@ -53,7 +53,8 @@ QGrpcCallOptions::QGrpcCallOptions(const QGrpcCallOptions &other)
 */
 QGrpcCallOptions &QGrpcCallOptions::operator=(const QGrpcCallOptions &other)
 {
-    *dPtr = *other.dPtr;
+    if (this != &other)
+        *dPtr = *other.dPtr;
     return *this;
 }
 
