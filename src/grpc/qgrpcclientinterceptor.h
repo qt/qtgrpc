@@ -36,6 +36,11 @@ private:
 class Q_GRPC_EXPORT QGrpcClientInterceptor
 {
 public:
+    QGrpcClientInterceptor() = default;
+    QGrpcClientInterceptor(const QGrpcClientInterceptor &) = default;
+    QGrpcClientInterceptor &operator=(const QGrpcClientInterceptor &) = default;
+    QGrpcClientInterceptor(QGrpcClientInterceptor &&) noexcept = default;
+    QGrpcClientInterceptor &operator=(QGrpcClientInterceptor &&) noexcept = default;
     virtual ~QGrpcClientInterceptor();
 
 #ifdef Q_QDOC
