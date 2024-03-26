@@ -60,6 +60,17 @@ QGrpcChannelOptions &QGrpcChannelOptions::operator=(const QGrpcChannelOptions &o
 }
 
 /*!
+    Move-construct a QGrpcChannelOptions instance, making it point at the same
+    object that \a other was pointing to.
+*/
+QGrpcChannelOptions::QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept = default;
+
+/*!
+    Move-assigns \a other to this QGrpcChannelOptions instance.
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::operator=(QGrpcChannelOptions &&other) noexcept = default;
+
+/*!
     Destroys the QGrpcChannelOptions object.
 */
 QGrpcChannelOptions::~QGrpcChannelOptions() = default;

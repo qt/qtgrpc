@@ -29,6 +29,8 @@ public:
 
     QGrpcChannelOptions(const QGrpcChannelOptions &other);
     QGrpcChannelOptions &operator=(const QGrpcChannelOptions &other);
+    QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept;
+    QGrpcChannelOptions &operator=(QGrpcChannelOptions &&other) noexcept;
 
     QGrpcChannelOptions &withHost(const QUrl &host);
     QGrpcChannelOptions &withDeadline(std::chrono::milliseconds deadline);
