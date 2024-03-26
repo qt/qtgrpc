@@ -15,11 +15,14 @@ QT_BEGIN_NAMESPACE
 
 class QGrpcChannelOperation;
 class QGrpcOperationPrivate;
+
 class Q_GRPC_EXPORT QGrpcOperation : public QObject
 {
     Q_OBJECT
 
 public:
+    ~QGrpcOperation() override;
+
     template <typename T>
     T read() const
     {
@@ -45,7 +48,6 @@ Q_SIGNALS:
 
 protected:
     explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation);
-    ~QGrpcOperation() override;
 
     const QGrpcChannelOperation *channelOperation() const;
     std::shared_ptr<const QAbstractProtobufSerializer> serializer() const;
