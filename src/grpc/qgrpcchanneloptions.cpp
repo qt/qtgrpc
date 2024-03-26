@@ -60,7 +60,8 @@ QGrpcChannelOptions::QGrpcChannelOptions(const QGrpcChannelOptions &other)
 */
 QGrpcChannelOptions &QGrpcChannelOptions::operator=(const QGrpcChannelOptions &other)
 {
-    *dPtr = *other.dPtr;
+    if (this != &other)
+        *dPtr = *other.dPtr;
     return *this;
 }
 
