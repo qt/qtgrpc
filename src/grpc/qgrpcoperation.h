@@ -34,11 +34,11 @@ public:
         return value;
     }
 
-    QGrpcMetadata metadata() const;
-    QLatin1StringView method() const;
+    [[nodiscard]] QGrpcMetadata metadata() const noexcept;
+    [[nodiscard]] QLatin1StringView method() const noexcept;
 
     void cancel();
-    bool isFinished() const;
+    [[nodiscard]] bool isFinished() const noexcept;
 
 Q_SIGNALS:
     void finished();
@@ -47,14 +47,14 @@ Q_SIGNALS:
 protected:
     explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation);
 
-    const QGrpcChannelOperation *channelOperation() const;
-    std::shared_ptr<const QAbstractProtobufSerializer> serializer() const;
+    [[nodiscard]] const QGrpcChannelOperation *channelOperation() const noexcept;
+    [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const noexcept;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
 
-    QByteArray data() const;
-    QGrpcStatus deserializationError() const;
+    [[nodiscard]] QByteArray data() const noexcept;
+    [[nodiscard]] QGrpcStatus deserializationError() const;
 
     Q_DECLARE_PRIVATE(QGrpcOperation)
 };

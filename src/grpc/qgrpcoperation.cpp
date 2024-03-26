@@ -104,7 +104,7 @@ QGrpcOperation::~QGrpcOperation() = default;
     \internal
     Getter of the data received from the channel.
 */
-QByteArray QGrpcOperation::data() const
+QByteArray QGrpcOperation::data() const noexcept
 {
     return d_func()->data;
 }
@@ -113,7 +113,7 @@ QByteArray QGrpcOperation::data() const
     Getter of the metadata received from the channel. For the HTTP2 channels it
     usually contains the HTTP headers received from the server.
 */
-QGrpcMetadata QGrpcOperation::metadata() const
+QGrpcMetadata QGrpcOperation::metadata() const noexcept
 {
     return d_func()->channelOperation->serverMetadata();
 }
@@ -121,7 +121,7 @@ QGrpcMetadata QGrpcOperation::metadata() const
 /*!
     Getter of the method that this operation was intialized with.
 */
-QLatin1StringView QGrpcOperation::method() const
+QLatin1StringView QGrpcOperation::method() const noexcept
 {
     return d_func()->channelOperation->method();
 }
@@ -130,7 +130,7 @@ QLatin1StringView QGrpcOperation::method() const
     \internal
     Returns a pointer to the assigned channel-side QGrpcChannelOperation.
 */
-const QGrpcChannelOperation *QGrpcOperation::channelOperation() const
+const QGrpcChannelOperation *QGrpcOperation::channelOperation() const noexcept
 {
     return d_func()->channelOperation.get();
 }
@@ -139,7 +139,7 @@ const QGrpcChannelOperation *QGrpcOperation::channelOperation() const
     \internal
     Getter of the serializer that QGrpcOperation was constructed with.
 */
-std::shared_ptr<const QAbstractProtobufSerializer> QGrpcOperation::serializer() const
+std::shared_ptr<const QAbstractProtobufSerializer> QGrpcOperation::serializer() const noexcept
 {
     return d_func()->channelOperation->serializer();
 }
@@ -162,7 +162,7 @@ void QGrpcOperation::cancel()
     Returns true when QGrpcOperation finished its workflow,
     meaning it was finished, canceled, or error occurred, otherwise returns false.
 */
-bool QGrpcOperation::isFinished() const
+bool QGrpcOperation::isFinished() const noexcept
 {
     return d_func()->isFinished.loadRelaxed();
 }
