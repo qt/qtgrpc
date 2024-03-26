@@ -35,8 +35,8 @@ public:
     QGrpcSerializationFormat &operator=(const QGrpcSerializationFormat &);
     QGrpcSerializationFormat &operator=(QGrpcSerializationFormat &&);
 
-    QByteArray suffix() const;
-    std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
+    [[nodiscard]] QByteArray suffix() const noexcept;
+    [[nodiscard]] std::shared_ptr<QAbstractProtobufSerializer> serializer() const noexcept;
 
 private:
     std::unique_ptr<QGrpcSerializationFormatPrivate> dPtr;

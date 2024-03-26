@@ -125,7 +125,7 @@ QGrpcSerializationFormat &QGrpcSerializationFormat::operator=(QGrpcSerialization
 /*!
     Returns the content type suffix for this serialization format.
 */
-QByteArray QGrpcSerializationFormat::suffix() const
+QByteArray QGrpcSerializationFormat::suffix() const noexcept
 {
     return dPtr->suffix;
 }
@@ -135,7 +135,7 @@ QByteArray QGrpcSerializationFormat::suffix() const
 
     /sa QAbstractProtobufSerializer
 */
-std::shared_ptr<QAbstractProtobufSerializer> QGrpcSerializationFormat::serializer() const
+std::shared_ptr<QAbstractProtobufSerializer> QGrpcSerializationFormat::serializer() const noexcept
 {
     return dPtr->serializer;
 }
