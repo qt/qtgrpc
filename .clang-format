@@ -105,7 +105,7 @@ PenaltyReturnTypeOnItsOwnLine: 100
 # The coding style does not specify the following, but this is what gives
 # results closest to the existing code.
 AlignAfterOpenBracket: Align
-AlignArrayOfStructures: Right
+AlignArrayOfStructures: Left
 
 AlwaysBreakTemplateDeclarations: Yes
 
