@@ -36,13 +36,13 @@ public:
     QGrpcChannelOptions &withDeadline(std::chrono::milliseconds deadline);
     QGrpcChannelOptions &withMetadata(const QGrpcMetadata &metadata);
 
-    QUrl host() const;
-    std::optional<std::chrono::milliseconds> deadline() const;
-    QGrpcMetadata metadata() const;
+    [[nodiscard]] QUrl host() const noexcept;
+    [[nodiscard]] std::optional<std::chrono::milliseconds> deadline() const noexcept;
+    [[nodiscard]] QGrpcMetadata metadata() const;
 
 #if QT_CONFIG(ssl)
     QGrpcChannelOptions &withSslConfiguration(const QSslConfiguration &sslConfiguration);
-    std::optional<QSslConfiguration> sslConfiguration() const;
+    [[nodiscard]] std::optional<QSslConfiguration> sslConfiguration() const noexcept;
 #endif
 
 private:
