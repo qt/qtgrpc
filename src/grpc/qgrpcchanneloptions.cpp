@@ -133,7 +133,7 @@ QGrpcChannelOptions::withSerializationFormat(const QGrpcSerializationFormat &for
 
     If value was not set returns empty std::optional.
 */
-std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const
+std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const noexcept
 {
     return dPtr->deadline;
 }
@@ -141,7 +141,7 @@ std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const
 /*!
     Returns host value for the channel.
 */
-QUrl QGrpcChannelOptions::host() const
+QUrl QGrpcChannelOptions::host() const noexcept
 {
     return dPtr->host;
 }
@@ -151,7 +151,7 @@ QUrl QGrpcChannelOptions::host() const
 
     If value was not set returns empty QGrpcMetadata.
 */
-const QGrpcMetadata &QGrpcChannelOptions::metadata() const
+const QGrpcMetadata &QGrpcChannelOptions::metadata() const noexcept
 {
     return dPtr->metadata;
 }
@@ -160,7 +160,7 @@ const QGrpcMetadata &QGrpcChannelOptions::metadata() const
     \since 6.8
     Returns the serialization format used in \l QAbstractGrpcChannel implementations.
  */
-const QGrpcSerializationFormat &QGrpcChannelOptions::serializationFormat() const
+const QGrpcSerializationFormat &QGrpcChannelOptions::serializationFormat() const noexcept
 {
     return dPtr->serializationFormat;
 }
@@ -181,7 +181,7 @@ QGrpcChannelOptions &QGrpcChannelOptions::withSslConfiguration(
 
     If value was not set returns empty std::optional.
 */
-std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const
+std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const noexcept
 {
     return dPtr->sslConfiguration;
 }

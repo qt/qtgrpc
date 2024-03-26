@@ -39,14 +39,14 @@ public:
     QGrpcChannelOptions &withMetadata(const QGrpcMetadata &metadata);
     QGrpcChannelOptions &withSerializationFormat(const QGrpcSerializationFormat &format);
 
-    QUrl host() const;
-    std::optional<std::chrono::milliseconds> deadline() const;
-    const QGrpcMetadata &metadata() const;
-    const QGrpcSerializationFormat &serializationFormat() const;
+    [[nodiscard]] QUrl host() const noexcept;
+    [[nodiscard]] std::optional<std::chrono::milliseconds> deadline() const noexcept;
+    [[nodiscard]] const QGrpcMetadata &metadata() const noexcept;
+    [[nodiscard]] const QGrpcSerializationFormat &serializationFormat() const noexcept;
 
 #if QT_CONFIG(ssl)
     QGrpcChannelOptions &withSslConfiguration(const QSslConfiguration &sslConfiguration);
-    std::optional<QSslConfiguration> sslConfiguration() const;
+    [[nodiscard]] std::optional<QSslConfiguration> sslConfiguration() const noexcept;
 #endif
 
 private:
