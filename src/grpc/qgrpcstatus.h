@@ -48,14 +48,14 @@ public:
     QGrpcStatus(StatusCode code = StatusCode::Ok, const QString &message = QString());
     ~QGrpcStatus();
 
-    StatusCode code() const;
-    QString message() const;
-
     QGrpcStatus(const QGrpcStatus &other);
     QGrpcStatus &operator=(const QGrpcStatus &other);
 
     QGrpcStatus(QGrpcStatus &&other);
     QGrpcStatus &operator=(QGrpcStatus &&other);
+
+    [[nodiscard]] StatusCode code() const noexcept;
+    [[nodiscard]] QString message() const noexcept;
 
 private:
     friend bool operator==(const QGrpcStatus &lhs, QGrpcStatus::StatusCode code)
