@@ -22,8 +22,8 @@ public:
     using ReplyType = typename std::shared_ptr<T>;
     using ParamType = std::shared_ptr<QGrpcChannelOperation>;
 
-    QGrpcInterceptorContinuation(std::function<void(ReplyType, ParamType)> _func)
-        : func(std::move(_func))
+    QGrpcInterceptorContinuation(std::function<void(ReplyType, ParamType)> func_)
+        : func(std::move(func_))
     {
     }
 
