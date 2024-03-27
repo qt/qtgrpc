@@ -11,6 +11,9 @@
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
+#include <memory>
+#include <type_traits>
+
 QT_BEGIN_NAMESPACE
 
 class QAbstractGrpcClient;
@@ -25,6 +28,9 @@ public:
 
 Q_SIGNALS:
     void messageReceived();
+
+private:
+    Q_DISABLE_COPY_MOVE(QGrpcServerStream)
 };
 
 class Q_GRPC_EXPORT QGrpcClientStream final : public QGrpcOperation
@@ -35,7 +41,7 @@ public:
     explicit QGrpcClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
     ~QGrpcClientStream() override;
 
-    template<typename T>
+    template <typename T>
     void sendMessage(const T &message)
     {
         sendMessage(serializer()->serialize<T>(&message));
@@ -43,6 +49,7 @@ public:
 
 private:
     void sendMessage(const QByteArray &data);
+    Q_DISABLE_COPY_MOVE(QGrpcClientStream)
 };
 
 class Q_GRPC_EXPORT QGrpcBidirStream final : public QGrpcOperation
@@ -53,7 +60,7 @@ public:
     explicit QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
     ~QGrpcBidirStream() override;
 
-    template<typename T>
+    template <typename T>
     void sendMessage(const T &message)
     {
         sendMessage(serializer()->serialize<T>(&message));
@@ -64,6 +71,7 @@ Q_SIGNALS:
 
 private:
     void sendMessage(const QByteArray &data);
+    Q_DISABLE_COPY_MOVE(QGrpcBidirStream)
 };
 
 QT_END_NAMESPACE
