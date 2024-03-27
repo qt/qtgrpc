@@ -8,14 +8,14 @@
 #include "qgrpcchanneloperation.h"
 #include "qgrpcserializationformat.h"
 
-#include <QtCore/qmetaobject.h>
-#include <QtCore/qtimer.h>
-#include <QtCore/qurl.h>
 #include <QtCore/qbytearrayview.h>
 #include <QtCore/qendian.h>
 #include <QtCore/qiodevice.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qmetaobject.h>
 #include <QtCore/qqueue.h>
+#include <QtCore/qtimer.h>
+#include <QtCore/qurl.h>
 #include <QtNetwork/private/hpack_p.h>
 #include <QtNetwork/private/qhttp2connection_p.h>
 #include <QtNetwork/qlocalsocket.h>
@@ -27,7 +27,6 @@
 #include <QtProtobuf/qprotobufserializer.h>
 #include <qtgrpcglobal_p.h>
 
-#include <array>
 #include <functional>
 #include <unordered_map>
 #include <utility>
@@ -110,14 +109,15 @@ constexpr QByteArrayView GrpcStatusHeader("grpc-status");
 constexpr QByteArrayView GrpcStatusMessageHeader("grpc-message");
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
 constexpr QByteArrayView DefaultContentType = "application/grpc";
-}
+
+} // namespace
 
 class QGrpcSocketHandler;
 
 struct QGrpcHttp2ChannelPrivate : public QObject
 {
     explicit QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &options);
-    ~QGrpcHttp2ChannelPrivate();
+    ~QGrpcHttp2ChannelPrivate() override;
 
     void processOperation(std::shared_ptr<QGrpcChannelOperation> &&channelOperation,
                           bool endStream = false);
@@ -127,17 +127,9 @@ struct QGrpcHttp2ChannelPrivate : public QObject
 private:
     Q_DISABLE_COPY_MOVE(QGrpcHttp2ChannelPrivate)
 
-    enum SerializerTypes {
-        Default = 0,
-        Protobuf,
-        JSON
-    };
+    enum SerializerTypes { Default = 0, Protobuf, JSON };
 
-    enum ConnectionState {
-        Connecting = 0,
-        Connected,
-        Error
-    };
+    enum ConnectionState { Connecting = 0, Connected, Error };
 
     struct ExpectedData
     {
@@ -158,8 +150,9 @@ private:
 
     struct Http2Handler
     {
-        explicit Http2Handler(QHttp2Stream *_stream);
+        explicit Http2Handler(QHttp2Stream *stream_);
         ~Http2Handler();
+
         void sendData(QByteArrayView data, bool endStream = false);
         void processQueue();
         void cancel();
@@ -176,11 +169,11 @@ private:
 
     struct ChannelOperation
     {
-        ChannelOperation(std::shared_ptr<QGrpcChannelOperation> &&_operation, bool _endStream)
-            : operation(_operation), endStream(_endStream)
+        ChannelOperation(std::shared_ptr<QGrpcChannelOperation> &&operation_, bool endStream_)
+            : operation(std::move(operation_)), endStream(endStream_)
         {
         }
-
+        ~ChannelOperation() = default;
         ChannelOperation(ChannelOperation &&other) = default;
         ChannelOperation &operator=(ChannelOperation &&other) = default;
 
@@ -218,8 +211,8 @@ private:
     Http2Handler *createHandler(QHttp2Stream *stream);
     void deleteHandler(Http2Handler *handler);
 
-    template<typename T>
-    T* initSocket()
+    template <typename T>
+    T *initSocket()
     {
         auto p = std::make_unique<T>();
         T *typedSocket = p.get();
@@ -229,7 +222,7 @@ private:
 
     // This QNetworkReply::NetworkError -> QGrpcStatus::StatusCode mapping should be kept in sync
     // with original https://github.com/grpc/grpc/blob/master/doc/statuscodes.md
-    static std::unordered_map<quint32, QGrpcStatus::StatusCode> StatusCodeMap;
+    const static std::unordered_map<quint32, QGrpcStatus::StatusCode> StatusCodeMap;
 
     std::unique_ptr<QIODevice> m_socket = nullptr;
     QHttp2Connection *m_connection = nullptr;
@@ -241,8 +234,8 @@ private:
     std::function<void()> m_reconnectFunction;
 };
 
-QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(QHttp2Stream *_stream)
-    : stream(_stream), buffer(new QBuffer(_stream))
+QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(QHttp2Stream *stream_)
+    : stream(stream_), buffer(new QBuffer(stream_))
 {
 }
 
@@ -338,60 +331,60 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::cancel()
     processQueue();
 }
 
-std::unordered_map<quint32, QGrpcStatus::StatusCode> QGrpcHttp2ChannelPrivate::StatusCodeMap;
+const std::unordered_map<quint32, QGrpcStatus::StatusCode> QGrpcHttp2ChannelPrivate::StatusCodeMap;
 
 QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &options)
     : channelOptions(options)
 {
+    // Populate the map on first use of this constructor.
     [[maybe_unused]] static bool statusCodeMapInitialized = []() -> bool {
-        QGrpcHttp2ChannelPrivate::StatusCodeMap = {
-            { QNetworkReply::ConnectionRefusedError, QGrpcStatus::Unavailable },
-            { QNetworkReply::RemoteHostClosedError, QGrpcStatus::Unavailable },
-            { QNetworkReply::HostNotFoundError, QGrpcStatus::Unavailable },
-            { QNetworkReply::TimeoutError, QGrpcStatus::DeadlineExceeded },
-            { QNetworkReply::OperationCanceledError, QGrpcStatus::Unavailable },
-            { QNetworkReply::SslHandshakeFailedError, QGrpcStatus::PermissionDenied },
-            { QNetworkReply::TemporaryNetworkFailureError, QGrpcStatus::Unknown },
-            { QNetworkReply::NetworkSessionFailedError, QGrpcStatus::Unavailable },
-            { QNetworkReply::BackgroundRequestNotAllowedError, QGrpcStatus::Unknown },
-            { QNetworkReply::TooManyRedirectsError, QGrpcStatus::Unavailable },
-            { QNetworkReply::InsecureRedirectError, QGrpcStatus::PermissionDenied },
-            { QNetworkReply::UnknownNetworkError, QGrpcStatus::Unknown },
-            { QNetworkReply::ProxyConnectionRefusedError, QGrpcStatus::Unavailable },
-            { QNetworkReply::ProxyConnectionClosedError, QGrpcStatus::Unavailable },
-            { QNetworkReply::ProxyNotFoundError, QGrpcStatus::Unavailable },
-            { QNetworkReply::ProxyTimeoutError, QGrpcStatus::DeadlineExceeded },
-            { QNetworkReply::ProxyAuthenticationRequiredError, QGrpcStatus::Unauthenticated },
-            { QNetworkReply::UnknownProxyError, QGrpcStatus::Unknown },
-            { QNetworkReply::ContentAccessDenied, QGrpcStatus::PermissionDenied },
+        const_cast<std::unordered_map<quint32, QGrpcStatus::StatusCode> &>(StatusCodeMap) = {
+            { QNetworkReply::ConnectionRefusedError,            QGrpcStatus::Unavailable      },
+            { QNetworkReply::RemoteHostClosedError,             QGrpcStatus::Unavailable      },
+            { QNetworkReply::HostNotFoundError,                 QGrpcStatus::Unavailable      },
+            { QNetworkReply::TimeoutError,                      QGrpcStatus::DeadlineExceeded },
+            { QNetworkReply::OperationCanceledError,            QGrpcStatus::Unavailable      },
+            { QNetworkReply::SslHandshakeFailedError,           QGrpcStatus::PermissionDenied },
+            { QNetworkReply::TemporaryNetworkFailureError,      QGrpcStatus::Unknown          },
+            { QNetworkReply::NetworkSessionFailedError,         QGrpcStatus::Unavailable      },
+            { QNetworkReply::BackgroundRequestNotAllowedError,  QGrpcStatus::Unknown          },
+            { QNetworkReply::TooManyRedirectsError,             QGrpcStatus::Unavailable      },
+            { QNetworkReply::InsecureRedirectError,             QGrpcStatus::PermissionDenied },
+            { QNetworkReply::UnknownNetworkError,               QGrpcStatus::Unknown          },
+            { QNetworkReply::ProxyConnectionRefusedError,       QGrpcStatus::Unavailable      },
+            { QNetworkReply::ProxyConnectionClosedError,        QGrpcStatus::Unavailable      },
+            { QNetworkReply::ProxyNotFoundError,                QGrpcStatus::Unavailable      },
+            { QNetworkReply::ProxyTimeoutError,                 QGrpcStatus::DeadlineExceeded },
+            { QNetworkReply::ProxyAuthenticationRequiredError,  QGrpcStatus::Unauthenticated  },
+            { QNetworkReply::UnknownProxyError,                 QGrpcStatus::Unknown          },
+            { QNetworkReply::ContentAccessDenied,               QGrpcStatus::PermissionDenied },
             { QNetworkReply::ContentOperationNotPermittedError, QGrpcStatus::PermissionDenied },
-            { QNetworkReply::ContentNotFoundError, QGrpcStatus::NotFound },
-            { QNetworkReply::AuthenticationRequiredError, QGrpcStatus::PermissionDenied },
-            { QNetworkReply::ContentReSendError, QGrpcStatus::DataLoss },
-            { QNetworkReply::ContentConflictError, QGrpcStatus::InvalidArgument },
-            { QNetworkReply::ContentGoneError, QGrpcStatus::DataLoss },
-            { QNetworkReply::UnknownContentError, QGrpcStatus::Unknown },
-            { QNetworkReply::ProtocolUnknownError, QGrpcStatus::Unknown },
-            { QNetworkReply::ProtocolInvalidOperationError, QGrpcStatus::Unimplemented },
-            { QNetworkReply::ProtocolFailure, QGrpcStatus::Unknown },
-            { QNetworkReply::InternalServerError, QGrpcStatus::Internal },
-            { QNetworkReply::OperationNotImplementedError, QGrpcStatus::Unimplemented },
-            { QNetworkReply::ServiceUnavailableError, QGrpcStatus::Unavailable },
-            { QNetworkReply::UnknownServerError, QGrpcStatus::Unknown }
+            { QNetworkReply::ContentNotFoundError,              QGrpcStatus::NotFound         },
+            { QNetworkReply::AuthenticationRequiredError,       QGrpcStatus::PermissionDenied },
+            { QNetworkReply::ContentReSendError,                QGrpcStatus::DataLoss         },
+            { QNetworkReply::ContentConflictError,              QGrpcStatus::InvalidArgument  },
+            { QNetworkReply::ContentGoneError,                  QGrpcStatus::DataLoss         },
+            { QNetworkReply::UnknownContentError,               QGrpcStatus::Unknown          },
+            { QNetworkReply::ProtocolUnknownError,              QGrpcStatus::Unknown          },
+            { QNetworkReply::ProtocolInvalidOperationError,     QGrpcStatus::Unimplemented    },
+            { QNetworkReply::ProtocolFailure,                   QGrpcStatus::Unknown          },
+            { QNetworkReply::InternalServerError,               QGrpcStatus::Internal         },
+            { QNetworkReply::OperationNotImplementedError,      QGrpcStatus::Unimplemented    },
+            { QNetworkReply::ServiceUnavailableError,           QGrpcStatus::Unavailable      },
+            { QNetworkReply::UnknownServerError,                QGrpcStatus::Unknown          }
         };
         return true;
     }();
-
     const QByteArray formatSuffix = channelOptions.serializationFormat().suffix();
     const QByteArray defaultContentType = DefaultContentType.toByteArray();
     const QByteArray contentTypeFromOptions = !formatSuffix.isEmpty()
         ? defaultContentType + '+' + formatSuffix
         : defaultContentType;
-
     bool warnAboutFormatConflict = !formatSuffix.isEmpty();
-    auto it = channelOptions.metadata().find(ContentTypeHeader.toByteArray());
+
+    auto it = channelOptions.metadata().find(ContentTypeHeader.data());
     if (it != channelOptions.metadata().end()) {
-        if (formatSuffix == "" && it->second != DefaultContentType) {
+        if (formatSuffix.isEmpty() && it->second != DefaultContentType) {
             if (it->second == "application/grpc+json") {
                 channelOptions.withSerializationFormat({ QGrpcSerializationFormat::Format::Json });
             } else if (it->second == "application/grpc+proto" || it->second == DefaultContentType) {
@@ -412,9 +405,13 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &op
         warnAboutFormatConflict = false;
     }
 
-    m_contentType = !channelOptions.serializationFormat().suffix().isEmpty()
-        ? defaultContentType + '+' + channelOptions.serializationFormat().suffix()
-        : defaultContentType;
+    if (formatSuffix == channelOptions.serializationFormat().suffix()) { // no change
+        m_contentType = contentTypeFromOptions;
+    } else { // format has changed, update content type
+        m_contentType = !channelOptions.serializationFormat().suffix().isEmpty()
+            ? defaultContentType + '+' + channelOptions.serializationFormat().suffix()
+            : defaultContentType;
+    }
 
     if (warnAboutFormatConflict) {
         qGrpcWarning()
@@ -444,7 +441,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &op
         };
     } else
 #if QT_CONFIG(ssl)
-    if (url.scheme() == "https"_L1 || options.sslConfiguration()) {
+        if (url.scheme() == "https"_L1 || options.sslConfiguration()) {
         auto *sslSocket = initSocket<QSslSocket>();
         if (url.port() < 0) {
             url.setPort(443);
@@ -567,7 +564,7 @@ void QGrpcHttp2ChannelPrivate::sendRequest(const ChannelOperation &channelOperat
     Q_ASSERT_X(channelOperation.operation != nullptr, "QGrpcHttp2ChannelPrivate::sendRequest",
                "channelOperation is null");
 
-    auto channelOpPtr = channelOperation.operation.get();
+    auto *channelOpPtr = channelOperation.operation.get();
     if (!m_connection) {
         channelOperationAsyncError(channelOpPtr,
                                    { QGrpcStatus::Unavailable,
@@ -673,27 +670,25 @@ void QGrpcHttp2ChannelPrivate::sendRequest(const ChannelOperation &channelOperat
     QByteArray method{ channelOpPtr->method().data(), channelOpPtr->method().size() };
 
     HPack::HttpHeader requestHeaders = HPack::HttpHeader{
-        { AuthorityHeader.toByteArray(), channelOptions.host().host().toLatin1() },
-        { MethodHeader.toByteArray(), "POST"_ba },
-        { PathHeader.toByteArray(), QByteArray('/' + service + '/' + method) },
+        { AuthorityHeader.toByteArray(),          channelOptions.host().host().toLatin1()  },
+        { MethodHeader.toByteArray(),             "POST"_ba                                },
+        { PathHeader.toByteArray(),               QByteArray('/' + service + '/' + method) },
         { SchemeHeader.toByteArray(),
-          m_isLocalSocket ? "http"_ba : channelOptions.host().scheme().toLatin1() },
-        { ContentTypeHeader.toByteArray(), m_contentType },
-        { GrpcServiceNameHeader.toByteArray(), { service } },
-        { GrpcAcceptEncodingHeader.toByteArray(), "identity,deflate,gzip"_ba },
-        { AcceptEncodingHeader.toByteArray(), "identity,gzip"_ba },
-        { TEHeader.toByteArray(), "trailers"_ba },
+         m_isLocalSocket ? "http"_ba : channelOptions.host().scheme().toLatin1()           },
+        { ContentTypeHeader.toByteArray(),        m_contentType                            },
+        { GrpcServiceNameHeader.toByteArray(),    { service }                              },
+        { GrpcAcceptEncodingHeader.toByteArray(), "identity,deflate,gzip"_ba               },
+        { AcceptEncodingHeader.toByteArray(),     "identity,gzip"_ba                       },
+        { TEHeader.toByteArray(),                 "trailers"_ba                            },
     };
 
     auto iterateMetadata = [&requestHeaders](const auto &metadata) {
         for (const auto &[key, value] : std::as_const(metadata)) {
             auto lowerKey = key.toLower();
-            if (lowerKey == AuthorityHeader ||
-                lowerKey == MethodHeader ||
-                lowerKey == PathHeader ||
-                lowerKey == SchemeHeader ||
-                lowerKey == ContentTypeHeader)
+            if (lowerKey == AuthorityHeader || lowerKey == MethodHeader || lowerKey == PathHeader
+                || lowerKey == SchemeHeader || lowerKey == ContentTypeHeader) {
                 continue;
+            }
             requestHeaders.push_back({ lowerKey, value });
         }
     };
@@ -710,7 +705,8 @@ void QGrpcHttp2ChannelPrivate::sendRequest(const ChannelOperation &channelOperat
     handler->sendData(channelOpPtr->argument(), channelOperation.endStream);
 }
 
-QGrpcHttp2ChannelPrivate::Http2Handler *QGrpcHttp2ChannelPrivate::createHandler(QHttp2Stream *stream)
+QGrpcHttp2ChannelPrivate::Http2Handler *
+QGrpcHttp2ChannelPrivate::createHandler(QHttp2Stream *stream)
 {
     Http2Handler *handler = new Http2Handler(stream);
     m_activeHandlers.append(handler);
