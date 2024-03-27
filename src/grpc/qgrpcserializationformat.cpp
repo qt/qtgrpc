@@ -44,9 +44,9 @@ QT_BEGIN_NAMESPACE
 class QGrpcSerializationFormatPrivate
 {
 public:
-    QGrpcSerializationFormatPrivate(QByteArrayView _suffix,
-                                    std::shared_ptr<QAbstractProtobufSerializer> _serializer)
-        : suffix(_suffix.toByteArray()), serializer(std::move(_serializer))
+    QGrpcSerializationFormatPrivate(QByteArrayView suffix_,
+                                    std::shared_ptr<QAbstractProtobufSerializer> serializer_)
+        : suffix(suffix_.toByteArray()), serializer(std::move(serializer_))
     {
     }
     QByteArray suffix;
