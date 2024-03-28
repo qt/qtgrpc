@@ -220,15 +220,13 @@ QAbstractGrpcChannel::startClientStream(QLatin1StringView method, QLatin1StringV
                                                                     serializer());
     auto stream = std::make_shared<QGrpcClientStream>(channelOperation);
 
-    QTimer::singleShot(0, channelOperation.get(), [this, stream, channelOperation]() mutable {
-        using Continuation = QGrpcInterceptorContinuation<QGrpcClientStream>;
-        Continuation finalStream([this](Continuation::ReplyType response,
-                                        Continuation::ParamType operation) {
-            startClientStream(operation);
-            return response;
-        });
-        dPtr->interceptorManager.run(finalStream, stream, channelOperation);
+    using Continuation = QGrpcInterceptorContinuation<QGrpcClientStream>;
+    Continuation finalStream([this](Continuation::ReplyType response,
+                                    Continuation::ParamType operation) {
+        startClientStream(operation);
+        return response;
     });
+    dPtr->interceptorManager.run(finalStream, stream, channelOperation);
 
     if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->options()))
         QTimer::singleShot(*deadline, stream.get(), &QGrpcClientStream::cancel);
@@ -252,15 +250,13 @@ QAbstractGrpcChannel::startBidirStream(QLatin1StringView method, QLatin1StringVi
                                                                     serializer());
     auto stream = std::make_shared<QGrpcBidirStream>(channelOperation);
 
-    QTimer::singleShot(0, channelOperation.get(), [this, stream, channelOperation]() mutable {
-        using Continuation = QGrpcInterceptorContinuation<QGrpcBidirStream>;
-        Continuation finalStream([this](Continuation::ReplyType response,
-                                        Continuation::ParamType operation) {
-            startBidirStream(operation);
-            return response;
-        });
-        dPtr->interceptorManager.run(finalStream, stream, channelOperation);
+    using Continuation = QGrpcInterceptorContinuation<QGrpcBidirStream>;
+    Continuation finalStream([this](Continuation::ReplyType response,
+                                    Continuation::ParamType operation) {
+        startBidirStream(operation);
+        return response;
     });
+    dPtr->interceptorManager.run(finalStream, stream, channelOperation);
 
     if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->options()))
         QTimer::singleShot(*deadline, stream.get(), &QGrpcBidirStream::cancel);
