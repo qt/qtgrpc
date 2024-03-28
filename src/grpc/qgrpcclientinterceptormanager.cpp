@@ -1,12 +1,19 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
-#include "qgrpcclientinterceptormanager.h"
-#include "qgrpcclientinterceptormanager_p.h"
 
-#include "qgrpccallreply.h"
-#include "qgrpcstream.h"
+#include <QtGrpc/qgrpcclientinterceptormanager.h>
+#include <QtGrpc/qgrpccallreply.h>
+#include <QtGrpc/qgrpcstream.h>
+
+#include <iterator> // std::make_move_iterator
 
 QT_BEGIN_NAMESPACE
+
+class QGrpcClientInterceptorManagerPrivate
+{
+public:
+    std::vector<std::shared_ptr<QGrpcClientInterceptor>> interceptors;
+};
 
 /*!
     \class QGrpcClientInterceptorManager
@@ -21,47 +28,37 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    The default destructor, destroyes QGrpcClientInterceptorManager object.
+    Constructs an empty QGrpcClientInterceptorManager object.
 */
-QGrpcClientInterceptorManager::~QGrpcClientInterceptorManager()
+QGrpcClientInterceptorManager::QGrpcClientInterceptorManager()
+    : dPtr(std::make_unique<QGrpcClientInterceptorManagerPrivate>())
 {
-    delete d_ptr;
 }
 
 /*!
-    The default constructor, creates QGrpcClientInterceptorManager object.
+    Destroys the QGrpcClientInterceptorManager object.
 */
-QGrpcClientInterceptorManager::QGrpcClientInterceptorManager()
-    : d_ptr(new QGrpcClientInterceptorManagerPrivate())
-{
-}
+QGrpcClientInterceptorManager::~QGrpcClientInterceptorManager() = default;
 
 QGrpcClientInterceptorManager::QGrpcClientInterceptorManager(const QGrpcClientInterceptorManager
                                                                  &other)
-    : d_ptr(new QGrpcClientInterceptorManagerPrivate(*other.d_ptr))
-{
-}
-
-QGrpcClientInterceptorManager::QGrpcClientInterceptorManager(QGrpcClientInterceptorManager &&other)
-    : d_ptr(std::exchange(other.d_ptr, nullptr))
+    : dPtr(std::make_unique<QGrpcClientInterceptorManagerPrivate>(*other.dPtr))
 {
 }
 
 QGrpcClientInterceptorManager &
 QGrpcClientInterceptorManager::operator=(const QGrpcClientInterceptorManager &other)
 {
-    if (&other != this)
-        *d_ptr = *other.d_ptr;
+    if (this != &other)
+        dPtr = std::make_unique<QGrpcClientInterceptorManagerPrivate>(*other.dPtr);
     return *this;
 }
 
+QGrpcClientInterceptorManager::QGrpcClientInterceptorManager(QGrpcClientInterceptorManager
+                                                                 &&) noexcept = default;
+
 QGrpcClientInterceptorManager &
-QGrpcClientInterceptorManager::operator=(QGrpcClientInterceptorManager &&other)
-{
-    if (&other != this)
-        d_ptr = std::exchange(other.d_ptr, nullptr);
-    return *this;
-}
+QGrpcClientInterceptorManager::operator=(QGrpcClientInterceptorManager &&) noexcept = default;
 
 /*!
     Registers a QGrpcClientInterceptor interceptor.
@@ -82,8 +79,7 @@ QGrpcClientInterceptorManager::operator=(QGrpcClientInterceptorManager &&other)
 void QGrpcClientInterceptorManager::registerInterceptor(std::shared_ptr<QGrpcClientInterceptor>
                                                             next)
 {
-    Q_D(QGrpcClientInterceptorManager);
-    d->interceptors.push_back(next);
+    dPtr->interceptors.push_back(std::move(next));
 }
 
 /*!
@@ -107,9 +103,9 @@ void QGrpcClientInterceptorManager::registerInterceptor(std::shared_ptr<QGrpcCli
 void QGrpcClientInterceptorManager::
     registerInterceptors(std::vector<std::shared_ptr<QGrpcClientInterceptor>> nextInterceptors)
 {
-    Q_D(QGrpcClientInterceptorManager);
-    d->interceptors.insert(d_ptr->interceptors.end(), nextInterceptors.rbegin(),
-                           nextInterceptors.rend());
+    dPtr->interceptors.insert(dPtr->interceptors.end(),
+                              std::make_move_iterator(nextInterceptors.rbegin()),
+                              std::make_move_iterator(nextInterceptors.rend()));
 }
 
 /*!
@@ -135,9 +131,7 @@ void QGrpcClientInterceptorManager::run(QGrpcInterceptorContinuation<T> &finalCa
     if (response->isFinished())
         return;
 
-    Q_D(QGrpcClientInterceptorManager);
-
-    if (pos < d_ptr->interceptors.size()) {
+    if (pos < dPtr->interceptors.size()) {
         auto nextCall =
             [this, pos, &finalCall](typename QGrpcInterceptorContinuation<T>::ReplyType response,
                                     typename QGrpcInterceptorContinuation<T>::ParamType operation) {
@@ -145,8 +139,8 @@ void QGrpcClientInterceptorManager::run(QGrpcInterceptorContinuation<T> &finalCa
             };
         auto nextInterceptor = QGrpcInterceptorContinuation<T>(nextCall);
         // Execute interceptors in reversed order
-        const auto rpos = d_ptr->interceptors.size() - 1 - pos;
-        d->interceptors[rpos]->intercept<T>(operation, response, nextInterceptor);
+        const auto rpos = dPtr->interceptors.size() - 1 - pos;
+        dPtr->interceptors[rpos]->intercept<T>(operation, response, nextInterceptor);
         return;
     }
     // It's the time to call actuall call

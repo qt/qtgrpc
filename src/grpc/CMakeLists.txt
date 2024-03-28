@@ -14,7 +14,7 @@ qt_internal_add_module(Grpc
         qgrpccalloptions.h qgrpccalloptions.cpp
         qgrpcchanneloptions.h qgrpcchanneloptions.cpp
         qgrpcclientinterceptor.h qgrpcclientinterceptor.cpp
-        qgrpcclientinterceptormanager.h qgrpcclientinterceptormanager_p.h qgrpcclientinterceptormanager.cpp
+        qgrpcclientinterceptormanager.h qgrpcclientinterceptormanager.cpp
         qgrpcmetadata.h
         qtgrpcglobal.h qtgrpcglobal_p.h  qtgrpcglobal.cpp
         qgrpcserializationformat.h qgrpcserializationformat.cpp
