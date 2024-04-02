@@ -207,9 +207,9 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
     \since 6.7
     Returns the channel attached to this client.
 */
-const std::shared_ptr<QAbstractGrpcChannel> &QAbstractGrpcClient::channel()
+std::shared_ptr<QAbstractGrpcChannel> QAbstractGrpcClient::channel() const noexcept
 {
-    Q_D(QAbstractGrpcClient);
+    Q_D(const QAbstractGrpcClient);
     return d->channel;
 }
 

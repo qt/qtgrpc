@@ -31,7 +31,7 @@ class Q_GRPC_EXPORT QAbstractGrpcClient : public QObject
                        WRITE attachChannel NOTIFY channelChanged)
 public:
     void attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel);
-    const std::shared_ptr<QAbstractGrpcChannel> &channel();
+    [[nodiscard]] std::shared_ptr<QAbstractGrpcChannel> channel() const noexcept;
     ~QAbstractGrpcClient() override;
 
 Q_SIGNALS:
