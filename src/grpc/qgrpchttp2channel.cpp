@@ -195,10 +195,9 @@ private:
     {
         QObject::connect(socket, &T::errorOccurred, channelOperation,
                          [channelOperationPtr = QPointer(channelOperation)](auto error) {
-                             emit channelOperationPtr
-                                 ->errorOccurred({ QGrpcStatus::StatusCode::Unavailable,
-                                                   QString("Network error occurred %1"_L1)
-                                                       .arg(error) });
+                             emit channelOperationPtr->errorOccurred(QGrpcStatus{
+                                 QGrpcStatus::StatusCode::Unavailable,
+                                 QString("Network error occurred %1"_L1).arg(error) });
                              // The errorOccured signal can remove the last channelOperation holder,
                              // and in the same time the last finished signal listener, so we need
                              // to make sure that channelOperationPtr is still valid before
@@ -289,8 +288,10 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
 
                          channelOpInnerPtr->setServerMetadata(std::move(md));
 
-                         if (statusCode != QGrpcStatus::StatusCode::Ok)
-                             emit channelOpInnerPtr->errorOccurred({ statusCode, statusMessage });
+                         if (statusCode != QGrpcStatus::StatusCode::Ok) {
+                             emit channelOpInnerPtr->errorOccurred(QGrpcStatus{ statusCode,
+                                                                                statusMessage });
+                         }
 
                          // The errorOccured signal can remove the last channelOperation holder,
                          // and in the same time the last finished signal listener, so we need
@@ -312,7 +313,7 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
 
                              if (!m_operation.expired()) {
                                  auto channelOp = m_operation.lock();
-                                 emit channelOp->errorOccurred({ code, errorString });
+                                 emit channelOp->errorOccurred(QGrpcStatus{ code, errorString });
                              }
                          }
                          parentChannel->deleteHandler(this);
@@ -620,8 +621,8 @@ void QGrpcHttp2ChannelPrivate::processOperation(std::shared_ptr<QGrpcChannelOper
 
     if (!m_socket->isWritable()) {
         channelOperationAsyncError(channelOperationPtr,
-                                   { QGrpcStatus::StatusCode::Unavailable,
-                                     m_socket->errorString() });
+                                   QGrpcStatus{ QGrpcStatus::StatusCode::Unavailable,
+                                                m_socket->errorString() });
         return;
     }
 
@@ -690,16 +691,16 @@ void QGrpcHttp2ChannelPrivate::sendRequest(Http2Handler *handler)
     auto *channelOpPtr = handler->operation();
     if (!m_connection) {
         channelOperationAsyncError(channelOpPtr,
-                                   { QGrpcStatus::Unavailable,
-                                     "Unable to establish a HTTP/2 connection"_L1 });
+                                   QGrpcStatus{ QGrpcStatus::Unavailable,
+                                                "Unable to establish a HTTP/2 connection"_L1 });
         return;
     }
 
     const auto streamAttempt = m_connection->createStream();
     if (!streamAttempt.ok()) {
         channelOperationAsyncError(channelOpPtr,
-                                   { QGrpcStatus::Unavailable,
-                                     "Unable to create a HTTP/2 stream"_L1 });
+                                   QGrpcStatus{ QGrpcStatus::Unavailable,
+                                                "Unable to create a HTTP/2 stream"_L1 });
         return;
     }
     handler->attachStream(streamAttempt.unwrap());
@@ -736,8 +737,8 @@ void QGrpcHttp2ChannelPrivate::sendRequest(Http2Handler *handler)
 
     if (!handler->sendHeaders(requestHeaders)) {
         channelOperationAsyncError(channelOpPtr,
-                                   { QGrpcStatus::Unavailable,
-                                     "Unable to create HTTP2 stream"_L1 });
+                                   QGrpcStatus{ QGrpcStatus::Unavailable,
+                                                "Unable to create HTTP2 stream"_L1 });
         return;
     }
     handler->sendData(channelOpPtr->argument());

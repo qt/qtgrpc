@@ -86,6 +86,8 @@ QT_BEGIN_NAMESPACE
 class QGrpcStatusPrivate
 {
 public:
+    QGrpcStatusPrivate(QGrpcStatus::StatusCode code) : m_code(code) { }
+
     QGrpcStatusPrivate(QGrpcStatus::StatusCode code, const QString &message)
         : m_code(code), m_message(message)
     {
@@ -96,6 +98,13 @@ public:
     QGrpcStatus::StatusCode m_code;
     QString m_message;
 };
+
+/*!
+    Creates an instance of QGrpcStatus with a status \a code only.
+*/
+QGrpcStatus::QGrpcStatus(StatusCode code) : dPtr(std::make_unique<QGrpcStatusPrivate>(code))
+{
+}
 
 /*!
     Creates an instance of QGrpcStatus with a status \a code and a \a message.

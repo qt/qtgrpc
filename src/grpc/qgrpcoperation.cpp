@@ -178,7 +178,8 @@ void QGrpcOperation::cancel()
 {
     d_func()->isFinished.storeRelaxed(true);
     emit d_func()->channelOperation->cancelled();
-    emit errorOccurred({ QGrpcStatus::Cancelled, "Operation is cancelled by client"_L1 });
+    emit errorOccurred(QGrpcStatus{ QGrpcStatus::Cancelled,
+                                    "Operation is cancelled by client"_L1 });
 }
 
 /*!
@@ -196,19 +197,19 @@ QGrpcStatus QGrpcOperation::deserializationError() const
     switch (serializer()->deserializationError()) {
     case QAbstractProtobufSerializer::InvalidHeaderError: {
         const QLatin1StringView errStr("Response deserialization failed: invalid field found.");
-        status = { QGrpcStatus::InvalidArgument, errStr };
+        status = QGrpcStatus{ QGrpcStatus::InvalidArgument, errStr };
         qGrpcWarning() << errStr;
         emit errorOccurred(status);
     } break;
     case QAbstractProtobufSerializer::NoDeserializerError: {
         const QLatin1StringView errStr("No deserializer was found for a given type.");
-        status = { QGrpcStatus::InvalidArgument, errStr };
+        status = QGrpcStatus{ QGrpcStatus::InvalidArgument, errStr };
         qGrpcWarning() << errStr;
         emit errorOccurred(status);
     } break;
     case QAbstractProtobufSerializer::UnexpectedEndOfStreamError: {
         const QLatin1StringView errStr("Invalid size of received buffer.");
-        status = { QGrpcStatus::OutOfRange, errStr };
+        status = QGrpcStatus{ QGrpcStatus::OutOfRange, errStr };
         qGrpcWarning() << errStr;
         emit errorOccurred(status);
     } break;
@@ -216,7 +217,7 @@ QGrpcStatus QGrpcOperation::deserializationError() const
         Q_FALLTHROUGH();
     default:
         const QLatin1StringView errStr("Deserializing failed, but no error was set.");
-        status = { QGrpcStatus::InvalidArgument, errStr };
+        status = QGrpcStatus{ QGrpcStatus::InvalidArgument, errStr };
         qGrpcWarning() << errStr;
         emit errorOccurred(status);
     }

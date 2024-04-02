@@ -45,7 +45,8 @@ public:
 
     Q_ENUM(StatusCode)
 
-    QGrpcStatus(StatusCode code = StatusCode::Ok, const QString &message = QString());
+    explicit QGrpcStatus(StatusCode code = StatusCode::Ok);
+    explicit QGrpcStatus(StatusCode code, const QString &message);
     ~QGrpcStatus();
 
     QGrpcStatus(const QGrpcStatus &other);

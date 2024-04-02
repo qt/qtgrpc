@@ -104,7 +104,7 @@ QGrpcStatus QAbstractGrpcClientPrivate::checkThread(QLatin1StringView warningPre
 
     QGrpcStatus status;
     if (q->thread() != QThread::currentThread()) {
-        status = { QGrpcStatus::Unknown, threadSafetyWarning(warningPreamble) };
+        status = QGrpcStatus{ QGrpcStatus::Unknown, threadSafetyWarning(warningPreamble) };
         qGrpcCritical() << status.message();
         emit q->errorOccurred(status);
     }
@@ -116,7 +116,7 @@ bool QAbstractGrpcClientPrivate::checkChannel()
     Q_Q(QAbstractGrpcClient);
 
     if (!channel) {
-        emit q->errorOccurred({ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
+        emit q->errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
         return false;
     }
     return true;
@@ -185,7 +185,7 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
     if (channel->dPtr->threadId != QThread::currentThreadId()) {
         const QString status = threadSafetyWarning("QAbstractGrpcClient::attachChannel"_L1);
         qGrpcCritical() << status;
-        emit errorOccurred({ QGrpcStatus::Unknown, status });
+        emit errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown, status });
         return;
     }
     Q_D(QAbstractGrpcClient);
@@ -302,8 +302,8 @@ std::optional<QByteArray> QAbstractGrpcClient::trySerialize(const QProtobufMessa
     using namespace Qt::StringLiterals;
     auto _serializer = d->serializer();
     if (_serializer == nullptr) {
-        Q_EMIT errorOccurred({ QGrpcStatus::Unknown,
-                               "Serializing failed. Serializer is not ready."_L1 });
+        Q_EMIT errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
+                                          "Serializing failed. Serializer is not ready."_L1 });
         return std::nullopt;
     }
     return _serializer->serialize(&arg);
