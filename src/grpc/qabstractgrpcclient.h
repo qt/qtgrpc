@@ -67,7 +67,7 @@ protected:
         } else if constexpr (std::is_same_v<StreamType, QGrpcBidirStream>) {
             return startBidirStream(method, *argData, options);
         }
-        return {};
+        Q_UNREACHABLE_RETURN({});
     }
 
 private:
