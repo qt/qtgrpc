@@ -24,7 +24,7 @@ class Any;
 class Q_PROTOBUF_EXPORT QAbstractProtobufSerializer
 {
 public:
-    enum DeserializationError {
+    enum DeserializationError : uint8_t {
         NoError,
         InvalidHeaderError,
         NoDeserializerError,
