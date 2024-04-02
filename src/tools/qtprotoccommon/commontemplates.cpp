@@ -70,6 +70,7 @@ const char *CommonTemplates::DefaultProtobufIncludesTemplate()
 {
     return "#include <QtProtobuf/qprotobufobject.h>\n"
            "#include <QtProtobuf/qprotobuflazymessagepointer.h>\n"
+           "#include <QtProtobuf/qtprotobuftypes.h>\n"
             "\n";
 }
 

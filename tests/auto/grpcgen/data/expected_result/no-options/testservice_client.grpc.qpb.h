@@ -6,6 +6,7 @@
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufobject.h>
 #include <QtProtobuf/qprotobuflazymessagepointer.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qgrpccallreply.h>

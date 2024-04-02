@@ -10,7 +10,7 @@
 #  pragma qt_sync_stop_processing
 #endif
 
-#include <QtProtobuf/qabstractprotobufserializer.h>
+#include <QtProtobuf/qprotobufpropertyordering.h>
 
 #define Q_PROTOBUF_OBJECT\
     public:\
