@@ -56,9 +56,11 @@ protected:
 #else
     template <
         typename ParamType, typename StreamType,
-        typename IsCompatibleStream = std::disjunction<std::is_same<StreamType, QGrpcServerStream>,
-                                                       std::is_same<StreamType, QGrpcClientStream>,
-                                                       std::is_same<StreamType, QGrpcBidirStream>>>
+        typename IsCompatibleStream = typename std::enable_if_t<
+              std::disjunction_v<std::is_same<StreamType, QGrpcServerStream>,
+                                 std::is_same<StreamType, QGrpcClientStream>,
+                                 std::is_same<StreamType, QGrpcBidirStream>>,
+              bool>>
 #endif
     std::shared_ptr<StreamType> startStream(QLatin1StringView method, const QProtobufMessage &arg,
                                             const QGrpcCallOptions &options)
