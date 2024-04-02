@@ -23,7 +23,7 @@ class QAbstractProtobufSerializer;
 namespace QtProtobufPrivate {
 
 class QProtobufOneofPrivate;
-class Q_PROTOBUF_EXPORT QProtobufOneof final
+class QProtobufOneof final
 {
     template<typename T>
     using IsProtobufMessageType =
@@ -46,10 +46,10 @@ class Q_PROTOBUF_EXPORT QProtobufOneof final
             int>;
 
 public:
-    QProtobufOneof();
-    ~QProtobufOneof();
-    QProtobufOneof(const QProtobufOneof &other);
-    QProtobufOneof &operator=(const QProtobufOneof &other);
+    Q_PROTOBUF_EXPORT  QProtobufOneof();
+    Q_PROTOBUF_EXPORT  ~QProtobufOneof();
+    Q_PROTOBUF_EXPORT  QProtobufOneof(const QProtobufOneof &other);
+    Q_PROTOBUF_EXPORT  QProtobufOneof &operator=(const QProtobufOneof &other);
     QProtobufOneof(QProtobufOneof &&other) noexcept : d_ptr(std::exchange(other.d_ptr, {})) { }
     QProtobufOneof &operator=(QProtobufOneof &&other) noexcept
     {
@@ -93,8 +93,8 @@ public:
                 && *(value<T>()) == otherValue;
     }
 
-    int fieldNumber() const;
-    bool holdsField(int fieldNumber) const;
+    Q_PROTOBUF_EXPORT int fieldNumber() const;
+    Q_PROTOBUF_EXPORT bool holdsField(int fieldNumber) const;
 
 private:
     friend bool operator==(const QProtobufOneof &lhs, const QProtobufOneof &rhs)
@@ -105,12 +105,12 @@ private:
     {
         return !lhs.isEqual(rhs);
     }
-    bool isEqual(const QProtobufOneof &other) const;
+    Q_PROTOBUF_EXPORT bool isEqual(const QProtobufOneof &other) const;
 
     friend class QT_PREPEND_NAMESPACE(QProtobufMessage);
 
-    void setValue(const QVariant &value, int fieldNumber);
-    QVariant &rawValue() const;
+    Q_PROTOBUF_EXPORT void setValue(const QVariant &value, int fieldNumber);
+    Q_PROTOBUF_EXPORT QVariant &rawValue() const;
 
     QProtobufOneofPrivate *d_ptr;
     Q_DECLARE_PRIVATE(QProtobufOneof)
