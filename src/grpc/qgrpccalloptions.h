@@ -16,23 +16,23 @@ QT_BEGIN_NAMESPACE
 
 struct QGrpcCallOptionsPrivate;
 
-class Q_GRPC_EXPORT QGrpcCallOptions final
+class QGrpcCallOptions final
 {
 public:
-    QGrpcCallOptions();
-    ~QGrpcCallOptions();
+    Q_GRPC_EXPORT QGrpcCallOptions();
+    Q_GRPC_EXPORT ~QGrpcCallOptions();
 
-    QGrpcCallOptions(const QGrpcCallOptions &other);
-    QGrpcCallOptions &operator=(const QGrpcCallOptions &other);
-    QGrpcCallOptions(QGrpcCallOptions &&other) noexcept;
-    QGrpcCallOptions &operator=(QGrpcCallOptions &&other) noexcept;
+    Q_GRPC_EXPORT QGrpcCallOptions(const QGrpcCallOptions &other);
+    Q_GRPC_EXPORT QGrpcCallOptions &operator=(const QGrpcCallOptions &other);
+    Q_GRPC_EXPORT QGrpcCallOptions(QGrpcCallOptions &&other) noexcept;
+    Q_GRPC_EXPORT QGrpcCallOptions &operator=(QGrpcCallOptions &&other) noexcept;
 
-    QGrpcCallOptions &withDeadline(std::chrono::milliseconds deadline);
-    QGrpcCallOptions &withMetadata(const QGrpcMetadata &metadata);
-    QGrpcCallOptions &withMetadata(QGrpcMetadata &&metadata) noexcept;
+    Q_GRPC_EXPORT QGrpcCallOptions &withDeadline(std::chrono::milliseconds deadline);
+    Q_GRPC_EXPORT QGrpcCallOptions &withMetadata(const QGrpcMetadata &metadata);
+    Q_GRPC_EXPORT QGrpcCallOptions &withMetadata(QGrpcMetadata &&metadata) noexcept;
 
-    [[nodiscard]] std::optional<std::chrono::milliseconds> deadline() const noexcept;
-    [[nodiscard]] const QGrpcMetadata &metadata() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<std::chrono::milliseconds> deadline() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const noexcept;
 
 private:
     std::unique_ptr<QGrpcCallOptionsPrivate> dPtr;
