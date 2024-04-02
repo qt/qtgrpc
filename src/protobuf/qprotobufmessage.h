@@ -30,7 +30,7 @@ public:
     Q_PROTOBUF_EXPORT bool setProperty(QAnyStringView propertyName, const QVariant &value);
     Q_PROTOBUF_EXPORT bool setProperty(QAnyStringView propertyName, QVariant &&value);
 
-    Q_REQUIRED_RESULT
+    [[nodiscard]]
     Q_PROTOBUF_EXPORT static QProtobufMessagePointer constructByName(const QString &messageType);
 
     Q_PROTOBUF_EXPORT QList<qint32> unknownFieldNumbers() const;
