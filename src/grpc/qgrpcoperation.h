@@ -36,7 +36,7 @@ public:
 
     void read(QProtobufMessage *message) const;
 
-    [[nodiscard]] QGrpcMetadata metadata() const noexcept;
+    [[nodiscard]] const QGrpcMetadata &metadata() const noexcept;
     [[nodiscard]] QLatin1StringView method() const noexcept;
 
     void cancel();

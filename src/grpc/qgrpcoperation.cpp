@@ -136,7 +136,7 @@ void QGrpcOperation::read(QProtobufMessage *message) const
     Getter of the metadata received from the channel. For the HTTP2 channels it
     usually contains the HTTP headers received from the server.
 */
-QGrpcMetadata QGrpcOperation::metadata() const noexcept
+const QGrpcMetadata &QGrpcOperation::metadata() const noexcept
 {
     return d_func()->channelOperation->serverMetadata();
 }
