@@ -38,7 +38,7 @@ public:
     [[nodiscard]] const QGrpcMetadata &serverMetadata() const noexcept;
 
     void setArgument(QByteArrayView arg);
-    void setOptions(QGrpcCallOptions &options);
+    void setOptions(const QGrpcCallOptions &options);
 
     void setClientMetadata(const QGrpcMetadata &metadata);
     void setClientMetadata(QGrpcMetadata &&metadata);

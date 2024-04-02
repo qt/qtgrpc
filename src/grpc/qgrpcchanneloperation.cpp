@@ -183,7 +183,7 @@ void QGrpcChannelOperation::setArgument(QByteArrayView arg)
 /*!
     Updates the call \a options attribute.
 */
-void QGrpcChannelOperation::setOptions(QGrpcCallOptions &options)
+void QGrpcChannelOperation::setOptions(const QGrpcCallOptions &options)
 {
     Q_D(QGrpcChannelOperation);
     d->options = options;
