@@ -22,7 +22,6 @@ using namespace Qt::StringLiterals;
 struct QGrpcCallOptionsPrivate
 {
 public:
-    std::optional<QUrl> host;
     std::optional<std::chrono::milliseconds> deadline;
     QGrpcMetadata metadata;
 };
