@@ -16,7 +16,7 @@
 QT_BEGIN_NAMESPACE
 
 template <typename T>
-class Q_GRPC_EXPORT QGrpcInterceptorContinuation final
+class QGrpcInterceptorContinuation final
 {
 public:
     using ReplyType = typename std::shared_ptr<T>;
