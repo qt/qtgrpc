@@ -87,6 +87,11 @@ public:
     bool checkChannel();
     void addStream(std::shared_ptr<QGrpcOperation> stream);
     void removeStream(std::shared_ptr<QGrpcOperation> stream);
+    std::shared_ptr<QAbstractProtobufSerializer> serializer() const {
+        if (const auto &c = channel)
+            return c->serializer();
+        return nullptr;
+    }
 
     std::shared_ptr<QAbstractGrpcChannel> channel;
     const QLatin1StringView service;
@@ -293,26 +298,15 @@ QAbstractGrpcClient::startBidirStream(QLatin1StringView method, QByteArrayView a
 
 std::optional<QByteArray> QAbstractGrpcClient::trySerialize(const QProtobufMessage &arg)
 {
+    Q_D(QAbstractGrpcClient);
     using namespace Qt::StringLiterals;
-    auto _serializer = serializer();
+    auto _serializer = d->serializer();
     if (_serializer == nullptr) {
         Q_EMIT errorOccurred({ QGrpcStatus::Unknown,
                                "Serializing failed. Serializer is not ready."_L1 });
         return std::nullopt;
     }
     return _serializer->serialize(&arg);
-}
-
-/*!
-    Serializer provides assigned to client serializer.
-    Returns pointer to serializerowned by QProtobufSerializerRegistry.
-*/
-std::shared_ptr<QAbstractProtobufSerializer> QAbstractGrpcClient::serializer() const
-{
-    Q_D(const QAbstractGrpcClient);
-    if (const auto &c = d->channel)
-        return c->serializer();
-    return nullptr;
 }
 
 QT_END_NAMESPACE

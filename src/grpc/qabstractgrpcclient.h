@@ -84,7 +84,6 @@ private:
                                                        const QGrpcCallOptions &options);
 
     std::optional<QByteArray> trySerialize(const QProtobufMessage &arg);
-    std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 
     Q_DISABLE_COPY_MOVE(QAbstractGrpcClient)
     Q_DECLARE_PRIVATE(QAbstractGrpcClient)
