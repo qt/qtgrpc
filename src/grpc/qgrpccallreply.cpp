@@ -23,8 +23,9 @@ using namespace Qt::StringLiterals;
 */
 
 /*!
-    \fn template <typename Func1, typename Func2> void QGrpcCallReply::subscribe(QObject *receiver,
-    Func1 &&finishCallback, Func2 &&errorCallback, Qt::ConnectionType type = Qt::AutoConnection);
+    \fn template <typename FinishCallback, typename ErrorCallback> void QGrpcCallReply::subscribe(
+    QObject *receiver, FinishCallback &&finishCallback, ErrorCallback &&errorCallback,
+    Qt::ConnectionType type = Qt::AutoConnection)
 
     Convenience function to connect the \a finishCallback and
     \a errorCallback of \a receiver to the QGrpcCallReply::finished and
@@ -33,15 +34,15 @@ using namespace Qt::StringLiterals;
     Calling this function is equivalent to the following:
     \code
         QObject::connect(this, &QGrpcCallReply::finished, receiver,
-                         std::forward<Func1>(finishCallback), type);
+                         std::forward<FinishCallback>(finishCallback), type);
         QObject::connect(this, &QGrpcCallReply::errorOccurred, receiver,
-                         std::forward<Func2>(errorCallback), type);
+                         std::forward<ErrorCallback>(errorCallback), type);
     \endcode
 */
 
 /*!
-    \fn template <typename Func1> void QGrpcCallReply::subscribe(QObject *receiver,
-    Func1 &&finishCallback, Qt::ConnectionType type = Qt::AutoConnection);
+    \fn template <typename FinishCallback> void QGrpcCallReply::subscribe(QObject *receiver,
+    FinishCallback &&finishCallback, Qt::ConnectionType type = Qt::AutoConnection)
 
     Convenience function to connect the \a finishCallback of \a receiver to
     the QGrpcCallReply::finished signal with given connection \a type.
@@ -49,7 +50,7 @@ using namespace Qt::StringLiterals;
     Calling this function is equivalent to the following:
     \code
         QObject::connect(this, &QGrpcCallReply::finished, receiver,
-                         std::forward<Func1>(finishCallback), type);
+                         std::forward<FinishCallback>(finishCallback), type);
     \endcode
 */
 

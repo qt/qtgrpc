@@ -23,22 +23,22 @@ public:
     explicit QGrpcCallReply(std::shared_ptr<QGrpcChannelOperation> channelOperation);
     ~QGrpcCallReply() override;
 
-    template<typename Func1, typename Func2>
-    void subscribe(QObject *receiver, Func1 &&finishCallback, Func2 &&errorCallback,
+    template <typename FinishCallback, typename ErrorCallback>
+    void subscribe(QObject *receiver, FinishCallback &&finishCallback, ErrorCallback &&errorCallback,
                    Qt::ConnectionType type = Qt::AutoConnection)
     {
         QObject::connect(this, &QGrpcCallReply::finished, receiver,
-                         std::forward<Func1>(finishCallback), type);
+                         std::forward<FinishCallback>(finishCallback), type);
         QObject::connect(this, &QGrpcCallReply::errorOccurred, receiver,
-                         std::forward<Func2>(errorCallback), type);
+                         std::forward<ErrorCallback>(errorCallback), type);
     }
 
-    template<typename Func1>
-    void subscribe(QObject *receiver, Func1 &&finishCallback,
+    template <typename FinishCallback>
+    void subscribe(QObject *receiver, FinishCallback &&finishCallback,
                    Qt::ConnectionType type = Qt::AutoConnection)
     {
         QObject::connect(this, &QGrpcCallReply::finished, receiver,
-                         std::forward<Func1>(finishCallback), type);
+                         std::forward<FinishCallback>(finishCallback), type);
     }
 
 private:
