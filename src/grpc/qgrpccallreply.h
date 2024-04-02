@@ -42,7 +42,6 @@ public:
     }
 
 private:
-    QGrpcCallReply();
     Q_DISABLE_COPY_MOVE(QGrpcCallReply)
 };
 
