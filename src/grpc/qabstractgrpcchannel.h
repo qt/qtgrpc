@@ -39,16 +39,16 @@ public:
 protected:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
                                          QByteArrayView arg,
-                                         const QGrpcCallOptions &options = QGrpcCallOptions());
+                                         const QGrpcCallOptions &options);
     std::shared_ptr<QGrpcServerStream>
     startServerStream(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
-                      const QGrpcCallOptions &options = QGrpcCallOptions());
+                      const QGrpcCallOptions &options);
     std::shared_ptr<QGrpcClientStream>
     startClientStream(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
-                      const QGrpcCallOptions &options = QGrpcCallOptions());
+                      const QGrpcCallOptions &options);
     std::shared_ptr<QGrpcBidirStream>
     startBidirStream(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
-                     const QGrpcCallOptions &options = QGrpcCallOptions());
+                     const QGrpcCallOptions &options);
 
     virtual void call(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
     virtual void startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
