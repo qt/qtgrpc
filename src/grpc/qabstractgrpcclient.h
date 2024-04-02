@@ -47,11 +47,12 @@ protected:
 #ifdef Q_QDOC
     template <typename StreamType>
 #else
-    template <
-        typename StreamType,
-        typename IsCompatibleStream = std::disjunction<std::is_same<StreamType, QGrpcServerStream>,
-                                                       std::is_same<StreamType, QGrpcClientStream>,
-                                                       std::is_same<StreamType, QGrpcBidirStream>>>
+    template <typename StreamType,
+              typename IsCompatibleStream = typename std::enable_if_t<
+                  std::disjunction_v<std::is_same<StreamType, QGrpcServerStream>,
+                                     std::is_same<StreamType, QGrpcClientStream>,
+                                     std::is_same<StreamType, QGrpcBidirStream>>,
+                  bool>>
 #endif
     std::shared_ptr<StreamType> startStream(QLatin1StringView method, const QProtobufMessage &arg,
                                             const QGrpcCallOptions &options)
