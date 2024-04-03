@@ -278,9 +278,9 @@ QAnyStringView Any::defaultUrlPrefix()
     return u"type.googleapis.com";
 }
 
-bool Any::equals(const Any &other) const noexcept
+bool comparesEqual(const Any &lhs, const Any &rhs) noexcept
 {
-    return typeUrl() == other.typeUrl() && value() == other.value();
+    return lhs.typeUrl() == rhs.typeUrl() && lhs.value() == rhs.value();
 }
 
 /*!
