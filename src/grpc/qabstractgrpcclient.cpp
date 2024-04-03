@@ -224,6 +224,13 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
                                    emit errorOccurred(status);
                                });
 
+
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_MSVC(4573)
+    connect(reply.get(), &QGrpcCallReply::finished, this, [errorConnection] {
+        QObject::disconnect(*errorConnection);
+    });
+QT_WARNING_POP
     return reply;
 }
 
