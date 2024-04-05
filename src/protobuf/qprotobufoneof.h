@@ -18,8 +18,6 @@
 
 QT_BEGIN_NAMESPACE
 
-class QAbstractProtobufSerializer;
-
 namespace QtProtobufPrivate {
 
 class QProtobufOneofPrivate;
