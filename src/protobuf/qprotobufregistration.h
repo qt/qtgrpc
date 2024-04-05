@@ -40,11 +40,6 @@ using Serializer = void (*)(const QAbstractProtobufSerializer *, const QVariant 
                             const QProtobufPropertyOrderingInfo &);
 using Deserializer = void (*)(const QAbstractProtobufSerializer *, QVariant &);
 
-/*!
- \private
- \brief SerializationHandlers contains set of objects that required for class
- serialization/deserialization
- */
 struct SerializationHandler
 {
     Serializer serializer = nullptr; /*!< serializer assigned to class */
@@ -54,10 +49,6 @@ struct SerializationHandler
 extern Q_PROTOBUF_EXPORT SerializationHandler findHandler(QMetaType type);
 extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, const SerializationHandler &handlers);
 
-/*!
- \private
- \brief default serializer template for list of type T objects that inherits from QProtobufMessage
- */
 template <typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
 void serializeList(const QAbstractProtobufSerializer *serializer, const QVariant &listValue,
@@ -69,10 +60,6 @@ void serializeList(const QAbstractProtobufSerializer *serializer, const QVariant
     }
 }
 
-/*!
- \private
- \brief default serializer template for map of key K, value V
- */
 template <typename K, typename V,
           typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
 void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant &value,
@@ -85,11 +72,6 @@ void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant 
     }
 }
 
-/*!
- \private
- \brief default serializer template for map of type key K, value V. Specialization for V that
- inherits from QProtobufMessage
- */
 template <typename K, typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
 void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant &value,
@@ -102,10 +84,6 @@ void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant 
     }
 }
 
-/*!
- \private
- \brief default serializer template for enum types
- */
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
 void serializeEnum(const QAbstractProtobufSerializer *serializer, const QVariant &value,
                    const QProtobufPropertyOrderingInfo &fieldInfo)
@@ -116,10 +94,6 @@ void serializeEnum(const QAbstractProtobufSerializer *serializer, const QVariant
                               fieldInfo);
 }
 
-/*!
- \private
- \brief default serializer template for enum list types
- */
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
 void serializeEnumList(const QAbstractProtobufSerializer *serializer, const QVariant &value,
                        const QProtobufPropertyOrderingInfo &fieldInfo)
@@ -133,10 +107,6 @@ void serializeEnumList(const QAbstractProtobufSerializer *serializer, const QVar
     serializer->serializeEnumList(intList, metaEnum, fieldInfo);
 }
 
-/*!
- \private
- \brief default deserializer template for list of type T objects that inherits from QProtobufMessage
- */
 template <typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
 void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &previous)
@@ -153,11 +123,6 @@ void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &pr
     }
 }
 
-/*!
- \private
- *
- \brief default deserializer template for map of key K, value V
- */
 template <typename K, typename V,
           typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
 void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &previous)
@@ -176,12 +141,6 @@ void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &pre
     }
 }
 
-/*!
- \private
- *
- \brief default deserializer template for map of type key K, value V. Specialization for V
-        that inherits from QProtobufMessage
- */
 template <typename K, typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
 void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &previous)
@@ -201,11 +160,6 @@ void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &pre
     }
 }
 
-/*!
- \private
- *
- \brief default deserializer template for enum type T
- */
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
 void deserializeEnum(const QAbstractProtobufSerializer *serializer, QVariant &to)
 {
@@ -216,11 +170,6 @@ void deserializeEnum(const QAbstractProtobufSerializer *serializer, QVariant &to
         to = QVariant::fromValue<T>(static_cast<T>(intValue._t));
 }
 
-/*!
- \private
- *
- \brief default deserializer template for enumList type T
- */
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
 void deserializeEnumList(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
