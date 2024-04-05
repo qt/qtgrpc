@@ -19,7 +19,7 @@ class QGrpcCallOptions;
 class QGrpcChannelOperationPrivate;
 class QGrpcStatus;
 
-class Q_GRPC_EXPORT QGrpcChannelOperation : public QObject
+class Q_GRPC_EXPORT QGrpcChannelOperation final : public QObject
 {
     Q_OBJECT
 public:
