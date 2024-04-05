@@ -197,7 +197,8 @@ private:
                          [channelOperationPtr = QPointer(channelOperation)](auto error) {
                              emit channelOperationPtr->errorOccurred(QGrpcStatus{
                                  QGrpcStatus::StatusCode::Unavailable,
-                                 QString("Network error occurred %1"_L1).arg(error) });
+                                 QGrpcHttp2ChannelPrivate::tr("Network error occurred %1")
+                                     .arg(error) });
                              // The errorOccured signal can remove the last channelOperation holder,
                              // and in the same time the last finished signal listener, so we need
                              // to make sure that channelOperationPtr is still valid before
@@ -692,8 +693,9 @@ void QGrpcHttp2ChannelPrivate::sendRequest(Http2Handler *handler)
     auto *channelOpPtr = handler->operation();
     if (!m_connection) {
         channelOperationAsyncError(channelOpPtr,
-                                   QGrpcStatus{ QGrpcStatus::Unavailable,
-                                                "Unable to establish a HTTP/2 connection"_L1 });
+                                   QGrpcStatus{
+                                       QGrpcStatus::Unavailable,
+                                       tr("Unable to establish an HTTP/2 connection") });
         return;
     }
 
@@ -701,7 +703,7 @@ void QGrpcHttp2ChannelPrivate::sendRequest(Http2Handler *handler)
     if (!streamAttempt.ok()) {
         channelOperationAsyncError(channelOpPtr,
                                    QGrpcStatus{ QGrpcStatus::Unavailable,
-                                                "Unable to create a HTTP/2 stream"_L1 });
+                                                tr("Unable to create an HTTP/2 stream") });
         return;
     }
     handler->attachStream(streamAttempt.unwrap());
@@ -739,7 +741,7 @@ void QGrpcHttp2ChannelPrivate::sendRequest(Http2Handler *handler)
     if (!handler->sendHeaders(requestHeaders)) {
         channelOperationAsyncError(channelOpPtr,
                                    QGrpcStatus{ QGrpcStatus::Unavailable,
-                                                "Unable to create HTTP2 stream"_L1 });
+                                                tr("Unable to create an HTTP/2 stream") });
         return;
     }
     handler->sendData(channelOpPtr->argument());

@@ -22,10 +22,11 @@ using namespace Qt::StringLiterals;
 namespace {
 static QString threadSafetyWarning(QLatin1StringView methodName)
 {
-    return "%1 is called from a different thread.\n"
-           "Qt GRPC doesn't guarantee thread safety on the channel level.\n"
-           "You have to be confident that channel routines are working in "
-           "the same thread as QAbstractGrpcClient."_L1.arg(methodName);
+    return QAbstractGrpcClient::tr("%1 is called from a different thread.\n"
+                                   "Qt GRPC doesn't guarantee thread safety on the channel level.\n"
+                                   "You have to be confident that channel routines are working in "
+                                   "the same thread as QAbstractGrpcClient.")
+        .arg(methodName);
 }
 } // namespace
 
@@ -116,7 +117,8 @@ bool QAbstractGrpcClientPrivate::checkChannel()
     Q_Q(QAbstractGrpcClient);
 
     if (!channel) {
-        emit q->errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown, "No channel(s) attached."_L1 });
+        emit q->errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
+                                           q->tr("No channel(s) attached.") });
         return false;
     }
     return true;
@@ -309,8 +311,8 @@ std::optional<QByteArray> QAbstractGrpcClient::trySerialize(const QProtobufMessa
     using namespace Qt::StringLiterals;
     auto _serializer = d->serializer();
     if (_serializer == nullptr) {
-        Q_EMIT errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
-                                          "Serializing failed. Serializer is not ready."_L1 });
+        Q_EMIT errorOccurred(QGrpcStatus{
+            QGrpcStatus::Unknown, tr("Serializing failed. Serializer is not ready.") });
         return std::nullopt;
     }
     return _serializer->serialize(&arg);

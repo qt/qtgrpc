@@ -180,7 +180,7 @@ void QGrpcOperation::cancel()
     d_func()->isFinished.storeRelaxed(true);
     emit d_func()->channelOperation->cancelled();
     emit errorOccurred(QGrpcStatus{ QGrpcStatus::Cancelled,
-                                    "Operation is cancelled by client"_L1 });
+                                    tr("Operation is cancelled by client") });
 }
 
 /*!
@@ -197,19 +197,19 @@ QGrpcStatus QGrpcOperation::deserializationError() const
     QGrpcStatus status;
     switch (serializer()->deserializationError()) {
     case QAbstractProtobufSerializer::InvalidHeaderError: {
-        const QLatin1StringView errStr("Response deserialization failed: invalid field found.");
+        const QString errStr = tr("Response deserialization failed: invalid field found.");
         status = QGrpcStatus{ QGrpcStatus::InvalidArgument, errStr };
         qGrpcWarning() << errStr;
         emit errorOccurred(status);
     } break;
     case QAbstractProtobufSerializer::NoDeserializerError: {
-        const QLatin1StringView errStr("No deserializer was found for a given type.");
+        const QString errStr = tr("No deserializer was found for a given type.");
         status = QGrpcStatus{ QGrpcStatus::InvalidArgument, errStr };
         qGrpcWarning() << errStr;
         emit errorOccurred(status);
     } break;
     case QAbstractProtobufSerializer::UnexpectedEndOfStreamError: {
-        const QLatin1StringView errStr("Invalid size of received buffer.");
+        const QString errStr = tr("Invalid size of received buffer.");
         status = QGrpcStatus{ QGrpcStatus::OutOfRange, errStr };
         qGrpcWarning() << errStr;
         emit errorOccurred(status);
@@ -217,7 +217,7 @@ QGrpcStatus QGrpcOperation::deserializationError() const
     case QAbstractProtobufSerializer::NoError:
         Q_FALLTHROUGH();
     default:
-        const QLatin1StringView errStr("Deserializing failed, but no error was set.");
+        const QString errStr = tr("Deserializing failed, but no error was set.");
         status = QGrpcStatus{ QGrpcStatus::InvalidArgument, errStr };
         qGrpcWarning() << errStr;
         emit errorOccurred(status);
