@@ -74,7 +74,7 @@ using namespace Qt::StringLiterals;
         };
         auto channel = std::make_shared<
             QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
-                               .withSerializationFormat({ "dummy",
+                               .withSerializationFormat(QGrpcSerializationFormat{ "dummy",
                                                           std::make_shared<DummySerializer>() }));
     \endcode
 
@@ -505,15 +505,16 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &op
     if (it != channelOptions.metadata().end()) {
         if (formatSuffix.isEmpty() && it->second != DefaultContentType) {
             if (it->second == "application/grpc+json") {
-                channelOptions.withSerializationFormat({ QGrpcSerializationFormat::Format::Json });
+                channelOptions.withSerializationFormat(QGrpcSerializationFormat{
+                    QGrpcSerializationFormat::Format::Json });
             } else if (it->second == "application/grpc+proto" || it->second == DefaultContentType) {
-                channelOptions
-                    .withSerializationFormat({ QGrpcSerializationFormat::Format::Protobuf });
+                channelOptions.withSerializationFormat(QGrpcSerializationFormat{
+                    QGrpcSerializationFormat::Format::Protobuf });
             } else {
                 qGrpcWarning() << "Cannot choose the serializer for " << ContentTypeHeader
                                << it->second << ". Using protobuf format as the default one.";
-                channelOptions
-                    .withSerializationFormat({ QGrpcSerializationFormat::Format::Default });
+                channelOptions.withSerializationFormat(QGrpcSerializationFormat{
+                    QGrpcSerializationFormat::Format::Default });
             }
         } else if (it->second != contentTypeFromOptions) {
             warnAboutFormatConflict = true;

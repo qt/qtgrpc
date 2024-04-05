@@ -30,14 +30,9 @@ public:
     virtual QString deserializationErrorString() const override { return {}; }
 
 protected:
-    virtual QByteArray
-    serializeMessage(const QProtobufMessage *) const override
-    {
-        return {};
-    }
+    virtual QByteArray serializeMessage(const QProtobufMessage *) const override { return {}; }
 
-    virtual bool deserializeMessage(QProtobufMessage *,
-                                    QByteArrayView) const override
+    virtual bool deserializeMessage(QProtobufMessage *, QByteArrayView) const override
     {
         return true;
     }
@@ -46,20 +41,14 @@ protected:
                          const QtProtobufPrivate::QProtobufPropertyOrderingInfo &) const override
     {
     }
-    bool deserializeObject(QProtobufMessage *) const override
-    {
-        return true;
-    }
+    bool deserializeObject(QProtobufMessage *) const override { return true; }
 
     void
     serializeListObject(const QProtobufMessage *,
                         const QtProtobufPrivate::QProtobufPropertyOrderingInfo &) const override
     {
     }
-    bool deserializeListObject(QProtobufMessage *) const override
-    {
-        return true;
-    }
+    bool deserializeListObject(QProtobufMessage *) const override { return true; }
 
     void serializeMapPair(const QVariant &, const QVariant &,
                           const QtProtobufPrivate::QProtobufPropertyOrderingInfo &) const override
@@ -83,7 +72,7 @@ protected:
         return true;
     }
 };
-}
+} // namespace
 
 class QGrpcHttp2ChannelTest : public QObject
 {
@@ -106,7 +95,6 @@ void QGrpcHttp2ChannelTest::CheckMethodsGeneration()
     client.testMethod(request, &client, [](std::shared_ptr<QGrpcCallReply>) {});
 }
 
-
 void QGrpcHttp2ChannelTest::AttachChannelThreadTest()
 {
     std::shared_ptr<QGrpcHttp2Channel> channel;
@@ -128,9 +116,9 @@ void QGrpcHttp2ChannelTest::AttachChannelThreadTest()
     QTRY_COMPARE_EQ(clientErrorSpy.count(), 1);
     QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(), QGrpcStatus::Unknown);
     QVERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
-                    .message()
-                    .startsWith("QAbstractGrpcClient::attachChannel is called from a different "
-                                "thread."));
+                .message()
+                .startsWith("QAbstractGrpcClient::attachChannel is called from a different "
+                            "thread."));
 }
 
 void QGrpcHttp2ChannelTest::SerializationFormat()
@@ -142,14 +130,14 @@ void QGrpcHttp2ChannelTest::SerializationFormat()
 
     channel = std::make_shared<
         QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
-                               .withSerializationFormat({ QGrpcSerializationFormat::Format::
-                                                              Json }));
+                               .withSerializationFormat(QGrpcSerializationFormat{
+                                   QGrpcSerializationFormat::Format::Json }));
     QVERIFY(dynamic_cast<QProtobufJsonSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
         QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
-                               .withSerializationFormat({ QGrpcSerializationFormat::Format::
-                                                              Protobuf }));
+                               .withSerializationFormat(QGrpcSerializationFormat{
+                                   QGrpcSerializationFormat::Format::Protobuf }));
     QVERIFY(dynamic_cast<QProtobufSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
@@ -162,53 +150,68 @@ void QGrpcHttp2ChannelTest::SerializationFormat()
 void QGrpcHttp2ChannelTest::SerializationFormatWithHeaders()
 {
     std::shared_ptr<QAbstractGrpcChannel> channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba, "application/grpc"_ba } }));
     QVERIFY(dynamic_cast<QProtobufSerializer *>(channel->serializer().get()) != nullptr);
 
     // Initialize with various content-type headers
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba,
                                                  "application/grpc+json"_ba } }));
     QVERIFY(dynamic_cast<QProtobufJsonSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba,
                                                  "application/grpc+proto"_ba } }));
     QVERIFY(dynamic_cast<QProtobufSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba,
                                                  "application/grpc+unknown"_ba } }));
     QVERIFY(dynamic_cast<QProtobufSerializer *>(channel->serializer().get()) != nullptr);
 
     // Initialize with the default content-type header and various serialization formats
     channel = std::make_shared<QGrpcHttp2Channel>(QGrpcChannelOptions{
-        QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                                       .withMetadata({ { "content-type"_ba,
                                                                         "application/grpc"_ba } })
-                                                      .withSerializationFormat({}));
+                                                      .withSerializationFormat(QGrpcSerializationFormat{}));
     QVERIFY(dynamic_cast<QProtobufSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba, "application/grpc"_ba } })
-                               .withSerializationFormat({ QGrpcSerializationFormat::Format::
-                                                              Json }));
+                               .withSerializationFormat(QGrpcSerializationFormat{
+                                   QGrpcSerializationFormat::Format::Json }));
     QVERIFY(dynamic_cast<QProtobufJsonSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba, "application/grpc"_ba } })
-                               .withSerializationFormat({ QGrpcSerializationFormat::Format::
-                                                              Protobuf }));
+                               .withSerializationFormat(QGrpcSerializationFormat{
+                                   QGrpcSerializationFormat::Format::Protobuf }));
     QVERIFY(dynamic_cast<QProtobufSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba, "application/grpc"_ba } })
                                .withSerializationFormat({ "dummy",
                                                           std::make_shared<DummySerializer>() }));
@@ -216,19 +219,26 @@ void QGrpcHttp2ChannelTest::SerializationFormatWithHeaders()
 
     // Initialize with the content-type header incompatible with serialization format
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba, "application/grpc+json"_ba } })
-                               .withSerializationFormat({ QGrpcSerializationFormat::Format::Protobuf }));
+                               .withSerializationFormat(QGrpcSerializationFormat{
+                                   QGrpcSerializationFormat::Format::Protobuf }));
     QVERIFY(dynamic_cast<QProtobufSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba, "application/grpc+json"_ba } })
-                               .withSerializationFormat({}));
+                               .withSerializationFormat(QGrpcSerializationFormat{}));
     QVERIFY(dynamic_cast<QProtobufJsonSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba, "application/grpc+json"_ba } })
                                .withSerializationFormat({ "dummy",
                                                           std::make_shared<DummySerializer>() }));
@@ -236,28 +246,35 @@ void QGrpcHttp2ChannelTest::SerializationFormatWithHeaders()
 
     // Initialize with the content-type header matching the serialization format
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba, "application/grpc+proto"_ba } })
-                               .withSerializationFormat({ QGrpcSerializationFormat::Format::
-                                                              Protobuf }));
+                               .withSerializationFormat(QGrpcSerializationFormat{
+                                   QGrpcSerializationFormat::Format::Protobuf }));
     QVERIFY(dynamic_cast<QProtobufSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba, "application/grpc+json"_ba } })
-                               .withSerializationFormat({ QGrpcSerializationFormat::Format::
-                                                              Json }));
+                               .withSerializationFormat(QGrpcSerializationFormat{
+                                   QGrpcSerializationFormat::Format::Json }));
     QVERIFY(dynamic_cast<QProtobufJsonSerializer *>(channel->serializer().get()) != nullptr);
 
-    channel = std::make_shared<QGrpcHttp2Channel>(QGrpcChannelOptions{
-        QUrl("http://localhost:50051", QUrl::StrictMode) }
-                                                      .withMetadata({ { "content-type"_ba,
-                                                                        "application/grpc"_ba } })
-                                                      .withSerializationFormat({}));
+    channel = std::make_shared<
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
+                               .withMetadata({ { "content-type"_ba, "application/grpc"_ba } })
+                               .withSerializationFormat(QGrpcSerializationFormat{}));
     QVERIFY(dynamic_cast<QProtobufSerializer *>(channel->serializer().get()) != nullptr);
 
     channel = std::make_shared<
-        QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+        QGrpcHttp2Channel>(QGrpcChannelOptions{
+        QUrl("http://localhost:50051", QUrl::StrictMode)
+    }
                                .withMetadata({ { "content-type"_ba, "application/grpc+dummy"_ba } })
                                .withSerializationFormat({ "dummy",
                                                           std::make_shared<DummySerializer>() }));

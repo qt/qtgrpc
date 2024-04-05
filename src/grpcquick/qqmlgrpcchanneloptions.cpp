@@ -24,9 +24,7 @@ public:
 #endif // QT_CONFIG(ssl)
 };
 
-QQmlGrpcChannelOptionsPrivate::QQmlGrpcChannelOptionsPrivate()
-    : QObjectPrivate(),
-      m_options(QUrl())
+QQmlGrpcChannelOptionsPrivate::QQmlGrpcChannelOptionsPrivate() : QObjectPrivate(), m_options(QUrl())
 {
 }
 
@@ -49,8 +47,8 @@ void QQmlGrpcChannelOptions::setHost(const QUrl &newUrl)
 
 qint64 QQmlGrpcChannelOptions::deadline() const
 {
-    std::chrono::milliseconds ms
-            = d_func()->m_options.deadline().value_or(std::chrono::milliseconds(0));
+    std::chrono::milliseconds
+        ms = d_func()->m_options.deadline().value_or(std::chrono::milliseconds(0));
     return ms.count();
 }
 
@@ -85,20 +83,19 @@ void QQmlGrpcChannelOptions::setMetadata(QQmlGrpcMetadata *value)
     }
 }
 
-QQmlSerializationFormat::GrpcSerializationFormat
-QQmlGrpcChannelOptions::serializationFormat() const
+QQmlSerializationFormat::GrpcSerializationFormat QQmlGrpcChannelOptions::serializationFormat() const
 {
     return d_func()->m_format;
 }
 
-void QQmlGrpcChannelOptions::setSerializationFormat(
-    QQmlSerializationFormat::GrpcSerializationFormat format)
+void QQmlGrpcChannelOptions::setSerializationFormat(QQmlSerializationFormat::GrpcSerializationFormat
+                                                        format)
 {
     Q_D(QQmlGrpcChannelOptions);
     if (d->m_format != format) {
         d->m_format = format;
-        d->m_options.withSerializationFormat(
-            {static_cast<QGrpcSerializationFormat::Format>(format)} );
+        d->m_options.withSerializationFormat(QGrpcSerializationFormat{
+            static_cast<QGrpcSerializationFormat::Format>(format) });
         emit serializationFormatChanged();
     }
 }
