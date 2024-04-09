@@ -34,11 +34,11 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcMetadata : public QObject
     Q_PROPERTY(QVariantMap data READ data WRITE setData NOTIFY dataChanged REQUIRED)
 public:
     QQmlGrpcMetadata(QObject *parent = nullptr);
-    ~QQmlGrpcMetadata();
+    ~QQmlGrpcMetadata() override;
 
     const QGrpcMetadata &metadata() const { return m_metadata; }
     const QVariantMap &data() const { return m_variantdata; }
-    void setData(const QVariantMap &value);
+    void setData(const QVariantMap &data);
 
 signals:
     void dataChanged();
