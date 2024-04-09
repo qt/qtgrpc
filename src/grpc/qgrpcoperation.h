@@ -47,7 +47,8 @@ Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status) const;
 
 protected:
-    explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation);
+    explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                            QObject *parent = nullptr);
 
     [[nodiscard]] QGrpcChannelOperation *channelOperation() const noexcept;
     [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const noexcept;

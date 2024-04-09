@@ -68,8 +68,9 @@ public:
     QAtomicInteger<bool> isFinished{ false };
 };
 
-QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation)
-    : QObject(*new QGrpcOperationPrivate(std::move(channelOperation)))
+QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                               QObject *parent)
+    : QObject(*new QGrpcOperationPrivate(std::move(channelOperation)), parent)
 {
     [[maybe_unused]] bool valid =
             QObject::connect(d_func()->channelOperation.get(), &QGrpcChannelOperation::dataReady,
@@ -142,7 +143,7 @@ const QGrpcMetadata &QGrpcOperation::metadata() const noexcept
 }
 
 /*!
-    Getter of the method that this operation was intialized with.
+    Getter of the method that this operation was initialized with.
 */
 QLatin1StringView QGrpcOperation::method() const noexcept
 {

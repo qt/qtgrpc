@@ -23,7 +23,8 @@ class Q_GRPC_EXPORT QGrpcServerStream final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
+    explicit QGrpcServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                               QObject *parent = nullptr);
     ~QGrpcServerStream() override;
 
 Q_SIGNALS:
@@ -38,7 +39,8 @@ class Q_GRPC_EXPORT QGrpcClientStream final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
+    explicit QGrpcClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                               QObject *parent = nullptr);
     ~QGrpcClientStream() override;
 #ifdef Q_QDOC
     template <typename T>
@@ -62,7 +64,8 @@ class Q_GRPC_EXPORT QGrpcBidirStream final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation);
+    explicit QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+                              QObject *parent = nullptr);
     ~QGrpcBidirStream() override;
 
 #ifdef Q_QDOC
