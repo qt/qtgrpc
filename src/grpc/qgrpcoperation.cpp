@@ -153,7 +153,7 @@ QLatin1StringView QGrpcOperation::method() const noexcept
     \internal
     Returns a pointer to the assigned channel-side QGrpcChannelOperation.
 */
-const QGrpcChannelOperation *QGrpcOperation::channelOperation() const noexcept
+QGrpcChannelOperation *QGrpcOperation::channelOperation() const noexcept
 {
     return d_func()->channelOperation.get();
 }

@@ -49,7 +49,7 @@ Q_SIGNALS:
 protected:
     explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation);
 
-    [[nodiscard]] const QGrpcChannelOperation *channelOperation() const noexcept;
+    [[nodiscard]] QGrpcChannelOperation *channelOperation() const noexcept;
     [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const noexcept;
 
 private:

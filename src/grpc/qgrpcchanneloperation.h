@@ -47,7 +47,7 @@ public:
 
 Q_SIGNALS:
     void dataReady(const QByteArray &data);
-    void sendData(const QByteArray &data) const;
+    void sendData(const QByteArray &data);
     void errorOccurred(const QGrpcStatus &status);
     void finished();
 

@@ -35,7 +35,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QGrpcChannelOperation::sendData(const QByteArray &data) const
+    \fn void QGrpcChannelOperation::sendData(const QByteArray &data)
 
     The signal is emitted when the client tries to send a new message to the
     channel.
