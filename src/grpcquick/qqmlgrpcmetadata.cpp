@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "qqmlgrpcmetadata_p.h"
+#include <QtCore/qstringtokenizer.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -21,9 +22,8 @@ void QQmlGrpcMetadata::setData(const QVariantMap &data)
     m_variantdata = data;
     for (const auto&[key, val]: m_variantdata.asKeyValueRange()) {
         // Transform the variant map into a std::multimap
-        const QStringList valueList = val.toString().split(u',');
-        for (const QString &splitVal : valueList)
-            m_metadata.insert(std::make_pair(key.toUtf8(), splitVal.toUtf8()));
+        for (const auto &it : QStringTokenizer(get<QString>(val), u','))
+            m_metadata.insert(std::make_pair(key.toUtf8(), it.toUtf8()));
     }
     emit dataChanged();
 }
