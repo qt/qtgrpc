@@ -89,6 +89,8 @@ if(protoc_version VERSION_GREATER_EQUAL "3.12" AND protoc_version VERSION_LESS "
     )
 endif()
 
+add_dependencies(tst_qtprotobufgen tst_qtprotobufgen_gen tst_qtprotobufgen_custom_exports_gen)
+
 if(TARGET Qt6::Qml)
     qt_internal_extend_target(tst_qtprotobufgen
         DEFINES
