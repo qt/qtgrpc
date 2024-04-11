@@ -134,6 +134,36 @@ void QGrpcOperation::read(QProtobufMessage *message) const
 }
 
 /*!
+   \since 6.8
+
+   Returns the last deserialization error.
+
+   \sa QAbstractProtobufSerializer::deserializationError
+*/
+QAbstractProtobufSerializer::DeserializationError QGrpcOperation::deserializationError() const
+{
+    const auto ser = d_func()->channelOperation->serializer();
+    if (!ser)
+        return QAbstractProtobufSerializer::NoDeserializerError;
+    return ser->deserializationError();
+}
+
+/*!
+   \since 6.8
+
+   Returns the last deserialization error string.
+
+   \sa QAbstractProtobufSerializer::deserializationErrorString
+*/
+QString QGrpcOperation::deserializationErrorString() const
+{
+    const auto ser = d_func()->channelOperation->serializer();
+    if (!ser)
+        return QStringLiteral("serializer not available");
+    return ser->deserializationErrorString();
+}
+
+/*!
     Getter of the metadata received from the channel. For the HTTP2 channels it
     usually contains the HTTP headers received from the server.
 */

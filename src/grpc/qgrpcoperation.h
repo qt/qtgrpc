@@ -36,6 +36,9 @@ public:
 
     void read(QProtobufMessage *message) const;
 
+    [[nodiscard]] QAbstractProtobufSerializer::DeserializationError deserializationError() const;
+    [[nodiscard]] QString deserializationErrorString() const;
+
     [[nodiscard]] const QGrpcMetadata &metadata() const noexcept;
     [[nodiscard]] QLatin1StringView method() const noexcept;
 
