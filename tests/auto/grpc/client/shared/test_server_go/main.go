@@ -7,6 +7,7 @@ import (
 	context "context"
 	"crypto/tls"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"os"
@@ -83,6 +84,45 @@ func (ts *testServer) TestMethodBiStream(stream tests.TestService_TestMethodBiSt
 		req, err := stream.Recv()
 		if err != nil {
 			return grpcStatus.Error(grpcCodes.DataLoss, "Read failed")
+		}
+
+		rspString := req.TestFieldString + fmt.Sprintf("%d", i+1)
+		err = stream.Send(&tests.SimpleStringMessage{TestFieldString: rspString})
+		if err != nil {
+			return grpcStatus.Error(grpcCodes.DataLoss, "Write failed")
+		}
+		time.Sleep(ts.testMessageLatency)
+	}
+	return nil
+}
+
+func (ts *testServer) TestMethodClientStreamWithDone(stream tests.TestService_TestMethodClientStreamWithDoneServer) error {
+	var rspString string
+	for i := 0; i < 4; i++ {
+		req, err := stream.Recv()
+		if err != nil {
+			if err == io.EOF {
+				return stream.SendAndClose(&tests.SimpleStringMessage{TestFieldString: rspString})
+			} else {
+				return grpcStatus.Error(grpcCodes.DataLoss, rspString)
+			}
+		}
+		rspString += req.TestFieldString + fmt.Sprintf("%d", i+1)
+		time.Sleep(ts.testMessageLatency)
+	}
+
+	return stream.SendAndClose(&tests.SimpleStringMessage{TestFieldString: rspString})
+}
+
+func (ts *testServer) TestMethodBiStreamWithDone(stream tests.TestService_TestMethodBiStreamWithDoneServer) error {
+	for i := 0; i < 4; i++ {
+		req, err := stream.Recv()
+		if err != nil {
+			if err == io.EOF {
+				return nil
+			} else {
+				return grpcStatus.Error(grpcCodes.DataLoss, "Read failed")
+			}
 		}
 
 		rspString := req.TestFieldString + fmt.Sprintf("%d", i+1)

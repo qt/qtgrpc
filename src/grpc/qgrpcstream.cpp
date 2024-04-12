@@ -88,6 +88,16 @@ void QGrpcClientStream::sendMessage(const QByteArray &data)
 }
 
 /*!
+    \since 6.8
+    Ends the stream from the client side (half-closing). The server is still allowed to send
+    responses after this call.
+*/
+void QGrpcClientStream::writesDone()
+{
+    emit QGrpcOperation::channelOperation()->writesDone();
+}
+
+/*!
     \class QGrpcBidirStream
     \inmodule QtGrpc
     \since 6.7
@@ -140,6 +150,16 @@ void QGrpcBidirStream::sendMessage(const QProtobufMessage *message)
 void QGrpcBidirStream::sendMessage(const QByteArray &data)
 {
     emit QGrpcOperation::channelOperation()->sendData(data);
+}
+
+/*!
+    \since 6.8
+    Ends the stream from the client side (half-closing). The server is still allowed to send
+    responses after this call.
+*/
+void QGrpcBidirStream::writesDone()
+{
+    emit QGrpcOperation::channelOperation()->writesDone();
 }
 
 QT_END_NAMESPACE

@@ -152,6 +152,8 @@ private:
     class Http2Handler : public QObject
     {
     public:
+        enum State : uint8_t { Active, Cancelled, Finished };
+
         explicit Http2Handler(std::shared_ptr<QGrpcChannelOperation> &&operation,
                               QGrpcHttp2ChannelPrivate *parent, bool endStream);
         ~Http2Handler();
@@ -160,6 +162,7 @@ private:
         [[nodiscard]] bool sendHeaders(const HPack::HttpHeader &headers);
         void processQueue();
         void cancel();
+        void finish();
         void handleError(quint32 errorCode, const QString &errorString);
 
         void attachStream(QHttp2Stream *stream_);
@@ -182,7 +185,7 @@ private:
         QPointer<QHttp2Stream> m_stream;
         QBuffer *m_buffer = nullptr;
         ExpectedData m_expectedData;
-        bool m_cancelled = false;
+        State m_handlerState = Active;
         const bool m_endStreamAtFirstData;
         Q_DISABLE_COPY_MOVE(Http2Handler)
     };
@@ -244,6 +247,7 @@ QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(std::shared_ptr<QGrpcChanne
 {
     auto *channelOpPtr = operation_.get();
     QObject::connect(channelOpPtr, &QGrpcChannelOperation::cancelled, this, &Http2Handler::cancel);
+    QObject::connect(channelOpPtr, &QGrpcChannelOperation::writesDone, this, &Http2Handler::finish);
     if (!m_endStreamAtFirstData) {
         QObject::connect(channelOpPtr, &QGrpcChannelOperation::sendData, this,
                          [this](const QByteArray &data) { sendData(data); });
@@ -297,8 +301,11 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
                          // and in the same time the last finished signal listener, so we need
                          // to make sure that channelOpInnerPtr is still valid before
                          // emitting the finished signal.
-                         if (endStream && !m_cancelled && !channelOpInnerPtr.isNull())
+                         if (endStream && m_handlerState != Cancelled
+                             && !channelOpInnerPtr.isNull()) {
+                             m_handlerState = Finished;
                              emit channelOpInnerPtr->finished();
+                         }
                      });
 
     auto parentChannel = qobject_cast<QGrpcHttp2ChannelPrivate *>(parent());
@@ -321,7 +328,7 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
 
     QObject::connect(m_stream.get(), &QHttp2Stream::dataReceived, channelOpPtr,
                      [channelOpPtr, this](const QByteArray &data, bool endStream) {
-                         if (!m_cancelled) {
+                         if (m_handlerState != Cancelled) {
                              m_expectedData.container.append(data);
 
                              if (!m_expectedData.updateExpectedSize())
@@ -342,10 +349,11 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
                                  if (!m_expectedData.updateExpectedSize())
                                      return;
                              }
+                             if (endStream) {
+                                 m_handlerState = Finished;
+                                 emit channelOpPtr->finished();
+                             }
                          }
-
-                         if (endStream)
-                             emit channelOpPtr->finished();
                      });
 
     QObject::connect(m_stream.get(), &QHttp2Stream::uploadFinished, this,
@@ -383,7 +391,7 @@ void QGrpcHttp2ChannelPrivate::channelOperationAsyncError(QGrpcChannelOperation 
 // The data for cancelled stream is ignored.
 void QGrpcHttp2ChannelPrivate::Http2Handler::sendData(QByteArrayView data)
 {
-    if (m_cancelled || isStreamClosedForSending()) {
+    if (m_handlerState != Active || isStreamClosedForSending()) {
         qGrpcDebug("Attempt sending data to the ended stream");
         return;
     }
@@ -402,7 +410,7 @@ bool QGrpcHttp2ChannelPrivate::Http2Handler::sendHeaders(const HPack::HttpHeader
 {
     Q_ASSERT(m_stream != nullptr);
 
-    if (m_cancelled || isStreamClosedForSending()) {
+    if (m_handlerState != Active || isStreamClosedForSending()) {
         qGrpcDebug("Attempt sending headers to the ended stream");
         return false;
     }
@@ -434,18 +442,33 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::processQueue()
 // gRPC cancellation happens by sending empty DATA frame with the END_STREAM bit
 void QGrpcHttp2ChannelPrivate::Http2Handler::cancel()
 {
-    if (m_cancelled)
+    if (m_handlerState != Active)
         return;
 
-    m_cancelled = true;
+    m_handlerState = Cancelled;
 
-    // Stream is already (half)closed, skip sending the cancellation DATA frame.
+    // Stream is already (half)closed, skip sending the DATA frame with the end-of-stream flag.
     if (isStreamClosedForSending())
         return;
 
     // Clear the existing queue and enqeue empty data. Data should contains at least the payload
     // size, even if payload is 0. Empty data is the explicit indicator for stream cancellation.
     m_queue.clear();
+    m_queue.enqueue({});
+    processQueue();
+}
+
+void QGrpcHttp2ChannelPrivate::Http2Handler::finish()
+{
+    if (m_handlerState != Active)
+        return;
+
+    m_handlerState = Finished;
+
+    // Stream is already (half)closed, skip sending the DATA frame with the end-of-stream flag.
+    if (isStreamClosedForSending())
+        return;
+
     m_queue.enqueue({});
     processQueue();
 }

@@ -59,6 +59,7 @@ Q_SIGNALS:
     void finished();
 
     void cancelled();
+    void writesDone();
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcChannelOperation)

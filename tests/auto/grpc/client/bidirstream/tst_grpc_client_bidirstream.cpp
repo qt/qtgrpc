@@ -24,6 +24,7 @@ public:
 
 private slots:
     void valid();
+    void sequentialSendWithDone();
 };
 
 void QtGrpcClientBidirStreamTest::valid()
@@ -55,6 +56,42 @@ void QtGrpcClientBidirStreamTest::valid()
     QCOMPARE(streamErrorSpy.count(), 0);
 
     QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33Stream44");
+}
+
+void QtGrpcClientBidirStreamTest::sequentialSendWithDone()
+{
+    const int ExpectedMessageCount = 4;
+
+    SimpleStringMessage request;
+    request.setTestFieldString("Stream");
+
+    auto stream = client()->streamTestMethodBiStreamWithDone(request);
+
+    QString fullResponse;
+    int i = 0;
+    QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, this,
+                     [stream, &request, &fullResponse, &i, ExpectedMessageCount]() {
+                         Q_UNUSED(ExpectedMessageCount)
+                         if (const auto rsp = stream->read<SimpleStringMessage>()) {
+                             fullResponse += rsp->testFieldString() + QString::number(++i);
+                             if (i == (ExpectedMessageCount - 1)) {
+                                 stream->writesDone();
+                                 request.setTestFieldString("StreamWrong");
+                             }
+                             stream->sendMessage(request);
+                         }
+                     });
+
+    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QVERIFY(streamFinishedSpy.isValid());
+    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
+    QVERIFY(streamErrorSpy.isValid());
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
+                                 MessageLatencyWithThreshold * ExpectedMessageCount);
+    QCOMPARE(streamErrorSpy.count(), 0);
+
+    QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33");
 }
 
 QTEST_MAIN(QtGrpcClientBidirStreamTest)

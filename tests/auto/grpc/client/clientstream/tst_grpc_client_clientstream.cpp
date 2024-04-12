@@ -25,6 +25,7 @@ public:
 private slots:
     void valid();
     void sequentialSend();
+    void sequentialSendWithDone();
 };
 
 void QtGrpcClientClientStreamTest::valid()
@@ -86,6 +87,37 @@ void QtGrpcClientClientStreamTest::sequentialSend()
     const auto result = stream->read<SimpleStringMessage>();
     QVERIFY(result.has_value());
     QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3Stream4");
+}
+
+void QtGrpcClientClientStreamTest::sequentialSendWithDone()
+{
+    const int ExpectedMessageCount = 4;
+
+    SimpleStringMessage request;
+    request.setTestFieldString("Stream");
+
+    auto stream = client()->streamTestMethodClientStreamWithDone(request);
+
+    // Ensure that messages are not lost during the sequential sending right after the stream is
+    // instanciated.
+    for (int i = 1; i < (ExpectedMessageCount - 1); ++i) {
+        stream->sendMessage(request);
+    }
+    stream->writesDone();
+    request.setTestFieldString("StreamWrong");
+    stream->sendMessage(request);
+
+    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QVERIFY(streamFinishedSpy.isValid());
+    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
+    QVERIFY(streamErrorSpy.isValid());
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
+                                 MessageLatencyWithThreshold * ExpectedMessageCount);
+    QCOMPARE(streamErrorSpy.count(), 0);
+
+    std::optional<SimpleStringMessage> result = stream->read<SimpleStringMessage>();
+    QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3");
 }
 
 QTEST_MAIN(QtGrpcClientClientStreamTest)

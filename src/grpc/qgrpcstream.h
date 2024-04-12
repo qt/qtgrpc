@@ -51,6 +51,7 @@ public:
     }
 
     void sendMessage(const QProtobufMessage *message);
+    void writesDone();
 
 private:
     void sendMessage(const QByteArray &data);
@@ -78,6 +79,7 @@ public:
 
     void sendMessage(const QProtobufMessage *message);
 
+    void writesDone();
 Q_SIGNALS:
     void messageReceived();
 

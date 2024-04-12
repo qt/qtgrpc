@@ -28,4 +28,6 @@ service TestService {
     rpc testMethodStatusMessage(SimpleStringMessage) returns (SimpleStringMessage) {}
     rpc testMethodNonCompatibleArgRet(SimpleIntMessage) returns (SimpleStringMessage) {}
     rpc testMetadata(Empty) returns (Empty) {}
+    rpc testMethodClientStreamWithDone(stream SimpleStringMessage) returns (SimpleStringMessage) {}
+    rpc testMethodBiStreamWithDone(stream SimpleStringMessage) returns (stream SimpleStringMessage) {}
 }

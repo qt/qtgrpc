@@ -60,6 +60,15 @@ private:
             ::grpc::ServerContext *context,
             ::grpc::ServerReaderWriter<::qtgrpc::tests::SimpleStringMessage,
                                        ::qtgrpc::tests::SimpleStringMessage> *stream) override;
+    grpc::Status
+    testMethodClientStreamWithDone(::grpc::ServerContext *,
+                           ::grpc::ServerReader<::qtgrpc::tests::SimpleStringMessage> *reader,
+                           ::qtgrpc::tests::SimpleStringMessage *response) override;
+
+    grpc::Status testMethodBiStreamWithDone(
+        ::grpc::ServerContext *context,
+        ::grpc::ServerReaderWriter<::qtgrpc::tests::SimpleStringMessage,
+                                   ::qtgrpc::tests::SimpleStringMessage> *stream) override;
     qint64 m_latency;
 };
 }
@@ -186,6 +195,43 @@ grpc::Status TestServiceServiceImpl::testMethodBiStream(
             return grpc::Status(grpc::StatusCode::DATA_LOSS, "Read failed");
         }
         std::string rspString = req.testfieldstring() + std::to_string(i + 1);
+        ::qtgrpc::tests::SimpleStringMessage rsp;
+        rsp.set_testfieldstring(rspString);
+        if (!stream->Write(rsp, {})) {
+            qInfo() << "Unable to write message to bidirectional stream";
+            return grpc::Status(grpc::StatusCode::DATA_LOSS, "Write failed");
+        }
+        QThread::msleep(m_latency);
+    }
+
+    return {};
+}
+
+grpc::Status TestServiceServiceImpl::testMethodClientStreamWithDone(
+    ::grpc::ServerContext *, ::grpc::ServerReader<::qtgrpc::tests::SimpleStringMessage> *reader,
+    ::qtgrpc::tests::SimpleStringMessage *response)
+{
+    ::qtgrpc::tests::SimpleStringMessage req;
+    std::string rspString;
+    int i = 0;
+    while (reader->Read(&req)) {
+        rspString += req.testfieldstring();
+        rspString += std::to_string(++i);
+    }
+
+    response->set_testfieldstring(rspString);
+    return {};
+}
+
+grpc::Status TestServiceServiceImpl::testMethodBiStreamWithDone(
+    ::grpc::ServerContext *,
+    ::grpc::ServerReaderWriter<::qtgrpc::tests::SimpleStringMessage,
+                               ::qtgrpc::tests::SimpleStringMessage> *stream)
+{
+    ::qtgrpc::tests::SimpleStringMessage req;
+    int i = 0;
+    while (stream->Read(&req)) {
+        std::string rspString = req.testfieldstring() + std::to_string(++i);
         ::qtgrpc::tests::SimpleStringMessage rsp;
         rsp.set_testfieldstring(rspString);
         if (!stream->Write(rsp, {})) {
