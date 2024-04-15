@@ -5,7 +5,9 @@
     \typealias QGrpcMetadata
     \inmodule QtGrpc
     \relates std::unordered_multimap<QByteArray, QByteArray>
-    \brief The QGrpcMetadata is an STL-style unordered multimap container.
+    \brief The QGrpcMetadata is an STL-style
+    \l {https://en.cppreference.com/w/cpp/container/unordered_multimap} {unordered
+    multimap container}.
 
     Metadata contains information about a particular RPC call or channel
     (such as authentication details) in the form of a list of key-value pairs,
