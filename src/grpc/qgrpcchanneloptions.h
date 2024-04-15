@@ -12,7 +12,6 @@
 #  include <QtNetwork/qsslconfiguration.h>
 #endif
 
-#include <chrono>
 #include <memory>
 #include <optional>
 
@@ -35,12 +34,12 @@ public:
     QGrpcChannelOptions &operator=(QGrpcChannelOptions &&other) noexcept;
 
     QGrpcChannelOptions &withHost(const QUrl &host);
-    QGrpcChannelOptions &withDeadline(std::chrono::milliseconds deadline);
+    QGrpcChannelOptions &withDeadline(QGrpcDuration deadline);
     QGrpcChannelOptions &withMetadata(const QGrpcMetadata &metadata);
     QGrpcChannelOptions &withSerializationFormat(const QGrpcSerializationFormat &format);
 
     [[nodiscard]] QUrl host() const noexcept;
-    [[nodiscard]] std::optional<std::chrono::milliseconds> deadline() const noexcept;
+    [[nodiscard]] std::optional<QGrpcDuration> deadline() const noexcept;
     [[nodiscard]] const QGrpcMetadata &metadata() const noexcept;
     [[nodiscard]] const QGrpcSerializationFormat &serializationFormat() const noexcept;
 

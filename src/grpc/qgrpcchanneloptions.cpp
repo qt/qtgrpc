@@ -29,7 +29,7 @@ public:
     }
 
     QUrl host;
-    std::optional<std::chrono::milliseconds> deadline;
+    std::optional<QGrpcDuration> deadline;
     QGrpcMetadata metadata;
     std::optional<QStringList> credentialList;
     QGrpcSerializationFormat serializationFormat;
@@ -93,7 +93,7 @@ QGrpcChannelOptions &QGrpcChannelOptions::withHost(const QUrl &host)
 /*!
     Sets deadline value with \a deadline and returns updated QGrpcChannelOptions object.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::withDeadline(std::chrono::milliseconds deadline)
+QGrpcChannelOptions &QGrpcChannelOptions::withDeadline(QGrpcDuration deadline)
 {
     dPtr->deadline = deadline;
     return *this;
@@ -134,7 +134,7 @@ QGrpcChannelOptions::withSerializationFormat(const QGrpcSerializationFormat &for
 
     If value was not set returns empty std::optional.
 */
-std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const noexcept
+std::optional<QGrpcDuration> QGrpcChannelOptions::deadline() const noexcept
 {
     return dPtr->deadline;
 }

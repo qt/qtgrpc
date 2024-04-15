@@ -39,9 +39,9 @@ void QtGrpcClientDeadlineTest::ChannelAndCallDeadlineTest()
 {
     QFETCH(double, minTimeout);
     QFETCH(double, maxTimeout);
-    const auto minTimeoutDuration = std::chrono::milliseconds(static_cast<int64_t>(MessageLatency
+    const auto minTimeoutDuration = QGrpcDuration(static_cast<int64_t>(MessageLatency
                                                                                    * minTimeout));
-    const auto maxTimeoutDuration = std::chrono::milliseconds(static_cast<int64_t>(MessageLatency
+    const auto maxTimeoutDuration = QGrpcDuration(static_cast<int64_t>(MessageLatency
                                                                                    * maxTimeout));
     QGrpcCallOptions callOpts;
     callOpts.withDeadline(minTimeoutDuration);

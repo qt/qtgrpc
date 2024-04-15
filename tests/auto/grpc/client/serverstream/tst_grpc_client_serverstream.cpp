@@ -381,7 +381,7 @@ void QtGrpcClientServerStreamTest::CancelWhileErrorTimeout()
 void QtGrpcClientServerStreamTest::Deadline_data()
 {
     const int ExpectedMessageCount = 4;
-    QTest::addColumn<std::chrono::milliseconds>("timeout");
+    QTest::addColumn<QGrpcDuration>("timeout");
     QTest::addColumn<int>("ExpectedMessageCount");
     constexpr std::array<qreal, 4> messageLatencyFractions{ 0.7, 0.9, 1.0, 1.3 };
     for (const auto &fraction : messageLatencyFractions)
@@ -389,14 +389,14 @@ void QtGrpcClientServerStreamTest::Deadline_data()
                               .arg(fraction)
                               .toStdString()
                               .c_str())
-                << std::chrono::milliseconds(
+                << QGrpcDuration(
                            static_cast<int64_t>((MessageLatency * fraction * ExpectedMessageCount)))
                 << ExpectedMessageCount;
 }
 
 void QtGrpcClientServerStreamTest::Deadline()
 {
-    QFETCH(const std::chrono::milliseconds, timeout);
+    QFETCH(const QGrpcDuration, timeout);
     QFETCH(const int, ExpectedMessageCount);
 
     QGrpcCallOptions opt;

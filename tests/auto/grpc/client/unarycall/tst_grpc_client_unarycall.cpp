@@ -263,16 +263,16 @@ void QtGrpcClientUnaryCallTest::Metadata()
 
 void QtGrpcClientUnaryCallTest::Deadline_data()
 {
-    QTest::addColumn<std::chrono::milliseconds>("timeout");
+    QTest::addColumn<QGrpcDuration>("timeout");
     constexpr std::array<qreal, 4> messageLatencyFractions{ 0.7, 0.9, 1.0, 1.3 };
     for (const auto &fraction : messageLatencyFractions)
         QTest::newRow(QString("MessageLatency * %1").arg(fraction).toStdString().c_str())
-                << std::chrono::milliseconds(static_cast<int64_t>(MessageLatency * fraction));
+                << QGrpcDuration(static_cast<int64_t>(MessageLatency * fraction));
 }
 
 void QtGrpcClientUnaryCallTest::Deadline()
 {
-    QFETCH(const std::chrono::milliseconds, timeout);
+    QFETCH(const QGrpcDuration, timeout);
 
     QGrpcCallOptions opt;
     opt.withDeadline(timeout);

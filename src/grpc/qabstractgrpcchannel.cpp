@@ -92,7 +92,7 @@ QT_BEGIN_NAMESPACE
     thread where the function was called.
 */
 
-static std::optional<std::chrono::milliseconds>
+static std::optional<QGrpcDuration>
 deadlineForCall(const QGrpcChannelOptions &channelOptions, const QGrpcCallOptions &callOptions)
 {
     if (callOptions.deadline())

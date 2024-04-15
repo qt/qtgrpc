@@ -17,13 +17,13 @@ QQmlGrpcCallOptions::~QQmlGrpcCallOptions() = default;
 
 qint64 QQmlGrpcCallOptions::deadline() const
 {
-    std::chrono::milliseconds ms = m_options.deadline().value_or(std::chrono::milliseconds(0));
+    QGrpcDuration ms = m_options.deadline().value_or(QGrpcDuration(0));
     return ms.count();
 }
 
 void QQmlGrpcCallOptions::setDeadline(qint64 value)
 {
-    std::chrono::milliseconds ms(value);
+    QGrpcDuration ms(value);
     m_options.withDeadline(ms);
     emit deadlineChanged();
 }

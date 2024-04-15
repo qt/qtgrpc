@@ -8,7 +8,6 @@
 #include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
-#include <chrono>
 #include <memory>
 #include <optional>
 
@@ -27,11 +26,11 @@ public:
     Q_GRPC_EXPORT QGrpcCallOptions(QGrpcCallOptions &&other) noexcept;
     Q_GRPC_EXPORT QGrpcCallOptions &operator=(QGrpcCallOptions &&other) noexcept;
 
-    Q_GRPC_EXPORT QGrpcCallOptions &withDeadline(std::chrono::milliseconds deadline);
+    Q_GRPC_EXPORT QGrpcCallOptions &withDeadline(QGrpcDuration deadline);
     Q_GRPC_EXPORT QGrpcCallOptions &withMetadata(const QGrpcMetadata &metadata);
     Q_GRPC_EXPORT QGrpcCallOptions &withMetadata(QGrpcMetadata &&metadata) noexcept;
 
-    [[nodiscard]] Q_GRPC_EXPORT std::optional<std::chrono::milliseconds> deadline() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<QGrpcDuration> deadline() const noexcept;
     [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const noexcept;
 
 private:

@@ -22,7 +22,7 @@ using namespace Qt::StringLiterals;
 struct QGrpcCallOptionsPrivate
 {
 public:
-    std::optional<std::chrono::milliseconds> deadline;
+    std::optional<QGrpcDuration> deadline;
     QGrpcMetadata metadata;
 };
 
@@ -64,7 +64,7 @@ QGrpcCallOptions &QGrpcCallOptions::operator=(QGrpcCallOptions &&other) noexcept
 /*!
     Sets deadline value with \a deadline and returns updated QGrpcCallOptions object.
 */
-QGrpcCallOptions &QGrpcCallOptions::withDeadline(std::chrono::milliseconds deadline)
+QGrpcCallOptions &QGrpcCallOptions::withDeadline(QGrpcDuration deadline)
 {
     dPtr->deadline = deadline;
     return *this;
@@ -102,7 +102,7 @@ QGrpcCallOptions &QGrpcCallOptions::withMetadata(QGrpcMetadata &&metadata) noexc
 
     If value was not set returns empty std::optional.
 */
-std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadline() const noexcept
+std::optional<QGrpcDuration> QGrpcCallOptions::deadline() const noexcept
 {
     return dPtr->deadline;
 }

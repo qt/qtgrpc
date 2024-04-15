@@ -75,7 +75,7 @@ void GrpcClientTestBase::initTestCase_data()
 
     if (m_channels.testFlag(Channel::WithChannelDeadline)) {
         constexpr auto
-            channelTimeout = std::chrono::milliseconds(static_cast<int64_t>(MessageLatency * 0.25));
+            channelTimeout = QGrpcDuration(static_cast<int64_t>(MessageLatency * 0.25));
         QTest::newRow("Http2ClientDeadline")
             << QFlags{ Channel::Qt, Channel::WithChannelDeadline }
             << std::shared_ptr<
