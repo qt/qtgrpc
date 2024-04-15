@@ -55,8 +55,10 @@ protected:
         auto responsePtr = response.get();
         QObject::connect(responsePtr, &QGrpcServerStream::messageReceived, responsePtr,
                         [responsePtr]{
-                            SimpleStringMessage mess = responsePtr->read<SimpleStringMessage>();
-                            qDebug() << "Response received:" << mess.testFieldString();
+                            const auto mess = responsePtr->read<SimpleStringMessage>();
+                            if (!mess)
+                                qDebug() << "Failed deserialization";
+                            qDebug() << "Response received:" << mess->testFieldString();
                         });
     }
 
@@ -67,8 +69,8 @@ protected:
         // Intercept the response
         QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this,
                              [stream] {
-                                SimpleStringMessage mess = stream->read<SimpleStringMessage>();
-                                qDebug() << "Response received:" << mess.testFieldString();
+                                if (const auto mess = responsePtr->read<SimpleStringMessage>())
+                                    qDebug() << "Response received:" << mess->testFieldString();
                              });
 
         // Log incoming and outgoing requests here

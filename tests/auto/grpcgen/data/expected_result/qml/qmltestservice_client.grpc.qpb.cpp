@@ -27,8 +27,14 @@ void QmlClient::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const 
 
     std::shared_ptr<QGrpcCallReply> reply = call("testMethod"_L1, arg, options);
     reply->subscribe(jsEngine, [reply, callback, jsEngine]() {
-        auto result = reply->read<qtgrpc::tests::SimpleStringMessage>();
-        callback.call(QJSValueList{jsEngine->toScriptValue(result)});
+        if (const auto result = reply->read<qtgrpc::tests::SimpleStringMessage>()) {
+            callback.call(QJSValueList{jsEngine->toScriptValue(*result)});
+            return;
+        }
+        QGrpcStatus::StatusCode code = QGrpcStatus::StatusCode::InvalidArgument;
+        if (reply->deserializationError() == QAbstractProtobufSerializer::UnexpectedEndOfStreamError)
+            code = QGrpcStatus::StatusCode::OutOfRange;
+        emit reply->errorOccurred(QGrpcStatus{ code, reply->deserializationErrorString() });
     }, [errorCallback, jsEngine](const QGrpcStatus &status) {
         errorCallback.call(QJSValueList{jsEngine->toScriptValue(status)});
     });

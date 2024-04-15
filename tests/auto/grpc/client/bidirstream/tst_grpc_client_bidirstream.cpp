@@ -39,9 +39,10 @@ void QtGrpcClientBidirStreamTest::Valid()
     int i = 0;
     QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, this,
                      [stream, &request, &fullResponse, &i]() {
-                         SimpleStringMessage rsp = stream->read<SimpleStringMessage>();
-                         fullResponse += rsp.testFieldString() + QString::number(++i);
-                         stream->sendMessage(request);
+                         if (const auto rsp = stream->read<SimpleStringMessage>()) {
+                             fullResponse += rsp->testFieldString() + QString::number(++i);
+                             stream->sendMessage(request);
+                         }
                      });
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);

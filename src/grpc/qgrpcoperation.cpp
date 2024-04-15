@@ -2,15 +2,13 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include "qgrpcoperation.h"
-
-#include "qtgrpcglobal_p.h"
-#include "qgrpcchanneloperation.h"
-
-#include <QtCore/qatomic.h>
 #include <QtCore/private/qobject_p.h>
-#include <QtCore/qpointer.h>
+#include <QtCore/qatomic.h>
 #include <QtCore/qeventloop.h>
+#include <QtCore/qpointer.h>
+#include <QtGrpc/private/qtgrpcglobal_p.h>
+#include <QtGrpc/qgrpcchanneloperation.h>
+#include <QtGrpc/qgrpcoperation.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -24,14 +22,17 @@ using namespace Qt::StringLiterals;
 */
 
 /*!
-    \fn template <typename T> T QGrpcOperation::read() const
+    \fn template <typename T> std::optional<T> QGrpcOperation::read() const
 
-    Reads message from raw byte array stored in QGrpcOperation.
+    Reads a message from a raw byte array stored within this QGrpcOperation
+    instance.
 
-    Returns a deserialized message or, on failure, a default-constructed
-    message.
-    If deserialization is not successful the \l QGrpcOperation::errorOccurred
-    signal is emitted.
+    Returns an optional deserialized message. On failure, \c {std::nullopt} is
+    returned.
+
+    The error can be retrieved using \l deserializationError.
+
+    \sa read, deserializationError, deserializationErrorString
 */
 
 /*!
@@ -44,12 +45,9 @@ using namespace Qt::StringLiterals;
 */
 
 /*!
-    \fn void QGrpcOperation::errorOccurred(const QGrpcStatus &status) const
+    \fn void QGrpcOperation::errorOccurred(const QGrpcStatus &status)
 
-    This signal indicates the error occurred during serialization.
-
-    This signal is emitted when error with \a status occurs in channel
-    or during serialization.
+    This signal is emitted when an error with \a status occurs in the channel.
 
     \sa QAbstractGrpcClient::errorOccurred
 */
@@ -112,25 +110,23 @@ QByteArray QGrpcOperation::data() const noexcept
 
 /*!
     \since 6.8
-    Reads a message from a raw byte array stored in QGrpcOperation.
+    Reads a message from a raw byte array which is stored within this
+    QGrpcOperation instance.
 
-    The function writes a deserialized value to \a message pointer.
+    The function writes the deserialized value to the \a message pointer.
 
-    If deserialization is not successful the \l QGrpcOperation::errorOccurred
-    signal is emitted.
+    If the deserialization is successful, this function returns \c true.
+    Otherwise, it returns \c false, and the error can be retrieved with \l
+    deserializationError.
 
-    \note This function has slower message deserialization compared to its
-          template counterpart.
-
+    \sa read, deserializationError, deserializationErrorString
 */
-void QGrpcOperation::read(QProtobufMessage *message) const
+bool QGrpcOperation::read(QProtobufMessage *message) const
 {
     Q_ASSERT_X(message != nullptr, "QGrpcOperation::read",
                "Can't read to nullptr QProtobufMessage");
-    if (auto ser = serializer(); ser) {
-        if (!ser->deserialize(message, data()))
-            emit errorOccurred(deserializationError());
-    }
+    const auto ser = d_func()->channelOperation->serializer();
+    return ser && ser->deserialize(message, data());
 }
 
 /*!
@@ -220,39 +216,6 @@ void QGrpcOperation::cancel()
 bool QGrpcOperation::isFinished() const noexcept
 {
     return d_func()->isFinished.loadRelaxed();
-}
-
-QGrpcStatus QGrpcOperation::deserializationError() const
-{
-    QGrpcStatus status;
-    switch (serializer()->deserializationError()) {
-    case QAbstractProtobufSerializer::InvalidHeaderError: {
-        const QString errStr = tr("Response deserialization failed: invalid field found.");
-        status = QGrpcStatus{ QGrpcStatus::InvalidArgument, errStr };
-        qGrpcWarning() << errStr;
-        emit errorOccurred(status);
-    } break;
-    case QAbstractProtobufSerializer::NoDeserializerError: {
-        const QString errStr = tr("No deserializer was found for a given type.");
-        status = QGrpcStatus{ QGrpcStatus::InvalidArgument, errStr };
-        qGrpcWarning() << errStr;
-        emit errorOccurred(status);
-    } break;
-    case QAbstractProtobufSerializer::UnexpectedEndOfStreamError: {
-        const QString errStr = tr("Invalid size of received buffer.");
-        status = QGrpcStatus{ QGrpcStatus::OutOfRange, errStr };
-        qGrpcWarning() << errStr;
-        emit errorOccurred(status);
-    } break;
-    case QAbstractProtobufSerializer::NoError:
-        Q_FALLTHROUGH();
-    default:
-        const QString errStr = tr("Deserializing failed, but no error was set.");
-        status = QGrpcStatus{ QGrpcStatus::InvalidArgument, errStr };
-        qGrpcWarning() << errStr;
-        emit errorOccurred(status);
-    }
-    return status;
 }
 
 QT_END_NAMESPACE

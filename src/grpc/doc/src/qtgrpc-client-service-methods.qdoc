@@ -125,8 +125,9 @@ it, call the \c PingPong method:
     auto reply = cl.PingPong(request,{});
     QObject::connect(reply.get(), &QGrpcCallReply::finished, reply.get(),
                      [requestTime, replyPtr = reply.get()]() {
-                         auto response = replyPtr->read<ping::pong::Pong>();
-                         qDebug() << "Ping-Pong time difference" << response.time() - requestTime;
+                         if (const auto response = replyPtr->read<ping::pong::Pong>())
+                            qDebug() << "Ping-Pong time difference" << response->time() - requestTime;
+                        qDebug() << "Failed deserialization";
                      });
 
     QObject::connect(reply.get(), &QGrpcCallReply::errorOccurred, stream.get()
@@ -153,8 +154,8 @@ an argument to the callback function that is used in the call:
 \code
     ...
     cl.PingPong(request, &a, [requestTime](std::shared_ptr<QGrpcCallReply> reply) {
-        auto response = reply->read<ping::pong::Pong>();
-        qDebug() << "Ping and Pong time difference" << response.time() - requestTime;
+        if (const auto response = reply->read<ping::pong::Pong>())
+            qDebug() << "Ping and Pong time difference" << response->time() - requestTime;
     });
 \endcode
 This variant makes a connection to the \l{QGrpcCallReply::finished} signal
@@ -182,9 +183,10 @@ the method that returns the pointer to \l QGrpcServerStream:
 \code
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, stream.get(),
                      [streamPtr = stream.get(), requestTime]() {
-                         auto response = streamPtr->read<ping::pong::Pong>();
-                         qDebug() << "Ping-Pong next response time difference"
-                                  << response.time() - requestTime;
+                         if (const auto response = streamPtr->read<ping::pong::Pong>()) {
+                            qDebug() << "Ping-Pong next response time difference"
+                                    << response->time() - requestTime;
+                         }
                      });
 
     QObject::connect(stream.get(), &QGrpcServerStream::errorOccurred, stream.get()
@@ -232,8 +234,9 @@ To send multiple requests to the server, use the
 
     QObject::connect(stream.get(), &QGrpcServerStream::finished, stream.get(),
                      [streamPtr = stream.get(), &timer]{
-                         auto response = streamPtr->read<ping::pong::Pong>();
-                         qDebug() << "Slowest Ping time: " << response.time();
+                         if (const auto response = streamPtr->read<ping::pong::Pong>()) {
+                            qDebug() << "Slowest Ping time: " << response->time();
+                         }
                          timer.stop();
                      });
 
@@ -277,8 +280,8 @@ breaking the connection session:
 
     QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, stream.get(),
                      [streamPtr = stream.get(), &timer, &maxPingPongTime, &requestTime]{
-                         auto response = streamPtr->read<ping::pong::Pong>();
-                         maxPingPongTime = std::max(maxPingPongTime, response.time() - requestTime);
+                         if (const auto response = streamPtr->read<ping::pong::Pong>())
+                            maxPingPongTime = std::max(maxPingPongTime, response->time() - requestTime);
                      });
 
     QObject::connect(stream.get(), &QGrpcBidirStream::finished, stream.get(),

@@ -30,10 +30,12 @@ void NaviThread::run()
     Empty request;
     m_stream = m_client->streamGetNaviStream(request);
     connect(m_stream.get(), &QGrpcServerStream::messageReceived, this, [this] {
-        DistanceMsg result = m_stream->read<DistanceMsg>();
-        emit totalDistanceChanged(result.totalDistance());
-        emit remainingDistanceChanged(result.remainingDistance());
-        emit directionChanged(result.direction());
+        const auto result = m_stream->read<DistanceMsg>();
+        if (!result)
+            return;
+        emit totalDistanceChanged(result->totalDistance());
+        emit remainingDistanceChanged(result->remainingDistance());
+        emit directionChanged(result->direction());
     });
 
     connect(m_stream.get(), &QGrpcServerStream::errorOccurred, this,

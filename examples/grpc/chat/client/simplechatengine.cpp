@@ -82,8 +82,8 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
                              emit userNameChanged();
                          }
                          setState(Connected);
-                         m_messages.append(
-                                 stream->read<qtgrpc::examples::chat::ChatMessages>().messages());
+                         if (const auto msg = stream->read<qtgrpc::examples::chat::ChatMessages>())
+                            m_messages.append(msg->messages());
                      });
     // ![1]
 }

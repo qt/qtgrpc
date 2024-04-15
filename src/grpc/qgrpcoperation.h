@@ -24,17 +24,14 @@ public:
     ~QGrpcOperation() override;
 
     template <typename T>
-    T read() const
+    std::optional<T> read() const
     {
         T value;
-        if (auto ser = serializer(); ser) {
-            if (!ser->deserialize(&value, data()))
-                errorOccurred(deserializationError());
-        }
-        return value;
+        const auto ser = serializer();
+        return ser && ser->deserialize(&value, data()) ? std::optional<T>(value) : std::nullopt;
     }
 
-    void read(QProtobufMessage *message) const;
+    bool read(QProtobufMessage *message) const;
 
     [[nodiscard]] QAbstractProtobufSerializer::DeserializationError deserializationError() const;
     [[nodiscard]] QString deserializationErrorString() const;
@@ -47,7 +44,7 @@ public:
 
 Q_SIGNALS:
     void finished();
-    void errorOccurred(const QGrpcStatus &status) const;
+    void errorOccurred(const QGrpcStatus &status);
 
 protected:
     explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation,
@@ -58,11 +55,9 @@ protected:
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
+    Q_DECLARE_PRIVATE(QGrpcOperation)
 
     [[nodiscard]] QByteArray data() const noexcept;
-    [[nodiscard]] QGrpcStatus deserializationError() const;
-
-    Q_DECLARE_PRIVATE(QGrpcOperation)
 };
 
 QT_END_NAMESPACE

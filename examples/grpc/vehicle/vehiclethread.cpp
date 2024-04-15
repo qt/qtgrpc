@@ -36,16 +36,15 @@ void VehicleThread::run()
     });
 
     connect(replyFuel.get(), &QGrpcCallReply::finished, [replyFuel, this] {
-        FuelLevelMsg fuelLvl = replyFuel->read<FuelLevelMsg>();
-        emit fuelLevelChanged(fuelLvl.fuelLevel());
+        if (const auto fuelLvl = replyFuel->read<FuelLevelMsg>())
+            emit fuelLevelChanged(fuelLvl->fuelLevel());
     });
 
     Empty speedRequest;
     m_streamSpeed = m_client->streamGetSpeedStream(speedRequest);
     connect(m_streamSpeed.get(), &QGrpcServerStream::messageReceived, this, [this] {
-        SpeedMsg speedResponse;
-        speedResponse = m_streamSpeed->read<SpeedMsg>();
-        emit speedChanged(speedResponse.speed());
+        if (const auto speedResponse = m_streamSpeed->read<SpeedMsg>())
+            emit speedChanged(speedResponse->speed());
     });
 
     connect(m_streamSpeed.get(), &QGrpcServerStream::errorOccurred, this,
@@ -62,8 +61,8 @@ void VehicleThread::run()
     Empty gearRequest;
     m_streamGear = m_client->streamGetGearStream(gearRequest);
     connect(m_streamGear.get(), &QGrpcServerStream::messageReceived, this, [this] {
-        GearMsg gearResponse = m_streamGear->read<GearMsg>();
-        emit rpmChanged(gearResponse.rpm());
+        if (const auto gearResponse = m_streamGear->read<GearMsg>())
+            emit rpmChanged(gearResponse->rpm());
     });
 
     connect(m_streamGear.get(), &QGrpcServerStream::errorOccurred, this,

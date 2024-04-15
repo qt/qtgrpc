@@ -67,8 +67,9 @@ void QtGrpcClientServerStreamTest::Valid()
     QVERIFY(streamFinishedSpy.isValid());
 
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream] {
-        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+        const auto ret = stream->read<SimpleStringMessage>();
+        QVERIFY(ret.has_value());
+        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
@@ -96,8 +97,9 @@ void QtGrpcClientServerStreamTest::Cancel()
 
     int i = 0;
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&] {
-        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+        const auto ret = stream->read<SimpleStringMessage>();
+        QVERIFY(ret.has_value());
+        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
         if (++i == ExpectedMessageCount)
             stream->cancel();
     });
@@ -130,8 +132,9 @@ void QtGrpcClientServerStreamTest::DeferredCancel()
 
     int i = 0;
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&] {
-        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+        const auto ret = stream->read<SimpleStringMessage>();
+        QVERIFY(ret.has_value());
+        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
         if (++i == ExpectedMessageCount)
             QTimer::singleShot(MessageLatencyThreshold, stream.get(), &QGrpcServerStream::cancel);
     });
@@ -162,8 +165,9 @@ void QtGrpcClientServerStreamTest::HugeBlob()
     QVERIFY(streamErrorSpy.isValid());
 
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream] {
-        BlobMessage ret = stream->read<BlobMessage>();
-        result.setTestBytes(ret.testBytes());
+        const auto ret = stream->read<BlobMessage>();
+        QVERIFY(ret.has_value());
+        result.setTestBytes(ret->testBytes());
     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1, MessageLatencyWithThreshold);
@@ -200,7 +204,11 @@ void QtGrpcClientServerStreamTest::GetAsyncReply()
     request.setTestFieldString("Hello Qt!");
 
     reply = client()->testMethod(request);
-    reply->subscribe(this, [reply, &result] { result = reply->read<SimpleStringMessage>(); });
+    reply->subscribe(this, [reply, &result] {
+        const auto ret = reply->read<SimpleStringMessage>();
+        QVERIFY(ret.has_value());
+        result = *ret;
+    });
 
     QTRY_COMPARE_WITH_TIMEOUT(result.testFieldString(), request.testFieldString(),
                               MessageLatencyWithThreshold);
@@ -209,9 +217,15 @@ void QtGrpcClientServerStreamTest::GetAsyncReply()
     request.setTestFieldString("Hello Qt1!");
 
     reply = client()->testMethod(request);
-    reply->subscribe(
-            this, [reply, &result] { result = reply->read<SimpleStringMessage>(); },
-            [] { QVERIFY(false); });
+    reply->subscribe(this, [reply, &result] {
+            const auto ret = reply->read<SimpleStringMessage>();
+            QVERIFY(ret.has_value());
+            result = *ret;
+        },
+        [] {
+            QVERIFY(false);
+        }
+    );
 
     QTRY_COMPARE_WITH_TIMEOUT(result.testFieldString(), request.testFieldString(),
                               MessageLatencyWithThreshold);
@@ -238,8 +252,9 @@ void QtGrpcClientServerStreamTest::MultipleStreams()
     QVERIFY(steamMessageRecievedSpy.isValid());
 
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream] {
-        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+        const auto ret = stream->read<SimpleStringMessage>();
+        QVERIFY(ret.has_value());
+        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
@@ -320,9 +335,10 @@ void QtGrpcClientServerStreamTest::InThread()
         auto stream = client()->streamTestMethodServerStream(request);
         QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, &waiter,
                          [&result, &i, &waiter, stream] {
-                             SimpleStringMessage ret = stream->read<SimpleStringMessage>();
+                             const auto ret = stream->read<SimpleStringMessage>();
+                             QVERIFY(ret.has_value());
                              result.setTestFieldString(result.testFieldString()
-                                                       + ret.testFieldString());
+                                                       + ret->testFieldString());
                              if (++i == 4)
                                  waiter.quit();
                          });
@@ -398,8 +414,9 @@ void QtGrpcClientServerStreamTest::Deadline()
 
     SimpleStringMessage result;
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream] {
-        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+        const auto ret = stream->read<SimpleStringMessage>();
+        QVERIFY(ret.has_value());
+        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
     });
 
     if (timeout.count() < MessageLatency * ExpectedMessageCount) {
@@ -455,8 +472,9 @@ void QtGrpcClientServerStreamTest::Interceptor()
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream] {
-        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+        const auto ret = stream->read<SimpleStringMessage>();
+        QVERIFY(ret.has_value());
+        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
@@ -490,8 +508,8 @@ void QtGrpcClientServerStreamTest::CancelledInterceptor()
     QVERIFY(streamErrorSpy.isValid());
 
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&] {
-        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+        const auto ret = stream->read<SimpleStringMessage>();
+        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamErrorSpy.count(), 1, MessageLatencyWithThreshold);
@@ -511,9 +529,9 @@ void QtGrpcClientServerStreamTest::InterceptResponse()
                                 QLatin1StringView) {
             QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this,
                              [&serverResponse, stream] {
-                                 SimpleStringMessage mess = stream->read<SimpleStringMessage>();
+                                 const auto mess = stream->read<SimpleStringMessage>();
                                  serverResponse.setTestFieldString(serverResponse.testFieldString()
-                                                                   + mess.testFieldString());
+                                                                   + mess->testFieldString());
                              });
             continuation(std::move(stream), operation);
         };
@@ -539,8 +557,9 @@ void QtGrpcClientServerStreamTest::InterceptResponse()
 
     SimpleStringMessage result;
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&] {
-        SimpleStringMessage ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret.testFieldString());
+        const auto ret = stream->read<SimpleStringMessage>();
+        QVERIFY(ret.has_value());
+        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,

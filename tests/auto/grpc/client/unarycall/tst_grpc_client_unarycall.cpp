@@ -60,8 +60,8 @@ private slots:
 void QtGrpcClientUnaryCallTest::AsyncWithSubscribe()
 {
     SimpleStringMessage request;
-    SimpleStringMessage result;
     request.setTestFieldString("Hello Qt!");
+    std::optional<SimpleStringMessage> result;
 
     bool waitForReply = false;
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
@@ -71,12 +71,13 @@ void QtGrpcClientUnaryCallTest::AsyncWithSubscribe()
     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(waitForReply, true, MessageLatency);
-    QCOMPARE_EQ(result.testFieldString(), "Hello Qt!");
+    QVERIFY(result.has_value());
+    QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
 }
 
 void QtGrpcClientUnaryCallTest::AsyncWithLambda()
 {
-    SimpleStringMessage result;
+    std::optional<SimpleStringMessage> result = SimpleStringMessage();
     SimpleStringMessage request;
     request.setTestFieldString("Hello Qt!");
     bool waitForReply = false;
@@ -87,18 +88,19 @@ void QtGrpcClientUnaryCallTest::AsyncWithLambda()
                          });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(waitForReply, true, MessageLatency);
-    QCOMPARE_EQ(result.testFieldString(), "Hello Qt!");
+    QVERIFY(result.has_value());
+    QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
 }
 
 void QtGrpcClientUnaryCallTest::ImmediateCancel()
 {
-    SimpleStringMessage result;
     SimpleStringMessage request;
     request.setTestFieldString("sleep");
 
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
 
-    result.setTestFieldString("Result not changed by echo");
+    std::optional<SimpleStringMessage> result = SimpleStringMessage();
+    result->setTestFieldString("Result not changed by echo");
     QObject::connect(reply.get(), &QGrpcCallReply::finished, this,
                      [&result, reply] { result = reply->read<SimpleStringMessage>(); });
 
@@ -116,7 +118,7 @@ void QtGrpcClientUnaryCallTest::ImmediateCancel()
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
     QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 0, FailTimeout);
 
-    QCOMPARE_EQ(result.testFieldString(), "Result not changed by echo");
+    QCOMPARE_EQ(result->testFieldString(), "Result not changed by echo");
     QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(),
                 QGrpcStatus::Cancelled);
 }
@@ -126,8 +128,8 @@ void QtGrpcClientUnaryCallTest::DeferredCancel()
     SimpleStringMessage request;
     request.setTestFieldString("sleep");
 
-    SimpleStringMessage result;
-    result.setTestFieldString("Result not changed by echo");
+    std::optional<SimpleStringMessage> result = SimpleStringMessage();
+    result->setTestFieldString("Result not changed by echo");
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
 
     QObject::connect(reply.get(), &QGrpcCallReply::finished, this, [reply, &result] {
@@ -141,7 +143,7 @@ void QtGrpcClientUnaryCallTest::DeferredCancel()
     QTimer::singleShot(MessageLatencyThreshold, reply.get(), &QGrpcCallReply::cancel);
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(replyErrorSpy.count(), 1, FailTimeout);
-    QCOMPARE_EQ(result.testFieldString(), "Result not changed by echo");
+    QCOMPARE_EQ(result->testFieldString(), "Result not changed by echo");
 }
 
 void QtGrpcClientUnaryCallTest::AsyncClientStatusMessage()
@@ -200,12 +202,12 @@ void QtGrpcClientUnaryCallTest::InThread()
 void QtGrpcClientUnaryCallTest::AsyncInThread()
 {
     SimpleStringMessage request;
-    SimpleStringMessage result;
     request.setTestFieldString("Hello Qt from thread!");
 
     QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
     QVERIFY(clientErrorSpy.isValid());
 
+    std::optional<SimpleStringMessage> result = SimpleStringMessage();
     const std::unique_ptr<QThread> thread(QThread::create([&] {
         QEventLoop waiter;
         std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
@@ -219,7 +221,7 @@ void QtGrpcClientUnaryCallTest::AsyncInThread()
 
     thread->start();
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
-    QTRY_VERIFY(result.testFieldString().isEmpty());
+    QTRY_VERIFY(result.has_value());
     QTRY_VERIFY(
             qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
                     .message()
@@ -293,7 +295,7 @@ void QtGrpcClientUnaryCallTest::Deadline()
                 || code == QGrpcStatus::StatusCode::Unavailable);
     } else if (timeout.count() >= MessageLatencyWithThreshold) {
         QTRY_COMPARE_EQ_WITH_TIMEOUT(callFinishedSpy.count(), 1, MessageLatencyWithThreshold);
-        QCOMPARE(reply->read<SimpleStringMessage>().testFieldString(), request.testFieldString());
+        QCOMPARE(reply->read<SimpleStringMessage>()->testFieldString(), request.testFieldString());
     } else {
         // Because we're can't be sure about the result,
         // cancel the call, that might affect other tests.
@@ -348,13 +350,13 @@ void QtGrpcClientUnaryCallTest::CancelledInterceptor()
     channel->addInterceptorManager(manager);
     client()->attachChannel(channel);
 
-    SimpleStringMessage result;
     SimpleStringMessage request;
     request.setTestFieldString("sleep");
 
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
 
-    result.setTestFieldString("Result not changed by echo");
+    std::optional<SimpleStringMessage> result = SimpleStringMessage();
+    result->setTestFieldString("Result not changed by echo");
     QObject::connect(reply.get(), &QGrpcCallReply::finished, this,
                      [&result, reply] { result = reply->read<SimpleStringMessage>(); });
 
@@ -370,12 +372,12 @@ void QtGrpcClientUnaryCallTest::CancelledInterceptor()
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
     QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 0, FailTimeout);
 
-    QCOMPARE_EQ(result.testFieldString(), "Result not changed by echo");
+    QCOMPARE_EQ(result->testFieldString(), "Result not changed by echo");
 }
 
 void QtGrpcClientUnaryCallTest::InterceptResponse()
 {
-    SimpleStringMessage serverResponse;
+    std::optional<SimpleStringMessage> serverResponse = SimpleStringMessage();
     auto interceptFunc =
         [this, &serverResponse](std::shared_ptr<QGrpcChannelOperation> operation,
                                 std::shared_ptr<QGrpcCallReply> response,
@@ -395,15 +397,15 @@ void QtGrpcClientUnaryCallTest::InterceptResponse()
     client()->attachChannel(channel);
 
     SimpleStringMessage request;
-    SimpleStringMessage result;
     request.setTestFieldString("Hello Qt!");
+    std::optional<SimpleStringMessage> result;
     client()->testMethod(request, client().get(), [&result](std::shared_ptr<QGrpcCallReply> reply) {
         result = reply->read<SimpleStringMessage>();
     });
 
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(serverResponse.testFieldString(),
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(serverResponse->testFieldString(),
                                  "Hello Qt!", MessageLatencyWithThreshold);
-    QCOMPARE_EQ(result.testFieldString(), "Hello Qt!");
+    QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
 }
 
 void QtGrpcClientUnaryCallTest::CacheIntercept()
@@ -431,13 +433,13 @@ void QtGrpcClientUnaryCallTest::CacheIntercept()
     client()->attachChannel(channel);
 
     SimpleStringMessage request;
-    SimpleStringMessage result;
+    std::optional<SimpleStringMessage> result = SimpleStringMessage();
     request.setTestFieldString("Hello Qt!");
     client()->testMethod(request, client().get(), [&result](std::shared_ptr<QGrpcCallReply> reply) {
         result = reply->read<SimpleStringMessage>();
     });
 
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(result.testFieldString(),
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(result->testFieldString(),
                                  "inter1", MessageLatencyWithThreshold);
 }
 

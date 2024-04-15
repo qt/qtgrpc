@@ -55,8 +55,8 @@ void QtGrpcClientClientStreamTest::Valid()
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
     QCOMPARE(streamErrorSpy.count(), 0);
 
-    SimpleStringMessage result = stream->read<SimpleStringMessage>();
-    QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2Stream3Stream4");
+    const auto result = stream->read<SimpleStringMessage>();
+    QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3Stream4");
 }
 
 void QtGrpcClientClientStreamTest::SequentialSend()
@@ -83,8 +83,9 @@ void QtGrpcClientClientStreamTest::SequentialSend()
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
     QCOMPARE(streamErrorSpy.count(), 0);
 
-    SimpleStringMessage result = stream->read<SimpleStringMessage>();
-    QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2Stream3Stream4");
+    const auto result = stream->read<SimpleStringMessage>();
+    QVERIFY(result.has_value());
+    QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3Stream4");
 }
 
 QTEST_MAIN(QtGrpcClientClientStreamTest)

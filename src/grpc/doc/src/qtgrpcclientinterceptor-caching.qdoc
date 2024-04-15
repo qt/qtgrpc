@@ -55,8 +55,8 @@ protected:
         // Intercept the response
         QObject::connect(response.get(), &QGrpcCallReply::finished, this,
                              [operation, response] {
-                                SimpleStringMessage mess = response->read<SimpleStringMessage>();
-                                cache.insert(operation->method(), operation->service(), mess.testFieldString());
+                                if (const auto mess = response->read<SimpleStringMessage>())
+                                    cache.insert(operation->method(), operation->service(), mess->testFieldString());
                              });
         // Deserialize the request
         SimpleStringMessage deserializedArg;
@@ -88,8 +88,8 @@ protected:
         // Intercept the response
         QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this,
                              [operation, stream] {
-                                SimpleStringMessage mess = stream->read<SimpleStringMessage>();
-                                cache.insert_or_append(operation->method(), operation->service(), mess.testFieldString());
+                                if (const auto mess = stream->read<SimpleStringMessage>())
+                                    cache.insert_or_append(operation->method(), operation->service(), mess->testFieldString());
                              });
         QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
                              [operation] {
