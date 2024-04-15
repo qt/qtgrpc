@@ -5,7 +5,7 @@
 #define QGRPCALLOPTIONS_H
 
 #include <QtCore/qurl.h>
-#include <QtGrpc/qgrpcmetadata.h>
+#include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 #include <chrono>

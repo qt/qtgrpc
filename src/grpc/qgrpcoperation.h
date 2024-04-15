@@ -8,7 +8,7 @@
 #include <QtCore/qobject.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
-#include <QtGrpc/qgrpcmetadata.h>
+#include <QtGrpc/qgrpcdefs.h>
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
 QT_BEGIN_NAMESPACE

@@ -8,6 +8,7 @@
 #include "qgrpcchanneloperation.h"
 #include "qgrpcclientinterceptor.h"
 #include "qgrpcstream.h"
+#include <QtGrpc/qgrpcdefs.h>
 
 #include <QtCore/qtimer.h>
 

@@ -20,7 +20,7 @@
 #include <QtCore/qmap.h>
 #include <QtCore/qobject.h>
 #include <QtCore/qvariant.h>
-#include <QtGrpc/qgrpcmetadata.h>
+#include <QtGrpc/qgrpcdefs.h>
 #include <QtQml/qqmlregistration.h>
 
 QT_BEGIN_NAMESPACE

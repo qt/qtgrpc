@@ -7,7 +7,7 @@
 #include <QtCore/qobject.h>
 #include <QtCore/qlatin1stringview.h>
 #include <QtCore/qbytearrayview.h>
-#include <QtGrpc/qgrpcmetadata.h>
+#include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 #include <memory>

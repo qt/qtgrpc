@@ -1,8 +1,8 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#ifndef QGRPCMETADATA_H
-#define QGRPCMETADATA_H
+#ifndef QGRPCDEFS_H
+#define QGRPCDEFS_H
 
 #include <QtGrpc/qtgrpcglobal.h>
 
@@ -20,4 +20,4 @@ using QGrpcMetadata = std::unordered_multimap<QByteArray, QByteArray>;
 
 QT_END_NAMESPACE
 
-#endif // QGRPCMETADATA_H
+#endif // QGRPCDEFS_H
