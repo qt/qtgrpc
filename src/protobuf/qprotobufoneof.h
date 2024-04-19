@@ -102,15 +102,9 @@ public:
     Q_PROTOBUF_EXPORT bool holdsField(int fieldNumber) const;
 
 private:
-    friend bool operator==(const QProtobufOneof &lhs, const QProtobufOneof &rhs)
-    {
-        return lhs.isEqual(rhs);
-    }
-    friend bool operator!=(const QProtobufOneof &lhs, const QProtobufOneof &rhs)
-    {
-        return !lhs.isEqual(rhs);
-    }
-    Q_PROTOBUF_EXPORT bool isEqual(const QProtobufOneof &other) const;
+    friend Q_PROTOBUF_EXPORT bool comparesEqual(const QProtobufOneof &lhs,
+                                                const QProtobufOneof &rhs) noexcept;
+    Q_DECLARE_EQUALITY_COMPARABLE(QProtobufOneof)
 
     friend class QT_PREPEND_NAMESPACE(QProtobufMessage);
 

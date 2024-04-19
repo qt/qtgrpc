@@ -100,12 +100,12 @@ QProtobufOneof &QProtobufOneof::operator=(const QProtobufOneof &other)
     \internal
     Checks if values stored in oneof is equal \a other.
 */
-bool QProtobufOneof::isEqual(const QProtobufOneof &other) const
+bool comparesEqual(const QProtobufOneof &lhs, const QProtobufOneof &rhs) noexcept
 {
-    if (d_ptr == other.d_ptr)
+    if (lhs.d_ptr == rhs.d_ptr)
         return true;
-    return d_func()->fieldNumber == other.d_func()->fieldNumber
-            && d_func()->value == other.d_func()->value;
+    return lhs.d_func()->fieldNumber == rhs.d_func()->fieldNumber
+        && lhs.d_func()->value == rhs.d_func()->value;
 }
 
 /*!
