@@ -565,8 +565,6 @@ public:
     SimpleSInt32StringMapMessage &operator =(const SimpleSInt32StringMapMessage &other);
     SimpleSInt32StringMapMessage(SimpleSInt32StringMapMessage &&other) noexcept;
     SimpleSInt32StringMapMessage &operator =(SimpleSInt32StringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt32StringMapMessage &other) const;
-    bool operator !=(const SimpleSInt32StringMapMessage &other) const;
 
     SimpleSInt32StringMapMessage::MapFieldEntry mapField() const;
     SimpleSInt32StringMapMessage::MapFieldEntry &mapField();
@@ -574,6 +572,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt32StringMapMessage &lhs, const SimpleSInt32StringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt32StringMapMessage &lhs, const SimpleSInt32StringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt32StringMapMessage &lhs, const SimpleSInt32StringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt32StringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt32StringMapMessage_QtProtobufNested {
@@ -602,8 +609,6 @@ public:
     SimpleSInt64StringMapMessage &operator =(const SimpleSInt64StringMapMessage &other);
     SimpleSInt64StringMapMessage(SimpleSInt64StringMapMessage &&other) noexcept;
     SimpleSInt64StringMapMessage &operator =(SimpleSInt64StringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt64StringMapMessage &other) const;
-    bool operator !=(const SimpleSInt64StringMapMessage &other) const;
 
     SimpleSInt64StringMapMessage::MapFieldEntry mapField() const;
     SimpleSInt64StringMapMessage::MapFieldEntry &mapField();
@@ -611,6 +616,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt64StringMapMessage &lhs, const SimpleSInt64StringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt64StringMapMessage &lhs, const SimpleSInt64StringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt64StringMapMessage &lhs, const SimpleSInt64StringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt64StringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt64StringMapMessage_QtProtobufNested {
@@ -639,8 +653,6 @@ public:
     SimpleInt32StringMapMessage &operator =(const SimpleInt32StringMapMessage &other);
     SimpleInt32StringMapMessage(SimpleInt32StringMapMessage &&other) noexcept;
     SimpleInt32StringMapMessage &operator =(SimpleInt32StringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt32StringMapMessage &other) const;
-    bool operator !=(const SimpleInt32StringMapMessage &other) const;
 
     SimpleInt32StringMapMessage::MapFieldEntry mapField() const;
     SimpleInt32StringMapMessage::MapFieldEntry &mapField();
@@ -648,6 +660,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt32StringMapMessage &lhs, const SimpleInt32StringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt32StringMapMessage &lhs, const SimpleInt32StringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt32StringMapMessage &lhs, const SimpleInt32StringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt32StringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt32StringMapMessage_QtProtobufNested {
@@ -676,8 +697,6 @@ public:
     SimpleInt64StringMapMessage &operator =(const SimpleInt64StringMapMessage &other);
     SimpleInt64StringMapMessage(SimpleInt64StringMapMessage &&other) noexcept;
     SimpleInt64StringMapMessage &operator =(SimpleInt64StringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt64StringMapMessage &other) const;
-    bool operator !=(const SimpleInt64StringMapMessage &other) const;
 
     SimpleInt64StringMapMessage::MapFieldEntry mapField() const;
     SimpleInt64StringMapMessage::MapFieldEntry &mapField();
@@ -685,6 +704,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt64StringMapMessage &lhs, const SimpleInt64StringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt64StringMapMessage &lhs, const SimpleInt64StringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt64StringMapMessage &lhs, const SimpleInt64StringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt64StringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt64StringMapMessage_QtProtobufNested {
@@ -713,8 +741,6 @@ public:
     SimpleUInt32StringMapMessage &operator =(const SimpleUInt32StringMapMessage &other);
     SimpleUInt32StringMapMessage(SimpleUInt32StringMapMessage &&other) noexcept;
     SimpleUInt32StringMapMessage &operator =(SimpleUInt32StringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt32StringMapMessage &other) const;
-    bool operator !=(const SimpleUInt32StringMapMessage &other) const;
 
     SimpleUInt32StringMapMessage::MapFieldEntry mapField() const;
     SimpleUInt32StringMapMessage::MapFieldEntry &mapField();
@@ -722,6 +748,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt32StringMapMessage &lhs, const SimpleUInt32StringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt32StringMapMessage &lhs, const SimpleUInt32StringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt32StringMapMessage &lhs, const SimpleUInt32StringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt32StringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt32StringMapMessage_QtProtobufNested {
@@ -750,8 +785,6 @@ public:
     SimpleUInt64StringMapMessage &operator =(const SimpleUInt64StringMapMessage &other);
     SimpleUInt64StringMapMessage(SimpleUInt64StringMapMessage &&other) noexcept;
     SimpleUInt64StringMapMessage &operator =(SimpleUInt64StringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt64StringMapMessage &other) const;
-    bool operator !=(const SimpleUInt64StringMapMessage &other) const;
 
     SimpleUInt64StringMapMessage::MapFieldEntry mapField() const;
     SimpleUInt64StringMapMessage::MapFieldEntry &mapField();
@@ -759,6 +792,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt64StringMapMessage &lhs, const SimpleUInt64StringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt64StringMapMessage &lhs, const SimpleUInt64StringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt64StringMapMessage &lhs, const SimpleUInt64StringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt64StringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt64StringMapMessage_QtProtobufNested {
@@ -787,8 +829,6 @@ public:
     SimpleFixed32StringMapMessage &operator =(const SimpleFixed32StringMapMessage &other);
     SimpleFixed32StringMapMessage(SimpleFixed32StringMapMessage &&other) noexcept;
     SimpleFixed32StringMapMessage &operator =(SimpleFixed32StringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed32StringMapMessage &other) const;
-    bool operator !=(const SimpleFixed32StringMapMessage &other) const;
 
     SimpleFixed32StringMapMessage::MapFieldEntry mapField() const;
     SimpleFixed32StringMapMessage::MapFieldEntry &mapField();
@@ -796,6 +836,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed32StringMapMessage &lhs, const SimpleFixed32StringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed32StringMapMessage &lhs, const SimpleFixed32StringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed32StringMapMessage &lhs, const SimpleFixed32StringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed32StringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed32StringMapMessage_QtProtobufNested {
@@ -824,8 +873,6 @@ public:
     SimpleFixed64StringMapMessage &operator =(const SimpleFixed64StringMapMessage &other);
     SimpleFixed64StringMapMessage(SimpleFixed64StringMapMessage &&other) noexcept;
     SimpleFixed64StringMapMessage &operator =(SimpleFixed64StringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed64StringMapMessage &other) const;
-    bool operator !=(const SimpleFixed64StringMapMessage &other) const;
 
     SimpleFixed64StringMapMessage::MapFieldEntry mapField() const;
     SimpleFixed64StringMapMessage::MapFieldEntry &mapField();
@@ -833,6 +880,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed64StringMapMessage &lhs, const SimpleFixed64StringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed64StringMapMessage &lhs, const SimpleFixed64StringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed64StringMapMessage &lhs, const SimpleFixed64StringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed64StringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed64StringMapMessage_QtProtobufNested {
@@ -861,8 +917,6 @@ public:
     SimpleSFixed32StringMapMessage &operator =(const SimpleSFixed32StringMapMessage &other);
     SimpleSFixed32StringMapMessage(SimpleSFixed32StringMapMessage &&other) noexcept;
     SimpleSFixed32StringMapMessage &operator =(SimpleSFixed32StringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed32StringMapMessage &other) const;
-    bool operator !=(const SimpleSFixed32StringMapMessage &other) const;
 
     SimpleSFixed32StringMapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32StringMapMessage::MapFieldEntry &mapField();
@@ -870,6 +924,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed32StringMapMessage &lhs, const SimpleSFixed32StringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed32StringMapMessage &lhs, const SimpleSFixed32StringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed32StringMapMessage &lhs, const SimpleSFixed32StringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed32StringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed32StringMapMessage_QtProtobufNested {
@@ -898,8 +961,6 @@ public:
     SimpleSFixed64StringMapMessage &operator =(const SimpleSFixed64StringMapMessage &other);
     SimpleSFixed64StringMapMessage(SimpleSFixed64StringMapMessage &&other) noexcept;
     SimpleSFixed64StringMapMessage &operator =(SimpleSFixed64StringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed64StringMapMessage &other) const;
-    bool operator !=(const SimpleSFixed64StringMapMessage &other) const;
 
     SimpleSFixed64StringMapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64StringMapMessage::MapFieldEntry &mapField();
@@ -907,6 +968,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed64StringMapMessage &lhs, const SimpleSFixed64StringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed64StringMapMessage &lhs, const SimpleSFixed64StringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed64StringMapMessage &lhs, const SimpleSFixed64StringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed64StringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed64StringMapMessage_QtProtobufNested {
@@ -935,8 +1005,6 @@ public:
     SimpleStringStringMapMessage &operator =(const SimpleStringStringMapMessage &other);
     SimpleStringStringMapMessage(SimpleStringStringMapMessage &&other) noexcept;
     SimpleStringStringMapMessage &operator =(SimpleStringStringMapMessage &&other) noexcept;
-    bool operator ==(const SimpleStringStringMapMessage &other) const;
-    bool operator !=(const SimpleStringStringMapMessage &other) const;
 
     SimpleStringStringMapMessage::MapFieldEntry mapField() const;
     SimpleStringStringMapMessage::MapFieldEntry &mapField();
@@ -944,6 +1012,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleStringStringMapMessage &lhs, const SimpleStringStringMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleStringStringMapMessage &lhs, const SimpleStringStringMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleStringStringMapMessage &lhs, const SimpleStringStringMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleStringStringMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleStringStringMapMessage_QtProtobufNested {
@@ -972,8 +1049,6 @@ public:
     SimpleSInt32SInt32MapMessage &operator =(const SimpleSInt32SInt32MapMessage &other);
     SimpleSInt32SInt32MapMessage(SimpleSInt32SInt32MapMessage &&other) noexcept;
     SimpleSInt32SInt32MapMessage &operator =(SimpleSInt32SInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt32SInt32MapMessage &other) const;
-    bool operator !=(const SimpleSInt32SInt32MapMessage &other) const;
 
     SimpleSInt32SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32SInt32MapMessage::MapFieldEntry &mapField();
@@ -981,6 +1056,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt32SInt32MapMessage &lhs, const SimpleSInt32SInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt32SInt32MapMessage &lhs, const SimpleSInt32SInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt32SInt32MapMessage &lhs, const SimpleSInt32SInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt32SInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt32SInt32MapMessage_QtProtobufNested {
@@ -1009,8 +1093,6 @@ public:
     SimpleSInt64SInt32MapMessage &operator =(const SimpleSInt64SInt32MapMessage &other);
     SimpleSInt64SInt32MapMessage(SimpleSInt64SInt32MapMessage &&other) noexcept;
     SimpleSInt64SInt32MapMessage &operator =(SimpleSInt64SInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt64SInt32MapMessage &other) const;
-    bool operator !=(const SimpleSInt64SInt32MapMessage &other) const;
 
     SimpleSInt64SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64SInt32MapMessage::MapFieldEntry &mapField();
@@ -1018,6 +1100,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt64SInt32MapMessage &lhs, const SimpleSInt64SInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt64SInt32MapMessage &lhs, const SimpleSInt64SInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt64SInt32MapMessage &lhs, const SimpleSInt64SInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt64SInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt64SInt32MapMessage_QtProtobufNested {
@@ -1046,8 +1137,6 @@ public:
     SimpleInt32SInt32MapMessage &operator =(const SimpleInt32SInt32MapMessage &other);
     SimpleInt32SInt32MapMessage(SimpleInt32SInt32MapMessage &&other) noexcept;
     SimpleInt32SInt32MapMessage &operator =(SimpleInt32SInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt32SInt32MapMessage &other) const;
-    bool operator !=(const SimpleInt32SInt32MapMessage &other) const;
 
     SimpleInt32SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleInt32SInt32MapMessage::MapFieldEntry &mapField();
@@ -1055,6 +1144,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt32SInt32MapMessage &lhs, const SimpleInt32SInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt32SInt32MapMessage &lhs, const SimpleInt32SInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt32SInt32MapMessage &lhs, const SimpleInt32SInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt32SInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt32SInt32MapMessage_QtProtobufNested {
@@ -1083,8 +1181,6 @@ public:
     SimpleInt64SInt32MapMessage &operator =(const SimpleInt64SInt32MapMessage &other);
     SimpleInt64SInt32MapMessage(SimpleInt64SInt32MapMessage &&other) noexcept;
     SimpleInt64SInt32MapMessage &operator =(SimpleInt64SInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt64SInt32MapMessage &other) const;
-    bool operator !=(const SimpleInt64SInt32MapMessage &other) const;
 
     SimpleInt64SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleInt64SInt32MapMessage::MapFieldEntry &mapField();
@@ -1092,6 +1188,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt64SInt32MapMessage &lhs, const SimpleInt64SInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt64SInt32MapMessage &lhs, const SimpleInt64SInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt64SInt32MapMessage &lhs, const SimpleInt64SInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt64SInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt64SInt32MapMessage_QtProtobufNested {
@@ -1120,8 +1225,6 @@ public:
     SimpleUInt32SInt32MapMessage &operator =(const SimpleUInt32SInt32MapMessage &other);
     SimpleUInt32SInt32MapMessage(SimpleUInt32SInt32MapMessage &&other) noexcept;
     SimpleUInt32SInt32MapMessage &operator =(SimpleUInt32SInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt32SInt32MapMessage &other) const;
-    bool operator !=(const SimpleUInt32SInt32MapMessage &other) const;
 
     SimpleUInt32SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32SInt32MapMessage::MapFieldEntry &mapField();
@@ -1129,6 +1232,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt32SInt32MapMessage &lhs, const SimpleUInt32SInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt32SInt32MapMessage &lhs, const SimpleUInt32SInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt32SInt32MapMessage &lhs, const SimpleUInt32SInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt32SInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt32SInt32MapMessage_QtProtobufNested {
@@ -1157,8 +1269,6 @@ public:
     SimpleUInt64SInt32MapMessage &operator =(const SimpleUInt64SInt32MapMessage &other);
     SimpleUInt64SInt32MapMessage(SimpleUInt64SInt32MapMessage &&other) noexcept;
     SimpleUInt64SInt32MapMessage &operator =(SimpleUInt64SInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt64SInt32MapMessage &other) const;
-    bool operator !=(const SimpleUInt64SInt32MapMessage &other) const;
 
     SimpleUInt64SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64SInt32MapMessage::MapFieldEntry &mapField();
@@ -1166,6 +1276,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt64SInt32MapMessage &lhs, const SimpleUInt64SInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt64SInt32MapMessage &lhs, const SimpleUInt64SInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt64SInt32MapMessage &lhs, const SimpleUInt64SInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt64SInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt64SInt32MapMessage_QtProtobufNested {
@@ -1194,8 +1313,6 @@ public:
     SimpleFixed32SInt32MapMessage &operator =(const SimpleFixed32SInt32MapMessage &other);
     SimpleFixed32SInt32MapMessage(SimpleFixed32SInt32MapMessage &&other) noexcept;
     SimpleFixed32SInt32MapMessage &operator =(SimpleFixed32SInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed32SInt32MapMessage &other) const;
-    bool operator !=(const SimpleFixed32SInt32MapMessage &other) const;
 
     SimpleFixed32SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32SInt32MapMessage::MapFieldEntry &mapField();
@@ -1203,6 +1320,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed32SInt32MapMessage &lhs, const SimpleFixed32SInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed32SInt32MapMessage &lhs, const SimpleFixed32SInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed32SInt32MapMessage &lhs, const SimpleFixed32SInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed32SInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed32SInt32MapMessage_QtProtobufNested {
@@ -1231,8 +1357,6 @@ public:
     SimpleFixed64SInt32MapMessage &operator =(const SimpleFixed64SInt32MapMessage &other);
     SimpleFixed64SInt32MapMessage(SimpleFixed64SInt32MapMessage &&other) noexcept;
     SimpleFixed64SInt32MapMessage &operator =(SimpleFixed64SInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed64SInt32MapMessage &other) const;
-    bool operator !=(const SimpleFixed64SInt32MapMessage &other) const;
 
     SimpleFixed64SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64SInt32MapMessage::MapFieldEntry &mapField();
@@ -1240,6 +1364,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed64SInt32MapMessage &lhs, const SimpleFixed64SInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed64SInt32MapMessage &lhs, const SimpleFixed64SInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed64SInt32MapMessage &lhs, const SimpleFixed64SInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed64SInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed64SInt32MapMessage_QtProtobufNested {
@@ -1268,8 +1401,6 @@ public:
     SimpleSFixed32SInt32MapMessage &operator =(const SimpleSFixed32SInt32MapMessage &other);
     SimpleSFixed32SInt32MapMessage(SimpleSFixed32SInt32MapMessage &&other) noexcept;
     SimpleSFixed32SInt32MapMessage &operator =(SimpleSFixed32SInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed32SInt32MapMessage &other) const;
-    bool operator !=(const SimpleSFixed32SInt32MapMessage &other) const;
 
     SimpleSFixed32SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32SInt32MapMessage::MapFieldEntry &mapField();
@@ -1277,6 +1408,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed32SInt32MapMessage &lhs, const SimpleSFixed32SInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed32SInt32MapMessage &lhs, const SimpleSFixed32SInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed32SInt32MapMessage &lhs, const SimpleSFixed32SInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed32SInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed32SInt32MapMessage_QtProtobufNested {
@@ -1305,8 +1445,6 @@ public:
     SimpleSFixed64SInt32MapMessage &operator =(const SimpleSFixed64SInt32MapMessage &other);
     SimpleSFixed64SInt32MapMessage(SimpleSFixed64SInt32MapMessage &&other) noexcept;
     SimpleSFixed64SInt32MapMessage &operator =(SimpleSFixed64SInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed64SInt32MapMessage &other) const;
-    bool operator !=(const SimpleSFixed64SInt32MapMessage &other) const;
 
     SimpleSFixed64SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64SInt32MapMessage::MapFieldEntry &mapField();
@@ -1314,6 +1452,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed64SInt32MapMessage &lhs, const SimpleSFixed64SInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed64SInt32MapMessage &lhs, const SimpleSFixed64SInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed64SInt32MapMessage &lhs, const SimpleSFixed64SInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed64SInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed64SInt32MapMessage_QtProtobufNested {
@@ -1342,8 +1489,6 @@ public:
     SimpleStringSInt32MapMessage &operator =(const SimpleStringSInt32MapMessage &other);
     SimpleStringSInt32MapMessage(SimpleStringSInt32MapMessage &&other) noexcept;
     SimpleStringSInt32MapMessage &operator =(SimpleStringSInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleStringSInt32MapMessage &other) const;
-    bool operator !=(const SimpleStringSInt32MapMessage &other) const;
 
     SimpleStringSInt32MapMessage::MapFieldEntry mapField() const;
     SimpleStringSInt32MapMessage::MapFieldEntry &mapField();
@@ -1351,6 +1496,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleStringSInt32MapMessage &lhs, const SimpleStringSInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleStringSInt32MapMessage &lhs, const SimpleStringSInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleStringSInt32MapMessage &lhs, const SimpleStringSInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleStringSInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleStringSInt32MapMessage_QtProtobufNested {
@@ -1379,8 +1533,6 @@ public:
     SimpleSInt32SInt64MapMessage &operator =(const SimpleSInt32SInt64MapMessage &other);
     SimpleSInt32SInt64MapMessage(SimpleSInt32SInt64MapMessage &&other) noexcept;
     SimpleSInt32SInt64MapMessage &operator =(SimpleSInt32SInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt32SInt64MapMessage &other) const;
-    bool operator !=(const SimpleSInt32SInt64MapMessage &other) const;
 
     SimpleSInt32SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32SInt64MapMessage::MapFieldEntry &mapField();
@@ -1388,6 +1540,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt32SInt64MapMessage &lhs, const SimpleSInt32SInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt32SInt64MapMessage &lhs, const SimpleSInt32SInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt32SInt64MapMessage &lhs, const SimpleSInt32SInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt32SInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt32SInt64MapMessage_QtProtobufNested {
@@ -1416,8 +1577,6 @@ public:
     SimpleSInt64SInt64MapMessage &operator =(const SimpleSInt64SInt64MapMessage &other);
     SimpleSInt64SInt64MapMessage(SimpleSInt64SInt64MapMessage &&other) noexcept;
     SimpleSInt64SInt64MapMessage &operator =(SimpleSInt64SInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt64SInt64MapMessage &other) const;
-    bool operator !=(const SimpleSInt64SInt64MapMessage &other) const;
 
     SimpleSInt64SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64SInt64MapMessage::MapFieldEntry &mapField();
@@ -1425,6 +1584,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt64SInt64MapMessage &lhs, const SimpleSInt64SInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt64SInt64MapMessage &lhs, const SimpleSInt64SInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt64SInt64MapMessage &lhs, const SimpleSInt64SInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt64SInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt64SInt64MapMessage_QtProtobufNested {
@@ -1453,8 +1621,6 @@ public:
     SimpleInt32SInt64MapMessage &operator =(const SimpleInt32SInt64MapMessage &other);
     SimpleInt32SInt64MapMessage(SimpleInt32SInt64MapMessage &&other) noexcept;
     SimpleInt32SInt64MapMessage &operator =(SimpleInt32SInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt32SInt64MapMessage &other) const;
-    bool operator !=(const SimpleInt32SInt64MapMessage &other) const;
 
     SimpleInt32SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleInt32SInt64MapMessage::MapFieldEntry &mapField();
@@ -1462,6 +1628,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt32SInt64MapMessage &lhs, const SimpleInt32SInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt32SInt64MapMessage &lhs, const SimpleInt32SInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt32SInt64MapMessage &lhs, const SimpleInt32SInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt32SInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt32SInt64MapMessage_QtProtobufNested {
@@ -1490,8 +1665,6 @@ public:
     SimpleInt64SInt64MapMessage &operator =(const SimpleInt64SInt64MapMessage &other);
     SimpleInt64SInt64MapMessage(SimpleInt64SInt64MapMessage &&other) noexcept;
     SimpleInt64SInt64MapMessage &operator =(SimpleInt64SInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt64SInt64MapMessage &other) const;
-    bool operator !=(const SimpleInt64SInt64MapMessage &other) const;
 
     SimpleInt64SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleInt64SInt64MapMessage::MapFieldEntry &mapField();
@@ -1499,6 +1672,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt64SInt64MapMessage &lhs, const SimpleInt64SInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt64SInt64MapMessage &lhs, const SimpleInt64SInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt64SInt64MapMessage &lhs, const SimpleInt64SInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt64SInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt64SInt64MapMessage_QtProtobufNested {
@@ -1527,8 +1709,6 @@ public:
     SimpleUInt32SInt64MapMessage &operator =(const SimpleUInt32SInt64MapMessage &other);
     SimpleUInt32SInt64MapMessage(SimpleUInt32SInt64MapMessage &&other) noexcept;
     SimpleUInt32SInt64MapMessage &operator =(SimpleUInt32SInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt32SInt64MapMessage &other) const;
-    bool operator !=(const SimpleUInt32SInt64MapMessage &other) const;
 
     SimpleUInt32SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32SInt64MapMessage::MapFieldEntry &mapField();
@@ -1536,6 +1716,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt32SInt64MapMessage &lhs, const SimpleUInt32SInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt32SInt64MapMessage &lhs, const SimpleUInt32SInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt32SInt64MapMessage &lhs, const SimpleUInt32SInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt32SInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt32SInt64MapMessage_QtProtobufNested {
@@ -1564,8 +1753,6 @@ public:
     SimpleUInt64SInt64MapMessage &operator =(const SimpleUInt64SInt64MapMessage &other);
     SimpleUInt64SInt64MapMessage(SimpleUInt64SInt64MapMessage &&other) noexcept;
     SimpleUInt64SInt64MapMessage &operator =(SimpleUInt64SInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt64SInt64MapMessage &other) const;
-    bool operator !=(const SimpleUInt64SInt64MapMessage &other) const;
 
     SimpleUInt64SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64SInt64MapMessage::MapFieldEntry &mapField();
@@ -1573,6 +1760,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt64SInt64MapMessage &lhs, const SimpleUInt64SInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt64SInt64MapMessage &lhs, const SimpleUInt64SInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt64SInt64MapMessage &lhs, const SimpleUInt64SInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt64SInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt64SInt64MapMessage_QtProtobufNested {
@@ -1601,8 +1797,6 @@ public:
     SimpleFixed32SInt64MapMessage &operator =(const SimpleFixed32SInt64MapMessage &other);
     SimpleFixed32SInt64MapMessage(SimpleFixed32SInt64MapMessage &&other) noexcept;
     SimpleFixed32SInt64MapMessage &operator =(SimpleFixed32SInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed32SInt64MapMessage &other) const;
-    bool operator !=(const SimpleFixed32SInt64MapMessage &other) const;
 
     SimpleFixed32SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32SInt64MapMessage::MapFieldEntry &mapField();
@@ -1610,6 +1804,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed32SInt64MapMessage &lhs, const SimpleFixed32SInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed32SInt64MapMessage &lhs, const SimpleFixed32SInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed32SInt64MapMessage &lhs, const SimpleFixed32SInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed32SInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed32SInt64MapMessage_QtProtobufNested {
@@ -1638,8 +1841,6 @@ public:
     SimpleFixed64SInt64MapMessage &operator =(const SimpleFixed64SInt64MapMessage &other);
     SimpleFixed64SInt64MapMessage(SimpleFixed64SInt64MapMessage &&other) noexcept;
     SimpleFixed64SInt64MapMessage &operator =(SimpleFixed64SInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed64SInt64MapMessage &other) const;
-    bool operator !=(const SimpleFixed64SInt64MapMessage &other) const;
 
     SimpleFixed64SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64SInt64MapMessage::MapFieldEntry &mapField();
@@ -1647,6 +1848,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed64SInt64MapMessage &lhs, const SimpleFixed64SInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed64SInt64MapMessage &lhs, const SimpleFixed64SInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed64SInt64MapMessage &lhs, const SimpleFixed64SInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed64SInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed64SInt64MapMessage_QtProtobufNested {
@@ -1675,8 +1885,6 @@ public:
     SimpleSFixed32SInt64MapMessage &operator =(const SimpleSFixed32SInt64MapMessage &other);
     SimpleSFixed32SInt64MapMessage(SimpleSFixed32SInt64MapMessage &&other) noexcept;
     SimpleSFixed32SInt64MapMessage &operator =(SimpleSFixed32SInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed32SInt64MapMessage &other) const;
-    bool operator !=(const SimpleSFixed32SInt64MapMessage &other) const;
 
     SimpleSFixed32SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32SInt64MapMessage::MapFieldEntry &mapField();
@@ -1684,6 +1892,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed32SInt64MapMessage &lhs, const SimpleSFixed32SInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed32SInt64MapMessage &lhs, const SimpleSFixed32SInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed32SInt64MapMessage &lhs, const SimpleSFixed32SInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed32SInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed32SInt64MapMessage_QtProtobufNested {
@@ -1712,8 +1929,6 @@ public:
     SimpleSFixed64SInt64MapMessage &operator =(const SimpleSFixed64SInt64MapMessage &other);
     SimpleSFixed64SInt64MapMessage(SimpleSFixed64SInt64MapMessage &&other) noexcept;
     SimpleSFixed64SInt64MapMessage &operator =(SimpleSFixed64SInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed64SInt64MapMessage &other) const;
-    bool operator !=(const SimpleSFixed64SInt64MapMessage &other) const;
 
     SimpleSFixed64SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64SInt64MapMessage::MapFieldEntry &mapField();
@@ -1721,6 +1936,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed64SInt64MapMessage &lhs, const SimpleSFixed64SInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed64SInt64MapMessage &lhs, const SimpleSFixed64SInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed64SInt64MapMessage &lhs, const SimpleSFixed64SInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed64SInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed64SInt64MapMessage_QtProtobufNested {
@@ -1749,8 +1973,6 @@ public:
     SimpleStringSInt64MapMessage &operator =(const SimpleStringSInt64MapMessage &other);
     SimpleStringSInt64MapMessage(SimpleStringSInt64MapMessage &&other) noexcept;
     SimpleStringSInt64MapMessage &operator =(SimpleStringSInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleStringSInt64MapMessage &other) const;
-    bool operator !=(const SimpleStringSInt64MapMessage &other) const;
 
     SimpleStringSInt64MapMessage::MapFieldEntry mapField() const;
     SimpleStringSInt64MapMessage::MapFieldEntry &mapField();
@@ -1758,6 +1980,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleStringSInt64MapMessage &lhs, const SimpleStringSInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleStringSInt64MapMessage &lhs, const SimpleStringSInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleStringSInt64MapMessage &lhs, const SimpleStringSInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleStringSInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleStringSInt64MapMessage_QtProtobufNested {
@@ -1786,8 +2017,6 @@ public:
     SimpleSInt32UInt32MapMessage &operator =(const SimpleSInt32UInt32MapMessage &other);
     SimpleSInt32UInt32MapMessage(SimpleSInt32UInt32MapMessage &&other) noexcept;
     SimpleSInt32UInt32MapMessage &operator =(SimpleSInt32UInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt32UInt32MapMessage &other) const;
-    bool operator !=(const SimpleSInt32UInt32MapMessage &other) const;
 
     SimpleSInt32UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32UInt32MapMessage::MapFieldEntry &mapField();
@@ -1795,6 +2024,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt32UInt32MapMessage &lhs, const SimpleSInt32UInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt32UInt32MapMessage &lhs, const SimpleSInt32UInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt32UInt32MapMessage &lhs, const SimpleSInt32UInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt32UInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt32UInt32MapMessage_QtProtobufNested {
@@ -1823,8 +2061,6 @@ public:
     SimpleSInt64UInt32MapMessage &operator =(const SimpleSInt64UInt32MapMessage &other);
     SimpleSInt64UInt32MapMessage(SimpleSInt64UInt32MapMessage &&other) noexcept;
     SimpleSInt64UInt32MapMessage &operator =(SimpleSInt64UInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt64UInt32MapMessage &other) const;
-    bool operator !=(const SimpleSInt64UInt32MapMessage &other) const;
 
     SimpleSInt64UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64UInt32MapMessage::MapFieldEntry &mapField();
@@ -1832,6 +2068,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt64UInt32MapMessage &lhs, const SimpleSInt64UInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt64UInt32MapMessage &lhs, const SimpleSInt64UInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt64UInt32MapMessage &lhs, const SimpleSInt64UInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt64UInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt64UInt32MapMessage_QtProtobufNested {
@@ -1860,8 +2105,6 @@ public:
     SimpleInt32UInt32MapMessage &operator =(const SimpleInt32UInt32MapMessage &other);
     SimpleInt32UInt32MapMessage(SimpleInt32UInt32MapMessage &&other) noexcept;
     SimpleInt32UInt32MapMessage &operator =(SimpleInt32UInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt32UInt32MapMessage &other) const;
-    bool operator !=(const SimpleInt32UInt32MapMessage &other) const;
 
     SimpleInt32UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleInt32UInt32MapMessage::MapFieldEntry &mapField();
@@ -1869,6 +2112,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt32UInt32MapMessage &lhs, const SimpleInt32UInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt32UInt32MapMessage &lhs, const SimpleInt32UInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt32UInt32MapMessage &lhs, const SimpleInt32UInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt32UInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt32UInt32MapMessage_QtProtobufNested {
@@ -1897,8 +2149,6 @@ public:
     SimpleInt64UInt32MapMessage &operator =(const SimpleInt64UInt32MapMessage &other);
     SimpleInt64UInt32MapMessage(SimpleInt64UInt32MapMessage &&other) noexcept;
     SimpleInt64UInt32MapMessage &operator =(SimpleInt64UInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt64UInt32MapMessage &other) const;
-    bool operator !=(const SimpleInt64UInt32MapMessage &other) const;
 
     SimpleInt64UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleInt64UInt32MapMessage::MapFieldEntry &mapField();
@@ -1906,6 +2156,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt64UInt32MapMessage &lhs, const SimpleInt64UInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt64UInt32MapMessage &lhs, const SimpleInt64UInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt64UInt32MapMessage &lhs, const SimpleInt64UInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt64UInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt64UInt32MapMessage_QtProtobufNested {
@@ -1934,8 +2193,6 @@ public:
     SimpleUInt32UInt32MapMessage &operator =(const SimpleUInt32UInt32MapMessage &other);
     SimpleUInt32UInt32MapMessage(SimpleUInt32UInt32MapMessage &&other) noexcept;
     SimpleUInt32UInt32MapMessage &operator =(SimpleUInt32UInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt32UInt32MapMessage &other) const;
-    bool operator !=(const SimpleUInt32UInt32MapMessage &other) const;
 
     SimpleUInt32UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32UInt32MapMessage::MapFieldEntry &mapField();
@@ -1943,6 +2200,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt32UInt32MapMessage &lhs, const SimpleUInt32UInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt32UInt32MapMessage &lhs, const SimpleUInt32UInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt32UInt32MapMessage &lhs, const SimpleUInt32UInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt32UInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt32UInt32MapMessage_QtProtobufNested {
@@ -1971,8 +2237,6 @@ public:
     SimpleUInt64UInt32MapMessage &operator =(const SimpleUInt64UInt32MapMessage &other);
     SimpleUInt64UInt32MapMessage(SimpleUInt64UInt32MapMessage &&other) noexcept;
     SimpleUInt64UInt32MapMessage &operator =(SimpleUInt64UInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt64UInt32MapMessage &other) const;
-    bool operator !=(const SimpleUInt64UInt32MapMessage &other) const;
 
     SimpleUInt64UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64UInt32MapMessage::MapFieldEntry &mapField();
@@ -1980,6 +2244,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt64UInt32MapMessage &lhs, const SimpleUInt64UInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt64UInt32MapMessage &lhs, const SimpleUInt64UInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt64UInt32MapMessage &lhs, const SimpleUInt64UInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt64UInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt64UInt32MapMessage_QtProtobufNested {
@@ -2008,8 +2281,6 @@ public:
     SimpleFixed32UInt32MapMessage &operator =(const SimpleFixed32UInt32MapMessage &other);
     SimpleFixed32UInt32MapMessage(SimpleFixed32UInt32MapMessage &&other) noexcept;
     SimpleFixed32UInt32MapMessage &operator =(SimpleFixed32UInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed32UInt32MapMessage &other) const;
-    bool operator !=(const SimpleFixed32UInt32MapMessage &other) const;
 
     SimpleFixed32UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32UInt32MapMessage::MapFieldEntry &mapField();
@@ -2017,6 +2288,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed32UInt32MapMessage &lhs, const SimpleFixed32UInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed32UInt32MapMessage &lhs, const SimpleFixed32UInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed32UInt32MapMessage &lhs, const SimpleFixed32UInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed32UInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed32UInt32MapMessage_QtProtobufNested {
@@ -2045,8 +2325,6 @@ public:
     SimpleFixed64UInt32MapMessage &operator =(const SimpleFixed64UInt32MapMessage &other);
     SimpleFixed64UInt32MapMessage(SimpleFixed64UInt32MapMessage &&other) noexcept;
     SimpleFixed64UInt32MapMessage &operator =(SimpleFixed64UInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed64UInt32MapMessage &other) const;
-    bool operator !=(const SimpleFixed64UInt32MapMessage &other) const;
 
     SimpleFixed64UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64UInt32MapMessage::MapFieldEntry &mapField();
@@ -2054,6 +2332,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed64UInt32MapMessage &lhs, const SimpleFixed64UInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed64UInt32MapMessage &lhs, const SimpleFixed64UInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed64UInt32MapMessage &lhs, const SimpleFixed64UInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed64UInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed64UInt32MapMessage_QtProtobufNested {
@@ -2082,8 +2369,6 @@ public:
     SimpleSFixed32UInt32MapMessage &operator =(const SimpleSFixed32UInt32MapMessage &other);
     SimpleSFixed32UInt32MapMessage(SimpleSFixed32UInt32MapMessage &&other) noexcept;
     SimpleSFixed32UInt32MapMessage &operator =(SimpleSFixed32UInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed32UInt32MapMessage &other) const;
-    bool operator !=(const SimpleSFixed32UInt32MapMessage &other) const;
 
     SimpleSFixed32UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32UInt32MapMessage::MapFieldEntry &mapField();
@@ -2091,6 +2376,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed32UInt32MapMessage &lhs, const SimpleSFixed32UInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed32UInt32MapMessage &lhs, const SimpleSFixed32UInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed32UInt32MapMessage &lhs, const SimpleSFixed32UInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed32UInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed32UInt32MapMessage_QtProtobufNested {
@@ -2119,8 +2413,6 @@ public:
     SimpleSFixed64UInt32MapMessage &operator =(const SimpleSFixed64UInt32MapMessage &other);
     SimpleSFixed64UInt32MapMessage(SimpleSFixed64UInt32MapMessage &&other) noexcept;
     SimpleSFixed64UInt32MapMessage &operator =(SimpleSFixed64UInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed64UInt32MapMessage &other) const;
-    bool operator !=(const SimpleSFixed64UInt32MapMessage &other) const;
 
     SimpleSFixed64UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64UInt32MapMessage::MapFieldEntry &mapField();
@@ -2128,6 +2420,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed64UInt32MapMessage &lhs, const SimpleSFixed64UInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed64UInt32MapMessage &lhs, const SimpleSFixed64UInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed64UInt32MapMessage &lhs, const SimpleSFixed64UInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed64UInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed64UInt32MapMessage_QtProtobufNested {
@@ -2156,8 +2457,6 @@ public:
     SimpleStringUInt32MapMessage &operator =(const SimpleStringUInt32MapMessage &other);
     SimpleStringUInt32MapMessage(SimpleStringUInt32MapMessage &&other) noexcept;
     SimpleStringUInt32MapMessage &operator =(SimpleStringUInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleStringUInt32MapMessage &other) const;
-    bool operator !=(const SimpleStringUInt32MapMessage &other) const;
 
     SimpleStringUInt32MapMessage::MapFieldEntry mapField() const;
     SimpleStringUInt32MapMessage::MapFieldEntry &mapField();
@@ -2165,6 +2464,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleStringUInt32MapMessage &lhs, const SimpleStringUInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleStringUInt32MapMessage &lhs, const SimpleStringUInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleStringUInt32MapMessage &lhs, const SimpleStringUInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleStringUInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleStringUInt32MapMessage_QtProtobufNested {
@@ -2193,8 +2501,6 @@ public:
     SimpleSInt32UInt64MapMessage &operator =(const SimpleSInt32UInt64MapMessage &other);
     SimpleSInt32UInt64MapMessage(SimpleSInt32UInt64MapMessage &&other) noexcept;
     SimpleSInt32UInt64MapMessage &operator =(SimpleSInt32UInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt32UInt64MapMessage &other) const;
-    bool operator !=(const SimpleSInt32UInt64MapMessage &other) const;
 
     SimpleSInt32UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32UInt64MapMessage::MapFieldEntry &mapField();
@@ -2202,6 +2508,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt32UInt64MapMessage &lhs, const SimpleSInt32UInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt32UInt64MapMessage &lhs, const SimpleSInt32UInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt32UInt64MapMessage &lhs, const SimpleSInt32UInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt32UInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt32UInt64MapMessage_QtProtobufNested {
@@ -2230,8 +2545,6 @@ public:
     SimpleSInt64UInt64MapMessage &operator =(const SimpleSInt64UInt64MapMessage &other);
     SimpleSInt64UInt64MapMessage(SimpleSInt64UInt64MapMessage &&other) noexcept;
     SimpleSInt64UInt64MapMessage &operator =(SimpleSInt64UInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt64UInt64MapMessage &other) const;
-    bool operator !=(const SimpleSInt64UInt64MapMessage &other) const;
 
     SimpleSInt64UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64UInt64MapMessage::MapFieldEntry &mapField();
@@ -2239,6 +2552,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt64UInt64MapMessage &lhs, const SimpleSInt64UInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt64UInt64MapMessage &lhs, const SimpleSInt64UInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt64UInt64MapMessage &lhs, const SimpleSInt64UInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt64UInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt64UInt64MapMessage_QtProtobufNested {
@@ -2267,8 +2589,6 @@ public:
     SimpleInt32UInt64MapMessage &operator =(const SimpleInt32UInt64MapMessage &other);
     SimpleInt32UInt64MapMessage(SimpleInt32UInt64MapMessage &&other) noexcept;
     SimpleInt32UInt64MapMessage &operator =(SimpleInt32UInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt32UInt64MapMessage &other) const;
-    bool operator !=(const SimpleInt32UInt64MapMessage &other) const;
 
     SimpleInt32UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleInt32UInt64MapMessage::MapFieldEntry &mapField();
@@ -2276,6 +2596,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt32UInt64MapMessage &lhs, const SimpleInt32UInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt32UInt64MapMessage &lhs, const SimpleInt32UInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt32UInt64MapMessage &lhs, const SimpleInt32UInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt32UInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt32UInt64MapMessage_QtProtobufNested {
@@ -2304,8 +2633,6 @@ public:
     SimpleInt64UInt64MapMessage &operator =(const SimpleInt64UInt64MapMessage &other);
     SimpleInt64UInt64MapMessage(SimpleInt64UInt64MapMessage &&other) noexcept;
     SimpleInt64UInt64MapMessage &operator =(SimpleInt64UInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt64UInt64MapMessage &other) const;
-    bool operator !=(const SimpleInt64UInt64MapMessage &other) const;
 
     SimpleInt64UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleInt64UInt64MapMessage::MapFieldEntry &mapField();
@@ -2313,6 +2640,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt64UInt64MapMessage &lhs, const SimpleInt64UInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt64UInt64MapMessage &lhs, const SimpleInt64UInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt64UInt64MapMessage &lhs, const SimpleInt64UInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt64UInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt64UInt64MapMessage_QtProtobufNested {
@@ -2341,8 +2677,6 @@ public:
     SimpleUInt32UInt64MapMessage &operator =(const SimpleUInt32UInt64MapMessage &other);
     SimpleUInt32UInt64MapMessage(SimpleUInt32UInt64MapMessage &&other) noexcept;
     SimpleUInt32UInt64MapMessage &operator =(SimpleUInt32UInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt32UInt64MapMessage &other) const;
-    bool operator !=(const SimpleUInt32UInt64MapMessage &other) const;
 
     SimpleUInt32UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32UInt64MapMessage::MapFieldEntry &mapField();
@@ -2350,6 +2684,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt32UInt64MapMessage &lhs, const SimpleUInt32UInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt32UInt64MapMessage &lhs, const SimpleUInt32UInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt32UInt64MapMessage &lhs, const SimpleUInt32UInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt32UInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt32UInt64MapMessage_QtProtobufNested {
@@ -2378,8 +2721,6 @@ public:
     SimpleUInt64UInt64MapMessage &operator =(const SimpleUInt64UInt64MapMessage &other);
     SimpleUInt64UInt64MapMessage(SimpleUInt64UInt64MapMessage &&other) noexcept;
     SimpleUInt64UInt64MapMessage &operator =(SimpleUInt64UInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt64UInt64MapMessage &other) const;
-    bool operator !=(const SimpleUInt64UInt64MapMessage &other) const;
 
     SimpleUInt64UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64UInt64MapMessage::MapFieldEntry &mapField();
@@ -2387,6 +2728,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt64UInt64MapMessage &lhs, const SimpleUInt64UInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt64UInt64MapMessage &lhs, const SimpleUInt64UInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt64UInt64MapMessage &lhs, const SimpleUInt64UInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt64UInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt64UInt64MapMessage_QtProtobufNested {
@@ -2415,8 +2765,6 @@ public:
     SimpleFixed32UInt64MapMessage &operator =(const SimpleFixed32UInt64MapMessage &other);
     SimpleFixed32UInt64MapMessage(SimpleFixed32UInt64MapMessage &&other) noexcept;
     SimpleFixed32UInt64MapMessage &operator =(SimpleFixed32UInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed32UInt64MapMessage &other) const;
-    bool operator !=(const SimpleFixed32UInt64MapMessage &other) const;
 
     SimpleFixed32UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32UInt64MapMessage::MapFieldEntry &mapField();
@@ -2424,6 +2772,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed32UInt64MapMessage &lhs, const SimpleFixed32UInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed32UInt64MapMessage &lhs, const SimpleFixed32UInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed32UInt64MapMessage &lhs, const SimpleFixed32UInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed32UInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed32UInt64MapMessage_QtProtobufNested {
@@ -2452,8 +2809,6 @@ public:
     SimpleFixed64UInt64MapMessage &operator =(const SimpleFixed64UInt64MapMessage &other);
     SimpleFixed64UInt64MapMessage(SimpleFixed64UInt64MapMessage &&other) noexcept;
     SimpleFixed64UInt64MapMessage &operator =(SimpleFixed64UInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed64UInt64MapMessage &other) const;
-    bool operator !=(const SimpleFixed64UInt64MapMessage &other) const;
 
     SimpleFixed64UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64UInt64MapMessage::MapFieldEntry &mapField();
@@ -2461,6 +2816,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed64UInt64MapMessage &lhs, const SimpleFixed64UInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed64UInt64MapMessage &lhs, const SimpleFixed64UInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed64UInt64MapMessage &lhs, const SimpleFixed64UInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed64UInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed64UInt64MapMessage_QtProtobufNested {
@@ -2489,8 +2853,6 @@ public:
     SimpleSFixed32UInt64MapMessage &operator =(const SimpleSFixed32UInt64MapMessage &other);
     SimpleSFixed32UInt64MapMessage(SimpleSFixed32UInt64MapMessage &&other) noexcept;
     SimpleSFixed32UInt64MapMessage &operator =(SimpleSFixed32UInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed32UInt64MapMessage &other) const;
-    bool operator !=(const SimpleSFixed32UInt64MapMessage &other) const;
 
     SimpleSFixed32UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32UInt64MapMessage::MapFieldEntry &mapField();
@@ -2498,6 +2860,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed32UInt64MapMessage &lhs, const SimpleSFixed32UInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed32UInt64MapMessage &lhs, const SimpleSFixed32UInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed32UInt64MapMessage &lhs, const SimpleSFixed32UInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed32UInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed32UInt64MapMessage_QtProtobufNested {
@@ -2526,8 +2897,6 @@ public:
     SimpleSFixed64UInt64MapMessage &operator =(const SimpleSFixed64UInt64MapMessage &other);
     SimpleSFixed64UInt64MapMessage(SimpleSFixed64UInt64MapMessage &&other) noexcept;
     SimpleSFixed64UInt64MapMessage &operator =(SimpleSFixed64UInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed64UInt64MapMessage &other) const;
-    bool operator !=(const SimpleSFixed64UInt64MapMessage &other) const;
 
     SimpleSFixed64UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64UInt64MapMessage::MapFieldEntry &mapField();
@@ -2535,6 +2904,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed64UInt64MapMessage &lhs, const SimpleSFixed64UInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed64UInt64MapMessage &lhs, const SimpleSFixed64UInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed64UInt64MapMessage &lhs, const SimpleSFixed64UInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed64UInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed64UInt64MapMessage_QtProtobufNested {
@@ -2563,8 +2941,6 @@ public:
     SimpleStringUInt64MapMessage &operator =(const SimpleStringUInt64MapMessage &other);
     SimpleStringUInt64MapMessage(SimpleStringUInt64MapMessage &&other) noexcept;
     SimpleStringUInt64MapMessage &operator =(SimpleStringUInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleStringUInt64MapMessage &other) const;
-    bool operator !=(const SimpleStringUInt64MapMessage &other) const;
 
     SimpleStringUInt64MapMessage::MapFieldEntry mapField() const;
     SimpleStringUInt64MapMessage::MapFieldEntry &mapField();
@@ -2572,6 +2948,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleStringUInt64MapMessage &lhs, const SimpleStringUInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleStringUInt64MapMessage &lhs, const SimpleStringUInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleStringUInt64MapMessage &lhs, const SimpleStringUInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleStringUInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleStringUInt64MapMessage_QtProtobufNested {
@@ -2600,8 +2985,6 @@ public:
     SimpleSInt32Int32MapMessage &operator =(const SimpleSInt32Int32MapMessage &other);
     SimpleSInt32Int32MapMessage(SimpleSInt32Int32MapMessage &&other) noexcept;
     SimpleSInt32Int32MapMessage &operator =(SimpleSInt32Int32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt32Int32MapMessage &other) const;
-    bool operator !=(const SimpleSInt32Int32MapMessage &other) const;
 
     SimpleSInt32Int32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32Int32MapMessage::MapFieldEntry &mapField();
@@ -2609,6 +2992,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt32Int32MapMessage &lhs, const SimpleSInt32Int32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt32Int32MapMessage &lhs, const SimpleSInt32Int32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt32Int32MapMessage &lhs, const SimpleSInt32Int32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt32Int32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt32Int32MapMessage_QtProtobufNested {
@@ -2637,8 +3029,6 @@ public:
     SimpleSInt64Int32MapMessage &operator =(const SimpleSInt64Int32MapMessage &other);
     SimpleSInt64Int32MapMessage(SimpleSInt64Int32MapMessage &&other) noexcept;
     SimpleSInt64Int32MapMessage &operator =(SimpleSInt64Int32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt64Int32MapMessage &other) const;
-    bool operator !=(const SimpleSInt64Int32MapMessage &other) const;
 
     SimpleSInt64Int32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64Int32MapMessage::MapFieldEntry &mapField();
@@ -2646,6 +3036,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt64Int32MapMessage &lhs, const SimpleSInt64Int32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt64Int32MapMessage &lhs, const SimpleSInt64Int32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt64Int32MapMessage &lhs, const SimpleSInt64Int32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt64Int32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt64Int32MapMessage_QtProtobufNested {
@@ -2674,8 +3073,6 @@ public:
     SimpleInt32Int32MapMessage &operator =(const SimpleInt32Int32MapMessage &other);
     SimpleInt32Int32MapMessage(SimpleInt32Int32MapMessage &&other) noexcept;
     SimpleInt32Int32MapMessage &operator =(SimpleInt32Int32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt32Int32MapMessage &other) const;
-    bool operator !=(const SimpleInt32Int32MapMessage &other) const;
 
     SimpleInt32Int32MapMessage::MapFieldEntry mapField() const;
     SimpleInt32Int32MapMessage::MapFieldEntry &mapField();
@@ -2683,6 +3080,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt32Int32MapMessage &lhs, const SimpleInt32Int32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt32Int32MapMessage &lhs, const SimpleInt32Int32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt32Int32MapMessage &lhs, const SimpleInt32Int32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt32Int32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt32Int32MapMessage_QtProtobufNested {
@@ -2711,8 +3117,6 @@ public:
     SimpleInt64Int32MapMessage &operator =(const SimpleInt64Int32MapMessage &other);
     SimpleInt64Int32MapMessage(SimpleInt64Int32MapMessage &&other) noexcept;
     SimpleInt64Int32MapMessage &operator =(SimpleInt64Int32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt64Int32MapMessage &other) const;
-    bool operator !=(const SimpleInt64Int32MapMessage &other) const;
 
     SimpleInt64Int32MapMessage::MapFieldEntry mapField() const;
     SimpleInt64Int32MapMessage::MapFieldEntry &mapField();
@@ -2720,6 +3124,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt64Int32MapMessage &lhs, const SimpleInt64Int32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt64Int32MapMessage &lhs, const SimpleInt64Int32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt64Int32MapMessage &lhs, const SimpleInt64Int32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt64Int32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt64Int32MapMessage_QtProtobufNested {
@@ -2748,8 +3161,6 @@ public:
     SimpleUInt32Int32MapMessage &operator =(const SimpleUInt32Int32MapMessage &other);
     SimpleUInt32Int32MapMessage(SimpleUInt32Int32MapMessage &&other) noexcept;
     SimpleUInt32Int32MapMessage &operator =(SimpleUInt32Int32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt32Int32MapMessage &other) const;
-    bool operator !=(const SimpleUInt32Int32MapMessage &other) const;
 
     SimpleUInt32Int32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32Int32MapMessage::MapFieldEntry &mapField();
@@ -2757,6 +3168,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt32Int32MapMessage &lhs, const SimpleUInt32Int32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt32Int32MapMessage &lhs, const SimpleUInt32Int32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt32Int32MapMessage &lhs, const SimpleUInt32Int32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt32Int32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt32Int32MapMessage_QtProtobufNested {
@@ -2785,8 +3205,6 @@ public:
     SimpleUInt64Int32MapMessage &operator =(const SimpleUInt64Int32MapMessage &other);
     SimpleUInt64Int32MapMessage(SimpleUInt64Int32MapMessage &&other) noexcept;
     SimpleUInt64Int32MapMessage &operator =(SimpleUInt64Int32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt64Int32MapMessage &other) const;
-    bool operator !=(const SimpleUInt64Int32MapMessage &other) const;
 
     SimpleUInt64Int32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64Int32MapMessage::MapFieldEntry &mapField();
@@ -2794,6 +3212,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt64Int32MapMessage &lhs, const SimpleUInt64Int32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt64Int32MapMessage &lhs, const SimpleUInt64Int32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt64Int32MapMessage &lhs, const SimpleUInt64Int32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt64Int32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt64Int32MapMessage_QtProtobufNested {
@@ -2822,8 +3249,6 @@ public:
     SimpleFixed32Int32MapMessage &operator =(const SimpleFixed32Int32MapMessage &other);
     SimpleFixed32Int32MapMessage(SimpleFixed32Int32MapMessage &&other) noexcept;
     SimpleFixed32Int32MapMessage &operator =(SimpleFixed32Int32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed32Int32MapMessage &other) const;
-    bool operator !=(const SimpleFixed32Int32MapMessage &other) const;
 
     SimpleFixed32Int32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32Int32MapMessage::MapFieldEntry &mapField();
@@ -2831,6 +3256,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed32Int32MapMessage &lhs, const SimpleFixed32Int32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed32Int32MapMessage &lhs, const SimpleFixed32Int32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed32Int32MapMessage &lhs, const SimpleFixed32Int32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed32Int32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed32Int32MapMessage_QtProtobufNested {
@@ -2859,8 +3293,6 @@ public:
     SimpleFixed64Int32MapMessage &operator =(const SimpleFixed64Int32MapMessage &other);
     SimpleFixed64Int32MapMessage(SimpleFixed64Int32MapMessage &&other) noexcept;
     SimpleFixed64Int32MapMessage &operator =(SimpleFixed64Int32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed64Int32MapMessage &other) const;
-    bool operator !=(const SimpleFixed64Int32MapMessage &other) const;
 
     SimpleFixed64Int32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64Int32MapMessage::MapFieldEntry &mapField();
@@ -2868,6 +3300,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed64Int32MapMessage &lhs, const SimpleFixed64Int32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed64Int32MapMessage &lhs, const SimpleFixed64Int32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed64Int32MapMessage &lhs, const SimpleFixed64Int32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed64Int32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed64Int32MapMessage_QtProtobufNested {
@@ -2896,8 +3337,6 @@ public:
     SimpleSFixed32Int32MapMessage &operator =(const SimpleSFixed32Int32MapMessage &other);
     SimpleSFixed32Int32MapMessage(SimpleSFixed32Int32MapMessage &&other) noexcept;
     SimpleSFixed32Int32MapMessage &operator =(SimpleSFixed32Int32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed32Int32MapMessage &other) const;
-    bool operator !=(const SimpleSFixed32Int32MapMessage &other) const;
 
     SimpleSFixed32Int32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32Int32MapMessage::MapFieldEntry &mapField();
@@ -2905,6 +3344,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed32Int32MapMessage &lhs, const SimpleSFixed32Int32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed32Int32MapMessage &lhs, const SimpleSFixed32Int32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed32Int32MapMessage &lhs, const SimpleSFixed32Int32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed32Int32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed32Int32MapMessage_QtProtobufNested {
@@ -2933,8 +3381,6 @@ public:
     SimpleSFixed64Int32MapMessage &operator =(const SimpleSFixed64Int32MapMessage &other);
     SimpleSFixed64Int32MapMessage(SimpleSFixed64Int32MapMessage &&other) noexcept;
     SimpleSFixed64Int32MapMessage &operator =(SimpleSFixed64Int32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed64Int32MapMessage &other) const;
-    bool operator !=(const SimpleSFixed64Int32MapMessage &other) const;
 
     SimpleSFixed64Int32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64Int32MapMessage::MapFieldEntry &mapField();
@@ -2942,6 +3388,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed64Int32MapMessage &lhs, const SimpleSFixed64Int32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed64Int32MapMessage &lhs, const SimpleSFixed64Int32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed64Int32MapMessage &lhs, const SimpleSFixed64Int32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed64Int32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed64Int32MapMessage_QtProtobufNested {
@@ -2970,8 +3425,6 @@ public:
     SimpleStringInt32MapMessage &operator =(const SimpleStringInt32MapMessage &other);
     SimpleStringInt32MapMessage(SimpleStringInt32MapMessage &&other) noexcept;
     SimpleStringInt32MapMessage &operator =(SimpleStringInt32MapMessage &&other) noexcept;
-    bool operator ==(const SimpleStringInt32MapMessage &other) const;
-    bool operator !=(const SimpleStringInt32MapMessage &other) const;
 
     SimpleStringInt32MapMessage::MapFieldEntry mapField() const;
     SimpleStringInt32MapMessage::MapFieldEntry &mapField();
@@ -2979,6 +3432,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleStringInt32MapMessage &lhs, const SimpleStringInt32MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleStringInt32MapMessage &lhs, const SimpleStringInt32MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleStringInt32MapMessage &lhs, const SimpleStringInt32MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleStringInt32MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleStringInt32MapMessage_QtProtobufNested {
@@ -3007,8 +3469,6 @@ public:
     SimpleSInt32Int64MapMessage &operator =(const SimpleSInt32Int64MapMessage &other);
     SimpleSInt32Int64MapMessage(SimpleSInt32Int64MapMessage &&other) noexcept;
     SimpleSInt32Int64MapMessage &operator =(SimpleSInt32Int64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt32Int64MapMessage &other) const;
-    bool operator !=(const SimpleSInt32Int64MapMessage &other) const;
 
     SimpleSInt32Int64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32Int64MapMessage::MapFieldEntry &mapField();
@@ -3016,6 +3476,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt32Int64MapMessage &lhs, const SimpleSInt32Int64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt32Int64MapMessage &lhs, const SimpleSInt32Int64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt32Int64MapMessage &lhs, const SimpleSInt32Int64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt32Int64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt32Int64MapMessage_QtProtobufNested {
@@ -3044,8 +3513,6 @@ public:
     SimpleSInt64Int64MapMessage &operator =(const SimpleSInt64Int64MapMessage &other);
     SimpleSInt64Int64MapMessage(SimpleSInt64Int64MapMessage &&other) noexcept;
     SimpleSInt64Int64MapMessage &operator =(SimpleSInt64Int64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt64Int64MapMessage &other) const;
-    bool operator !=(const SimpleSInt64Int64MapMessage &other) const;
 
     SimpleSInt64Int64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64Int64MapMessage::MapFieldEntry &mapField();
@@ -3053,6 +3520,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt64Int64MapMessage &lhs, const SimpleSInt64Int64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt64Int64MapMessage &lhs, const SimpleSInt64Int64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt64Int64MapMessage &lhs, const SimpleSInt64Int64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt64Int64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt64Int64MapMessage_QtProtobufNested {
@@ -3081,8 +3557,6 @@ public:
     SimpleInt32Int64MapMessage &operator =(const SimpleInt32Int64MapMessage &other);
     SimpleInt32Int64MapMessage(SimpleInt32Int64MapMessage &&other) noexcept;
     SimpleInt32Int64MapMessage &operator =(SimpleInt32Int64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt32Int64MapMessage &other) const;
-    bool operator !=(const SimpleInt32Int64MapMessage &other) const;
 
     SimpleInt32Int64MapMessage::MapFieldEntry mapField() const;
     SimpleInt32Int64MapMessage::MapFieldEntry &mapField();
@@ -3090,6 +3564,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt32Int64MapMessage &lhs, const SimpleInt32Int64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt32Int64MapMessage &lhs, const SimpleInt32Int64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt32Int64MapMessage &lhs, const SimpleInt32Int64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt32Int64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt32Int64MapMessage_QtProtobufNested {
@@ -3118,8 +3601,6 @@ public:
     SimpleInt64Int64MapMessage &operator =(const SimpleInt64Int64MapMessage &other);
     SimpleInt64Int64MapMessage(SimpleInt64Int64MapMessage &&other) noexcept;
     SimpleInt64Int64MapMessage &operator =(SimpleInt64Int64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt64Int64MapMessage &other) const;
-    bool operator !=(const SimpleInt64Int64MapMessage &other) const;
 
     SimpleInt64Int64MapMessage::MapFieldEntry mapField() const;
     SimpleInt64Int64MapMessage::MapFieldEntry &mapField();
@@ -3127,6 +3608,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt64Int64MapMessage &lhs, const SimpleInt64Int64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt64Int64MapMessage &lhs, const SimpleInt64Int64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt64Int64MapMessage &lhs, const SimpleInt64Int64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt64Int64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt64Int64MapMessage_QtProtobufNested {
@@ -3155,8 +3645,6 @@ public:
     SimpleUInt32Int64MapMessage &operator =(const SimpleUInt32Int64MapMessage &other);
     SimpleUInt32Int64MapMessage(SimpleUInt32Int64MapMessage &&other) noexcept;
     SimpleUInt32Int64MapMessage &operator =(SimpleUInt32Int64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt32Int64MapMessage &other) const;
-    bool operator !=(const SimpleUInt32Int64MapMessage &other) const;
 
     SimpleUInt32Int64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32Int64MapMessage::MapFieldEntry &mapField();
@@ -3164,6 +3652,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt32Int64MapMessage &lhs, const SimpleUInt32Int64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt32Int64MapMessage &lhs, const SimpleUInt32Int64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt32Int64MapMessage &lhs, const SimpleUInt32Int64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt32Int64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt32Int64MapMessage_QtProtobufNested {
@@ -3192,8 +3689,6 @@ public:
     SimpleUInt64Int64MapMessage &operator =(const SimpleUInt64Int64MapMessage &other);
     SimpleUInt64Int64MapMessage(SimpleUInt64Int64MapMessage &&other) noexcept;
     SimpleUInt64Int64MapMessage &operator =(SimpleUInt64Int64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt64Int64MapMessage &other) const;
-    bool operator !=(const SimpleUInt64Int64MapMessage &other) const;
 
     SimpleUInt64Int64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64Int64MapMessage::MapFieldEntry &mapField();
@@ -3201,6 +3696,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt64Int64MapMessage &lhs, const SimpleUInt64Int64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt64Int64MapMessage &lhs, const SimpleUInt64Int64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt64Int64MapMessage &lhs, const SimpleUInt64Int64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt64Int64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt64Int64MapMessage_QtProtobufNested {
@@ -3229,8 +3733,6 @@ public:
     SimpleFixed32Int64MapMessage &operator =(const SimpleFixed32Int64MapMessage &other);
     SimpleFixed32Int64MapMessage(SimpleFixed32Int64MapMessage &&other) noexcept;
     SimpleFixed32Int64MapMessage &operator =(SimpleFixed32Int64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed32Int64MapMessage &other) const;
-    bool operator !=(const SimpleFixed32Int64MapMessage &other) const;
 
     SimpleFixed32Int64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32Int64MapMessage::MapFieldEntry &mapField();
@@ -3238,6 +3740,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed32Int64MapMessage &lhs, const SimpleFixed32Int64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed32Int64MapMessage &lhs, const SimpleFixed32Int64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed32Int64MapMessage &lhs, const SimpleFixed32Int64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed32Int64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed32Int64MapMessage_QtProtobufNested {
@@ -3266,8 +3777,6 @@ public:
     SimpleFixed64Int64MapMessage &operator =(const SimpleFixed64Int64MapMessage &other);
     SimpleFixed64Int64MapMessage(SimpleFixed64Int64MapMessage &&other) noexcept;
     SimpleFixed64Int64MapMessage &operator =(SimpleFixed64Int64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed64Int64MapMessage &other) const;
-    bool operator !=(const SimpleFixed64Int64MapMessage &other) const;
 
     SimpleFixed64Int64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64Int64MapMessage::MapFieldEntry &mapField();
@@ -3275,6 +3784,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed64Int64MapMessage &lhs, const SimpleFixed64Int64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed64Int64MapMessage &lhs, const SimpleFixed64Int64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed64Int64MapMessage &lhs, const SimpleFixed64Int64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed64Int64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed64Int64MapMessage_QtProtobufNested {
@@ -3303,8 +3821,6 @@ public:
     SimpleSFixed32Int64MapMessage &operator =(const SimpleSFixed32Int64MapMessage &other);
     SimpleSFixed32Int64MapMessage(SimpleSFixed32Int64MapMessage &&other) noexcept;
     SimpleSFixed32Int64MapMessage &operator =(SimpleSFixed32Int64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed32Int64MapMessage &other) const;
-    bool operator !=(const SimpleSFixed32Int64MapMessage &other) const;
 
     SimpleSFixed32Int64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32Int64MapMessage::MapFieldEntry &mapField();
@@ -3312,6 +3828,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed32Int64MapMessage &lhs, const SimpleSFixed32Int64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed32Int64MapMessage &lhs, const SimpleSFixed32Int64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed32Int64MapMessage &lhs, const SimpleSFixed32Int64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed32Int64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed32Int64MapMessage_QtProtobufNested {
@@ -3340,8 +3865,6 @@ public:
     SimpleSFixed64Int64MapMessage &operator =(const SimpleSFixed64Int64MapMessage &other);
     SimpleSFixed64Int64MapMessage(SimpleSFixed64Int64MapMessage &&other) noexcept;
     SimpleSFixed64Int64MapMessage &operator =(SimpleSFixed64Int64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed64Int64MapMessage &other) const;
-    bool operator !=(const SimpleSFixed64Int64MapMessage &other) const;
 
     SimpleSFixed64Int64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64Int64MapMessage::MapFieldEntry &mapField();
@@ -3349,6 +3872,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed64Int64MapMessage &lhs, const SimpleSFixed64Int64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed64Int64MapMessage &lhs, const SimpleSFixed64Int64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed64Int64MapMessage &lhs, const SimpleSFixed64Int64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed64Int64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed64Int64MapMessage_QtProtobufNested {
@@ -3377,8 +3909,6 @@ public:
     SimpleStringInt64MapMessage &operator =(const SimpleStringInt64MapMessage &other);
     SimpleStringInt64MapMessage(SimpleStringInt64MapMessage &&other) noexcept;
     SimpleStringInt64MapMessage &operator =(SimpleStringInt64MapMessage &&other) noexcept;
-    bool operator ==(const SimpleStringInt64MapMessage &other) const;
-    bool operator !=(const SimpleStringInt64MapMessage &other) const;
 
     SimpleStringInt64MapMessage::MapFieldEntry mapField() const;
     SimpleStringInt64MapMessage::MapFieldEntry &mapField();
@@ -3386,6 +3916,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleStringInt64MapMessage &lhs, const SimpleStringInt64MapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleStringInt64MapMessage &lhs, const SimpleStringInt64MapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleStringInt64MapMessage &lhs, const SimpleStringInt64MapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleStringInt64MapMessage_QtProtobufData> dptr;
 };
 namespace SimpleStringInt64MapMessage_QtProtobufNested {
@@ -3414,8 +3953,6 @@ public:
     SimpleSInt32ComplexMessageMapMessage &operator =(const SimpleSInt32ComplexMessageMapMessage &other);
     SimpleSInt32ComplexMessageMapMessage(SimpleSInt32ComplexMessageMapMessage &&other) noexcept;
     SimpleSInt32ComplexMessageMapMessage &operator =(SimpleSInt32ComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt32ComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleSInt32ComplexMessageMapMessage &other) const;
 
     SimpleSInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3423,6 +3960,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt32ComplexMessageMapMessage &lhs, const SimpleSInt32ComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt32ComplexMessageMapMessage &lhs, const SimpleSInt32ComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt32ComplexMessageMapMessage &lhs, const SimpleSInt32ComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt32ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt32ComplexMessageMapMessage_QtProtobufNested {
@@ -3451,8 +3997,6 @@ public:
     SimpleSInt64ComplexMessageMapMessage &operator =(const SimpleSInt64ComplexMessageMapMessage &other);
     SimpleSInt64ComplexMessageMapMessage(SimpleSInt64ComplexMessageMapMessage &&other) noexcept;
     SimpleSInt64ComplexMessageMapMessage &operator =(SimpleSInt64ComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleSInt64ComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleSInt64ComplexMessageMapMessage &other) const;
 
     SimpleSInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3460,6 +4004,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSInt64ComplexMessageMapMessage &lhs, const SimpleSInt64ComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSInt64ComplexMessageMapMessage &lhs, const SimpleSInt64ComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt64ComplexMessageMapMessage &lhs, const SimpleSInt64ComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt64ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSInt64ComplexMessageMapMessage_QtProtobufNested {
@@ -3488,8 +4041,6 @@ public:
     SimpleInt32ComplexMessageMapMessage &operator =(const SimpleInt32ComplexMessageMapMessage &other);
     SimpleInt32ComplexMessageMapMessage(SimpleInt32ComplexMessageMapMessage &&other) noexcept;
     SimpleInt32ComplexMessageMapMessage &operator =(SimpleInt32ComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt32ComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleInt32ComplexMessageMapMessage &other) const;
 
     SimpleInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleInt32ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3497,6 +4048,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt32ComplexMessageMapMessage &lhs, const SimpleInt32ComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt32ComplexMessageMapMessage &lhs, const SimpleInt32ComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt32ComplexMessageMapMessage &lhs, const SimpleInt32ComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt32ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt32ComplexMessageMapMessage_QtProtobufNested {
@@ -3525,8 +4085,6 @@ public:
     SimpleInt64ComplexMessageMapMessage &operator =(const SimpleInt64ComplexMessageMapMessage &other);
     SimpleInt64ComplexMessageMapMessage(SimpleInt64ComplexMessageMapMessage &&other) noexcept;
     SimpleInt64ComplexMessageMapMessage &operator =(SimpleInt64ComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleInt64ComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleInt64ComplexMessageMapMessage &other) const;
 
     SimpleInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleInt64ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3534,6 +4092,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleInt64ComplexMessageMapMessage &lhs, const SimpleInt64ComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleInt64ComplexMessageMapMessage &lhs, const SimpleInt64ComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt64ComplexMessageMapMessage &lhs, const SimpleInt64ComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt64ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleInt64ComplexMessageMapMessage_QtProtobufNested {
@@ -3562,8 +4129,6 @@ public:
     SimpleUInt32ComplexMessageMapMessage &operator =(const SimpleUInt32ComplexMessageMapMessage &other);
     SimpleUInt32ComplexMessageMapMessage(SimpleUInt32ComplexMessageMapMessage &&other) noexcept;
     SimpleUInt32ComplexMessageMapMessage &operator =(SimpleUInt32ComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt32ComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleUInt32ComplexMessageMapMessage &other) const;
 
     SimpleUInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3571,6 +4136,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt32ComplexMessageMapMessage &lhs, const SimpleUInt32ComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt32ComplexMessageMapMessage &lhs, const SimpleUInt32ComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt32ComplexMessageMapMessage &lhs, const SimpleUInt32ComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt32ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt32ComplexMessageMapMessage_QtProtobufNested {
@@ -3599,8 +4173,6 @@ public:
     SimpleUInt64ComplexMessageMapMessage &operator =(const SimpleUInt64ComplexMessageMapMessage &other);
     SimpleUInt64ComplexMessageMapMessage(SimpleUInt64ComplexMessageMapMessage &&other) noexcept;
     SimpleUInt64ComplexMessageMapMessage &operator =(SimpleUInt64ComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleUInt64ComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleUInt64ComplexMessageMapMessage &other) const;
 
     SimpleUInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3608,6 +4180,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleUInt64ComplexMessageMapMessage &lhs, const SimpleUInt64ComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUInt64ComplexMessageMapMessage &lhs, const SimpleUInt64ComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt64ComplexMessageMapMessage &lhs, const SimpleUInt64ComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt64ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleUInt64ComplexMessageMapMessage_QtProtobufNested {
@@ -3636,8 +4217,6 @@ public:
     SimpleFixed32ComplexMessageMapMessage &operator =(const SimpleFixed32ComplexMessageMapMessage &other);
     SimpleFixed32ComplexMessageMapMessage(SimpleFixed32ComplexMessageMapMessage &&other) noexcept;
     SimpleFixed32ComplexMessageMapMessage &operator =(SimpleFixed32ComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed32ComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleFixed32ComplexMessageMapMessage &other) const;
 
     SimpleFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3645,6 +4224,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed32ComplexMessageMapMessage &lhs, const SimpleFixed32ComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed32ComplexMessageMapMessage &lhs, const SimpleFixed32ComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed32ComplexMessageMapMessage &lhs, const SimpleFixed32ComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed32ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed32ComplexMessageMapMessage_QtProtobufNested {
@@ -3673,8 +4261,6 @@ public:
     SimpleFixed64ComplexMessageMapMessage &operator =(const SimpleFixed64ComplexMessageMapMessage &other);
     SimpleFixed64ComplexMessageMapMessage(SimpleFixed64ComplexMessageMapMessage &&other) noexcept;
     SimpleFixed64ComplexMessageMapMessage &operator =(SimpleFixed64ComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleFixed64ComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleFixed64ComplexMessageMapMessage &other) const;
 
     SimpleFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3682,6 +4268,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleFixed64ComplexMessageMapMessage &lhs, const SimpleFixed64ComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFixed64ComplexMessageMapMessage &lhs, const SimpleFixed64ComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixed64ComplexMessageMapMessage &lhs, const SimpleFixed64ComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixed64ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleFixed64ComplexMessageMapMessage_QtProtobufNested {
@@ -3710,8 +4305,6 @@ public:
     SimpleSFixed32ComplexMessageMapMessage &operator =(const SimpleSFixed32ComplexMessageMapMessage &other);
     SimpleSFixed32ComplexMessageMapMessage(SimpleSFixed32ComplexMessageMapMessage &&other) noexcept;
     SimpleSFixed32ComplexMessageMapMessage &operator =(SimpleSFixed32ComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed32ComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleSFixed32ComplexMessageMapMessage &other) const;
 
     SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3719,6 +4312,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed32ComplexMessageMapMessage &lhs, const SimpleSFixed32ComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed32ComplexMessageMapMessage &lhs, const SimpleSFixed32ComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed32ComplexMessageMapMessage &lhs, const SimpleSFixed32ComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed32ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed32ComplexMessageMapMessage_QtProtobufNested {
@@ -3747,8 +4349,6 @@ public:
     SimpleSFixed64ComplexMessageMapMessage &operator =(const SimpleSFixed64ComplexMessageMapMessage &other);
     SimpleSFixed64ComplexMessageMapMessage(SimpleSFixed64ComplexMessageMapMessage &&other) noexcept;
     SimpleSFixed64ComplexMessageMapMessage &operator =(SimpleSFixed64ComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleSFixed64ComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleSFixed64ComplexMessageMapMessage &other) const;
 
     SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3756,6 +4356,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleSFixed64ComplexMessageMapMessage &lhs, const SimpleSFixed64ComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSFixed64ComplexMessageMapMessage &lhs, const SimpleSFixed64ComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixed64ComplexMessageMapMessage &lhs, const SimpleSFixed64ComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixed64ComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleSFixed64ComplexMessageMapMessage_QtProtobufNested {
@@ -3784,8 +4393,6 @@ public:
     SimpleStringComplexMessageMapMessage &operator =(const SimpleStringComplexMessageMapMessage &other);
     SimpleStringComplexMessageMapMessage(SimpleStringComplexMessageMapMessage &&other) noexcept;
     SimpleStringComplexMessageMapMessage &operator =(SimpleStringComplexMessageMapMessage &&other) noexcept;
-    bool operator ==(const SimpleStringComplexMessageMapMessage &other) const;
-    bool operator !=(const SimpleStringComplexMessageMapMessage &other) const;
 
     SimpleStringComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleStringComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3793,6 +4400,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleStringComplexMessageMapMessage &lhs, const SimpleStringComplexMessageMapMessage &rhs) noexcept;
+    friend bool operator==(const SimpleStringComplexMessageMapMessage &lhs, const SimpleStringComplexMessageMapMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleStringComplexMessageMapMessage &lhs, const SimpleStringComplexMessageMapMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleStringComplexMessageMapMessage_QtProtobufData> dptr;
 };
 namespace SimpleStringComplexMessageMapMessage_QtProtobufNested {

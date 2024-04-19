@@ -98,15 +98,11 @@ SimpleSInt32StringMapMessage &SimpleSInt32StringMapMessage::operator =(SimpleSIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt32StringMapMessage::operator ==(const SimpleSInt32StringMapMessage &other) const
+bool comparesEqual(const SimpleSInt32StringMapMessage &lhs, const SimpleSInt32StringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt32StringMapMessage::operator !=(const SimpleSInt32StringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt32StringMapMessage::MapFieldEntry SimpleSInt32StringMapMessage::mapField() const
@@ -221,15 +217,11 @@ SimpleSInt64StringMapMessage &SimpleSInt64StringMapMessage::operator =(SimpleSIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt64StringMapMessage::operator ==(const SimpleSInt64StringMapMessage &other) const
+bool comparesEqual(const SimpleSInt64StringMapMessage &lhs, const SimpleSInt64StringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt64StringMapMessage::operator !=(const SimpleSInt64StringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt64StringMapMessage::MapFieldEntry SimpleSInt64StringMapMessage::mapField() const
@@ -344,15 +336,11 @@ SimpleInt32StringMapMessage &SimpleInt32StringMapMessage::operator =(SimpleInt32
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt32StringMapMessage::operator ==(const SimpleInt32StringMapMessage &other) const
+bool comparesEqual(const SimpleInt32StringMapMessage &lhs, const SimpleInt32StringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt32StringMapMessage::operator !=(const SimpleInt32StringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt32StringMapMessage::MapFieldEntry SimpleInt32StringMapMessage::mapField() const
@@ -467,15 +455,11 @@ SimpleInt64StringMapMessage &SimpleInt64StringMapMessage::operator =(SimpleInt64
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt64StringMapMessage::operator ==(const SimpleInt64StringMapMessage &other) const
+bool comparesEqual(const SimpleInt64StringMapMessage &lhs, const SimpleInt64StringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt64StringMapMessage::operator !=(const SimpleInt64StringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt64StringMapMessage::MapFieldEntry SimpleInt64StringMapMessage::mapField() const
@@ -590,15 +574,11 @@ SimpleUInt32StringMapMessage &SimpleUInt32StringMapMessage::operator =(SimpleUIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt32StringMapMessage::operator ==(const SimpleUInt32StringMapMessage &other) const
+bool comparesEqual(const SimpleUInt32StringMapMessage &lhs, const SimpleUInt32StringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt32StringMapMessage::operator !=(const SimpleUInt32StringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt32StringMapMessage::MapFieldEntry SimpleUInt32StringMapMessage::mapField() const
@@ -713,15 +693,11 @@ SimpleUInt64StringMapMessage &SimpleUInt64StringMapMessage::operator =(SimpleUIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt64StringMapMessage::operator ==(const SimpleUInt64StringMapMessage &other) const
+bool comparesEqual(const SimpleUInt64StringMapMessage &lhs, const SimpleUInt64StringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt64StringMapMessage::operator !=(const SimpleUInt64StringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt64StringMapMessage::MapFieldEntry SimpleUInt64StringMapMessage::mapField() const
@@ -836,15 +812,11 @@ SimpleFixed32StringMapMessage &SimpleFixed32StringMapMessage::operator =(SimpleF
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed32StringMapMessage::operator ==(const SimpleFixed32StringMapMessage &other) const
+bool comparesEqual(const SimpleFixed32StringMapMessage &lhs, const SimpleFixed32StringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed32StringMapMessage::operator !=(const SimpleFixed32StringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed32StringMapMessage::MapFieldEntry SimpleFixed32StringMapMessage::mapField() const
@@ -959,15 +931,11 @@ SimpleFixed64StringMapMessage &SimpleFixed64StringMapMessage::operator =(SimpleF
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed64StringMapMessage::operator ==(const SimpleFixed64StringMapMessage &other) const
+bool comparesEqual(const SimpleFixed64StringMapMessage &lhs, const SimpleFixed64StringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed64StringMapMessage::operator !=(const SimpleFixed64StringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed64StringMapMessage::MapFieldEntry SimpleFixed64StringMapMessage::mapField() const
@@ -1082,15 +1050,11 @@ SimpleSFixed32StringMapMessage &SimpleSFixed32StringMapMessage::operator =(Simpl
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed32StringMapMessage::operator ==(const SimpleSFixed32StringMapMessage &other) const
+bool comparesEqual(const SimpleSFixed32StringMapMessage &lhs, const SimpleSFixed32StringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed32StringMapMessage::operator !=(const SimpleSFixed32StringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed32StringMapMessage::MapFieldEntry SimpleSFixed32StringMapMessage::mapField() const
@@ -1205,15 +1169,11 @@ SimpleSFixed64StringMapMessage &SimpleSFixed64StringMapMessage::operator =(Simpl
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed64StringMapMessage::operator ==(const SimpleSFixed64StringMapMessage &other) const
+bool comparesEqual(const SimpleSFixed64StringMapMessage &lhs, const SimpleSFixed64StringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed64StringMapMessage::operator !=(const SimpleSFixed64StringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed64StringMapMessage::MapFieldEntry SimpleSFixed64StringMapMessage::mapField() const
@@ -1328,15 +1288,11 @@ SimpleStringStringMapMessage &SimpleStringStringMapMessage::operator =(SimpleStr
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringStringMapMessage::operator ==(const SimpleStringStringMapMessage &other) const
+bool comparesEqual(const SimpleStringStringMapMessage &lhs, const SimpleStringStringMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleStringStringMapMessage::operator !=(const SimpleStringStringMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleStringStringMapMessage::MapFieldEntry SimpleStringStringMapMessage::mapField() const
@@ -1451,15 +1407,11 @@ SimpleSInt32SInt32MapMessage &SimpleSInt32SInt32MapMessage::operator =(SimpleSIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt32SInt32MapMessage::operator ==(const SimpleSInt32SInt32MapMessage &other) const
+bool comparesEqual(const SimpleSInt32SInt32MapMessage &lhs, const SimpleSInt32SInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt32SInt32MapMessage::operator !=(const SimpleSInt32SInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt32SInt32MapMessage::MapFieldEntry SimpleSInt32SInt32MapMessage::mapField() const
@@ -1574,15 +1526,11 @@ SimpleSInt64SInt32MapMessage &SimpleSInt64SInt32MapMessage::operator =(SimpleSIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt64SInt32MapMessage::operator ==(const SimpleSInt64SInt32MapMessage &other) const
+bool comparesEqual(const SimpleSInt64SInt32MapMessage &lhs, const SimpleSInt64SInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt64SInt32MapMessage::operator !=(const SimpleSInt64SInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt64SInt32MapMessage::MapFieldEntry SimpleSInt64SInt32MapMessage::mapField() const
@@ -1697,15 +1645,11 @@ SimpleInt32SInt32MapMessage &SimpleInt32SInt32MapMessage::operator =(SimpleInt32
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt32SInt32MapMessage::operator ==(const SimpleInt32SInt32MapMessage &other) const
+bool comparesEqual(const SimpleInt32SInt32MapMessage &lhs, const SimpleInt32SInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt32SInt32MapMessage::operator !=(const SimpleInt32SInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt32SInt32MapMessage::MapFieldEntry SimpleInt32SInt32MapMessage::mapField() const
@@ -1820,15 +1764,11 @@ SimpleInt64SInt32MapMessage &SimpleInt64SInt32MapMessage::operator =(SimpleInt64
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt64SInt32MapMessage::operator ==(const SimpleInt64SInt32MapMessage &other) const
+bool comparesEqual(const SimpleInt64SInt32MapMessage &lhs, const SimpleInt64SInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt64SInt32MapMessage::operator !=(const SimpleInt64SInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt64SInt32MapMessage::MapFieldEntry SimpleInt64SInt32MapMessage::mapField() const
@@ -1943,15 +1883,11 @@ SimpleUInt32SInt32MapMessage &SimpleUInt32SInt32MapMessage::operator =(SimpleUIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt32SInt32MapMessage::operator ==(const SimpleUInt32SInt32MapMessage &other) const
+bool comparesEqual(const SimpleUInt32SInt32MapMessage &lhs, const SimpleUInt32SInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt32SInt32MapMessage::operator !=(const SimpleUInt32SInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt32SInt32MapMessage::MapFieldEntry SimpleUInt32SInt32MapMessage::mapField() const
@@ -2066,15 +2002,11 @@ SimpleUInt64SInt32MapMessage &SimpleUInt64SInt32MapMessage::operator =(SimpleUIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt64SInt32MapMessage::operator ==(const SimpleUInt64SInt32MapMessage &other) const
+bool comparesEqual(const SimpleUInt64SInt32MapMessage &lhs, const SimpleUInt64SInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt64SInt32MapMessage::operator !=(const SimpleUInt64SInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt64SInt32MapMessage::MapFieldEntry SimpleUInt64SInt32MapMessage::mapField() const
@@ -2189,15 +2121,11 @@ SimpleFixed32SInt32MapMessage &SimpleFixed32SInt32MapMessage::operator =(SimpleF
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed32SInt32MapMessage::operator ==(const SimpleFixed32SInt32MapMessage &other) const
+bool comparesEqual(const SimpleFixed32SInt32MapMessage &lhs, const SimpleFixed32SInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed32SInt32MapMessage::operator !=(const SimpleFixed32SInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed32SInt32MapMessage::MapFieldEntry SimpleFixed32SInt32MapMessage::mapField() const
@@ -2312,15 +2240,11 @@ SimpleFixed64SInt32MapMessage &SimpleFixed64SInt32MapMessage::operator =(SimpleF
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed64SInt32MapMessage::operator ==(const SimpleFixed64SInt32MapMessage &other) const
+bool comparesEqual(const SimpleFixed64SInt32MapMessage &lhs, const SimpleFixed64SInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed64SInt32MapMessage::operator !=(const SimpleFixed64SInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed64SInt32MapMessage::MapFieldEntry SimpleFixed64SInt32MapMessage::mapField() const
@@ -2435,15 +2359,11 @@ SimpleSFixed32SInt32MapMessage &SimpleSFixed32SInt32MapMessage::operator =(Simpl
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed32SInt32MapMessage::operator ==(const SimpleSFixed32SInt32MapMessage &other) const
+bool comparesEqual(const SimpleSFixed32SInt32MapMessage &lhs, const SimpleSFixed32SInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed32SInt32MapMessage::operator !=(const SimpleSFixed32SInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed32SInt32MapMessage::MapFieldEntry SimpleSFixed32SInt32MapMessage::mapField() const
@@ -2558,15 +2478,11 @@ SimpleSFixed64SInt32MapMessage &SimpleSFixed64SInt32MapMessage::operator =(Simpl
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed64SInt32MapMessage::operator ==(const SimpleSFixed64SInt32MapMessage &other) const
+bool comparesEqual(const SimpleSFixed64SInt32MapMessage &lhs, const SimpleSFixed64SInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed64SInt32MapMessage::operator !=(const SimpleSFixed64SInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed64SInt32MapMessage::MapFieldEntry SimpleSFixed64SInt32MapMessage::mapField() const
@@ -2681,15 +2597,11 @@ SimpleStringSInt32MapMessage &SimpleStringSInt32MapMessage::operator =(SimpleStr
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringSInt32MapMessage::operator ==(const SimpleStringSInt32MapMessage &other) const
+bool comparesEqual(const SimpleStringSInt32MapMessage &lhs, const SimpleStringSInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleStringSInt32MapMessage::operator !=(const SimpleStringSInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleStringSInt32MapMessage::MapFieldEntry SimpleStringSInt32MapMessage::mapField() const
@@ -2804,15 +2716,11 @@ SimpleSInt32SInt64MapMessage &SimpleSInt32SInt64MapMessage::operator =(SimpleSIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt32SInt64MapMessage::operator ==(const SimpleSInt32SInt64MapMessage &other) const
+bool comparesEqual(const SimpleSInt32SInt64MapMessage &lhs, const SimpleSInt32SInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt32SInt64MapMessage::operator !=(const SimpleSInt32SInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt32SInt64MapMessage::MapFieldEntry SimpleSInt32SInt64MapMessage::mapField() const
@@ -2927,15 +2835,11 @@ SimpleSInt64SInt64MapMessage &SimpleSInt64SInt64MapMessage::operator =(SimpleSIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt64SInt64MapMessage::operator ==(const SimpleSInt64SInt64MapMessage &other) const
+bool comparesEqual(const SimpleSInt64SInt64MapMessage &lhs, const SimpleSInt64SInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt64SInt64MapMessage::operator !=(const SimpleSInt64SInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt64SInt64MapMessage::MapFieldEntry SimpleSInt64SInt64MapMessage::mapField() const
@@ -3050,15 +2954,11 @@ SimpleInt32SInt64MapMessage &SimpleInt32SInt64MapMessage::operator =(SimpleInt32
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt32SInt64MapMessage::operator ==(const SimpleInt32SInt64MapMessage &other) const
+bool comparesEqual(const SimpleInt32SInt64MapMessage &lhs, const SimpleInt32SInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt32SInt64MapMessage::operator !=(const SimpleInt32SInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt32SInt64MapMessage::MapFieldEntry SimpleInt32SInt64MapMessage::mapField() const
@@ -3173,15 +3073,11 @@ SimpleInt64SInt64MapMessage &SimpleInt64SInt64MapMessage::operator =(SimpleInt64
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt64SInt64MapMessage::operator ==(const SimpleInt64SInt64MapMessage &other) const
+bool comparesEqual(const SimpleInt64SInt64MapMessage &lhs, const SimpleInt64SInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt64SInt64MapMessage::operator !=(const SimpleInt64SInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt64SInt64MapMessage::MapFieldEntry SimpleInt64SInt64MapMessage::mapField() const
@@ -3296,15 +3192,11 @@ SimpleUInt32SInt64MapMessage &SimpleUInt32SInt64MapMessage::operator =(SimpleUIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt32SInt64MapMessage::operator ==(const SimpleUInt32SInt64MapMessage &other) const
+bool comparesEqual(const SimpleUInt32SInt64MapMessage &lhs, const SimpleUInt32SInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt32SInt64MapMessage::operator !=(const SimpleUInt32SInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt32SInt64MapMessage::MapFieldEntry SimpleUInt32SInt64MapMessage::mapField() const
@@ -3419,15 +3311,11 @@ SimpleUInt64SInt64MapMessage &SimpleUInt64SInt64MapMessage::operator =(SimpleUIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt64SInt64MapMessage::operator ==(const SimpleUInt64SInt64MapMessage &other) const
+bool comparesEqual(const SimpleUInt64SInt64MapMessage &lhs, const SimpleUInt64SInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt64SInt64MapMessage::operator !=(const SimpleUInt64SInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt64SInt64MapMessage::MapFieldEntry SimpleUInt64SInt64MapMessage::mapField() const
@@ -3542,15 +3430,11 @@ SimpleFixed32SInt64MapMessage &SimpleFixed32SInt64MapMessage::operator =(SimpleF
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed32SInt64MapMessage::operator ==(const SimpleFixed32SInt64MapMessage &other) const
+bool comparesEqual(const SimpleFixed32SInt64MapMessage &lhs, const SimpleFixed32SInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed32SInt64MapMessage::operator !=(const SimpleFixed32SInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed32SInt64MapMessage::MapFieldEntry SimpleFixed32SInt64MapMessage::mapField() const
@@ -3665,15 +3549,11 @@ SimpleFixed64SInt64MapMessage &SimpleFixed64SInt64MapMessage::operator =(SimpleF
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed64SInt64MapMessage::operator ==(const SimpleFixed64SInt64MapMessage &other) const
+bool comparesEqual(const SimpleFixed64SInt64MapMessage &lhs, const SimpleFixed64SInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed64SInt64MapMessage::operator !=(const SimpleFixed64SInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed64SInt64MapMessage::MapFieldEntry SimpleFixed64SInt64MapMessage::mapField() const
@@ -3788,15 +3668,11 @@ SimpleSFixed32SInt64MapMessage &SimpleSFixed32SInt64MapMessage::operator =(Simpl
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed32SInt64MapMessage::operator ==(const SimpleSFixed32SInt64MapMessage &other) const
+bool comparesEqual(const SimpleSFixed32SInt64MapMessage &lhs, const SimpleSFixed32SInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed32SInt64MapMessage::operator !=(const SimpleSFixed32SInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed32SInt64MapMessage::MapFieldEntry SimpleSFixed32SInt64MapMessage::mapField() const
@@ -3911,15 +3787,11 @@ SimpleSFixed64SInt64MapMessage &SimpleSFixed64SInt64MapMessage::operator =(Simpl
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed64SInt64MapMessage::operator ==(const SimpleSFixed64SInt64MapMessage &other) const
+bool comparesEqual(const SimpleSFixed64SInt64MapMessage &lhs, const SimpleSFixed64SInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed64SInt64MapMessage::operator !=(const SimpleSFixed64SInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed64SInt64MapMessage::MapFieldEntry SimpleSFixed64SInt64MapMessage::mapField() const
@@ -4034,15 +3906,11 @@ SimpleStringSInt64MapMessage &SimpleStringSInt64MapMessage::operator =(SimpleStr
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringSInt64MapMessage::operator ==(const SimpleStringSInt64MapMessage &other) const
+bool comparesEqual(const SimpleStringSInt64MapMessage &lhs, const SimpleStringSInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleStringSInt64MapMessage::operator !=(const SimpleStringSInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleStringSInt64MapMessage::MapFieldEntry SimpleStringSInt64MapMessage::mapField() const
@@ -4157,15 +4025,11 @@ SimpleSInt32UInt32MapMessage &SimpleSInt32UInt32MapMessage::operator =(SimpleSIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt32UInt32MapMessage::operator ==(const SimpleSInt32UInt32MapMessage &other) const
+bool comparesEqual(const SimpleSInt32UInt32MapMessage &lhs, const SimpleSInt32UInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt32UInt32MapMessage::operator !=(const SimpleSInt32UInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt32UInt32MapMessage::MapFieldEntry SimpleSInt32UInt32MapMessage::mapField() const
@@ -4280,15 +4144,11 @@ SimpleSInt64UInt32MapMessage &SimpleSInt64UInt32MapMessage::operator =(SimpleSIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt64UInt32MapMessage::operator ==(const SimpleSInt64UInt32MapMessage &other) const
+bool comparesEqual(const SimpleSInt64UInt32MapMessage &lhs, const SimpleSInt64UInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt64UInt32MapMessage::operator !=(const SimpleSInt64UInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt64UInt32MapMessage::MapFieldEntry SimpleSInt64UInt32MapMessage::mapField() const
@@ -4403,15 +4263,11 @@ SimpleInt32UInt32MapMessage &SimpleInt32UInt32MapMessage::operator =(SimpleInt32
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt32UInt32MapMessage::operator ==(const SimpleInt32UInt32MapMessage &other) const
+bool comparesEqual(const SimpleInt32UInt32MapMessage &lhs, const SimpleInt32UInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt32UInt32MapMessage::operator !=(const SimpleInt32UInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt32UInt32MapMessage::MapFieldEntry SimpleInt32UInt32MapMessage::mapField() const
@@ -4526,15 +4382,11 @@ SimpleInt64UInt32MapMessage &SimpleInt64UInt32MapMessage::operator =(SimpleInt64
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt64UInt32MapMessage::operator ==(const SimpleInt64UInt32MapMessage &other) const
+bool comparesEqual(const SimpleInt64UInt32MapMessage &lhs, const SimpleInt64UInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt64UInt32MapMessage::operator !=(const SimpleInt64UInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt64UInt32MapMessage::MapFieldEntry SimpleInt64UInt32MapMessage::mapField() const
@@ -4649,15 +4501,11 @@ SimpleUInt32UInt32MapMessage &SimpleUInt32UInt32MapMessage::operator =(SimpleUIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt32UInt32MapMessage::operator ==(const SimpleUInt32UInt32MapMessage &other) const
+bool comparesEqual(const SimpleUInt32UInt32MapMessage &lhs, const SimpleUInt32UInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt32UInt32MapMessage::operator !=(const SimpleUInt32UInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt32UInt32MapMessage::MapFieldEntry SimpleUInt32UInt32MapMessage::mapField() const
@@ -4772,15 +4620,11 @@ SimpleUInt64UInt32MapMessage &SimpleUInt64UInt32MapMessage::operator =(SimpleUIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt64UInt32MapMessage::operator ==(const SimpleUInt64UInt32MapMessage &other) const
+bool comparesEqual(const SimpleUInt64UInt32MapMessage &lhs, const SimpleUInt64UInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt64UInt32MapMessage::operator !=(const SimpleUInt64UInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt64UInt32MapMessage::MapFieldEntry SimpleUInt64UInt32MapMessage::mapField() const
@@ -4895,15 +4739,11 @@ SimpleFixed32UInt32MapMessage &SimpleFixed32UInt32MapMessage::operator =(SimpleF
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed32UInt32MapMessage::operator ==(const SimpleFixed32UInt32MapMessage &other) const
+bool comparesEqual(const SimpleFixed32UInt32MapMessage &lhs, const SimpleFixed32UInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed32UInt32MapMessage::operator !=(const SimpleFixed32UInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed32UInt32MapMessage::MapFieldEntry SimpleFixed32UInt32MapMessage::mapField() const
@@ -5018,15 +4858,11 @@ SimpleFixed64UInt32MapMessage &SimpleFixed64UInt32MapMessage::operator =(SimpleF
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed64UInt32MapMessage::operator ==(const SimpleFixed64UInt32MapMessage &other) const
+bool comparesEqual(const SimpleFixed64UInt32MapMessage &lhs, const SimpleFixed64UInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed64UInt32MapMessage::operator !=(const SimpleFixed64UInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed64UInt32MapMessage::MapFieldEntry SimpleFixed64UInt32MapMessage::mapField() const
@@ -5141,15 +4977,11 @@ SimpleSFixed32UInt32MapMessage &SimpleSFixed32UInt32MapMessage::operator =(Simpl
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed32UInt32MapMessage::operator ==(const SimpleSFixed32UInt32MapMessage &other) const
+bool comparesEqual(const SimpleSFixed32UInt32MapMessage &lhs, const SimpleSFixed32UInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed32UInt32MapMessage::operator !=(const SimpleSFixed32UInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed32UInt32MapMessage::MapFieldEntry SimpleSFixed32UInt32MapMessage::mapField() const
@@ -5264,15 +5096,11 @@ SimpleSFixed64UInt32MapMessage &SimpleSFixed64UInt32MapMessage::operator =(Simpl
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed64UInt32MapMessage::operator ==(const SimpleSFixed64UInt32MapMessage &other) const
+bool comparesEqual(const SimpleSFixed64UInt32MapMessage &lhs, const SimpleSFixed64UInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed64UInt32MapMessage::operator !=(const SimpleSFixed64UInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed64UInt32MapMessage::MapFieldEntry SimpleSFixed64UInt32MapMessage::mapField() const
@@ -5387,15 +5215,11 @@ SimpleStringUInt32MapMessage &SimpleStringUInt32MapMessage::operator =(SimpleStr
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringUInt32MapMessage::operator ==(const SimpleStringUInt32MapMessage &other) const
+bool comparesEqual(const SimpleStringUInt32MapMessage &lhs, const SimpleStringUInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleStringUInt32MapMessage::operator !=(const SimpleStringUInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleStringUInt32MapMessage::MapFieldEntry SimpleStringUInt32MapMessage::mapField() const
@@ -5510,15 +5334,11 @@ SimpleSInt32UInt64MapMessage &SimpleSInt32UInt64MapMessage::operator =(SimpleSIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt32UInt64MapMessage::operator ==(const SimpleSInt32UInt64MapMessage &other) const
+bool comparesEqual(const SimpleSInt32UInt64MapMessage &lhs, const SimpleSInt32UInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt32UInt64MapMessage::operator !=(const SimpleSInt32UInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt32UInt64MapMessage::MapFieldEntry SimpleSInt32UInt64MapMessage::mapField() const
@@ -5633,15 +5453,11 @@ SimpleSInt64UInt64MapMessage &SimpleSInt64UInt64MapMessage::operator =(SimpleSIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt64UInt64MapMessage::operator ==(const SimpleSInt64UInt64MapMessage &other) const
+bool comparesEqual(const SimpleSInt64UInt64MapMessage &lhs, const SimpleSInt64UInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt64UInt64MapMessage::operator !=(const SimpleSInt64UInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt64UInt64MapMessage::MapFieldEntry SimpleSInt64UInt64MapMessage::mapField() const
@@ -5756,15 +5572,11 @@ SimpleInt32UInt64MapMessage &SimpleInt32UInt64MapMessage::operator =(SimpleInt32
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt32UInt64MapMessage::operator ==(const SimpleInt32UInt64MapMessage &other) const
+bool comparesEqual(const SimpleInt32UInt64MapMessage &lhs, const SimpleInt32UInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt32UInt64MapMessage::operator !=(const SimpleInt32UInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt32UInt64MapMessage::MapFieldEntry SimpleInt32UInt64MapMessage::mapField() const
@@ -5879,15 +5691,11 @@ SimpleInt64UInt64MapMessage &SimpleInt64UInt64MapMessage::operator =(SimpleInt64
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt64UInt64MapMessage::operator ==(const SimpleInt64UInt64MapMessage &other) const
+bool comparesEqual(const SimpleInt64UInt64MapMessage &lhs, const SimpleInt64UInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt64UInt64MapMessage::operator !=(const SimpleInt64UInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt64UInt64MapMessage::MapFieldEntry SimpleInt64UInt64MapMessage::mapField() const
@@ -6002,15 +5810,11 @@ SimpleUInt32UInt64MapMessage &SimpleUInt32UInt64MapMessage::operator =(SimpleUIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt32UInt64MapMessage::operator ==(const SimpleUInt32UInt64MapMessage &other) const
+bool comparesEqual(const SimpleUInt32UInt64MapMessage &lhs, const SimpleUInt32UInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt32UInt64MapMessage::operator !=(const SimpleUInt32UInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt32UInt64MapMessage::MapFieldEntry SimpleUInt32UInt64MapMessage::mapField() const
@@ -6125,15 +5929,11 @@ SimpleUInt64UInt64MapMessage &SimpleUInt64UInt64MapMessage::operator =(SimpleUIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt64UInt64MapMessage::operator ==(const SimpleUInt64UInt64MapMessage &other) const
+bool comparesEqual(const SimpleUInt64UInt64MapMessage &lhs, const SimpleUInt64UInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt64UInt64MapMessage::operator !=(const SimpleUInt64UInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt64UInt64MapMessage::MapFieldEntry SimpleUInt64UInt64MapMessage::mapField() const
@@ -6248,15 +6048,11 @@ SimpleFixed32UInt64MapMessage &SimpleFixed32UInt64MapMessage::operator =(SimpleF
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed32UInt64MapMessage::operator ==(const SimpleFixed32UInt64MapMessage &other) const
+bool comparesEqual(const SimpleFixed32UInt64MapMessage &lhs, const SimpleFixed32UInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed32UInt64MapMessage::operator !=(const SimpleFixed32UInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed32UInt64MapMessage::MapFieldEntry SimpleFixed32UInt64MapMessage::mapField() const
@@ -6371,15 +6167,11 @@ SimpleFixed64UInt64MapMessage &SimpleFixed64UInt64MapMessage::operator =(SimpleF
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed64UInt64MapMessage::operator ==(const SimpleFixed64UInt64MapMessage &other) const
+bool comparesEqual(const SimpleFixed64UInt64MapMessage &lhs, const SimpleFixed64UInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed64UInt64MapMessage::operator !=(const SimpleFixed64UInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed64UInt64MapMessage::MapFieldEntry SimpleFixed64UInt64MapMessage::mapField() const
@@ -6494,15 +6286,11 @@ SimpleSFixed32UInt64MapMessage &SimpleSFixed32UInt64MapMessage::operator =(Simpl
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed32UInt64MapMessage::operator ==(const SimpleSFixed32UInt64MapMessage &other) const
+bool comparesEqual(const SimpleSFixed32UInt64MapMessage &lhs, const SimpleSFixed32UInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed32UInt64MapMessage::operator !=(const SimpleSFixed32UInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed32UInt64MapMessage::MapFieldEntry SimpleSFixed32UInt64MapMessage::mapField() const
@@ -6617,15 +6405,11 @@ SimpleSFixed64UInt64MapMessage &SimpleSFixed64UInt64MapMessage::operator =(Simpl
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed64UInt64MapMessage::operator ==(const SimpleSFixed64UInt64MapMessage &other) const
+bool comparesEqual(const SimpleSFixed64UInt64MapMessage &lhs, const SimpleSFixed64UInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed64UInt64MapMessage::operator !=(const SimpleSFixed64UInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed64UInt64MapMessage::MapFieldEntry SimpleSFixed64UInt64MapMessage::mapField() const
@@ -6740,15 +6524,11 @@ SimpleStringUInt64MapMessage &SimpleStringUInt64MapMessage::operator =(SimpleStr
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringUInt64MapMessage::operator ==(const SimpleStringUInt64MapMessage &other) const
+bool comparesEqual(const SimpleStringUInt64MapMessage &lhs, const SimpleStringUInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleStringUInt64MapMessage::operator !=(const SimpleStringUInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleStringUInt64MapMessage::MapFieldEntry SimpleStringUInt64MapMessage::mapField() const
@@ -6863,15 +6643,11 @@ SimpleSInt32Int32MapMessage &SimpleSInt32Int32MapMessage::operator =(SimpleSInt3
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt32Int32MapMessage::operator ==(const SimpleSInt32Int32MapMessage &other) const
+bool comparesEqual(const SimpleSInt32Int32MapMessage &lhs, const SimpleSInt32Int32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt32Int32MapMessage::operator !=(const SimpleSInt32Int32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt32Int32MapMessage::MapFieldEntry SimpleSInt32Int32MapMessage::mapField() const
@@ -6986,15 +6762,11 @@ SimpleSInt64Int32MapMessage &SimpleSInt64Int32MapMessage::operator =(SimpleSInt6
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt64Int32MapMessage::operator ==(const SimpleSInt64Int32MapMessage &other) const
+bool comparesEqual(const SimpleSInt64Int32MapMessage &lhs, const SimpleSInt64Int32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt64Int32MapMessage::operator !=(const SimpleSInt64Int32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt64Int32MapMessage::MapFieldEntry SimpleSInt64Int32MapMessage::mapField() const
@@ -7109,15 +6881,11 @@ SimpleInt32Int32MapMessage &SimpleInt32Int32MapMessage::operator =(SimpleInt32In
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt32Int32MapMessage::operator ==(const SimpleInt32Int32MapMessage &other) const
+bool comparesEqual(const SimpleInt32Int32MapMessage &lhs, const SimpleInt32Int32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt32Int32MapMessage::operator !=(const SimpleInt32Int32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt32Int32MapMessage::MapFieldEntry SimpleInt32Int32MapMessage::mapField() const
@@ -7232,15 +7000,11 @@ SimpleInt64Int32MapMessage &SimpleInt64Int32MapMessage::operator =(SimpleInt64In
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt64Int32MapMessage::operator ==(const SimpleInt64Int32MapMessage &other) const
+bool comparesEqual(const SimpleInt64Int32MapMessage &lhs, const SimpleInt64Int32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt64Int32MapMessage::operator !=(const SimpleInt64Int32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt64Int32MapMessage::MapFieldEntry SimpleInt64Int32MapMessage::mapField() const
@@ -7355,15 +7119,11 @@ SimpleUInt32Int32MapMessage &SimpleUInt32Int32MapMessage::operator =(SimpleUInt3
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt32Int32MapMessage::operator ==(const SimpleUInt32Int32MapMessage &other) const
+bool comparesEqual(const SimpleUInt32Int32MapMessage &lhs, const SimpleUInt32Int32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt32Int32MapMessage::operator !=(const SimpleUInt32Int32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt32Int32MapMessage::MapFieldEntry SimpleUInt32Int32MapMessage::mapField() const
@@ -7478,15 +7238,11 @@ SimpleUInt64Int32MapMessage &SimpleUInt64Int32MapMessage::operator =(SimpleUInt6
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt64Int32MapMessage::operator ==(const SimpleUInt64Int32MapMessage &other) const
+bool comparesEqual(const SimpleUInt64Int32MapMessage &lhs, const SimpleUInt64Int32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt64Int32MapMessage::operator !=(const SimpleUInt64Int32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt64Int32MapMessage::MapFieldEntry SimpleUInt64Int32MapMessage::mapField() const
@@ -7601,15 +7357,11 @@ SimpleFixed32Int32MapMessage &SimpleFixed32Int32MapMessage::operator =(SimpleFix
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed32Int32MapMessage::operator ==(const SimpleFixed32Int32MapMessage &other) const
+bool comparesEqual(const SimpleFixed32Int32MapMessage &lhs, const SimpleFixed32Int32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed32Int32MapMessage::operator !=(const SimpleFixed32Int32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed32Int32MapMessage::MapFieldEntry SimpleFixed32Int32MapMessage::mapField() const
@@ -7724,15 +7476,11 @@ SimpleFixed64Int32MapMessage &SimpleFixed64Int32MapMessage::operator =(SimpleFix
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed64Int32MapMessage::operator ==(const SimpleFixed64Int32MapMessage &other) const
+bool comparesEqual(const SimpleFixed64Int32MapMessage &lhs, const SimpleFixed64Int32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed64Int32MapMessage::operator !=(const SimpleFixed64Int32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed64Int32MapMessage::MapFieldEntry SimpleFixed64Int32MapMessage::mapField() const
@@ -7847,15 +7595,11 @@ SimpleSFixed32Int32MapMessage &SimpleSFixed32Int32MapMessage::operator =(SimpleS
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed32Int32MapMessage::operator ==(const SimpleSFixed32Int32MapMessage &other) const
+bool comparesEqual(const SimpleSFixed32Int32MapMessage &lhs, const SimpleSFixed32Int32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed32Int32MapMessage::operator !=(const SimpleSFixed32Int32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed32Int32MapMessage::MapFieldEntry SimpleSFixed32Int32MapMessage::mapField() const
@@ -7970,15 +7714,11 @@ SimpleSFixed64Int32MapMessage &SimpleSFixed64Int32MapMessage::operator =(SimpleS
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed64Int32MapMessage::operator ==(const SimpleSFixed64Int32MapMessage &other) const
+bool comparesEqual(const SimpleSFixed64Int32MapMessage &lhs, const SimpleSFixed64Int32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed64Int32MapMessage::operator !=(const SimpleSFixed64Int32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed64Int32MapMessage::MapFieldEntry SimpleSFixed64Int32MapMessage::mapField() const
@@ -8093,15 +7833,11 @@ SimpleStringInt32MapMessage &SimpleStringInt32MapMessage::operator =(SimpleStrin
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringInt32MapMessage::operator ==(const SimpleStringInt32MapMessage &other) const
+bool comparesEqual(const SimpleStringInt32MapMessage &lhs, const SimpleStringInt32MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleStringInt32MapMessage::operator !=(const SimpleStringInt32MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleStringInt32MapMessage::MapFieldEntry SimpleStringInt32MapMessage::mapField() const
@@ -8216,15 +7952,11 @@ SimpleSInt32Int64MapMessage &SimpleSInt32Int64MapMessage::operator =(SimpleSInt3
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt32Int64MapMessage::operator ==(const SimpleSInt32Int64MapMessage &other) const
+bool comparesEqual(const SimpleSInt32Int64MapMessage &lhs, const SimpleSInt32Int64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt32Int64MapMessage::operator !=(const SimpleSInt32Int64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt32Int64MapMessage::MapFieldEntry SimpleSInt32Int64MapMessage::mapField() const
@@ -8339,15 +8071,11 @@ SimpleSInt64Int64MapMessage &SimpleSInt64Int64MapMessage::operator =(SimpleSInt6
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt64Int64MapMessage::operator ==(const SimpleSInt64Int64MapMessage &other) const
+bool comparesEqual(const SimpleSInt64Int64MapMessage &lhs, const SimpleSInt64Int64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt64Int64MapMessage::operator !=(const SimpleSInt64Int64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt64Int64MapMessage::MapFieldEntry SimpleSInt64Int64MapMessage::mapField() const
@@ -8462,15 +8190,11 @@ SimpleInt32Int64MapMessage &SimpleInt32Int64MapMessage::operator =(SimpleInt32In
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt32Int64MapMessage::operator ==(const SimpleInt32Int64MapMessage &other) const
+bool comparesEqual(const SimpleInt32Int64MapMessage &lhs, const SimpleInt32Int64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt32Int64MapMessage::operator !=(const SimpleInt32Int64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt32Int64MapMessage::MapFieldEntry SimpleInt32Int64MapMessage::mapField() const
@@ -8585,15 +8309,11 @@ SimpleInt64Int64MapMessage &SimpleInt64Int64MapMessage::operator =(SimpleInt64In
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt64Int64MapMessage::operator ==(const SimpleInt64Int64MapMessage &other) const
+bool comparesEqual(const SimpleInt64Int64MapMessage &lhs, const SimpleInt64Int64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt64Int64MapMessage::operator !=(const SimpleInt64Int64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt64Int64MapMessage::MapFieldEntry SimpleInt64Int64MapMessage::mapField() const
@@ -8708,15 +8428,11 @@ SimpleUInt32Int64MapMessage &SimpleUInt32Int64MapMessage::operator =(SimpleUInt3
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt32Int64MapMessage::operator ==(const SimpleUInt32Int64MapMessage &other) const
+bool comparesEqual(const SimpleUInt32Int64MapMessage &lhs, const SimpleUInt32Int64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt32Int64MapMessage::operator !=(const SimpleUInt32Int64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt32Int64MapMessage::MapFieldEntry SimpleUInt32Int64MapMessage::mapField() const
@@ -8831,15 +8547,11 @@ SimpleUInt64Int64MapMessage &SimpleUInt64Int64MapMessage::operator =(SimpleUInt6
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt64Int64MapMessage::operator ==(const SimpleUInt64Int64MapMessage &other) const
+bool comparesEqual(const SimpleUInt64Int64MapMessage &lhs, const SimpleUInt64Int64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt64Int64MapMessage::operator !=(const SimpleUInt64Int64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt64Int64MapMessage::MapFieldEntry SimpleUInt64Int64MapMessage::mapField() const
@@ -8954,15 +8666,11 @@ SimpleFixed32Int64MapMessage &SimpleFixed32Int64MapMessage::operator =(SimpleFix
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed32Int64MapMessage::operator ==(const SimpleFixed32Int64MapMessage &other) const
+bool comparesEqual(const SimpleFixed32Int64MapMessage &lhs, const SimpleFixed32Int64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed32Int64MapMessage::operator !=(const SimpleFixed32Int64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed32Int64MapMessage::MapFieldEntry SimpleFixed32Int64MapMessage::mapField() const
@@ -9077,15 +8785,11 @@ SimpleFixed64Int64MapMessage &SimpleFixed64Int64MapMessage::operator =(SimpleFix
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed64Int64MapMessage::operator ==(const SimpleFixed64Int64MapMessage &other) const
+bool comparesEqual(const SimpleFixed64Int64MapMessage &lhs, const SimpleFixed64Int64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed64Int64MapMessage::operator !=(const SimpleFixed64Int64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed64Int64MapMessage::MapFieldEntry SimpleFixed64Int64MapMessage::mapField() const
@@ -9200,15 +8904,11 @@ SimpleSFixed32Int64MapMessage &SimpleSFixed32Int64MapMessage::operator =(SimpleS
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed32Int64MapMessage::operator ==(const SimpleSFixed32Int64MapMessage &other) const
+bool comparesEqual(const SimpleSFixed32Int64MapMessage &lhs, const SimpleSFixed32Int64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed32Int64MapMessage::operator !=(const SimpleSFixed32Int64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed32Int64MapMessage::MapFieldEntry SimpleSFixed32Int64MapMessage::mapField() const
@@ -9323,15 +9023,11 @@ SimpleSFixed64Int64MapMessage &SimpleSFixed64Int64MapMessage::operator =(SimpleS
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed64Int64MapMessage::operator ==(const SimpleSFixed64Int64MapMessage &other) const
+bool comparesEqual(const SimpleSFixed64Int64MapMessage &lhs, const SimpleSFixed64Int64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed64Int64MapMessage::operator !=(const SimpleSFixed64Int64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed64Int64MapMessage::MapFieldEntry SimpleSFixed64Int64MapMessage::mapField() const
@@ -9446,15 +9142,11 @@ SimpleStringInt64MapMessage &SimpleStringInt64MapMessage::operator =(SimpleStrin
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringInt64MapMessage::operator ==(const SimpleStringInt64MapMessage &other) const
+bool comparesEqual(const SimpleStringInt64MapMessage &lhs, const SimpleStringInt64MapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleStringInt64MapMessage::operator !=(const SimpleStringInt64MapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleStringInt64MapMessage::MapFieldEntry SimpleStringInt64MapMessage::mapField() const
@@ -9569,15 +9261,11 @@ SimpleSInt32ComplexMessageMapMessage &SimpleSInt32ComplexMessageMapMessage::oper
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt32ComplexMessageMapMessage::operator ==(const SimpleSInt32ComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleSInt32ComplexMessageMapMessage &lhs, const SimpleSInt32ComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt32ComplexMessageMapMessage::operator !=(const SimpleSInt32ComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt32ComplexMessageMapMessage::MapFieldEntry SimpleSInt32ComplexMessageMapMessage::mapField() const
@@ -9692,15 +9380,11 @@ SimpleSInt64ComplexMessageMapMessage &SimpleSInt64ComplexMessageMapMessage::oper
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt64ComplexMessageMapMessage::operator ==(const SimpleSInt64ComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleSInt64ComplexMessageMapMessage &lhs, const SimpleSInt64ComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSInt64ComplexMessageMapMessage::operator !=(const SimpleSInt64ComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSInt64ComplexMessageMapMessage::MapFieldEntry SimpleSInt64ComplexMessageMapMessage::mapField() const
@@ -9815,15 +9499,11 @@ SimpleInt32ComplexMessageMapMessage &SimpleInt32ComplexMessageMapMessage::operat
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt32ComplexMessageMapMessage::operator ==(const SimpleInt32ComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleInt32ComplexMessageMapMessage &lhs, const SimpleInt32ComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt32ComplexMessageMapMessage::operator !=(const SimpleInt32ComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt32ComplexMessageMapMessage::MapFieldEntry SimpleInt32ComplexMessageMapMessage::mapField() const
@@ -9938,15 +9618,11 @@ SimpleInt64ComplexMessageMapMessage &SimpleInt64ComplexMessageMapMessage::operat
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt64ComplexMessageMapMessage::operator ==(const SimpleInt64ComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleInt64ComplexMessageMapMessage &lhs, const SimpleInt64ComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleInt64ComplexMessageMapMessage::operator !=(const SimpleInt64ComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleInt64ComplexMessageMapMessage::MapFieldEntry SimpleInt64ComplexMessageMapMessage::mapField() const
@@ -10061,15 +9737,11 @@ SimpleUInt32ComplexMessageMapMessage &SimpleUInt32ComplexMessageMapMessage::oper
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt32ComplexMessageMapMessage::operator ==(const SimpleUInt32ComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleUInt32ComplexMessageMapMessage &lhs, const SimpleUInt32ComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt32ComplexMessageMapMessage::operator !=(const SimpleUInt32ComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt32ComplexMessageMapMessage::MapFieldEntry SimpleUInt32ComplexMessageMapMessage::mapField() const
@@ -10184,15 +9856,11 @@ SimpleUInt64ComplexMessageMapMessage &SimpleUInt64ComplexMessageMapMessage::oper
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt64ComplexMessageMapMessage::operator ==(const SimpleUInt64ComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleUInt64ComplexMessageMapMessage &lhs, const SimpleUInt64ComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleUInt64ComplexMessageMapMessage::operator !=(const SimpleUInt64ComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleUInt64ComplexMessageMapMessage::MapFieldEntry SimpleUInt64ComplexMessageMapMessage::mapField() const
@@ -10307,15 +9975,11 @@ SimpleFixed32ComplexMessageMapMessage &SimpleFixed32ComplexMessageMapMessage::op
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed32ComplexMessageMapMessage::operator ==(const SimpleFixed32ComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleFixed32ComplexMessageMapMessage &lhs, const SimpleFixed32ComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed32ComplexMessageMapMessage::operator !=(const SimpleFixed32ComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed32ComplexMessageMapMessage::MapFieldEntry SimpleFixed32ComplexMessageMapMessage::mapField() const
@@ -10430,15 +10094,11 @@ SimpleFixed64ComplexMessageMapMessage &SimpleFixed64ComplexMessageMapMessage::op
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixed64ComplexMessageMapMessage::operator ==(const SimpleFixed64ComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleFixed64ComplexMessageMapMessage &lhs, const SimpleFixed64ComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleFixed64ComplexMessageMapMessage::operator !=(const SimpleFixed64ComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleFixed64ComplexMessageMapMessage::MapFieldEntry SimpleFixed64ComplexMessageMapMessage::mapField() const
@@ -10553,15 +10213,11 @@ SimpleSFixed32ComplexMessageMapMessage &SimpleSFixed32ComplexMessageMapMessage::
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed32ComplexMessageMapMessage::operator ==(const SimpleSFixed32ComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleSFixed32ComplexMessageMapMessage &lhs, const SimpleSFixed32ComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed32ComplexMessageMapMessage::operator !=(const SimpleSFixed32ComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry SimpleSFixed32ComplexMessageMapMessage::mapField() const
@@ -10676,15 +10332,11 @@ SimpleSFixed64ComplexMessageMapMessage &SimpleSFixed64ComplexMessageMapMessage::
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixed64ComplexMessageMapMessage::operator ==(const SimpleSFixed64ComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleSFixed64ComplexMessageMapMessage &lhs, const SimpleSFixed64ComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleSFixed64ComplexMessageMapMessage::operator !=(const SimpleSFixed64ComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry SimpleSFixed64ComplexMessageMapMessage::mapField() const
@@ -10799,15 +10451,11 @@ SimpleStringComplexMessageMapMessage &SimpleStringComplexMessageMapMessage::oper
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringComplexMessageMapMessage::operator ==(const SimpleStringComplexMessageMapMessage &other) const
+bool comparesEqual(const SimpleStringComplexMessageMapMessage &lhs, const SimpleStringComplexMessageMapMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_mapField, other.dptr->m_mapField);
-}
-
-bool SimpleStringComplexMessageMapMessage::operator !=(const SimpleStringComplexMessageMapMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_mapField, rhs.dptr->m_mapField);
 }
 
 SimpleStringComplexMessageMapMessage::MapFieldEntry SimpleStringComplexMessageMapMessage::mapField() const

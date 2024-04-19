@@ -90,14 +90,10 @@ EmptyMessage &EmptyMessage::operator =(EmptyMessage &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool EmptyMessage::operator ==(const EmptyMessage &other) const
+bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other);
-}
-
-bool EmptyMessage::operator !=(const EmptyMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs));
 }
 
 
@@ -191,15 +187,11 @@ SimpleStringMessage &SimpleStringMessage::operator =(SimpleStringMessage &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringMessage::operator ==(const SimpleStringMessage &other) const
+bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldString == other.dptr->m_testFieldString;
-}
-
-bool SimpleStringMessage::operator !=(const SimpleStringMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldString == rhs.dptr->m_testFieldString;
 }
 
 QString SimpleStringMessage::testFieldString() const
@@ -316,17 +308,13 @@ ComplexMessage &ComplexMessage::operator =(ComplexMessage &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool ComplexMessage::operator ==(const ComplexMessage &other) const
+bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt
-        && (dptr->m_testComplexField == other.dptr->m_testComplexField
-            || *dptr->m_testComplexField == *other.dptr->m_testComplexField);
-}
-
-bool ComplexMessage::operator !=(const ComplexMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt
+        && (lhs.dptr->m_testComplexField == rhs.dptr->m_testComplexField
+            || *lhs.dptr->m_testComplexField == *rhs.dptr->m_testComplexField);
 }
 
 QtProtobuf::int32 ComplexMessage::testFieldInt() const

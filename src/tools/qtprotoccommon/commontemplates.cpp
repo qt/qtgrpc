@@ -415,43 +415,44 @@ const char *CommonTemplates::MoveAssignmentOperatorDefinitionTemplate()
            "}\n";
 }
 
-const char *CommonTemplates::EqualOperatorDeclarationTemplate()
+const char *CommonTemplates::EqualityDeclarationTemplate()
 {
-    return "bool operator ==(const $classname$ &other) const;\n";
+    return "friend $export_macro$ bool comparesEqual(const $classname$ &lhs, "
+           "const $classname$ &rhs) noexcept;\n"
+           "friend bool operator==(const $classname$ &lhs, const $classname$ &rhs) noexcept\n"
+           "{\n"
+           "    return comparesEqual(lhs, rhs);\n"
+           "}\n"
+           "friend bool operator!=(const $classname$ &lhs, const $classname$ &rhs) noexcept\n"
+           "{\n"
+           "    return !comparesEqual(lhs, rhs);\n"
+           "}\n";
 }
-const char *CommonTemplates::EqualOperatorDefinitionTemplate()
+
+const char *CommonTemplates::ComparesEqualDefinitionTemplate()
 {
-    return "bool $classname$::operator ==(const $classname$ &other) const\n{\n"
-           "    return QProtobufMessage::isEqual(*this, other)";
+    return "bool comparesEqual(const $classname$ &lhs, const $classname$ &rhs) noexcept\n"
+           "{\n"
+           "    return operator ==(static_cast<const QProtobufMessage&>(lhs),\n"
+           "                       static_cast<const QProtobufMessage&>(rhs))";
 }
 const char *CommonTemplates::EqualOperatorMemberTemplate()
 {
-    return "dptr->m_$property_name$ == other.dptr->m_$property_name$";
+    return "lhs.dptr->m_$property_name$ == rhs.dptr->m_$property_name$";
 }
 const char *CommonTemplates::EqualOperatorMemberMessageTemplate()
 {
-    return "(dptr->m_$property_name$ == other.dptr->m_$property_name$\n"
-           "    || *dptr->m_$property_name$ == *other.dptr->m_$property_name$)";
+    return "(lhs.dptr->m_$property_name$ == rhs.dptr->m_$property_name$\n"
+           "    || *lhs.dptr->m_$property_name$ == *rhs.dptr->m_$property_name$)";
 }
 const char *CommonTemplates::EqualOperatorMemberRepeatedTemplate()
 {
-    return "QtProtobuf::repeatedValueCompare(dptr->m_$property_name$, "
-           "other.dptr->m_$property_name$)";
+    return "QtProtobuf::repeatedValueCompare(lhs.dptr->m_$property_name$, "
+           "rhs.dptr->m_$property_name$)";
 }
 const char *CommonTemplates::EqualOperatorMemberOneofTemplate()
 {
-    return "dptr->m_$optional_property_name$ == other.dptr->m_$optional_property_name$";
-}
-
-const char *CommonTemplates::NotEqualOperatorDeclarationTemplate()
-{
-    return "bool operator !=(const $classname$ &other) const;\n";
-}
-const char *CommonTemplates::NotEqualOperatorDefinitionTemplate()
-{
-    return "bool $classname$::operator !=(const $classname$ &other) const\n{\n"
-           "    return !this->operator ==(other);\n"
-           "}\n\n";
+    return "lhs.dptr->m_$optional_property_name$ == rhs.dptr->m_$optional_property_name$";
 }
 
 const char *CommonTemplates::PrivateGetterMessageDeclarationTemplate()

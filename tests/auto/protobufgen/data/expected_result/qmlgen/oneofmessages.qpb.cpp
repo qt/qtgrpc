@@ -100,15 +100,11 @@ OneofSimpleMessage &OneofSimpleMessage::operator =(OneofSimpleMessage &&other) n
     dptr.swap(other.dptr);
     return *this;
 }
-bool OneofSimpleMessage::operator ==(const OneofSimpleMessage &other) const
+bool comparesEqual(const OneofSimpleMessage &lhs, const OneofSimpleMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testOneof == other.dptr->m_testOneof;
-}
-
-bool OneofSimpleMessage::operator !=(const OneofSimpleMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testOneof == rhs.dptr->m_testOneof;
 }
 
 QtProtobuf::int32 OneofSimpleMessage::testOneofFieldInt_p() const
@@ -311,17 +307,13 @@ OneofComplexMessage &OneofComplexMessage::operator =(OneofComplexMessage &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool OneofComplexMessage::operator ==(const OneofComplexMessage &other) const
+bool comparesEqual(const OneofComplexMessage &lhs, const OneofComplexMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt
-        && dptr->m_testOneof == other.dptr->m_testOneof
-        && dptr->m_secondOneof == other.dptr->m_secondOneof;
-}
-
-bool OneofComplexMessage::operator !=(const OneofComplexMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt
+        && lhs.dptr->m_testOneof == rhs.dptr->m_testOneof
+        && lhs.dptr->m_secondOneof == rhs.dptr->m_secondOneof;
 }
 
 QtProtobuf::int32 OneofComplexMessage::testFieldInt() const

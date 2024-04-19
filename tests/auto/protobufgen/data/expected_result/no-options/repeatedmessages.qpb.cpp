@@ -96,15 +96,11 @@ RepeatedStringMessage &RepeatedStringMessage::operator =(RepeatedStringMessage &
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedStringMessage::operator ==(const RepeatedStringMessage &other) const
+bool comparesEqual(const RepeatedStringMessage &lhs, const RepeatedStringMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedString == other.dptr->m_testRepeatedString;
-}
-
-bool RepeatedStringMessage::operator !=(const RepeatedStringMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedString == rhs.dptr->m_testRepeatedString;
 }
 
 QStringList RepeatedStringMessage::testRepeatedString() const
@@ -217,15 +213,11 @@ RepeatedDoubleMessage &RepeatedDoubleMessage::operator =(RepeatedDoubleMessage &
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedDoubleMessage::operator ==(const RepeatedDoubleMessage &other) const
+bool comparesEqual(const RepeatedDoubleMessage &lhs, const RepeatedDoubleMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedDouble == other.dptr->m_testRepeatedDouble;
-}
-
-bool RepeatedDoubleMessage::operator !=(const RepeatedDoubleMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedDouble == rhs.dptr->m_testRepeatedDouble;
 }
 
 QtProtobuf::doubleList RepeatedDoubleMessage::testRepeatedDouble() const
@@ -338,15 +330,11 @@ RepeatedBytesMessage &RepeatedBytesMessage::operator =(RepeatedBytesMessage &&ot
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedBytesMessage::operator ==(const RepeatedBytesMessage &other) const
+bool comparesEqual(const RepeatedBytesMessage &lhs, const RepeatedBytesMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedBytes == other.dptr->m_testRepeatedBytes;
-}
-
-bool RepeatedBytesMessage::operator !=(const RepeatedBytesMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedBytes == rhs.dptr->m_testRepeatedBytes;
 }
 
 QByteArrayList RepeatedBytesMessage::testRepeatedBytes() const
@@ -459,15 +447,11 @@ RepeatedFloatMessage &RepeatedFloatMessage::operator =(RepeatedFloatMessage &&ot
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedFloatMessage::operator ==(const RepeatedFloatMessage &other) const
+bool comparesEqual(const RepeatedFloatMessage &lhs, const RepeatedFloatMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedFloat == other.dptr->m_testRepeatedFloat;
-}
-
-bool RepeatedFloatMessage::operator !=(const RepeatedFloatMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedFloat == rhs.dptr->m_testRepeatedFloat;
 }
 
 QtProtobuf::floatList RepeatedFloatMessage::testRepeatedFloat() const
@@ -580,15 +564,11 @@ RepeatedComplexMessage &RepeatedComplexMessage::operator =(RepeatedComplexMessag
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedComplexMessage::operator ==(const RepeatedComplexMessage &other) const
+bool comparesEqual(const RepeatedComplexMessage &lhs, const RepeatedComplexMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_testRepeatedComplex, other.dptr->m_testRepeatedComplex);
-}
-
-bool RepeatedComplexMessage::operator !=(const RepeatedComplexMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_testRepeatedComplex, rhs.dptr->m_testRepeatedComplex);
 }
 
 ComplexMessageRepeated RepeatedComplexMessage::testRepeatedComplex() const
@@ -701,15 +681,11 @@ RepeatedSIntMessage &RepeatedSIntMessage::operator =(RepeatedSIntMessage &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedSIntMessage::operator ==(const RepeatedSIntMessage &other) const
+bool comparesEqual(const RepeatedSIntMessage &lhs, const RepeatedSIntMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
-}
-
-bool RepeatedSIntMessage::operator !=(const RepeatedSIntMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
 QtProtobuf::sint32List RepeatedSIntMessage::testRepeatedInt() const
@@ -822,15 +798,11 @@ RepeatedIntMessage &RepeatedIntMessage::operator =(RepeatedIntMessage &&other) n
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedIntMessage::operator ==(const RepeatedIntMessage &other) const
+bool comparesEqual(const RepeatedIntMessage &lhs, const RepeatedIntMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
-}
-
-bool RepeatedIntMessage::operator !=(const RepeatedIntMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
 QtProtobuf::int32List RepeatedIntMessage::testRepeatedInt() const
@@ -943,15 +915,11 @@ RepeatedUIntMessage &RepeatedUIntMessage::operator =(RepeatedUIntMessage &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedUIntMessage::operator ==(const RepeatedUIntMessage &other) const
+bool comparesEqual(const RepeatedUIntMessage &lhs, const RepeatedUIntMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
-}
-
-bool RepeatedUIntMessage::operator !=(const RepeatedUIntMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
 QtProtobuf::uint32List RepeatedUIntMessage::testRepeatedInt() const
@@ -1064,15 +1032,11 @@ RepeatedSInt64Message &RepeatedSInt64Message::operator =(RepeatedSInt64Message &
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedSInt64Message::operator ==(const RepeatedSInt64Message &other) const
+bool comparesEqual(const RepeatedSInt64Message &lhs, const RepeatedSInt64Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
-}
-
-bool RepeatedSInt64Message::operator !=(const RepeatedSInt64Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
 QtProtobuf::sint64List RepeatedSInt64Message::testRepeatedInt() const
@@ -1185,15 +1149,11 @@ RepeatedInt64Message &RepeatedInt64Message::operator =(RepeatedInt64Message &&ot
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedInt64Message::operator ==(const RepeatedInt64Message &other) const
+bool comparesEqual(const RepeatedInt64Message &lhs, const RepeatedInt64Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
-}
-
-bool RepeatedInt64Message::operator !=(const RepeatedInt64Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
 QtProtobuf::int64List RepeatedInt64Message::testRepeatedInt() const
@@ -1306,15 +1266,11 @@ RepeatedUInt64Message &RepeatedUInt64Message::operator =(RepeatedUInt64Message &
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedUInt64Message::operator ==(const RepeatedUInt64Message &other) const
+bool comparesEqual(const RepeatedUInt64Message &lhs, const RepeatedUInt64Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
-}
-
-bool RepeatedUInt64Message::operator !=(const RepeatedUInt64Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
 QtProtobuf::uint64List RepeatedUInt64Message::testRepeatedInt() const
@@ -1427,15 +1383,11 @@ RepeatedFixedIntMessage &RepeatedFixedIntMessage::operator =(RepeatedFixedIntMes
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedFixedIntMessage::operator ==(const RepeatedFixedIntMessage &other) const
+bool comparesEqual(const RepeatedFixedIntMessage &lhs, const RepeatedFixedIntMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
-}
-
-bool RepeatedFixedIntMessage::operator !=(const RepeatedFixedIntMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
 QtProtobuf::fixed32List RepeatedFixedIntMessage::testRepeatedInt() const
@@ -1548,15 +1500,11 @@ RepeatedSFixedIntMessage &RepeatedSFixedIntMessage::operator =(RepeatedSFixedInt
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedSFixedIntMessage::operator ==(const RepeatedSFixedIntMessage &other) const
+bool comparesEqual(const RepeatedSFixedIntMessage &lhs, const RepeatedSFixedIntMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
-}
-
-bool RepeatedSFixedIntMessage::operator !=(const RepeatedSFixedIntMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
 QtProtobuf::sfixed32List RepeatedSFixedIntMessage::testRepeatedInt() const
@@ -1669,15 +1617,11 @@ RepeatedFixedInt64Message &RepeatedFixedInt64Message::operator =(RepeatedFixedIn
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedFixedInt64Message::operator ==(const RepeatedFixedInt64Message &other) const
+bool comparesEqual(const RepeatedFixedInt64Message &lhs, const RepeatedFixedInt64Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
-}
-
-bool RepeatedFixedInt64Message::operator !=(const RepeatedFixedInt64Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
 QtProtobuf::fixed64List RepeatedFixedInt64Message::testRepeatedInt() const
@@ -1790,15 +1734,11 @@ RepeatedSFixedInt64Message &RepeatedSFixedInt64Message::operator =(RepeatedSFixe
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedSFixedInt64Message::operator ==(const RepeatedSFixedInt64Message &other) const
+bool comparesEqual(const RepeatedSFixedInt64Message &lhs, const RepeatedSFixedInt64Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedInt == other.dptr->m_testRepeatedInt;
-}
-
-bool RepeatedSFixedInt64Message::operator !=(const RepeatedSFixedInt64Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
 QtProtobuf::sfixed64List RepeatedSFixedInt64Message::testRepeatedInt() const
@@ -1911,15 +1851,11 @@ RepeatedBoolMessage &RepeatedBoolMessage::operator =(RepeatedBoolMessage &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedBoolMessage::operator ==(const RepeatedBoolMessage &other) const
+bool comparesEqual(const RepeatedBoolMessage &lhs, const RepeatedBoolMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testRepeatedBool == other.dptr->m_testRepeatedBool;
-}
-
-bool RepeatedBoolMessage::operator !=(const RepeatedBoolMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testRepeatedBool == rhs.dptr->m_testRepeatedBool;
 }
 
 QtProtobuf::boolList RepeatedBoolMessage::testRepeatedBool() const

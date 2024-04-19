@@ -97,15 +97,11 @@ AnnotatedMessage1 &AnnotatedMessage1::operator =(AnnotatedMessage1 &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool AnnotatedMessage1::operator ==(const AnnotatedMessage1 &other) const
+bool comparesEqual(const AnnotatedMessage1 &lhs, const AnnotatedMessage1 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool AnnotatedMessage1::operator !=(const AnnotatedMessage1 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 AnnotatedMessage1::testField() const
@@ -213,15 +209,11 @@ AnnotatedMessage2 &AnnotatedMessage2::operator =(AnnotatedMessage2 &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool AnnotatedMessage2::operator ==(const AnnotatedMessage2 &other) const
+bool comparesEqual(const AnnotatedMessage2 &lhs, const AnnotatedMessage2 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool AnnotatedMessage2::operator !=(const AnnotatedMessage2 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 AnnotatedMessage2::testField() const
@@ -329,15 +321,11 @@ AnnotatedMessage3 &AnnotatedMessage3::operator =(AnnotatedMessage3 &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool AnnotatedMessage3::operator ==(const AnnotatedMessage3 &other) const
+bool comparesEqual(const AnnotatedMessage3 &lhs, const AnnotatedMessage3 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool AnnotatedMessage3::operator !=(const AnnotatedMessage3 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 AnnotatedMessage3::testField() const
@@ -445,15 +433,11 @@ AnnotatedMessage4 &AnnotatedMessage4::operator =(AnnotatedMessage4 &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool AnnotatedMessage4::operator ==(const AnnotatedMessage4 &other) const
+bool comparesEqual(const AnnotatedMessage4 &lhs, const AnnotatedMessage4 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool AnnotatedMessage4::operator !=(const AnnotatedMessage4 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 AnnotatedMessage4::testField() const
@@ -561,15 +545,11 @@ AnnotatedMessage5 &AnnotatedMessage5::operator =(AnnotatedMessage5 &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool AnnotatedMessage5::operator ==(const AnnotatedMessage5 &other) const
+bool comparesEqual(const AnnotatedMessage5 &lhs, const AnnotatedMessage5 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool AnnotatedMessage5::operator !=(const AnnotatedMessage5 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 AnnotatedMessage5::testField() const
@@ -677,15 +657,11 @@ AnnotatedMessage6 &AnnotatedMessage6::operator =(AnnotatedMessage6 &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool AnnotatedMessage6::operator ==(const AnnotatedMessage6 &other) const
+bool comparesEqual(const AnnotatedMessage6 &lhs, const AnnotatedMessage6 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool AnnotatedMessage6::operator !=(const AnnotatedMessage6 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 AnnotatedMessage6::testField() const
@@ -793,15 +769,11 @@ AnnotatedMessage7 &AnnotatedMessage7::operator =(AnnotatedMessage7 &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool AnnotatedMessage7::operator ==(const AnnotatedMessage7 &other) const
+bool comparesEqual(const AnnotatedMessage7 &lhs, const AnnotatedMessage7 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool AnnotatedMessage7::operator !=(const AnnotatedMessage7 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 AnnotatedMessage7::testField() const
@@ -909,15 +881,11 @@ AnnotatedMessage8 &AnnotatedMessage8::operator =(AnnotatedMessage8 &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool AnnotatedMessage8::operator ==(const AnnotatedMessage8 &other) const
+bool comparesEqual(const AnnotatedMessage8 &lhs, const AnnotatedMessage8 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool AnnotatedMessage8::operator !=(const AnnotatedMessage8 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 AnnotatedMessage8::testField() const
@@ -1025,15 +993,11 @@ AnnotatedMessage9 &AnnotatedMessage9::operator =(AnnotatedMessage9 &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool AnnotatedMessage9::operator ==(const AnnotatedMessage9 &other) const
+bool comparesEqual(const AnnotatedMessage9 &lhs, const AnnotatedMessage9 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool AnnotatedMessage9::operator !=(const AnnotatedMessage9 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 AnnotatedMessage9::testField() const

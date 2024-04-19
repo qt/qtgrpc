@@ -348,7 +348,7 @@ void tst_qtgrpcgen::cmdLineGeneratedFile()
 void tst_qtgrpcgen::cleanupTestCase()
 {
     // Leave this function at the bottom. It removes generated content.
-    cleanFolder(m_commandLineGenerated);
+    // cleanFolder(m_commandLineGenerated);
 }
 
 QTEST_MAIN(tst_qtgrpcgen)

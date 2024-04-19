@@ -79,11 +79,18 @@ public:
     EmptyMessage &operator =(const EmptyMessage &other);
     EmptyMessage(EmptyMessage &&other) noexcept;
     EmptyMessage &operator =(EmptyMessage &&other) noexcept;
-    bool operator ==(const EmptyMessage &other) const;
-    bool operator !=(const EmptyMessage &other) const;
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept;
+    friend bool operator==(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<EmptyMessage_QtProtobufData> dptr;
 };
 namespace EmptyMessage_QtProtobufNested {
@@ -108,14 +115,21 @@ public:
     SimpleIntMessage &operator =(const SimpleIntMessage &other);
     SimpleIntMessage(SimpleIntMessage &&other) noexcept;
     SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept;
-    bool operator ==(const SimpleIntMessage &other) const;
-    bool operator !=(const SimpleIntMessage &other) const;
 
     QtProtobuf::int32 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept;
+    friend bool operator==(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleIntMessage_QtProtobufData> dptr;
 };
 namespace SimpleIntMessage_QtProtobufNested {
@@ -147,8 +161,6 @@ public:
     NoPackageExternalMessage &operator =(const NoPackageExternalMessage &other);
     NoPackageExternalMessage(NoPackageExternalMessage &&other) noexcept;
     NoPackageExternalMessage &operator =(NoPackageExternalMessage &&other) noexcept;
-    bool operator ==(const NoPackageExternalMessage &other) const;
-    bool operator !=(const NoPackageExternalMessage &other) const;
 
     bool hasTestField() const;
     SimpleIntMessageExt &testField() const;
@@ -157,6 +169,15 @@ public:
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool comparesEqual(const NoPackageExternalMessage &lhs, const NoPackageExternalMessage &rhs) noexcept;
+    friend bool operator==(const NoPackageExternalMessage &lhs, const NoPackageExternalMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const NoPackageExternalMessage &lhs, const NoPackageExternalMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     SimpleIntMessageExt *testField_p();
     void setTestField_p(SimpleIntMessageExt *testField);
     QExplicitlySharedDataPointer<NoPackageExternalMessage_QtProtobufData> dptr;
@@ -190,8 +211,6 @@ public:
     NoPackageMessage &operator =(const NoPackageMessage &other);
     NoPackageMessage(NoPackageMessage &&other) noexcept;
     NoPackageMessage &operator =(NoPackageMessage &&other) noexcept;
-    bool operator ==(const NoPackageMessage &other) const;
-    bool operator !=(const NoPackageMessage &other) const;
 
     bool hasTestField() const;
     SimpleIntMessage &testField() const;
@@ -200,6 +219,15 @@ public:
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool comparesEqual(const NoPackageMessage &lhs, const NoPackageMessage &rhs) noexcept;
+    friend bool operator==(const NoPackageMessage &lhs, const NoPackageMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const NoPackageMessage &lhs, const NoPackageMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     SimpleIntMessage *testField_p();
     void setTestField_p(SimpleIntMessage *testField);
     QExplicitlySharedDataPointer<NoPackageMessage_QtProtobufData> dptr;

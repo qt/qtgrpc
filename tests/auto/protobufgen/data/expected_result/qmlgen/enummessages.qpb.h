@@ -156,14 +156,21 @@ public:
     SimpleEnumMessage &operator =(const SimpleEnumMessage &other);
     SimpleEnumMessage(SimpleEnumMessage &&other) noexcept;
     SimpleEnumMessage &operator =(SimpleEnumMessage &&other) noexcept;
-    bool operator ==(const SimpleEnumMessage &other) const;
-    bool operator !=(const SimpleEnumMessage &other) const;
 
     SimpleEnumMessage_QtProtobufNested::LocalEnum localEnum() const;
     void setLocalEnum(const SimpleEnumMessage_QtProtobufNested::LocalEnum &localEnum);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleEnumMessage &lhs, const SimpleEnumMessage &rhs) noexcept;
+    friend bool operator==(const SimpleEnumMessage &lhs, const SimpleEnumMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleEnumMessage &lhs, const SimpleEnumMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleEnumMessage_QtProtobufData> dptr;
 };
 namespace SimpleEnumMessage_QtProtobufNested {
@@ -204,8 +211,6 @@ public:
     RepeatedEnumMessage &operator =(const RepeatedEnumMessage &other);
     RepeatedEnumMessage(RepeatedEnumMessage &&other) noexcept;
     RepeatedEnumMessage &operator =(RepeatedEnumMessage &&other) noexcept;
-    bool operator ==(const RepeatedEnumMessage &other) const;
-    bool operator !=(const RepeatedEnumMessage &other) const;
 
     RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated localEnumList() const;
     RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated &localEnumList();
@@ -213,6 +218,15 @@ public:
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const RepeatedEnumMessage &lhs, const RepeatedEnumMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedEnumMessage &lhs, const RepeatedEnumMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedEnumMessage &lhs, const RepeatedEnumMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedEnumMessage_QtProtobufData> dptr;
 };
 namespace RepeatedEnumMessage_QtProtobufNested {
@@ -263,8 +277,6 @@ public:
     MixedEnumUsageMessage &operator =(const MixedEnumUsageMessage &other);
     MixedEnumUsageMessage(MixedEnumUsageMessage &&other) noexcept;
     MixedEnumUsageMessage &operator =(MixedEnumUsageMessage &&other) noexcept;
-    bool operator ==(const MixedEnumUsageMessage &other) const;
-    bool operator !=(const MixedEnumUsageMessage &other) const;
 
     MixedEnumUsageMessage_QtProtobufNested::LocalEnum localEnum() const;
 
@@ -283,6 +295,15 @@ public:
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const MixedEnumUsageMessage &lhs, const MixedEnumUsageMessage &rhs) noexcept;
+    friend bool operator==(const MixedEnumUsageMessage &lhs, const MixedEnumUsageMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const MixedEnumUsageMessage &lhs, const MixedEnumUsageMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<MixedEnumUsageMessage_QtProtobufData> dptr;
 };
 namespace MixedEnumUsageMessage_QtProtobufNested {
@@ -324,11 +345,18 @@ public:
     NestedEnumHolder &operator =(const NestedEnumHolder &other);
     NestedEnumHolder(NestedEnumHolder &&other) noexcept;
     NestedEnumHolder &operator =(NestedEnumHolder &&other) noexcept;
-    bool operator ==(const NestedEnumHolder &other) const;
-    bool operator !=(const NestedEnumHolder &other) const;
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const NestedEnumHolder &lhs, const NestedEnumHolder &rhs) noexcept;
+    friend bool operator==(const NestedEnumHolder &lhs, const NestedEnumHolder &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const NestedEnumHolder &lhs, const NestedEnumHolder &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<NestedEnumHolder_QtProtobufData> dptr;
 };
 namespace NestedEnumHolder_QtProtobufNested {
@@ -365,11 +393,18 @@ public:
     NestedEnumHolderLevel1 &operator =(const NestedEnumHolderLevel1 &other);
     NestedEnumHolderLevel1(NestedEnumHolderLevel1 &&other) noexcept;
     NestedEnumHolderLevel1 &operator =(NestedEnumHolderLevel1 &&other) noexcept;
-    bool operator ==(const NestedEnumHolderLevel1 &other) const;
-    bool operator !=(const NestedEnumHolderLevel1 &other) const;
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const NestedEnumHolderLevel1 &lhs, const NestedEnumHolderLevel1 &rhs) noexcept;
+    friend bool operator==(const NestedEnumHolderLevel1 &lhs, const NestedEnumHolderLevel1 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const NestedEnumHolderLevel1 &lhs, const NestedEnumHolderLevel1 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<NestedEnumHolderLevel1_QtProtobufData> dptr;
 };
 namespace NestedEnumHolderLevel1_QtProtobufNested {
@@ -401,11 +436,18 @@ public:
     NestedEnumHolderLevel2 &operator =(const NestedEnumHolderLevel2 &other);
     NestedEnumHolderLevel2(NestedEnumHolderLevel2 &&other) noexcept;
     NestedEnumHolderLevel2 &operator =(NestedEnumHolderLevel2 &&other) noexcept;
-    bool operator ==(const NestedEnumHolderLevel2 &other) const;
-    bool operator !=(const NestedEnumHolderLevel2 &other) const;
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const NestedEnumHolderLevel2 &lhs, const NestedEnumHolderLevel2 &rhs) noexcept;
+    friend bool operator==(const NestedEnumHolderLevel2 &lhs, const NestedEnumHolderLevel2 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const NestedEnumHolderLevel2 &lhs, const NestedEnumHolderLevel2 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<NestedEnumHolderLevel2_QtProtobufData> dptr;
 };
 namespace NestedEnumHolderLevel2_QtProtobufNested {
@@ -442,8 +484,6 @@ public:
     NestedEnumMessage &operator =(const NestedEnumMessage &other);
     NestedEnumMessage(NestedEnumMessage &&other) noexcept;
     NestedEnumMessage &operator =(NestedEnumMessage &&other) noexcept;
-    bool operator ==(const NestedEnumMessage &other) const;
-    bool operator !=(const NestedEnumMessage &other) const;
 
     MixedEnumUsageMessage_QtProtobufNested::LocalEnum localEnumField() const;
 
@@ -462,6 +502,15 @@ public:
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const NestedEnumMessage &lhs, const NestedEnumMessage &rhs) noexcept;
+    friend bool operator==(const NestedEnumMessage &lhs, const NestedEnumMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const NestedEnumMessage &lhs, const NestedEnumMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<NestedEnumMessage_QtProtobufData> dptr;
 };
 namespace NestedEnumMessage_QtProtobufNested {
@@ -497,8 +546,6 @@ public:
     SimpleFileEnumMessage &operator =(const SimpleFileEnumMessage &other);
     SimpleFileEnumMessage(SimpleFileEnumMessage &&other) noexcept;
     SimpleFileEnumMessage &operator =(SimpleFileEnumMessage &&other) noexcept;
-    bool operator ==(const SimpleFileEnumMessage &other) const;
-    bool operator !=(const SimpleFileEnumMessage &other) const;
 
     TestEnumGadget::TestEnum globalEnum() const;
 
@@ -509,6 +556,15 @@ public:
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleFileEnumMessage &lhs, const SimpleFileEnumMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFileEnumMessage &lhs, const SimpleFileEnumMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFileEnumMessage &lhs, const SimpleFileEnumMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFileEnumMessage_QtProtobufData> dptr;
 };
 namespace SimpleFileEnumMessage_QtProtobufNested {
@@ -540,8 +596,6 @@ public:
     StepChildEnumMessage &operator =(const StepChildEnumMessage &other);
     StepChildEnumMessage(StepChildEnumMessage &&other) noexcept;
     StepChildEnumMessage &operator =(StepChildEnumMessage &&other) noexcept;
-    bool operator ==(const StepChildEnumMessage &other) const;
-    bool operator !=(const StepChildEnumMessage &other) const;
 
     SimpleEnumMessage_QtProtobufNested::LocalEnum localStepChildEnum() const;
 
@@ -552,6 +606,15 @@ public:
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const StepChildEnumMessage &lhs, const StepChildEnumMessage &rhs) noexcept;
+    friend bool operator==(const StepChildEnumMessage &lhs, const StepChildEnumMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const StepChildEnumMessage &lhs, const StepChildEnumMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<StepChildEnumMessage_QtProtobufData> dptr;
 };
 namespace StepChildEnumMessage_QtProtobufNested {
@@ -584,14 +647,21 @@ public:
     A &operator =(const A &other);
     A(A &&other) noexcept;
     A &operator =(A &&other) noexcept;
-    bool operator ==(const A &other) const;
-    bool operator !=(const A &other) const;
 
     B_QtProtobufNested::BEnum val() const;
     void setVal(const B_QtProtobufNested::BEnum &val);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const A &lhs, const A &rhs) noexcept;
+    friend bool operator==(const A &lhs, const A &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const A &lhs, const A &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<A_QtProtobufData> dptr;
 };
 namespace A_QtProtobufNested {
@@ -630,14 +700,21 @@ public:
     B &operator =(const B &other);
     B(B &&other) noexcept;
     B &operator =(B &&other) noexcept;
-    bool operator ==(const B &other) const;
-    bool operator !=(const B &other) const;
 
     A_QtProtobufNested::AEnum val() const;
     void setVal(const A_QtProtobufNested::AEnum &val);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const B &lhs, const B &rhs) noexcept;
+    friend bool operator==(const B &lhs, const B &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const B &lhs, const B &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<B_QtProtobufData> dptr;
 };
 namespace B_QtProtobufNested {

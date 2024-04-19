@@ -59,14 +59,21 @@ public:
     FieldIndexTest1Message &operator =(const FieldIndexTest1Message &other);
     FieldIndexTest1Message(FieldIndexTest1Message &&other) noexcept;
     FieldIndexTest1Message &operator =(FieldIndexTest1Message &&other) noexcept;
-    bool operator ==(const FieldIndexTest1Message &other) const;
-    bool operator !=(const FieldIndexTest1Message &other) const;
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const FieldIndexTest1Message &lhs, const FieldIndexTest1Message &rhs) noexcept;
+    friend bool operator==(const FieldIndexTest1Message &lhs, const FieldIndexTest1Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const FieldIndexTest1Message &lhs, const FieldIndexTest1Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<FieldIndexTest1Message_QtProtobufData> dptr;
 };
 namespace FieldIndexTest1Message_QtProtobufNested {
@@ -94,14 +101,21 @@ public:
     FieldIndexTest2Message &operator =(const FieldIndexTest2Message &other);
     FieldIndexTest2Message(FieldIndexTest2Message &&other) noexcept;
     FieldIndexTest2Message &operator =(FieldIndexTest2Message &&other) noexcept;
-    bool operator ==(const FieldIndexTest2Message &other) const;
-    bool operator !=(const FieldIndexTest2Message &other) const;
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const FieldIndexTest2Message &lhs, const FieldIndexTest2Message &rhs) noexcept;
+    friend bool operator==(const FieldIndexTest2Message &lhs, const FieldIndexTest2Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const FieldIndexTest2Message &lhs, const FieldIndexTest2Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<FieldIndexTest2Message_QtProtobufData> dptr;
 };
 namespace FieldIndexTest2Message_QtProtobufNested {
@@ -129,14 +143,21 @@ public:
     FieldIndexTest3Message &operator =(const FieldIndexTest3Message &other);
     FieldIndexTest3Message(FieldIndexTest3Message &&other) noexcept;
     FieldIndexTest3Message &operator =(FieldIndexTest3Message &&other) noexcept;
-    bool operator ==(const FieldIndexTest3Message &other) const;
-    bool operator !=(const FieldIndexTest3Message &other) const;
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const FieldIndexTest3Message &lhs, const FieldIndexTest3Message &rhs) noexcept;
+    friend bool operator==(const FieldIndexTest3Message &lhs, const FieldIndexTest3Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const FieldIndexTest3Message &lhs, const FieldIndexTest3Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<FieldIndexTest3Message_QtProtobufData> dptr;
 };
 namespace FieldIndexTest3Message_QtProtobufNested {
@@ -164,14 +185,21 @@ public:
     FieldIndexTest4Message &operator =(const FieldIndexTest4Message &other);
     FieldIndexTest4Message(FieldIndexTest4Message &&other) noexcept;
     FieldIndexTest4Message &operator =(FieldIndexTest4Message &&other) noexcept;
-    bool operator ==(const FieldIndexTest4Message &other) const;
-    bool operator !=(const FieldIndexTest4Message &other) const;
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const FieldIndexTest4Message &lhs, const FieldIndexTest4Message &rhs) noexcept;
+    friend bool operator==(const FieldIndexTest4Message &lhs, const FieldIndexTest4Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const FieldIndexTest4Message &lhs, const FieldIndexTest4Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<FieldIndexTest4Message_QtProtobufData> dptr;
 };
 namespace FieldIndexTest4Message_QtProtobufNested {

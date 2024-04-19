@@ -97,14 +97,10 @@ EmptyMessage &EmptyMessage::operator =(EmptyMessage &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool EmptyMessage::operator ==(const EmptyMessage &other) const
+bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other);
-}
-
-bool EmptyMessage::operator !=(const EmptyMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs));
 }
 
 
@@ -199,15 +195,11 @@ SimpleIntMessage &SimpleIntMessage::operator =(SimpleIntMessage &&other) noexcep
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleIntMessage::operator ==(const SimpleIntMessage &other) const
+bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt;
-}
-
-bool SimpleIntMessage::operator !=(const SimpleIntMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt;
 }
 
 QtProtobuf::int32 SimpleIntMessage::testFieldInt() const
@@ -317,16 +309,12 @@ NoPackageExternalMessage &NoPackageExternalMessage::operator =(NoPackageExternal
     dptr.swap(other.dptr);
     return *this;
 }
-bool NoPackageExternalMessage::operator ==(const NoPackageExternalMessage &other) const
+bool comparesEqual(const NoPackageExternalMessage &lhs, const NoPackageExternalMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && (dptr->m_testField == other.dptr->m_testField
-            || *dptr->m_testField == *other.dptr->m_testField);
-}
-
-bool NoPackageExternalMessage::operator !=(const NoPackageExternalMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && (lhs.dptr->m_testField == rhs.dptr->m_testField
+            || *lhs.dptr->m_testField == *rhs.dptr->m_testField);
 }
 
 SimpleIntMessageExt *NoPackageExternalMessage::testField_p()
@@ -464,16 +452,12 @@ NoPackageMessage &NoPackageMessage::operator =(NoPackageMessage &&other) noexcep
     dptr.swap(other.dptr);
     return *this;
 }
-bool NoPackageMessage::operator ==(const NoPackageMessage &other) const
+bool comparesEqual(const NoPackageMessage &lhs, const NoPackageMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && (dptr->m_testField == other.dptr->m_testField
-            || *dptr->m_testField == *other.dptr->m_testField);
-}
-
-bool NoPackageMessage::operator !=(const NoPackageMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && (lhs.dptr->m_testField == rhs.dptr->m_testField
+            || *lhs.dptr->m_testField == *rhs.dptr->m_testField);
 }
 
 SimpleIntMessage *NoPackageMessage::testField_p()

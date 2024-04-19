@@ -132,8 +132,6 @@ public:
     RepeatedStringMessage &operator =(const RepeatedStringMessage &other);
     RepeatedStringMessage(RepeatedStringMessage &&other) noexcept;
     RepeatedStringMessage &operator =(RepeatedStringMessage &&other) noexcept;
-    bool operator ==(const RepeatedStringMessage &other) const;
-    bool operator !=(const RepeatedStringMessage &other) const;
 
     QStringList testRepeatedString() const;
     QStringList &testRepeatedString();
@@ -141,6 +139,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedStringMessage &lhs, const RepeatedStringMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedStringMessage &lhs, const RepeatedStringMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedStringMessage &lhs, const RepeatedStringMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedStringMessage_QtProtobufData> dptr;
 };
 namespace RepeatedStringMessage_QtProtobufNested {
@@ -168,8 +175,6 @@ public:
     RepeatedDoubleMessage &operator =(const RepeatedDoubleMessage &other);
     RepeatedDoubleMessage(RepeatedDoubleMessage &&other) noexcept;
     RepeatedDoubleMessage &operator =(RepeatedDoubleMessage &&other) noexcept;
-    bool operator ==(const RepeatedDoubleMessage &other) const;
-    bool operator !=(const RepeatedDoubleMessage &other) const;
 
     QtProtobuf::doubleList testRepeatedDouble() const;
     QtProtobuf::doubleList &testRepeatedDouble();
@@ -177,6 +182,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedDoubleMessage &lhs, const RepeatedDoubleMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedDoubleMessage &lhs, const RepeatedDoubleMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedDoubleMessage &lhs, const RepeatedDoubleMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedDoubleMessage_QtProtobufData> dptr;
 };
 namespace RepeatedDoubleMessage_QtProtobufNested {
@@ -204,8 +218,6 @@ public:
     RepeatedBytesMessage &operator =(const RepeatedBytesMessage &other);
     RepeatedBytesMessage(RepeatedBytesMessage &&other) noexcept;
     RepeatedBytesMessage &operator =(RepeatedBytesMessage &&other) noexcept;
-    bool operator ==(const RepeatedBytesMessage &other) const;
-    bool operator !=(const RepeatedBytesMessage &other) const;
 
     QByteArrayList testRepeatedBytes() const;
     QByteArrayList &testRepeatedBytes();
@@ -213,6 +225,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedBytesMessage &lhs, const RepeatedBytesMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedBytesMessage &lhs, const RepeatedBytesMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedBytesMessage &lhs, const RepeatedBytesMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedBytesMessage_QtProtobufData> dptr;
 };
 namespace RepeatedBytesMessage_QtProtobufNested {
@@ -240,8 +261,6 @@ public:
     RepeatedFloatMessage &operator =(const RepeatedFloatMessage &other);
     RepeatedFloatMessage(RepeatedFloatMessage &&other) noexcept;
     RepeatedFloatMessage &operator =(RepeatedFloatMessage &&other) noexcept;
-    bool operator ==(const RepeatedFloatMessage &other) const;
-    bool operator !=(const RepeatedFloatMessage &other) const;
 
     QtProtobuf::floatList testRepeatedFloat() const;
     QtProtobuf::floatList &testRepeatedFloat();
@@ -249,6 +268,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedFloatMessage &lhs, const RepeatedFloatMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedFloatMessage &lhs, const RepeatedFloatMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedFloatMessage &lhs, const RepeatedFloatMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedFloatMessage_QtProtobufData> dptr;
 };
 namespace RepeatedFloatMessage_QtProtobufNested {
@@ -276,8 +304,6 @@ public:
     RepeatedComplexMessage &operator =(const RepeatedComplexMessage &other);
     RepeatedComplexMessage(RepeatedComplexMessage &&other) noexcept;
     RepeatedComplexMessage &operator =(RepeatedComplexMessage &&other) noexcept;
-    bool operator ==(const RepeatedComplexMessage &other) const;
-    bool operator !=(const RepeatedComplexMessage &other) const;
 
     ComplexMessageRepeated testRepeatedComplex() const;
     ComplexMessageRepeated &testRepeatedComplex();
@@ -285,6 +311,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedComplexMessage &lhs, const RepeatedComplexMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedComplexMessage &lhs, const RepeatedComplexMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedComplexMessage &lhs, const RepeatedComplexMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedComplexMessage_QtProtobufData> dptr;
 };
 namespace RepeatedComplexMessage_QtProtobufNested {
@@ -312,8 +347,6 @@ public:
     RepeatedSIntMessage &operator =(const RepeatedSIntMessage &other);
     RepeatedSIntMessage(RepeatedSIntMessage &&other) noexcept;
     RepeatedSIntMessage &operator =(RepeatedSIntMessage &&other) noexcept;
-    bool operator ==(const RepeatedSIntMessage &other) const;
-    bool operator !=(const RepeatedSIntMessage &other) const;
 
     QtProtobuf::sint32List testRepeatedInt() const;
     QtProtobuf::sint32List &testRepeatedInt();
@@ -321,6 +354,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedSIntMessage &lhs, const RepeatedSIntMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedSIntMessage &lhs, const RepeatedSIntMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedSIntMessage &lhs, const RepeatedSIntMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedSIntMessage_QtProtobufData> dptr;
 };
 namespace RepeatedSIntMessage_QtProtobufNested {
@@ -348,8 +390,6 @@ public:
     RepeatedIntMessage &operator =(const RepeatedIntMessage &other);
     RepeatedIntMessage(RepeatedIntMessage &&other) noexcept;
     RepeatedIntMessage &operator =(RepeatedIntMessage &&other) noexcept;
-    bool operator ==(const RepeatedIntMessage &other) const;
-    bool operator !=(const RepeatedIntMessage &other) const;
 
     QtProtobuf::int32List testRepeatedInt() const;
     QtProtobuf::int32List &testRepeatedInt();
@@ -357,6 +397,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedIntMessage &lhs, const RepeatedIntMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedIntMessage &lhs, const RepeatedIntMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedIntMessage &lhs, const RepeatedIntMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedIntMessage_QtProtobufData> dptr;
 };
 namespace RepeatedIntMessage_QtProtobufNested {
@@ -384,8 +433,6 @@ public:
     RepeatedUIntMessage &operator =(const RepeatedUIntMessage &other);
     RepeatedUIntMessage(RepeatedUIntMessage &&other) noexcept;
     RepeatedUIntMessage &operator =(RepeatedUIntMessage &&other) noexcept;
-    bool operator ==(const RepeatedUIntMessage &other) const;
-    bool operator !=(const RepeatedUIntMessage &other) const;
 
     QtProtobuf::uint32List testRepeatedInt() const;
     QtProtobuf::uint32List &testRepeatedInt();
@@ -393,6 +440,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedUIntMessage &lhs, const RepeatedUIntMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedUIntMessage &lhs, const RepeatedUIntMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedUIntMessage &lhs, const RepeatedUIntMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedUIntMessage_QtProtobufData> dptr;
 };
 namespace RepeatedUIntMessage_QtProtobufNested {
@@ -420,8 +476,6 @@ public:
     RepeatedSInt64Message &operator =(const RepeatedSInt64Message &other);
     RepeatedSInt64Message(RepeatedSInt64Message &&other) noexcept;
     RepeatedSInt64Message &operator =(RepeatedSInt64Message &&other) noexcept;
-    bool operator ==(const RepeatedSInt64Message &other) const;
-    bool operator !=(const RepeatedSInt64Message &other) const;
 
     QtProtobuf::sint64List testRepeatedInt() const;
     QtProtobuf::sint64List &testRepeatedInt();
@@ -429,6 +483,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedSInt64Message &lhs, const RepeatedSInt64Message &rhs) noexcept;
+    friend bool operator==(const RepeatedSInt64Message &lhs, const RepeatedSInt64Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedSInt64Message &lhs, const RepeatedSInt64Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedSInt64Message_QtProtobufData> dptr;
 };
 namespace RepeatedSInt64Message_QtProtobufNested {
@@ -456,8 +519,6 @@ public:
     RepeatedInt64Message &operator =(const RepeatedInt64Message &other);
     RepeatedInt64Message(RepeatedInt64Message &&other) noexcept;
     RepeatedInt64Message &operator =(RepeatedInt64Message &&other) noexcept;
-    bool operator ==(const RepeatedInt64Message &other) const;
-    bool operator !=(const RepeatedInt64Message &other) const;
 
     QtProtobuf::int64List testRepeatedInt() const;
     QtProtobuf::int64List &testRepeatedInt();
@@ -465,6 +526,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedInt64Message &lhs, const RepeatedInt64Message &rhs) noexcept;
+    friend bool operator==(const RepeatedInt64Message &lhs, const RepeatedInt64Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedInt64Message &lhs, const RepeatedInt64Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedInt64Message_QtProtobufData> dptr;
 };
 namespace RepeatedInt64Message_QtProtobufNested {
@@ -492,8 +562,6 @@ public:
     RepeatedUInt64Message &operator =(const RepeatedUInt64Message &other);
     RepeatedUInt64Message(RepeatedUInt64Message &&other) noexcept;
     RepeatedUInt64Message &operator =(RepeatedUInt64Message &&other) noexcept;
-    bool operator ==(const RepeatedUInt64Message &other) const;
-    bool operator !=(const RepeatedUInt64Message &other) const;
 
     QtProtobuf::uint64List testRepeatedInt() const;
     QtProtobuf::uint64List &testRepeatedInt();
@@ -501,6 +569,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedUInt64Message &lhs, const RepeatedUInt64Message &rhs) noexcept;
+    friend bool operator==(const RepeatedUInt64Message &lhs, const RepeatedUInt64Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedUInt64Message &lhs, const RepeatedUInt64Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedUInt64Message_QtProtobufData> dptr;
 };
 namespace RepeatedUInt64Message_QtProtobufNested {
@@ -528,8 +605,6 @@ public:
     RepeatedFixedIntMessage &operator =(const RepeatedFixedIntMessage &other);
     RepeatedFixedIntMessage(RepeatedFixedIntMessage &&other) noexcept;
     RepeatedFixedIntMessage &operator =(RepeatedFixedIntMessage &&other) noexcept;
-    bool operator ==(const RepeatedFixedIntMessage &other) const;
-    bool operator !=(const RepeatedFixedIntMessage &other) const;
 
     QtProtobuf::fixed32List testRepeatedInt() const;
     QtProtobuf::fixed32List &testRepeatedInt();
@@ -537,6 +612,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedFixedIntMessage &lhs, const RepeatedFixedIntMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedFixedIntMessage &lhs, const RepeatedFixedIntMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedFixedIntMessage &lhs, const RepeatedFixedIntMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedFixedIntMessage_QtProtobufData> dptr;
 };
 namespace RepeatedFixedIntMessage_QtProtobufNested {
@@ -564,8 +648,6 @@ public:
     RepeatedSFixedIntMessage &operator =(const RepeatedSFixedIntMessage &other);
     RepeatedSFixedIntMessage(RepeatedSFixedIntMessage &&other) noexcept;
     RepeatedSFixedIntMessage &operator =(RepeatedSFixedIntMessage &&other) noexcept;
-    bool operator ==(const RepeatedSFixedIntMessage &other) const;
-    bool operator !=(const RepeatedSFixedIntMessage &other) const;
 
     QtProtobuf::sfixed32List testRepeatedInt() const;
     QtProtobuf::sfixed32List &testRepeatedInt();
@@ -573,6 +655,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedSFixedIntMessage &lhs, const RepeatedSFixedIntMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedSFixedIntMessage &lhs, const RepeatedSFixedIntMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedSFixedIntMessage &lhs, const RepeatedSFixedIntMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedSFixedIntMessage_QtProtobufData> dptr;
 };
 namespace RepeatedSFixedIntMessage_QtProtobufNested {
@@ -600,8 +691,6 @@ public:
     RepeatedFixedInt64Message &operator =(const RepeatedFixedInt64Message &other);
     RepeatedFixedInt64Message(RepeatedFixedInt64Message &&other) noexcept;
     RepeatedFixedInt64Message &operator =(RepeatedFixedInt64Message &&other) noexcept;
-    bool operator ==(const RepeatedFixedInt64Message &other) const;
-    bool operator !=(const RepeatedFixedInt64Message &other) const;
 
     QtProtobuf::fixed64List testRepeatedInt() const;
     QtProtobuf::fixed64List &testRepeatedInt();
@@ -609,6 +698,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedFixedInt64Message &lhs, const RepeatedFixedInt64Message &rhs) noexcept;
+    friend bool operator==(const RepeatedFixedInt64Message &lhs, const RepeatedFixedInt64Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedFixedInt64Message &lhs, const RepeatedFixedInt64Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedFixedInt64Message_QtProtobufData> dptr;
 };
 namespace RepeatedFixedInt64Message_QtProtobufNested {
@@ -636,8 +734,6 @@ public:
     RepeatedSFixedInt64Message &operator =(const RepeatedSFixedInt64Message &other);
     RepeatedSFixedInt64Message(RepeatedSFixedInt64Message &&other) noexcept;
     RepeatedSFixedInt64Message &operator =(RepeatedSFixedInt64Message &&other) noexcept;
-    bool operator ==(const RepeatedSFixedInt64Message &other) const;
-    bool operator !=(const RepeatedSFixedInt64Message &other) const;
 
     QtProtobuf::sfixed64List testRepeatedInt() const;
     QtProtobuf::sfixed64List &testRepeatedInt();
@@ -645,6 +741,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedSFixedInt64Message &lhs, const RepeatedSFixedInt64Message &rhs) noexcept;
+    friend bool operator==(const RepeatedSFixedInt64Message &lhs, const RepeatedSFixedInt64Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedSFixedInt64Message &lhs, const RepeatedSFixedInt64Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedSFixedInt64Message_QtProtobufData> dptr;
 };
 namespace RepeatedSFixedInt64Message_QtProtobufNested {
@@ -672,8 +777,6 @@ public:
     RepeatedBoolMessage &operator =(const RepeatedBoolMessage &other);
     RepeatedBoolMessage(RepeatedBoolMessage &&other) noexcept;
     RepeatedBoolMessage &operator =(RepeatedBoolMessage &&other) noexcept;
-    bool operator ==(const RepeatedBoolMessage &other) const;
-    bool operator !=(const RepeatedBoolMessage &other) const;
 
     QtProtobuf::boolList testRepeatedBool() const;
     QtProtobuf::boolList &testRepeatedBool();
@@ -681,6 +784,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedBoolMessage &lhs, const RepeatedBoolMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedBoolMessage &lhs, const RepeatedBoolMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedBoolMessage &lhs, const RepeatedBoolMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedBoolMessage_QtProtobufData> dptr;
 };
 namespace RepeatedBoolMessage_QtProtobufNested {

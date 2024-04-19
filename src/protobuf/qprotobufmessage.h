@@ -56,9 +56,6 @@ protected:
         return *this;
     }
 
-    Q_PROTOBUF_EXPORT
-    static bool isEqual(const QProtobufMessage &lhs, const QProtobufMessage &rhs) noexcept;
-
     QVariant property(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
                       bool allowInitialize = false) const;
     bool setProperty(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
@@ -67,6 +64,10 @@ protected:
                      QVariant &&value);
 
 private:
+    friend Q_PROTOBUF_EXPORT bool comparesEqual(const QProtobufMessage &lhs,
+                                                const QProtobufMessage &rhs) noexcept;
+    Q_DECLARE_EQUALITY_COMPARABLE(QProtobufMessage);
+
     void detachPrivate(); // Call before editing the private!
 
     const QMetaObject *metaObject() const;

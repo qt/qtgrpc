@@ -45,14 +45,21 @@ public:
     SimpleIntMessageExt &operator =(const SimpleIntMessageExt &other);
     SimpleIntMessageExt(SimpleIntMessageExt &&other) noexcept;
     SimpleIntMessageExt &operator =(SimpleIntMessageExt &&other) noexcept;
-    bool operator ==(const SimpleIntMessageExt &other) const;
-    bool operator !=(const SimpleIntMessageExt &other) const;
 
     QtProtobuf::int32 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool comparesEqual(const SimpleIntMessageExt &lhs, const SimpleIntMessageExt &rhs) noexcept;
+    friend bool operator==(const SimpleIntMessageExt &lhs, const SimpleIntMessageExt &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleIntMessageExt &lhs, const SimpleIntMessageExt &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleIntMessageExt_QtProtobufData> dptr;
 };
 namespace SimpleIntMessageExt_QtProtobufNested {

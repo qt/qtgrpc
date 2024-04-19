@@ -96,15 +96,11 @@ SimpleStringMessage &SimpleStringMessage::operator =(SimpleStringMessage &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringMessage::operator ==(const SimpleStringMessage &other) const
+bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldString == other.dptr->m_testFieldString;
-}
-
-bool SimpleStringMessage::operator !=(const SimpleStringMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldString == rhs.dptr->m_testFieldString;
 }
 
 QString SimpleStringMessage::testFieldString() const
@@ -212,15 +208,11 @@ SimpleIntMessage &SimpleIntMessage::operator =(SimpleIntMessage &&other) noexcep
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleIntMessage::operator ==(const SimpleIntMessage &other) const
+bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool SimpleIntMessage::operator !=(const SimpleIntMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 SimpleIntMessage::testField() const
@@ -327,15 +319,11 @@ BlobMessage &BlobMessage::operator =(BlobMessage &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool BlobMessage::operator ==(const BlobMessage &other) const
+bool comparesEqual(const BlobMessage &lhs, const BlobMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testBytes == other.dptr->m_testBytes;
-}
-
-bool BlobMessage::operator !=(const BlobMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testBytes == rhs.dptr->m_testBytes;
 }
 
 QByteArray BlobMessage::testBytes() const

@@ -90,14 +90,10 @@ EmptyMessage &EmptyMessage::operator =(EmptyMessage &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool EmptyMessage::operator ==(const EmptyMessage &other) const
+bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other);
-}
-
-bool EmptyMessage::operator !=(const EmptyMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs));
 }
 
 
@@ -192,15 +188,11 @@ SimpleBoolMessage &SimpleBoolMessage::operator =(SimpleBoolMessage &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleBoolMessage::operator ==(const SimpleBoolMessage &other) const
+bool comparesEqual(const SimpleBoolMessage &lhs, const SimpleBoolMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldBool == other.dptr->m_testFieldBool;
-}
-
-bool SimpleBoolMessage::operator !=(const SimpleBoolMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldBool == rhs.dptr->m_testFieldBool;
 }
 
 bool SimpleBoolMessage::testFieldBool() const
@@ -308,15 +300,11 @@ SimpleIntMessage &SimpleIntMessage::operator =(SimpleIntMessage &&other) noexcep
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleIntMessage::operator ==(const SimpleIntMessage &other) const
+bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt;
-}
-
-bool SimpleIntMessage::operator !=(const SimpleIntMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt;
 }
 
 QtProtobuf::int32 SimpleIntMessage::testFieldInt() const
@@ -424,15 +412,11 @@ SimpleSIntMessage &SimpleSIntMessage::operator =(SimpleSIntMessage &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSIntMessage::operator ==(const SimpleSIntMessage &other) const
+bool comparesEqual(const SimpleSIntMessage &lhs, const SimpleSIntMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt;
-}
-
-bool SimpleSIntMessage::operator !=(const SimpleSIntMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt;
 }
 
 QtProtobuf::sint32 SimpleSIntMessage::testFieldInt() const
@@ -540,15 +524,11 @@ SimpleUIntMessage &SimpleUIntMessage::operator =(SimpleUIntMessage &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUIntMessage::operator ==(const SimpleUIntMessage &other) const
+bool comparesEqual(const SimpleUIntMessage &lhs, const SimpleUIntMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt;
-}
-
-bool SimpleUIntMessage::operator !=(const SimpleUIntMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt;
 }
 
 QtProtobuf::uint32 SimpleUIntMessage::testFieldInt() const
@@ -656,15 +636,11 @@ SimpleInt64Message &SimpleInt64Message::operator =(SimpleInt64Message &&other) n
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleInt64Message::operator ==(const SimpleInt64Message &other) const
+bool comparesEqual(const SimpleInt64Message &lhs, const SimpleInt64Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt;
-}
-
-bool SimpleInt64Message::operator !=(const SimpleInt64Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt;
 }
 
 QtProtobuf::int64 SimpleInt64Message::testFieldInt() const
@@ -772,15 +748,11 @@ SimpleSInt64Message &SimpleSInt64Message::operator =(SimpleSInt64Message &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSInt64Message::operator ==(const SimpleSInt64Message &other) const
+bool comparesEqual(const SimpleSInt64Message &lhs, const SimpleSInt64Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt;
-}
-
-bool SimpleSInt64Message::operator !=(const SimpleSInt64Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt;
 }
 
 QtProtobuf::sint64 SimpleSInt64Message::testFieldInt() const
@@ -888,15 +860,11 @@ SimpleUInt64Message &SimpleUInt64Message::operator =(SimpleUInt64Message &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleUInt64Message::operator ==(const SimpleUInt64Message &other) const
+bool comparesEqual(const SimpleUInt64Message &lhs, const SimpleUInt64Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt;
-}
-
-bool SimpleUInt64Message::operator !=(const SimpleUInt64Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt;
 }
 
 QtProtobuf::uint64 SimpleUInt64Message::testFieldInt() const
@@ -1003,15 +971,11 @@ SimpleStringMessage &SimpleStringMessage::operator =(SimpleStringMessage &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleStringMessage::operator ==(const SimpleStringMessage &other) const
+bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldString == other.dptr->m_testFieldString;
-}
-
-bool SimpleStringMessage::operator !=(const SimpleStringMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldString == rhs.dptr->m_testFieldString;
 }
 
 QString SimpleStringMessage::testFieldString() const
@@ -1119,15 +1083,11 @@ SimpleFloatMessage &SimpleFloatMessage::operator =(SimpleFloatMessage &&other) n
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFloatMessage::operator ==(const SimpleFloatMessage &other) const
+bool comparesEqual(const SimpleFloatMessage &lhs, const SimpleFloatMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldFloat == other.dptr->m_testFieldFloat;
-}
-
-bool SimpleFloatMessage::operator !=(const SimpleFloatMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldFloat == rhs.dptr->m_testFieldFloat;
 }
 
 float SimpleFloatMessage::testFieldFloat() const
@@ -1236,15 +1196,11 @@ SimpleDoubleMessage &SimpleDoubleMessage::operator =(SimpleDoubleMessage &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleDoubleMessage::operator ==(const SimpleDoubleMessage &other) const
+bool comparesEqual(const SimpleDoubleMessage &lhs, const SimpleDoubleMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldDouble == other.dptr->m_testFieldDouble;
-}
-
-bool SimpleDoubleMessage::operator !=(const SimpleDoubleMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldDouble == rhs.dptr->m_testFieldDouble;
 }
 
 double SimpleDoubleMessage::testFieldDouble() const
@@ -1352,15 +1308,11 @@ SimpleBytesMessage &SimpleBytesMessage::operator =(SimpleBytesMessage &&other) n
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleBytesMessage::operator ==(const SimpleBytesMessage &other) const
+bool comparesEqual(const SimpleBytesMessage &lhs, const SimpleBytesMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldBytes == other.dptr->m_testFieldBytes;
-}
-
-bool SimpleBytesMessage::operator !=(const SimpleBytesMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldBytes == rhs.dptr->m_testFieldBytes;
 }
 
 QByteArray SimpleBytesMessage::testFieldBytes() const
@@ -1468,15 +1420,11 @@ SimpleFixedInt32Message &SimpleFixedInt32Message::operator =(SimpleFixedInt32Mes
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixedInt32Message::operator ==(const SimpleFixedInt32Message &other) const
+bool comparesEqual(const SimpleFixedInt32Message &lhs, const SimpleFixedInt32Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldFixedInt32 == other.dptr->m_testFieldFixedInt32;
-}
-
-bool SimpleFixedInt32Message::operator !=(const SimpleFixedInt32Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldFixedInt32 == rhs.dptr->m_testFieldFixedInt32;
 }
 
 QtProtobuf::fixed32 SimpleFixedInt32Message::testFieldFixedInt32() const
@@ -1584,15 +1532,11 @@ SimpleFixedInt64Message &SimpleFixedInt64Message::operator =(SimpleFixedInt64Mes
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFixedInt64Message::operator ==(const SimpleFixedInt64Message &other) const
+bool comparesEqual(const SimpleFixedInt64Message &lhs, const SimpleFixedInt64Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldFixedInt64 == other.dptr->m_testFieldFixedInt64;
-}
-
-bool SimpleFixedInt64Message::operator !=(const SimpleFixedInt64Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldFixedInt64 == rhs.dptr->m_testFieldFixedInt64;
 }
 
 QtProtobuf::fixed64 SimpleFixedInt64Message::testFieldFixedInt64() const
@@ -1699,15 +1643,11 @@ SimpleSFixedInt32Message &SimpleSFixedInt32Message::operator =(SimpleSFixedInt32
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixedInt32Message::operator ==(const SimpleSFixedInt32Message &other) const
+bool comparesEqual(const SimpleSFixedInt32Message &lhs, const SimpleSFixedInt32Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldFixedInt32 == other.dptr->m_testFieldFixedInt32;
-}
-
-bool SimpleSFixedInt32Message::operator !=(const SimpleSFixedInt32Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldFixedInt32 == rhs.dptr->m_testFieldFixedInt32;
 }
 
 QtProtobuf::sfixed32 SimpleSFixedInt32Message::testFieldFixedInt32() const
@@ -1814,15 +1754,11 @@ SimpleSFixedInt64Message &SimpleSFixedInt64Message::operator =(SimpleSFixedInt64
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleSFixedInt64Message::operator ==(const SimpleSFixedInt64Message &other) const
+bool comparesEqual(const SimpleSFixedInt64Message &lhs, const SimpleSFixedInt64Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldFixedInt64 == other.dptr->m_testFieldFixedInt64;
-}
-
-bool SimpleSFixedInt64Message::operator !=(const SimpleSFixedInt64Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldFixedInt64 == rhs.dptr->m_testFieldFixedInt64;
 }
 
 QtProtobuf::sfixed64 SimpleSFixedInt64Message::testFieldFixedInt64() const
@@ -1939,17 +1875,13 @@ ComplexMessage &ComplexMessage::operator =(ComplexMessage &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool ComplexMessage::operator ==(const ComplexMessage &other) const
+bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt
-        && (dptr->m_testComplexField == other.dptr->m_testComplexField
-            || *dptr->m_testComplexField == *other.dptr->m_testComplexField);
-}
-
-bool ComplexMessage::operator !=(const ComplexMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt
+        && (lhs.dptr->m_testComplexField == rhs.dptr->m_testComplexField
+            || *lhs.dptr->m_testComplexField == *rhs.dptr->m_testComplexField);
 }
 
 QtProtobuf::int32 ComplexMessage::testFieldInt() const

@@ -49,14 +49,21 @@ public:
     TestStringMessage &operator =(const TestStringMessage &other);
     TestStringMessage(TestStringMessage &&other) noexcept;
     TestStringMessage &operator =(TestStringMessage &&other) noexcept;
-    bool operator ==(const TestStringMessage &other) const;
-    bool operator !=(const TestStringMessage &other) const;
 
     QString stringField() const;
     void setStringField(const QString &stringField);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const TestStringMessage &lhs, const TestStringMessage &rhs) noexcept;
+    friend bool operator==(const TestStringMessage &lhs, const TestStringMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const TestStringMessage &lhs, const TestStringMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<TestStringMessage_QtProtobufData> dptr;
 };
 namespace TestStringMessage_QtProtobufNested {
@@ -99,8 +106,6 @@ public:
     OptionalMessage &operator =(const OptionalMessage &other);
     OptionalMessage(OptionalMessage &&other) noexcept;
     OptionalMessage &operator =(OptionalMessage &&other) noexcept;
-    bool operator ==(const OptionalMessage &other) const;
-    bool operator !=(const OptionalMessage &other) const;
 
     QtProtobuf::sint32 testField() const;
 
@@ -146,6 +151,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const OptionalMessage &lhs, const OptionalMessage &rhs) noexcept;
+    friend bool operator==(const OptionalMessage &lhs, const OptionalMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const OptionalMessage &lhs, const OptionalMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QtProtobuf::sint32 testFieldOpt_p() const;
     bool testFieldBoolOpt_p() const;
     QByteArray testFieldBytesOpt_p() const;

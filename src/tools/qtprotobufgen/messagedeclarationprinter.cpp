@@ -121,9 +121,7 @@ void MessageDeclarationPrinter::printMoveSemantic()
 void MessageDeclarationPrinter::printComparisonOperators()
 {
     assert(m_descriptor != nullptr);
-    m_printer->Print(m_typeMap, CommonTemplates::EqualOperatorDeclarationTemplate());
-
-    m_printer->Print(m_typeMap, CommonTemplates::NotEqualOperatorDeclarationTemplate());
+    m_printer->Print(m_typeMap, CommonTemplates::EqualityDeclarationTemplate());
 }
 
 void MessageDeclarationPrinter::printConstructors()
@@ -473,7 +471,6 @@ void MessageDeclarationPrinter::printClassBody()
     printCopyFunctionality();
     printMoveSemantic();
 
-    printComparisonOperators();
     Outdent();
 
     printGetters();
@@ -485,6 +482,9 @@ void MessageDeclarationPrinter::printClassBody()
     Outdent();
 
     printPrivateBlock();
+    Indent();
+    printComparisonOperators();
+    Outdent();
     printPrivateGetters();
     printPrivateSetters();
 

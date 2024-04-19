@@ -96,15 +96,11 @@ SimpleIntMessageExt &SimpleIntMessageExt::operator =(SimpleIntMessageExt &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleIntMessageExt::operator ==(const SimpleIntMessageExt &other) const
+bool comparesEqual(const SimpleIntMessageExt &lhs, const SimpleIntMessageExt &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testFieldInt == other.dptr->m_testFieldInt;
-}
-
-bool SimpleIntMessageExt::operator !=(const SimpleIntMessageExt &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testFieldInt == rhs.dptr->m_testFieldInt;
 }
 
 QtProtobuf::int32 SimpleIntMessageExt::testFieldInt() const

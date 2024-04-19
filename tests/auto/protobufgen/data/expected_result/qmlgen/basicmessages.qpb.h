@@ -141,11 +141,18 @@ public:
     EmptyMessage &operator =(const EmptyMessage &other);
     EmptyMessage(EmptyMessage &&other) noexcept;
     EmptyMessage &operator =(EmptyMessage &&other) noexcept;
-    bool operator ==(const EmptyMessage &other) const;
-    bool operator !=(const EmptyMessage &other) const;
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept;
+    friend bool operator==(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<EmptyMessage_QtProtobufData> dptr;
 };
 namespace EmptyMessage_QtProtobufNested {
@@ -170,14 +177,21 @@ public:
     SimpleBoolMessage &operator =(const SimpleBoolMessage &other);
     SimpleBoolMessage(SimpleBoolMessage &&other) noexcept;
     SimpleBoolMessage &operator =(SimpleBoolMessage &&other) noexcept;
-    bool operator ==(const SimpleBoolMessage &other) const;
-    bool operator !=(const SimpleBoolMessage &other) const;
 
     bool testFieldBool() const;
     void setTestFieldBool(const bool &testFieldBool);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleBoolMessage &lhs, const SimpleBoolMessage &rhs) noexcept;
+    friend bool operator==(const SimpleBoolMessage &lhs, const SimpleBoolMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleBoolMessage &lhs, const SimpleBoolMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleBoolMessage_QtProtobufData> dptr;
 };
 namespace SimpleBoolMessage_QtProtobufNested {
@@ -207,14 +221,21 @@ public:
     SimpleIntMessage &operator =(const SimpleIntMessage &other);
     SimpleIntMessage(SimpleIntMessage &&other) noexcept;
     SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept;
-    bool operator ==(const SimpleIntMessage &other) const;
-    bool operator !=(const SimpleIntMessage &other) const;
 
     QtProtobuf::int32 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept;
+    friend bool operator==(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleIntMessage_QtProtobufData> dptr;
 };
 namespace SimpleIntMessage_QtProtobufNested {
@@ -244,14 +265,21 @@ public:
     SimpleSIntMessage &operator =(const SimpleSIntMessage &other);
     SimpleSIntMessage(SimpleSIntMessage &&other) noexcept;
     SimpleSIntMessage &operator =(SimpleSIntMessage &&other) noexcept;
-    bool operator ==(const SimpleSIntMessage &other) const;
-    bool operator !=(const SimpleSIntMessage &other) const;
 
     QtProtobuf::sint32 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::sint32 &testFieldInt);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleSIntMessage &lhs, const SimpleSIntMessage &rhs) noexcept;
+    friend bool operator==(const SimpleSIntMessage &lhs, const SimpleSIntMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSIntMessage &lhs, const SimpleSIntMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSIntMessage_QtProtobufData> dptr;
 };
 namespace SimpleSIntMessage_QtProtobufNested {
@@ -281,14 +309,21 @@ public:
     SimpleUIntMessage &operator =(const SimpleUIntMessage &other);
     SimpleUIntMessage(SimpleUIntMessage &&other) noexcept;
     SimpleUIntMessage &operator =(SimpleUIntMessage &&other) noexcept;
-    bool operator ==(const SimpleUIntMessage &other) const;
-    bool operator !=(const SimpleUIntMessage &other) const;
 
     QtProtobuf::uint32 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::uint32 &testFieldInt);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleUIntMessage &lhs, const SimpleUIntMessage &rhs) noexcept;
+    friend bool operator==(const SimpleUIntMessage &lhs, const SimpleUIntMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUIntMessage &lhs, const SimpleUIntMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUIntMessage_QtProtobufData> dptr;
 };
 namespace SimpleUIntMessage_QtProtobufNested {
@@ -318,14 +353,21 @@ public:
     SimpleInt64Message &operator =(const SimpleInt64Message &other);
     SimpleInt64Message(SimpleInt64Message &&other) noexcept;
     SimpleInt64Message &operator =(SimpleInt64Message &&other) noexcept;
-    bool operator ==(const SimpleInt64Message &other) const;
-    bool operator !=(const SimpleInt64Message &other) const;
 
     QtProtobuf::int64 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::int64 &testFieldInt);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleInt64Message &lhs, const SimpleInt64Message &rhs) noexcept;
+    friend bool operator==(const SimpleInt64Message &lhs, const SimpleInt64Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleInt64Message &lhs, const SimpleInt64Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleInt64Message_QtProtobufData> dptr;
 };
 namespace SimpleInt64Message_QtProtobufNested {
@@ -355,14 +397,21 @@ public:
     SimpleSInt64Message &operator =(const SimpleSInt64Message &other);
     SimpleSInt64Message(SimpleSInt64Message &&other) noexcept;
     SimpleSInt64Message &operator =(SimpleSInt64Message &&other) noexcept;
-    bool operator ==(const SimpleSInt64Message &other) const;
-    bool operator !=(const SimpleSInt64Message &other) const;
 
     QtProtobuf::sint64 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::sint64 &testFieldInt);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleSInt64Message &lhs, const SimpleSInt64Message &rhs) noexcept;
+    friend bool operator==(const SimpleSInt64Message &lhs, const SimpleSInt64Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSInt64Message &lhs, const SimpleSInt64Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSInt64Message_QtProtobufData> dptr;
 };
 namespace SimpleSInt64Message_QtProtobufNested {
@@ -392,14 +441,21 @@ public:
     SimpleUInt64Message &operator =(const SimpleUInt64Message &other);
     SimpleUInt64Message(SimpleUInt64Message &&other) noexcept;
     SimpleUInt64Message &operator =(SimpleUInt64Message &&other) noexcept;
-    bool operator ==(const SimpleUInt64Message &other) const;
-    bool operator !=(const SimpleUInt64Message &other) const;
 
     QtProtobuf::uint64 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::uint64 &testFieldInt);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleUInt64Message &lhs, const SimpleUInt64Message &rhs) noexcept;
+    friend bool operator==(const SimpleUInt64Message &lhs, const SimpleUInt64Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleUInt64Message &lhs, const SimpleUInt64Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleUInt64Message_QtProtobufData> dptr;
 };
 namespace SimpleUInt64Message_QtProtobufNested {
@@ -429,14 +485,21 @@ public:
     SimpleStringMessage &operator =(const SimpleStringMessage &other);
     SimpleStringMessage(SimpleStringMessage &&other) noexcept;
     SimpleStringMessage &operator =(SimpleStringMessage &&other) noexcept;
-    bool operator ==(const SimpleStringMessage &other) const;
-    bool operator !=(const SimpleStringMessage &other) const;
 
     QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept;
+    friend bool operator==(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleStringMessage_QtProtobufData> dptr;
 };
 namespace SimpleStringMessage_QtProtobufNested {
@@ -466,14 +529,21 @@ public:
     SimpleFloatMessage &operator =(const SimpleFloatMessage &other);
     SimpleFloatMessage(SimpleFloatMessage &&other) noexcept;
     SimpleFloatMessage &operator =(SimpleFloatMessage &&other) noexcept;
-    bool operator ==(const SimpleFloatMessage &other) const;
-    bool operator !=(const SimpleFloatMessage &other) const;
 
     float testFieldFloat() const;
     void setTestFieldFloat(const float &testFieldFloat);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleFloatMessage &lhs, const SimpleFloatMessage &rhs) noexcept;
+    friend bool operator==(const SimpleFloatMessage &lhs, const SimpleFloatMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFloatMessage &lhs, const SimpleFloatMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFloatMessage_QtProtobufData> dptr;
 };
 namespace SimpleFloatMessage_QtProtobufNested {
@@ -503,14 +573,21 @@ public:
     SimpleDoubleMessage &operator =(const SimpleDoubleMessage &other);
     SimpleDoubleMessage(SimpleDoubleMessage &&other) noexcept;
     SimpleDoubleMessage &operator =(SimpleDoubleMessage &&other) noexcept;
-    bool operator ==(const SimpleDoubleMessage &other) const;
-    bool operator !=(const SimpleDoubleMessage &other) const;
 
     double testFieldDouble() const;
     void setTestFieldDouble(const double &testFieldDouble);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleDoubleMessage &lhs, const SimpleDoubleMessage &rhs) noexcept;
+    friend bool operator==(const SimpleDoubleMessage &lhs, const SimpleDoubleMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleDoubleMessage &lhs, const SimpleDoubleMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleDoubleMessage_QtProtobufData> dptr;
 };
 namespace SimpleDoubleMessage_QtProtobufNested {
@@ -540,14 +617,21 @@ public:
     SimpleBytesMessage &operator =(const SimpleBytesMessage &other);
     SimpleBytesMessage(SimpleBytesMessage &&other) noexcept;
     SimpleBytesMessage &operator =(SimpleBytesMessage &&other) noexcept;
-    bool operator ==(const SimpleBytesMessage &other) const;
-    bool operator !=(const SimpleBytesMessage &other) const;
 
     QByteArray testFieldBytes() const;
     void setTestFieldBytes(const QByteArray &testFieldBytes);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleBytesMessage &lhs, const SimpleBytesMessage &rhs) noexcept;
+    friend bool operator==(const SimpleBytesMessage &lhs, const SimpleBytesMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleBytesMessage &lhs, const SimpleBytesMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleBytesMessage_QtProtobufData> dptr;
 };
 namespace SimpleBytesMessage_QtProtobufNested {
@@ -577,14 +661,21 @@ public:
     SimpleFixedInt32Message &operator =(const SimpleFixedInt32Message &other);
     SimpleFixedInt32Message(SimpleFixedInt32Message &&other) noexcept;
     SimpleFixedInt32Message &operator =(SimpleFixedInt32Message &&other) noexcept;
-    bool operator ==(const SimpleFixedInt32Message &other) const;
-    bool operator !=(const SimpleFixedInt32Message &other) const;
 
     QtProtobuf::fixed32 testFieldFixedInt32() const;
     void setTestFieldFixedInt32(const QtProtobuf::fixed32 &testFieldFixedInt32);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleFixedInt32Message &lhs, const SimpleFixedInt32Message &rhs) noexcept;
+    friend bool operator==(const SimpleFixedInt32Message &lhs, const SimpleFixedInt32Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixedInt32Message &lhs, const SimpleFixedInt32Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixedInt32Message_QtProtobufData> dptr;
 };
 namespace SimpleFixedInt32Message_QtProtobufNested {
@@ -614,14 +705,21 @@ public:
     SimpleFixedInt64Message &operator =(const SimpleFixedInt64Message &other);
     SimpleFixedInt64Message(SimpleFixedInt64Message &&other) noexcept;
     SimpleFixedInt64Message &operator =(SimpleFixedInt64Message &&other) noexcept;
-    bool operator ==(const SimpleFixedInt64Message &other) const;
-    bool operator !=(const SimpleFixedInt64Message &other) const;
 
     QtProtobuf::fixed64 testFieldFixedInt64() const;
     void setTestFieldFixedInt64(const QtProtobuf::fixed64 &testFieldFixedInt64);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleFixedInt64Message &lhs, const SimpleFixedInt64Message &rhs) noexcept;
+    friend bool operator==(const SimpleFixedInt64Message &lhs, const SimpleFixedInt64Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleFixedInt64Message &lhs, const SimpleFixedInt64Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleFixedInt64Message_QtProtobufData> dptr;
 };
 namespace SimpleFixedInt64Message_QtProtobufNested {
@@ -651,14 +749,21 @@ public:
     SimpleSFixedInt32Message &operator =(const SimpleSFixedInt32Message &other);
     SimpleSFixedInt32Message(SimpleSFixedInt32Message &&other) noexcept;
     SimpleSFixedInt32Message &operator =(SimpleSFixedInt32Message &&other) noexcept;
-    bool operator ==(const SimpleSFixedInt32Message &other) const;
-    bool operator !=(const SimpleSFixedInt32Message &other) const;
 
     QtProtobuf::sfixed32 testFieldFixedInt32() const;
     void setTestFieldFixedInt32(const QtProtobuf::sfixed32 &testFieldFixedInt32);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleSFixedInt32Message &lhs, const SimpleSFixedInt32Message &rhs) noexcept;
+    friend bool operator==(const SimpleSFixedInt32Message &lhs, const SimpleSFixedInt32Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixedInt32Message &lhs, const SimpleSFixedInt32Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixedInt32Message_QtProtobufData> dptr;
 };
 namespace SimpleSFixedInt32Message_QtProtobufNested {
@@ -688,14 +793,21 @@ public:
     SimpleSFixedInt64Message &operator =(const SimpleSFixedInt64Message &other);
     SimpleSFixedInt64Message(SimpleSFixedInt64Message &&other) noexcept;
     SimpleSFixedInt64Message &operator =(SimpleSFixedInt64Message &&other) noexcept;
-    bool operator ==(const SimpleSFixedInt64Message &other) const;
-    bool operator !=(const SimpleSFixedInt64Message &other) const;
 
     QtProtobuf::sfixed64 testFieldFixedInt64() const;
     void setTestFieldFixedInt64(const QtProtobuf::sfixed64 &testFieldFixedInt64);
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const SimpleSFixedInt64Message &lhs, const SimpleSFixedInt64Message &rhs) noexcept;
+    friend bool operator==(const SimpleSFixedInt64Message &lhs, const SimpleSFixedInt64Message &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleSFixedInt64Message &lhs, const SimpleSFixedInt64Message &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleSFixedInt64Message_QtProtobufData> dptr;
 };
 namespace SimpleSFixedInt64Message_QtProtobufNested {
@@ -728,8 +840,6 @@ public:
     ComplexMessage &operator =(const ComplexMessage &other);
     ComplexMessage(ComplexMessage &&other) noexcept;
     ComplexMessage &operator =(ComplexMessage &&other) noexcept;
-    bool operator ==(const ComplexMessage &other) const;
-    bool operator !=(const ComplexMessage &other) const;
 
     QtProtobuf::int32 testFieldInt() const;
 
@@ -741,6 +851,15 @@ public:
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept;
+    friend bool operator==(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     SimpleStringMessage *testComplexField_p();
     void setTestComplexField_p(SimpleStringMessage *testComplexField);
     QExplicitlySharedDataPointer<ComplexMessage_QtProtobufData> dptr;

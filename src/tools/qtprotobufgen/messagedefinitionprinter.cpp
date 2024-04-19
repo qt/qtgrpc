@@ -344,7 +344,7 @@ void MessageDefinitionPrinter::printComparisonOperators()
 {
     assert(m_descriptor != nullptr);
 
-    m_printer->Print(m_typeMap, CommonTemplates::EqualOperatorDefinitionTemplate());
+    m_printer->Print(m_typeMap, CommonTemplates::ComparesEqualDefinitionTemplate());
 
     Indent();
     Indent();
@@ -377,8 +377,6 @@ void MessageDefinitionPrinter::printComparisonOperators()
 
     m_printer->Print(";\n");
     m_printer->Print(CommonTemplates::SimpleBlockEnclosureTemplate());
-
-    m_printer->Print(m_typeMap, CommonTemplates::NotEqualOperatorDefinitionTemplate());
 }
 
 void MessageDefinitionPrinter::printGetters()

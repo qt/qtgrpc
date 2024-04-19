@@ -96,15 +96,11 @@ TestStringMessage &TestStringMessage::operator =(TestStringMessage &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool TestStringMessage::operator ==(const TestStringMessage &other) const
+bool comparesEqual(const TestStringMessage &lhs, const TestStringMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_stringField == other.dptr->m_stringField;
-}
-
-bool TestStringMessage::operator !=(const TestStringMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_stringField == rhs.dptr->m_stringField;
 }
 
 QString TestStringMessage::stringField() const
@@ -274,26 +270,22 @@ OptionalMessage &OptionalMessage::operator =(OptionalMessage &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool OptionalMessage::operator ==(const OptionalMessage &other) const
+bool comparesEqual(const OptionalMessage &lhs, const OptionalMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField
-        && dptr->m_testFieldOpt == other.dptr->m_testFieldOpt
-        && dptr->m_testFieldBool == other.dptr->m_testFieldBool
-        && dptr->m_testFieldBoolOpt == other.dptr->m_testFieldBoolOpt
-        && dptr->m_testFieldBytes == other.dptr->m_testFieldBytes
-        && dptr->m_testFieldBytesOpt == other.dptr->m_testFieldBytesOpt
-        && dptr->m_testFieldString == other.dptr->m_testFieldString
-        && dptr->m_testFieldStringOpt == other.dptr->m_testFieldStringOpt
-        && (dptr->m_testFieldMessage == other.dptr->m_testFieldMessage
-            || *dptr->m_testFieldMessage == *other.dptr->m_testFieldMessage)
-        && (dptr->m_testFieldMessageOpt == other.dptr->m_testFieldMessageOpt
-            || *dptr->m_testFieldMessageOpt == *other.dptr->m_testFieldMessageOpt);
-}
-
-bool OptionalMessage::operator !=(const OptionalMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField
+        && lhs.dptr->m_testFieldOpt == rhs.dptr->m_testFieldOpt
+        && lhs.dptr->m_testFieldBool == rhs.dptr->m_testFieldBool
+        && lhs.dptr->m_testFieldBoolOpt == rhs.dptr->m_testFieldBoolOpt
+        && lhs.dptr->m_testFieldBytes == rhs.dptr->m_testFieldBytes
+        && lhs.dptr->m_testFieldBytesOpt == rhs.dptr->m_testFieldBytesOpt
+        && lhs.dptr->m_testFieldString == rhs.dptr->m_testFieldString
+        && lhs.dptr->m_testFieldStringOpt == rhs.dptr->m_testFieldStringOpt
+        && (lhs.dptr->m_testFieldMessage == rhs.dptr->m_testFieldMessage
+            || *lhs.dptr->m_testFieldMessage == *rhs.dptr->m_testFieldMessage)
+        && (lhs.dptr->m_testFieldMessageOpt == rhs.dptr->m_testFieldMessageOpt
+            || *lhs.dptr->m_testFieldMessageOpt == *rhs.dptr->m_testFieldMessageOpt);
 }
 
 QtProtobuf::sint32 OptionalMessage::testField() const

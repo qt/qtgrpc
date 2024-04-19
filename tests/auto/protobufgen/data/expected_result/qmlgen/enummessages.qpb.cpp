@@ -116,15 +116,11 @@ SimpleEnumMessage &SimpleEnumMessage::operator =(SimpleEnumMessage &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleEnumMessage::operator ==(const SimpleEnumMessage &other) const
+bool comparesEqual(const SimpleEnumMessage &lhs, const SimpleEnumMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_localEnum == other.dptr->m_localEnum;
-}
-
-bool SimpleEnumMessage::operator !=(const SimpleEnumMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_localEnum == rhs.dptr->m_localEnum;
 }
 
 SimpleEnumMessage_QtProtobufNested::LocalEnum SimpleEnumMessage::localEnum() const
@@ -234,15 +230,11 @@ RepeatedEnumMessage &RepeatedEnumMessage::operator =(RepeatedEnumMessage &&other
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedEnumMessage::operator ==(const RepeatedEnumMessage &other) const
+bool comparesEqual(const RepeatedEnumMessage &lhs, const RepeatedEnumMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_localEnumList == other.dptr->m_localEnumList;
-}
-
-bool RepeatedEnumMessage::operator !=(const RepeatedEnumMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_localEnumList == rhs.dptr->m_localEnumList;
 }
 
 RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated RepeatedEnumMessage::localEnumList() const
@@ -353,14 +345,10 @@ NestedEnumHolder &NestedEnumHolder::operator =(NestedEnumHolder &&other) noexcep
     dptr.swap(other.dptr);
     return *this;
 }
-bool NestedEnumHolder::operator ==(const NestedEnumHolder &other) const
+bool comparesEqual(const NestedEnumHolder &lhs, const NestedEnumHolder &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other);
-}
-
-bool NestedEnumHolder::operator !=(const NestedEnumHolder &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs));
 }
 
 namespace NestedEnumHolderLevel1_QtProtobufNested {
@@ -452,14 +440,10 @@ NestedEnumHolderLevel2 &NestedEnumHolderLevel2::operator =(NestedEnumHolderLevel
     dptr.swap(other.dptr);
     return *this;
 }
-bool NestedEnumHolderLevel2::operator ==(const NestedEnumHolderLevel2 &other) const
+bool comparesEqual(const NestedEnumHolderLevel2 &lhs, const NestedEnumHolderLevel2 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other);
-}
-
-bool NestedEnumHolderLevel2::operator !=(const NestedEnumHolderLevel2 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs));
 }
 
 } // namespace NestedEnumHolderLevel1_QtProtobufNested
@@ -551,14 +535,10 @@ NestedEnumHolderLevel1 &NestedEnumHolderLevel1::operator =(NestedEnumHolderLevel
     dptr.swap(other.dptr);
     return *this;
 }
-bool NestedEnumHolderLevel1::operator ==(const NestedEnumHolderLevel1 &other) const
+bool comparesEqual(const NestedEnumHolderLevel1 &lhs, const NestedEnumHolderLevel1 &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other);
-}
-
-bool NestedEnumHolderLevel1::operator !=(const NestedEnumHolderLevel1 &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs));
 }
 
 
@@ -681,19 +661,15 @@ NestedEnumMessage &NestedEnumMessage::operator =(NestedEnumMessage &&other) noex
     dptr.swap(other.dptr);
     return *this;
 }
-bool NestedEnumMessage::operator ==(const NestedEnumMessage &other) const
+bool comparesEqual(const NestedEnumMessage &lhs, const NestedEnumMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_localEnumField == other.dptr->m_localEnumField
-        && dptr->m_localEnumField2 == other.dptr->m_localEnumField2
-        && dptr->m_localEnumField3 == other.dptr->m_localEnumField3
-        && dptr->m_localEnumField4 == other.dptr->m_localEnumField4
-        && dptr->m_localEnumField5 == other.dptr->m_localEnumField5;
-}
-
-bool NestedEnumMessage::operator !=(const NestedEnumMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_localEnumField == rhs.dptr->m_localEnumField
+        && lhs.dptr->m_localEnumField2 == rhs.dptr->m_localEnumField2
+        && lhs.dptr->m_localEnumField3 == rhs.dptr->m_localEnumField3
+        && lhs.dptr->m_localEnumField4 == rhs.dptr->m_localEnumField4
+        && lhs.dptr->m_localEnumField5 == rhs.dptr->m_localEnumField5;
 }
 
 MixedEnumUsageMessage_QtProtobufNested::LocalEnum NestedEnumMessage::localEnumField() const
@@ -877,18 +853,14 @@ MixedEnumUsageMessage &MixedEnumUsageMessage::operator =(MixedEnumUsageMessage &
     dptr.swap(other.dptr);
     return *this;
 }
-bool MixedEnumUsageMessage::operator ==(const MixedEnumUsageMessage &other) const
+bool comparesEqual(const MixedEnumUsageMessage &lhs, const MixedEnumUsageMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_localEnum == other.dptr->m_localEnum
-        && dptr->m_localEnumList == other.dptr->m_localEnumList
-        && QtProtobuf::repeatedValueCompare(dptr->m_localEnumMap, other.dptr->m_localEnumMap)
-        && QtProtobuf::repeatedValueCompare(dptr->m_msgList, other.dptr->m_msgList);
-}
-
-bool MixedEnumUsageMessage::operator !=(const MixedEnumUsageMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_localEnum == rhs.dptr->m_localEnum
+        && lhs.dptr->m_localEnumList == rhs.dptr->m_localEnumList
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_localEnumMap, rhs.dptr->m_localEnumMap)
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_msgList, rhs.dptr->m_msgList);
 }
 
 MixedEnumUsageMessage_QtProtobufNested::LocalEnum MixedEnumUsageMessage::localEnum() const
@@ -1059,16 +1031,12 @@ SimpleFileEnumMessage &SimpleFileEnumMessage::operator =(SimpleFileEnumMessage &
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleFileEnumMessage::operator ==(const SimpleFileEnumMessage &other) const
+bool comparesEqual(const SimpleFileEnumMessage &lhs, const SimpleFileEnumMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_globalEnum == other.dptr->m_globalEnum
-        && dptr->m_globalEnumList == other.dptr->m_globalEnumList;
-}
-
-bool SimpleFileEnumMessage::operator !=(const SimpleFileEnumMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_globalEnum == rhs.dptr->m_globalEnum
+        && lhs.dptr->m_globalEnumList == rhs.dptr->m_globalEnumList;
 }
 
 TestEnumGadget::TestEnum SimpleFileEnumMessage::globalEnum() const
@@ -1201,16 +1169,12 @@ StepChildEnumMessage &StepChildEnumMessage::operator =(StepChildEnumMessage &&ot
     dptr.swap(other.dptr);
     return *this;
 }
-bool StepChildEnumMessage::operator ==(const StepChildEnumMessage &other) const
+bool comparesEqual(const StepChildEnumMessage &lhs, const StepChildEnumMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_localStepChildEnum == other.dptr->m_localStepChildEnum
-        && dptr->m_localStepChildList == other.dptr->m_localStepChildList;
-}
-
-bool StepChildEnumMessage::operator !=(const StepChildEnumMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_localStepChildEnum == rhs.dptr->m_localStepChildEnum
+        && lhs.dptr->m_localStepChildList == rhs.dptr->m_localStepChildList;
 }
 
 SimpleEnumMessage_QtProtobufNested::LocalEnum StepChildEnumMessage::localStepChildEnum() const
@@ -1340,15 +1304,11 @@ A &A::operator =(A &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool A::operator ==(const A &other) const
+bool comparesEqual(const A &lhs, const A &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_val == other.dptr->m_val;
-}
-
-bool A::operator !=(const A &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_val == rhs.dptr->m_val;
 }
 
 B_QtProtobufNested::BEnum A::val() const
@@ -1459,15 +1419,11 @@ B &B::operator =(B &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool B::operator ==(const B &other) const
+bool comparesEqual(const B &lhs, const B &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_val == other.dptr->m_val;
-}
-
-bool B::operator !=(const B &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_val == rhs.dptr->m_val;
 }
 
 A_QtProtobufNested::AEnum B::val() const

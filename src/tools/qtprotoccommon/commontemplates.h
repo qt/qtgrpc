@@ -88,14 +88,12 @@ public:
     static const char *AssignmentOperatorDefinitionTemplate();
     static const char *MoveAssignmentOperatorDeclarationTemplate();
     static const char *MoveAssignmentOperatorDefinitionTemplate();
-    static const char *EqualOperatorDeclarationTemplate();
-    static const char *EqualOperatorDefinitionTemplate();
+    static const char *EqualityDeclarationTemplate();
+    static const char *ComparesEqualDefinitionTemplate();
     static const char *EqualOperatorMemberTemplate();
     static const char *EqualOperatorMemberMessageTemplate();
     static const char *EqualOperatorMemberRepeatedTemplate();
     static const char *EqualOperatorMemberOneofTemplate();
-    static const char *NotEqualOperatorDeclarationTemplate();
-    static const char *NotEqualOperatorDefinitionTemplate();
     static const char *PrivateGetterMessageDeclarationTemplate();
     static const char *PrivateGetterMessageDefinitionTemplate();
     static const char *ClearMessageDeclarationTemplate();

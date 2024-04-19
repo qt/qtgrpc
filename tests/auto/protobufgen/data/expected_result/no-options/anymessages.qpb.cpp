@@ -96,15 +96,11 @@ AnyMessage &AnyMessage::operator =(AnyMessage &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool AnyMessage::operator ==(const AnyMessage &other) const
+bool comparesEqual(const AnyMessage &lhs, const AnyMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_field == other.dptr->m_field;
-}
-
-bool AnyMessage::operator !=(const AnyMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_field == rhs.dptr->m_field;
 }
 
 QtProtobuf::Any AnyMessage::field() const
@@ -211,15 +207,11 @@ RepeatedAnyMessage &RepeatedAnyMessage::operator =(RepeatedAnyMessage &&other) n
     dptr.swap(other.dptr);
     return *this;
 }
-bool RepeatedAnyMessage::operator ==(const RepeatedAnyMessage &other) const
+bool comparesEqual(const RepeatedAnyMessage &lhs, const RepeatedAnyMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && QtProtobuf::repeatedValueCompare(dptr->m_anys, other.dptr->m_anys);
-}
-
-bool RepeatedAnyMessage::operator !=(const RepeatedAnyMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_anys, rhs.dptr->m_anys);
 }
 
 QList<QtProtobuf::Any> RepeatedAnyMessage::anys() const
@@ -338,16 +330,12 @@ TwoAnyMessage &TwoAnyMessage::operator =(TwoAnyMessage &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool TwoAnyMessage::operator ==(const TwoAnyMessage &other) const
+bool comparesEqual(const TwoAnyMessage &lhs, const TwoAnyMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_one == other.dptr->m_one
-        && dptr->m_two == other.dptr->m_two;
-}
-
-bool TwoAnyMessage::operator !=(const TwoAnyMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_one == rhs.dptr->m_one
+        && lhs.dptr->m_two == rhs.dptr->m_two;
 }
 
 QtProtobuf::Any TwoAnyMessage::one() const
@@ -494,19 +482,15 @@ Example &Example::operator =(Example &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool Example::operator ==(const Example &other) const
+bool comparesEqual(const Example &lhs, const Example &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_str == other.dptr->m_str
-        && dptr->m_i == other.dptr->m_i
-        && dptr->m_j == other.dptr->m_j
-        && dptr->m_h == other.dptr->m_h
-        && dptr->m_str2 == other.dptr->m_str2;
-}
-
-bool Example::operator !=(const Example &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_str == rhs.dptr->m_str
+        && lhs.dptr->m_i == rhs.dptr->m_i
+        && lhs.dptr->m_j == rhs.dptr->m_j
+        && lhs.dptr->m_h == rhs.dptr->m_h
+        && lhs.dptr->m_str2 == rhs.dptr->m_str2;
 }
 
 QString Example::str() const
@@ -666,15 +650,11 @@ SimpleMessage &SimpleMessage::operator =(SimpleMessage &&other) noexcept
     dptr.swap(other.dptr);
     return *this;
 }
-bool SimpleMessage::operator ==(const SimpleMessage &other) const
+bool comparesEqual(const SimpleMessage &lhs, const SimpleMessage &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_i == other.dptr->m_i;
-}
-
-bool SimpleMessage::operator !=(const SimpleMessage &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_i == rhs.dptr->m_i;
 }
 
 QtProtobuf::int32 SimpleMessage::i() const

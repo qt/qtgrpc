@@ -97,15 +97,11 @@ FieldIndexTest1Message &FieldIndexTest1Message::operator =(FieldIndexTest1Messag
     dptr.swap(other.dptr);
     return *this;
 }
-bool FieldIndexTest1Message::operator ==(const FieldIndexTest1Message &other) const
+bool comparesEqual(const FieldIndexTest1Message &lhs, const FieldIndexTest1Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool FieldIndexTest1Message::operator !=(const FieldIndexTest1Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 FieldIndexTest1Message::testField() const
@@ -213,15 +209,11 @@ FieldIndexTest2Message &FieldIndexTest2Message::operator =(FieldIndexTest2Messag
     dptr.swap(other.dptr);
     return *this;
 }
-bool FieldIndexTest2Message::operator ==(const FieldIndexTest2Message &other) const
+bool comparesEqual(const FieldIndexTest2Message &lhs, const FieldIndexTest2Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool FieldIndexTest2Message::operator !=(const FieldIndexTest2Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 FieldIndexTest2Message::testField() const
@@ -329,15 +321,11 @@ FieldIndexTest3Message &FieldIndexTest3Message::operator =(FieldIndexTest3Messag
     dptr.swap(other.dptr);
     return *this;
 }
-bool FieldIndexTest3Message::operator ==(const FieldIndexTest3Message &other) const
+bool comparesEqual(const FieldIndexTest3Message &lhs, const FieldIndexTest3Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool FieldIndexTest3Message::operator !=(const FieldIndexTest3Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 FieldIndexTest3Message::testField() const
@@ -445,15 +433,11 @@ FieldIndexTest4Message &FieldIndexTest4Message::operator =(FieldIndexTest4Messag
     dptr.swap(other.dptr);
     return *this;
 }
-bool FieldIndexTest4Message::operator ==(const FieldIndexTest4Message &other) const
+bool comparesEqual(const FieldIndexTest4Message &lhs, const FieldIndexTest4Message &rhs) noexcept
 {
-    return QProtobufMessage::isEqual(*this, other)
-        && dptr->m_testField == other.dptr->m_testField;
-}
-
-bool FieldIndexTest4Message::operator !=(const FieldIndexTest4Message &other) const
-{
-    return !this->operator ==(other);
+    return operator ==(static_cast<const QProtobufMessage&>(lhs),
+                       static_cast<const QProtobufMessage&>(rhs))
+        && lhs.dptr->m_testField == rhs.dptr->m_testField;
 }
 
 QtProtobuf::sint32 FieldIndexTest4Message::testField() const

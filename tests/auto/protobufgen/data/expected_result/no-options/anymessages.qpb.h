@@ -66,14 +66,21 @@ public:
     AnyMessage &operator =(const AnyMessage &other);
     AnyMessage(AnyMessage &&other) noexcept;
     AnyMessage &operator =(AnyMessage &&other) noexcept;
-    bool operator ==(const AnyMessage &other) const;
-    bool operator !=(const AnyMessage &other) const;
 
     QtProtobuf::Any field() const;
     void setField(const QtProtobuf::Any &field);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const AnyMessage &lhs, const AnyMessage &rhs) noexcept;
+    friend bool operator==(const AnyMessage &lhs, const AnyMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const AnyMessage &lhs, const AnyMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<AnyMessage_QtProtobufData> dptr;
 };
 namespace AnyMessage_QtProtobufNested {
@@ -101,8 +108,6 @@ public:
     RepeatedAnyMessage &operator =(const RepeatedAnyMessage &other);
     RepeatedAnyMessage(RepeatedAnyMessage &&other) noexcept;
     RepeatedAnyMessage &operator =(RepeatedAnyMessage &&other) noexcept;
-    bool operator ==(const RepeatedAnyMessage &other) const;
-    bool operator !=(const RepeatedAnyMessage &other) const;
 
     QList<QtProtobuf::Any> anys() const;
     QList<QtProtobuf::Any> &anys();
@@ -110,6 +115,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const RepeatedAnyMessage &lhs, const RepeatedAnyMessage &rhs) noexcept;
+    friend bool operator==(const RepeatedAnyMessage &lhs, const RepeatedAnyMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const RepeatedAnyMessage &lhs, const RepeatedAnyMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<RepeatedAnyMessage_QtProtobufData> dptr;
 };
 namespace RepeatedAnyMessage_QtProtobufNested {
@@ -138,8 +152,6 @@ public:
     TwoAnyMessage &operator =(const TwoAnyMessage &other);
     TwoAnyMessage(TwoAnyMessage &&other) noexcept;
     TwoAnyMessage &operator =(TwoAnyMessage &&other) noexcept;
-    bool operator ==(const TwoAnyMessage &other) const;
-    bool operator !=(const TwoAnyMessage &other) const;
 
     QtProtobuf::Any one() const;
 
@@ -149,6 +161,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const TwoAnyMessage &lhs, const TwoAnyMessage &rhs) noexcept;
+    friend bool operator==(const TwoAnyMessage &lhs, const TwoAnyMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const TwoAnyMessage &lhs, const TwoAnyMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<TwoAnyMessage_QtProtobufData> dptr;
 };
 namespace TwoAnyMessage_QtProtobufNested {
@@ -181,8 +202,6 @@ public:
     Example &operator =(const Example &other);
     Example(Example &&other) noexcept;
     Example &operator =(Example &&other) noexcept;
-    bool operator ==(const Example &other) const;
-    bool operator !=(const Example &other) const;
 
     QString str() const;
 
@@ -201,6 +220,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const Example &lhs, const Example &rhs) noexcept;
+    friend bool operator==(const Example &lhs, const Example &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const Example &lhs, const Example &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<Example_QtProtobufData> dptr;
 };
 namespace Example_QtProtobufNested {
@@ -232,14 +260,21 @@ public:
     SimpleMessage &operator =(const SimpleMessage &other);
     SimpleMessage(SimpleMessage &&other) noexcept;
     SimpleMessage &operator =(SimpleMessage &&other) noexcept;
-    bool operator ==(const SimpleMessage &other) const;
-    bool operator !=(const SimpleMessage &other) const;
 
     QtProtobuf::int32 i() const;
     void setI(const QtProtobuf::int32 &i);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleMessage &lhs, const SimpleMessage &rhs) noexcept;
+    friend bool operator==(const SimpleMessage &lhs, const SimpleMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleMessage &lhs, const SimpleMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleMessage_QtProtobufData> dptr;
 };
 namespace SimpleMessage_QtProtobufNested {

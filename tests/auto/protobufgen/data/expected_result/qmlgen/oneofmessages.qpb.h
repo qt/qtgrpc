@@ -61,8 +61,6 @@ public:
     OneofSimpleMessage &operator =(const OneofSimpleMessage &other);
     OneofSimpleMessage(OneofSimpleMessage &&other) noexcept;
     OneofSimpleMessage &operator =(OneofSimpleMessage &&other) noexcept;
-    bool operator ==(const OneofSimpleMessage &other) const;
-    bool operator !=(const OneofSimpleMessage &other) const;
 
     bool hasTestOneofFieldInt() const;
     QtProtobuf::int32 testOneofFieldInt() const;
@@ -76,6 +74,15 @@ public:
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const OneofSimpleMessage &lhs, const OneofSimpleMessage &rhs) noexcept;
+    friend bool operator==(const OneofSimpleMessage &lhs, const OneofSimpleMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const OneofSimpleMessage &lhs, const OneofSimpleMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QtProtobuf::int32 testOneofFieldInt_p() const;
     QtProtobuf::int32 testOneofFieldSecondInt_p() const;
     void setTestOneofFieldInt_p(QtProtobuf::int32 testOneofFieldInt);
@@ -137,8 +144,6 @@ public:
     OneofComplexMessage &operator =(const OneofComplexMessage &other);
     OneofComplexMessage(OneofComplexMessage &&other) noexcept;
     OneofComplexMessage &operator =(OneofComplexMessage &&other) noexcept;
-    bool operator ==(const OneofComplexMessage &other) const;
-    bool operator !=(const OneofComplexMessage &other) const;
 
     QtProtobuf::int32 testFieldInt() const;
 
@@ -177,6 +182,15 @@ public:
     static void registerTypes();
 
 private:
+    friend QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool comparesEqual(const OneofComplexMessage &lhs, const OneofComplexMessage &rhs) noexcept;
+    friend bool operator==(const OneofComplexMessage &lhs, const OneofComplexMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const OneofComplexMessage &lhs, const OneofComplexMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QtProtobuf::int32 testOneofFieldInt_p() const;
     ComplexMessage *testOneofComplexField_p();
     ComplexMessage *testOneofSecondComplexField_p();

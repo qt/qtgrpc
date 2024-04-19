@@ -53,14 +53,21 @@ public:
     SimpleStringMessage &operator =(const SimpleStringMessage &other);
     SimpleStringMessage(SimpleStringMessage &&other) noexcept;
     SimpleStringMessage &operator =(SimpleStringMessage &&other) noexcept;
-    bool operator ==(const SimpleStringMessage &other) const;
-    bool operator !=(const SimpleStringMessage &other) const;
 
     QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept;
+    friend bool operator==(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleStringMessage_QtProtobufData> dptr;
 };
 namespace SimpleStringMessage_QtProtobufNested {
@@ -88,14 +95,21 @@ public:
     SimpleIntMessage &operator =(const SimpleIntMessage &other);
     SimpleIntMessage(SimpleIntMessage &&other) noexcept;
     SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept;
-    bool operator ==(const SimpleIntMessage &other) const;
-    bool operator !=(const SimpleIntMessage &other) const;
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept;
+    friend bool operator==(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<SimpleIntMessage_QtProtobufData> dptr;
 };
 namespace SimpleIntMessage_QtProtobufNested {
@@ -123,14 +137,21 @@ public:
     BlobMessage &operator =(const BlobMessage &other);
     BlobMessage(BlobMessage &&other) noexcept;
     BlobMessage &operator =(BlobMessage &&other) noexcept;
-    bool operator ==(const BlobMessage &other) const;
-    bool operator !=(const BlobMessage &other) const;
 
     QByteArray testBytes() const;
     void setTestBytes(const QByteArray &testBytes);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const BlobMessage &lhs, const BlobMessage &rhs) noexcept;
+    friend bool operator==(const BlobMessage &lhs, const BlobMessage &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const BlobMessage &lhs, const BlobMessage &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<BlobMessage_QtProtobufData> dptr;
 };
 namespace BlobMessage_QtProtobufNested {

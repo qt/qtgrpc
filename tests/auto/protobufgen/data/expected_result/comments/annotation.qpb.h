@@ -90,8 +90,6 @@ public:
     AnnotatedMessage1 &operator =(const AnnotatedMessage1 &other);
     AnnotatedMessage1(AnnotatedMessage1 &&other) noexcept;
     AnnotatedMessage1 &operator =(AnnotatedMessage1 &&other) noexcept;
-    bool operator ==(const AnnotatedMessage1 &other) const;
-    bool operator !=(const AnnotatedMessage1 &other) const;
 
     /**
      * \brief Field annotation
@@ -101,6 +99,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const AnnotatedMessage1 &lhs, const AnnotatedMessage1 &rhs) noexcept;
+    friend bool operator==(const AnnotatedMessage1 &lhs, const AnnotatedMessage1 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const AnnotatedMessage1 &lhs, const AnnotatedMessage1 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<AnnotatedMessage1_QtProtobufData> dptr;
 };
 namespace AnnotatedMessage1_QtProtobufNested {
@@ -129,8 +136,6 @@ public:
     AnnotatedMessage2 &operator =(const AnnotatedMessage2 &other);
     AnnotatedMessage2(AnnotatedMessage2 &&other) noexcept;
     AnnotatedMessage2 &operator =(AnnotatedMessage2 &&other) noexcept;
-    bool operator ==(const AnnotatedMessage2 &other) const;
-    bool operator !=(const AnnotatedMessage2 &other) const;
 
     /*!
      * \brief Field annotation
@@ -140,6 +145,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const AnnotatedMessage2 &lhs, const AnnotatedMessage2 &rhs) noexcept;
+    friend bool operator==(const AnnotatedMessage2 &lhs, const AnnotatedMessage2 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const AnnotatedMessage2 &lhs, const AnnotatedMessage2 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<AnnotatedMessage2_QtProtobufData> dptr;
 };
 namespace AnnotatedMessage2_QtProtobufNested {
@@ -168,8 +182,6 @@ public:
     AnnotatedMessage3 &operator =(const AnnotatedMessage3 &other);
     AnnotatedMessage3(AnnotatedMessage3 &&other) noexcept;
     AnnotatedMessage3 &operator =(AnnotatedMessage3 &&other) noexcept;
-    bool operator ==(const AnnotatedMessage3 &other) const;
-    bool operator !=(const AnnotatedMessage3 &other) const;
 
     /*
      * Field annotation
@@ -180,6 +192,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const AnnotatedMessage3 &lhs, const AnnotatedMessage3 &rhs) noexcept;
+    friend bool operator==(const AnnotatedMessage3 &lhs, const AnnotatedMessage3 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const AnnotatedMessage3 &lhs, const AnnotatedMessage3 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<AnnotatedMessage3_QtProtobufData> dptr;
 };
 namespace AnnotatedMessage3_QtProtobufNested {
@@ -208,14 +229,21 @@ public:
     AnnotatedMessage4 &operator =(const AnnotatedMessage4 &other);
     AnnotatedMessage4(AnnotatedMessage4 &&other) noexcept;
     AnnotatedMessage4 &operator =(AnnotatedMessage4 &&other) noexcept;
-    bool operator ==(const AnnotatedMessage4 &other) const;
-    bool operator !=(const AnnotatedMessage4 &other) const;
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const AnnotatedMessage4 &lhs, const AnnotatedMessage4 &rhs) noexcept;
+    friend bool operator==(const AnnotatedMessage4 &lhs, const AnnotatedMessage4 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const AnnotatedMessage4 &lhs, const AnnotatedMessage4 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<AnnotatedMessage4_QtProtobufData> dptr;
 };
 namespace AnnotatedMessage4_QtProtobufNested {
@@ -244,8 +272,6 @@ public:
     AnnotatedMessage5 &operator =(const AnnotatedMessage5 &other);
     AnnotatedMessage5(AnnotatedMessage5 &&other) noexcept;
     AnnotatedMessage5 &operator =(AnnotatedMessage5 &&other) noexcept;
-    bool operator ==(const AnnotatedMessage5 &other) const;
-    bool operator !=(const AnnotatedMessage5 &other) const;
 
     /* Field annotation */
     QtProtobuf::sint32 testField() const;
@@ -253,6 +279,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const AnnotatedMessage5 &lhs, const AnnotatedMessage5 &rhs) noexcept;
+    friend bool operator==(const AnnotatedMessage5 &lhs, const AnnotatedMessage5 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const AnnotatedMessage5 &lhs, const AnnotatedMessage5 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<AnnotatedMessage5_QtProtobufData> dptr;
 };
 namespace AnnotatedMessage5_QtProtobufNested {
@@ -281,8 +316,6 @@ public:
     AnnotatedMessage6 &operator =(const AnnotatedMessage6 &other);
     AnnotatedMessage6(AnnotatedMessage6 &&other) noexcept;
     AnnotatedMessage6 &operator =(AnnotatedMessage6 &&other) noexcept;
-    bool operator ==(const AnnotatedMessage6 &other) const;
-    bool operator !=(const AnnotatedMessage6 &other) const;
 
     /** Field annotation */
     QtProtobuf::sint32 testField() const;
@@ -290,6 +323,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const AnnotatedMessage6 &lhs, const AnnotatedMessage6 &rhs) noexcept;
+    friend bool operator==(const AnnotatedMessage6 &lhs, const AnnotatedMessage6 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const AnnotatedMessage6 &lhs, const AnnotatedMessage6 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<AnnotatedMessage6_QtProtobufData> dptr;
 };
 namespace AnnotatedMessage6_QtProtobufNested {
@@ -320,8 +362,6 @@ public:
     AnnotatedMessage7 &operator =(const AnnotatedMessage7 &other);
     AnnotatedMessage7(AnnotatedMessage7 &&other) noexcept;
     AnnotatedMessage7 &operator =(AnnotatedMessage7 &&other) noexcept;
-    bool operator ==(const AnnotatedMessage7 &other) const;
-    bool operator !=(const AnnotatedMessage7 &other) const;
 
     /*! Field annotation */
     QtProtobuf::sint32 testField() const;
@@ -329,6 +369,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const AnnotatedMessage7 &lhs, const AnnotatedMessage7 &rhs) noexcept;
+    friend bool operator==(const AnnotatedMessage7 &lhs, const AnnotatedMessage7 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const AnnotatedMessage7 &lhs, const AnnotatedMessage7 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<AnnotatedMessage7_QtProtobufData> dptr;
 };
 namespace AnnotatedMessage7_QtProtobufNested {
@@ -359,8 +408,6 @@ public:
     AnnotatedMessage8 &operator =(const AnnotatedMessage8 &other);
     AnnotatedMessage8(AnnotatedMessage8 &&other) noexcept;
     AnnotatedMessage8 &operator =(AnnotatedMessage8 &&other) noexcept;
-    bool operator ==(const AnnotatedMessage8 &other) const;
-    bool operator !=(const AnnotatedMessage8 &other) const;
 
     /* Field annotation */
     QtProtobuf::sint32 testField() const;
@@ -368,6 +415,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const AnnotatedMessage8 &lhs, const AnnotatedMessage8 &rhs) noexcept;
+    friend bool operator==(const AnnotatedMessage8 &lhs, const AnnotatedMessage8 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const AnnotatedMessage8 &lhs, const AnnotatedMessage8 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<AnnotatedMessage8_QtProtobufData> dptr;
 };
 namespace AnnotatedMessage8_QtProtobufNested {
@@ -399,8 +455,6 @@ public:
     AnnotatedMessage9 &operator =(const AnnotatedMessage9 &other);
     AnnotatedMessage9(AnnotatedMessage9 &&other) noexcept;
     AnnotatedMessage9 &operator =(AnnotatedMessage9 &&other) noexcept;
-    bool operator ==(const AnnotatedMessage9 &other) const;
-    bool operator !=(const AnnotatedMessage9 &other) const;
 
     /* Field annotation */
     QtProtobuf::sint32 testField() const;
@@ -408,6 +462,15 @@ public:
     static void registerTypes();
 
 private:
+    friend  bool comparesEqual(const AnnotatedMessage9 &lhs, const AnnotatedMessage9 &rhs) noexcept;
+    friend bool operator==(const AnnotatedMessage9 &lhs, const AnnotatedMessage9 &rhs) noexcept
+    {
+        return comparesEqual(lhs, rhs);
+    }
+    friend bool operator!=(const AnnotatedMessage9 &lhs, const AnnotatedMessage9 &rhs) noexcept
+    {
+        return !comparesEqual(lhs, rhs);
+    }
     QExplicitlySharedDataPointer<AnnotatedMessage9_QtProtobufData> dptr;
 };
 namespace AnnotatedMessage9_QtProtobufNested {

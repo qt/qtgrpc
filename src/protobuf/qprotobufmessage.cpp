@@ -187,7 +187,7 @@ const QtProtobufPrivate::QProtobufPropertyOrdering *QProtobufMessage::propertyOr
 /*!
     \internal
 */
-bool QProtobufMessage::isEqual(const QProtobufMessage &lhs, const QProtobufMessage &rhs) noexcept
+bool comparesEqual(const QProtobufMessage &lhs, const QProtobufMessage &rhs) noexcept
 {
     if (lhs.d_ptr == rhs.d_ptr)
         return true;
