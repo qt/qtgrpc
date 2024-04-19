@@ -354,7 +354,7 @@ void QtGrpcClientServerStreamTest::InThread()
             qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
                     .message()
                     .startsWith(
-                            "QAbstractGrpcClient::startStream<QGrpcServerStream> is called from a "
+                            "QGrpcClientBase::startStream<QGrpcServerStream> is called from a "
                             "different thread."));
 }
 

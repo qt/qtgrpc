@@ -96,7 +96,7 @@ two alternative asynchronous methods:
     namespace ping::pong {
     namespace PingPongService {
 
-    class Client : public QAbstractGrpcClient {
+    class Client : public QGrpcClientBase {
         Q_OBJECT
     public:
         std::shared_ptr<QGrpcCallReply> PingPong(const ping::pong::Ping &arg,
@@ -161,7 +161,7 @@ an argument to the callback function that is used in the call:
 This variant makes a connection to the \l{QGrpcCallReply::finished} signal
 implicitly, but you cannot cancel the call using the \l{QGrpcOperation::cancel}
 function, and to get information about error occurred you need to subscribe to
-the common \l{QAbstractGrpcClient::errorOccurred} signal.
+the common \l{QGrpcClientBase::errorOccurred} signal.
 
 \section1 Using the server streams in Qt GRPC
 

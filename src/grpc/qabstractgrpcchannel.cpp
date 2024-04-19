@@ -43,7 +43,7 @@ QT_BEGIN_NAMESPACE
     method when making unary gRPC call. The \a channelOperation is the
     pointer to a channel side \l QGrpcChannelOperation primitive that is
     connected with \l QGrpcCallReply primitive, that is used in
-    \l QAbstractGrpcClient implementations.
+    \l QGrpcClientBase implementations.
 
     The function should implement the channel-side logic of unary call. The
     implementation must be asynchronous and must not block the thread where
@@ -57,7 +57,7 @@ QT_BEGIN_NAMESPACE
     This pure virtual function that the starts of the server-side stream. The
     \a channelOperation is the pointer to a channel side
     \l QGrpcChannelOperation primitive that is connected with \l QGrpcServerStream
-    primitive, that is used in \l QAbstractGrpcClient implementations.
+    primitive, that is used in \l QGrpcClientBase implementations.
 
     The function should implement the channel-side logic of server-side stream.
     The implementation must be asynchronous and must not block the thread where
@@ -71,7 +71,7 @@ QT_BEGIN_NAMESPACE
     This pure virtual function that the starts of the client-side stream. The
     \a channelOperation is the pointer to a channel side
     \l QGrpcChannelOperation primitive that is connected with
-    \l QGrpcClientStream primitive, that is used in \l QAbstractGrpcClient.
+    \l QGrpcClientStream primitive, that is used in \l QGrpcClientBase.
 
     The function should implement the channel-side logic of client-side stream.
     The implementation must be asynchronous and must not block the thread where
@@ -85,7 +85,7 @@ QT_BEGIN_NAMESPACE
     This pure virtual function that the starts of the bidirectional stream. The
     \a channelOperation is the pointer to a channel side
     \l QGrpcChannelOperation primitive that is connected with
-    \l QGrpcBidirStream primitive, that is used in \l QAbstractGrpcClient.
+    \l QGrpcBidirStream primitive, that is used in \l QGrpcClientBase.
 
     The function should implement the channel-side logic of bidirectional
     stream. The implementation must be asynchronous and must not block the
@@ -132,7 +132,7 @@ const QGrpcChannelOptions &QAbstractGrpcChannel::channelOptions() const noexcept
     between them.
 
     The function should not be called directly, but only by
-    \l QAbstractGrpcClient implementations.
+    \l QGrpcClientBase implementations.
 */
 std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView method,
                                                            QLatin1StringView service,
@@ -172,7 +172,7 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
     between them.
 
     The function should not be called directly, but only by
-    \l QAbstractGrpcClient implementations.
+    \l QGrpcClientBase implementations.
 */
 std::shared_ptr<QGrpcServerStream>
 QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringView service,
@@ -211,7 +211,7 @@ QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringV
     between them.
 
     The function should not be called directly, but only by
-    \l QAbstractGrpcClient.
+    \l QGrpcClientBase.
 */
 std::shared_ptr<QGrpcClientStream>
 QAbstractGrpcChannel::startClientStream(QLatin1StringView method, QLatin1StringView service,
@@ -241,7 +241,7 @@ QAbstractGrpcChannel::startClientStream(QLatin1StringView method, QLatin1StringV
     between them.
 
     The function should not be called directly, but only by
-    \l QAbstractGrpcClient.
+    \l QGrpcClientBase.
 */
 std::shared_ptr<QGrpcBidirStream>
 QAbstractGrpcChannel::startBidirStream(QLatin1StringView method, QLatin1StringView service,

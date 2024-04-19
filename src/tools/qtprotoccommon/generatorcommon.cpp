@@ -396,7 +396,7 @@ TypeMap common::produceClientTypeMap(const ServiceDescriptor *service, const Des
              { "full_type", fullName },
              { "scope_type", scopeName },
              { "scope_namespaces", scopeNamespaces },
-             { "parent_class", "QAbstractGrpcClient" },
+             { "parent_class", "QGrpcClientBase" },
              { "export_macro", exportMacro } };
 }
 

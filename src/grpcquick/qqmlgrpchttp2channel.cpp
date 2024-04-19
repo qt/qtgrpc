@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "qqmlgrpchttp2channel_p.h"
-#include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qgrpchttp2channel.h>
 
 QT_BEGIN_NAMESPACE

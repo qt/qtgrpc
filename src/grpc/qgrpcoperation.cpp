@@ -49,7 +49,7 @@ using namespace Qt::StringLiterals;
 
     This signal is emitted when an error with \a status occurs in the channel.
 
-    \sa QAbstractGrpcClient::errorOccurred
+    \sa QGrpcClientBase::errorOccurred
 */
 
 class QGrpcOperationPrivate : public QObjectPrivate

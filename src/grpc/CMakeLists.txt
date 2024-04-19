@@ -10,7 +10,7 @@ qt_internal_add_module(Grpc
         qgrpcstatus.h qgrpcstatus.cpp
         qabstractgrpcchannel.h qabstractgrpcchannel_p.h qabstractgrpcchannel.cpp
         qgrpchttp2channel.h qgrpchttp2channel.cpp
-        qabstractgrpcclient.h qabstractgrpcclient.cpp
+        qgrpcclientbase.h qgrpcclientbase.cpp
         qgrpccalloptions.h qgrpccalloptions.cpp
         qgrpcchanneloptions.h qgrpcchanneloptions.cpp
         qgrpcclientinterceptor.h qgrpcclientinterceptor.cpp

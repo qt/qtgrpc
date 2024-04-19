@@ -196,7 +196,7 @@ void QtGrpcClientUnaryCallTest::InThread()
     QVERIFY(reply == nullptr);
     QVERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
                     .message()
-                    .startsWith("QAbstractGrpcClient::call is called from a different thread."));
+                    .startsWith("QGrpcClientBase::call is called from a different thread."));
 }
 
 void QtGrpcClientUnaryCallTest::AsyncInThread()
@@ -225,7 +225,7 @@ void QtGrpcClientUnaryCallTest::AsyncInThread()
     QTRY_VERIFY(
             qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
                     .message()
-                    .startsWith("QAbstractGrpcClient::call is called from a different thread."));
+                    .startsWith("QGrpcClientBase::call is called from a different thread."));
 }
 
 void QtGrpcClientUnaryCallTest::Metadata()

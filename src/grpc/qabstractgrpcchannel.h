@@ -16,7 +16,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class QAbstractGrpcClient;
+class QGrpcClientBase;
 class QAbstractProtobufSerializer;
 struct QAbstractGrpcChannelPrivate;
 class QGrpcServerStream;
@@ -57,7 +57,7 @@ protected:
 
     [[nodiscard]] const QGrpcChannelOptions &channelOptions() const noexcept;
 
-    friend class QAbstractGrpcClient;
+    friend class QGrpcClientBase;
     explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
 
 private:

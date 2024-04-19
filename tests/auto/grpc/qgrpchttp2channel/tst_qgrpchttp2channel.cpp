@@ -117,7 +117,7 @@ void QGrpcHttp2ChannelTest::AttachChannelThreadTest()
     QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(), QGrpcStatus::Unknown);
     QVERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
                 .message()
-                .startsWith("QAbstractGrpcClient::attachChannel is called from a different "
+                .startsWith("QGrpcClientBase::attachChannel is called from a different "
                             "thread."));
 }
 

@@ -2,8 +2,8 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#ifndef QABSTRACTGRPCLIENT_H
-#define QABSTRACTGRPCLIENT_H
+#ifndef QGRPCLIENTBASE_H
+#define QGRPCLIENTBASE_H
 
 #include <QtCore/qobject.h>
 #include <QtCore/qsharedpointer.h>
@@ -22,9 +22,9 @@ QT_BEGIN_NAMESPACE
 
 class QGrpcOperation;
 class QAbstractGrpcChannel;
-class QAbstractGrpcClientPrivate;
+class QGrpcClientBasePrivate;
 
-class Q_GRPC_EXPORT QAbstractGrpcClient : public QObject
+class Q_GRPC_EXPORT QGrpcClientBase : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(std::shared_ptr<QAbstractGrpcChannel> channel READ channel
@@ -32,14 +32,14 @@ class Q_GRPC_EXPORT QAbstractGrpcClient : public QObject
 public:
     void attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel);
     [[nodiscard]] std::shared_ptr<QAbstractGrpcChannel> channel() const noexcept;
-    ~QAbstractGrpcClient() override;
+    ~QGrpcClientBase() override;
 
 Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status);
     void channelChanged();
 
 protected:
-    explicit QAbstractGrpcClient(QLatin1StringView service, QObject *parent = nullptr);
+    explicit QGrpcClientBase(QLatin1StringView service, QObject *parent = nullptr);
 
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg,
                                          const QGrpcCallOptions &options);
@@ -85,10 +85,10 @@ private:
 
     std::optional<QByteArray> trySerialize(const QProtobufMessage &arg);
 
-    Q_DISABLE_COPY_MOVE(QAbstractGrpcClient)
-    Q_DECLARE_PRIVATE(QAbstractGrpcClient)
+    Q_DISABLE_COPY_MOVE(QGrpcClientBase)
+    Q_DECLARE_PRIVATE(QGrpcClientBase)
 };
 
 QT_END_NAMESPACE
 
-#endif // QABSTRACTGRPCLIENT_H
+#endif // QGRPCLIENTBASE_H

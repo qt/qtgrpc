@@ -7,7 +7,7 @@ namespace TestService {
 using namespace Qt::StringLiterals;
 
 Client::Client(QObject *parent)
-    : QAbstractGrpcClient("qtgrpc.tests.TestService"_L1, parent)
+    : QGrpcClientBase("qtgrpc.tests.TestService"_L1, parent)
 {
 }
 

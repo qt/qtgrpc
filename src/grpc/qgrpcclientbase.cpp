@@ -13,7 +13,7 @@
 
 #include <private/qobject_p.h>
 
-#include "qabstractgrpcclient.h"
+#include "qgrpcclientbase.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -22,30 +22,30 @@ using namespace Qt::StringLiterals;
 namespace {
 static QString threadSafetyWarning(QLatin1StringView methodName)
 {
-    return QAbstractGrpcClient::tr("%1 is called from a different thread.\n"
+    return QGrpcClientBase::tr("%1 is called from a different thread.\n"
                                    "Qt GRPC doesn't guarantee thread safety on the channel level.\n"
                                    "You have to be confident that channel routines are working in "
-                                   "the same thread as QAbstractGrpcClient.")
+                                   "the same thread as QGrpcClientBase.")
         .arg(methodName);
 }
 } // namespace
 
 /*!
-    \class QAbstractGrpcClient
+    \class QGrpcClientBase
     \inmodule QtGrpc
-    \brief The QAbstractGrpcClient class is bridge between gRPC clients
+    \brief The QGrpcClientBase class is bridge between gRPC clients
     and channels.
 
-    QAbstractGrpcClient provides a set of functions for client classes
+    QGrpcClientBase provides a set of functions for client classes
     generated out of protobuf services.
-    QAbstractGrpcClient enforces thread safety for startStream() and call() methods
+    QGrpcClientBase enforces thread safety for startStream() and call() methods
     of generated clients.
-    The methods QAbstractGrpcClient::call() and QAbstractGrpcClient::startStream()
+    The methods QGrpcClientBase::call() and QGrpcClientBase::startStream()
     should only be called by the generated client classes.
 */
 
 /*!
-    \fn template <typename StreamType> std::shared_ptr<StreamType> QAbstractGrpcClient::startStream(QLatin1StringView method, const QProtobufMessage &arg, const QGrpcCallOptions &options)
+    \fn template <typename StreamType> std::shared_ptr<StreamType> QGrpcClientBase::startStream(QLatin1StringView method, const QProtobufMessage &arg, const QGrpcCallOptions &options)
 
     Starts the stream \a method of the \e StreamType type with the message
     argument \a arg to the attached channel.
@@ -58,14 +58,14 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 */
 
 /*!
-    \fn void QAbstractGrpcClient::channelChanged()
+    \fn void QGrpcClientBase::channelChanged()
     \since 6.7
 
     Indicates that a new channel is attached to the client.
 */
 
 /*!
-    \fn void QAbstractGrpcClient::errorOccurred(const QGrpcStatus &status);
+    \fn void QGrpcClientBase::errorOccurred(const QGrpcStatus &status);
 
     Indicates that an error occurred during serialization.
 
@@ -76,11 +76,11 @@ static QString threadSafetyWarning(QLatin1StringView methodName)
 */
 
 
-class QAbstractGrpcClientPrivate : public QObjectPrivate
+class QGrpcClientBasePrivate : public QObjectPrivate
 {
-    Q_DECLARE_PUBLIC(QAbstractGrpcClient)
+    Q_DECLARE_PUBLIC(QGrpcClientBase)
 public:
-    QAbstractGrpcClientPrivate(QLatin1StringView service) : service(service)
+    QGrpcClientBasePrivate(QLatin1StringView service) : service(service)
     {
     }
 
@@ -99,9 +99,9 @@ public:
     std::vector<std::shared_ptr<QGrpcOperation>> activeStreams;
 };
 
-QGrpcStatus QAbstractGrpcClientPrivate::checkThread(QLatin1StringView warningPreamble)
+QGrpcStatus QGrpcClientBasePrivate::checkThread(QLatin1StringView warningPreamble)
 {
-    Q_Q(QAbstractGrpcClient);
+    Q_Q(QGrpcClientBase);
 
     QGrpcStatus status;
     if (q->thread() != QThread::currentThread()) {
@@ -112,9 +112,9 @@ QGrpcStatus QAbstractGrpcClientPrivate::checkThread(QLatin1StringView warningPre
     return status;
 }
 
-bool QAbstractGrpcClientPrivate::checkChannel()
+bool QGrpcClientBasePrivate::checkChannel()
 {
-    Q_Q(QAbstractGrpcClient);
+    Q_Q(QGrpcClientBase);
 
     if (!channel) {
         emit q->errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
@@ -124,9 +124,9 @@ bool QAbstractGrpcClientPrivate::checkChannel()
     return true;
 }
 
-void QAbstractGrpcClientPrivate::addStream(std::shared_ptr<QGrpcOperation> grpcStream)
+void QGrpcClientBasePrivate::addStream(std::shared_ptr<QGrpcOperation> grpcStream)
 {
-    Q_Q(QAbstractGrpcClient);
+    Q_Q(QGrpcClientBase);
     auto errorConnection = std::make_shared<QMetaObject::Connection>();
     auto finishedConnection = std::make_shared<QMetaObject::Connection>();
 
@@ -138,7 +138,7 @@ void QAbstractGrpcClientPrivate::addStream(std::shared_ptr<QGrpcOperation> grpcS
 
                 qGrpcWarning() << grpcStream->method() << "call" << service
                                << "stream error: " << status.message();
-                Q_Q(QAbstractGrpcClient);
+                Q_Q(QGrpcClientBase);
                 emit q->errorOccurred(status);
                 removeStream(std::move(grpcStream));
             });
@@ -156,7 +156,7 @@ void QAbstractGrpcClientPrivate::addStream(std::shared_ptr<QGrpcOperation> grpcS
     activeStreams.push_back(grpcStream);
 }
 
-void QAbstractGrpcClientPrivate::removeStream(std::shared_ptr<QGrpcOperation> grpcStream)
+void QGrpcClientBasePrivate::removeStream(std::shared_ptr<QGrpcOperation> grpcStream)
 {
     auto it = std::find(activeStreams.begin(), activeStreams.end(), grpcStream);
     if (it != activeStreams.end())
@@ -165,12 +165,12 @@ void QAbstractGrpcClientPrivate::removeStream(std::shared_ptr<QGrpcOperation> gr
     grpcStream.reset();
 }
 
-QAbstractGrpcClient::QAbstractGrpcClient(QLatin1StringView service, QObject *parent)
-    : QObject(*new QAbstractGrpcClientPrivate(service), parent)
+QGrpcClientBase::QGrpcClientBase(QLatin1StringView service, QObject *parent)
+    : QObject(*new QGrpcClientBasePrivate(service), parent)
 {
 }
 
-QAbstractGrpcClient::~QAbstractGrpcClient() = default;
+QGrpcClientBase::~QGrpcClientBase() = default;
 
 /*!
     Attaches \a channel to client as transport layer for gRPC.
@@ -180,17 +180,17 @@ QAbstractGrpcClient::~QAbstractGrpcClient() = default;
 
     \note \b Warning: Qt GRPC doesn't guarantee thread safety on the channel level.
     You have to invoke the channel-related functions on the same thread as
-    QAbstractGrpcClient.
+    QGrpcClientBase.
 */
-void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel)
+void QGrpcClientBase::attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel)
 {
     if (channel->dPtr->threadId != QThread::currentThreadId()) {
-        const QString status = threadSafetyWarning("QAbstractGrpcClient::attachChannel"_L1);
+        const QString status = threadSafetyWarning("QGrpcClientBase::attachChannel"_L1);
         qGrpcCritical() << status;
         emit errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown, status });
         return;
     }
-    Q_D(QAbstractGrpcClient);
+    Q_D(QGrpcClientBase);
     for (auto &stream : d->activeStreams) {
         assert(stream != nullptr);
         stream->cancel();
@@ -200,7 +200,7 @@ void QAbstractGrpcClient::attachChannel(const std::shared_ptr<QAbstractGrpcChann
     emit channelChanged();
 }
 
-std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView method,
+std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
                                                           const QProtobufMessage &arg,
                                                           const QGrpcCallOptions &options)
 {
@@ -214,19 +214,19 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView meth
     \since 6.7
     Returns the channel attached to this client.
 */
-std::shared_ptr<QAbstractGrpcChannel> QAbstractGrpcClient::channel() const noexcept
+std::shared_ptr<QAbstractGrpcChannel> QGrpcClientBase::channel() const noexcept
 {
-    Q_D(const QAbstractGrpcClient);
+    Q_D(const QGrpcClientBase);
     return d->channel;
 }
 
-std::shared_ptr<QGrpcCallReply> QAbstractGrpcClient::call(QLatin1StringView method,
+std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
                                                           QByteArrayView arg,
                                                           const QGrpcCallOptions &options)
 {
     std::shared_ptr<QGrpcCallReply> reply;
-    Q_D(QAbstractGrpcClient);
-    if (d->checkThread("QAbstractGrpcClient::call"_L1) != QGrpcStatus::Ok)
+    Q_D(QGrpcClientBase);
+    if (d->checkThread("QGrpcClientBase::call"_L1) != QGrpcStatus::Ok)
         return reply;
 
     if (!d->checkChannel())
@@ -252,12 +252,12 @@ QT_WARNING_POP
 }
 
 std::shared_ptr<QGrpcServerStream>
-QAbstractGrpcClient::startServerStream(QLatin1StringView method, QByteArrayView arg,
+QGrpcClientBase::startServerStream(QLatin1StringView method, QByteArrayView arg,
                                        const QGrpcCallOptions &options)
 {
-    Q_D(QAbstractGrpcClient);
+    Q_D(QGrpcClientBase);
 
-    if (d->checkThread("QAbstractGrpcClient::startStream<QGrpcServerStream>"_L1) != QGrpcStatus::Ok)
+    if (d->checkThread("QGrpcClientBase::startStream<QGrpcServerStream>"_L1) != QGrpcStatus::Ok)
         return {};
 
     if (!d->checkChannel())
@@ -270,12 +270,12 @@ QAbstractGrpcClient::startServerStream(QLatin1StringView method, QByteArrayView 
 }
 
 std::shared_ptr<QGrpcClientStream>
-QAbstractGrpcClient::startClientStream(QLatin1StringView method, QByteArrayView arg,
+QGrpcClientBase::startClientStream(QLatin1StringView method, QByteArrayView arg,
                                        const QGrpcCallOptions &options)
 {
-    Q_D(QAbstractGrpcClient);
+    Q_D(QGrpcClientBase);
 
-    if (d->checkThread("QAbstractGrpcClient::startStream<QGrpcClientStream>"_L1) != QGrpcStatus::Ok)
+    if (d->checkThread("QGrpcClientBase::startStream<QGrpcClientStream>"_L1) != QGrpcStatus::Ok)
         return {};
 
     if (!d->checkChannel())
@@ -288,12 +288,12 @@ QAbstractGrpcClient::startClientStream(QLatin1StringView method, QByteArrayView 
 }
 
 std::shared_ptr<QGrpcBidirStream>
-QAbstractGrpcClient::startBidirStream(QLatin1StringView method, QByteArrayView arg,
+QGrpcClientBase::startBidirStream(QLatin1StringView method, QByteArrayView arg,
                                       const QGrpcCallOptions &options)
 {
-    Q_D(QAbstractGrpcClient);
+    Q_D(QGrpcClientBase);
 
-    if (d->checkThread("QAbstractGrpcClient::startStream<QGrpcBidirStream>"_L1) != QGrpcStatus::Ok)
+    if (d->checkThread("QGrpcClientBase::startStream<QGrpcBidirStream>"_L1) != QGrpcStatus::Ok)
         return {};
 
     if (!d->checkChannel())
@@ -305,9 +305,9 @@ QAbstractGrpcClient::startBidirStream(QLatin1StringView method, QByteArrayView a
     return grpcStream;
 }
 
-std::optional<QByteArray> QAbstractGrpcClient::trySerialize(const QProtobufMessage &arg)
+std::optional<QByteArray> QGrpcClientBase::trySerialize(const QProtobufMessage &arg)
 {
-    Q_D(QAbstractGrpcClient);
+    Q_D(QGrpcClientBase);
     using namespace Qt::StringLiterals;
     auto _serializer = d->serializer();
     if (_serializer == nullptr) {
@@ -320,4 +320,4 @@ std::optional<QByteArray> QAbstractGrpcClient::trySerialize(const QProtobufMessa
 
 QT_END_NAMESPACE
 
-#include "moc_qabstractgrpcclient.cpp"
+#include "moc_qgrpcclientbase.cpp"

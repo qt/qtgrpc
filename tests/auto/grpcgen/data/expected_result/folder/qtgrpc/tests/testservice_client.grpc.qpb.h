@@ -8,8 +8,8 @@
 #include <QtProtobuf/qprotobuflazymessagepointer.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
-#include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qgrpccallreply.h>
+#include <QtGrpc/qgrpcclientbase.h>
 #include <QtGrpc/qgrpcstream.h>
 
 #include <memory>
@@ -19,7 +19,7 @@
 namespace qtgrpc::tests {
 namespace TestService {
 
-class  Client : public QAbstractGrpcClient
+class  Client : public QGrpcClientBase
 {
     Q_OBJECT
 

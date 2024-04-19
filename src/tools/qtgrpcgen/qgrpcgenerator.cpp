@@ -28,7 +28,7 @@ static const std::set<std::string> externalQmlIncludes = {"QtQml/qqmlengine.h",
                                                           "QtQml/qjsengine.h",
                                                           "QtQml/qjsvalue.h"};
 
-static const std::set<std::string> externalIncludes = {"QtGrpc/qabstractgrpcclient.h",
+static const std::set<std::string> externalIncludes = {"QtGrpc/qgrpcclientbase.h",
                                                        "QtGrpc/qgrpccallreply.h",
                                                        "QtGrpc/qgrpcstream.h"};
 
