@@ -12,7 +12,6 @@
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
-#include <QtProtobuf/qabstractprotobufserializer.h>
 
 #include <memory>
 #include <optional>
