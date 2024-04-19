@@ -24,10 +24,18 @@ namespace QtProtobufPrivate {
 
 /*!
     \internal
-    \fn template<typename T, IsProtobufMessageType<T> = 0> T &QProtobufOneof::value() const
+    \fn template<typename T, IsProtobufMessageType<T> = 0> const T *value() const
 
-    Returns the reference to a protobuf message that is stored inside the
+    Returns the pointer to a protobuf message that is stored inside the
     QProtobufOneof object.
+*/
+
+/*!
+    \internal
+    \fn template<typename T, IsProtobufMessageType<T> = 0> T *value()
+
+    Returns the pointer to a protobuf message that is stored inside the
+    QProtobufOneof object. Mutable overload.
 */
 
 /*!
@@ -109,11 +117,15 @@ QProtobufOneof::~QProtobufOneof()
     delete d_ptr;
 }
 
-QVariant &QProtobufOneof::rawValue() const
+const QVariant &QProtobufOneof::rawValue() const
 {
     return d_ptr->value;
 }
 
+QVariant &QProtobufOneof::rawValue()
+{
+    return d_ptr->value;
+}
 /*
    Setting of the QProtobufOneof data makes sense only using
    value/fieldNumber pair. Instead of non-constant dereferencing of the

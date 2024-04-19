@@ -69,11 +69,18 @@ public:
     }
 
     template<typename T, IsProtobufMessageType<T> = 0>
-    T *value() const
+    T *value()
     {
         if (rawValue().isNull() || QMetaType::fromType<T>() != rawValue().metaType())
             rawValue().setValue(T());
         return reinterpret_cast<T *>(rawValue().data());
+    }
+
+    template<typename T, IsProtobufMessageType<T> = 0>
+    const T *value() const
+    {
+        Q_ASSERT(QMetaType::fromType<T>() == rawValue().metaType());
+        return reinterpret_cast<const T *>(rawValue().data());
     }
 
     template<typename T, IsNonMessageProtobufType<T> = 0>
@@ -108,7 +115,8 @@ private:
     friend class QT_PREPEND_NAMESPACE(QProtobufMessage);
 
     Q_PROTOBUF_EXPORT void setValue(const QVariant &value, int fieldNumber);
-    Q_PROTOBUF_EXPORT QVariant &rawValue() const;
+    Q_PROTOBUF_EXPORT const QVariant &rawValue() const;
+    Q_PROTOBUF_EXPORT QVariant &rawValue();
 
     QProtobufOneofPrivate *d_ptr;
     Q_DECLARE_PRIVATE(QProtobufOneof)
