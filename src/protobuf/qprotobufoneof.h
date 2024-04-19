@@ -119,6 +119,4 @@ private:
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(QtProtobufPrivate::QProtobufOneof)
-
 #endif // QPROTOBUFONEOF_H
