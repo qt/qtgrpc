@@ -205,8 +205,11 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
                                                           const QGrpcCallOptions &options)
 {
     std::optional<QByteArray> argData = trySerialize(arg);
-    if (!argData)
+    if (!argData) {
+        Q_EMIT errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
+                                          tr("Serializing failed. Serializer is not ready.") });
         return {};
+    }
     return call(method, *argData, options);
 }
 
@@ -305,17 +308,15 @@ QGrpcClientBase::startBidirStream(QLatin1StringView method, QByteArrayView arg,
     return grpcStream;
 }
 
-std::optional<QByteArray> QGrpcClientBase::trySerialize(const QProtobufMessage &arg)
+std::optional<QByteArray> QGrpcClientBase::trySerialize(const QProtobufMessage &arg) const
 {
-    Q_D(QGrpcClientBase);
+    Q_D(const QGrpcClientBase);
     using namespace Qt::StringLiterals;
-    auto _serializer = d->serializer();
-    if (_serializer == nullptr) {
-        Q_EMIT errorOccurred(QGrpcStatus{
-            QGrpcStatus::Unknown, tr("Serializing failed. Serializer is not ready.") });
+    auto serializer = d->serializer();
+    if (serializer == nullptr)
         return std::nullopt;
-    }
-    return _serializer->serialize(&arg);
+
+    return serializer->serialize(&arg);
 }
 
 QT_END_NAMESPACE

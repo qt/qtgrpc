@@ -58,8 +58,11 @@ protected:
                                             const QGrpcCallOptions &options)
     {
         std::optional<QByteArray> argData = trySerialize(arg);
-        if (!argData)
+        if (!argData) {
+            Q_EMIT errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
+                                              tr("Serializing failed. Serializer is not ready.") });
             return {};
+        }
         if constexpr (std::is_same_v<StreamType, QGrpcServerStream>) {
             return startServerStream(method, *argData, options);
         } else if constexpr (std::is_same_v<StreamType, QGrpcClientStream>) {
@@ -83,7 +86,7 @@ private:
     std::shared_ptr<QGrpcBidirStream> startBidirStream(QLatin1StringView method, QByteArrayView arg,
                                                        const QGrpcCallOptions &options);
 
-    std::optional<QByteArray> trySerialize(const QProtobufMessage &arg);
+    std::optional<QByteArray> trySerialize(const QProtobufMessage &arg) const;
 
     Q_DISABLE_COPY_MOVE(QGrpcClientBase)
     Q_DECLARE_PRIVATE(QGrpcClientBase)
