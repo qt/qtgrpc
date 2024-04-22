@@ -17,12 +17,12 @@ QT_BEGIN_NAMESPACE
 /*!
     \class QAbstractGrpcChannel
     \inmodule QtGrpc
-    \brief The QAbstractGrpcChannel class is interface that represents common
+    \brief The QAbstractGrpcChannel class is an interface that represents common
     gRPC channel functionality.
 
-    You may implement this interface to create your own channels for gRPC transport.
-    QGrpcChannel or QGrpcHttp2Channel, which are full implementations of
-    QAbstractGrpcChannel are recommended to use.
+    Implement this interface to create your own custom channel for gRPC
+    transportation. We provide the QGrpcHttp2Channel, which is a fully featured
+    implementation of the QAbstractGrpcChannel for HTTP/2 communication.
 */
 
 /*!
