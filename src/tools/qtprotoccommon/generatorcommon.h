@@ -8,6 +8,7 @@
 #include <google/protobuf/io/printer.h>
 
 #include <map>
+#include <set>
 #include <string>
 #include <string_view>
 #include <functional>
@@ -47,7 +48,8 @@ struct common {
     }
 
     static std::string getFullNamespace(std::string_view fullDescriptorName,
-                                        std::string_view separator);
+                                        std::string_view separator,
+                                        bool extraScope);
     template<typename T>
     static std::string getFullNamespace(const T *type, std::string_view separator)
     {
@@ -68,7 +70,8 @@ struct common {
         }
 
         return getFullNamespace(type->file()->package() + nestingNamespaces + '.' + type->name(),
-                                separator);
+                                separator,
+                                common::isExtraNamespacedFile(std::string(type->file()->name())));
     }
 
     template<typename T>
@@ -155,6 +158,12 @@ struct common {
     static const Descriptor *findHighestMessage(const Descriptor *message);
 
     static std::string collectFieldFlags(const google::protobuf::FieldDescriptor *field);
+
+    static bool isExtraNamespacedFile(const std::string &file);
+    static void setExtraNamespacedFiles(const std::set<std::string> &files);
+
+private:
+    static std::set<std::string> m_extraNamespacedFiles;
 };
 } // namespace qtprotoccommon
 
