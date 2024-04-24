@@ -38,5 +38,7 @@ qt6_add_protobuf(tst_protobuf_timestamp
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
     PROTO_INCLUDES
         $<TARGET_PROPERTY:Qt6::ProtobufWellKnownTypes,QT_PROTO_INCLUDES>
+    EXTRA_NAMESPACE
+        MyTopLevelNamespace
 )
 qt_autogen_tools_initial_setup(tst_protobuf_basictypes_gen)

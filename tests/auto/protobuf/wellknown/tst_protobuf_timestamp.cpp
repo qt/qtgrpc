@@ -16,7 +16,7 @@ private slots:
     void simpleMessage();
 };
 
-using namespace qtproto::tests;
+using namespace MyTopLevelNamespace::qtproto::tests;
 using namespace Qt::StringLiterals;
 
 void tst_protobuf_timestamp::simpleMessage()

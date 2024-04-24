@@ -52,15 +52,18 @@ std::string_view getInitializerByFieldType(FieldDescriptor::Type type)
 }
 } // namespace
 
+std::set<std::string> common::m_extraNamespacedFiles;
+
 /*
     Constructs a C++ namespace from the full protobuf descriptor name. E.g. for
     the message descriptor "test.protobuf.MessageType" the function
     returns "test::protobuf", if the separator is "::".
 */
 std::string common::getFullNamespace(std::string_view fullDescriptorName,
-                                     std::string_view separator)
+                                     std::string_view separator,
+                                     bool extraScope)
 {
-    std::string output = Options::instance().extraNamespace();
+    std::string output = (extraScope) ? Options::instance().extraNamespace() : "";
     std::string::size_type nameIndex = fullDescriptorName.rfind('.');
     if (nameIndex == std::string::npos)
         return output;
@@ -740,4 +743,15 @@ std::string common::collectFieldFlags(const FieldDescriptor *field)
         writeFlag("NoFlags");
 
     return flags;
+}
+
+bool common::isExtraNamespacedFile(const std::string &file)
+{
+    return m_extraNamespacedFiles.find(file) != m_extraNamespacedFiles.end();
+}
+
+void common::setExtraNamespacedFiles(const std::set<std::string> &files)
+{
+    if (!files.empty() && files != m_extraNamespacedFiles)
+        m_extraNamespacedFiles = files;
 }
