@@ -3,6 +3,7 @@
 
 #include <QtGrpc/qgrpcchanneloperation.h>
 #include <QtGrpc/qgrpccalloptions.h>
+#include <QtGrpc/qgrpcstatus.h>
 
 #include <QtCore/private/qobject_p.h>
 #include <QtProtobuf/qprotobufserializer.h>
