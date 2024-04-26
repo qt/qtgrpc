@@ -47,14 +47,13 @@ public:
 #endif
     void sendMessage(const T &message)
     {
-        sendMessage(serializer()->serialize(&message));
+        sendMessage(&message);
     }
 
     void sendMessage(const QProtobufMessage *message);
     void writesDone();
 
 private:
-    void sendMessage(const QByteArray &data);
     Q_DISABLE_COPY_MOVE(QGrpcClientStream)
 };
 
@@ -74,7 +73,7 @@ public:
 #endif
     void sendMessage(const T &message)
     {
-        sendMessage(serializer()->serialize(&message));
+        sendMessage(&message);
     }
 
     void sendMessage(const QProtobufMessage *message);
@@ -84,7 +83,6 @@ Q_SIGNALS:
     void messageReceived();
 
 private:
-    void sendMessage(const QByteArray &data);
     Q_DISABLE_COPY_MOVE(QGrpcBidirStream)
 };
 

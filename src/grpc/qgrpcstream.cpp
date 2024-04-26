@@ -69,21 +69,10 @@ QGrpcClientStream::~QGrpcClientStream() = default;
 /*!
     \since 6.8
     Serializes \a message and sends it to the server.
-
-    \note This function has slower message serialization compared to its
-          template counterpart.
 */
 void QGrpcClientStream::sendMessage(const QProtobufMessage *message)
 {
-    sendMessage(serializer()->serialize(message));
-}
-
-/*!
-    \internal
-    Sends the serialized \a data to the server.
-*/
-void QGrpcClientStream::sendMessage(const QByteArray &data)
-{
+    QByteArray data = QGrpcOperation::channelOperation()->serializer()->serialize(message);
     emit QGrpcOperation::channelOperation()->sendData(data);
 }
 
@@ -134,21 +123,10 @@ QGrpcBidirStream::~QGrpcBidirStream() = default;
 /*!
     \since 6.8
     Serializes \a message and sends it to the server.
-
-    \note This function has slower message serialization compared to its
-          template counterpart.
 */
 void QGrpcBidirStream::sendMessage(const QProtobufMessage *message)
 {
-    sendMessage(serializer()->serialize(message));
-}
-
-/*!
-    \internal
-    Sends the serialized \a data to the server.
-*/
-void QGrpcBidirStream::sendMessage(const QByteArray &data)
-{
+    QByteArray data = QGrpcOperation::channelOperation()->serializer()->serialize(message);
     emit QGrpcOperation::channelOperation()->sendData(data);
 }
 

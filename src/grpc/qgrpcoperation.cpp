@@ -186,15 +186,6 @@ QGrpcChannelOperation *QGrpcOperation::channelOperation() const noexcept
 }
 
 /*!
-    \internal
-    Getter of the serializer that QGrpcOperation was constructed with.
-*/
-std::shared_ptr<const QAbstractProtobufSerializer> QGrpcOperation::serializer() const noexcept
-{
-    return d_func()->channelOperation->serializer();
-}
-
-/*!
     Attempts to cancel the operation in a channel and immediately emits
     \l{QGrpcOperation::errorOccurred} with the \l{QGrpcStatus::Cancelled}
     status code.

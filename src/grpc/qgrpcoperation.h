@@ -27,8 +27,7 @@ public:
     std::optional<T> read() const
     {
         T value;
-        const auto ser = serializer();
-        return ser && ser->deserialize(&value, data()) ? std::optional<T>(value) : std::nullopt;
+        return read(&value) ? std::optional<T>(value) : std::nullopt;
     }
 
     bool read(QProtobufMessage *message) const;
@@ -51,7 +50,6 @@ protected:
                             QObject *parent = nullptr);
 
     [[nodiscard]] QGrpcChannelOperation *channelOperation() const noexcept;
-    [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const noexcept;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
