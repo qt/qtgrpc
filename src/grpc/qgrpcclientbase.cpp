@@ -182,7 +182,7 @@ QGrpcClientBase::~QGrpcClientBase() = default;
     You have to invoke the channel-related functions on the same thread as
     QGrpcClientBase.
 */
-void QGrpcClientBase::attachChannel(const std::shared_ptr<QAbstractGrpcChannel> &channel)
+void QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channel)
 {
     if (channel->dPtr->threadId != QThread::currentThreadId()) {
         const QString status = threadSafetyWarning("QGrpcClientBase::attachChannel"_L1);
@@ -196,7 +196,7 @@ void QGrpcClientBase::attachChannel(const std::shared_ptr<QAbstractGrpcChannel> 
         stream->cancel();
     }
 
-    d->channel = channel;
+    d->channel = std::move(channel);
     emit channelChanged();
 }
 
