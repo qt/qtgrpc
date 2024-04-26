@@ -33,11 +33,6 @@ private:
         const override;
     bool deserializeObject(QProtobufMessage *message) const override;
 
-    void serializeListObject(const QProtobufMessage *message,
-                             const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
-        const override;
-    bool deserializeListObject(QProtobufMessage *message) const override;
-
     void serializeMapPair(const QVariant &key, const QVariant &value,
                           const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
         const override;

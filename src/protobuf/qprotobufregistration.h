@@ -56,7 +56,7 @@ void serializeList(const QAbstractProtobufSerializer *serializer, const QVariant
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
     for (const auto &value : listValue.value<QList<V>>()) {
-        serializer->serializeListObject(&value, fieldInfo);
+        serializer->serializeObject(&value, fieldInfo);
     }
 }
 
@@ -117,7 +117,7 @@ void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &pr
                "QAbstractProtobufSerializer::deserializeList",
                "Previous value metatype doesn't match the list metatype");
     V newValue;
-    if (serializer->deserializeListObject(&newValue)) {
+    if (serializer->deserializeObject(&newValue)) {
         QList<V> *list = reinterpret_cast<QList<V> *>(previous.data());
         list->append(newValue);
     }

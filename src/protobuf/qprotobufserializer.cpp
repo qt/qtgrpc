@@ -355,17 +355,6 @@ bool QProtobufSerializer::deserializeObject(QProtobufMessage *message) const
     return d_ptr->deserializeObject(message);
 }
 
-void QProtobufSerializer::serializeListObject(const QProtobufMessage *message,
-                                              const QProtobufFieldInfo &fieldInfo) const
-{
-    d_ptr->serializeObject(message, fieldInfo);
-}
-
-bool QProtobufSerializer::deserializeListObject(QProtobufMessage *message) const
-{
-    return d_ptr->deserializeObject(message);
-}
-
 void QProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
                                            const QProtobufFieldInfo &fieldInfo) const
 {

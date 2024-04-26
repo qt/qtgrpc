@@ -45,11 +45,6 @@ public:
                     const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const = 0;
     virtual bool deserializeObject(QProtobufMessage *message) const = 0;
 
-    virtual void serializeListObject(const QProtobufMessage *message,
-                                     const QtProtobufPrivate::QProtobufFieldInfo
-                                         &fieldInfo) const = 0;
-    virtual bool deserializeListObject(QProtobufMessage *message) const = 0;
-
     virtual void
     serializeMapPair(const QVariant &key, const QVariant &value,
                      const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const = 0;

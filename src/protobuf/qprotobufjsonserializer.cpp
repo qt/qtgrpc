@@ -283,7 +283,18 @@ public:
 
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (handler.serializer) {
-            handler.serializer(qPtr, propertyValue, fieldInfo);
+            if (fieldInfo.getFieldFlags() & QtProtobufPrivate::FieldFlag::Repeated
+                && !(fieldInfo.getFieldFlags() & QtProtobufPrivate::FieldFlag::Enum)) {
+                const auto fieldName = fieldInfo.getJsonName().toString();
+                QJsonObject activeObject = activeValue.toObject();
+                activeValue = activeObject.value(fieldName).toArray();
+                handler.serializer(qPtr, propertyValue, fieldInfo);
+                if (!activeValue.toArray().empty())
+                    activeObject.insert(fieldName, activeValue);
+                activeValue = activeObject;
+            } else {
+                handler.serializer(qPtr, propertyValue, fieldInfo);
+            }
         } else {
             QJsonObject activeObject = activeValue.toObject();
             auto iter = handlers.constFind(userType);
@@ -694,33 +705,22 @@ bool QProtobufJsonSerializer::deserializeMessage(QProtobufMessage *message,
 void QProtobufJsonSerializer::serializeObject(const QProtobufMessage *message,
                                               const QProtobufFieldInfo &fieldInfo) const
 {
-    auto store = d_ptr->activeValue.toObject();
-    d_ptr->activeValue = QJsonObject();
-    d_ptr->serializeObject(message);
-    store.insert(fieldInfo.getJsonName().toString(), d_ptr->activeValue);
-    d_ptr->activeValue = store;
-}
-
-void QProtobufJsonSerializer::serializeListObject(const QProtobufMessage *message,
-                                                  const QProtobufFieldInfo &fieldInfo)
-    const
-{
-    auto fieldName = fieldInfo.getJsonName().toString();
-    auto store = d_ptr->activeValue.toObject();
-    QJsonArray newArrayVal = store.value(fieldName).toArray();
-    d_ptr->activeValue = {};
-    d_ptr->serializeObject(message);
-    newArrayVal.append(d_ptr->activeValue);
-    store.insert(fieldName, newArrayVal);
-    d_ptr->activeValue = store;
+    if (d_ptr->activeValue.isArray()) {
+        auto store = d_ptr->activeValue.toArray();
+        d_ptr->activeValue = QJsonObject();
+        d_ptr->serializeObject(message);
+        store.append(d_ptr->activeValue);
+        d_ptr->activeValue = store;
+    } else {
+        auto store = d_ptr->activeValue.toObject();
+        d_ptr->activeValue = QJsonObject();
+        d_ptr->serializeObject(message);
+        store.insert(fieldInfo.getJsonName().toString(), d_ptr->activeValue);
+        d_ptr->activeValue = store;
+    }
 }
 
 bool QProtobufJsonSerializer::deserializeObject(QProtobufMessage *message) const
-{
-    return d_ptr->deserializeObject(message);
-}
-
-bool QProtobufJsonSerializer::deserializeListObject(QProtobufMessage *message) const
 {
     return d_ptr->deserializeObject(message);
 }

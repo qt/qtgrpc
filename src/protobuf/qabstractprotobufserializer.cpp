@@ -75,29 +75,6 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QAbstractProtobufSerializer::serializeListObject(const QProtobufMessage *message,
-        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
-
-    Serializes \a message as part of a list of messages one by one with \a fieldInfo.
-
-    You should not call this function directly.
-
-    \sa QAbstractProtobufSerializer::deserializeListObject()
-*/
-
-/*!
-    \fn bool QAbstractProtobufSerializer::deserializeListObject(QProtobufMessage *message) const
-
-    Deserializes \a message from byte stream as part of list property
-    from a wire.
-    Returns \c true if deserialization was successful, otherwise \c false.
-
-    You should not call this function directly.
-
-    \sa QAbstractProtobufSerializer::serializeListObject()
-*/
-
-/*!
     \fn void QAbstractProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
         const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
 

@@ -43,13 +43,6 @@ protected:
     }
     bool deserializeObject(QProtobufMessage *) const override { return true; }
 
-    void
-    serializeListObject(const QProtobufMessage *,
-                        const QtProtobufPrivate::QProtobufFieldInfo &) const override
-    {
-    }
-    bool deserializeListObject(QProtobufMessage *) const override { return true; }
-
     void serializeMapPair(const QVariant &, const QVariant &,
                           const QtProtobufPrivate::QProtobufFieldInfo &) const override
     {

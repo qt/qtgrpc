@@ -49,7 +49,7 @@ static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, c
         google::protobuf::Any realAny;
         realAny.setValue(any.value());
         realAny.setTypeUrl(any.typeUrl());
-        serializer->serializeListObject(&realAny, fieldInfo);
+        serializer->serializeObject(&realAny, fieldInfo);
     }
 }
 
