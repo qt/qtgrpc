@@ -221,8 +221,8 @@ static constexpr struct {
         QtProtobufPrivate::Optional | QtProtobufPrivate::ExplicitPresence, /* = testFieldBytesOpt */
         QtProtobufPrivate::NoFlags, /* = testFieldString */
         QtProtobufPrivate::Optional | QtProtobufPrivate::ExplicitPresence, /* = testFieldStringOpt */
-        QtProtobufPrivate::ExplicitPresence, /* = testFieldMessage */
-        QtProtobufPrivate::ExplicitPresence, /* = testFieldMessageOpt */
+        QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = testFieldMessage */
+        QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = testFieldMessageOpt */
     },
     // char_data
     /* metadata char_data: */

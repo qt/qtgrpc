@@ -90,6 +90,9 @@ void QtProtobufEnumTypesGenerationTest::localEnumTest()
     QCOMPARE(simpleEnum.value(1), 1);
     QCOMPARE(simpleEnum.value(2), 2);
     QCOMPARE(simpleEnum.value(3), 3);
+
+    QVERIFY(SimpleEnumMessage::staticPropertyOrdering.getFieldFlags(0)
+            & QtProtobufPrivate::FieldFlag::Enum);
 }
 
 void QtProtobufEnumTypesGenerationTest::mixedEnumUsageTest()

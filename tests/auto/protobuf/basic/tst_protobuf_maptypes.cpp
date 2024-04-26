@@ -29,6 +29,8 @@ void QtProtobufMapTypesGenerationTest::sInt32StringMapMessageTest()
 {
     const char *propertyName = "mapField";
     qProtobufAssertMessagePropertyRegistered<SimpleSInt32StringMapMessage, SimpleSInt32StringMapMessage::MapFieldEntry>(1, "qtprotobufnamespace::tests::SimpleSInt32StringMapMessage::MapFieldEntry", propertyName);
+    QVERIFY(SimpleSInt32StringMapMessage::staticPropertyOrdering.getFieldFlags(0)
+            & QtProtobufPrivate::FieldFlag::Map);
 
     QVERIFY(QMetaType::fromType<SimpleSInt32StringMapMessage::MapFieldEntry>().isRegistered());
 
@@ -52,6 +54,8 @@ void QtProtobufMapTypesGenerationTest::stringStringMapMessageTest()
 {
     const char *propertyName = "mapField";
     qProtobufAssertMessagePropertyRegistered<SimpleStringStringMapMessage, SimpleStringStringMapMessage::MapFieldEntry>(13, "qtprotobufnamespace::tests::SimpleStringStringMapMessage::MapFieldEntry", propertyName);
+    QVERIFY(SimpleStringStringMapMessage::staticPropertyOrdering.getFieldFlags(0)
+            & QtProtobufPrivate::FieldFlag::Map);
 
     QVERIFY(QMetaType::fromType<SimpleStringStringMapMessage::MapFieldEntry>().isRegistered());
 

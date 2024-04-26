@@ -24,7 +24,11 @@ enum FieldFlag : uint {
     NonPacked = 0x1,
     Oneof = 0x02,
     Optional = 0x04,
-    ExplicitPresence = 0x08
+    ExplicitPresence = 0x08,
+    Message = 0x10,
+    Enum = 0x20,
+    Repeated = 0x40,
+    Map = 0x80,
 };
 
 struct QProtobufPropertyOrdering

@@ -49,7 +49,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -168,7 +168,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -287,7 +287,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -406,7 +406,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -525,7 +525,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -644,7 +644,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -763,7 +763,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -882,7 +882,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -1001,7 +1001,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -1120,7 +1120,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -1239,7 +1239,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -1358,7 +1358,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -1477,7 +1477,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -1596,7 +1596,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -1715,7 +1715,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -1834,7 +1834,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -1953,7 +1953,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -2072,7 +2072,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -2191,7 +2191,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -2310,7 +2310,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -2429,7 +2429,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -2548,7 +2548,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -2667,7 +2667,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -2786,7 +2786,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -2905,7 +2905,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -3024,7 +3024,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -3143,7 +3143,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -3262,7 +3262,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -3381,7 +3381,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -3500,7 +3500,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -3619,7 +3619,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -3738,7 +3738,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -3857,7 +3857,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -3976,7 +3976,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -4095,7 +4095,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -4214,7 +4214,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -4333,7 +4333,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -4452,7 +4452,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -4571,7 +4571,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -4690,7 +4690,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -4809,7 +4809,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -4928,7 +4928,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -5047,7 +5047,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -5166,7 +5166,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -5285,7 +5285,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -5404,7 +5404,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -5523,7 +5523,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -5642,7 +5642,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -5761,7 +5761,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -5880,7 +5880,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -5999,7 +5999,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -6118,7 +6118,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -6237,7 +6237,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -6356,7 +6356,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -6475,7 +6475,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -6594,7 +6594,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -6713,7 +6713,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -6832,7 +6832,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -6951,7 +6951,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -7070,7 +7070,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -7189,7 +7189,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -7308,7 +7308,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -7427,7 +7427,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -7546,7 +7546,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -7665,7 +7665,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -7784,7 +7784,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -7903,7 +7903,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -8022,7 +8022,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -8141,7 +8141,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -8260,7 +8260,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -8379,7 +8379,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -8498,7 +8498,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -8617,7 +8617,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -8736,7 +8736,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -8855,7 +8855,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -8974,7 +8974,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -9093,7 +9093,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -9212,7 +9212,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -9331,7 +9331,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -9450,7 +9450,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -9569,7 +9569,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -9688,7 +9688,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -9807,7 +9807,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -9926,7 +9926,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -10045,7 +10045,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -10164,7 +10164,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -10283,7 +10283,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */
@@ -10402,7 +10402,7 @@ static constexpr struct {
         // Property indices:
         0, /* = mapField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = mapField */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = mapField */
     },
     // char_data
     /* metadata char_data: */

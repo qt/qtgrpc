@@ -757,6 +757,18 @@ std::string common::collectFieldFlags(const FieldDescriptor *field)
         writeFlag("ExplicitPresence");
     }
 
+    if (field->is_map())
+        writeFlag("Map");
+
+    if (field->is_repeated() && !field->is_map())
+        writeFlag("Repeated");
+
+    if (field->type() == FieldDescriptor::TYPE_ENUM)
+        writeFlag("Enum");
+
+    if (field->type() == FieldDescriptor::TYPE_MESSAGE)
+        writeFlag("Message");
+
     if (flags.empty())
         writeFlag("NoFlags");
 

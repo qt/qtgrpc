@@ -254,11 +254,11 @@ static constexpr struct {
         // Field flags:
         QtProtobufPrivate::NoFlags, /* = testFieldInt */
         QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = testOneofFieldInt */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = testOneofComplexField */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = testOneofSecondComplexField */
+        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = testOneofComplexField */
+        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = testOneofSecondComplexField */
         QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = secondFieldInt */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = secondComplexField */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = secondSecondComplexField */
+        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = secondComplexField */
+        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = secondSecondComplexField */
         QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = testSnakeCaseField */
     },
     // char_data

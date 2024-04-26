@@ -49,7 +49,7 @@ static constexpr struct {
         // Property indices:
         0, /* = field */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = field */
+        QtProtobufPrivate::Message, /* = field */
     },
     // char_data
     /* metadata char_data: */
@@ -160,7 +160,7 @@ static constexpr struct {
         // Property indices:
         0, /* = anys */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = anys */
+        QtProtobufPrivate::Repeated | QtProtobufPrivate::Message, /* = anys */
     },
     // char_data
     /* metadata char_data: */
@@ -282,8 +282,8 @@ static constexpr struct {
         0, /* = one */
         1, /* = two */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = one */
-        QtProtobufPrivate::NoFlags, /* = two */
+        QtProtobufPrivate::Message, /* = one */
+        QtProtobufPrivate::Message, /* = two */
     },
     // char_data
     /* metadata char_data: */

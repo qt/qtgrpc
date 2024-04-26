@@ -66,7 +66,7 @@ static constexpr struct {
         // Property indices:
         0, /* = localEnum */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = localEnum */
+        QtProtobufPrivate::Enum, /* = localEnum */
     },
     // char_data
     /* metadata char_data: */
@@ -180,7 +180,7 @@ static constexpr struct {
         // Property indices:
         0, /* = localEnumList */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = localEnumList */
+        QtProtobufPrivate::Repeated | QtProtobufPrivate::Enum, /* = localEnumList */
     },
     // char_data
     /* metadata char_data: */
@@ -610,11 +610,11 @@ static constexpr struct {
         3, /* = localEnumField4 */
         4, /* = localEnumField5 */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = localEnumField */
-        QtProtobufPrivate::NoFlags, /* = localEnumField2 */
-        QtProtobufPrivate::NoFlags, /* = localEnumField3 */
-        QtProtobufPrivate::NoFlags, /* = localEnumField4 */
-        QtProtobufPrivate::NoFlags, /* = localEnumField5 */
+        QtProtobufPrivate::Enum, /* = localEnumField */
+        QtProtobufPrivate::Enum, /* = localEnumField2 */
+        QtProtobufPrivate::Enum, /* = localEnumField3 */
+        QtProtobufPrivate::Enum, /* = localEnumField4 */
+        QtProtobufPrivate::Enum, /* = localEnumField5 */
     },
     // char_data
     /* metadata char_data: */
@@ -798,10 +798,10 @@ static constexpr struct {
         2, /* = localEnumMap */
         3, /* = msgList */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = localEnum */
-        QtProtobufPrivate::NoFlags, /* = localEnumList */
-        QtProtobufPrivate::NoFlags, /* = localEnumMap */
-        QtProtobufPrivate::NoFlags, /* = msgList */
+        QtProtobufPrivate::Enum, /* = localEnum */
+        QtProtobufPrivate::Repeated | QtProtobufPrivate::Enum, /* = localEnumList */
+        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = localEnumMap */
+        QtProtobufPrivate::Repeated | QtProtobufPrivate::Message, /* = msgList */
     },
     // char_data
     /* metadata char_data: */
@@ -983,8 +983,8 @@ static constexpr struct {
         0, /* = globalEnum */
         1, /* = globalEnumList */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = globalEnum */
-        QtProtobufPrivate::NoFlags, /* = globalEnumList */
+        QtProtobufPrivate::Enum, /* = globalEnum */
+        QtProtobufPrivate::Repeated | QtProtobufPrivate::Enum, /* = globalEnumList */
     },
     // char_data
     /* metadata char_data: */
@@ -1121,8 +1121,8 @@ static constexpr struct {
         0, /* = localStepChildEnum */
         1, /* = localStepChildList */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = localStepChildEnum */
-        QtProtobufPrivate::NoFlags, /* = localStepChildList */
+        QtProtobufPrivate::Enum, /* = localStepChildEnum */
+        QtProtobufPrivate::Repeated | QtProtobufPrivate::Enum, /* = localStepChildList */
     },
     // char_data
     /* metadata char_data: */
@@ -1254,7 +1254,7 @@ static constexpr struct {
         // Property indices:
         0, /* = val */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = val */
+        QtProtobufPrivate::Enum, /* = val */
     },
     // char_data
     /* metadata char_data: */
@@ -1369,7 +1369,7 @@ static constexpr struct {
         // Property indices:
         0, /* = val */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = val */
+        QtProtobufPrivate::Enum, /* = val */
     },
     // char_data
     /* metadata char_data: */

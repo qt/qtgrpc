@@ -49,7 +49,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedString */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedString */
+        QtProtobufPrivate::Repeated, /* = testRepeatedString */
     },
     // char_data
     /* metadata char_data: */
@@ -166,7 +166,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedDouble */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedDouble */
+        QtProtobufPrivate::Repeated, /* = testRepeatedDouble */
     },
     // char_data
     /* metadata char_data: */
@@ -283,7 +283,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedBytes */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedBytes */
+        QtProtobufPrivate::Repeated, /* = testRepeatedBytes */
     },
     // char_data
     /* metadata char_data: */
@@ -400,7 +400,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedFloat */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedFloat */
+        QtProtobufPrivate::Repeated, /* = testRepeatedFloat */
     },
     // char_data
     /* metadata char_data: */
@@ -517,7 +517,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedComplex */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedComplex */
+        QtProtobufPrivate::Repeated | QtProtobufPrivate::Message, /* = testRepeatedComplex */
     },
     // char_data
     /* metadata char_data: */
@@ -634,7 +634,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedInt */
+        QtProtobufPrivate::Repeated, /* = testRepeatedInt */
     },
     // char_data
     /* metadata char_data: */
@@ -751,7 +751,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedInt */
+        QtProtobufPrivate::Repeated, /* = testRepeatedInt */
     },
     // char_data
     /* metadata char_data: */
@@ -868,7 +868,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedInt */
+        QtProtobufPrivate::Repeated, /* = testRepeatedInt */
     },
     // char_data
     /* metadata char_data: */
@@ -985,7 +985,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedInt */
+        QtProtobufPrivate::Repeated, /* = testRepeatedInt */
     },
     // char_data
     /* metadata char_data: */
@@ -1102,7 +1102,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedInt */
+        QtProtobufPrivate::Repeated, /* = testRepeatedInt */
     },
     // char_data
     /* metadata char_data: */
@@ -1219,7 +1219,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedInt */
+        QtProtobufPrivate::Repeated, /* = testRepeatedInt */
     },
     // char_data
     /* metadata char_data: */
@@ -1336,7 +1336,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedInt */
+        QtProtobufPrivate::Repeated, /* = testRepeatedInt */
     },
     // char_data
     /* metadata char_data: */
@@ -1453,7 +1453,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedInt */
+        QtProtobufPrivate::Repeated, /* = testRepeatedInt */
     },
     // char_data
     /* metadata char_data: */
@@ -1570,7 +1570,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedInt */
+        QtProtobufPrivate::Repeated, /* = testRepeatedInt */
     },
     // char_data
     /* metadata char_data: */
@@ -1687,7 +1687,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedInt */
+        QtProtobufPrivate::Repeated, /* = testRepeatedInt */
     },
     // char_data
     /* metadata char_data: */
@@ -1804,7 +1804,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testRepeatedBool */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testRepeatedBool */
+        QtProtobufPrivate::Repeated, /* = testRepeatedBool */
     },
     // char_data
     /* metadata char_data: */
