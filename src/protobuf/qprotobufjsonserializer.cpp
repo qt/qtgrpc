@@ -262,6 +262,17 @@ public:
     }
     ~QProtobufJsonSerializerPrivate() = default;
 
+    [[nodiscard]] static QMetaEnum getMetaEnum(QMetaType enumMetaType)
+    {
+        const auto *metaObject = enumMetaType.metaObject();
+        Q_ASSERT(metaObject);
+        for (int i = 0; i < metaObject->enumeratorCount(); ++i) {
+            if (metaObject->enumerator(i).metaType() == enumMetaType)
+                return metaObject->enumerator(i);
+        }
+        return {};
+    }
+
     void serializeProperty(const QVariant &propertyValue,
                            const QProtobufFieldInfo &fieldInfo)
     {
@@ -278,6 +289,16 @@ public:
             serializeObject(messageProperty);
             store.insert(fieldInfo.getJsonName().toString(), activeValue);
             activeValue = store;
+            return;
+        }
+
+        if (propertyValue.metaType().flags() & QMetaType::IsEnumeration) {
+            const auto metaEnum = getMetaEnum(metaType);
+            Q_ASSERT(metaEnum.isValid());
+            QJsonObject activeObject = activeValue.toObject();
+            activeObject.insert(fieldInfo.getJsonName().toString(),
+                                QString::fromUtf8(metaEnum.key(propertyValue.value<int32_t>())));
+            activeValue = activeObject;
             return;
         }
 
@@ -595,9 +616,17 @@ public:
                 QVariant newPropertyValue = message->property(iter->second, true);
                 bool ok = false;
 
-                newPropertyValue = deserializeValue(newPropertyValue, ok);
-                activeValue = store;
-
+                if (iter->second.getFieldFlags() & QtProtobufPrivate::FieldFlag::Enum
+                    && !(iter->second.getFieldFlags() & QtProtobufPrivate::FieldFlag::Repeated)) {
+                    const auto metaEnum = getMetaEnum(newPropertyValue.metaType());
+                    Q_ASSERT(metaEnum.isValid());
+                    newPropertyValue.setValue(deserializeEnum(activeValue, metaEnum, ok));
+                    if (!ok)
+                        setInvalidFormatError();
+                } else {
+                    newPropertyValue = deserializeValue(newPropertyValue, ok);
+                    activeValue = store;
+                }
                 if (ok)
                     message->setProperty(iter->second, newPropertyValue);
             }
@@ -773,6 +802,12 @@ bool QProtobufJsonSerializer::deserializeMapPair(QVariant &key, QVariant &value)
         Q_ASSERT(messageProperty != nullptr);
         d_ptr->activeValue = jsonValue;
         deserializeObject(messageProperty);
+    } else if (metaType.flags() & QMetaType::IsEnumeration) {
+        const auto metaEnum = QProtobufJsonSerializerPrivate::getMetaEnum(metaType);
+        Q_ASSERT(metaEnum.isValid());
+        value.setValue(d_ptr->deserializeEnum(jsonValue, metaEnum, ok));
+        if (!ok)
+            d_ptr->setInvalidFormatError();
     } else if (it = d_ptr->handlers.constFind(value.userType()); it != d_ptr->handlers.constEnd()) {
         ok = false;
         value = it.value().deserializer(jsonValue, ok);
@@ -799,18 +834,6 @@ bool QProtobufJsonSerializer::deserializeMapPair(QVariant &key, QVariant &value)
     return true;
 }
 
-void QProtobufJsonSerializer::serializeEnum(QtProtobuf::int64 value, const QMetaEnum &metaEnum,
-                                            const QtProtobufPrivate::QProtobufFieldInfo
-                                                &fieldInfo) const
-{
-    if (value == 0 && !isOneofOrOptionalField(fieldInfo))
-        return;
-
-    QJsonObject activeObject = d_ptr->activeValue.toObject();
-    activeObject.insert(fieldInfo.getJsonName().toString(), QString::fromUtf8(metaEnum.key(value)));
-    d_ptr->activeValue = activeObject;
-}
-
 void QProtobufJsonSerializer::
     serializeEnumList(const QList<QtProtobuf::int64> &values, const QMetaEnum &metaEnum,
                       const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
@@ -824,17 +847,6 @@ void QProtobufJsonSerializer::
     QJsonObject activeObject = d_ptr->activeValue.toObject();
     activeObject.insert(fieldInfo.getJsonName().toString(), arr);
     d_ptr->activeValue = activeObject;
-}
-
-bool QProtobufJsonSerializer::deserializeEnum(QtProtobuf::int64 &value,
-                                              const QMetaEnum &metaEnum) const
-{
-    bool ok = false;
-    value = d_ptr->deserializeEnum(d_ptr->activeValue, metaEnum, ok);
-    if (!ok)
-        d_ptr->setInvalidFormatError();
-    d_ptr->activeValue = {};
-    return ok;
 }
 
 bool QProtobufJsonSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value,

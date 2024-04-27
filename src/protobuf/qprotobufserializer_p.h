@@ -540,6 +540,12 @@ isOneofOrOptionalField(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
         || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
 }
 
+inline bool isEnumField(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
+{
+    return fieldInfo.getFieldFlags() & QtProtobufPrivate::FieldFlag::Enum
+        && !(fieldInfo.getFieldFlags() & QtProtobufPrivate::FieldFlag::Repeated);
+}
+
 QT_END_NAMESPACE
 
 #endif // QPROTOBUFSERIALIZER_P_H

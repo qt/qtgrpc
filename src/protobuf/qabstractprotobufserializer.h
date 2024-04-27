@@ -51,13 +51,9 @@ public:
     virtual bool deserializeMapPair(QVariant &key, QVariant &value) const = 0;
 
     virtual void
-    serializeEnum(QtProtobuf::int64 value, const QMetaEnum &metaEnum,
-                  const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const = 0;
-    virtual void
     serializeEnumList(const QList<QtProtobuf::int64> &value, const QMetaEnum &metaEnum,
                       const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const = 0;
 
-    virtual bool deserializeEnum(QtProtobuf::int64 &value, const QMetaEnum &metaEnum) const = 0;
     virtual bool deserializeEnumList(QList<QtProtobuf::int64> &value,
                                      const QMetaEnum &metaEnum) const = 0;
 protected:

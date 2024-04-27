@@ -367,7 +367,14 @@ void QProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &
                     ->serializer(key,
                                  QProtobufSerializerPrivate::encodeHeader(1,
                                                                           keyHandler->wireType)));
-    d_ptr->serializeProperty(value, QProtobufSerializerPrivate::mapValueOrdering);
+    if (value.metaType().flags() & QMetaType::IsEnumeration) {
+        d_ptr->result
+            .append(QProtobufSerializerPrivate::encodeHeader(2, QtProtobuf::WireTypes::Varint));
+        d_ptr->result.append(QProtobufSerializerPrivate::serializeBasic<
+                             QtProtobuf::int64>(value.value<int64_t>()));
+    } else {
+        d_ptr->serializeProperty(value, QProtobufSerializerPrivate::mapValueOrdering);
+    }
     store.append(QProtobufSerializerPrivate::encodeHeader(fieldInfo.getFieldNumber(),
                                                           QtProtobuf::WireTypes::LengthDelimited));
     store.append(QProtobufSerializerPrivate::serializeVarintCommon<uint32_t>(d_ptr->result.size()));
@@ -378,18 +385,6 @@ void QProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &
 bool QProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value) const
 {
     return d_ptr->deserializeMapPair(key, value);
-}
-
-void QProtobufSerializer::serializeEnum(QtProtobuf::int64 value, const QMetaEnum &,
-                                        const QProtobufFieldInfo &fieldInfo) const
-{
-    if (value == 0 && !isOneofOrOptionalField(fieldInfo))
-        return;
-
-    QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Varint;
-    int fieldNumber = fieldInfo.getFieldNumber();
-    d_ptr->result.append(QProtobufSerializerPrivate::encodeHeader(fieldNumber, type)
-                         + QProtobufSerializerPrivate::serializeBasic<QtProtobuf::int64>(value));
 }
 
 void QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
@@ -410,17 +405,6 @@ void QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &valu
         d_ptr->result
             .append(header
                     + QProtobufSerializerPrivate::serializeListType<QtProtobuf::int64>(value));
-}
-
-bool QProtobufSerializer::deserializeEnum(QtProtobuf::int64 &value, const QMetaEnum &) const
-{
-    QVariant variantValue;
-    if (!QProtobufSerializerPrivate::deserializeBasic<QtProtobuf::int64>(d_ptr->it, variantValue)) {
-        d_ptr->setUnexpectedEndOfStreamError();
-        return false;
-    }
-    value = variantValue.value<QtProtobuf::int64>();
-    return true;
 }
 
 bool QProtobufSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value,
@@ -561,6 +545,17 @@ void QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue
         return;
     }
 
+    if (isEnumField(fieldInfo)) {
+        auto value = propertyValue.value<int64_t>();
+        if (value == 0 && !isOneofOrOptionalField(fieldInfo))
+            return;
+        result.append(QProtobufSerializerPrivate::encodeHeader(fieldInfo.getFieldNumber(),
+                                                               QtProtobuf::WireTypes::Varint));
+        result.append(QProtobufSerializerPrivate::serializeBasic<
+                      QtProtobuf::int64>(propertyValue.value<int64_t>()));
+        return;
+    }
+
     auto basicHandler = findIntegratedTypeHandler(
             metaType, fieldInfo.getFieldFlags() & QtProtobufPrivate::NonPacked);
     if (basicHandler) {
@@ -636,6 +631,12 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
         auto *messageProperty = newPropertyValue.value<QProtobufMessage *>();
         Q_ASSERT(messageProperty != nullptr);
         if (deserializeObject(messageProperty))
+            return message->setProperty(fieldInfo, std::move(newPropertyValue));
+        return false;
+    }
+
+    if (isEnumField(fieldInfo)) {
+        if (deserializeBasic<QtProtobuf::int64>(it, newPropertyValue))
             return message->setProperty(fieldInfo, std::move(newPropertyValue));
         return false;
     }
@@ -733,7 +734,11 @@ bool QProtobufSerializerPrivate::deserializeMapPair(QVariant &key, QVariant &val
                 auto *messageProperty = value.value<QProtobufMessage *>();
                 Q_ASSERT(messageProperty != nullptr);
                 deserializeObject(messageProperty);
-            } else if (auto basicHandler = findIntegratedTypeHandler(metaType, false); basicHandler) {
+            } else if (metaType.flags() & QMetaType::IsEnumeration) {
+                if (!deserializeBasic<QtProtobuf::int64>(it, value))
+                    return false;
+            } else if (auto basicHandler = findIntegratedTypeHandler(metaType, false);
+                       basicHandler) {
                 basicHandler->deserializer(it, value);
             } else {
                 auto handler = QtProtobufPrivate::findHandler(metaType);

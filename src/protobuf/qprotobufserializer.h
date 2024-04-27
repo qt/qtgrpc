@@ -40,14 +40,10 @@ private:
         const override;
     bool deserializeMapPair(QVariant &key, QVariant &value) const override;
 
-    void
-    serializeEnum(QtProtobuf::int64 value, const QMetaEnum &metaEnum,
-                  const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const override;
     void serializeEnumList(const QList<QtProtobuf::int64> &value, const QMetaEnum &metaEnum,
                            const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
         const override;
 
-    bool deserializeEnum(QtProtobuf::int64 &value, const QMetaEnum &metaEnum) const override;
     bool deserializeEnumList(QList<QtProtobuf::int64> &value,
                              const QMetaEnum &metaEnum) const override;
 

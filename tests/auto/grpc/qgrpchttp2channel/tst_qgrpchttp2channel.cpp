@@ -49,16 +49,10 @@ protected:
     }
     bool deserializeMapPair(QVariant &, QVariant &) const override { return true; }
 
-    void serializeEnum(QtProtobuf::int64, const QMetaEnum &,
-                       const QtProtobufPrivate::QProtobufFieldInfo &) const override
-    {
-    }
     void serializeEnumList(const QList<QtProtobuf::int64> &, const QMetaEnum &,
                            const QtProtobufPrivate::QProtobufFieldInfo &) const override
     {
     }
-
-    bool deserializeEnum(QtProtobuf::int64 &, const QMetaEnum &) const override { return true; }
 
     bool deserializeEnumList(QList<QtProtobuf::int64> &, const QMetaEnum &) const override
     {

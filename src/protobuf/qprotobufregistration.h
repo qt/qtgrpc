@@ -85,16 +85,6 @@ void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant 
 }
 
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void serializeEnum(const QAbstractProtobufSerializer *serializer, const QVariant &value,
-                   const QProtobufFieldInfo &fieldInfo)
-{
-    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
-    static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
-    serializer->serializeEnum(QtProtobuf::int64(value.value<T>()), metaEnum,
-                              fieldInfo);
-}
-
-template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
 void serializeEnumList(const QAbstractProtobufSerializer *serializer, const QVariant &value,
                        const QProtobufFieldInfo &fieldInfo)
 {
@@ -161,16 +151,6 @@ void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &pre
 }
 
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void deserializeEnum(const QAbstractProtobufSerializer *serializer, QVariant &to)
-{
-    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
-    static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
-    QtProtobuf::int64 intValue;
-    if (serializer->deserializeEnum(intValue, metaEnum))
-        to = QVariant::fromValue<T>(static_cast<T>(intValue._t));
-}
-
-template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
 void deserializeEnumList(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
     Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
@@ -212,9 +192,6 @@ inline void qRegisterProtobufEnumType();
 template<typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
 inline void qRegisterProtobufEnumType()
 {
-    QtProtobufPrivate::registerHandler(
-        QMetaType::fromType<T>(),
-        { QtProtobufPrivate::serializeEnum<T>, QtProtobufPrivate::deserializeEnum<T> });
     QtProtobufPrivate::registerHandler(
         QMetaType::fromType<QList<T>>(),
         { QtProtobufPrivate::serializeEnumList<T>, QtProtobufPrivate::deserializeEnumList<T> });
