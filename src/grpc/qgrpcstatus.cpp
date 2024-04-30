@@ -151,6 +151,12 @@ QGrpcStatus::operator QVariant() const
 */
 
 /*!
+    \since 6.8
+    \fn bool QGrpcStatus::isOk() const noexcept
+    Returns \c true if code() is equal to \l {Ok}.
+*/
+
+/*!
     \fn bool QGrpcStatus::operator==(const QGrpcStatus &lhs, const StatusCode &rhs) noexcept
     Returns \c true if the status codes in \a lhs and \a rhs are equal.
 */
