@@ -65,6 +65,7 @@ public:
 
     [[nodiscard]] StatusCode code() const noexcept { return m_code; }
     [[nodiscard]] QString message() const noexcept { return m_message; }
+    [[nodiscard]] bool isOk() const noexcept { return code() == Ok; }
 
 private:
     QGrpcStatus::StatusCode m_code;

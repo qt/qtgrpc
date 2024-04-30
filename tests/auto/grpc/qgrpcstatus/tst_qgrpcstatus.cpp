@@ -27,6 +27,7 @@ void QGrpcStatusTest::defaultConstructedIsOk() const
     QGrpcStatus s1;
     QVERIFY(s1.message().isEmpty());
     QCOMPARE_EQ(s1.code(), QGrpcStatus::Ok);
+    QVERIFY(s1.isOk());
 
     QGrpcStatus s2(QGrpcStatus::Ok);
     QCOMPARE_EQ(s1.code(), s2.code());
@@ -44,6 +45,7 @@ void QGrpcStatusTest::hasSpecialMemberFunctions() const
     QGrpcStatus s1 = { QGrpcStatus::PermissionDenied, msg };
     QCOMPARE_EQ(s1.code(), QGrpcStatus::PermissionDenied);
     QCOMPARE_EQ(s1.message(), msg);
+    QVERIFY(!s1.isOk());
 
     QGrpcStatus s2(s1);
     check(s1, s2);
