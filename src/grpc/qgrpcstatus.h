@@ -5,20 +5,24 @@
 #ifndef QGRPCSTATUS_H
 #define QGRPCSTATUS_H
 
-#include <QtCore/qmetatype.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qobjectdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
-#include <memory>
+#include <QtCore/qanystringview.h>
+#include <QtCore/qcompare.h>
+#include <QtCore/qmetatype.h>
+#include <QtCore/qobjectdefs.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qtclasshelpermacros.h>
 
 QT_BEGIN_NAMESPACE
 
-class QGrpcStatusPrivate;
+class QDataStream;
+class QDebug;
+class QVariant;
 
-class Q_GRPC_EXPORT QGrpcStatus final
+class QGrpcStatus final
 {
-    Q_GADGET
+    Q_GADGET_EXPORT(Q_GRPC_EXPORT)
     Q_PROPERTY(StatusCode code READ code CONSTANT)
     Q_PROPERTY(QString message READ message CONSTANT)
 
@@ -42,45 +46,57 @@ public:
         DataLoss = 15,
         Unauthenticated = 16,
     };
-
     Q_ENUM(StatusCode)
 
-    explicit QGrpcStatus(StatusCode code = StatusCode::Ok);
-    explicit QGrpcStatus(StatusCode code, const QString &message);
-    ~QGrpcStatus();
+    Q_GRPC_EXPORT Q_IMPLICIT QGrpcStatus(StatusCode code = Ok, QAnyStringView message = {});
+    Q_GRPC_EXPORT ~QGrpcStatus();
+    Q_GRPC_EXPORT QGrpcStatus(const QGrpcStatus &other);
+    Q_GRPC_EXPORT QGrpcStatus &operator=(const QGrpcStatus &other);
+    QGrpcStatus(QGrpcStatus &&other) noexcept = default;
+    QGrpcStatus &operator=(QGrpcStatus &&other) noexcept = default;
 
-    QGrpcStatus(const QGrpcStatus &other);
-    QGrpcStatus &operator=(const QGrpcStatus &other);
+    Q_GRPC_EXPORT Q_IMPLICIT operator QVariant() const;
 
-    QGrpcStatus(QGrpcStatus &&other);
-    QGrpcStatus &operator=(QGrpcStatus &&other);
+    void swap(QGrpcStatus &other) noexcept
+    {
+        std::swap(m_code, other.m_code);
+        m_message.swap(other.m_message);
+    }
 
-    [[nodiscard]] StatusCode code() const noexcept;
-    [[nodiscard]] QString message() const noexcept;
+    [[nodiscard]] StatusCode code() const noexcept { return m_code; }
+    [[nodiscard]] QString message() const noexcept { return m_message; }
 
 private:
-    friend bool operator==(const QGrpcStatus &lhs, QGrpcStatus::StatusCode code)
+    QGrpcStatus::StatusCode m_code;
+    QString m_message;
+
+    friend bool comparesEqual(const QGrpcStatus &lhs, StatusCode rhs) noexcept
     {
-        return lhs.code() == code;
+        return lhs.code() == rhs;
     }
-    friend bool operator!=(const QGrpcStatus &lhs, QGrpcStatus::StatusCode code)
-    {
-        return lhs.code() != code;
-    }
-    friend bool operator==(const QGrpcStatus &lhs, const QGrpcStatus &rhs)
+    friend bool comparesEqual(const QGrpcStatus &lhs, const QGrpcStatus &rhs) noexcept
     {
         return lhs.code() == rhs.code();
     }
-    friend bool operator!=(const QGrpcStatus &lhs, const QGrpcStatus &rhs)
+    Q_DECLARE_EQUALITY_COMPARABLE(QGrpcStatus, StatusCode)
+    Q_DECLARE_EQUALITY_COMPARABLE(QGrpcStatus)
+
+    friend size_t qHash(const QGrpcStatus &key, size_t seed = 0) noexcept
     {
-        return lhs.code() == rhs.code();
+        return qHash(key.code(), seed);
     }
 
-    std::unique_ptr<QGrpcStatusPrivate> dPtr;
+#ifndef QT_NO_DEBUG_STREAM
+    friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcStatus &status);
+#endif
+#ifndef QT_NO_DATASTREAM
+    friend Q_GRPC_EXPORT QDataStream &operator<<(QDataStream &out, const QGrpcStatus &status);
+    friend Q_GRPC_EXPORT QDataStream &operator>>(QDataStream &in, QGrpcStatus &status);
+#endif
 };
 
-QT_END_NAMESPACE
+Q_DECLARE_SHARED(QGrpcStatus)
 
-Q_DECLARE_METATYPE(QGrpcStatus)
+QT_END_NAMESPACE
 
 #endif // QGRPCSTATUS_H

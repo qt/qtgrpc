@@ -2,20 +2,38 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include "qgrpcstatus.h"
+#include <QtGrpc/qgrpcstatus.h>
+
+#include <QtCore/qdatastream.h>
+#include <QtCore/qdebug.h>
+#include <QtCore/qvariant.h>
 
 QT_BEGIN_NAMESPACE
 
 /*!
     \class QGrpcStatus
     \inmodule QtGrpc
+    \compares equality
+    \compareswith equality StatusCode
+    \endcompareswith
 
-    \brief The QGrpcStatus class contains information about last gRPC operation.
+    \brief This class combines a \l StatusCode and a string message.
 
-    In case of error in call/stream processing QGrpcStatus will contain code
-    any of non-Ok QGrpcStatus::StatusCode.
-    This class combines QGrpcStatus::StatusCode and message returned from
-    channel or QGrpc framework.
+    The QGrpcStatus class contains information about the last gRPC operation
+    returned from the respective channel, or other functions in the QtGrpc
+    library.
+
+    If a RPC operation failed, contains a \l StatusCode other than \l {Ok}.
+*/
+
+/*!
+    \property QGrpcStatus::code
+    \brief QGrpcStatus::StatusCode received for prior gRPC call.
+*/
+
+/*!
+    \property QGrpcStatus::message
+    \brief Status message received for prior gRPC call.
 */
 
 /*!
@@ -64,112 +82,143 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn bool QGrpcStatus::operator==(const QGrpcStatus &lhs, QGrpcStatus::StatusCode code)
-    Returns \c true if \a lhs status code and \a code are equal.
+    Constructs a QGrpcStatus with the status code \a code and the string \a
+    message.
 */
-
-/*!
-    \fn bool QGrpcStatus::operator!=(const QGrpcStatus &lhs, QGrpcStatus::StatusCode code)
-    Returns \c true if \a lhs status code and \a code are not equal.
-*/
-
-/*!
-    \fn bool QGrpcStatus::operator==(const QGrpcStatus &lhs, const QGrpcStatus &rhs)
-    Returns \c true if \a lhs status code and \a rhs status code are equal.
-*/
-
-/*!
-    \fn bool QGrpcStatus::operator!=(const QGrpcStatus &lhs, const QGrpcStatus &rhs)
-    Returns \c true if \a lhs status code and \a rhs status code are not equal.
-*/
-
-class QGrpcStatusPrivate
-{
-public:
-    QGrpcStatusPrivate(QGrpcStatus::StatusCode code) : m_code(code) { }
-
-    QGrpcStatusPrivate(QGrpcStatus::StatusCode code, const QString &message)
-        : m_code(code), m_message(message)
-    {
-    }
-
-    ~QGrpcStatusPrivate() = default;
-
-    QGrpcStatus::StatusCode m_code;
-    QString m_message;
-};
-
-/*!
-    Creates an instance of QGrpcStatus with a status \a code only.
-*/
-QGrpcStatus::QGrpcStatus(StatusCode code) : dPtr(std::make_unique<QGrpcStatusPrivate>(code))
+QGrpcStatus::QGrpcStatus(StatusCode code, QAnyStringView message)
+    : m_code(code), m_message(message.toString())
 {
 }
 
 /*!
-    Creates an instance of QGrpcStatus with a status \a code and a \a message.
-*/
-QGrpcStatus::QGrpcStatus(StatusCode code, const QString &message)
-    : dPtr(std::make_unique<QGrpcStatusPrivate>(code, message))
-{
-}
-
-/*!
-    Copies the \a other QGrpcStatus to this QGrpcStatus.
-*/
-QGrpcStatus::QGrpcStatus(const QGrpcStatus &other)
-    : dPtr(std::make_unique<QGrpcStatusPrivate>(other.dPtr->m_code, other.dPtr->m_message))
-{
-}
-
-/*!
-    Moves \a other into new instance of QGrpcStatus.
-*/
-QGrpcStatus::QGrpcStatus(QGrpcStatus &&other) : dPtr(std::move(other.dPtr))
-{
-}
-
-/*!
-    Assigns the \a other QGrpcStatus into this QGrpcStatus.
-*/
-QGrpcStatus &QGrpcStatus::operator=(const QGrpcStatus &other)
-{
-    dPtr->m_code = other.dPtr->m_code;
-    dPtr->m_message = other.dPtr->m_message;
-    return *this;
-}
-
-/*!
-    Move assigns \a other into new instance of QGrpcStatus.
-*/
-QGrpcStatus &QGrpcStatus::operator=(QGrpcStatus &&other)
-{
-    dPtr = std::move(other.dPtr);
-    return *this;
-}
-
-/*!
-    Destroys the QGrpcStatus.
+    Destroys the status object.
 */
 QGrpcStatus::~QGrpcStatus() = default;
 
 /*!
-    \property QGrpcStatus::code
-    \brief QGrpcStatus::StatusCode received for prior gRPC call.
+    Copy-constructs a QGrpcStatus from \a other
 */
-QGrpcStatus::StatusCode QGrpcStatus::code() const noexcept
+QGrpcStatus::QGrpcStatus(const QGrpcStatus &other) = default;
+
+/*!
+    Assigns the data of the \a other object to this status object and returns
+    a reference to it.
+*/
+QGrpcStatus &QGrpcStatus::operator=(const QGrpcStatus &other) = default;
+
+/*!
+    \fn QGrpcStatus::QGrpcStatus(QGrpcStatus &&other) noexcept
+    Move-constructs a new QGrpcStatus from \a other.
+
+    \note The moved-from object \a other is placed in a partially-formed state,
+    in which the only valid operations are destruction and assignment of a new
+    value.
+*/
+
+/*!
+    \fn QGrpcStatus& QGrpcStatus::operator=(QGrpcStatus &&other) noexcept
+    Move-assigns \a other to this QGrpcStatus instance and returns a reference
+    to it.
+
+    \note The moved-from object \a other is placed in a partially-formed state,
+    in which the only valid operations are destruction and assignment of a new
+    value.
+*/
+
+/*!
+    \since 6.8
+    Constructs a new QVariant object from this QGrpcStatus.
+*/
+QGrpcStatus::operator QVariant() const
 {
-    return dPtr->m_code;
+    return QVariant::fromValue(*this);
 }
 
 /*!
-    \property QGrpcStatus::message
-    \brief Status message received for prior gRPC call.
+    \since 6.8
+    \fn void QGrpcStatus::swap(QGrpcStatus &other) noexcept
+    Swaps this instance with \a other. This operation is very fast and never fails.
 */
-QString QGrpcStatus::message() const noexcept
+
+/*!
+    \fn QGrpcStatus::StatusCode QGrpcStatus::code() const noexcept
+    Returns the contained \l StatusCode.
+*/
+
+/*!
+    \fn QString QGrpcStatus::message() const noexcept
+    Returns the contained status message.
+*/
+
+/*!
+    \fn bool QGrpcStatus::operator==(const QGrpcStatus &lhs, const StatusCode &rhs) noexcept
+    Returns \c true if the status codes in \a lhs and \a rhs are equal.
+*/
+
+/*!
+    \fn bool QGrpcStatus::operator!=(const QGrpcStatus &lhs, const StatusCode &rhs) noexcept
+    Returns \c true if the status codes in \a lhs and \a rhs are not equal.
+*/
+
+/*!
+    \fn bool QGrpcStatus::operator==(const QGrpcStatus &lhs, const QGrpcStatus &rhs) noexcept
+    Returns \c true if the status codes in \a lhs and \a rhs are equal.
+*/
+
+/*!
+    \fn bool QGrpcStatus::operator!=(const QGrpcStatus &lhs, const QGrpcStatus &rhs) noexcept
+    Returns \c true if the status codes in \a lhs and \a rhs are not equal.
+*/
+
+/*!
+    \since 6.8
+    \fn size_t QGrpcStatus::qHash(const QGrpcStatus &key, size_t seed) noexcept
+    Returns the hash value of \a key, using \a seed to seed the calculation.
+*/
+
+#ifndef QT_NO_DEBUG_STREAM
+
+/*!
+    \since 6.8
+    \fn QDebug QGrpcStatus::operator<<(QDebug debug, const QGrpcStatus& status)
+    Writes \a status to the specified stream \a debug.
+*/
+QDebug operator<<(QDebug debug, const QGrpcStatus &status)
 {
-    return dPtr->m_message;
+    const QDebugStateSaver save(debug);
+    debug.nospace() << "QGrpcStatus( code: " << status.code() << ", message: " << status.message()
+                    << " )";
+    return debug;
 }
+
+#endif // QT_NO_DEBUG_STREAM
+
+#ifndef QT_NO_DATASTREAM
+
+/*!
+    \since 6.8
+    \fn QDataStream &QGrpcStatus::operator<<(QDataStream &out, const QGrpcStatus &status)
+    Writes the given \a status to the specified stream \a out.
+*/
+QDataStream &operator<<(QDataStream &out, const QGrpcStatus &status)
+{
+    out << status.m_code << status.m_message;
+    return out;
+}
+
+/*!
+    \since 6.8
+    \fn QDataStream &QGrpcStatus::operator>>(QDataStream &in, QGrpcStatus &status)
+    Reads a QGrpcStatus from stream \a in into \a status.
+*/
+QDataStream &operator>>(QDataStream &in, QGrpcStatus &status)
+{
+    in >> status.m_code;
+    in >> status.m_message;
+    return in;
+}
+
+#endif // QT_NO_DATASTREAM
 
 QT_END_NAMESPACE
 
