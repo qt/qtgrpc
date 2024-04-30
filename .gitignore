@@ -139,5 +139,8 @@ CTestTestfile.cmake
 CMakeLists.txt.user
 **build*
 
-#vscode specifi
-.vscode
+# vscode specific
+.vscode/
+
+# intellij specific
+.idea/
