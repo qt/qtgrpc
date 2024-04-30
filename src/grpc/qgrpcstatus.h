@@ -32,7 +32,6 @@ public:
         NotFound = 5,
         AlreadyExists = 6,
         PermissionDenied = 7,
-        Unauthenticated = 16,
         ResourceExhausted = 8,
         FailedPrecondition = 9,
         Aborted = 10,
@@ -41,6 +40,7 @@ public:
         Internal = 13,
         Unavailable = 14,
         DataLoss = 15,
+        Unauthenticated = 16,
     };
 
     Q_ENUM(StatusCode)
