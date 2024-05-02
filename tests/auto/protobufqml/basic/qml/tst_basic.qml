@@ -880,6 +880,8 @@ TestCase {
     }
 
     function test_sfixed32LocaleStringConversion(data) {
+        if (Qt.locale().name != "en_US")
+            skip("This test prints garbage on non-en_US locales (see QTBUG-124915)")
         expectFail("sfixed32LocaleString number is not match",
                    sfixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale())
                    + " not equal "
