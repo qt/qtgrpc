@@ -75,9 +75,8 @@ target to the protobuf one:
 \section1 Arguments
 \list
     \li \c TARGET_TYPE is the type of gRPC code to be generated.
-        Since gRPC supports a client-server architecture, \c CLIENT or
-        \c SERVER source code may be generated.
-        \note for Qt 6.5 only \c CLIENT source code generation is supported.
+        Although gRPC supports a client-server architecture, only
+        CLIENT source code can be generated.
     \include qtgrpcgen-options.qdocinc 0
     \include qtprotoccommon-options.qdocinc 0
     \include qtprotogen-cmake-options.qdocinc 0
