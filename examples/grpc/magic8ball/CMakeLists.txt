@@ -61,6 +61,7 @@ target_link_libraries(magic8ball PRIVATE
     Qt6::Protobuf
     Qt6::Grpc
     Qt6::GrpcQuick
+    magic8ball_plugin
 )
 
 install(TARGETS magic8ball
