@@ -21,7 +21,7 @@ TestCase {
     property b shortBName;
     property a shortAName;
 
-    function test_1init() {
+    function initTestCase() {
         localEnumMessage.localEnum = SimpleEnumMessage.LOCAL_ENUM_VALUE3
         localEnumMessage2.localEnum = EnumPack_.SimpleEnumMessage.LOCAL_ENUM_VALUE3
 

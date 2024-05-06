@@ -32,7 +32,7 @@ TestCase {
     // Messages with fields not compatible with QML
     property simpleBytesMessage bytesMessage;
 
-    function test_1initialization() {
+    function initTestCase() {
         // 32 size
         int32Msg.testFieldInt = 2147483647
         sint32Msg.testFieldInt = 2147483647

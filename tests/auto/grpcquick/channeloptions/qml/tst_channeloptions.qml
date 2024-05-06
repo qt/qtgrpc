@@ -57,7 +57,7 @@ Item {
         id: optionsCase
         name: "qtgrpcSslChannelOptionsTest"
 
-        function test_1initialization()
+        function initTestCase()
         {
             if (!sslSupport) {
                 warn("No SSL support detected!")

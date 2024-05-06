@@ -13,7 +13,7 @@ TestCase {
     property simpleIntMessageExt intMsgExt;
     property emptyMessage emptyMsg;
 
-    function test_1init() {
+    function initTestCase() {
         noPackageMessageUser.testField.testFieldInt = 42
         noPackageExternal.testField.testFieldInt = 100
         intMsgExt.testFieldInt = -100
