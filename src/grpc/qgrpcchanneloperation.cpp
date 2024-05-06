@@ -161,6 +161,14 @@ QGrpcChannelOperation::serializer() const noexcept
 }
 
 /*!
+    Returns the client metadata that is being sent to the server.
+*/
+const QGrpcMetadata &QGrpcChannelOperation::clientMetadata() const noexcept
+{
+    return d_func()->options.metadata();
+}
+
+/*!
     Returns the metadata that is received from server.
 
     The method is used implicitly by \l QGrpcOperation counterpart.
