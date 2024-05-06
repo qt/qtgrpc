@@ -30,7 +30,7 @@ TestCase {
     property complexMessage msg2;
     property complexMessage msg3;
 
-    function test_1init() {
+    function initTestCase() {
         msg1.testComplexField = "complexMessage 1"
         msg2.testComplexField = "complexMessage 2"
 
