@@ -4,6 +4,8 @@
 #include <QtGrpc/private/qtgrpcglobal_p.h>
 #include <QtGrpc/qgrpccalloptions.h>
 
+#include <QtCore/qdebug.h>
+
 QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
@@ -124,5 +126,21 @@ QGrpcMetadata QGrpcCallOptions::metadata() && noexcept
     return std::move(dPtr->metadata);
 }
 
+#ifndef QT_NO_DEBUG_STREAM
+/*!
+    \since 6.8
+    \fn QDebug QGrpcCallOptions::operator<<(QDebug debug, const QGrpcCallOptions &callOpts)
+    Writes \a callOpts to the specified stream \a debug.
+*/
+QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts)
+{
+    QDebugStateSaver save(debug);
+    debug.nospace();
+    debug.noquote();
+    debug << "QGrpcCallOptions(deadline: " << callOpts.deadline()
+          << ", metadata: " << callOpts.metadata() << ')';
+    return debug;
+}
+#endif
 
 QT_END_NAMESPACE

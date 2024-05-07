@@ -12,6 +12,7 @@
 
 QT_BEGIN_NAMESPACE
 
+class QDebug;
 class QGrpcCallOptionsPrivate;
 
 class QGrpcCallOptions final
@@ -35,6 +36,10 @@ public:
 
 private:
     std::unique_ptr<QGrpcCallOptionsPrivate> dPtr;
+
+#ifndef QT_NO_DEBUG_STREAM
+    friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts);
+#endif
 };
 
 QT_END_NAMESPACE
