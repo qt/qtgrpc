@@ -1,12 +1,12 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <QtGrpc/qgrpcchanneloperation.h>
 #include <QtGrpc/qgrpccalloptions.h>
+#include <QtGrpc/qgrpcchanneloperation.h>
 #include <QtGrpc/qgrpcstatus.h>
+#include <QtProtobuf/qprotobufserializer.h>
 
 #include <QtCore/private/qobject_p.h>
-#include <QtProtobuf/qprotobufserializer.h>
 
 #include <utility>
 
@@ -93,16 +93,16 @@ class QGrpcChannelOperationPrivate : public QObjectPrivate
     Q_DECLARE_PUBLIC(QGrpcChannelOperation)
 public:
     QGrpcChannelOperationPrivate(QLatin1StringView method_, QLatin1StringView service_,
-                                 QByteArrayView arg_, QGrpcCallOptions options_,
-                                 std::shared_ptr<QAbstractProtobufSerializer> serializer_)
-        : method(method_), service(service_), arg(arg_.toByteArray()), options(std::move(options_)),
-          serializer(std::move(serializer_))
+                                 QByteArrayView argument_, QGrpcCallOptions options_,
+                                 std::shared_ptr<QAbstractProtobufSerializer> &&serializer_)
+        : method(method_), service(service_), argument(argument_.toByteArray()),
+          options(std::move(options_)), serializer(std::move(serializer_))
     {
     }
 
     QLatin1StringView method;
     QLatin1StringView service;
-    QByteArray arg;
+    QByteArray argument;
     QGrpcCallOptions options;
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
     QGrpcMetadata serverMetadata;
@@ -140,7 +140,7 @@ QLatin1StringView QGrpcChannelOperation::service() const noexcept
 */
 QByteArrayView QGrpcChannelOperation::argument() const noexcept
 {
-    return d_func()->arg;
+    return d_func()->argument;
 }
 
 /*!
@@ -186,7 +186,7 @@ const QGrpcMetadata &QGrpcChannelOperation::serverMetadata() const noexcept
 void QGrpcChannelOperation::setArgument(QByteArrayView arg)
 {
     Q_D(QGrpcChannelOperation);
-    d->arg = arg.toByteArray();
+    d->argument = arg.toByteArray();
 }
 
 /*!

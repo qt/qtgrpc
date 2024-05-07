@@ -4,17 +4,19 @@
 #ifndef QGRPCCHANNELOPERATION_H
 #define QGRPCCHANNELOPERATION_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qlatin1stringview.h>
-#include <QtCore/qbytearrayview.h>
 #include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
+#include <QtProtobuf/qabstractprotobufserializer.h>
+
+#include <QtCore/qbytearray.h>
+#include <QtCore/qbytearrayview.h>
+#include <QtCore/qlatin1stringview.h>
+#include <QtCore/qobject.h>
 
 #include <memory>
 
 QT_BEGIN_NAMESPACE
 
-class QAbstractProtobufSerializer;
 class QGrpcCallOptions;
 class QGrpcChannelOperationPrivate;
 class QGrpcStatus;
@@ -24,7 +26,7 @@ class Q_GRPC_EXPORT QGrpcChannelOperation final : public QObject
     Q_OBJECT
 public:
     explicit QGrpcChannelOperation(QLatin1StringView method, QLatin1StringView service,
-                                   QByteArrayView arg, const QGrpcCallOptions &options,
+                                   QByteArrayView argument, const QGrpcCallOptions &options,
                                    std::shared_ptr<QAbstractProtobufSerializer> serializer);
     ~QGrpcChannelOperation() override;
 
