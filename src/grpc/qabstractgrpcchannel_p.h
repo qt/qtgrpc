@@ -21,10 +21,11 @@
 
 QT_BEGIN_NAMESPACE
 
-struct QAbstractGrpcChannelPrivate
+class QAbstractGrpcChannelPrivate
 {
-    QAbstractGrpcChannelPrivate(const QGrpcChannelOptions &options)
-        : threadId(QThread::currentThreadId()), channelOptions(std::move(options))
+public:
+    explicit QAbstractGrpcChannelPrivate(const QGrpcChannelOptions &options)
+        : threadId(QThread::currentThreadId()), channelOptions(options)
     {
     }
     const Qt::HANDLE threadId;

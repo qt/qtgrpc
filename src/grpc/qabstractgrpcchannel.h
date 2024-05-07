@@ -18,7 +18,7 @@
 QT_BEGIN_NAMESPACE
 
 class QAbstractProtobufSerializer;
-struct QAbstractGrpcChannelPrivate;
+class QAbstractGrpcChannelPrivate;
 class QGrpcBidirStream;
 class QGrpcCallReply;
 class QGrpcChannelOperation;
