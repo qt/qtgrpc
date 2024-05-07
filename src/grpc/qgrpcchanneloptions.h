@@ -4,13 +4,12 @@
 #ifndef QGRPCHANNELOPTIONS_H
 #define QGRPCHANNELOPTIONS_H
 
-#include <QtCore/qurl.h>
 #include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
-
 #if QT_CONFIG(ssl)
 #  include <QtNetwork/qsslconfiguration.h>
 #endif
+#include <QtCore/qurl.h>
 
 #include <memory>
 #include <optional>
@@ -19,8 +18,7 @@ QT_BEGIN_NAMESPACE
 
 class QSslConfiguration;
 class QGrpcSerializationFormat;
-
-struct QGrpcChannelOptionsPrivate;
+class QGrpcChannelOptionsPrivate;
 
 class Q_GRPC_EXPORT QGrpcChannelOptions final
 {

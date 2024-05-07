@@ -1,10 +1,9 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <qtgrpcglobal_p.h>
-
-#include "qgrpcchanneloptions.h"
-#include "qgrpcserializationformat.h"
+#include <QtGrpc/private/qtgrpcglobal_p.h>
+#include <QtGrpc/qgrpcchanneloptions.h>
+#include <QtGrpc/qgrpcserializationformat.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -20,7 +19,7 @@ using namespace Qt::StringLiterals;
     options that are used by gRPC channels to communicate with the services.
 */
 
-struct QGrpcChannelOptionsPrivate
+class QGrpcChannelOptionsPrivate
 {
 public:
     QGrpcChannelOptionsPrivate(const QUrl &_host)
