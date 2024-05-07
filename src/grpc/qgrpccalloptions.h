@@ -4,7 +4,6 @@
 #ifndef QGRPCALLOPTIONS_H
 #define QGRPCALLOPTIONS_H
 
-#include <QtCore/qurl.h>
 #include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
@@ -13,7 +12,7 @@
 
 QT_BEGIN_NAMESPACE
 
-struct QGrpcCallOptionsPrivate;
+class QGrpcCallOptionsPrivate;
 
 class QGrpcCallOptions final
 {

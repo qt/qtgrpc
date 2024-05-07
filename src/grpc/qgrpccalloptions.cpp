@@ -1,9 +1,8 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <qtgrpcglobal_p.h>
-
-#include "qgrpccalloptions.h"
+#include <QtGrpc/private/qtgrpcglobal_p.h>
+#include <QtGrpc/qgrpccalloptions.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -19,7 +18,7 @@ using namespace Qt::StringLiterals;
     that are used by gRPC channels to communicate with the services.
 */
 
-struct QGrpcCallOptionsPrivate
+class QGrpcCallOptionsPrivate
 {
 public:
     std::optional<QGrpcDuration> deadline;
