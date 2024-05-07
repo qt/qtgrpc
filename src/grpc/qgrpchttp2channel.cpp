@@ -61,7 +61,7 @@ using namespace Qt::StringLiterals;
     \code
         auto channelJson = std::make_shared<
         QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
-                               .setMetadata({ { "content-type"_ba,
+                               .withMetadata({ { "content-type"_ba,
                                                  "application/grpc+json"_ba } }));
     \endcode
 
@@ -72,7 +72,7 @@ using namespace Qt::StringLiterals;
             ...
         };
         auto channel = std::make_shared<
-            QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
+            QGrpcHttp2Channel>(QUrl("http://localhost:50051", QUrl::StrictMode), QGrpcChannelOptions{}
                                .setSerializationFormat(QGrpcSerializationFormat{ "dummy",
                                                           std::make_shared<DummySerializer>() }));
     \endcode
@@ -117,12 +117,13 @@ struct QGrpcHttp2ChannelPrivate : public QObject
 {
     Q_OBJECT
 public:
-    explicit QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &options);
+    explicit QGrpcHttp2ChannelPrivate(const QUrl &uri, const QGrpcChannelOptions &options);
     ~QGrpcHttp2ChannelPrivate() override;
 
     void processOperation(const std::shared_ptr<QGrpcChannelOperation> &channelOperation,
                           bool endStream = false);
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
+    QUrl hostUri;
     QGrpcChannelOptions channelOptions;
 
 private:
@@ -406,11 +407,11 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::prepareInitialRequest(QGrpcChannelO
     QByteArray service{ channelOperation->service().data(), channelOperation->service().size() };
     QByteArray method{ channelOperation->method().data(), channelOperation->method().size() };
     m_initialHeaders = HPack::HttpHeader{
-        {AuthorityHeader.toByteArray(),           channelOptions.host().host().toLatin1() },
+        {AuthorityHeader.toByteArray(),           channel->hostUri.host().toLatin1()      },
         { MethodHeader.toByteArray(),             "POST"_ba                               },
         { PathHeader.toByteArray(),               QByteArray('/' + service + '/' + method)},
         { SchemeHeader.toByteArray(),
-         channel->m_isLocalSocket ? "http"_ba : channelOptions.host().scheme().toLatin1() },
+         channel->m_isLocalSocket ? "http"_ba : channel->hostUri.scheme().toLatin1()      },
         { ContentTypeHeader.toByteArray(),        channel->m_contentType                  },
         { GrpcServiceNameHeader.toByteArray(),    { service }                             },
         { GrpcAcceptEncodingHeader.toByteArray(), "identity,deflate,gzip"_ba              },
@@ -540,8 +541,9 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::finish()
 
 const std::unordered_map<quint32, QGrpcStatus::StatusCode> QGrpcHttp2ChannelPrivate::StatusCodeMap;
 
-QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &options)
-    : channelOptions(options)
+QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri,
+                                                   const QGrpcChannelOptions &options)
+    : hostUri(uri), channelOptions(options)
 {
     // Populate the map on first use of this constructor.
     [[maybe_unused]] static bool statusCodeMapInitialized = []() -> bool {
@@ -629,30 +631,29 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &op
                              QString::fromLatin1(it->second));
     }
 
-    QUrl url = channelOptions.host();
-    if (url.scheme() == "unix"_L1) {
+    if (hostUri.scheme() == "unix"_L1) {
         auto *localSocket = initSocket<QLocalSocket>();
         m_isLocalSocket = true;
 
         QObject::connect(localSocket, &QLocalSocket::connected, this,
                          &QGrpcHttp2ChannelPrivate::createHttp2Connection);
         QObject::connect(localSocket, &QLocalSocket::errorOccurred, this,
-                         [this, url](QLocalSocket::LocalSocketError error) {
+                         [this](QLocalSocket::LocalSocketError error) {
                              qGrpcDebug()
                                  << "Error occurred(" << error << "):"
                                  << static_cast<QLocalSocket *>(m_socket.get())->errorString()
-                                 << url;
+                                 << hostUri;
                              handleSocketError();
                          });
-        m_reconnectFunction = [localSocket, url] {
-            localSocket->connectToServer(url.host() + url.path());
+        m_reconnectFunction = [localSocket, this] {
+            localSocket->connectToServer(hostUri.host() + hostUri.path());
         };
     } else
 #if QT_CONFIG(ssl)
-    if (url.scheme() == "https"_L1 || options.sslConfiguration()) {
+        if (hostUri.scheme() == "https"_L1 || options.sslConfiguration()) {
         auto *sslSocket = initSocket<QSslSocket>();
-        if (url.port() < 0) {
-            url.setPort(443);
+        if (hostUri.port() < 0) {
+            hostUri.setPort(443);
         }
 
         if (options.sslConfiguration())
@@ -661,36 +662,36 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &op
         QObject::connect(sslSocket, &QSslSocket::encrypted, this,
                          &QGrpcHttp2ChannelPrivate::createHttp2Connection);
         QObject::connect(sslSocket, &QAbstractSocket::errorOccurred, this,
-                         [this, url](QAbstractSocket::SocketError error) {
+                         [this](QAbstractSocket::SocketError error) {
                              qDebug()
                                  << "Error occurred(" << error << "):"
                                  << static_cast<QAbstractSocket *>(m_socket.get())->errorString()
-                                 << url;
+                                 << hostUri;
                              handleSocketError();
                          });
-        m_reconnectFunction = [sslSocket, url] {
-            sslSocket->connectToHostEncrypted(url.host(), static_cast<quint16>(url.port()));
+        m_reconnectFunction = [sslSocket, this] {
+            sslSocket->connectToHostEncrypted(hostUri.host(), static_cast<quint16>(hostUri.port()));
         };
     } else
 #endif
     {
         auto *httpSocket = initSocket<QTcpSocket>();
-        if (url.port() < 0) {
-            url.setPort(80);
+        if (hostUri.port() < 0) {
+            hostUri.setPort(80);
         }
 
         QObject::connect(httpSocket, &QAbstractSocket::connected, this,
                          &QGrpcHttp2ChannelPrivate::createHttp2Connection);
         QObject::connect(httpSocket, &QAbstractSocket::errorOccurred, this,
-                         [this, url](QAbstractSocket::SocketError error) {
+                         [this](QAbstractSocket::SocketError error) {
                              qGrpcDebug()
                                  << "Error occurred(" << error << "):"
                                  << static_cast<QAbstractSocket *>(m_socket.get())->errorString()
-                                 << url;
+                                 << hostUri;
                              handleSocketError();
                          });
-        m_reconnectFunction = [httpSocket, url] {
-            httpSocket->connectToHost(url.host(), static_cast<quint16>(url.port()));
+        m_reconnectFunction = [httpSocket, this] {
+            httpSocket->connectToHost(hostUri.host(), static_cast<quint16>(hostUri.port()));
         };
     }
     m_reconnectFunction();
@@ -809,10 +810,20 @@ void QGrpcHttp2ChannelPrivate::deleteHandler(Http2Handler *handler)
 }
 
 /*!
-    Constructs QGrpcHttp2Channel with \a options.
+    Constructs QGrpcHttp2Channel with \a hostUri.
 */
-QGrpcHttp2Channel::QGrpcHttp2Channel(const QGrpcChannelOptions &options)
-    : QAbstractGrpcChannel(options), dPtr(std::make_unique<QGrpcHttp2ChannelPrivate>(options))
+QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri)
+    : QAbstractGrpcChannel(),
+      dPtr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, QGrpcChannelOptions{}))
+{
+}
+
+/*!
+    Constructs QGrpcHttp2Channel with \a hostUri and \a options.
+*/
+QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri, const QGrpcChannelOptions &options)
+    : QAbstractGrpcChannel(options),
+      dPtr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, options))
 {
 }
 
@@ -820,6 +831,14 @@ QGrpcHttp2Channel::QGrpcHttp2Channel(const QGrpcChannelOptions &options)
     Destroys the QGrpcHttp2Channel object.
 */
 QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
+
+/*!
+    Returns the host URI for this channel.
+*/
+QUrl QGrpcHttp2Channel::hostUri() const noexcept
+{
+    return dPtr->hostUri;
+}
 
 /*!
     \internal

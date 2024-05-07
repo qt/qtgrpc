@@ -28,8 +28,9 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcHttp2Channel : public QQmlAbstractGrpcChannel
     Q_OBJECT
     QML_NAMED_ELEMENT(GrpcHttp2Channel)
     QML_ADDED_IN_VERSION(6, 7)
-    Q_PROPERTY(QQmlGrpcChannelOptions *options READ options
-                       WRITE setOptions NOTIFY optionsChanged REQUIRED)
+    Q_PROPERTY(QUrl hostUri READ hostUri WRITE setHostUri NOTIFY hostUriChanged REQUIRED)
+    Q_PROPERTY(QQmlGrpcChannelOptions *options READ options WRITE setOptions NOTIFY optionsChanged
+                   REQUIRED)
     Q_PROPERTY(std::shared_ptr<QAbstractGrpcChannel> channel READ getChannel NOTIFY channelUpdated)
 
 public:
@@ -39,14 +40,18 @@ public:
     QQmlGrpcChannelOptions *options() const { return m_options; }
     void setOptions(QQmlGrpcChannelOptions *options);
 
+    QUrl hostUri() const noexcept { return m_hostUri; }
+    void setHostUri(const QUrl &hostUri);
 Q_SIGNALS:
     void optionsChanged();
     void channelUpdated();
+    void hostUriChanged();
 
 private:
     void updateChannel();
 
     QQmlGrpcChannelOptions *m_options;
+    QUrl m_hostUri;
     std::shared_ptr<QAbstractGrpcChannel> m_channel;
 };
 

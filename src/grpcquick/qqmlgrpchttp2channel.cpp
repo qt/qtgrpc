@@ -32,10 +32,38 @@ void QQmlGrpcHttp2Channel::setOptions(QQmlGrpcChannelOptions *options)
 
 void QQmlGrpcHttp2Channel::updateChannel()
 {
-    if (m_channel && m_options)
+    if (m_hostUri.isEmpty())
+        return;
+
+    if (!m_hostUri.isValid()) {
+        qWarning() << "Unable to initialize the channel. The host URI is not valid.";
+        return;
+    }
+
+    if (m_channel)
         m_channel.reset();
-    m_channel = std::make_shared<QGrpcHttp2Channel>(m_options->options());
+
+    if (m_hostUri.isValid()) {
+        m_channel = m_options ? std::make_shared<QGrpcHttp2Channel>(m_hostUri, m_options->options())
+                              : std::make_shared<QGrpcHttp2Channel>(m_hostUri);
+    }
     emit channelUpdated();
+}
+
+void QQmlGrpcHttp2Channel::setHostUri(const QUrl &hostUri)
+{
+    if (hostUri == m_hostUri)
+        return;
+
+    if (m_channel) {
+        qWarning() << "Changing the host URI is not supported.";
+        return;
+    }
+
+    m_hostUri = hostUri;
+
+    emit hostUriChanged();
+    updateChannel();
 }
 
 QT_END_NAMESPACE

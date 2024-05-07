@@ -60,6 +60,7 @@ protected:
     [[nodiscard]] const QGrpcChannelOptions &channelOptions() const & noexcept;
 
     friend class QGrpcClientBase;
+    QAbstractGrpcChannel();
     explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
 
 private:

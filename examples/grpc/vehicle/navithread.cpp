@@ -21,8 +21,8 @@ void NaviThread::run()
 {
     if (!m_client) {
         auto channel = std::shared_ptr<
-            QAbstractGrpcChannel>(new QGrpcHttp2Channel(QGrpcChannelOptions{
-            QUrl("http://localhost:50051", QUrl::StrictMode) }));
+            QAbstractGrpcChannel>(new QGrpcHttp2Channel(QUrl("http://localhost:50051",
+                                                             QUrl::StrictMode)));
         m_client = std::make_shared<qtgrpc::examples::NaviService::Client>();
         m_client->attachChannel(channel);
     }

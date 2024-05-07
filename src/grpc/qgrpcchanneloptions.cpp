@@ -24,12 +24,8 @@ using namespace Qt::StringLiterals;
 class QGrpcChannelOptionsPrivate
 {
 public:
-    QGrpcChannelOptionsPrivate(const QUrl &_host)
-        : host(_host), serializationFormat(QGrpcSerializationFormat::Format::Default)
-    {
-    }
+    QGrpcChannelOptionsPrivate() : serializationFormat(QGrpcSerializationFormat::Default) { }
 
-    QUrl host;
     std::optional<QGrpcDuration> deadline;
     QGrpcMetadata metadata;
     QGrpcSerializationFormat serializationFormat;
@@ -39,10 +35,9 @@ public:
 };
 
 /*!
-    Constructs an QGrpcChannelOptions object with \a host value.
+    Constructs a QGrpcChannelOptions.
 */
-QGrpcChannelOptions::QGrpcChannelOptions(const QUrl &host)
-    : dPtr(std::make_unique<QGrpcChannelOptionsPrivate>(host))
+QGrpcChannelOptions::QGrpcChannelOptions() : dPtr(std::make_unique<QGrpcChannelOptionsPrivate>())
 {
 }
 
@@ -80,15 +75,6 @@ QGrpcChannelOptions &QGrpcChannelOptions::operator=(QGrpcChannelOptions &&other)
     Destroys the QGrpcChannelOptions object.
 */
 QGrpcChannelOptions::~QGrpcChannelOptions() = default;
-
-/*!
-    Sets host value with \a host and returns updated QGrpcChannelOptions object.
-*/
-QGrpcChannelOptions &QGrpcChannelOptions::setHost(const QUrl &host)
-{
-    dPtr->host = host;
-    return *this;
-}
 
 /*!
     Sets deadline value with \a deadline and returns updated QGrpcChannelOptions object.
@@ -146,14 +132,6 @@ QGrpcChannelOptions::setSerializationFormat(const QGrpcSerializationFormat &form
 std::optional<QGrpcDuration> QGrpcChannelOptions::deadline() const noexcept
 {
     return dPtr->deadline;
-}
-
-/*!
-    Returns host value for the channel.
-*/
-QUrl QGrpcChannelOptions::host() const noexcept
-{
-    return dPtr->host;
 }
 
 /*!
@@ -224,8 +202,8 @@ QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
     QDebugStateSaver save(debug);
     debug.nospace();
     debug.noquote();
-    debug << "QGrpcChannelOptions(host: " << chOpts.host()
-          << ", deadline: " << chOpts.deadline() << ", metadata: " << chOpts.metadata()
+    debug << "QGrpcChannelOptions(deadline: " << chOpts.deadline()
+          << ", metadata: " << chOpts.metadata()
           << ", serializationFormat: " << chOpts.serializationFormat().suffix()
           << ", sslConfiguration: ";
 #  if QT_CONFIG(ssl)

@@ -101,6 +101,11 @@ deadlineForCall(const QGrpcChannelOptions &channelOptions, const QGrpcCallOption
     return std::nullopt;
 }
 
+QAbstractGrpcChannel::QAbstractGrpcChannel()
+    : dPtr(std::make_unique<QAbstractGrpcChannelPrivate>(QGrpcChannelOptions{}))
+{
+}
+
 QAbstractGrpcChannel::QAbstractGrpcChannel(const QGrpcChannelOptions &options)
     : dPtr(std::make_unique<QAbstractGrpcChannelPrivate>(options))
 {

@@ -35,7 +35,6 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcChannelOptions : public QObject
     QML_NAMED_ELEMENT(GrpcChannelOptions)
     QML_ADDED_IN_VERSION(6, 7)
 
-    Q_PROPERTY(QUrl host READ host WRITE setHost NOTIFY hostChanged REQUIRED)
     Q_PROPERTY(qint64 deadline READ deadline WRITE setDeadline NOTIFY deadlineChanged)
     Q_PROPERTY(QQmlGrpcMetadata *metadata READ metadata WRITE setMetadata NOTIFY metadataChanged)
     Q_PROPERTY(QQmlSerializationFormat::GrpcSerializationFormat serializationFormat
@@ -50,8 +49,6 @@ public:
     QQmlGrpcChannelOptions(QObject *parent = nullptr);
 
     const QGrpcChannelOptions &options() const;
-    QUrl host() const;
-    void setHost(const QUrl &newUrl);
     qint64 deadline() const;
     void setDeadline(qint64 value);
     QQmlGrpcMetadata *metadata() const;
@@ -64,7 +61,6 @@ public:
 #endif // QT_CONFIG(ssl)
 
 Q_SIGNALS:
-    void hostChanged();
     void deadlineChanged();
     void metadataChanged();
     void serializationFormatChanged();

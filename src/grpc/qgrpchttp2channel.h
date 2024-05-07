@@ -17,8 +17,11 @@ struct QGrpcHttp2ChannelPrivate;
 class Q_GRPC_EXPORT QGrpcHttp2Channel final : public QAbstractGrpcChannel
 {
 public:
-    explicit QGrpcHttp2Channel(const QGrpcChannelOptions &options);
+    explicit QGrpcHttp2Channel(const QUrl &hostUri);
+    explicit QGrpcHttp2Channel(const QUrl &hostUri, const QGrpcChannelOptions &options);
     ~QGrpcHttp2Channel() override;
+
+    [[nodiscard]] QUrl hostUri() const noexcept;
 
 private:
     void call(std::shared_ptr<QGrpcChannelOperation> channelOperation) override;

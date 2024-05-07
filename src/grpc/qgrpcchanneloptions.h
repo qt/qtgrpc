@@ -23,7 +23,7 @@ class QGrpcChannelOptionsPrivate;
 class Q_GRPC_EXPORT QGrpcChannelOptions final
 {
 public:
-    explicit QGrpcChannelOptions(const QUrl &host);
+    QGrpcChannelOptions();
     ~QGrpcChannelOptions();
 
     QGrpcChannelOptions(const QGrpcChannelOptions &other);
@@ -31,13 +31,11 @@ public:
     QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept;
     QGrpcChannelOptions &operator=(QGrpcChannelOptions &&other) noexcept;
 
-    QGrpcChannelOptions &setHost(const QUrl &host);
     QGrpcChannelOptions &setDeadline(QGrpcDuration deadline);
     QGrpcChannelOptions &setMetadata(const QGrpcMetadata &metadata);
     QGrpcChannelOptions &setMetadata(QGrpcMetadata &&metadata);
     QGrpcChannelOptions &setSerializationFormat(const QGrpcSerializationFormat &format);
 
-    [[nodiscard]] QUrl host() const noexcept;
     [[nodiscard]] std::optional<QGrpcDuration> deadline() const noexcept;
     [[nodiscard]] const QGrpcMetadata &metadata() const & noexcept;
     [[nodiscard]] QGrpcMetadata metadata() && noexcept;

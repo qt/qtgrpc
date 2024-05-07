@@ -75,13 +75,6 @@
 */
 
 /*!
-    \qmlproperty QUrl QQmlGrpcChannelOptions::host
-    Sets a host \c URL for the channel.
-    \note host is \c REQUIRED property. It must be set for object creation.
-    \sa QGrpcChannelOptions::host
-*/
-
-/*!
     \qmlproperty enumeration QQmlGrpcChannelOptions::serializationFormat
     Sets the serialization format for the channel.
     The \c {GrpcSerializationFormat::Default}
@@ -176,6 +169,13 @@
     \note You can inherit from QQmlGrpcChannelOptions for importing custom
           channel in QML.
     \sa QQmlAbstractGrpcChannel, QGrpcHttp2Channel
+*/
+
+/*!
+    \qmlproperty QUrl QQmlGrpcHttp2Channel::hostUri
+    Sets a host \c URL for the channel.
+    \note host is \c REQUIRED property. It must be set for object creation.
+    \sa QGrpcHttp2Channel::hostUri
 */
 
 /*!

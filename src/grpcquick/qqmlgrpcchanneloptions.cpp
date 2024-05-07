@@ -24,25 +24,13 @@ public:
 #endif // QT_CONFIG(ssl)
 };
 
-QQmlGrpcChannelOptionsPrivate::QQmlGrpcChannelOptionsPrivate() : QObjectPrivate(), m_options(QUrl())
+QQmlGrpcChannelOptionsPrivate::QQmlGrpcChannelOptionsPrivate() : QObjectPrivate()
 {
 }
 
 QQmlGrpcChannelOptions::QQmlGrpcChannelOptions(QObject *parent)
     : QObject(*(new QQmlGrpcChannelOptionsPrivate()), parent)
 {
-}
-
-QUrl QQmlGrpcChannelOptions::host() const
-{
-    return d_func()->m_options.host();
-}
-
-void QQmlGrpcChannelOptions::setHost(const QUrl &newUrl)
-{
-    Q_D(QQmlGrpcChannelOptions);
-    d->m_options.setHost(newUrl);
-    emit hostChanged();
 }
 
 qint64 QQmlGrpcChannelOptions::deadline() const

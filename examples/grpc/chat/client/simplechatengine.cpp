@@ -45,14 +45,14 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
     QUrl url("http://localhost:65002");
 
     // ![0]
-    QGrpcChannelOptions channelOptions(url);
+    QGrpcChannelOptions channelOptions;
     QGrpcMetadata metadata = {
         { "user-name", { name.toUtf8() } },
         { "user-password", { password.toUtf8() } },
     };
     channelOptions.setMetadata(metadata);
-    std::shared_ptr<QAbstractGrpcChannel> channel = std::make_shared<QGrpcHttp2Channel>(
-            channelOptions);
+    std::shared_ptr<QAbstractGrpcChannel>
+        channel = std::make_shared<QGrpcHttp2Channel>(url, channelOptions);
     // ![0]
 
     m_client->attachChannel(channel);

@@ -40,8 +40,8 @@ Item {
 
     GrpcHttp2Channel {
         id: httpChannel
+        hostUri: "http://localhost:50051"
         options: GrpcChannelOptions {
-            host: "http://localhost:50051"
         }
     }
 

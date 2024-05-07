@@ -34,15 +34,15 @@ Item {
 
     function createGrpcChannelItem() {
         return Qt.createQmlObject("import QtQuick; import QtGrpc; GrpcHttp2Channel { \
+                                   hostUri: \"http://localhost:50051\"; \
                                    options: GrpcChannelOptions { \
-                                   host: \"http://localhost:50051\"; \
                                    deadline: { 2000 } } }", root)
     }
 
     function createGrpcChannelWithDeadlineItem() {
         return Qt.createQmlObject("import QtQuick; import QtGrpc; GrpcHttp2Channel { \
+                                   hostUri: \"http://localhost:50051\"; \
                                    options: GrpcChannelOptions { \
-                                   host: \"http://localhost:50051\"; \
                                    deadline: { 1000 } }  }", root)
     }
 
@@ -66,7 +66,7 @@ Item {
         function test_ChannelOptions_data() {
             return [
                         { tag: "grpcChannelOptions URL is set",
-                            field: grpcChannel.options.host, answer: "http://localhost:50051" },
+                            field: grpcChannel.hostUri, answer: "http://localhost:50051" },
                         { tag: "grpcChannelOptions deadline is set",
                             field: grpcChannelDeadline.options.deadline, answer: 1000 }
                     ]

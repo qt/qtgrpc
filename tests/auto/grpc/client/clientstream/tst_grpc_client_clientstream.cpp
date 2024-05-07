@@ -123,8 +123,9 @@ void QtGrpcClientClientStreamTest::sequentialSendWithDone()
 
 void QtGrpcClientClientStreamTest::sequentialSendWithDoneWhenChannelNotReady()
 {
-    auto channel = std::shared_ptr<QAbstractGrpcChannel>(new QGrpcHttp2Channel(QGrpcChannelOptions{
-        QUrl("http://localhost:50051", QUrl::StrictMode) }));
+    auto channel = std::shared_ptr<
+        QAbstractGrpcChannel>(new QGrpcHttp2Channel(QUrl("http://localhost:50051",
+                                                         QUrl::StrictMode)));
     auto client = std::make_shared<qtgrpc::tests::TestService::Client>();
     client->attachChannel(std::move(channel));
 

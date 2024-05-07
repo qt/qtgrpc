@@ -32,7 +32,6 @@ Item {
 
     GrpcChannelOptions {
         id: options
-        host: "http://localhost:50051"
         deadline: { 1000 }
         metadata: GrpcMetadata {
             id: grpcData
@@ -44,7 +43,6 @@ Item {
 
     GrpcChannelOptions {
         id: optionsWithChangedProperties
-        host: "http://localhost:50051"
         metadata: GrpcMetadata {
             data: ({ "user-name": "localhost",
                        "user-password": "qwerty"})
@@ -109,8 +107,6 @@ Item {
 
         function test_ChannelOptions_data() {
             return [
-                        { tag: "options URL is set",
-                            field: options.host, answer: "http://localhost:50051" },
                         { tag: "options.metadata == grpcData",
                             field: options.metadata, answer: grpcData },
                         { tag: "options.metadata.data == grpcData.data",
