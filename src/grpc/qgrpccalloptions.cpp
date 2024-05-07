@@ -107,13 +107,22 @@ std::optional<QGrpcDuration> QGrpcCallOptions::deadline() const noexcept
 }
 
 /*!
+    \fn const QGrpcMetadata &QGrpcCallOptions::metadata() const & noexcept
+    \fn QGrpcMetadata QGrpcCallOptions::metadata() && noexcept
+
     Returns metadata used for a call.
 
     If value was not set returns empty QGrpcMetadata.
 */
-const QGrpcMetadata &QGrpcCallOptions::metadata() const noexcept
+const QGrpcMetadata &QGrpcCallOptions::metadata() const & noexcept
 {
     return dPtr->metadata;
 }
+
+QGrpcMetadata QGrpcCallOptions::metadata() && noexcept
+{
+    return std::move(dPtr->metadata);
+}
+
 
 QT_END_NAMESPACE

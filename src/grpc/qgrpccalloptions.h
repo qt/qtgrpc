@@ -30,7 +30,8 @@ public:
     Q_GRPC_EXPORT QGrpcCallOptions &withMetadata(QGrpcMetadata &&metadata) noexcept;
 
     [[nodiscard]] Q_GRPC_EXPORT std::optional<QGrpcDuration> deadline() const noexcept;
-    [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const & noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT QGrpcMetadata metadata() && noexcept;
 
 private:
     std::unique_ptr<QGrpcCallOptionsPrivate> dPtr;
