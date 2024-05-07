@@ -38,8 +38,9 @@ public:
 
     [[nodiscard]] QUrl host() const noexcept;
     [[nodiscard]] std::optional<QGrpcDuration> deadline() const noexcept;
-    [[nodiscard]] const QGrpcMetadata &metadata() const noexcept;
     [[nodiscard]] const QGrpcSerializationFormat &serializationFormat() const noexcept;
+    [[nodiscard]] const QGrpcMetadata &metadata() const & noexcept;
+    [[nodiscard]] QGrpcMetadata metadata() && noexcept;
 
 #if QT_CONFIG(ssl)
     QGrpcChannelOptions &withSslConfiguration(const QSslConfiguration &sslConfiguration);

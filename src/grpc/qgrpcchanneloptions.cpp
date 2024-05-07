@@ -146,13 +146,21 @@ QUrl QGrpcChannelOptions::host() const noexcept
 }
 
 /*!
+    \fn const QGrpcMetadata &QGrpcChannelOptions::metadata() const & noexcept
+    \fn QGrpcMetadata QGrpcChannelOptions::metadata() && noexcept
+
     Returns metadata used for every call on the channel.
 
     If value was not set returns empty QGrpcMetadata.
 */
-const QGrpcMetadata &QGrpcChannelOptions::metadata() const noexcept
+const QGrpcMetadata &QGrpcChannelOptions::metadata() const & noexcept
 {
     return dPtr->metadata;
+}
+
+QGrpcMetadata QGrpcChannelOptions::metadata() && noexcept
+{
+    return std::move(dPtr->metadata);
 }
 
 /*!
