@@ -31,7 +31,6 @@ public:
     QUrl host;
     std::optional<QGrpcDuration> deadline;
     QGrpcMetadata metadata;
-    std::optional<QStringList> credentialList;
     QGrpcSerializationFormat serializationFormat;
 #if QT_CONFIG(ssl)
     std::optional<QSslConfiguration> sslConfiguration;
