@@ -167,11 +167,19 @@ QGrpcMetadata QGrpcChannelOptions::metadata() && noexcept
 
 /*!
     \since 6.8
+    \fn const QGrpcSerializationFormat &QGrpcChannelOptions::serializationFormat() const & noexcept
+    \fn QGrpcSerializationFormat QGrpcChannelOptions::serializationFormat() && noexcept
+
     Returns the serialization format used in \l QAbstractGrpcChannel implementations.
  */
-const QGrpcSerializationFormat &QGrpcChannelOptions::serializationFormat() const noexcept
+const QGrpcSerializationFormat &QGrpcChannelOptions::serializationFormat() const & noexcept
 {
     return dPtr->serializationFormat;
+}
+
+QGrpcSerializationFormat QGrpcChannelOptions::serializationFormat() && noexcept
+{
+    return std::move(dPtr->serializationFormat);
 }
 
 #if QT_CONFIG(ssl)
