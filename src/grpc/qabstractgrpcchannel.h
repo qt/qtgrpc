@@ -5,27 +5,28 @@
 #ifndef QABSTRACTGRPCCHANNEL_H
 #define QABSTRACTGRPCCHANNEL_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qthread.h>
-#include <QtCore/qbytearray.h>
 #include <QtGrpc/qgrpccalloptions.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
+
+#include <QtCore/qbytearray.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qthread.h>
 
 #include <memory>
 
 QT_BEGIN_NAMESPACE
 
-class QGrpcClientBase;
 class QAbstractProtobufSerializer;
 struct QAbstractGrpcChannelPrivate;
-class QGrpcServerStream;
-class QGrpcClientStream;
 class QGrpcBidirStream;
 class QGrpcCallReply;
 class QGrpcChannelOperation;
 class QGrpcChannelOptions;
+class QGrpcClientBase;
 class QGrpcClientInterceptorManager;
+class QGrpcClientStream;
+class QGrpcServerStream;
 
 class Q_GRPC_EXPORT QAbstractGrpcChannel
 {

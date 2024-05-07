@@ -2,13 +2,13 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include "qabstractgrpcchannel.h"
-#include "qabstractgrpcchannel_p.h"
-#include "qgrpccallreply.h"
-#include "qgrpcchanneloperation.h"
-#include "qgrpcclientinterceptor.h"
-#include "qgrpcstream.h"
+#include <QtGrpc/private/qabstractgrpcchannel_p.h>
+#include <QtGrpc/qabstractgrpcchannel.h>
+#include <QtGrpc/qgrpccallreply.h>
+#include <QtGrpc/qgrpcchanneloptions.h>
+#include <QtGrpc/qgrpcclientinterceptor.h>
 #include <QtGrpc/qgrpcdefs.h>
+#include <QtGrpc/qgrpcstream.h>
 
 #include <QtCore/qtimer.h>
 
