@@ -6,20 +6,26 @@
 
 #include <QtGrpc/qtgrpcglobal.h>
 
-#include <unordered_map>
 #include <chrono>
+#include <unordered_map>
 
 #if 0
 // Create a forwarding header
-#pragma qt_class(QGrpcMetadata)
-#pragma qt_class(QGrpcDuration)
-#pragma qt_sync_stop_processing
+#  pragma qt_class(QGrpcMetadata)
+#  pragma qt_class(QGrpcDuration)
+#  pragma qt_sync_stop_processing
 #endif
 
 QT_BEGIN_NAMESPACE
 
+class QDebug;
+
 using QGrpcMetadata = std::unordered_multimap<QByteArray, QByteArray>;
 using QGrpcDuration = std::chrono::milliseconds;
+
+#ifndef QT_NO_DEBUG_STREAM
+Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcMetadata &metadata);
+#endif
 
 QT_END_NAMESPACE
 

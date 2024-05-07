@@ -1,6 +1,9 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
 
+#include <QtCore/qdebug.h>
+#include <QtGrpc/qgrpcdefs.h>
+
 /*!
     \typealias QGrpcMetadata
     \inmodule QtGrpc
@@ -15,3 +18,26 @@
     be binary data.
 */
 
+QT_BEGIN_NAMESPACE
+
+#ifndef QT_NO_DEBUG_STREAM
+QDebug operator<<(QDebug debug, const QGrpcMetadata &metadata)
+{
+    QDebugStateSaver save(debug);
+    debug.nospace();
+    debug.noquote();
+    debug << "QGrpcMetadata(";
+    size_t i = 0;
+    for (const auto &md : metadata) {
+        debug << "{key: " << md.first << ", value: " << md.second;
+        if (++i < metadata.size())
+            debug << "}, ";
+        else
+            debug << '}';
+    }
+    debug << ')';
+    return debug;
+}
+#endif
+
+QT_END_NAMESPACE
