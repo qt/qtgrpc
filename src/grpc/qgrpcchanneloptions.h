@@ -49,6 +49,10 @@ public:
 
 private:
     std::unique_ptr<QGrpcChannelOptionsPrivate> dPtr;
+
+#ifndef QT_NO_DEBUG_STREAM
+    friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts);
+#endif
 };
 QT_END_NAMESPACE
 

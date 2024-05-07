@@ -5,6 +5,8 @@
 #include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qgrpcserializationformat.h>
 
+#include <QtCore/qdebug.h>
+
 QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
@@ -191,6 +193,34 @@ QGrpcChannelOptions &QGrpcChannelOptions::withSslConfiguration(
 std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const noexcept
 {
     return dPtr->sslConfiguration;
+}
+#endif
+
+#ifndef QT_NO_DEBUG_STREAM
+/*!
+    \since 6.8
+    \fn QDebug QGrpcChannelOptions::operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
+    Writes \a chOpts to the specified stream \a debug.
+*/
+QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
+{
+    QDebugStateSaver save(debug);
+    debug.nospace();
+    debug.noquote();
+    debug << "QGrpcChannelOptions(host: " << chOpts.host()
+          << ", deadline: " << chOpts.deadline() << ", metadata: " << chOpts.metadata()
+          << ", serializationFormat: " << chOpts.serializationFormat().suffix()
+          << ", sslConfiguration: ";
+#  if QT_CONFIG(ssl)
+    if (chOpts.sslConfiguration())
+        debug << "available";
+    else
+        debug << std::nullopt;
+#  else
+    debug << "unsupported";
+#  endif
+    debug << ')';
+    return debug;
 }
 #endif
 
