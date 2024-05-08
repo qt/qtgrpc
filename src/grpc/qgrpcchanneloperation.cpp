@@ -124,7 +124,8 @@ QGrpcChannelOperation::~QGrpcChannelOperation() = default;
 */
 QLatin1StringView QGrpcChannelOperation::method() const noexcept
 {
-    return d_func()->method;
+    Q_D(const QGrpcChannelOperation);
+    return d->method;
 }
 
 /*!
@@ -132,7 +133,8 @@ QLatin1StringView QGrpcChannelOperation::method() const noexcept
 */
 QLatin1StringView QGrpcChannelOperation::service() const noexcept
 {
-    return d_func()->service;
+    Q_D(const QGrpcChannelOperation);
+    return d->service;
 }
 
 /*!
@@ -140,7 +142,8 @@ QLatin1StringView QGrpcChannelOperation::service() const noexcept
 */
 QByteArrayView QGrpcChannelOperation::argument() const noexcept
 {
-    return d_func()->argument;
+    Q_D(const QGrpcChannelOperation);
+    return d->argument;
 }
 
 /*!
@@ -148,7 +151,8 @@ QByteArrayView QGrpcChannelOperation::argument() const noexcept
 */
 const QGrpcCallOptions &QGrpcChannelOperation::options() const noexcept
 {
-    return d_func()->options;
+    Q_D(const QGrpcChannelOperation);
+    return d->options;
 }
 
 /*!
@@ -157,7 +161,8 @@ const QGrpcCallOptions &QGrpcChannelOperation::options() const noexcept
 std::shared_ptr<const QAbstractProtobufSerializer>
 QGrpcChannelOperation::serializer() const noexcept
 {
-    return d_func()->serializer;
+    Q_D(const QGrpcChannelOperation);
+    return d->serializer;
 }
 
 /*!
@@ -165,7 +170,8 @@ QGrpcChannelOperation::serializer() const noexcept
 */
 const QGrpcMetadata &QGrpcChannelOperation::clientMetadata() const noexcept
 {
-    return d_func()->options.metadata();
+    Q_D(const QGrpcChannelOperation);
+    return d->options.metadata();
 }
 
 /*!
@@ -175,7 +181,8 @@ const QGrpcMetadata &QGrpcChannelOperation::clientMetadata() const noexcept
 */
 const QGrpcMetadata &QGrpcChannelOperation::serverMetadata() const noexcept
 {
-    return d_func()->serverMetadata;
+    Q_D(const QGrpcChannelOperation);
+    return d->serverMetadata;
 }
 
 /*!
