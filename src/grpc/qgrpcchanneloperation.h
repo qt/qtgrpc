@@ -33,11 +33,16 @@ public:
     [[nodiscard]] QLatin1StringView method() const noexcept;
     [[nodiscard]] QLatin1StringView service() const noexcept;
     [[nodiscard]] QByteArrayView argument() const noexcept;
-    [[nodiscard]] const QGrpcCallOptions &options() const noexcept;
+    [[nodiscard]] const QGrpcCallOptions &options() const & noexcept;
     [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const noexcept;
 
-    [[nodiscard]] const QGrpcMetadata &clientMetadata() const noexcept;
-    [[nodiscard]] const QGrpcMetadata &serverMetadata() const noexcept;
+    [[nodiscard]] const QGrpcMetadata &clientMetadata() const & noexcept;
+    [[nodiscard]] const QGrpcMetadata &serverMetadata() const & noexcept;
+
+    // Should never happen. Type is not movable.
+    QGrpcMetadata clientMetadata() && noexcept = delete;
+    QGrpcMetadata serverMetadata() && noexcept = delete;
+    QGrpcCallOptions options() && noexcept = delete;
 
     void setArgument(QByteArrayView arg);
     void setOptions(const QGrpcCallOptions &options);

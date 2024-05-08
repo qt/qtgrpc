@@ -149,7 +149,7 @@ QByteArrayView QGrpcChannelOperation::argument() const noexcept
 /*!
     Return the options that are assigned to this operation.
 */
-const QGrpcCallOptions &QGrpcChannelOperation::options() const noexcept
+const QGrpcCallOptions &QGrpcChannelOperation::options() const & noexcept
 {
     Q_D(const QGrpcChannelOperation);
     return d->options;
@@ -168,7 +168,7 @@ QGrpcChannelOperation::serializer() const noexcept
 /*!
     Returns the client metadata that is being sent to the server.
 */
-const QGrpcMetadata &QGrpcChannelOperation::clientMetadata() const noexcept
+const QGrpcMetadata &QGrpcChannelOperation::clientMetadata() const & noexcept
 {
     Q_D(const QGrpcChannelOperation);
     return d->options.metadata();
@@ -179,7 +179,7 @@ const QGrpcMetadata &QGrpcChannelOperation::clientMetadata() const noexcept
 
     The method is used implicitly by \l QGrpcOperation counterpart.
 */
-const QGrpcMetadata &QGrpcChannelOperation::serverMetadata() const noexcept
+const QGrpcMetadata &QGrpcChannelOperation::serverMetadata() const & noexcept
 {
     Q_D(const QGrpcChannelOperation);
     return d->serverMetadata;
