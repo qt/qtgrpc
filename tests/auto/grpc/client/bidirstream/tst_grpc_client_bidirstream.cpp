@@ -23,10 +23,10 @@ public:
     }
 
 private slots:
-    void Valid();
+    void valid();
 };
 
-void QtGrpcClientBidirStreamTest::Valid()
+void QtGrpcClientBidirStreamTest::valid()
 {
     const int ExpectedMessageCount = 4;
 

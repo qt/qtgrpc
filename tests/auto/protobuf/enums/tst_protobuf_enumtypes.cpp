@@ -14,18 +14,18 @@ class QtProtobufEnumTypesGenerationTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void BasicTest();
-    void LocalEnumTest();
-    void LocalEnumListTest();
-    void MixedEnumUsageTest();
-    void FileEnumsTest();
-    void StepChildEnumMessageTest();
-    void StepChildEnumListMessageTest();
+    void basicTest();
+    void localEnumTest();
+    void localEnumListTest();
+    void mixedEnumUsageTest();
+    void fileEnumsTest();
+    void stepChildEnumMessageTest();
+    void stepChildEnumListMessageTest();
 };
 
 using namespace qtprotobufnamespace::tests;
 
-void QtProtobufEnumTypesGenerationTest::BasicTest()
+void QtProtobufEnumTypesGenerationTest::basicTest()
 {
     QVERIFY(TestEnumGadget::staticMetaObject.enumeratorCount() > 0);
     QMetaEnum testEnum;
@@ -67,7 +67,7 @@ void QtProtobufEnumTypesGenerationTest::BasicTest()
     QCOMPARE(testEnum.value(2), 2);
 }
 
-void QtProtobufEnumTypesGenerationTest::LocalEnumTest()
+void QtProtobufEnumTypesGenerationTest::localEnumTest()
 {
     const auto &metaObject = SimpleEnumMessage_QtProtobufNested::staticMetaObject;
     QVERIFY(metaObject.enumeratorCount() > 0);
@@ -92,7 +92,7 @@ void QtProtobufEnumTypesGenerationTest::LocalEnumTest()
     QCOMPARE(simpleEnum.value(3), 3);
 }
 
-void QtProtobufEnumTypesGenerationTest::MixedEnumUsageTest()
+void QtProtobufEnumTypesGenerationTest::mixedEnumUsageTest()
 {
     QVERIFY(MixedEnumUsageMessage_QtProtobufNested::staticMetaObject.enumeratorCount() > 0);
 
@@ -114,7 +114,7 @@ void QtProtobufEnumTypesGenerationTest::MixedEnumUsageTest()
     QCOMPARE(test.localEnumMap(), value);
 }
 
-void QtProtobufEnumTypesGenerationTest::LocalEnumListTest()
+void QtProtobufEnumTypesGenerationTest::localEnumListTest()
 {
     QVERIFY(RepeatedEnumMessage_QtProtobufNested::staticMetaObject.enumeratorCount() > 0);
 
@@ -132,7 +132,7 @@ void QtProtobufEnumTypesGenerationTest::LocalEnumListTest()
     QCOMPARE(test.localEnumList(), value);
 }
 
-void QtProtobufEnumTypesGenerationTest::FileEnumsTest()
+void QtProtobufEnumTypesGenerationTest::fileEnumsTest()
 {
     const char *propertyName = "globalEnumList";
     qProtobufAssertMessagePropertyRegistered<SimpleFileEnumMessage, TestEnumGadget::TestEnumRepeated>(2, "TestEnumGadget::TestEnumRepeated", propertyName);
@@ -148,7 +148,7 @@ void QtProtobufEnumTypesGenerationTest::FileEnumsTest()
     QCOMPARE(test.globalEnumList(), value);
 }
 
-void QtProtobufEnumTypesGenerationTest::StepChildEnumMessageTest()
+void QtProtobufEnumTypesGenerationTest::stepChildEnumMessageTest()
 {
     const char *propertyName = "localStepChildEnum";
     qProtobufAssertMessagePropertyRegistered<StepChildEnumMessage, SimpleEnumMessage::LocalEnum>(1, "SimpleEnumMessage::LocalEnum", propertyName);
@@ -159,7 +159,7 @@ void QtProtobufEnumTypesGenerationTest::StepChildEnumMessageTest()
     QCOMPARE(test.localStepChildEnum(), SimpleEnumMessage::LocalEnum::LOCAL_ENUM_VALUE2);
 }
 
-void QtProtobufEnumTypesGenerationTest::StepChildEnumListMessageTest()
+void QtProtobufEnumTypesGenerationTest::stepChildEnumListMessageTest()
 {
     const char *propertyName = "localStepChildList";
     qProtobufAssertMessagePropertyRegistered<StepChildEnumMessage, SimpleEnumMessage::LocalEnumRepeated>(2, "SimpleEnumMessage::LocalEnumRepeated", propertyName);

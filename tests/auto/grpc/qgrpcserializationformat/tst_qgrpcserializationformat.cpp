@@ -17,12 +17,12 @@ public:
     QGrpcSerializationFormatTest() { }
 
 private slots:
-    void ConstructEmbedded();
-    void ConstructCustom();
-    void CopyMove();
+    void constructEmbedded();
+    void constructCustom();
+    void copyMove();
 };
 
-void QGrpcSerializationFormatTest::ConstructEmbedded()
+void QGrpcSerializationFormatTest::constructEmbedded()
 {
     QGrpcSerializationFormat defaultFormat(QGrpcSerializationFormat::Format::Default);
     QCOMPARE(defaultFormat.suffix(), "");
@@ -37,14 +37,14 @@ void QGrpcSerializationFormatTest::ConstructEmbedded()
     QVERIFY(dynamic_cast<QProtobufSerializer *>(protobufFormat.serializer().get()) != nullptr);
 }
 
-void QGrpcSerializationFormatTest::ConstructCustom()
+void QGrpcSerializationFormatTest::constructCustom()
 {
     QGrpcSerializationFormat customFormat("test", std::make_shared<QProtobufJsonSerializer>());
     QCOMPARE(customFormat.suffix(), "test");
     QVERIFY(dynamic_cast<QProtobufJsonSerializer *>(customFormat.serializer().get()) != nullptr);
 }
 
-void QGrpcSerializationFormatTest::CopyMove()
+void QGrpcSerializationFormatTest::copyMove()
 {
     QGrpcSerializationFormat f1(QGrpcSerializationFormat::Format::Json);
 

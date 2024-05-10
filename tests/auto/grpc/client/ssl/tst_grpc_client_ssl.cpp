@@ -24,10 +24,10 @@ public:
     {
     }
 private slots:
-    void IncorrectSecureCredentialsTest();
+    void incorrectSecureCredentialsTest();
 };
 
-void QtGrpcSslClientTest::IncorrectSecureCredentialsTest()
+void QtGrpcSslClientTest::incorrectSecureCredentialsTest()
 {
     SimpleStringMessage req;
     req.setTestFieldString("Hello Qt!");

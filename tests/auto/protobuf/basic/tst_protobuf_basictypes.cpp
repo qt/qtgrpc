@@ -18,37 +18,37 @@ class QtProtobufTypesGenerationTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void EmptyMessageTest();
-    void BoolMessageTest();
-    void IntMessageTest();
-    void SIntMessageTest();
-    void UIntMessageTest();
-    void Int64MessageTest();
-    void SInt64MessageTest();
-    void UInt64MessageTest();
-    void FixedInt32MessageTest();
-    void FixedInt64MessageTest();
-    void SFixedInt32MessageTest();
-    void SFixedInt64MessageTest();
-    void StringMessageTest();
-    void FloatMessageTest();
-    void DoubleMessageTest();
-    void ComplexMessageTest();
-    void BytesMessageTest();
-    void OneofMessageEmptyTest();
-    void OneofMessageTest();
-    void OneofMessageCopyComplexValueTest();
+    void emptyMessageTest();
+    void boolMessageTest();
+    void intMessageTest();
+    void sIntMessageTest();
+    void uIntMessageTest();
+    void int64MessageTest();
+    void sInt64MessageTest();
+    void uInt64MessageTest();
+    void fixedInt32MessageTest();
+    void fixedInt64MessageTest();
+    void sFixedInt32MessageTest();
+    void sFixedInt64MessageTest();
+    void stringMessageTest();
+    void floatMessageTest();
+    void doubleMessageTest();
+    void complexMessageTest();
+    void bytesMessageTest();
+    void oneofMessageEmptyTest();
+    void oneofMessageTest();
+    void oneofMessageCopyComplexValueTest();
 
-    void AssignmentOperatorTest();
-    void MoveOperatorTest();
-    void AccessMessageFieldsFromGetter();
+    void assignmentOperatorTest();
+    void moveOperatorTest();
+    void accessMessageFieldsFromGetter();
 
-    void InvalidMessageConstructorTest();
+    void invalidMessageConstructorTest();
 };
 
 using namespace qtprotobufnamespace::tests;
 
-void QtProtobufTypesGenerationTest::EmptyMessageTest()
+void QtProtobufTypesGenerationTest::emptyMessageTest()
 {
     QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::staticPropertyOrdering.fieldCount(), 0);
     QCOMPARE(qtprotobufnamespace::tests::EmptyMessage::staticMetaObject.propertyCount(), 0);
@@ -72,7 +72,7 @@ void QtProtobufTypesGenerationTest::EmptyMessageTest()
     QCOMPARE(from, to);
 }
 
-void QtProtobufTypesGenerationTest::BoolMessageTest()
+void QtProtobufTypesGenerationTest::boolMessageTest()
 {
     const char *propertyName = "testFieldBool";
     qProtobufAssertMessagePropertyRegistered<SimpleBoolMessage, bool>(1, "bool", propertyName);
@@ -101,7 +101,7 @@ void QtProtobufTypesGenerationTest::BoolMessageTest()
 
 }
 
-void QtProtobufTypesGenerationTest::IntMessageTest()
+void QtProtobufTypesGenerationTest::intMessageTest()
 {
     const char *propertyName = "testFieldInt";
     qProtobufAssertMessagePropertyRegistered<qtprotobufnamespace::tests::SimpleIntMessage, QtProtobuf::int32>(1, "QtProtobuf::int32", propertyName);
@@ -118,7 +118,7 @@ void QtProtobufTypesGenerationTest::IntMessageTest()
              "qtprotobufnamespace.tests.SimpleIntMessage");
 }
 
-void QtProtobufTypesGenerationTest::SIntMessageTest()
+void QtProtobufTypesGenerationTest::sIntMessageTest()
 {
     const char *propertyName = "testFieldInt";
     qProtobufAssertMessagePropertyRegistered<SimpleSIntMessage, QtProtobuf::sint32>(1, "QtProtobuf::sint32", propertyName);
@@ -133,7 +133,7 @@ void QtProtobufTypesGenerationTest::SIntMessageTest()
              "qtprotobufnamespace.tests.SimpleSIntMessage");
 }
 
-void QtProtobufTypesGenerationTest::UIntMessageTest()
+void QtProtobufTypesGenerationTest::uIntMessageTest()
 {
     const char *propertyName = "testFieldInt";
     qProtobufAssertMessagePropertyRegistered<SimpleUIntMessage, QtProtobuf::uint32>(1, "QtProtobuf::uint32", propertyName);
@@ -148,7 +148,7 @@ void QtProtobufTypesGenerationTest::UIntMessageTest()
              "qtprotobufnamespace.tests.SimpleUIntMessage");
 }
 
-void QtProtobufTypesGenerationTest::Int64MessageTest()
+void QtProtobufTypesGenerationTest::int64MessageTest()
 {
     const char *propertyName = "testFieldInt";
     qProtobufAssertMessagePropertyRegistered<SimpleInt64Message, QtProtobuf::int64>(1, "QtProtobuf::int64", propertyName);
@@ -163,7 +163,7 @@ void QtProtobufTypesGenerationTest::Int64MessageTest()
              "qtprotobufnamespace.tests.SimpleInt64Message");
 }
 
-void QtProtobufTypesGenerationTest::SInt64MessageTest()
+void QtProtobufTypesGenerationTest::sInt64MessageTest()
 {
     const char *propertyName = "testFieldInt";
     qProtobufAssertMessagePropertyRegistered<SimpleSInt64Message, QtProtobuf::sint64>(1, "QtProtobuf::sint64", propertyName);
@@ -178,7 +178,7 @@ void QtProtobufTypesGenerationTest::SInt64MessageTest()
              "qtprotobufnamespace.tests.SimpleSInt64Message");
 }
 
-void QtProtobufTypesGenerationTest::UInt64MessageTest()
+void QtProtobufTypesGenerationTest::uInt64MessageTest()
 {
     const char *propertyName = "testFieldInt";
     qProtobufAssertMessagePropertyRegistered<SimpleUInt64Message, QtProtobuf::uint64>(1, "QtProtobuf::uint64", propertyName);
@@ -193,7 +193,7 @@ void QtProtobufTypesGenerationTest::UInt64MessageTest()
              "qtprotobufnamespace.tests.SimpleUInt64Message");
 }
 
-void QtProtobufTypesGenerationTest::FixedInt32MessageTest()
+void QtProtobufTypesGenerationTest::fixedInt32MessageTest()
 {
     const char *propertyName = "testFieldFixedInt32";
     qProtobufAssertMessagePropertyRegistered<SimpleFixedInt32Message, QtProtobuf::fixed32>(1, "QtProtobuf::fixed32", propertyName);
@@ -210,7 +210,7 @@ void QtProtobufTypesGenerationTest::FixedInt32MessageTest()
              "qtprotobufnamespace.tests.SimpleFixedInt32Message");
 }
 
-void QtProtobufTypesGenerationTest::FixedInt64MessageTest()
+void QtProtobufTypesGenerationTest::fixedInt64MessageTest()
 {
     const char *propertyName = "testFieldFixedInt64";
     qProtobufAssertMessagePropertyRegistered<SimpleFixedInt64Message, QtProtobuf::fixed64>(1, "QtProtobuf::fixed64", propertyName);
@@ -227,7 +227,7 @@ void QtProtobufTypesGenerationTest::FixedInt64MessageTest()
              "qtprotobufnamespace.tests.SimpleFixedInt64Message");
 }
 
-void QtProtobufTypesGenerationTest::SFixedInt32MessageTest()
+void QtProtobufTypesGenerationTest::sFixedInt32MessageTest()
 {
     const char *propertyName = "testFieldFixedInt32";
     qProtobufAssertMessagePropertyRegistered<SimpleSFixedInt32Message, QtProtobuf::sfixed32>(1, "QtProtobuf::sfixed32", propertyName);
@@ -244,7 +244,7 @@ void QtProtobufTypesGenerationTest::SFixedInt32MessageTest()
              "qtprotobufnamespace.tests.SimpleSFixedInt32Message");
 }
 
-void QtProtobufTypesGenerationTest::SFixedInt64MessageTest()
+void QtProtobufTypesGenerationTest::sFixedInt64MessageTest()
 {
     const char *propertyName = "testFieldFixedInt64";
     qProtobufAssertMessagePropertyRegistered<SimpleSFixedInt64Message, QtProtobuf::sfixed64>(1, "QtProtobuf::sfixed64", propertyName);
@@ -261,7 +261,7 @@ void QtProtobufTypesGenerationTest::SFixedInt64MessageTest()
              "qtprotobufnamespace.tests.SimpleSFixedInt64Message");
 }
 
-void QtProtobufTypesGenerationTest::StringMessageTest()
+void QtProtobufTypesGenerationTest::stringMessageTest()
 {
     const char *propertyName = "testFieldString";
     SimpleStringMessage test;
@@ -278,7 +278,7 @@ void QtProtobufTypesGenerationTest::StringMessageTest()
              "qtprotobufnamespace.tests.SimpleStringMessage");
 }
 
-void QtProtobufTypesGenerationTest::FloatMessageTest()
+void QtProtobufTypesGenerationTest::floatMessageTest()
 {
     const char *propertyName = "testFieldFloat";
     SimpleFloatMessage test;
@@ -298,7 +298,7 @@ void QtProtobufTypesGenerationTest::FloatMessageTest()
              "qtprotobufnamespace.tests.SimpleFloatMessage");
 }
 
-void QtProtobufTypesGenerationTest::DoubleMessageTest()
+void QtProtobufTypesGenerationTest::doubleMessageTest()
 {
     const char *propertyName = "testFieldDouble";
     SimpleDoubleMessage test;
@@ -317,7 +317,7 @@ void QtProtobufTypesGenerationTest::DoubleMessageTest()
              "qtprotobufnamespace.tests.SimpleDoubleMessage");
 }
 
-void QtProtobufTypesGenerationTest::ComplexMessageTest()
+void QtProtobufTypesGenerationTest::complexMessageTest()
 {
     const char *propertyName = "testComplexField_p";
     qProtobufAssertMessagePropertyRegistered<qtprotobufnamespace::tests::ComplexMessage, qtprotobufnamespace::tests::SimpleStringMessage*>(
@@ -345,7 +345,7 @@ void QtProtobufTypesGenerationTest::ComplexMessageTest()
     QCOMPARE(embeddedStringMessage.testFieldString(), QString());
 }
 
-void QtProtobufTypesGenerationTest::BytesMessageTest()
+void QtProtobufTypesGenerationTest::bytesMessageTest()
 {
     const char *propertyName = "testFieldBytes";
     SimpleBytesMessage test;
@@ -360,7 +360,7 @@ void QtProtobufTypesGenerationTest::BytesMessageTest()
              "qtprotobufnamespace.tests.SimpleBytesMessage");
 }
 
-void QtProtobufTypesGenerationTest::OneofMessageEmptyTest()
+void QtProtobufTypesGenerationTest::oneofMessageEmptyTest()
 {
     OneofMessage test;
     QVERIFY(!test.hasTestOneofFieldInt());
@@ -368,7 +368,7 @@ void QtProtobufTypesGenerationTest::OneofMessageEmptyTest()
     QCOMPARE(test.testOneofField(), OneofMessage::TestOneofFields::UninitializedField);
 }
 
-void QtProtobufTypesGenerationTest::OneofMessageTest()
+void QtProtobufTypesGenerationTest::oneofMessageTest()
 {
     OneofMessage test;
 
@@ -392,7 +392,7 @@ void QtProtobufTypesGenerationTest::OneofMessageTest()
     QCOMPARE(test.testOneofField(), OneofMessage::TestOneofFields::TestOneofComplexField);
 }
 
-void QtProtobufTypesGenerationTest::OneofMessageCopyComplexValueTest()
+void QtProtobufTypesGenerationTest::oneofMessageCopyComplexValueTest()
 {
     OneofMessage test;
     ComplexMessage complexField;
@@ -413,7 +413,7 @@ void QtProtobufTypesGenerationTest::OneofMessageCopyComplexValueTest()
     QCOMPARE(test.testOneofField(), OneofMessage::TestOneofFields::TestOneofSecondComplexField);
 }
 
-void QtProtobufTypesGenerationTest::AssignmentOperatorTest()
+void QtProtobufTypesGenerationTest::assignmentOperatorTest()
 {
     const char *propertyName = "testFieldInt";
     qtprotobufnamespace::tests::SimpleIntMessage test;
@@ -431,7 +431,7 @@ void QtProtobufTypesGenerationTest::AssignmentOperatorTest()
     QCOMPARE(test2.testFieldInt(), test.testFieldInt());
 }
 
-void QtProtobufTypesGenerationTest::MoveOperatorTest()
+void QtProtobufTypesGenerationTest::moveOperatorTest()
 {
     const char *propertyName = "testFieldInt";
     qtprotobufnamespace::tests::SimpleIntMessage test;
@@ -447,7 +447,7 @@ void QtProtobufTypesGenerationTest::MoveOperatorTest()
     QCOMPARE(test4.testFieldInt(), 35);
 }
 
-void QtProtobufTypesGenerationTest::AccessMessageFieldsFromGetter()
+void QtProtobufTypesGenerationTest::accessMessageFieldsFromGetter()
 {
     SimpleStringMessage stringMsg;
     stringMsg.setTestFieldString({ "AccessMessageFieldsFromGetter" });
@@ -461,7 +461,7 @@ void QtProtobufTypesGenerationTest::AccessMessageFieldsFromGetter()
     QCOMPARE(actual, expected);
 }
 
-void QtProtobufTypesGenerationTest::InvalidMessageConstructorTest()
+void QtProtobufTypesGenerationTest::invalidMessageConstructorTest()
 {
     QProtobufMessagePointer message(QProtobufMessage::constructByName(
             "qtprotobufnamespace.tests.InvalidMessageConstructorTestNotExists"));

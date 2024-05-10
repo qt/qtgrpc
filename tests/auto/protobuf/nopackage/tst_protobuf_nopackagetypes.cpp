@@ -15,20 +15,20 @@ class QtProtobufNoPackageTypesGenerationTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void NoPackageEmptyMessageMessageTest();
-    void NoPackageSimpleIntMessageTest();
-    void NoPackageEnumTest();
-    void NoPackageExternalTest();
-    void NoPackageMessageTest();
+    void noPackageEmptyMessageMessageTest();
+    void noPackageSimpleIntMessageTest();
+    void noPackageEnumTest();
+    void noPackageExternalTest();
+    void noPackageMessageTest();
 };
 
-void QtProtobufNoPackageTypesGenerationTest::NoPackageEmptyMessageMessageTest()
+void QtProtobufNoPackageTypesGenerationTest::noPackageEmptyMessageMessageTest()
 {
     QCOMPARE(::EmptyMessage::staticPropertyOrdering.fieldCount(), 0);
     QCOMPARE(::EmptyMessage::staticMetaObject.propertyCount(), 0);
 }
 
-void QtProtobufNoPackageTypesGenerationTest::NoPackageSimpleIntMessageTest()
+void QtProtobufNoPackageTypesGenerationTest::noPackageSimpleIntMessageTest()
 {
     const char *propertyName = "testFieldInt";
     qProtobufAssertMessagePropertyRegistered<::SimpleIntMessage, QtProtobuf::int32>(1, "QtProtobuf::int32", propertyName);
@@ -42,7 +42,7 @@ void QtProtobufNoPackageTypesGenerationTest::NoPackageSimpleIntMessageTest()
     QCOMPARE(test.staticPropertyOrdering.getMessageFullName(), "SimpleIntMessage");
 }
 
-void QtProtobufNoPackageTypesGenerationTest::NoPackageEnumTest()
+void QtProtobufNoPackageTypesGenerationTest::noPackageEnumTest()
 {
     QVERIFY(::TestEnumGadget::staticMetaObject.enumeratorCount() > 0);
     QMetaEnum testEnum;
@@ -66,7 +66,7 @@ void QtProtobufNoPackageTypesGenerationTest::NoPackageEnumTest()
     QCOMPARE(testEnum.value(3), 5);
 }
 
-void QtProtobufNoPackageTypesGenerationTest::NoPackageExternalTest()
+void QtProtobufNoPackageTypesGenerationTest::noPackageExternalTest()
 {
     const char *propertyName = "testField_p";
     qProtobufAssertMessagePropertyRegistered<NoPackageExternalMessage, SimpleIntMessageExt*>(1, "SimpleIntMessageExt*", propertyName);
@@ -83,7 +83,7 @@ void QtProtobufNoPackageTypesGenerationTest::NoPackageExternalTest()
     QCOMPARE(test.staticPropertyOrdering.getMessageFullName(), "NoPackageExternalMessage");
 }
 
-void QtProtobufNoPackageTypesGenerationTest::NoPackageMessageTest()
+void QtProtobufNoPackageTypesGenerationTest::noPackageMessageTest()
 {
     const char *propertyName = "testField_p";
     qProtobufAssertMessagePropertyRegistered<NoPackageMessage, SimpleIntMessage*>(1, "SimpleIntMessage*", propertyName);

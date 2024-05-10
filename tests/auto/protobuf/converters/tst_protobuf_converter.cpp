@@ -18,11 +18,11 @@ public:
         qRegisterProtobufTypes();
     }
 private slots:
-    void TestFromTypeConverters();
-    void TestToTypeConverters();
+    void testFromTypeConverters();
+    void testToTypeConverters();
 };
 
-void QtProtobufConverterTest::TestFromTypeConverters()
+void QtProtobufConverterTest::testFromTypeConverters()
 {
     QVariant testVariant;
 
@@ -45,7 +45,7 @@ void QtProtobufConverterTest::TestFromTypeConverters()
     QCOMPARE(testVariant.value<QtProtobuf::int64>()._t, 47);
 }
 
-void QtProtobufConverterTest::TestToTypeConverters()
+void QtProtobufConverterTest::testToTypeConverters()
 {
     bool ok = false;
     QVariant testVariant;

@@ -23,11 +23,11 @@ public:
     }
 
 private slots:
-    void Valid();
-    void SequentialSend();
+    void valid();
+    void sequentialSend();
 };
 
-void QtGrpcClientClientStreamTest::Valid()
+void QtGrpcClientClientStreamTest::valid()
 {
     const int ExpectedMessageCount = 4;
 
@@ -59,7 +59,7 @@ void QtGrpcClientClientStreamTest::Valid()
     QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3Stream4");
 }
 
-void QtGrpcClientClientStreamTest::SequentialSend()
+void QtGrpcClientClientStreamTest::sequentialSend()
 {
     const int ExpectedMessageCount = 4;
 

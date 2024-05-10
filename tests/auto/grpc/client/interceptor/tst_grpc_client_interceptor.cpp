@@ -21,13 +21,13 @@ class QtGrpcClientInterceptorTest : public QObject
     Q_OBJECT
 private slots:
 
-    void ClientInterceptorTest();
-    void ContinuationNotCalledTest();
-    void BatchRegistrationOrderingTest();
-    void CancelledInterceptor();
+    void clientInterceptorTest();
+    void continuationNotCalledTest();
+    void batchRegistrationOrderingTest();
+    void cancelledInterceptor();
 };
 
-void QtGrpcClientInterceptorTest::ClientInterceptorTest()
+void QtGrpcClientInterceptorTest::clientInterceptorTest()
 {
     using Continuation = QGrpcInterceptorContinuation<QGrpcCallReply>;
     constexpr QLatin1StringView interceptor1Id = "inter1"_L1;
@@ -71,7 +71,7 @@ void QtGrpcClientInterceptorTest::ClientInterceptorTest()
     QCOMPARE(key->second, interceptor1Id.latin1());
 }
 
-void QtGrpcClientInterceptorTest::ContinuationNotCalledTest()
+void QtGrpcClientInterceptorTest::continuationNotCalledTest()
 {
     using Continuation = QGrpcInterceptorContinuation<QGrpcCallReply>;
     constexpr QLatin1StringView interceptor1Id = "inter1"_L1;
@@ -117,7 +117,7 @@ void QtGrpcClientInterceptorTest::ContinuationNotCalledTest()
     QCOMPARE(key->second, interceptor2Id.latin1());
 }
 
-void QtGrpcClientInterceptorTest::BatchRegistrationOrderingTest()
+void QtGrpcClientInterceptorTest::batchRegistrationOrderingTest()
 {
     using Continuation = QGrpcInterceptorContinuation<QGrpcCallReply>;
     constexpr QLatin1StringView interceptorIdPrefix = "inter"_L1;
@@ -164,7 +164,7 @@ void QtGrpcClientInterceptorTest::BatchRegistrationOrderingTest()
     QCOMPARE(interceptorOrder.at(3), "inter1"_L1);
 }
 
-void QtGrpcClientInterceptorTest::CancelledInterceptor()
+void QtGrpcClientInterceptorTest::cancelledInterceptor()
 {
     using Continuation = QGrpcInterceptorContinuation<QGrpcCallReply>;
     constexpr QLatin1StringView interceptor1Id = "inter1"_L1;

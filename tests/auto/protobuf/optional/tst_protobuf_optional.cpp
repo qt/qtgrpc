@@ -17,12 +17,12 @@ class QtProtobufOptionalTest : public QObject
     Q_OBJECT
 
 private slots:
-    void Copy();
-    void Move();
-    void Equal();
+    void copy();
+    void move();
+    void equal();
 };
 
-void QtProtobufOptionalTest::Copy()
+void QtProtobufOptionalTest::copy()
 {
     qtprotobufnamespace::optional::tests::OptionalMessage msg;
     msg.setTestFieldBoolOpt(true);
@@ -65,7 +65,7 @@ void QtProtobufOptionalTest::Copy()
     QCOMPARE(other2.testFieldBytesOpt(), msg.testFieldBytesOpt());
 }
 
-void QtProtobufOptionalTest::Move()
+void QtProtobufOptionalTest::move()
 {
     qtprotobufnamespace::optional::tests::OptionalMessage msg;
     msg.setTestFieldBoolOpt(true);
@@ -114,7 +114,7 @@ void QtProtobufOptionalTest::Move()
     QCOMPARE(other2.testFieldBytesOpt(), msg.testFieldBytesOpt());
 }
 
-void QtProtobufOptionalTest::Equal()
+void QtProtobufOptionalTest::equal()
 {
     qtprotobufnamespace::optional::tests::OptionalMessage msg1;
     msg1.setTestFieldBoolOpt(true);

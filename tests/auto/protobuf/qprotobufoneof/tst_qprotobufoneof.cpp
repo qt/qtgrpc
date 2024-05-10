@@ -58,10 +58,10 @@ class QProtobufOneofTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void ValueReplacement();
-    void ValueImplicitSharing();
-    void MoveValue();
-    void EqualOperator();
+    void valueReplacement();
+    void valueImplicitSharing();
+    void moveValue();
+    void equalOperator();
 
     void init()
     {
@@ -72,7 +72,7 @@ private slots:
 
 Q_DECLARE_METATYPE(TestMetaType)
 
-void QProtobufOneofTest::ValueReplacement()
+void QProtobufOneofTest::valueReplacement()
 {
     {
         QtProtobufPrivate::QProtobufOneof optional;
@@ -92,7 +92,7 @@ void QProtobufOneofTest::ValueReplacement()
     QCOMPARE(TestMetaType::m_copied, 2);
 }
 
-void QProtobufOneofTest::ValueImplicitSharing()
+void QProtobufOneofTest::valueImplicitSharing()
 {
     {
         QtProtobufPrivate::QProtobufOneof optional;
@@ -136,7 +136,7 @@ void QProtobufOneofTest::ValueImplicitSharing()
     QCOMPARE(optional4.value<TestMetaType>()->intValue(), 5);
 }
 
-void QProtobufOneofTest::EqualOperator()
+void QProtobufOneofTest::equalOperator()
 {
     QtProtobufPrivate::QProtobufOneof optional1;
     optional1.setValue(TestMetaType{ 5 }, 1);
@@ -182,7 +182,7 @@ void QProtobufOneofTest::EqualOperator()
     QVERIFY(optional1 != optional2);
 }
 
-void QProtobufOneofTest::MoveValue()
+void QProtobufOneofTest::moveValue()
 {
     {
         QtProtobufPrivate::QProtobufOneof optional;

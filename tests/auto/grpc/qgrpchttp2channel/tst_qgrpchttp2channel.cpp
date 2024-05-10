@@ -78,13 +78,13 @@ class QGrpcHttp2ChannelTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void CheckMethodsGeneration();
-    void AttachChannelThreadTest();
-    void SerializationFormat();
-    void SerializationFormatWithHeaders();
+    void checkMethodsGeneration();
+    void attachChannelThreadTest();
+    void serializationFormat();
+    void serializationFormatWithHeaders();
 };
 
-void QGrpcHttp2ChannelTest::CheckMethodsGeneration()
+void QGrpcHttp2ChannelTest::checkMethodsGeneration()
 {
     // Dummy compile time check of functions generation and interface compatibility
     TestService::Client client;
@@ -95,7 +95,7 @@ void QGrpcHttp2ChannelTest::CheckMethodsGeneration()
     client.testMethod(request, &client, [](std::shared_ptr<QGrpcCallReply>) {});
 }
 
-void QGrpcHttp2ChannelTest::AttachChannelThreadTest()
+void QGrpcHttp2ChannelTest::attachChannelThreadTest()
 {
     std::shared_ptr<QGrpcHttp2Channel> channel;
     QGrpcChannelOptions channelOptions(QUrl("http://localhost:50051", QUrl::StrictMode));
@@ -121,7 +121,7 @@ void QGrpcHttp2ChannelTest::AttachChannelThreadTest()
                             "thread."));
 }
 
-void QGrpcHttp2ChannelTest::SerializationFormat()
+void QGrpcHttp2ChannelTest::serializationFormat()
 {
     std::shared_ptr<QAbstractGrpcChannel>
         channel = std::make_shared<QGrpcHttp2Channel>(QGrpcChannelOptions{
@@ -147,7 +147,7 @@ void QGrpcHttp2ChannelTest::SerializationFormat()
     QVERIFY(dynamic_cast<DummySerializer *>(channel->serializer().get()) != nullptr);
 }
 
-void QGrpcHttp2ChannelTest::SerializationFormatWithHeaders()
+void QGrpcHttp2ChannelTest::serializationFormatWithHeaders()
 {
     std::shared_ptr<QAbstractGrpcChannel> channel = std::make_shared<
         QGrpcHttp2Channel>(QGrpcChannelOptions{

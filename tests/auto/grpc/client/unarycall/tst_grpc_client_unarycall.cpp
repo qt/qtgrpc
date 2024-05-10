@@ -40,24 +40,24 @@ public:
     }
 
 private slots:
-    void AsyncWithSubscribe();
-    void AsyncWithLambda();
-    void ImmediateCancel();
-    void DeferredCancel();
-    void AsyncClientStatusMessage();
-    void AsyncStatusMessage();
-    void InThread();
-    void AsyncInThread();
-    void Metadata();
-    void Deadline_data();
-    void Deadline();
-    void Interceptor();
-    void CancelledInterceptor();
-    void InterceptResponse();
-    void CacheIntercept();
+    void asyncWithSubscribe();
+    void asyncWithLambda();
+    void immediateCancel();
+    void deferredCancel();
+    void asyncClientStatusMessage();
+    void asyncStatusMessage();
+    void inThread();
+    void asyncInThread();
+    void metadata();
+    void deadline_data();
+    void deadline();
+    void interceptor();
+    void cancelledInterceptor();
+    void interceptResponse();
+    void cacheIntercept();
 };
 
-void QtGrpcClientUnaryCallTest::AsyncWithSubscribe()
+void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Hello Qt!");
@@ -75,7 +75,7 @@ void QtGrpcClientUnaryCallTest::AsyncWithSubscribe()
     QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
 }
 
-void QtGrpcClientUnaryCallTest::AsyncWithLambda()
+void QtGrpcClientUnaryCallTest::asyncWithLambda()
 {
     std::optional<SimpleStringMessage> result = SimpleStringMessage();
     SimpleStringMessage request;
@@ -92,7 +92,7 @@ void QtGrpcClientUnaryCallTest::AsyncWithLambda()
     QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
 }
 
-void QtGrpcClientUnaryCallTest::ImmediateCancel()
+void QtGrpcClientUnaryCallTest::immediateCancel()
 {
     SimpleStringMessage request;
     request.setTestFieldString("sleep");
@@ -123,7 +123,7 @@ void QtGrpcClientUnaryCallTest::ImmediateCancel()
                 QGrpcStatus::Cancelled);
 }
 
-void QtGrpcClientUnaryCallTest::DeferredCancel()
+void QtGrpcClientUnaryCallTest::deferredCancel()
 {
     SimpleStringMessage request;
     request.setTestFieldString("sleep");
@@ -146,7 +146,7 @@ void QtGrpcClientUnaryCallTest::DeferredCancel()
     QCOMPARE_EQ(result->testFieldString(), "Result not changed by echo");
 }
 
-void QtGrpcClientUnaryCallTest::AsyncClientStatusMessage()
+void QtGrpcClientUnaryCallTest::asyncClientStatusMessage()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Some status message");
@@ -162,7 +162,7 @@ void QtGrpcClientUnaryCallTest::AsyncClientStatusMessage()
              request.testFieldString());
 }
 
-void QtGrpcClientUnaryCallTest::AsyncStatusMessage()
+void QtGrpcClientUnaryCallTest::asyncStatusMessage()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Some status message");
@@ -177,7 +177,7 @@ void QtGrpcClientUnaryCallTest::AsyncStatusMessage()
              request.testFieldString());
 }
 
-void QtGrpcClientUnaryCallTest::InThread()
+void QtGrpcClientUnaryCallTest::inThread()
 {
     SimpleStringMessage request;
 
@@ -199,7 +199,7 @@ void QtGrpcClientUnaryCallTest::InThread()
                     .startsWith("QGrpcClientBase::call is called from a different thread."));
 }
 
-void QtGrpcClientUnaryCallTest::AsyncInThread()
+void QtGrpcClientUnaryCallTest::asyncInThread()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Hello Qt from thread!");
@@ -228,7 +228,7 @@ void QtGrpcClientUnaryCallTest::AsyncInThread()
                     .startsWith("QGrpcClientBase::call is called from a different thread."));
 }
 
-void QtGrpcClientUnaryCallTest::Metadata()
+void QtGrpcClientUnaryCallTest::metadata()
 {
     QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
     QVERIFY(clientErrorSpy.isValid());
@@ -261,7 +261,7 @@ void QtGrpcClientUnaryCallTest::Metadata()
     QCOMPARE_EQ(clientReturnHeader, "valid_value"_ba);
 }
 
-void QtGrpcClientUnaryCallTest::Deadline_data()
+void QtGrpcClientUnaryCallTest::deadline_data()
 {
     QTest::addColumn<QGrpcDuration>("timeout");
     constexpr std::array<qreal, 4> messageLatencyFractions{ 0.7, 0.9, 1.0, 1.3 };
@@ -270,7 +270,7 @@ void QtGrpcClientUnaryCallTest::Deadline_data()
                 << QGrpcDuration(static_cast<int64_t>(MessageLatency * fraction));
 }
 
-void QtGrpcClientUnaryCallTest::Deadline()
+void QtGrpcClientUnaryCallTest::deadline()
 {
     QFETCH(const QGrpcDuration, timeout);
 
@@ -303,7 +303,7 @@ void QtGrpcClientUnaryCallTest::Deadline()
     }
 }
 
-void QtGrpcClientUnaryCallTest::Interceptor()
+void QtGrpcClientUnaryCallTest::interceptor()
 {
     constexpr QLatin1StringView clientMetadataKey = "client_header"_L1;
     constexpr QLatin1StringView serverMetadataKey = "server_header"_L1;
@@ -340,7 +340,7 @@ void QtGrpcClientUnaryCallTest::Interceptor()
     QCOMPARE_EQ(it->second, "inter1inter2"_ba);
 }
 
-void QtGrpcClientUnaryCallTest::CancelledInterceptor()
+void QtGrpcClientUnaryCallTest::cancelledInterceptor()
 {
     constexpr QLatin1StringView interceptor1Id = "inter1"_L1;
 
@@ -375,7 +375,7 @@ void QtGrpcClientUnaryCallTest::CancelledInterceptor()
     QCOMPARE_EQ(result->testFieldString(), "Result not changed by echo");
 }
 
-void QtGrpcClientUnaryCallTest::InterceptResponse()
+void QtGrpcClientUnaryCallTest::interceptResponse()
 {
     std::optional<SimpleStringMessage> serverResponse = SimpleStringMessage();
     auto interceptFunc =
@@ -408,7 +408,7 @@ void QtGrpcClientUnaryCallTest::InterceptResponse()
     QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
 }
 
-void QtGrpcClientUnaryCallTest::CacheIntercept()
+void QtGrpcClientUnaryCallTest::cacheIntercept()
 {
     SimpleStringMessage serverResponse;
     auto interceptFunc =

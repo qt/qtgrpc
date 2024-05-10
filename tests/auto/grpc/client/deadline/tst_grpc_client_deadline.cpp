@@ -22,11 +22,11 @@ class QtGrpcClientDeadlineTest : public GrpcClientTestBase
 public:
     QtGrpcClientDeadlineTest() : GrpcClientTestBase(Channels(Channel::WithChannelDeadline)) { }
 private slots:
-    void ChannelAndCallDeadlineTest_data();
-    void ChannelAndCallDeadlineTest();
+    void channelAndCallDeadlineTest_data();
+    void channelAndCallDeadlineTest();
 };
 
-void QtGrpcClientDeadlineTest::ChannelAndCallDeadlineTest_data()
+void QtGrpcClientDeadlineTest::channelAndCallDeadlineTest_data()
 {
     QTest::addColumn<double>("minTimeout");
     QTest::addColumn<double>("maxTimeout");
@@ -35,7 +35,7 @@ void QtGrpcClientDeadlineTest::ChannelAndCallDeadlineTest_data()
     QTest::addRow("0.25") << double(0.25) << double(0.6);
 }
 
-void QtGrpcClientDeadlineTest::ChannelAndCallDeadlineTest()
+void QtGrpcClientDeadlineTest::channelAndCallDeadlineTest()
 {
     QFETCH(double, minTimeout);
     QFETCH(double, maxTimeout);

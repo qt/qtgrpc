@@ -11,24 +11,24 @@ class QtProtobufEnumTypesDeserializationTest : public QObject
     Q_OBJECT
 private slots:
     void init() { m_serializer.reset(new QProtobufJsonSerializer); }
-    void SimpleEnumMessageDeserializeTest();
-    void RepeatedEnumMessageTest();
-    void MalformedJsonTest();
-    void InvalidTypeTest();
+    void simpleEnumMessageDeserializeTest();
+    void repeatedEnumMessageTest();
+    void malformedJsonTest();
+    void invalidTypeTest();
 private:
     std::unique_ptr<QProtobufJsonSerializer> m_serializer;
 };
 
 using namespace qtprotobufnamespace::tests;
 
-void QtProtobufEnumTypesDeserializationTest::SimpleEnumMessageDeserializeTest()
+void QtProtobufEnumTypesDeserializationTest::simpleEnumMessageDeserializeTest()
 {
     SimpleEnumMessage test;
     test.deserialize(m_serializer.get(), "{\"localEnum\":\"LOCAL_ENUM_VALUE2\"}");
     QCOMPARE(test.localEnum(), SimpleEnumMessage::LocalEnum::LOCAL_ENUM_VALUE2);
 }
 
-void QtProtobufEnumTypesDeserializationTest::RepeatedEnumMessageTest()
+void QtProtobufEnumTypesDeserializationTest::repeatedEnumMessageTest()
 {
     RepeatedEnumMessage msg;
 
@@ -50,7 +50,7 @@ void QtProtobufEnumTypesDeserializationTest::RepeatedEnumMessageTest()
                  RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE3 }));
 }
 
-void QtProtobufEnumTypesDeserializationTest::MalformedJsonTest()
+void QtProtobufEnumTypesDeserializationTest::malformedJsonTest()
 {
     SimpleEnumMessage test;
     // more braces
@@ -71,7 +71,7 @@ void QtProtobufEnumTypesDeserializationTest::MalformedJsonTest()
              QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
 }
 
-void QtProtobufEnumTypesDeserializationTest::InvalidTypeTest()
+void QtProtobufEnumTypesDeserializationTest::invalidTypeTest()
 {
     // no LOCAL_ENUM_VALUE240
     SimpleEnumMessage invalidTest;

@@ -15,29 +15,29 @@ class QtProtobufRepeatedTypesGenerationTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void RepeatedStringMessageTest();
-    void RepeatedIntMessageTest();
-    void RepeatedDoubleMessageTest();
-    void RepeatedFloatMessageTest();
-    void RepeatedBytesMessageTest();
-    void RepeatedSIntMessageTest();
-    void RepeatedUIntMessageTest();
-    void RepeatedInt64MessageTest();
-    void RepeatedSInt64MessageTest();
-    void RepeatedUInt64MessageTest();
-    void RepeatedFixedIntMessageTest();
-    void RepeatedFixedInt64MessageTest();
-    void RepeatedSFixedIntMessageTest();
-    void RepeatedSFixedInt64MessageTest();
-    void RepeatedBoolTest();
+    void repeatedStringMessageTest();
+    void repeatedIntMessageTest();
+    void repeatedDoubleMessageTest();
+    void repeatedFloatMessageTest();
+    void repeatedBytesMessageTest();
+    void repeatedSIntMessageTest();
+    void repeatedUIntMessageTest();
+    void repeatedInt64MessageTest();
+    void repeatedSInt64MessageTest();
+    void repeatedUInt64MessageTest();
+    void repeatedFixedIntMessageTest();
+    void repeatedFixedInt64MessageTest();
+    void repeatedSFixedIntMessageTest();
+    void repeatedSFixedInt64MessageTest();
+    void repeatedBoolTest();
 
-    void MoveOperatorRepeatedTest();
-    void RepeatedComplexMessageCompareTest();
+    void moveOperatorRepeatedTest();
+    void repeatedComplexMessageCompareTest();
 };
 
 using namespace qtprotobufnamespace::tests;
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedStringMessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedStringMessageTest()
 {
     const char *propertyName = "testRepeatedString";
     qProtobufAssertMessagePropertyRegistered<RepeatedStringMessage, QStringList>(1, "QStringList", propertyName);
@@ -48,7 +48,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedStringMessageTest()
     QCOMPARE(test.testRepeatedString(), QStringList({"Text", "tryam"}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedIntMessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedIntMessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedIntMessage, QtProtobuf::int32List>(1, "QtProtobuf::int32List", propertyName);
@@ -65,7 +65,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedIntMessageTest()
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::int32List({1, 2, 3, 4, 5}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedDoubleMessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedDoubleMessageTest()
 {
     const char *propertyName = "testRepeatedDouble";
     qProtobufAssertMessagePropertyRegistered<RepeatedDoubleMessage, QtProtobuf::doubleList>(1, "QtProtobuf::doubleList", propertyName);
@@ -82,7 +82,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedDoubleMessageTest()
     QCOMPARE(test.testRepeatedDouble(), QtProtobuf::doubleList({1.0, 2.3, 3, 4.7, 5.9}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedFloatMessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedFloatMessageTest()
 {
     const char *propertyName = "testRepeatedFloat";
     qProtobufAssertMessagePropertyRegistered<RepeatedFloatMessage, QtProtobuf::floatList>(1, "QtProtobuf::floatList", propertyName);
@@ -99,7 +99,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedFloatMessageTest()
     QCOMPARE(test.testRepeatedFloat(), QtProtobuf::floatList({1.0f, 2.3f, 3, 4.7f, 5.9f}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedBytesMessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedBytesMessageTest()
 {
     const char *propertyName = "testRepeatedBytes";
     qProtobufAssertMessagePropertyRegistered<RepeatedBytesMessage, QByteArrayList>(1, "QByteArrayList", propertyName);
@@ -122,7 +122,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedBytesMessageTest()
     QCOMPARE(test.testRepeatedBytes(), bList);
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedSIntMessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedSIntMessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedSIntMessage, QtProtobuf::sint32List>(1, "QtProtobuf::sint32List", propertyName);
@@ -139,7 +139,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedSIntMessageTest()
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::sint32List({1, 2, 3, 4, 5}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedUIntMessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedUIntMessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedUIntMessage, QtProtobuf::uint32List>(1, "QtProtobuf::uint32List", propertyName);
@@ -156,7 +156,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedUIntMessageTest()
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::uint32List({1, 2, 3, 4, 5}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedInt64MessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedInt64MessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedInt64Message, QtProtobuf::int64List>(1, "QtProtobuf::int64List", propertyName);
@@ -173,7 +173,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedInt64MessageTest()
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::int64List({1, 2, 3, 4, 5}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedSInt64MessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedSInt64MessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedSInt64Message, QtProtobuf::sint64List>(1, "QtProtobuf::sint64List", propertyName);
@@ -190,7 +190,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedSInt64MessageTest()
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::sint64List({1, 2, 3, 4, 5}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedUInt64MessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedUInt64MessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedUInt64Message, QtProtobuf::uint64List>(1, "QtProtobuf::uint64List", propertyName);
@@ -207,7 +207,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedUInt64MessageTest()
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::uint64List({1, 2, 3, 4, 5}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedFixedIntMessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedFixedIntMessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedFixedIntMessage, QtProtobuf::fixed32List>(1, "QtProtobuf::fixed32List", propertyName);
@@ -224,7 +224,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedFixedIntMessageTest()
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::fixed32List({1, 2, 3, 4, 5}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedFixedInt64MessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedFixedInt64MessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedFixedInt64Message, QtProtobuf::fixed64List>(1, "QtProtobuf::fixed64List", propertyName);
@@ -241,7 +241,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedFixedInt64MessageTest()
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::fixed64List({1, 2, 3, 4, 5}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedSFixedIntMessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedSFixedIntMessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedSFixedIntMessage, QtProtobuf::sfixed32List>(1, "QtProtobuf::sfixed32List", propertyName);
@@ -258,7 +258,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedSFixedIntMessageTest()
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::sfixed32List({1, 2, 3, 4, 5}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedSFixedInt64MessageTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedSFixedInt64MessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedSFixedInt64Message, QtProtobuf::sfixed64List>(1, "QtProtobuf::sfixed64List", propertyName);
@@ -275,7 +275,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedSFixedInt64MessageTest()
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::sfixed64List({1, 2, 3, 4, 5}));
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedBoolTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedBoolTest()
 {
     const char *propertyName = "testRepeatedBool";
     qProtobufAssertMessagePropertyRegistered<RepeatedBoolMessage, QtProtobuf::boolList>(
@@ -296,7 +296,7 @@ void QtProtobufRepeatedTypesGenerationTest::RepeatedBoolTest()
     QCOMPARE(test.testRepeatedBool(), list);
 }
 
-void QtProtobufRepeatedTypesGenerationTest::MoveOperatorRepeatedTest()
+void QtProtobufRepeatedTypesGenerationTest::moveOperatorRepeatedTest()
 {
     const char *propertyName = "testRepeatedInt";
     RepeatedIntMessage test;
@@ -314,7 +314,7 @@ void QtProtobufRepeatedTypesGenerationTest::MoveOperatorRepeatedTest()
     QCOMPARE(QtProtobuf::int32List({ 55, 44, 11, 35 }), test4.testRepeatedInt());
 }
 
-void QtProtobufRepeatedTypesGenerationTest::RepeatedComplexMessageCompareTest()
+void QtProtobufRepeatedTypesGenerationTest::repeatedComplexMessageCompareTest()
 {
     SimpleStringMessage stringMsg;
 

@@ -15,17 +15,17 @@ class QtProtobufExtraNamespaceTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void EmptyMessageTest();
-    void ComplexMessageTest();
+    void emptyMessageTest();
+    void complexMessageTest();
 };
 
-void QtProtobufExtraNamespaceTest::EmptyMessageTest()
+void QtProtobufExtraNamespaceTest::emptyMessageTest()
 {
     QCOMPARE(EmptyMessage::staticPropertyOrdering.fieldCount(), 0);
     QCOMPARE(EmptyMessage::staticMetaObject.propertyCount(), 0);
 }
 
-void QtProtobufExtraNamespaceTest::ComplexMessageTest()
+void QtProtobufExtraNamespaceTest::complexMessageTest()
 {
     const char *propertyName = "testComplexField_p";
     qProtobufAssertMessagePropertyRegistered<ComplexMessage, SimpleStringMessage*>(

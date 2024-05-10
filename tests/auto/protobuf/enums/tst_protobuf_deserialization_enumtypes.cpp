@@ -15,22 +15,22 @@ private slots:
     {
         m_serializer.reset(new QProtobufSerializer);
     }
-    void SimpleEnumMessageDeserializeTest();
-    void RepeatedEnumMessageTest();
+    void simpleEnumMessageDeserializeTest();
+    void repeatedEnumMessageTest();
 private:
     std::unique_ptr<QProtobufSerializer> m_serializer;
 };
 
 using namespace qtprotobufnamespace::tests;
 
-void QtProtobufEnumTypesDeserializationTest::SimpleEnumMessageDeserializeTest()
+void QtProtobufEnumTypesDeserializationTest::simpleEnumMessageDeserializeTest()
 {
     SimpleEnumMessage test;
     test.deserialize(m_serializer.get(), QByteArray::fromHex("0803"));
     QCOMPARE(test.localEnum(), SimpleEnumMessage::LocalEnum::LOCAL_ENUM_VALUE3);
 }
 
-void QtProtobufEnumTypesDeserializationTest::RepeatedEnumMessageTest()
+void QtProtobufEnumTypesDeserializationTest::repeatedEnumMessageTest()
 {
     RepeatedEnumMessage msg;
 

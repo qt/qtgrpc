@@ -20,26 +20,26 @@ class QtProtobufMapTypesDeserializationTest : public QObject
 private slots:
     void init() { serializer.reset(new QProtobufSerializer); }
 
-    void SimpleFixed32ComplexMapDeserializeTest();
-    void SimpleSFixed32ComplexMapDeserializeTest();
-    void SimpleInt32ComplexMapDeserializeTest();
-    void SimpleSInt32ComplexMapDeserializeTest();
-    void SimpleUInt32ComplexMapDeserializeTest();
-    void SimpleFixed64ComplexMapDeserializeTest();
-    void SimpleSFixed64ComplexMapDeserializeTest();
-    void SimpleInt64ComplexMapDeserializeTest();
-    void SimpleSInt64ComplexMapDeserializeTest();
-    void SimpleUInt64ComplexMapDeserializeTest();
-    void SimpleStringComplexMapDeserializeTest();
-    void SimpleUInt64ComplexMapInvalidLengthDeserializeTest();
-    void SimpleStringComplexMapInvalidLengthDeserializeTest();
-    void SimpleUInt64ComplexMapCorruptedDeserializeTest();
+    void simpleFixed32ComplexMapDeserializeTest();
+    void simpleSFixed32ComplexMapDeserializeTest();
+    void simpleInt32ComplexMapDeserializeTest();
+    void simpleSInt32ComplexMapDeserializeTest();
+    void simpleUInt32ComplexMapDeserializeTest();
+    void simpleFixed64ComplexMapDeserializeTest();
+    void simpleSFixed64ComplexMapDeserializeTest();
+    void simpleInt64ComplexMapDeserializeTest();
+    void simpleSInt64ComplexMapDeserializeTest();
+    void simpleUInt64ComplexMapDeserializeTest();
+    void simpleStringComplexMapDeserializeTest();
+    void simpleUInt64ComplexMapInvalidLengthDeserializeTest();
+    void simpleStringComplexMapInvalidLengthDeserializeTest();
+    void simpleUInt64ComplexMapCorruptedDeserializeTest();
 
 private:
     std::unique_ptr<QProtobufSerializer> serializer;
 };
 
-void QtProtobufMapTypesDeserializationTest::SimpleFixed32ComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleFixed32ComplexMapDeserializeTest()
 {
     SimpleFixed32ComplexMessageMapMessage test;
     test.deserialize(serializer.get(),
@@ -70,7 +70,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleFixed32ComplexMapDeserializeTe
     QCOMPARE(test.mapField()[65555], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleSFixed32ComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleSFixed32ComplexMapDeserializeTest()
 {
     SimpleSFixed32ComplexMessageMapMessage test;
     test.deserialize(
@@ -102,7 +102,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleSFixed32ComplexMapDeserializeT
     QCOMPARE(test.mapField()[65555], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleInt32ComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleInt32ComplexMapDeserializeTest()
 {
     SimpleInt32ComplexMessageMapMessage test;
     test.deserialize(
@@ -134,7 +134,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleInt32ComplexMapDeserializeTest
     QCOMPARE(test.mapField()[65555], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleSInt32ComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleSInt32ComplexMapDeserializeTest()
 {
     SimpleSInt32ComplexMessageMapMessage test;
     test.deserialize(serializer.get(),
@@ -165,7 +165,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleSInt32ComplexMapDeserializeTes
     QCOMPARE(test.mapField()[-65555], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleUInt32ComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleUInt32ComplexMapDeserializeTest()
 {
     SimpleUInt32ComplexMessageMapMessage test;
     test.deserialize(
@@ -197,7 +197,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleUInt32ComplexMapDeserializeTes
     QCOMPARE(test.mapField()[65555], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleFixed64ComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleFixed64ComplexMapDeserializeTest()
 {
     SimpleFixed64ComplexMessageMapMessage test;
     test.deserialize(serializer.get(),
@@ -229,7 +229,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleFixed64ComplexMapDeserializeTe
     QCOMPARE(test.mapField()[65555], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleSFixed64ComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleSFixed64ComplexMapDeserializeTest()
 {
     SimpleSFixed64ComplexMessageMapMessage test;
     test.deserialize(serializer.get(),
@@ -261,7 +261,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleSFixed64ComplexMapDeserializeT
     QCOMPARE(test.mapField()[65555], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleInt64ComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleInt64ComplexMapDeserializeTest()
 {
     SimpleInt64ComplexMessageMapMessage test;
     test.deserialize(
@@ -293,7 +293,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleInt64ComplexMapDeserializeTest
     QCOMPARE(test.mapField()[65555], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleSInt64ComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleSInt64ComplexMapDeserializeTest()
 {
     SimpleSInt64ComplexMessageMapMessage test;
     test.deserialize(serializer.get(),
@@ -324,7 +324,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleSInt64ComplexMapDeserializeTes
     QCOMPARE(test.mapField()[65555], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleUInt64ComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleUInt64ComplexMapDeserializeTest()
 {
     SimpleUInt64ComplexMessageMapMessage test;
     test.deserialize(
@@ -356,7 +356,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleUInt64ComplexMapDeserializeTes
     QCOMPARE(test.mapField()[65555], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleStringComplexMapDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleStringComplexMapDeserializeTest()
 {
     SimpleStringComplexMessageMapMessage test;
     test.deserialize(serializer.get(),
@@ -388,7 +388,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleStringComplexMapDeserializeTes
     QCOMPARE(test.mapField()["WUT??"], expected3);
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleUInt64ComplexMapInvalidLengthDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleUInt64ComplexMapInvalidLengthDeserializeTest()
 {
     SimpleUInt64ComplexMessageMapMessage test;
     test.deserialize(serializer.get(),
@@ -399,7 +399,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleUInt64ComplexMapInvalidLengthD
     QVERIFY(test.mapField().isEmpty());
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleStringComplexMapInvalidLengthDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleStringComplexMapInvalidLengthDeserializeTest()
 {
     SimpleStringComplexMessageMapMessage test;
     test.deserialize(serializer.get(),
@@ -426,7 +426,7 @@ void QtProtobufMapTypesDeserializationTest::SimpleStringComplexMapInvalidLengthD
     QVERIFY(!test.mapField().contains("where is my car dude?"));
 }
 
-void QtProtobufMapTypesDeserializationTest::SimpleUInt64ComplexMapCorruptedDeserializeTest()
+void QtProtobufMapTypesDeserializationTest::simpleUInt64ComplexMapCorruptedDeserializeTest()
 {
     SimpleUInt64ComplexMessageMapMessage test;
     test.deserialize(

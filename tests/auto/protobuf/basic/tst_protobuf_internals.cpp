@@ -18,11 +18,11 @@ public:
     QtProtobufInternalsTest() = default;
 
 private slots:
-    void NullPointerMessageTest();
-    void NullPointerGetterMessageTest();
+    void nullPointerMessageTest();
+    void nullPointerGetterMessageTest();
 };
 
-void QtProtobufInternalsTest::NullPointerMessageTest()
+void QtProtobufInternalsTest::nullPointerMessageTest()
 {
     SimpleStringMessage stringMsg;
     stringMsg.setTestFieldString({ "not null" });
@@ -35,7 +35,7 @@ void QtProtobufInternalsTest::NullPointerMessageTest()
     QVERIFY(msg.testComplexField_p() != nullptr);
 }
 
-void QtProtobufInternalsTest::NullPointerGetterMessageTest()
+void QtProtobufInternalsTest::nullPointerGetterMessageTest()
 {
     ComplexMessage msg;
     QVERIFY(!msg.hasTestComplexField());

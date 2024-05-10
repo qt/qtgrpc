@@ -8,10 +8,10 @@ class QtGrpcServerTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void TrueTest();
+    void trueTest();
 };
 
-void QtGrpcServerTest::TrueTest()
+void QtGrpcServerTest::trueTest()
 {
     QVERIFY(true);
 }

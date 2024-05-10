@@ -19,27 +19,27 @@ class QtProtobufJsonMapTypesDeserializationTest : public QObject
 private slots:
     void init() { serializer.reset(new QProtobufJsonSerializer); }
 
-    void SimpleFixed32StringMapDeserializeTest();
-    void SimpleSFixed32StringMapDeserializeTest();
-    void SimpleInt32StringMapDeserializeTest();
-    void SimpleSInt32StringMapDeserializeTest();
-    void SimpleUInt32StringMapDeserializeTest();
-    void SimpleFixed64StringMapDeserializeTest();
-    void SimpleSFixed64StringMapDeserializeTest();
-    void SimpleInt64StringMapDeserializeTest();
-    void SimpleSInt64StringMapDeserializeTest();
-    void SimpleUInt64StringMapDeserializeTest();
-    void SimpleStringStringMapDeserializeTest();
-    void SimpleFixed32ComplexMapDeserializeTest();
-    void BoolBoolMapDeserializeTest();
-    void MalformedJsonTest();
-    void InvalidTypeTest();
+    void simpleFixed32StringMapDeserializeTest();
+    void simpleSFixed32StringMapDeserializeTest();
+    void simpleInt32StringMapDeserializeTest();
+    void simpleSInt32StringMapDeserializeTest();
+    void simpleUInt32StringMapDeserializeTest();
+    void simpleFixed64StringMapDeserializeTest();
+    void simpleSFixed64StringMapDeserializeTest();
+    void simpleInt64StringMapDeserializeTest();
+    void simpleSInt64StringMapDeserializeTest();
+    void simpleUInt64StringMapDeserializeTest();
+    void simpleStringStringMapDeserializeTest();
+    void simpleFixed32ComplexMapDeserializeTest();
+    void boolBoolMapDeserializeTest();
+    void malformedJsonTest();
+    void invalidTypeTest();
 
 private:
     std::unique_ptr<QProtobufJsonSerializer> serializer;
 };
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleFixed32StringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleFixed32StringMapDeserializeTest()
 {
     SimpleFixed32StringMapMessage test;
     test.deserialize(
@@ -52,7 +52,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleFixed32StringMapDeserializ
                                                             { 0, { "" } } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleSFixed32StringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleSFixed32StringMapDeserializeTest()
 {
     SimpleSFixed32StringMapMessage test;
     test.deserialize(
@@ -64,7 +64,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleSFixed32StringMapDeseriali
                                                              { 15, { "fifteen" } } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleInt32StringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleInt32StringMapDeserializeTest()
 {
     SimpleInt32StringMapMessage test;
     test.deserialize(
@@ -76,7 +76,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleInt32StringMapDeserializeT
                                                           { 15, { "fifteen" } } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleSInt32StringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleSInt32StringMapDeserializeTest()
 {
     SimpleSInt32StringMapMessage test;
     test.deserialize(
@@ -88,7 +88,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleSInt32StringMapDeserialize
                                                            { 15, { "fifteen" } } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleUInt32StringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleUInt32StringMapDeserializeTest()
 {
     SimpleUInt32StringMapMessage test;
     test.deserialize(serializer.get(),
@@ -99,7 +99,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleUInt32StringMapDeserialize
                                                            { 15, { "fifteen" } } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleFixed64StringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleFixed64StringMapDeserializeTest()
 {
     SimpleFixed64StringMapMessage test;
     test.deserialize(serializer.get(),
@@ -110,7 +110,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleFixed64StringMapDeserializ
                                                             { 15, { "fifteen" } } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleSFixed64StringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleSFixed64StringMapDeserializeTest()
 {
     SimpleSFixed64StringMapMessage test;
     test.deserialize(
@@ -122,7 +122,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleSFixed64StringMapDeseriali
                                                              { 15, { "fifteen" } } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleInt64StringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleInt64StringMapDeserializeTest()
 {
     SimpleInt64StringMapMessage test;
     test.deserialize(
@@ -134,7 +134,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleInt64StringMapDeserializeT
                                                           { 15, { "fifteen" } } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleSInt64StringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleSInt64StringMapDeserializeTest()
 {
     SimpleSInt64StringMapMessage test;
     test.deserialize(
@@ -146,7 +146,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleSInt64StringMapDeserialize
                                                            { 15, { "fifteen" } } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleUInt64StringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleUInt64StringMapDeserializeTest()
 {
     SimpleUInt64StringMapMessage test;
     test.deserialize(serializer.get(),
@@ -157,7 +157,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleUInt64StringMapDeserialize
                                                            { 15, { "fifteen" } } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleStringStringMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleStringStringMapDeserializeTest()
 {
     SimpleStringStringMapMessage test;
     test.deserialize(serializer.get(),
@@ -169,7 +169,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleStringStringMapDeserialize
                                                            { "sweet", "fifteen" } }));
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::SimpleFixed32ComplexMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::simpleFixed32ComplexMapDeserializeTest()
 {
     SimpleFixed32ComplexMessageMapMessage test;
     test.deserialize(
@@ -205,7 +205,7 @@ void QtProtobufJsonMapTypesDeserializationTest::SimpleFixed32ComplexMapDeseriali
     QCOMPARE(test.mapField()[65555], expected3);
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::BoolBoolMapDeserializeTest()
+void QtProtobufJsonMapTypesDeserializationTest::boolBoolMapDeserializeTest()
 {
     BoolBoolMessageMapMessage test;
     test.deserialize(serializer.get(), "{\"mapField\":{\"true\":\"false\",\"false\":\"true\"}}");
@@ -215,7 +215,7 @@ void QtProtobufJsonMapTypesDeserializationTest::BoolBoolMapDeserializeTest()
     QCOMPARE(test.mapField()[false], true);
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::MalformedJsonTest()
+void QtProtobufJsonMapTypesDeserializationTest::malformedJsonTest()
 {
     SimpleUInt64StringMapMessage test;
     // no brace
@@ -246,7 +246,7 @@ void QtProtobufJsonMapTypesDeserializationTest::MalformedJsonTest()
              QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
 }
 
-void QtProtobufJsonMapTypesDeserializationTest::InvalidTypeTest()
+void QtProtobufJsonMapTypesDeserializationTest::invalidTypeTest()
 {
     // Expected int, but float is used
     SimpleInt32StringMapMessage fTest, bTest;

@@ -13,8 +13,8 @@ class QtProtobufRawSerializersTest : public QObject
     Q_OBJECT
 private slots:
     void init() { m_serializer.reset(new QProtobufSerializer); }
-    void ComplexMessageSerializeTest();
-    void ComplexMessageDeserializeTest();
+    void complexMessageSerializeTest();
+    void complexMessageDeserializeTest();
 private:
     std::unique_ptr<QProtobufSerializer> m_serializer;
 };
@@ -24,7 +24,7 @@ class NonMessageQObject : public QObject
     Q_OBJECT
 };
 
-void QtProtobufRawSerializersTest::ComplexMessageSerializeTest()
+void QtProtobufRawSerializersTest::complexMessageSerializeTest()
 {
     QProtobufMessagePointer rawMessage =
             QProtobufMessage::constructByName("qtprotobufnamespace.tests.ComplexMessage");
@@ -35,7 +35,7 @@ void QtProtobufRawSerializersTest::ComplexMessageSerializeTest()
     QCOMPARE(message->testComplexField().testFieldString(), QLatin1String("qwerty"));
 }
 
-void QtProtobufRawSerializersTest::ComplexMessageDeserializeTest()
+void QtProtobufRawSerializersTest::complexMessageDeserializeTest()
 {
     QProtobufMessagePointer rawMessage =
             QProtobufMessage::constructByName("qtprotobufnamespace.tests.ComplexMessage");

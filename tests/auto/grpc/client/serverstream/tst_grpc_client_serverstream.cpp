@@ -32,23 +32,23 @@ public:
     }
 
 private slots:
-    void Valid();
-    void Cancel();
-    void DeferredCancel();
-    void HugeBlob();
-    void GetAsyncReply();
-    void MultipleStreams();
-    void MultipleStreamsCancel();
-    void InThread();
-    void CancelWhileErrorTimeout();
-    void Deadline_data();
-    void Deadline();
-    void Interceptor();
-    void CancelledInterceptor();
-    void InterceptResponse();
+    void valid();
+    void cancel();
+    void deferredCancel();
+    void hugeBlob();
+    void getAsyncReply();
+    void multipleStreams();
+    void multipleStreamsCancel();
+    void inThread();
+    void cancelWhileErrorTimeout();
+    void deadline_data();
+    void deadline();
+    void interceptor();
+    void cancelledInterceptor();
+    void interceptResponse();
 };
 
-void QtGrpcClientServerStreamTest::Valid()
+void QtGrpcClientServerStreamTest::valid()
 {
     const int ExpectedMessageCount = 4;
 
@@ -80,7 +80,7 @@ void QtGrpcClientServerStreamTest::Valid()
     QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2Stream3Stream4");
 }
 
-void QtGrpcClientServerStreamTest::Cancel()
+void QtGrpcClientServerStreamTest::cancel()
 {
     const int ExpectedMessageCount = 2;
 
@@ -111,7 +111,7 @@ void QtGrpcClientServerStreamTest::Cancel()
     QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2");
 }
 
-void QtGrpcClientServerStreamTest::DeferredCancel()
+void QtGrpcClientServerStreamTest::deferredCancel()
 {
     const int ExpectedMessageCount = 3;
 
@@ -147,7 +147,7 @@ void QtGrpcClientServerStreamTest::DeferredCancel()
     QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2Stream3");
 }
 
-void QtGrpcClientServerStreamTest::HugeBlob()
+void QtGrpcClientServerStreamTest::hugeBlob()
 {
     BlobMessage result;
     BlobMessage request;
@@ -179,7 +179,7 @@ void QtGrpcClientServerStreamTest::HugeBlob()
     QCOMPARE_EQ(returnDataHash, dataHash);
 }
 
-void QtGrpcClientServerStreamTest::GetAsyncReply()
+void QtGrpcClientServerStreamTest::getAsyncReply()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Some status message");
@@ -231,7 +231,7 @@ void QtGrpcClientServerStreamTest::GetAsyncReply()
                               MessageLatencyWithThreshold);
 }
 
-void QtGrpcClientServerStreamTest::MultipleStreams()
+void QtGrpcClientServerStreamTest::multipleStreams()
 {
     const int ExpectedMessageCount = 4;
     SimpleStringMessage result;
@@ -265,7 +265,7 @@ void QtGrpcClientServerStreamTest::MultipleStreams()
     QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2Stream3Stream4");
 }
 
-void QtGrpcClientServerStreamTest::MultipleStreamsCancel()
+void QtGrpcClientServerStreamTest::multipleStreamsCancel()
 {
     SimpleStringMessage result;
     SimpleStringMessage request;
@@ -320,7 +320,7 @@ void QtGrpcClientServerStreamTest::MultipleStreamsCancel()
     QCOMPARE_EQ(otherStreamNextErrorSpy.count(), 0);
 }
 
-void QtGrpcClientServerStreamTest::InThread()
+void QtGrpcClientServerStreamTest::inThread()
 {
     SimpleStringMessage result;
     SimpleStringMessage request;
@@ -358,7 +358,7 @@ void QtGrpcClientServerStreamTest::InThread()
                             "different thread."));
 }
 
-void QtGrpcClientServerStreamTest::CancelWhileErrorTimeout()
+void QtGrpcClientServerStreamTest::cancelWhileErrorTimeout()
 {
     SimpleStringMessage result;
     SimpleStringMessage request;
@@ -378,7 +378,7 @@ void QtGrpcClientServerStreamTest::CancelWhileErrorTimeout()
     QCOMPARE_EQ(streamFinishedSpy.count(), 0);
 }
 
-void QtGrpcClientServerStreamTest::Deadline_data()
+void QtGrpcClientServerStreamTest::deadline_data()
 {
     const int ExpectedMessageCount = 4;
     QTest::addColumn<QGrpcDuration>("timeout");
@@ -394,7 +394,7 @@ void QtGrpcClientServerStreamTest::Deadline_data()
                 << ExpectedMessageCount;
 }
 
-void QtGrpcClientServerStreamTest::Deadline()
+void QtGrpcClientServerStreamTest::deadline()
 {
     QFETCH(const QGrpcDuration, timeout);
     QFETCH(const int, ExpectedMessageCount);
@@ -437,7 +437,7 @@ void QtGrpcClientServerStreamTest::Deadline()
     }
 }
 
-void QtGrpcClientServerStreamTest::Interceptor()
+void QtGrpcClientServerStreamTest::interceptor()
 {
     const int ExpectedMessageCount = 4;
     constexpr QLatin1StringView interceptor1Id = "int"_L1;
@@ -485,7 +485,7 @@ void QtGrpcClientServerStreamTest::Interceptor()
     QCOMPARE_EQ(result.testFieldString(), "inter1inter2inter3inter4");
 }
 
-void QtGrpcClientServerStreamTest::CancelledInterceptor()
+void QtGrpcClientServerStreamTest::cancelledInterceptor()
 {
     constexpr QLatin1StringView interceptor1Id = "inter1"_L1;
 
@@ -517,7 +517,7 @@ void QtGrpcClientServerStreamTest::CancelledInterceptor()
     QCOMPARE_EQ(result.testFieldString(), "Result not changed by echo");
 }
 
-void QtGrpcClientServerStreamTest::InterceptResponse()
+void QtGrpcClientServerStreamTest::interceptResponse()
 {
     const int ExpectedMessageCount = 4;
 
