@@ -35,7 +35,7 @@ void QtGrpcClientClientStreamTest::valid()
     SimpleStringMessage request;
     request.setTestFieldString("Stream");
 
-    auto stream = client()->streamTestMethodClientStream(request);
+    auto stream = client()->testMethodClientStream(request);
 
     int i = 0;
     QTimer sendTimer;
@@ -67,7 +67,7 @@ void QtGrpcClientClientStreamTest::sequentialSend()
     SimpleStringMessage request;
     request.setTestFieldString("Stream");
 
-    auto stream = client()->streamTestMethodClientStream(request);
+    auto stream = client()->testMethodClientStream(request);
 
     // Ensure that messages are not lost during the sequential sending right after the stream is
     // instanciated.
@@ -96,7 +96,7 @@ void QtGrpcClientClientStreamTest::sequentialSendWithDone()
     SimpleStringMessage request;
     request.setTestFieldString("Stream");
 
-    auto stream = client()->streamTestMethodClientStreamWithDone(request);
+    auto stream = client()->testMethodClientStreamWithDone(request);
 
     // Ensure that messages are not lost during the sequential sending right after the stream is
     // instanciated.

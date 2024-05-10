@@ -25,17 +25,17 @@ void Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QOb
     }, Qt::SingleShotConnection);
 }
 
-std::shared_ptr<QGrpcServerStream> Client::streamTestMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcServerStream> Client::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
     return startStream<QGrpcServerStream>("testMethodServerStream"_L1, arg, options);
 }
 
-std::shared_ptr<QGrpcClientStream> Client::streamTestMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcClientStream> Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
     return startStream<QGrpcClientStream>("testMethodClientStream"_L1, arg, options);
 }
 
-std::shared_ptr<QGrpcBidirStream> Client::streamTestMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcBidirStream> Client::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
     return startStream<QGrpcBidirStream>("testMethodBiStream"_L1, arg, options);
 }

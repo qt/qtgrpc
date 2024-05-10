@@ -41,7 +41,7 @@ void VehicleThread::run()
     });
 
     Empty speedRequest;
-    m_streamSpeed = m_client->streamGetSpeedStream(speedRequest);
+    m_streamSpeed = m_client->getSpeedStream(speedRequest);
     connect(m_streamSpeed.get(), &QGrpcServerStream::messageReceived, this, [this] {
         if (const auto speedResponse = m_streamSpeed->read<SpeedMsg>())
             emit speedChanged(speedResponse->speed());
@@ -59,7 +59,7 @@ void VehicleThread::run()
             [this] { emit speedChanged(0); });
 
     Empty gearRequest;
-    m_streamGear = m_client->streamGetGearStream(gearRequest);
+    m_streamGear = m_client->getGearStream(gearRequest);
     connect(m_streamGear.get(), &QGrpcServerStream::messageReceived, this, [this] {
         if (const auto gearResponse = m_streamGear->read<GearMsg>())
             emit rpmChanged(gearResponse->rpm());

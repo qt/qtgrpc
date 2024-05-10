@@ -58,7 +58,7 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
     m_client->attachChannel(channel);
 
     // ![1]
-    auto stream = m_client->streamMessageList(qtgrpc::examples::chat::None());
+    auto stream = m_client->messageList(qtgrpc::examples::chat::None());
     QObject::connect(stream.get(), &QGrpcServerStream::errorOccurred, this,
                      [this, stream](const QGrpcStatus &status) {
                          qCritical()

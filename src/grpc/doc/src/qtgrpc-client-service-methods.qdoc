@@ -173,7 +173,7 @@ For server streams, the \l {The qtgrpcgen Tool} {qtgrpcgen tool} generates
 the method that returns the pointer to \l QGrpcServerStream:
 
 \code
-    std::shared_ptr<QGrpcServerStream> streamPingSeveralPong(const ping::pong::Ping &arg,
+    std::shared_ptr<QGrpcServerStream> pingSeveralPong(const ping::pong::Ping &arg,
                                                              const QGrpcCallOptions &options = {});
 \endcode
 
@@ -215,14 +215,14 @@ For server streams, the \l {The qtgrpcgen Tool} {qtgrpcgen tool} generates
 the method that returns the pointer to \l{QGrpcClientStream}:
 
 \code
-    std::shared_ptr<QGrpcClientStream> streamSeveralPingPong(const ping::pong::Ping &arg,
+    std::shared_ptr<QGrpcClientStream> severalPingPong(const ping::pong::Ping &arg,
                                                              const QGrpcCallOptions &options = {});
 \endcode
 
 To send multiple requests to the server, use the
 \l {QGrpcClientStream::sendMessage} method:
 \code
-    auto stream = cl.streamSeveralPingPong(request);
+    auto stream = cl.severalPingPong(request);
 
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, stream.get(),
@@ -259,14 +259,14 @@ Bidirectional streams combine the functionality of server and client streams.
 The generated method returns the pointer to \l QGrpcBidirStream, which provides
 the API from both server and client streams:
 \code
-    std::shared_ptr<QGrpcBidirStream> streamSeveralPingSeveralPong(const ping::pong::Ping &arg,
+    std::shared_ptr<QGrpcBidirStream> severalPingSeveralPong(const ping::pong::Ping &arg,
                                                                    const QGrpcCallOptions &options = {});
 \endcode
 
 Use the bidirectional streams to organize the two-sided communication without
 breaking the connection session:
 \code
-    auto stream = cl.streamSeveralPingSeveralPong(request);
+    auto stream = cl.severalPingSeveralPong(request);
 
     qint64 maxPingPongTime = 0;
     QTimer timer;

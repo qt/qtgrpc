@@ -368,7 +368,6 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
         { "return_type",        outputTypeName                     },
         { "classname_low_case", utils::deCapitalizeAsciiName(scope)},
         { "method_name",        methodName                         },
-        { "method_name_upper",  methodNameUpper                    },
         { "param_type",         inputTypeName                      },
         { "param_name",         "arg"                              },
         { "stream_type",        streamType                         },

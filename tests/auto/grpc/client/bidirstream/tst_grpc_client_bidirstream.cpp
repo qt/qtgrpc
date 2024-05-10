@@ -34,7 +34,7 @@ void QtGrpcClientBidirStreamTest::valid()
     SimpleStringMessage request;
     request.setTestFieldString("Stream");
 
-    auto stream = client()->streamTestMethodBiStream(request);
+    auto stream = client()->testMethodBiStream(request);
 
     QString fullResponse;
     int i = 0;
@@ -65,7 +65,7 @@ void QtGrpcClientBidirStreamTest::sequentialSendWithDone()
     SimpleStringMessage request;
     request.setTestFieldString("Stream");
 
-    auto stream = client()->streamTestMethodBiStreamWithDone(request);
+    auto stream = client()->testMethodBiStreamWithDone(request);
 
     QString fullResponse;
     int i = 0;

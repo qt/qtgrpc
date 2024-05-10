@@ -28,7 +28,7 @@ void NaviThread::run()
     }
 
     Empty request;
-    m_stream = m_client->streamGetNaviStream(request);
+    m_stream = m_client->getNaviStream(request);
     connect(m_stream.get(), &QGrpcServerStream::messageReceived, this, [this] {
         const auto result = m_stream->read<DistanceMsg>();
         if (!result)
