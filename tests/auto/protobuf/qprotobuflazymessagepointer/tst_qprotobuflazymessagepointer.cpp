@@ -9,7 +9,7 @@
 class tst_QProtobufLazyMessagePointer : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void ctor();
     void reset();
     void get();

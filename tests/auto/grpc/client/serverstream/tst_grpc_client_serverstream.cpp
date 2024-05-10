@@ -31,7 +31,7 @@ public:
     {
     }
 
-private slots:
+private Q_SLOTS:
     void valid();
     void cancel();
     void deferredCancel();

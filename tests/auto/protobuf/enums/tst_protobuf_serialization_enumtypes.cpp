@@ -10,7 +10,7 @@
 class QtProtobufEnumTypesSerializationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void simpleEnumMessageSerializeTest();
     void repeatedEnumMessageTest();
 

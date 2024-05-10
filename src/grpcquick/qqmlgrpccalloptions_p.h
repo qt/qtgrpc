@@ -45,7 +45,7 @@ public:
     QQmlGrpcMetadata *metadata() const;
     void setMetadata(QQmlGrpcMetadata *value);
 
-signals:
+Q_SIGNALS:
     void deadlineChanged();
     void metadataChanged();
 

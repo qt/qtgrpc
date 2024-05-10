@@ -21,7 +21,7 @@ class QtGrpcClientDeadlineTest : public GrpcClientTestBase
     Q_OBJECT
 public:
     QtGrpcClientDeadlineTest() : GrpcClientTestBase(Channels(Channel::WithChannelDeadline)) { }
-private slots:
+private Q_SLOTS:
     void channelAndCallDeadlineTest_data();
     void channelAndCallDeadlineTest();
 };

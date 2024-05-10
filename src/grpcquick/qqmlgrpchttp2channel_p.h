@@ -39,7 +39,7 @@ public:
     QQmlGrpcChannelOptions *options() const { return m_options; }
     void setOptions(QQmlGrpcChannelOptions *options);
 
-signals:
+Q_SIGNALS:
     void optionsChanged();
     void channelUpdated();
 

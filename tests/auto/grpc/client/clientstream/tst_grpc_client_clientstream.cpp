@@ -22,7 +22,7 @@ public:
     {
     }
 
-private slots:
+private Q_SLOTS:
     void valid();
     void sequentialSend();
     void sequentialSendWithDone();

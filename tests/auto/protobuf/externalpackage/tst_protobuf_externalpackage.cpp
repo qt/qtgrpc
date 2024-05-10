@@ -14,7 +14,7 @@
 class QtProtobufExternalPackageGenerationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void repeatedExternalComplexMessageTest();
     void externalEnumMessageTest();
     void externalComplexMessageTest();

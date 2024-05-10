@@ -124,7 +124,7 @@ class tst_qtgrpcgen : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     //! Test qt_add_grpc() cmake function

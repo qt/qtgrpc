@@ -20,7 +20,7 @@ class QtProtobufOptionalSerializationTest : public QObject
 
     enum Format { Protobuf, JSON };
 
-private slots:
+private Q_SLOTS:
     void initTestCase_data();
     void initTestCase() { }
     void init();

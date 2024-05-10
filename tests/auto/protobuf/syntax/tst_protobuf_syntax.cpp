@@ -13,7 +13,7 @@
 class QtProtobufSyntaxTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void underscoresTest();
     void upperCaseTest();
     void reservedTest();

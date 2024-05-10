@@ -33,7 +33,7 @@ protected:
     std::shared_ptr<qtgrpc::tests::TestService::Client> client();
     GrpcClientTestBase::Channels channelType();
 
-public slots:
+public Q_SLOTS:
     void initTestCase_data();
     void init();
 

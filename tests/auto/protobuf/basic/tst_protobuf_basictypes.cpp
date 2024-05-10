@@ -17,7 +17,7 @@ using namespace Qt::Literals::StringLiterals;
 class QtProtobufTypesGenerationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void emptyMessageTest();
     void boolMessageTest();
     void intMessageTest();

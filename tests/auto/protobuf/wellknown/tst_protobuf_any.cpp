@@ -12,7 +12,7 @@
 class tst_protobuf_any : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void defaultConstructed();
     void simpleMessage();
     void anyMessage_data();

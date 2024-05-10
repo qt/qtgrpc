@@ -13,7 +13,7 @@
 class QtProtobufGenerationSequenceTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void sequenceTest();
     void cyclingTest();
     void mapRepeatedFieldSequenceTest();

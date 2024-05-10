@@ -57,7 +57,7 @@ const QtProtobufPrivate::QProtobufPropertyOrdering TestMetaType::staticPropertyO
 class QProtobufOneofTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void valueReplacement();
     void valueImplicitSharing();
     void moveValue();

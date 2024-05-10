@@ -16,7 +16,7 @@ class QGrpcSerializationFormatTest : public QObject
 public:
     QGrpcSerializationFormatTest() { }
 
-private slots:
+private Q_SLOTS:
     void constructEmbedded();
     void constructCustom();
     void copyMove();

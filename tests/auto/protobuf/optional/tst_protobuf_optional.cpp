@@ -16,7 +16,7 @@ class QtProtobufOptionalTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void copy();
     void move();
     void equal();

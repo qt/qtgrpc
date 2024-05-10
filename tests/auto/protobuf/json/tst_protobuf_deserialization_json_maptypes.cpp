@@ -16,7 +16,7 @@ using namespace Qt::Literals::StringLiterals;
 class QtProtobufJsonMapTypesDeserializationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void init() { serializer.reset(new QProtobufJsonSerializer); }
 
     void simpleFixed32StringMapDeserializeTest();

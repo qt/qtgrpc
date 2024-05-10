@@ -11,7 +11,7 @@
 class QtProtobufRawSerializersTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void init() { m_serializer.reset(new QProtobufSerializer); }
     void complexMessageSerializeTest();
     void complexMessageDeserializeTest();

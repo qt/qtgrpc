@@ -17,7 +17,7 @@ using namespace Qt::Literals::StringLiterals;
 class QtProtobufTypesDeserializationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void init() { serializer.reset(new QProtobufSerializer); }
 
     void fixedInt32MessageDeserializeTest_data();

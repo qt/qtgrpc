@@ -17,7 +17,7 @@ public:
         // messages)
         qRegisterProtobufTypes();
     }
-private slots:
+private Q_SLOTS:
     void testFromTypeConverters();
     void testToTypeConverters();
 };

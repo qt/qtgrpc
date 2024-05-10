@@ -14,7 +14,7 @@ using namespace qtprotobufnamespace::tests;
 class QtProtobufMapTypesSerializationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void init() { m_serializer.reset(new QProtobufSerializer); }
     void simpleFixed32ComplexMapSerializeTest();
     void simpleSFixed32ComplexMapSerializeTest();

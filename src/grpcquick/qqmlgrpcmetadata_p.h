@@ -40,7 +40,7 @@ public:
     const QVariantMap &data() const { return m_variantdata; }
     void setData(const QVariantMap &data);
 
-signals:
+Q_SIGNALS:
     void dataChanged();
 
 private:

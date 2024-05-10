@@ -77,7 +77,7 @@ protected:
 class QGrpcHttp2ChannelTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void checkMethodsGeneration();
     void attachChannelThreadTest();
     void serializationFormat();

@@ -16,7 +16,7 @@ using namespace Qt::Literals::StringLiterals;
 class QtProtobufMapTypesGenerationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void sInt32StringMapMessageTest();
     void stringStringMapMessageTest();
 

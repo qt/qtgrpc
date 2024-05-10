@@ -13,7 +13,7 @@ using namespace Qt::Literals::StringLiterals;
 class QtProtobufJsonMapTypesSerializationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void init() { m_serializer.reset(new QProtobufJsonSerializer); }
     void simpleFixed32StringMapSerializeTest();
     void simpleSFixed32StringMapSerializeTest();

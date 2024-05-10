@@ -19,7 +19,7 @@ using namespace Qt::StringLiterals;
 class QtGrpcClientInterceptorTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
 
     void clientInterceptorTest();
     void continuationNotCalledTest();

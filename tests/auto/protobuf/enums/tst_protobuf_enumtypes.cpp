@@ -13,7 +13,7 @@
 class QtProtobufEnumTypesGenerationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void basicTest();
     void localEnumTest();
     void localEnumListTest();

@@ -14,7 +14,7 @@
 class QtProtobufNoPackageTypesGenerationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void noPackageEmptyMessageMessageTest();
     void noPackageSimpleIntMessageTest();
     void noPackageEnumTest();

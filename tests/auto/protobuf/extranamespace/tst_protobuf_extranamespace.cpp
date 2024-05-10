@@ -14,7 +14,7 @@ using namespace MyTestNamespace::qtprotobufnamespace::tests;
 class QtProtobufExtraNamespaceTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void emptyMessageTest();
     void complexMessageTest();
 };

@@ -63,7 +63,7 @@ public:
     void setSslConfiguration(const QQmlSslConfiguration &config);
 #endif // QT_CONFIG(ssl)
 
-signals:
+Q_SIGNALS:
     void hostChanged();
     void deadlineChanged();
     void metadataChanged();

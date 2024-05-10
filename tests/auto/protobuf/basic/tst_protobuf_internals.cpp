@@ -13,7 +13,7 @@ class QtProtobufInternalsTest : public QObject
 public:
     QtProtobufInternalsTest() = default;
 
-private slots:
+private Q_SLOTS:
     void nullPointerMessageTest();
     void nullPointerGetterMessageTest();
 };

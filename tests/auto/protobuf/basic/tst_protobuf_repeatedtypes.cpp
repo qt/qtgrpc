@@ -14,7 +14,7 @@
 class QtProtobufRepeatedTypesGenerationTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void repeatedStringMessageTest();
     void repeatedIntMessageTest();
     void repeatedDoubleMessageTest();

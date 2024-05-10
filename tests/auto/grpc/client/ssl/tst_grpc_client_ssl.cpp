@@ -23,7 +23,7 @@ public:
         : GrpcClientTestBase(Channels(GrpcClientTestBase::Channel::SslNoCredentials))
     {
     }
-private slots:
+private Q_SLOTS:
     void incorrectSecureCredentialsTest();
 };
 
