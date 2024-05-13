@@ -325,7 +325,6 @@ QList<QByteArray> QProtobufMessage::unknownFieldData(qint32 field) const
 */
 QByteArray QProtobufMessage::serialize(QAbstractProtobufSerializer *serializer) const
 {
-    qRegisterProtobufTypes();
     return serializer->serialize(this);
 }
 
@@ -339,7 +338,6 @@ QByteArray QProtobufMessage::serialize(QAbstractProtobufSerializer *serializer) 
 */
 bool QProtobufMessage::deserialize(QAbstractProtobufSerializer *serializer, QByteArrayView data)
 {
-    qRegisterProtobufTypes();
     return serializer->deserialize(this, data);
 }
 
