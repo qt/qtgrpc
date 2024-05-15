@@ -1,11 +1,7 @@
 // Copyright (C) 2020 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#define private public
-#define protected public
 #include "basicmessages.qpb.h"
-#undef private
-#undef protected
 
 #include <QTest>
 
@@ -30,19 +26,21 @@ void QtProtobufInternalsTest::nullPointerMessageTest()
     msg.setTestFieldInt(0);
     msg.setTestComplexField(stringMsg);
 
-    msg.setTestComplexField_p(nullptr);
+    msg.setProperty("testComplexField_p",
+                    QVariant::fromValue(static_cast<SimpleStringMessage *>(nullptr)));
     QVERIFY(msg.testComplexField().testFieldString().isEmpty());
-    QVERIFY(msg.testComplexField_p() != nullptr);
+    QVERIFY(msg.property("testComplexField_p").value<SimpleStringMessage *>() != nullptr);
 }
 
 void QtProtobufInternalsTest::nullPointerGetterMessageTest()
 {
     ComplexMessage msg;
     QVERIFY(!msg.hasTestComplexField());
-    QVERIFY(msg.testComplexField_p() != nullptr);
-    msg.setTestComplexField_p(nullptr);
+    QVERIFY(msg.property("testComplexField_p").value<SimpleStringMessage *>() != nullptr);
+    msg.setProperty("testComplexField_p",
+                    QVariant::fromValue(static_cast<SimpleStringMessage *>(nullptr)));
     QVERIFY(msg.testComplexField().testFieldString().isEmpty());
-    QVERIFY(msg.testComplexField_p() != nullptr);
+    QVERIFY(msg.property("testComplexField_p").value<SimpleStringMessage *>() != nullptr);
 }
 
 QTEST_MAIN(QtProtobufInternalsTest)
