@@ -4,7 +4,6 @@
 #include <grpcclienttestbase.h>
 
 #include <QtGrpc/QGrpcCallOptions>
-#include <QtGrpc/QGrpcClientInterceptorManager>
 
 #include <QtCore/QCryptographicHash>
 #include <QtCore/QFile>
@@ -14,7 +13,6 @@
 #include <QtTest/QSignalSpy>
 #include <QtTest/QTest>
 
-#include <interceptormocks.h>
 #include <message_latency_defs.h>
 #include <testservice_client.grpc.qpb.h>
 
@@ -43,9 +41,6 @@ private Q_SLOTS:
     void cancelWhileErrorTimeout();
     void deadline_data();
     void deadline();
-    void interceptor();
-    void cancelledInterceptor();
-    void interceptResponse();
 };
 
 void QtGrpcClientServerStreamTest::valid()
@@ -435,140 +430,6 @@ void QtGrpcClientServerStreamTest::deadline()
         // cancel the stream, that might affect other tests.
         stream->cancel();
     }
-}
-
-void QtGrpcClientServerStreamTest::interceptor()
-{
-    const int ExpectedMessageCount = 4;
-    constexpr QLatin1StringView interceptor1Id = "int"_L1;
-    constexpr QLatin1StringView interceptor2Id = "er"_L1;
-
-    auto modifyFunc = [](std::shared_ptr<QGrpcChannelOperation> operation, QLatin1StringView id) {
-        SimpleStringMessage oldArg;
-        if (!operation->serializer()->deserialize(&oldArg, operation->argument())) {
-            QFAIL("Deserialization of arg failed.");
-            return;
-        }
-        SimpleStringMessage newArg;
-        newArg.setTestFieldString(QString("%1%2").arg(oldArg.testFieldString()).arg(id));
-        auto rawMessage = operation->serializer()->serialize(&newArg);
-        operation->setArgument(rawMessage);
-    };
-    auto manager = QGrpcClientInterceptorManager();
-    manager.registerInterceptors({ std::make_shared<MockInterceptor>(interceptor1Id, modifyFunc),
-                                   std::make_shared<MockInterceptor>(interceptor2Id, modifyFunc) });
-    auto channel = client()->channel();
-    channel->addInterceptorManager(manager);
-    client()->attachChannel(channel);
-
-    SimpleStringMessage result;
-    SimpleStringMessage request;
-    auto stream = client()->testMethodServerStream(request);
-
-    QSignalSpy messageReceivedSpy(stream.get(), &QGrpcServerStream::messageReceived);
-    QVERIFY(messageReceivedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
-    QVERIFY(streamErrorSpy.isValid());
-
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
-    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream] {
-        const auto ret = stream->read<SimpleStringMessage>();
-        QVERIFY(ret.has_value());
-        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
-    });
-
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
-                                 MessageLatencyWithThreshold * ExpectedMessageCount);
-    QCOMPARE(streamErrorSpy.count(), 0);
-
-    QCOMPARE(messageReceivedSpy.count(), ExpectedMessageCount);
-    QCOMPARE_EQ(result.testFieldString(), "inter1inter2inter3inter4");
-}
-
-void QtGrpcClientServerStreamTest::cancelledInterceptor()
-{
-    constexpr QLatin1StringView interceptor1Id = "inter1"_L1;
-
-    auto manager = QGrpcClientInterceptorManager();
-    manager.registerInterceptors({ std::make_shared<NoContinuationInterceptor>(interceptor1Id) });
-    auto channel = client()->channel();
-    channel->addInterceptorManager(manager);
-    client()->attachChannel(channel);
-
-    SimpleStringMessage result;
-    result.setTestFieldString("Result not changed by echo");
-    SimpleStringMessage request;
-    request.setTestFieldString("Stream");
-
-    auto stream = client()->testMethodServerStream(request);
-
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
-    QVERIFY(streamFinishedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
-    QVERIFY(streamErrorSpy.isValid());
-
-    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&] {
-        const auto ret = stream->read<SimpleStringMessage>();
-        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
-    });
-
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamErrorSpy.count(), 1, MessageLatencyWithThreshold);
-    QCOMPARE(streamFinishedSpy.count(), 0);
-    QCOMPARE_EQ(result.testFieldString(), "Result not changed by echo");
-}
-
-void QtGrpcClientServerStreamTest::interceptResponse()
-{
-    const int ExpectedMessageCount = 4;
-
-    SimpleStringMessage serverResponse;
-    auto interceptFunc =
-        [this, &serverResponse](std::shared_ptr<QGrpcChannelOperation> operation,
-                                std::shared_ptr<QGrpcServerStream> stream,
-                                QGrpcInterceptorContinuation<QGrpcServerStream> &continuation,
-                                QLatin1StringView) {
-            QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this,
-                             [&serverResponse, stream] {
-                                 const auto mess = stream->read<SimpleStringMessage>();
-                                 serverResponse.setTestFieldString(serverResponse.testFieldString()
-                                                                   + mess->testFieldString());
-                             });
-            continuation(std::move(stream), operation);
-        };
-
-    auto manager = QGrpcClientInterceptorManager();
-    manager.registerInterceptor(std::make_shared<ServerStreamInterceptor>("inter1"_L1,
-                                                                          interceptFunc));
-    auto channel = client()->channel();
-    channel->addInterceptorManager(manager);
-    client()->attachChannel(channel);
-
-    SimpleStringMessage request;
-    request.setTestFieldString("Stream");
-
-    auto stream = client()->testMethodServerStream(request);
-
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
-    QVERIFY(streamFinishedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
-    QVERIFY(streamErrorSpy.isValid());
-    QSignalSpy messageReceivedSpy(stream.get(), &QGrpcServerStream::messageReceived);
-    QVERIFY(messageReceivedSpy.isValid());
-
-    SimpleStringMessage result;
-    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&] {
-        const auto ret = stream->read<SimpleStringMessage>();
-        QVERIFY(ret.has_value());
-        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
-    });
-
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
-                                 MessageLatencyWithThreshold * ExpectedMessageCount);
-    QCOMPARE(streamErrorSpy.count(), 0);
-    QCOMPARE(messageReceivedSpy.count(), ExpectedMessageCount);
-
-    QCOMPARE_EQ(result.testFieldString(), "Stream1Stream2Stream3Stream4");
-    QCOMPARE_EQ(serverResponse.testFieldString(), "Stream1Stream2Stream3Stream4");
 }
 
 QTEST_MAIN(QtGrpcClientServerStreamTest)

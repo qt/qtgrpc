@@ -24,7 +24,6 @@ class QGrpcCallReply;
 class QGrpcChannelOperation;
 class QGrpcChannelOptions;
 class QGrpcClientBase;
-class QGrpcClientInterceptorManager;
 class QGrpcClientStream;
 class QGrpcServerStream;
 
@@ -33,7 +32,6 @@ class Q_GRPC_EXPORT QAbstractGrpcChannel
 public:
     virtual ~QAbstractGrpcChannel();
 
-    void addInterceptorManager(const QGrpcClientInterceptorManager &manager);
     [[nodiscard]] virtual std::shared_ptr<QAbstractProtobufSerializer>
     serializer() const noexcept = 0;
 

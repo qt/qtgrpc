@@ -166,15 +166,6 @@ QGrpcChannelOperation::serializer() const noexcept
 }
 
 /*!
-    Returns the client metadata that is being sent to the server.
-*/
-const QGrpcMetadata &QGrpcChannelOperation::clientMetadata() const & noexcept
-{
-    Q_D(const QGrpcChannelOperation);
-    return d->options.metadata();
-}
-
-/*!
     Returns the metadata that is received from server.
 
     The method is used implicitly by \l QGrpcOperation counterpart.
@@ -225,28 +216,6 @@ void QGrpcChannelOperation::setServerMetadata(QGrpcMetadata &&metadata)
 {
     Q_D(QGrpcChannelOperation);
     d->serverMetadata = std::move(metadata);
-}
-
-/*!
-    Updates client metadata in the QGrpcCallOptions attribute.
-
-    The \a metadata then can be processed on the server side.
-*/
-void QGrpcChannelOperation::setClientMetadata(const QGrpcMetadata &metadata)
-{
-    Q_D(QGrpcChannelOperation);
-    d->options.withMetadata(metadata);
-}
-
-/*!
-    Updates client metadata in the QGrpcCallOptions attribute.
-
-    The \a metadata then can be processed on the server side.
-*/
-void QGrpcChannelOperation::setClientMetadata(QGrpcMetadata &&metadata)
-{
-    Q_D(QGrpcChannelOperation);
-    d->options.withMetadata(std::move(metadata));
 }
 
 QT_END_NAMESPACE

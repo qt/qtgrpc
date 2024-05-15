@@ -106,7 +106,6 @@
     \list
         \li \l{CMake Commands in Qt6 GRPC}
         \li \l{Client Methods of the Qt GRPC Service}
-        \li \l{Qt GRPC Client Interceptors}
     \endlist
 
     \section1 References

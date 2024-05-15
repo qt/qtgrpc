@@ -16,7 +16,6 @@
 //
 
 #include <QtGrpc/qgrpcchanneloptions.h>
-#include <QtGrpc/qgrpcclientinterceptormanager.h>
 #include <QtGrpc/private/qtgrpcglobal_p.h>
 
 QT_BEGIN_NAMESPACE
@@ -30,7 +29,6 @@ public:
     }
     const Qt::HANDLE threadId;
     QGrpcChannelOptions channelOptions;
-    QGrpcClientInterceptorManager interceptorManager;
 };
 
 QT_END_NAMESPACE

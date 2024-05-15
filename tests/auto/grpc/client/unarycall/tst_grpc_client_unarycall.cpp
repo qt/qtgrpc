@@ -8,7 +8,6 @@
 #include <QtCore/QTimer>
 
 #include <QtGrpc/QGrpcCallOptions>
-#include <QtGrpc/QGrpcClientInterceptorManager>
 #include <QtGrpc/QGrpcMetadata>
 
 #include <QtTest/QSignalSpy>
@@ -16,7 +15,6 @@
 
 #include <memory>
 
-#include <interceptormocks.h>
 #include <message_latency_defs.h>
 #include <server_proc_runner.h>
 #include <testservice_client.grpc.qpb.h>
@@ -51,10 +49,6 @@ private Q_SLOTS:
     void metadata();
     void deadline_data();
     void deadline();
-    void interceptor();
-    void cancelledInterceptor();
-    void interceptResponse();
-    void cacheIntercept();
 };
 
 void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
@@ -301,146 +295,6 @@ void QtGrpcClientUnaryCallTest::deadline()
         // cancel the call, that might affect other tests.
         reply->cancel();
     }
-}
-
-void QtGrpcClientUnaryCallTest::interceptor()
-{
-    constexpr QLatin1StringView clientMetadataKey = "client_header"_L1;
-    constexpr QLatin1StringView serverMetadataKey = "server_header"_L1;
-    constexpr QLatin1StringView interceptor1Id = "inter1"_L1;
-    constexpr QLatin1StringView interceptor2Id = "inter2"_L1;
-
-    auto modifyFunc = [clientMetadataKey](std::shared_ptr<QGrpcChannelOperation> operation,
-                                          QLatin1StringView id) {
-        auto metadata = operation->options().metadata();
-        if (auto it = metadata.find(clientMetadataKey.latin1()); it != metadata.end()) {
-            it->second += id;
-        } else {
-            metadata.insert({ clientMetadataKey.latin1(), id.latin1() });
-        }
-        operation->setClientMetadata(metadata);
-    };
-    auto manager = QGrpcClientInterceptorManager();
-    manager.registerInterceptors({ std::make_shared<MockInterceptor>(interceptor1Id, modifyFunc),
-                                   std::make_shared<MockInterceptor>(interceptor2Id, modifyFunc) });
-    auto channel = client()->channel();
-    channel->addInterceptorManager(manager);
-    client()->attachChannel(channel);
-
-    auto reply = client()->testMetadata({});
-
-    QSignalSpy callFinishedSpy(reply.get(), &QGrpcCallReply::finished);
-    QVERIFY(callFinishedSpy.isValid());
-
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(callFinishedSpy.count(), 1, MessageLatencyWithThreshold);
-    const auto serverMetadata = reply->metadata();
-    const auto it = serverMetadata.find(serverMetadataKey.latin1());
-
-    QVERIFY(it != serverMetadata.end());
-    QCOMPARE_EQ(it->second, "inter1inter2"_ba);
-}
-
-void QtGrpcClientUnaryCallTest::cancelledInterceptor()
-{
-    constexpr QLatin1StringView interceptor1Id = "inter1"_L1;
-
-    auto manager = QGrpcClientInterceptorManager();
-    manager.registerInterceptors({ std::make_shared<NoContinuationInterceptor>(interceptor1Id) });
-    auto channel = client()->channel();
-    channel->addInterceptorManager(manager);
-    client()->attachChannel(channel);
-
-    SimpleStringMessage request;
-    request.setTestFieldString("sleep");
-
-    std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
-
-    std::optional<SimpleStringMessage> result = SimpleStringMessage();
-    result->setTestFieldString("Result not changed by echo");
-    QObject::connect(reply.get(), &QGrpcCallReply::finished, this,
-                     [&result, reply] { result = reply->read<SimpleStringMessage>(); });
-
-    QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
-    QSignalSpy replyFinishedSpy(reply.get(), &QGrpcCallReply::finished);
-    QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
-
-    QVERIFY(replyErrorSpy.isValid());
-    QVERIFY(replyFinishedSpy.isValid());
-    QVERIFY(clientErrorSpy.isValid());
-
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyErrorSpy.count(), 1, FailTimeout);
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 0, FailTimeout);
-
-    QCOMPARE_EQ(result->testFieldString(), "Result not changed by echo");
-}
-
-void QtGrpcClientUnaryCallTest::interceptResponse()
-{
-    std::optional<SimpleStringMessage> serverResponse = SimpleStringMessage();
-    auto interceptFunc =
-        [this, &serverResponse](std::shared_ptr<QGrpcChannelOperation> operation,
-                                std::shared_ptr<QGrpcCallReply> response,
-                                QGrpcInterceptorContinuation<QGrpcCallReply> &continuation,
-                                QLatin1StringView) {
-            QObject::connect(response.get(), &QGrpcCallReply::finished, this,
-                             [&serverResponse, response] {
-                                 serverResponse = response->read<SimpleStringMessage>();
-                             });
-            continuation(std::move(response), std::move(operation));
-        };
-
-    auto manager = QGrpcClientInterceptorManager();
-    manager.registerInterceptor(std::make_shared<CallInterceptor>("inter1"_L1, interceptFunc));
-    auto channel = client()->channel();
-    channel->addInterceptorManager(manager);
-    client()->attachChannel(channel);
-
-    SimpleStringMessage request;
-    request.setTestFieldString("Hello Qt!");
-    std::optional<SimpleStringMessage> result;
-    client()->testMethod(request, client().get(), [&result](std::shared_ptr<QGrpcCallReply> reply) {
-        result = reply->read<SimpleStringMessage>();
-    });
-
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(serverResponse->testFieldString(),
-                                 "Hello Qt!", MessageLatencyWithThreshold);
-    QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
-}
-
-void QtGrpcClientUnaryCallTest::cacheIntercept()
-{
-    SimpleStringMessage serverResponse;
-    auto interceptFunc =
-        [](std::shared_ptr<QGrpcChannelOperation> operation, std::shared_ptr<QGrpcCallReply>,
-           QGrpcInterceptorContinuation<QGrpcCallReply> &, QLatin1StringView id) {
-            SimpleStringMessage deserializedArg;
-            if (!operation->serializer()->deserialize(&deserializedArg, operation->argument())) {
-                QFAIL("Deserialization of arg failed.");
-                return;
-            }
-            SimpleStringMessage cachedValue;
-            cachedValue.setTestFieldString(id);
-            const auto serializedValue = operation->serializer()->serialize(&cachedValue);
-            emit operation->dataReady(serializedValue);
-            emit operation->finished();
-        };
-
-    auto manager = QGrpcClientInterceptorManager();
-    manager.registerInterceptor(std::make_shared<CallInterceptor>("inter1"_L1, interceptFunc));
-    auto channel = client()->channel();
-    channel->addInterceptorManager(manager);
-    client()->attachChannel(channel);
-
-    SimpleStringMessage request;
-    std::optional<SimpleStringMessage> result = SimpleStringMessage();
-    request.setTestFieldString("Hello Qt!");
-    client()->testMethod(request, client().get(), [&result](std::shared_ptr<QGrpcCallReply> reply) {
-        result = reply->read<SimpleStringMessage>();
-    });
-
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(result->testFieldString(),
-                                 "inter1", MessageLatencyWithThreshold);
 }
 
 QTEST_MAIN(QtGrpcClientUnaryCallTest)
