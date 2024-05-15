@@ -70,14 +70,14 @@ QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOpe
                                QObject *parent)
     : QObject(*new QGrpcOperationPrivate(std::move(channelOperation)), parent)
 {
-    [[maybe_unused]] bool valid =
-            QObject::connect(d_func()->channelOperation.get(), &QGrpcChannelOperation::dataReady,
-                             this, [this](const QByteArray &data) {
-                                 Q_D(QGrpcOperation);
-                                 d->data = data;
-                             });
+    [[maybe_unused]] bool valid = QObject::connect(d_func()->channelOperation.get(),
+                                                   &QGrpcChannelOperation::messageReceived, this,
+                                                   [this](const QByteArray &data) {
+                                                       Q_D(QGrpcOperation);
+                                                       d->data = data;
+                                                   });
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
-               "Unable to make connection to the 'dataReady' signal");
+               "Unable to make connection to the 'messageReceived' signal");
 
     valid = QObject::connect(d_func()->channelOperation.get(),
                              &QGrpcChannelOperation::errorOccurred, this,
@@ -195,7 +195,7 @@ QGrpcChannelOperation *QGrpcOperation::channelOperation() const noexcept
 void QGrpcOperation::cancel()
 {
     d_func()->isFinished.storeRelaxed(true);
-    emit d_func()->channelOperation->cancelled();
+    emit d_func()->channelOperation->cancelRequested();
     emit errorOccurred(QGrpcStatus{ QGrpcStatus::Cancelled,
                                     tr("Operation is cancelled by client") });
 }

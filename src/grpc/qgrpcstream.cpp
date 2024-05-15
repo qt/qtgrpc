@@ -31,8 +31,8 @@ QGrpcServerStream::QGrpcServerStream(std::shared_ptr<QGrpcChannelOperation> chan
                                      QObject *parent)
     : QGrpcOperation(std::move(channelOperation), parent)
 {
-    QObject::connect(QGrpcOperation::channelOperation(), &QGrpcChannelOperation::dataReady, this,
-                     [this] { emit messageReceived(); });
+    QObject::connect(QGrpcOperation::channelOperation(), &QGrpcChannelOperation::messageReceived,
+                     this, [this] { emit messageReceived(); });
 }
 
 /*!
@@ -50,7 +50,7 @@ QGrpcServerStream::~QGrpcServerStream() = default;
 */
 
 /*!
-    \fn template<typename T> void QGrpcClientStream::sendMessage(const T &message)
+    \fn template<typename T> void QGrpcClientStream::writeMessage(const T &message)
 
     Serializes \a message and sends it to the server.
 */
@@ -70,10 +70,10 @@ QGrpcClientStream::~QGrpcClientStream() = default;
     \since 6.8
     Serializes \a message and sends it to the server.
 */
-void QGrpcClientStream::sendMessage(const QProtobufMessage *message)
+void QGrpcClientStream::writeMessage(const QProtobufMessage *message)
 {
     QByteArray data = QGrpcOperation::channelOperation()->serializer()->serialize(message);
-    emit QGrpcOperation::channelOperation()->sendData(data);
+    emit QGrpcOperation::channelOperation()->writeMessageRequested(data);
 }
 
 /*!
@@ -83,7 +83,7 @@ void QGrpcClientStream::sendMessage(const QProtobufMessage *message)
 */
 void QGrpcClientStream::writesDone()
 {
-    emit QGrpcOperation::channelOperation()->writesDone();
+    emit QGrpcOperation::channelOperation()->writesDoneRequested();
 }
 
 /*!
@@ -102,7 +102,7 @@ void QGrpcClientStream::writesDone()
 */
 
 /*!
-    \fn template<typename T> void QGrpcBidirStream::sendMessage(const T &message)
+    \fn template<typename T> void QGrpcBidirStream::writeMessage(const T &message)
 
     Serializes \a message and sends it to the server.
 */
@@ -111,8 +111,8 @@ QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcChannelOperation> channe
                                    QObject *parent)
     : QGrpcOperation(std::move(channelOperation), parent)
 {
-    QObject::connect(QGrpcOperation::channelOperation(), &QGrpcChannelOperation::dataReady, this,
-                     [this] { emit messageReceived(); });
+    QObject::connect(QGrpcOperation::channelOperation(), &QGrpcChannelOperation::messageReceived,
+                     this, [this] { emit messageReceived(); });
 }
 
 /*!
@@ -124,10 +124,10 @@ QGrpcBidirStream::~QGrpcBidirStream() = default;
     \since 6.8
     Serializes \a message and sends it to the server.
 */
-void QGrpcBidirStream::sendMessage(const QProtobufMessage *message)
+void QGrpcBidirStream::writeMessage(const QProtobufMessage *message)
 {
     QByteArray data = QGrpcOperation::channelOperation()->serializer()->serialize(message);
-    emit QGrpcOperation::channelOperation()->sendData(data);
+    emit QGrpcOperation::channelOperation()->writeMessageRequested(data);
 }
 
 /*!
@@ -137,7 +137,7 @@ void QGrpcBidirStream::sendMessage(const QProtobufMessage *message)
 */
 void QGrpcBidirStream::writesDone()
 {
-    emit QGrpcOperation::channelOperation()->writesDone();
+    emit QGrpcOperation::channelOperation()->writesDoneRequested();
 }
 
 QT_END_NAMESPACE

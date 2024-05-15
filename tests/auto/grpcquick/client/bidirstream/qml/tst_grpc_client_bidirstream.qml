@@ -34,7 +34,7 @@ Item {
             root.messageArg.testFieldString = "streamQml" + root.times
             testCase.verify(root.streamSender,
                             "readMessage callback is called without active stream sender")
-            root.streamSender.sendMessage(root.messageArg)
+            root.streamSender.writeMessage(root.messageArg)
 
         }
     }

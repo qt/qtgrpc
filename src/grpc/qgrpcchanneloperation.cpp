@@ -21,7 +21,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QGrpcChannelOperation::dataReady(const QByteArray &data)
+    \fn void QGrpcChannelOperation::messageReceived(const QByteArray &data)
 
     The signal should be emitted by the channel when the new chunk of \a data is
     received.
@@ -36,7 +36,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QGrpcChannelOperation::sendData(const QByteArray &data)
+    \fn void QGrpcChannelOperation::writeMessageRequested(const QByteArray &data)
 
     The signal is emitted when the client tries to send a new message to the
     channel.
@@ -71,7 +71,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void cancelled()
+    \fn void QGrpcChannelOperation::cancelRequested()
 
     The signal is emitted when client requests to terminate the communication.
 

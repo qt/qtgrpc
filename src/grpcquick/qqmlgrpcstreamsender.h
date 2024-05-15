@@ -21,14 +21,14 @@ class QQmlGrpcStreamSender : public QObject
 protected:
     QQmlGrpcStreamSender(std::shared_ptr<Stream> stream) : m_stream(std::move(stream)) { }
 
-    void sendMessageImpl(const Arg &message)
+    void writeMessageImpl(const Arg &message)
     {
-        Q_ASSERT_X(m_stream, "sendMessageToStream", "stream is nullptr");
+        Q_ASSERT_X(m_stream, "writeMessageImpl", "stream is nullptr");
         if (m_stream->isFinished()) {
-            qWarning() << "Unable to send data, the stream is finished";
+            qWarning() << "Unable to write message; stream is finished";
             return;
         }
-        m_stream->sendMessage(&message);
+        m_stream->writeMessage(&message);
     }
 
 private:

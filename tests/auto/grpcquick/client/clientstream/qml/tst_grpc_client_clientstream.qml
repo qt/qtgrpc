@@ -66,7 +66,7 @@ Item {
         running: root.streamSender != null && root.times < root.expectedNumberOfMessages
         interval: testMessageLatency
         onTriggered: {
-            root.streamSender.sendMessage(root.messageArg)
+            root.streamSender.writeMessage(root.messageArg)
             ++times
         }
     }

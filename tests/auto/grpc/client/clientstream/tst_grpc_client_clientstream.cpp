@@ -41,7 +41,7 @@ void QtGrpcClientClientStreamTest::valid()
     int i = 0;
     QTimer sendTimer;
     QObject::connect(&sendTimer, &QTimer::timeout, this, [&]() {
-        stream->sendMessage(request);
+        stream->writeMessage(request);
         if (++i == ExpectedMessageCount)
             sendTimer.stop();
     });
@@ -73,7 +73,7 @@ void QtGrpcClientClientStreamTest::sequentialSend()
     // Ensure that messages are not lost during the sequential sending right after the stream is
     // instanciated.
     for (int i = 0; i < ExpectedMessageCount; ++i) {
-        stream->sendMessage(request);
+        stream->writeMessage(request);
     }
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
@@ -102,11 +102,11 @@ void QtGrpcClientClientStreamTest::sequentialSendWithDone()
     // Ensure that messages are not lost during the sequential sending right after the stream is
     // instanciated.
     for (int i = 1; i < (ExpectedMessageCount - 1); ++i) {
-        stream->sendMessage(request);
+        stream->writeMessage(request);
     }
     stream->writesDone();
     request.setTestFieldString("StreamWrong");
-    stream->sendMessage(request);
+    stream->writeMessage(request);
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
@@ -138,11 +138,11 @@ void QtGrpcClientClientStreamTest::sequentialSendWithDoneWhenChannelNotReady()
     // Ensure that messages are not lost during the sequential sending right after the stream is
     // instanciated.
     for (int i = 1; i < (ExpectedMessageCount - 1); ++i) {
-        stream->sendMessage(request);
+        stream->writeMessage(request);
     }
     stream->writesDone();
     request.setTestFieldString("StreamWrong");
-    stream->sendMessage(request);
+    stream->writeMessage(request);
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());

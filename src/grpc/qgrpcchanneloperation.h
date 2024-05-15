@@ -49,13 +49,14 @@ public:
     void setServerMetadata(QGrpcMetadata &&metadata);
 
 Q_SIGNALS:
-    void dataReady(const QByteArray &data);
-    void sendData(const QByteArray &data);
+    // Outgoing signals of the channel.
     void errorOccurred(const QGrpcStatus &status);
     void finished();
-
-    void cancelled();
-    void writesDone();
+    void messageReceived(const QByteArray &data);
+    // Icoming signals from the client.
+    void cancelRequested();
+    void writeMessageRequested(const QByteArray &data);
+    void writesDoneRequested();
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcChannelOperation)

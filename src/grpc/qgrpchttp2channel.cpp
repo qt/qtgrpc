@@ -159,7 +159,7 @@ private:
         ~Http2Handler();
         void sendInitialRequest();
 
-        void sendData(QByteArrayView data);
+        void writeMessage(QByteArrayView data);
         [[nodiscard]] bool sendHeaders(const HPack::HttpHeader &headers);
         void processQueue();
         void cancel();
@@ -252,11 +252,13 @@ QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(std::shared_ptr<QGrpcChanne
     : QObject(parent), m_operation(std::move(operation_)), m_endStreamAtFirstData(endStream)
 {
     auto *channelOpPtr = operation_.get();
-    QObject::connect(channelOpPtr, &QGrpcChannelOperation::cancelled, this, &Http2Handler::cancel);
-    QObject::connect(channelOpPtr, &QGrpcChannelOperation::writesDone, this, &Http2Handler::finish);
+    QObject::connect(channelOpPtr, &QGrpcChannelOperation::cancelRequested, this,
+                     &Http2Handler::cancel);
+    QObject::connect(channelOpPtr, &QGrpcChannelOperation::writesDoneRequested, this,
+                     &Http2Handler::finish);
     if (!m_endStreamAtFirstData) {
-        QObject::connect(channelOpPtr, &QGrpcChannelOperation::sendData, this,
-                         [this](const QByteArray &data) { sendData(data); });
+        QObject::connect(channelOpPtr, &QGrpcChannelOperation::writeMessageRequested, this,
+                         [this](const QByteArray &data) { writeMessage(data); });
     }
     prepareInitialRequest(channelOpPtr, parent);
 }
@@ -347,10 +349,10 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
                                               << "dataContainer:" << m_expectedData.container.size()
                                               << "capacity:" << m_expectedData.expectedSize;
                                  emit channelOpPtr
-                                     ->dataReady(m_expectedData.container
-                                                     .mid(GrpcMessageSizeHeaderSize,
-                                                          m_expectedData.expectedSize
-                                                              - GrpcMessageSizeHeaderSize));
+                                     ->messageReceived(m_expectedData.container
+                                                           .mid(GrpcMessageSizeHeaderSize,
+                                                                m_expectedData.expectedSize
+                                                                    - GrpcMessageSizeHeaderSize));
                                  m_expectedData.container.remove(0, m_expectedData.expectedSize);
                                  m_expectedData.expectedSize = 0;
                                  if (!m_expectedData.updateExpectedSize())
@@ -430,12 +432,12 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::prepareInitialRequest(QGrpcChannelO
     iterateMetadata(channelOptions.metadata());
     iterateMetadata(channelOperation->options().metadata());
 
-    sendData(channelOperation->argument());
+    writeMessage(channelOperation->argument());
 }
 
 // Do not send the data immediately, but put it to message queue, for further processing.
 // The data for cancelled stream is ignored.
-void QGrpcHttp2ChannelPrivate::Http2Handler::sendData(QByteArrayView data)
+void QGrpcHttp2ChannelPrivate::Http2Handler::writeMessage(QByteArrayView data)
 {
     if (m_handlerState != Active || isStreamClosedForSending()) {
         qGrpcDebug("Attempt sending data to the ended stream");

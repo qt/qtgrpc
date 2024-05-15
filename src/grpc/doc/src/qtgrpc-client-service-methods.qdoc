@@ -220,7 +220,7 @@ the method that returns the pointer to \l{QGrpcClientStream}:
 \endcode
 
 To send multiple requests to the server, use the
-\l {QGrpcClientStream::sendMessage} method:
+\l {QGrpcClientStream::writeMessage} method:
 \code
     auto stream = cl.severalPingPong(request);
 
@@ -229,7 +229,7 @@ To send multiple requests to the server, use the
                      [streamPtr = stream.get()](){
                          ping::pong::Ping request;
                          request.setTime(QDateTime::currentMSecsSinceEpoch());
-                         streamPtr->sendMessage(request);
+                         streamPtr->writeMessage(request);
                      });
 
     QObject::connect(stream.get(), &QGrpcServerStream::finished, stream.get(),
@@ -275,7 +275,7 @@ breaking the connection session:
                          requestTime = QDateTime::currentMSecsSinceEpoch();
                          ping::pong::Ping request;
                          request.setTime(requestTime);
-                         streamPtr->sendMessage(request);
+                         streamPtr->writeMessage(request);
                      });
 
     QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, stream.get(),

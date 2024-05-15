@@ -25,9 +25,9 @@ class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodClientStreamSender : public
     QML_UNCREATABLE("TestServiceTestMethodClientStreamSender can only be created by gRPC client instance")
 public:
     TestMethodClientStreamSender(std::shared_ptr<QGrpcClientStream> stream) : QQmlGrpcStreamSender(std::move(stream)) {}
-    Q_INVOKABLE void sendMessage(const qtgrpc::tests::SimpleStringMessage &arg)
+    Q_INVOKABLE void writeMessage(const qtgrpc::tests::SimpleStringMessage &arg)
     {
-        sendMessageImpl(arg);
+        writeMessageImpl(arg);
     }
 };
 
@@ -43,9 +43,9 @@ class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodBiStreamSender : public
     QML_UNCREATABLE("TestServiceTestMethodBiStreamSender can only be created by gRPC client instance")
 public:
     TestMethodBiStreamSender(std::shared_ptr<QGrpcBidirStream> stream) : QQmlGrpcStreamSender(std::move(stream)) {}
-    Q_INVOKABLE void sendMessage(const qtgrpc::tests::SimpleStringMessage &arg)
+    Q_INVOKABLE void writeMessage(const qtgrpc::tests::SimpleStringMessage &arg)
     {
-        sendMessageImpl(arg);
+        writeMessageImpl(arg);
     }
 };
 

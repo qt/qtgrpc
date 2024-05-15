@@ -45,12 +45,12 @@ public:
 #else
     template <typename T, std::enable_if_t<!std::is_pointer_v<T>, bool> = true>
 #endif
-    void sendMessage(const T &message)
+    void writeMessage(const T &message)
     {
-        sendMessage(&message);
+        writeMessage(&message);
     }
 
-    void sendMessage(const QProtobufMessage *message);
+    void writeMessage(const QProtobufMessage *message);
     void writesDone();
 
 private:
@@ -71,12 +71,12 @@ public:
 #else
     template <typename T, std::enable_if_t<!std::is_pointer_v<T>, bool> = true>
 #endif
-    void sendMessage(const T &message)
+    void writeMessage(const T &message)
     {
-        sendMessage(&message);
+        writeMessage(&message);
     }
 
-    void sendMessage(const QProtobufMessage *message);
+    void writeMessage(const QProtobufMessage *message);
 
     void writesDone();
 Q_SIGNALS:

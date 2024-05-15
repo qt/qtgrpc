@@ -140,9 +140,9 @@ const char *GrpcTemplates::StreamSenderDeclarationQmlTemplate()
            "public:\n"
            "    $sender_class_name$(std::shared_ptr<$stream_type$> stream) : "
            "QQmlGrpcStreamSender(std::move(stream)) {}\n"
-           "    Q_INVOKABLE void sendMessage(const $param_type$ &$param_name$)\n"
+           "    Q_INVOKABLE void writeMessage(const $param_type$ &$param_name$)\n"
            "    {\n"
-           "        sendMessageImpl($param_name$);\n"
+           "        writeMessageImpl($param_name$);\n"
            "    }\n"
            "};\n\n";
 }

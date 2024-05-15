@@ -42,7 +42,7 @@ void QtGrpcClientBidirStreamTest::valid()
                      [stream, &request, &fullResponse, &i]() {
                          if (const auto rsp = stream->read<SimpleStringMessage>()) {
                              fullResponse += rsp->testFieldString() + QString::number(++i);
-                             stream->sendMessage(request);
+                             stream->writeMessage(request);
                          }
                      });
 
@@ -78,7 +78,7 @@ void QtGrpcClientBidirStreamTest::sequentialSendWithDone()
                                  stream->writesDone();
                                  request.setTestFieldString("StreamWrong");
                              }
-                             stream->sendMessage(request);
+                             stream->writeMessage(request);
                          }
                      });
 
