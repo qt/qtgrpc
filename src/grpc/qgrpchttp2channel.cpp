@@ -190,10 +190,10 @@ private:
         Q_DISABLE_COPY_MOVE(Http2Handler)
     };
 
-    void channelOperationAsyncError(QGrpcChannelOperation *channelOperation,
-                                    const QGrpcStatus &status);
+    static void channelOperationAsyncError(QGrpcChannelOperation *channelOperation,
+                                           const QGrpcStatus &status);
     template <typename T>
-    void connectErrorHandler(T *socket, QGrpcChannelOperation *channelOperation)
+    static void connectErrorHandler(T *socket, QGrpcChannelOperation *channelOperation)
     {
         QObject::connect(socket, &T::errorOccurred, channelOperation,
                          [channelOperationPtr = QPointer(channelOperation)](auto error) {
