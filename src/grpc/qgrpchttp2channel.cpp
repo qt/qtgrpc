@@ -430,7 +430,7 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::prepareInitialRequest(QGrpcChannelO
     };
 
     iterateMetadata(channelOptions.metadata());
-    iterateMetadata(channelOperation->options().metadata());
+    iterateMetadata(channelOperation->callOptions().metadata());
 
     writeMessage(channelOperation->argument());
 }

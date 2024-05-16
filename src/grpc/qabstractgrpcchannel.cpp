@@ -143,7 +143,7 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
     auto reply = std::make_shared<QGrpcCallReply>(channelOperation);
     call(channelOperation);
 
-    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->options()))
+    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->callOptions()))
         QTimer::singleShot(*deadline, reply.get(), &QGrpcCallReply::cancel);
 
     return reply;
@@ -175,7 +175,7 @@ QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringV
     auto stream = std::make_shared<QGrpcServerStream>(channelOperation);
     startServerStream(channelOperation);
 
-    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->options()))
+    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->callOptions()))
         QTimer::singleShot(*deadline, stream.get(), &QGrpcServerStream::cancel);
 
     return stream;
@@ -200,7 +200,7 @@ QAbstractGrpcChannel::startClientStream(QLatin1StringView method, QLatin1StringV
     auto stream = std::make_shared<QGrpcClientStream>(channelOperation);
     startClientStream(channelOperation);
 
-    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->options()))
+    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->callOptions()))
         QTimer::singleShot(*deadline, stream.get(), &QGrpcClientStream::cancel);
 
     return stream;
@@ -225,7 +225,7 @@ QAbstractGrpcChannel::startBidirStream(QLatin1StringView method, QLatin1StringVi
     auto stream = std::make_shared<QGrpcBidirStream>(channelOperation);
     startBidirStream(channelOperation);
 
-    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->options()))
+    if (auto deadline = deadlineForCall(dPtr->channelOptions, channelOperation->callOptions()))
         QTimer::singleShot(*deadline, stream.get(), &QGrpcBidirStream::cancel);
 
     return stream;

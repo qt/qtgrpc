@@ -149,7 +149,7 @@ QByteArrayView QGrpcChannelOperation::argument() const noexcept
 /*!
     Return the options that are assigned to this operation.
 */
-const QGrpcCallOptions &QGrpcChannelOperation::options() const & noexcept
+const QGrpcCallOptions &QGrpcChannelOperation::callOptions() const & noexcept
 {
     Q_D(const QGrpcChannelOperation);
     return d->options;
@@ -190,7 +190,7 @@ void QGrpcChannelOperation::setArgument(QByteArrayView arg)
 /*!
     Updates the call \a options attribute.
 */
-void QGrpcChannelOperation::setOptions(const QGrpcCallOptions &options)
+void QGrpcChannelOperation::setCallOptions(const QGrpcCallOptions &options)
 {
     Q_D(QGrpcChannelOperation);
     d->options = options;
