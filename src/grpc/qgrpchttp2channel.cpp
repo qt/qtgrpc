@@ -157,6 +157,7 @@ private:
         explicit Http2Handler(std::shared_ptr<QGrpcChannelOperation> &&operation,
                               QGrpcHttp2ChannelPrivate *parent, bool endStream);
         ~Http2Handler();
+        void sendInitialRequest();
 
         void sendData(QByteArrayView data);
         [[nodiscard]] bool sendHeaders(const HPack::HttpHeader &headers);
@@ -180,6 +181,11 @@ private:
         }
 
     private:
+        void prepareInitialRequest(QGrpcChannelOperation *channelOperation,
+                                   QGrpcHttp2ChannelPrivate *channel);
+
+        HPack::HttpHeader m_initialHeaders;
+
         std::weak_ptr<QGrpcChannelOperation> m_operation;
         QQueue<QByteArray> m_queue;
         QPointer<QHttp2Stream> m_stream;
@@ -209,7 +215,7 @@ private:
                          });
     }
 
-    void sendRequest(Http2Handler *handler);
+    void sendInitialRequest(Http2Handler *handler);
     void sendPendingRequests();
     void createHttp2Connection();
     void handleSocketError();
@@ -252,6 +258,7 @@ QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(std::shared_ptr<QGrpcChanne
         QObject::connect(channelOpPtr, &QGrpcChannelOperation::sendData, this,
                          [this](const QByteArray &data) { sendData(data); });
     }
+    prepareInitialRequest(channelOpPtr, parent);
 }
 
 QGrpcHttp2ChannelPrivate::Http2Handler::~Http2Handler()
@@ -387,6 +394,45 @@ void QGrpcHttp2ChannelPrivate::channelOperationAsyncError(QGrpcChannelOperation 
                        });
 }
 
+// The initial headers to be sent before the first data.
+void QGrpcHttp2ChannelPrivate::Http2Handler::prepareInitialRequest(QGrpcChannelOperation
+                                                                       *channelOperation,
+                                                                   QGrpcHttp2ChannelPrivate
+                                                                       *channel)
+{
+    auto &channelOptions = channel->channelOptions;
+    QByteArray service{ channelOperation->service().data(), channelOperation->service().size() };
+    QByteArray method{ channelOperation->method().data(), channelOperation->method().size() };
+    m_initialHeaders = HPack::HttpHeader{
+        {AuthorityHeader.toByteArray(),           channelOptions.host().host().toLatin1() },
+        { MethodHeader.toByteArray(),             "POST"_ba                               },
+        { PathHeader.toByteArray(),               QByteArray('/' + service + '/' + method)},
+        { SchemeHeader.toByteArray(),
+         channel->m_isLocalSocket ? "http"_ba : channelOptions.host().scheme().toLatin1() },
+        { ContentTypeHeader.toByteArray(),        channel->m_contentType                  },
+        { GrpcServiceNameHeader.toByteArray(),    { service }                             },
+        { GrpcAcceptEncodingHeader.toByteArray(), "identity,deflate,gzip"_ba              },
+        { AcceptEncodingHeader.toByteArray(),     "identity,gzip"_ba                      },
+        { TEHeader.toByteArray(),                 "trailers"_ba                           },
+    };
+
+    auto iterateMetadata = [this](const auto &metadata) {
+        for (const auto &[key, value] : std::as_const(metadata)) {
+            auto lowerKey = key.toLower();
+            if (lowerKey == AuthorityHeader || lowerKey == MethodHeader || lowerKey == PathHeader
+                || lowerKey == SchemeHeader || lowerKey == ContentTypeHeader) {
+                continue;
+            }
+            m_initialHeaders.push_back({ lowerKey, value });
+        }
+    };
+
+    iterateMetadata(channelOptions.metadata());
+    iterateMetadata(channelOperation->options().metadata());
+
+    sendData(channelOperation->argument());
+}
+
 // Do not send the data immediately, but put it to message queue, for further processing.
 // The data for cancelled stream is ignored.
 void QGrpcHttp2ChannelPrivate::Http2Handler::sendData(QByteArrayView data)
@@ -402,6 +448,23 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::sendData(QByteArrayView data)
     msg += data;
 
     m_queue.enqueue(msg);
+    processQueue();
+}
+
+// Sends the initial headers before processing the message queue.
+void QGrpcHttp2ChannelPrivate::Http2Handler::sendInitialRequest()
+{
+    Q_ASSERT(!m_initialHeaders.empty());
+    Q_ASSERT(m_stream);
+
+    if (!m_stream->sendHEADERS(m_initialHeaders, false)) {
+        channelOperationAsyncError(operation(),
+                                   QGrpcStatus{
+                                       QGrpcStatus::Unavailable,
+                                       tr("Unable to send initial headers to an HTTP/2 stream") });
+        return;
+    }
+    m_initialHeaders.clear();
     processQueue();
 }
 
@@ -662,8 +725,8 @@ void QGrpcHttp2ChannelPrivate::processOperation(std::shared_ptr<QGrpcChannelOper
     if (m_connection == nullptr) {
         m_pendingHandlers.push_back(handler);
     } else {
+        sendInitialRequest(handler);
         m_activeHandlers.push_back(handler);
-        sendRequest(handler);
     }
 
     if (m_state == ConnectionState::Error) {
@@ -692,7 +755,7 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
             delete handler;
             continue;
         }
-        sendRequest(handler);
+        sendInitialRequest(handler);
     }
     m_activeHandlers.append(m_pendingHandlers);
     m_pendingHandlers.clear();
@@ -709,7 +772,7 @@ void QGrpcHttp2ChannelPrivate::handleSocketError()
     m_state = ConnectionState::Error;
 }
 
-void QGrpcHttp2ChannelPrivate::sendRequest(Http2Handler *handler)
+void QGrpcHttp2ChannelPrivate::sendInitialRequest(Http2Handler *handler)
 {
     Q_ASSERT(handler != nullptr);
     auto *channelOpPtr = handler->operation();
@@ -729,44 +792,7 @@ void QGrpcHttp2ChannelPrivate::sendRequest(Http2Handler *handler)
         return;
     }
     handler->attachStream(streamAttempt.unwrap());
-
-    QByteArray service{ channelOpPtr->service().data(), channelOpPtr->service().size() };
-    QByteArray method{ channelOpPtr->method().data(), channelOpPtr->method().size() };
-
-    HPack::HttpHeader requestHeaders = HPack::HttpHeader{
-        { AuthorityHeader.toByteArray(),          channelOptions.host().host().toLatin1()  },
-        { MethodHeader.toByteArray(),             "POST"_ba                                },
-        { PathHeader.toByteArray(),               QByteArray('/' + service + '/' + method) },
-        { SchemeHeader.toByteArray(),
-         m_isLocalSocket ? "http"_ba : channelOptions.host().scheme().toLatin1()           },
-        { ContentTypeHeader.toByteArray(),        m_contentType                            },
-        { GrpcServiceNameHeader.toByteArray(),    { service }                              },
-        { GrpcAcceptEncodingHeader.toByteArray(), "identity,deflate,gzip"_ba               },
-        { AcceptEncodingHeader.toByteArray(),     "identity,gzip"_ba                       },
-        { TEHeader.toByteArray(),                 "trailers"_ba                            },
-    };
-
-    auto iterateMetadata = [&requestHeaders](const auto &metadata) {
-        for (const auto &[key, value] : std::as_const(metadata)) {
-            auto lowerKey = key.toLower();
-            if (lowerKey == AuthorityHeader || lowerKey == MethodHeader || lowerKey == PathHeader
-                || lowerKey == SchemeHeader || lowerKey == ContentTypeHeader) {
-                continue;
-            }
-            requestHeaders.push_back({ lowerKey, value });
-        }
-    };
-
-    iterateMetadata(channelOptions.metadata());
-    iterateMetadata(channelOpPtr->options().metadata());
-
-    if (!handler->sendHeaders(requestHeaders)) {
-        channelOperationAsyncError(channelOpPtr,
-                                   QGrpcStatus{ QGrpcStatus::Unavailable,
-                                                tr("Unable to create an HTTP/2 stream") });
-        return;
-    }
-    handler->sendData(channelOpPtr->argument());
+    handler->sendInitialRequest();
 }
 
 void QGrpcHttp2ChannelPrivate::deleteHandler(Http2Handler *handler)
