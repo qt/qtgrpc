@@ -18,6 +18,7 @@ qt_internal_add_test(tst_grpc_channel_options_qml
 )
 
 qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0004 NEW)
 
 qt_add_qml_module(tst_grpc_channel_options_qml
     URI QmlTestUri

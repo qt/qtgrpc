@@ -12,6 +12,7 @@ if(NOT TARGET grpc_testserver)
     return()
 endif()
 qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0004 NEW)
 
 qt_internal_add_test(tst_grpc_client_unarycall_qml
     QMLTEST
