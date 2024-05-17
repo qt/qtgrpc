@@ -585,6 +585,7 @@ function(qt6_add_protobuf target)
             PLUGIN_TARGET "${target}plugin"
             VERSION 1.0
             OUTPUT_DIRECTORY "${qml_module_output_full_path}"
+            DEPENDENCIES QtProtobuf
         )
         set_target_properties(${target}plugin
             PROPERTIES
@@ -594,7 +595,15 @@ function(qt6_add_protobuf target)
             ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
         )
 
+        target_link_libraries(${target} PRIVATE
+            ${QT_CMAKE_EXPORT_NAMESPACE}::ProtobufQuick
+        )
+
         list(APPEND ${arg_OUTPUT_TARGETS} ${target}plugin)
+    elseif(existing_uri)
+        target_link_libraries(${target} PRIVATE
+            ${QT_CMAKE_EXPORT_NAMESPACE}::ProtobufQuick
+        )
     endif()
 
     if(DEFINED arg_OUTPUT_HEADERS)

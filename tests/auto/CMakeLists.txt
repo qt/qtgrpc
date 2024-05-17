@@ -21,7 +21,7 @@ if(QT_FEATURE_grpc AND TARGET Qt6::qtprotobufgen AND TARGET Qt6::qtgrpcgen)
     add_subdirectory(grpc)
 endif()
 
-if(TARGET Qt6::qtprotobufgen AND TARGET Qt6::Quick AND TARGET Qt6::QuickTest)
+if(TARGET Qt6::qtprotobufgen AND QT_FEATURE_protobufquick AND TARGET Qt6::QuickTest)
     add_subdirectory(protobufqml)
 endif()
 
