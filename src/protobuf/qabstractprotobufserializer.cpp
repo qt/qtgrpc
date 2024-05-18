@@ -194,10 +194,6 @@ QAbstractProtobufSerializer::~QAbstractProtobufSerializer() = default;
     Returns \c true if deserialization was successful, otherwise \c false.
 */
 
-namespace QtProtobufPrivate {
-extern QtProtobufPrivate::QProtobufPropertyOrdering getOrderingByMetaType(QMetaType type);
-}
-
 /*!
     \fn QAbstractProtobufSerializer::serialize(const QProtobufMessage *message) const
 
