@@ -39,7 +39,6 @@ public:
     ~QQmlGrpcCallOptions();
 
     const QGrpcCallOptions &options() const;
-    void setMaxRetryAttempts(qint64 value);
     qint64 deadline() const;
     void setDeadline(qint64 value);
     QQmlGrpcMetadata *metadata() const;
