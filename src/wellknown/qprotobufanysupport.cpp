@@ -26,7 +26,7 @@ public:
 };
 
 static void serializerProxy(const QAbstractProtobufSerializer *serializer, const QVariant &object,
-                            const QProtobufPropertyOrderingInfo &fieldInfo)
+                            const QProtobufFieldInfo &fieldInfo)
 {
     if (object.isNull())
         return;
@@ -42,7 +42,7 @@ static void serializerProxy(const QAbstractProtobufSerializer *serializer, const
 }
 
 static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, const QVariant &object,
-                                const QProtobufPropertyOrderingInfo &fieldInfo)
+                                const QProtobufFieldInfo &fieldInfo)
 {
     const auto anyList = object.value<QList<Any>>();
     for (const Any &any : anyList) {

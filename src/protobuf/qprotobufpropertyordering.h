@@ -54,10 +54,10 @@ private:
 };
 static_assert(std::is_trivially_destructible_v<QProtobufPropertyOrdering>);
 
-// Convenience structure to hold a reference to a single entry
-struct QProtobufPropertyOrderingInfo
+// Convenience structure to hold a reference to a single field information
+struct QProtobufFieldInfo
 {
-    QProtobufPropertyOrderingInfo(QProtobufPropertyOrdering ord, int ind)
+    QProtobufFieldInfo(QProtobufPropertyOrdering ord, int ind)
         : ordering(ord), index(ind)
     {
         Q_ASSERT(index >= 0);

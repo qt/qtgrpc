@@ -38,30 +38,30 @@ protected:
     }
 
     void serializeObject(const QProtobufMessage *,
-                         const QtProtobufPrivate::QProtobufPropertyOrderingInfo &) const override
+                         const QtProtobufPrivate::QProtobufFieldInfo &) const override
     {
     }
     bool deserializeObject(QProtobufMessage *) const override { return true; }
 
     void
     serializeListObject(const QProtobufMessage *,
-                        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &) const override
+                        const QtProtobufPrivate::QProtobufFieldInfo &) const override
     {
     }
     bool deserializeListObject(QProtobufMessage *) const override { return true; }
 
     void serializeMapPair(const QVariant &, const QVariant &,
-                          const QtProtobufPrivate::QProtobufPropertyOrderingInfo &) const override
+                          const QtProtobufPrivate::QProtobufFieldInfo &) const override
     {
     }
     bool deserializeMapPair(QVariant &, QVariant &) const override { return true; }
 
     void serializeEnum(QtProtobuf::int64, const QMetaEnum &,
-                       const QtProtobufPrivate::QProtobufPropertyOrderingInfo &) const override
+                       const QtProtobufPrivate::QProtobufFieldInfo &) const override
     {
     }
     void serializeEnumList(const QList<QtProtobuf::int64> &, const QMetaEnum &,
-                           const QtProtobufPrivate::QProtobufPropertyOrderingInfo &) const override
+                           const QtProtobufPrivate::QProtobufFieldInfo &) const override
     {
     }
 

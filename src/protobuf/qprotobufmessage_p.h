@@ -57,7 +57,7 @@ public:
 
     std::optional<QMetaProperty> metaProperty(QAnyStringView name) const;
     std::optional<QMetaProperty>
-    metaProperty(QtProtobufPrivate::QProtobufPropertyOrderingInfo ord) const;
+    metaProperty(QtProtobufPrivate::QProtobufFieldInfo ord) const;
 
     static QProtobufMessagePrivate *get(QProtobufMessage *message) { return message->d_func(); }
     static const QProtobufMessagePrivate *get(const QProtobufMessage *message)

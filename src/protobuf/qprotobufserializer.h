@@ -31,25 +31,25 @@ private:
     bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const override;
 
     void serializeObject(const QProtobufMessage *message,
-                         const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+                         const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
         const override;
     bool deserializeObject(QProtobufMessage *message) const override;
 
     void serializeListObject(const QProtobufMessage *message,
-                             const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+                             const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
         const override;
     bool deserializeListObject(QProtobufMessage *message) const override;
 
     void serializeMapPair(const QVariant &key, const QVariant &value,
-                          const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+                          const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
         const override;
     bool deserializeMapPair(QVariant &key, QVariant &value) const override;
 
     void
     serializeEnum(QtProtobuf::int64 value, const QMetaEnum &metaEnum,
-                  const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const override;
+                  const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const override;
     void serializeEnumList(const QList<QtProtobuf::int64> &value, const QMetaEnum &metaEnum,
-                           const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+                           const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
         const override;
 
     bool deserializeEnum(QtProtobuf::int64 &value, const QMetaEnum &metaEnum) const override;

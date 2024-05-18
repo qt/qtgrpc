@@ -32,7 +32,7 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
 */
 
 /*!
-    \class QProtobufPropertyOrderingInfo
+    \class QProtobufFieldInfo
     \inmodule QtProtobuf
     \internal
     \brief Holds a property's index in the property system, and the json_name.
@@ -48,7 +48,7 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
     \internal
 
     A map between the property field index and an instance of
-    QProtobufPropertyOrderingInfo.
+    QProtobufFieldInfo.
 
     \sa Q_PROTOBUF_OBJECT
 */

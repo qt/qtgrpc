@@ -263,7 +263,7 @@ public:
     ~QProtobufJsonSerializerPrivate() = default;
 
     void serializeProperty(const QVariant &propertyValue,
-                           const QProtobufPropertyOrderingInfo &fieldInfo)
+                           const QProtobufFieldInfo &fieldInfo)
     {
         QMetaType metaType = propertyValue.metaType();
         auto userType = propertyValue.userType();
@@ -312,7 +312,7 @@ public:
                 Q_ASSERT_X(fieldIndex < 536870912 && fieldIndex > 0,
                            "",
                            "fieldIndex is out of range");
-                QProtobufPropertyOrderingInfo fieldInfo(*ordering, index);
+                QProtobufFieldInfo fieldInfo(*ordering, index);
                 QVariant propertyValue = message->property(fieldInfo);
                 serializeProperty(propertyValue, fieldInfo);
             }
@@ -552,13 +552,13 @@ public:
         auto ordering = message->propertyOrdering();
         Q_ASSERT(ordering != nullptr);
 
-        std::map<QString, QProtobufPropertyOrderingInfo> msgContainer; // map<key, fieldInfo>
+        std::map<QString, QProtobufFieldInfo> msgContainer; // map<key, fieldInfo>
         for (int index = 0; index < ordering->fieldCount(); ++index) {
             int fieldIndex = ordering->getFieldNumber(index);
             Q_ASSERT_X(fieldIndex < 536870912 && fieldIndex > 0, "", "fieldIndex is out of range");
-            QProtobufPropertyOrderingInfo fieldInfo(*ordering, index);
+            QProtobufFieldInfo fieldInfo(*ordering, index);
             QString key = fieldInfo.getJsonName().toString();
-            msgContainer.insert(std::pair<QString, QProtobufPropertyOrderingInfo>(key, fieldInfo));
+            msgContainer.insert(std::pair<QString, QProtobufFieldInfo>(key, fieldInfo));
         }
 
         if (!activeValue.isObject()) {
@@ -572,7 +572,7 @@ public:
             if (activeObject.value(key).isNull())
                 continue;
 
-            std::map<QString, QProtobufPropertyOrderingInfo>::iterator iter = msgContainer
+            std::map<QString, QProtobufFieldInfo>::iterator iter = msgContainer
                                                                                   .find(key);
             if (iter == msgContainer.end())
                 iter = msgContainer.find(convertJsonKeyToJsonName(key));
@@ -692,7 +692,7 @@ bool QProtobufJsonSerializer::deserializeMessage(QProtobufMessage *message,
 }
 
 void QProtobufJsonSerializer::serializeObject(const QProtobufMessage *message,
-                                              const QProtobufPropertyOrderingInfo &fieldInfo) const
+                                              const QProtobufFieldInfo &fieldInfo) const
 {
     auto store = d_ptr->activeValue.toObject();
     d_ptr->activeValue = QJsonObject();
@@ -702,7 +702,7 @@ void QProtobufJsonSerializer::serializeObject(const QProtobufMessage *message,
 }
 
 void QProtobufJsonSerializer::serializeListObject(const QProtobufMessage *message,
-                                                  const QProtobufPropertyOrderingInfo &fieldInfo)
+                                                  const QProtobufFieldInfo &fieldInfo)
     const
 {
     auto fieldName = fieldInfo.getJsonName().toString();
@@ -726,7 +726,7 @@ bool QProtobufJsonSerializer::deserializeListObject(QProtobufMessage *message) c
 }
 
 void QProtobufJsonSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
-                                               const QProtobufPropertyOrderingInfo &fieldInfo) const
+                                               const QProtobufFieldInfo &fieldInfo) const
 {
     const QString fieldName = fieldInfo.getJsonName().toString();
     auto store = d_ptr->activeValue.toObject();
@@ -800,7 +800,7 @@ bool QProtobufJsonSerializer::deserializeMapPair(QVariant &key, QVariant &value)
 }
 
 void QProtobufJsonSerializer::serializeEnum(QtProtobuf::int64 value, const QMetaEnum &metaEnum,
-                                            const QtProtobufPrivate::QProtobufPropertyOrderingInfo
+                                            const QtProtobufPrivate::QProtobufFieldInfo
                                                 &fieldInfo) const
 {
     if (value == 0 && !isOneofOrOptionalField(fieldInfo))
@@ -813,7 +813,7 @@ void QProtobufJsonSerializer::serializeEnum(QtProtobuf::int64 value, const QMeta
 
 void QProtobufJsonSerializer::
     serializeEnumList(const QList<QtProtobuf::int64> &values, const QMetaEnum &metaEnum,
-                      const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+                      const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
 {
     if (values.isEmpty())
         return;

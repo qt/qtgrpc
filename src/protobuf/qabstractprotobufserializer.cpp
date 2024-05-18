@@ -51,7 +51,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \fn void QAbstractProtobufSerializer::serializeObject(const QProtobufMessage *message,
-        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
 
     Serializes a registered Protobuf message \a message with defined
     \a fieldInfo, that is recognized like an object, into a QByteArray.
@@ -76,7 +76,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \fn void QAbstractProtobufSerializer::serializeListObject(const QProtobufMessage *message,
-        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
 
     Serializes \a message as part of a list of messages one by one with \a fieldInfo.
 
@@ -99,7 +99,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \fn void QAbstractProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
-        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
 
     This function serializes pair of \a key and \a value, that belong as a protobuf map record,
     according to \a fieldInfo.
@@ -122,7 +122,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \fn void QAbstractProtobufSerializer::serializeEnum(QtProtobuf::int64 value,
         const QMetaEnum &metaEnum,
-        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
 
     This function serializes \a value from enum associated with property \a fieldInfo.
     \a metaEnum helps to encode the enum value.
@@ -148,7 +148,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \fn void QAbstractProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
         const QMetaEnum &metaEnum,
-        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo) const
+        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
 
     This function serializes a list, \a value, for enum list associated with property \a fieldInfo.
     \a metaEnum helps to encode the enum value.

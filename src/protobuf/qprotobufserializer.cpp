@@ -253,7 +253,7 @@ QByteArray QProtobufSerializer::serializeMessage(const QProtobufMessage *message
     return d_ptr->result;
 }
 
-const QProtobufPropertyOrderingInfo QProtobufSerializerPrivate::mapValueOrdering{
+const QProtobufFieldInfo QProtobufSerializerPrivate::mapValueOrdering{
     mapPropertyOrdering, 1
 };
 
@@ -267,7 +267,7 @@ void QProtobufSerializerPrivate::serializeMessage(const QProtobufMessage *messag
     for (int index = 0; index < ordering->fieldCount(); ++index) {
         int fieldIndex = ordering->getFieldNumber(index);
         Q_ASSERT_X(fieldIndex < 536870912 && fieldIndex > 0, "", "fieldIndex is out of range");
-        QProtobufPropertyOrderingInfo fieldInfo(*ordering, index);
+        QProtobufFieldInfo fieldInfo(*ordering, index);
         QVariant propertyValue = message->property(fieldInfo);
         serializeProperty(propertyValue, fieldInfo);
     }
@@ -306,7 +306,7 @@ bool QProtobufSerializer::deserializeMessage(QProtobufMessage *message, QByteArr
 }
 
 void QProtobufSerializerPrivate::serializeObject(const QProtobufMessage *message,
-                                          const QProtobufPropertyOrderingInfo &fieldInfo)
+                                          const QProtobufFieldInfo &fieldInfo)
 {
     auto store = result;
     result = {};
@@ -345,7 +345,7 @@ bool QProtobufSerializerPrivate::deserializeObject(QProtobufMessage *message)
 }
 
 void QProtobufSerializer::serializeObject(const QProtobufMessage *message,
-                                          const QProtobufPropertyOrderingInfo &fieldInfo) const
+                                          const QProtobufFieldInfo &fieldInfo) const
 {
     d_ptr->serializeObject(message, fieldInfo);
 }
@@ -356,7 +356,7 @@ bool QProtobufSerializer::deserializeObject(QProtobufMessage *message) const
 }
 
 void QProtobufSerializer::serializeListObject(const QProtobufMessage *message,
-                                              const QProtobufPropertyOrderingInfo &fieldInfo) const
+                                              const QProtobufFieldInfo &fieldInfo) const
 {
     d_ptr->serializeObject(message, fieldInfo);
 }
@@ -367,7 +367,7 @@ bool QProtobufSerializer::deserializeListObject(QProtobufMessage *message) const
 }
 
 void QProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
-                                           const QProtobufPropertyOrderingInfo &fieldInfo) const
+                                           const QProtobufFieldInfo &fieldInfo) const
 {
     auto keyHandler = findIntegratedTypeHandler(key.metaType(), false);
     Q_ASSERT_X(keyHandler, "QProtobufSerializer", "Map key is not an integrated type.");
@@ -392,7 +392,7 @@ bool QProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value) con
 }
 
 void QProtobufSerializer::serializeEnum(QtProtobuf::int64 value, const QMetaEnum &,
-                                        const QProtobufPropertyOrderingInfo &fieldInfo) const
+                                        const QProtobufFieldInfo &fieldInfo) const
 {
     if (value == 0 && !isOneofOrOptionalField(fieldInfo))
         return;
@@ -405,7 +405,7 @@ void QProtobufSerializer::serializeEnum(QtProtobuf::int64 value, const QMetaEnum
 
 void QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
                                             const QMetaEnum &,
-                                            const QProtobufPropertyOrderingInfo &fieldInfo) const
+                                            const QProtobufFieldInfo &fieldInfo) const
 {
     if (value.isEmpty())
         return;
@@ -546,7 +546,7 @@ qsizetype QProtobufSerializerPrivate::skipSerializedFieldBytes(QProtobufSelfchec
 }
 
 void QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
-                                                   const QProtobufPropertyOrderingInfo &fieldInfo)
+                                                   const QProtobufFieldInfo &fieldInfo)
 {
     QMetaType metaType = propertyValue.metaType();
 
@@ -635,7 +635,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
         return true;
     }
 
-    QProtobufPropertyOrderingInfo fieldInfo(*ordering, index);
+    QProtobufFieldInfo fieldInfo(*ordering, index);
     QVariant newPropertyValue = message->property(fieldInfo, true);
     QMetaType metaType = newPropertyValue.metaType();
 

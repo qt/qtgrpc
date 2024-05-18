@@ -84,7 +84,7 @@ std::optional<QMetaProperty> QProtobufMessagePrivate::metaProperty(QAnyStringVie
 }
 
 std::optional<QMetaProperty>
-QProtobufMessagePrivate::metaProperty(QtProtobufPrivate::QProtobufPropertyOrderingInfo info) const
+QProtobufMessagePrivate::metaProperty(QtProtobufPrivate::QProtobufFieldInfo info) const
 {
     const int propertyIndex = info.getPropertyIndex() + metaObject->propertyOffset();
     const QMetaProperty metaProperty = metaObject->property(propertyIndex);
@@ -253,7 +253,7 @@ void QProtobufMessageDeleter::operator()(QProtobufMessage *ptr) noexcept
 }
 
 QVariant
-QProtobufMessage::property(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
+QProtobufMessage::property(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
                            bool allowInitialize) const
 {
     int propertyIndex = fieldInfo.getPropertyIndex() + metaObject()->propertyOffset();
@@ -278,7 +278,7 @@ QProtobufMessage::property(const QtProtobufPrivate::QProtobufPropertyOrderingInf
 }
 
 bool QProtobufMessage::setProperty(
-        const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo, const QVariant &value)
+        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo, const QVariant &value)
 {
     Q_D(QProtobufMessage);
     const auto mp = d->metaProperty(fieldInfo);
@@ -287,7 +287,7 @@ bool QProtobufMessage::setProperty(
     return mp->writeOnGadget(this, value);
 }
 
-bool QProtobufMessage::setProperty(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &info,
+bool QProtobufMessage::setProperty(const QtProtobufPrivate::QProtobufFieldInfo &info,
                                    QVariant &&value)
 {
     Q_D(QProtobufMessage);

@@ -42,7 +42,7 @@ void registerQtTypeHandler()
 {
     registerHandler(QMetaType::fromType<QType>(),
                     { [](const QAbstractProtobufSerializer *serializer, const QVariant &value,
-                         const QProtobufPropertyOrderingInfo &info) {
+                         const QProtobufFieldInfo &info) {
                          auto do_convert = [](const QType &qtype) {
                              auto res = convert(qtype);
                              if constexpr (is_optional_v<decltype(res)>) {

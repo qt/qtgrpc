@@ -56,11 +56,11 @@ protected:
         return *this;
     }
 
-    QVariant property(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
+    QVariant property(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
                       bool allowInitialize = false) const;
-    bool setProperty(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
+    bool setProperty(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
                      const QVariant &value);
-    bool setProperty(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo,
+    bool setProperty(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
                      QVariant &&value);
 
 private:

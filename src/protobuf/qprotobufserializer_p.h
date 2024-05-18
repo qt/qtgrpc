@@ -500,13 +500,13 @@ public:
     static void skipLengthDelimited(QProtobufSelfcheckIterator &it);
 
     void serializeObject(const QProtobufMessage *message,
-                         const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo);
+                         const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo);
     bool deserializeObject(QProtobufMessage *message);
 
     void serializeMessage(const QProtobufMessage *message);
 
     void serializeProperty(const QVariant &propertyValue,
-                           const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo);
+                           const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo);
     [[nodiscard]] bool deserializeProperty(QProtobufMessage *message);
 
     void setDeserializationError(QAbstractProtobufSerializer::DeserializationError error,
@@ -526,7 +526,7 @@ public:
 
     bool preserveUnknownFields = true;
 
-    static const QtProtobufPrivate::QProtobufPropertyOrderingInfo mapValueOrdering;
+    static const QtProtobufPrivate::QProtobufFieldInfo mapValueOrdering;
 
 private:
     Q_DISABLE_COPY_MOVE(QProtobufSerializerPrivate)
@@ -534,7 +534,7 @@ private:
 };
 
 inline bool
-isOneofOrOptionalField(const QtProtobufPrivate::QProtobufPropertyOrderingInfo &fieldInfo)
+isOneofOrOptionalField(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
 {
     return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
         || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
