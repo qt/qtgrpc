@@ -64,21 +64,13 @@ struct QProtobufPropertyOrderingInfo
     }
 
     QUtf8StringView getJsonName() const { return ordering.getJsonName(index); }
-    int getFieldNumber() const
-    {
-        return (overrideFieldNumber >= 0) ? overrideFieldNumber : ordering.getFieldNumber(index);
-    }
+    int getFieldNumber() const { return ordering.getFieldNumber(index); }
     int getPropertyIndex() const { return ordering.getPropertyIndex(index); }
     uint getFieldFlags() const { return ordering.getFieldFlags(index); }
 
 private:
-    QProtobufPropertyOrderingInfo(QProtobufPropertyOrdering ord, int ind, int fieldNumber)
-        : ordering(ord), index(ind), overrideFieldNumber(fieldNumber)
-    {
-    }
     const QProtobufPropertyOrdering ordering;
     const int index;
-    const int overrideFieldNumber = -1; // special case for maps
 };
 
 template<typename>
