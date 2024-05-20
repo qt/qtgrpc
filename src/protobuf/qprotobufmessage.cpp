@@ -3,13 +3,17 @@
 
 #include "qprotobufmessage.h"
 #include "qprotobufmessage_p.h"
+
 #include "qabstractprotobufserializer.h"
 #include "qprotobufregistration.h"
+#include "qprotobufpropertyorderingbuilder_p.h"
 #include "qtprotobuftypes.h"
 
 
 #include <QtCore/qassert.h>
 #include <QtCore/qmetaobject.h>
+
+#include <QtCore/private/qmetaobjectbuilder_p.h>
 
 #include <string>
 
@@ -349,6 +353,112 @@ void QProtobufMessage::detachPrivate()
     if (!d_ptr->ref.deref())
         delete d_ptr;
     d_ptr = newD;
+}
+
+static bool isProtobufMessage(QMetaType type)
+{
+    if (const auto *mo = type.metaObject(); mo && mo->inherits(&QProtobufMessage::staticMetaObject))
+        return true;
+    return false;
+}
+
+using StaticMetaCallFn = void (*)(QObject *, QMetaObject::Call, int, void **);
+QMetaObject *buildMetaObject(QMetaType key, QMetaType value, StaticMetaCallFn metaCall)
+{
+    using namespace Qt::StringLiterals;
+    QMetaObjectBuilder builder;
+    builder.addProperty("key", key.name(), key);
+    if (isProtobufMessage(key)) {
+        auto propBuilder = builder.addProperty("has_key", "bool", QMetaType(QMetaType::Bool));
+        propBuilder.setWritable(false);
+    }
+    builder.addProperty("value", value.name(), value);
+    if (isProtobufMessage(value)) {
+        auto propBuilder = builder.addProperty("has_value", "bool", QMetaType(QMetaType::Bool));
+        propBuilder.setWritable(false);
+    }
+    builder.setClassName("QProtobufMapEntry<"_ba + key.name() + ", " + value.name() + '>');
+    builder.setSuperClass(&QProtobufMapEntryBase::staticMetaObject);
+    builder.setStaticMetacallFunction(metaCall);
+    builder.setFlags(MetaObjectFlag::PropertyAccessInStaticMetaCall);
+    return builder.toMetaObject();
+}
+
+QtProtobufPrivate::FieldFlags getFlagForType(QMetaType type)
+{
+    QtProtobufPrivate::FieldFlags flag = QtProtobufPrivate::NoFlags;
+
+    if (isProtobufMessage(type))
+        flag |= QtProtobufPrivate::Message | QtProtobufPrivate::ExplicitPresence;
+    if (type.flags() & QMetaType::IsEnumeration)
+        flag |= QtProtobufPrivate::Enum;
+    if (QByteArrayView(type.name()).startsWith("QList<")) // Surely there's a better way
+        flag |= QtProtobufPrivate::Repeated;
+    if (QByteArrayView(type.name()).startsWith("QHash<")) // Surely there's a better way
+        flag |= QtProtobufPrivate::Map;
+
+    flag |= QtProtobufPrivate::Optional; // Hardcoded for MapEntry uses...
+
+    // Need to get this info::
+    // NonPacked = 0x1,
+    // Oneof = 0x02,
+    // Optional = 0x04,
+    // Repeated = 0x40,
+    // Map = 0x80,
+
+    return flag;
+}
+
+QtProtobufPrivate::QProtobufPropertyOrdering::Data *buildMapEntryOrdering(QMetaType key,
+                                                                          QMetaType value)
+{
+    using namespace QtProtobufPrivate;
+    QProtobufPropertyOrderingBuilder builder("MapEntry");
+
+    const auto keyFlags = getFlagForType(key);
+    builder.addV0Field("key", 1, 0, keyFlags);
+
+    const uint valueIndex = keyFlags.testFlag(FieldFlag::ExplicitPresence) ? 2 : 1;
+    builder.addV0Field("value", 2, valueIndex, getFlagForType(value));
+
+    return builder.build();
+}
+
+class QProtobufMapEntryBasePrivate
+{
+    Q_DISABLE_COPY_MOVE(QProtobufMapEntryBasePrivate)
+public:
+    QProtobufMapEntryBasePrivate() = default;
+    ~QProtobufMapEntryBasePrivate();
+
+    QtProtobufPrivate::QProtobufPropertyOrdering::Data *data = nullptr;
+    QtProtobufPrivate::QProtobufPropertyOrdering ordering{};
+    QMetaObject *metaObject = nullptr;
+};
+
+QProtobufMapEntryBase::QProtobufMapEntryBase(QMetaType key, QMetaType value,
+                                             StaticMetaCallFn metaCall)
+    : QProtobufMessage(nullptr, nullptr),
+      d_ptr(new QProtobufMapEntryBasePrivate())
+{
+    d_ptr->data = buildMapEntryOrdering(key, value);
+    d_ptr->ordering.data = d_ptr->data;
+    d_ptr->metaObject = buildMetaObject(key, value, metaCall);
+    auto *priv = QProtobufMessagePrivate::get(this);
+    priv->ordering = &d_ptr->ordering;
+    priv->metaObject = d_ptr->metaObject;
+}
+
+QProtobufMapEntryBase::~QProtobufMapEntryBase()
+{
+    delete d_ptr;
+}
+
+QProtobufMapEntryBasePrivate::~QProtobufMapEntryBasePrivate()
+{
+    data->~Data();
+    free(data);
+    free(metaObject);
 }
 
 QT_END_NAMESPACE

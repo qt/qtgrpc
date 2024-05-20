@@ -42,11 +42,6 @@ public:
     virtual bool deserializeObject(QProtobufMessage *message) const = 0;
 
     virtual void
-    serializeMapPair(const QVariant &key, const QVariant &value,
-                     const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const = 0;
-    virtual bool deserializeMapPair(QVariant &key, QVariant &value) const = 0;
-
-    virtual void
     serializeEnumList(const QList<QtProtobuf::int64> &value, const QMetaEnum &metaEnum,
                       const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const = 0;
 

@@ -60,27 +60,24 @@ void serializeList(const QAbstractProtobufSerializer *serializer, const QVariant
     }
 }
 
-template <typename K, typename V,
-          typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
+template <typename K, typename V>
 void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant &value,
                   const QProtobufFieldInfo &fieldInfo)
 {
     Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
+    using QProtobufMapEntry = QProtobufMapEntry<K, V>;
+    static_assert(!std::is_pointer_v<typename QProtobufMapEntry::KeyType>,
+                  "Map key must not be message");
+    QProtobufMapEntry el;
     for (const auto &[k, v] : value.value<QHash<K, V>>().asKeyValueRange()) {
-        serializer->serializeMapPair(QVariant::fromValue<K>(k), QVariant::fromValue<V>(v),
-                                     fieldInfo);
-    }
-}
+        el.setKey(k);
 
-template <typename K, typename V,
-          typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant &value,
-                  const QProtobufFieldInfo &fieldInfo)
-{
-    Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
-    for (const auto &[k, v] : value.value<QHash<K, V>>().asKeyValueRange()) {
-        serializer->serializeMapPair(QVariant::fromValue<K>(k), QVariant::fromValue<V *>(&v),
-                                     fieldInfo);
+        if constexpr (std::is_pointer_v<typename QProtobufMapEntry::ValueType>)
+            el.setValue(&v);
+        else
+            el.setValue(v);
+
+        serializer->serializeObject(&el, fieldInfo);
     }
 }
 
@@ -113,8 +110,7 @@ void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &pr
     }
 }
 
-template <typename K, typename V,
-          typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0>
+template <typename K, typename V>
 void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
     Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
@@ -122,31 +118,18 @@ void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &pre
                "QAbstractProtobufSerializer::deserializeMap",
                "Previous value metatype doesn't match the map metatype");
 
-    QVariant key = QVariant::fromValue<K>(K());
-    QVariant value = QVariant::fromValue<V>(V());
-
-    if (serializer->deserializeMapPair(key, value)) {
+    using QProtobufMapEntry = QProtobufMapEntry<K, V>;
+    static_assert(!std::is_pointer_v<typename QProtobufMapEntry::KeyType>,
+                  "Map key must not be message");
+    QProtobufMapEntry el;
+    if (serializer->deserializeObject(&el)) {
         QHash<K, V> *out = reinterpret_cast<QHash<K, V> *>(previous.data());
-        out->insert(key.value<K>(), value.value<V>());
-    }
-}
+        auto it = out->emplace(std::move(el).key());
 
-template <typename K, typename V,
-          typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &previous)
-{
-    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
-    Q_ASSERT_X((previous.metaType() == QMetaType::fromType<QHash<K, V>>()) && previous.data(),
-               "QAbstractProtobufSerializer::deserializeMap",
-               "Previous value metatype doesn't match the map metatype");
-
-    std::unique_ptr<V> valuePtr = std::make_unique<V>();
-    QVariant key = QVariant::fromValue<K>(K());
-    QVariant value = QVariant::fromValue<V *>(valuePtr.get());
-
-    if (serializer->deserializeMapPair(key, value)) {
-        QHash<K, V> *out = reinterpret_cast<QHash<K, V> *>(previous.data());
-        out->insert(key.value<K>(), *(valuePtr.get()));
+        if constexpr (std::is_pointer_v<typename QProtobufMapEntry::ValueType>)
+            *it = std::move(*el.value());
+        else
+            *it = std::move(el).value();
     }
 }
 
@@ -177,12 +160,12 @@ inline void qRegisterProtobufType()
         { QtProtobufPrivate::serializeList<T>, QtProtobufPrivate::deserializeList<T> });
 }
 
-template<typename K, typename V>
+template <typename K, typename V>
 inline void qRegisterProtobufMapType()
 {
-    QtProtobufPrivate::registerHandler(
-        QMetaType::fromType<QHash<K, V>>(),
-        { QtProtobufPrivate::serializeMap<K, V>, QtProtobufPrivate::deserializeMap<K, V> });
+    QtProtobufPrivate::registerHandler(QMetaType::fromType<QHash<K, V>>(),
+                                       { QtProtobufPrivate::serializeMap<K, V>,
+                                         QtProtobufPrivate::deserializeMap<K, V> });
 }
 
 #ifdef Q_QDOC
