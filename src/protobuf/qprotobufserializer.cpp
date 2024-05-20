@@ -57,47 +57,6 @@ using SerializerRegistryType =
 
 namespace {
 
-static constexpr struct {
-    QtProtobufPrivate::QProtobufPropertyOrdering::Data data;
-    const std::array<uint, 9> qt_protobuf_Maptest_uint_data;
-    const char qt_protobuf_Maptest_char_data[23];
-} qt_protobuf_Maptest_metadata {
-    // data
-    {
-        0, /* = version */
-        2, /* = num fields */
-        3, /* = field number offset */
-        5, /* = property index offset */
-        7, /* = field flags offset */
-        4, /* = message full name length */
-    },
-    // uint_data
-    {
-        // JSON name offsets:
-        5, /* = key */
-        9, /* = value */
-        15, /* = end-of-string-marker */
-        // Field numbers:
-        1, /* = key */
-        2, /* = value */
-        // Property indices:
-        0, /* = key */
-        2, /* = value */
-        // Field flags:
-        QtProtobufPrivate::Optional, /* = key */
-        QtProtobufPrivate::Optional, /* = value */
-    },
-    // char_data
-    /* metadata char_data: */
-    "pair\0" /* = full message name */
-    /* field char_data: */
-    "key\0value\0"
-};
-
-const QtProtobufPrivate::QProtobufPropertyOrdering mapPropertyOrdering = {
-    &qt_protobuf_Maptest_metadata.data
-};
-
 #define QT_CONSTRUCT_PROTOBUF_SERIALIZATION_HANDLER(Type, WireType)          \
   {                                                                          \
     QMetaType::fromType<Type>(),                                             \
@@ -254,10 +213,6 @@ QByteArray QProtobufSerializer::serializeMessage(const QProtobufMessage *message
     return d_ptr->result;
 }
 
-const QProtobufFieldInfo QProtobufSerializerPrivate::mapValueOrdering{
-    mapPropertyOrdering, 1
-};
-
 void QProtobufSerializerPrivate::serializeMessage(const QProtobufMessage *message)
 {
     Q_ASSERT(message != nullptr);
@@ -355,38 +310,6 @@ void QProtobufSerializer::serializeObject(const QProtobufMessage *message,
 bool QProtobufSerializer::deserializeObject(QProtobufMessage *message) const
 {
     return d_ptr->deserializeObject(message);
-}
-
-void QProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
-                                           const QProtobufFieldInfo &fieldInfo) const
-{
-    auto keyHandler = findIntegratedTypeHandler(key.metaType(), false);
-    Q_ASSERT_X(keyHandler, "QProtobufSerializer", "Map key is not an integrated type.");
-    auto store = d_ptr->result;
-    d_ptr->result = {};
-    d_ptr->result
-        .append(keyHandler
-                    ->serializer(key,
-                                 QProtobufSerializerPrivate::encodeHeader(1,
-                                                                          keyHandler->wireType)));
-    if (value.metaType().flags() & QMetaType::IsEnumeration) {
-        d_ptr->result
-            .append(QProtobufSerializerPrivate::encodeHeader(2, QtProtobuf::WireTypes::Varint));
-        d_ptr->result.append(QProtobufSerializerPrivate::serializeBasic<
-                             QtProtobuf::int64>(value.value<int64_t>()));
-    } else {
-        d_ptr->serializeProperty(value, QProtobufSerializerPrivate::mapValueOrdering);
-    }
-    store.append(QProtobufSerializerPrivate::encodeHeader(fieldInfo.getFieldNumber(),
-                                                          QtProtobuf::WireTypes::LengthDelimited));
-    store.append(QProtobufSerializerPrivate::serializeVarintCommon<uint32_t>(d_ptr->result.size()));
-    store.append(d_ptr->result);
-    d_ptr->result = store;
-}
-
-bool QProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value) const
-{
-    return d_ptr->deserializeMapPair(key, value);
 }
 
 void QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
@@ -692,73 +615,6 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
     }
 
     return message->setProperty(fieldInfo, std::move(newPropertyValue));
-}
-
-bool QProtobufSerializerPrivate::deserializeMapPair(QVariant &key, QVariant &value)
-{
-    int mapIndex = 0;
-    QtProtobuf::WireTypes type = QtProtobuf::WireTypes::Unknown;
-    auto opt = QProtobufSerializerPrivate::deserializeVarintCommon<QtProtobuf::uint32>(it);
-    if (!opt) {
-        setUnexpectedEndOfStreamError();
-        return false;
-    }
-    unsigned int count = opt.value();
-    qProtoDebug("count: %u", count);
-    QProtobufSelfcheckIterator last = it + count;
-    while (it.isValid() && it != last) {
-        if (!QProtobufSerializerPrivate::decodeHeader(it, mapIndex, type)) {
-            setDeserializationError(
-                        QAbstractProtobufSerializer::InvalidHeaderError,
-                        QCoreApplication::translate("QtProtobuf",
-                                             "Message received doesn't contain valid header byte."));
-            return false;
-        }
-        if (mapIndex == 1) {
-            //Only simple types are supported as keys
-            QMetaType metaType = key.metaType();
-            auto basicHandler = findIntegratedTypeHandler(metaType, false);
-            if (!basicHandler) {
-                // clang-format off
-                QString errorStr = QCoreApplication::translate("QtProtobuf",
-                                                        "Either there is no deserializer for type "
-                                                        "%1 or it is not a builtin type")
-                        .arg(QLatin1String(key.typeName()));
-                // clang-format on
-                setDeserializationError(QAbstractProtobufSerializer::NoDeserializerError, errorStr);
-                return false;
-            }
-            basicHandler->deserializer(it, key);
-        } else {
-            //TODO: replace with some common function
-            QMetaType metaType = value.metaType();
-
-            if (metaType.flags() & QMetaType::IsPointer) {
-                auto *messageProperty = value.value<QProtobufMessage *>();
-                Q_ASSERT(messageProperty != nullptr);
-                deserializeObject(messageProperty);
-            } else if (metaType.flags() & QMetaType::IsEnumeration) {
-                if (!deserializeBasic<QtProtobuf::int64>(it, value))
-                    return false;
-            } else if (auto basicHandler = findIntegratedTypeHandler(metaType, false);
-                       basicHandler) {
-                basicHandler->deserializer(it, value);
-            } else {
-                auto handler = QtProtobufPrivate::findHandler(metaType);
-                if (!handler.deserializer) {
-                    qProtoWarning() << "No deserializer for type" << value.typeName();
-                    setDeserializationError(
-                                QAbstractProtobufSerializer::NoDeserializerError,
-                                QCoreApplication::translate("QtProtobuf",
-                                                     "No deserializer is registered for type %1")
-                                .arg(QLatin1String(value.typeName())));
-                    return false;
-                }
-                handler.deserializer(q_ptr, value);
-            }
-        }
-    }
-    return it == last;
 }
 
 QAbstractProtobufSerializer::DeserializationError QProtobufSerializer::deserializationError() const

@@ -83,6 +83,138 @@ private:
     Q_DECLARE_PRIVATE(QProtobufMessage)
 };
 
+class QProtobufMapEntryBasePrivate;
+class QProtobufMapEntryBase : public QProtobufMessage
+{
+    Q_GADGET_EXPORT(Q_PROTOBUF_EXPORT)
+    friend QMetaObject *buildMetaObject(QMetaType, QMetaType);
+    using StaticMetaCallFn = void (*)(QObject *, QMetaObject::Call, int, void **);
+
+protected:
+    Q_PROTOBUF_EXPORT explicit QProtobufMapEntryBase(QMetaType key, QMetaType value,
+                                                     StaticMetaCallFn metaCall);
+    Q_PROTOBUF_EXPORT ~QProtobufMapEntryBase();
+    Q_DISABLE_COPY_MOVE(QProtobufMapEntryBase)
+
+private:
+    QProtobufMapEntryBasePrivate *d_ptr;
+    Q_DECLARE_PRIVATE(QProtobufMapEntryBase)
+};
+
+template <typename Key, typename Value>
+class QProtobufMapEntry : public QProtobufMapEntryBase
+{
+    static void metaCall(QObject *object, QMetaObject::Call call, int index, void **args)
+    {
+        static constexpr bool needsHasValue = ResolveType<Value>::NeedsHasFunction;
+
+        QProtobufMapEntry *entry = reinterpret_cast<QProtobufMapEntry *>(object);
+        if (call == QMetaObject::ReadProperty) {
+            if (index == 0)
+                *reinterpret_cast<KeyType *>(args[0]) = entry->key();
+            if (index == 1)
+                *reinterpret_cast<ValueType *>(args[0]) = entry->value();
+            if constexpr (needsHasValue) {
+                if (index == 2)
+                    *reinterpret_cast<bool *>(args[0]) = entry->hasValue();
+            }
+        } else if (call == QMetaObject::WriteProperty) {
+            if (index == 0) {
+                entry->setKey(*reinterpret_cast<KeyType *>(args[0]));
+            } else if (index == 1 || index == 2 ) {
+                entry->setValue(*reinterpret_cast<ValueType *>(args[0]));
+            }
+        }
+    }
+
+    template <typename T, typename = void>
+    struct ResolveType {
+        using type = T;
+        static constexpr bool NeedsHasFunction = false;
+    };
+    template<typename T>
+    struct ResolveType<T, std::enable_if_t<std::is_base_of_v<QProtobufMessage, T>>> {
+        using type = T *;
+        static constexpr bool NeedsHasFunction = true;
+    };
+
+public:
+    using KeyType = Key;
+    using ValueType = typename ResolveType<Value>::type;
+
+    QProtobufMapEntry()
+        : QProtobufMapEntryBase(QMetaType::fromType<KeyType>(), QMetaType::fromType<ValueType>(),
+                                metaCall)
+    {
+    }
+    ~QProtobufMapEntry() {
+        if constexpr (std::is_pointer_v<ValueType>) {
+            if (m_ownsValue)
+                delete m_value;
+        }
+    }
+    Q_DISABLE_COPY_MOVE(QProtobufMapEntry)
+
+    KeyType key() const &
+    {
+        return m_key;
+    }
+    KeyType &&key() &&
+    {
+        return std::move(m_key);
+    }
+
+    ValueType value() const &
+    {
+        ensureValue();
+        return m_value;
+    }
+    ValueType &&value() &&
+    {
+        ensureValue();
+        m_ownsValue = false;
+        return std::move(m_value);
+    }
+    bool hasValue() const
+    {
+        if constexpr (ResolveType<Value>::NeedsHasFunction)
+            return m_value != nullptr;
+        return true;
+    }
+
+    void setKey(const KeyType &key)
+    {
+        m_key = key;
+    }
+    void setKey(const KeyType &&key)
+    {
+        m_key = std::move(key);
+    }
+    void setValue(const ValueType &value)
+    {
+        m_value = value;
+    }
+    void setValue(const ValueType &&value)
+    {
+        m_value = std::move(value);
+    }
+
+private:
+    void ensureValue() const
+    {
+        if constexpr (std::is_pointer_v<ValueType>) {
+            if (!m_value) {
+                m_value = new Value;
+                m_ownsValue = true;
+            }
+        }
+    }
+
+    mutable KeyType m_key{};
+    mutable ValueType m_value{};
+    mutable bool m_ownsValue = false;
+};
+
 QT_END_NAMESPACE
 
 #endif // Q_PROTOBUF_MESSAGE_H

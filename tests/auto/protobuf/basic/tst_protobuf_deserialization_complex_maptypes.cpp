@@ -407,7 +407,8 @@ void QtProtobufMapTypesDeserializationTest::simpleStringComplexMapInvalidLengthD
                              "6a140a055755543f3f120b120732053f5755543f080a6a170a0362656e1210120c320"
                              "a74656e20656c6576656e080b6a350a157768657265206973206d7920636172206475"
                              "64653f121c12183216666f757274792074776f2074656e20736978746565"));
-    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::InvalidHeaderError);
+    QCOMPARE(serializer->deserializationError(),
+             QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
 
     qtprotobufnamespace::tests::SimpleStringMessage stringMsg;
 

@@ -515,9 +515,6 @@ public:
     void clearError();
     void setUnexpectedEndOfStreamError();
 
-    [[nodiscard]]
-    bool deserializeMapPair(QVariant &key, QVariant &value);
-
     QAbstractProtobufSerializer::DeserializationError deserializationError =
             QAbstractProtobufSerializer::NoDeserializerError;
     QString deserializationErrorString;

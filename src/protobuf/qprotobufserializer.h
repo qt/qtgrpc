@@ -36,11 +36,6 @@ private:
         const override;
     bool deserializeObject(QProtobufMessage *message) const override;
 
-    void serializeMapPair(const QVariant &key, const QVariant &value,
-                          const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
-        const override;
-    bool deserializeMapPair(QVariant &key, QVariant &value) const override;
-
     void serializeEnumList(const QList<QtProtobuf::int64> &value, const QMetaEnum &metaEnum,
                            const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
         const override;

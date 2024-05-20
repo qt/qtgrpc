@@ -75,28 +75,6 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QAbstractProtobufSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
-        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
-
-    This function serializes pair of \a key and \a value, that belong as a protobuf map record,
-    according to \a fieldInfo.
-
-    You should not call this function directly.
-
-    \sa QAbstractProtobufSerializer::deserializeMapPair()
-*/
-
-/*!
-    \fn bool QAbstractProtobufSerializer::deserializeMapPair(QVariant &key, QVariant &value) const
-    This function deserializes a pair of \a key and \a value from a wire.
-    Returns \c true if deserialization was successful, otherwise \c false.
-
-    You should not call this function directly.
-
-    \sa QAbstractProtobufSerializer::serializeMapPair()
-*/
-
-/*!
     \fn void QAbstractProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
         const QMetaEnum &metaEnum,
         const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const

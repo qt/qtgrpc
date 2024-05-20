@@ -625,6 +625,16 @@ public:
                     newPropertyValue.setValue(deserializeEnum(activeValue, metaEnum, ok));
                     if (!ok)
                         setInvalidFormatError();
+                } else if (iter->second.getFieldFlags() & QtProtobufPrivate::FieldFlag::Map) {
+                    auto activeValueObj = activeValue.toObject();
+                    for (auto it = activeValueObj.begin(); it != activeValueObj.end(); ++it) {
+                        auto mapObj = QJsonObject{};
+                        mapObj.insert("key"_L1, it.key());
+                        mapObj.insert("value"_L1, it.value());
+                        activeValue = mapObj;
+                        newPropertyValue = deserializeValue(newPropertyValue, ok);
+                    }
+                    activeValue = store;
                 } else {
                     newPropertyValue = deserializeValue(newPropertyValue, ok);
                     activeValue = store;
@@ -744,9 +754,18 @@ void QProtobufJsonSerializer::serializeObject(const QProtobufMessage *message,
         d_ptr->activeValue = store;
     } else {
         auto store = d_ptr->activeValue.toObject();
+        const QString fieldName = fieldInfo.getJsonName().toString();
         d_ptr->activeValue = QJsonObject();
-        d_ptr->serializeObject(message);
-        store.insert(fieldInfo.getJsonName().toString(), d_ptr->activeValue);
+        if (fieldInfo.getFieldFlags() & QtProtobufPrivate::FieldFlag::Map) {
+            QJsonObject mapObject = store.value(fieldName).toObject();
+            d_ptr->serializeObject(message);
+            mapObject.insert(message->property("key").toString(),
+                             d_ptr->activeValue.toObject().value("value"_L1));
+            store.insert(fieldName, mapObject);
+        } else {
+            d_ptr->serializeObject(message);
+            store.insert(fieldName, d_ptr->activeValue);
+        }
         d_ptr->activeValue = store;
     }
 }
@@ -754,86 +773,6 @@ void QProtobufJsonSerializer::serializeObject(const QProtobufMessage *message,
 bool QProtobufJsonSerializer::deserializeObject(QProtobufMessage *message) const
 {
     return d_ptr->deserializeObject(message);
-}
-
-void QProtobufJsonSerializer::serializeMapPair(const QVariant &key, const QVariant &value,
-                                               const QProtobufFieldInfo &fieldInfo) const
-{
-    const QString fieldName = fieldInfo.getJsonName().toString();
-    auto store = d_ptr->activeValue.toObject();
-    QJsonObject mapObject = store.value(fieldName).toObject();
-    d_ptr->activeValue = QJsonObject();
-    d_ptr->serializeProperty(value, QProtobufSerializerPrivate::mapValueOrdering);
-    mapObject.insert(key.toString(), d_ptr->activeValue.toObject().value("value"_L1));
-    store.insert(fieldName, mapObject);
-    d_ptr->activeValue = store;
-}
-
-bool QProtobufJsonSerializer::deserializeMapPair(QVariant &key, QVariant &value) const
-{
-    if (!d_ptr->activeValue.isObject()) {
-        d_ptr->setUnexpectedEndOfStreamError();
-        return false;
-    }
-
-    QJsonObject activeObject = d_ptr->activeValue.toObject();
-    if (activeObject.isEmpty()) {
-        d_ptr->activeValue = {};
-        return false;
-    }
-
-    QString jsonKey = activeObject.keys().at(0);
-    QJsonValue jsonValue = activeObject.take(jsonKey);
-
-    auto it = d_ptr->handlers.constFind(key.userType());
-    if (it == d_ptr->handlers.constEnd() || !it.value().deserializer) {
-        d_ptr->setInvalidFormatError();
-        return false;
-    }
-
-    bool ok = false;
-    key = it.value().deserializer(QJsonValue(jsonKey), ok);
-    if (!ok) {
-        d_ptr->setInvalidFormatError();
-        return false;
-    }
-
-    QMetaType metaType = value.metaType();
-    if (metaType.flags() & QMetaType::IsPointer) {
-        auto *messageProperty = value.value<QProtobufMessage *>();
-        Q_ASSERT(messageProperty != nullptr);
-        d_ptr->activeValue = jsonValue;
-        deserializeObject(messageProperty);
-    } else if (metaType.flags() & QMetaType::IsEnumeration) {
-        const auto metaEnum = QProtobufJsonSerializerPrivate::getMetaEnum(metaType);
-        Q_ASSERT(metaEnum.isValid());
-        value.setValue(d_ptr->deserializeEnum(jsonValue, metaEnum, ok));
-        if (!ok)
-            d_ptr->setInvalidFormatError();
-    } else if (it = d_ptr->handlers.constFind(value.userType()); it != d_ptr->handlers.constEnd()) {
-        ok = false;
-        value = it.value().deserializer(jsonValue, ok);
-        if (!ok) {
-            d_ptr->setInvalidFormatError();
-            return false;
-        }
-    } else {
-        auto handler = QtProtobufPrivate::findHandler(value.metaType());
-        if (handler.deserializer) {
-            d_ptr->activeValue = jsonValue;
-            handler.deserializer(this, value);
-        } else {
-            d_ptr->setInvalidFormatError();
-            return false;
-        }
-    }
-
-    if (!activeObject.isEmpty())
-        d_ptr->activeValue = activeObject;
-    else
-        d_ptr->activeValue = {};
-
-    return true;
 }
 
 void QProtobufJsonSerializer::
