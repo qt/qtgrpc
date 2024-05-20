@@ -569,6 +569,7 @@ void QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue
         store.append(QProtobufSerializerPrivate::serializeVarintCommon<uint32_t>(result.size()));
         store.append(result);
         result = store;
+        return;
     }
 
     auto basicHandler = findIntegratedTypeHandler(
