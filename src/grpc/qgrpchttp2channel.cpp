@@ -120,7 +120,7 @@ public:
     explicit QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &options);
     ~QGrpcHttp2ChannelPrivate() override;
 
-    void processOperation(std::shared_ptr<QGrpcChannelOperation> &&channelOperation,
+    void processOperation(const std::shared_ptr<QGrpcChannelOperation> &channelOperation,
                           bool endStream = false);
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
     QGrpcChannelOptions channelOptions;
@@ -154,9 +154,9 @@ private:
     public:
         enum State : uint8_t { Active, Cancelled, Finished };
 
-        explicit Http2Handler(std::shared_ptr<QGrpcChannelOperation> &&operation,
+        explicit Http2Handler(const std::shared_ptr<QGrpcChannelOperation> &operation,
                               QGrpcHttp2ChannelPrivate *parent, bool endStream);
-        ~Http2Handler();
+        ~Http2Handler() override;
         void sendInitialRequest();
 
         void writeMessage(QByteArrayView data);
@@ -245,13 +245,13 @@ private:
     std::function<void()> m_reconnectFunction;
 };
 
-QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(std::shared_ptr<QGrpcChannelOperation>
-                                                         &&operation_,
+QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(const std::shared_ptr<QGrpcChannelOperation>
+                                                         &operation,
                                                      QGrpcHttp2ChannelPrivate *parent,
                                                      bool endStream)
-    : QObject(parent), m_operation(std::move(operation_)), m_endStreamAtFirstData(endStream)
+    : QObject(parent), m_operation(operation), m_endStreamAtFirstData(endStream)
 {
-    auto *channelOpPtr = operation_.get();
+    auto *channelOpPtr = operation.get();
     QObject::connect(channelOpPtr, &QGrpcChannelOperation::cancelRequested, this,
                      &Http2Handler::cancel);
     QObject::connect(channelOpPtr, &QGrpcChannelOperation::writesDoneRequested, this,
@@ -700,8 +700,8 @@ QGrpcHttp2ChannelPrivate::~QGrpcHttp2ChannelPrivate()
 {
 }
 
-void QGrpcHttp2ChannelPrivate::processOperation(std::shared_ptr<QGrpcChannelOperation>
-                                                    &&channelOperation,
+void QGrpcHttp2ChannelPrivate::processOperation(const std::shared_ptr<QGrpcChannelOperation>
+                                                    &channelOperation,
                                                 bool endStream)
 {
     auto *channelOperationPtr = channelOperation.get();
@@ -723,7 +723,7 @@ void QGrpcHttp2ChannelPrivate::processOperation(std::shared_ptr<QGrpcChannelOper
                                              channelOperationPtr);
     }
 
-    Http2Handler *handler = new Http2Handler(std::move(channelOperation), this, endStream);
+    Http2Handler *handler = new Http2Handler(channelOperation, this, endStream);
     if (m_connection == nullptr) {
         m_pendingHandlers.push_back(handler);
     } else {
@@ -825,7 +825,7 @@ QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
 */
 void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    dPtr->processOperation(std::move(channelOperation), true);
+    dPtr->processOperation(channelOperation, true);
 }
 
 /*!
@@ -834,7 +834,7 @@ void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcChannelOperation> channelOpera
 */
 void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    dPtr->processOperation(std::move(channelOperation), true);
+    dPtr->processOperation(channelOperation, true);
 }
 
 /*!
@@ -843,7 +843,7 @@ void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcChannelOperation>
 */
 void QGrpcHttp2Channel::startClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    dPtr->processOperation(std::move(channelOperation));
+    dPtr->processOperation(channelOperation);
 }
 
 /*!
@@ -852,7 +852,7 @@ void QGrpcHttp2Channel::startClientStream(std::shared_ptr<QGrpcChannelOperation>
 */
 void QGrpcHttp2Channel::startBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation)
 {
-    dPtr->processOperation(std::move(channelOperation));
+    dPtr->processOperation(channelOperation);
 }
 
 /*!
