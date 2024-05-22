@@ -34,6 +34,7 @@ public:
     QGrpcChannelOptions &setHost(const QUrl &host);
     QGrpcChannelOptions &setDeadline(QGrpcDuration deadline);
     QGrpcChannelOptions &setMetadata(const QGrpcMetadata &metadata);
+    QGrpcChannelOptions &setMetadata(QGrpcMetadata &&metadata);
     QGrpcChannelOptions &setSerializationFormat(const QGrpcSerializationFormat &format);
 
     [[nodiscard]] QUrl host() const noexcept;

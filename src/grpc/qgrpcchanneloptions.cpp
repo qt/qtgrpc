@@ -100,6 +100,9 @@ QGrpcChannelOptions &QGrpcChannelOptions::setDeadline(QGrpcDuration deadline)
 }
 
 /*!
+    \fn QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QGrpcMetadata &metadata)
+    \fn QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(QGrpcMetadata &&metadata)
+
     Sets \a metadata for all calls and returns updated QGrpcChannelOptions object.
 
     For HTTP2-based channels, \a metadata is converted into HTTP/2 headers, that
@@ -108,6 +111,12 @@ QGrpcChannelOptions &QGrpcChannelOptions::setDeadline(QGrpcDuration deadline)
 QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QGrpcMetadata &metadata)
 {
     dPtr->metadata = metadata;
+    return *this;
+}
+
+QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(QGrpcMetadata &&metadata)
+{
+    dPtr->metadata = std::move(metadata);
     return *this;
 }
 
