@@ -167,8 +167,9 @@ private:
         void writeMessage(QByteArrayView data);
         [[nodiscard]] bool sendHeaders(const HPack::HttpHeader &headers);
         void processQueue();
-        void cancel();
+        bool cancel();
         void finish();
+        void onDeadlineTimeout();
 
         void attachStream(QHttp2Stream *stream_);
 
@@ -197,6 +198,7 @@ private:
         ExpectedData m_expectedData;
         State m_handlerState = Active;
         const bool m_endStreamAtFirstData;
+        QTimer m_deadlineTimer;
         Q_DISABLE_COPY_MOVE(Http2Handler)
     };
 
@@ -259,6 +261,8 @@ QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(const std::shared_ptr<QGrpc
         QObject::connect(channelOpPtr, &QGrpcChannelOperation::writeMessageRequested, this,
                          [this](const QByteArray &data) { writeMessage(data); });
     }
+    QObject::connect(channelOpPtr, &QGrpcChannelOperation::finished,
+            &m_deadlineTimer, &QTimer::stop);
     prepareInitialRequest(channelOpPtr, parent);
 }
 
@@ -356,6 +360,18 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
 
     QObject::connect(m_stream.get(), &QHttp2Stream::uploadFinished, this,
                      &Http2Handler::processQueue);
+
+    std::optional<QGrpcDuration> deadline;
+    if (channelOpPtr->callOptions().deadline())
+        deadline = channelOpPtr->callOptions().deadline();
+    else if (parentChannel->channelOptions.deadline())
+        deadline = parentChannel->channelOptions.deadline();
+    if (deadline) {
+        // We have an active stream and a deadline. It's time to start the timer.
+        QObject::connect(&m_deadlineTimer, &QTimer::timeout, this,
+                         &Http2Handler::onDeadlineTimeout);
+        m_deadlineTimer.start(*deadline);
+    }
 }
 
 QGrpcChannelOperation *QGrpcHttp2ChannelPrivate::Http2Handler::operation() const
@@ -484,23 +500,17 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::processQueue()
     m_stream->sendDATA(m_buffer, data.isEmpty() || m_endStreamAtFirstData);
 }
 
-// gRPC cancellation happens by sending empty DATA frame with the END_STREAM bit
-void QGrpcHttp2ChannelPrivate::Http2Handler::cancel()
+bool QGrpcHttp2ChannelPrivate::Http2Handler::cancel()
 {
-    if (m_handlerState != Active)
-        return;
-
+    if (m_handlerState != Active || !m_stream)
+        return false;
     m_handlerState = Cancelled;
 
-    // Stream is already (half)closed, skip sending the DATA frame with the end-of-stream flag.
-    if (isStreamClosedForSending())
-        return;
+    // Client cancelled the stream before the deadline exceeded.
+    m_deadlineTimer.stop();
 
-    // Clear the existing queue and enqeue empty data. Data should contains at least the payload
-    // size, even if payload is 0. Empty data is the explicit indicator for stream cancellation.
-    m_queue.clear();
-    m_queue.enqueue({});
-    processQueue();
+    // Immediate cancellation by sending the RST_STREAM frame.
+    return m_stream->sendRST_STREAM(Http2::Http2Error::CANCEL);
 }
 
 void QGrpcHttp2ChannelPrivate::Http2Handler::finish()
@@ -516,6 +526,24 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::finish()
 
     m_queue.enqueue({});
     processQueue();
+}
+
+void QGrpcHttp2ChannelPrivate::Http2Handler::onDeadlineTimeout()
+{
+    Q_ASSERT_X(m_stream, "onDeadlineTimeout", "stream is not available");
+
+    if (m_operation.expired()) {
+        qGrpcWarning("Operation expired on deadline timeout");
+        return;
+    }
+    // cancel the stream by sending the RST_FRAME and report
+    // the status back to our user.
+    if (cancel()) {
+        emit m_operation.lock()->finished({ QGrpcStatus::DeadlineExceeded,
+                                                 "Deadline Exceeded" });
+    } else {
+        qGrpcWarning("Cancellation failed on deadline timeout.");
+    }
 }
 
 const std::unordered_map<quint32, QGrpcStatus::StatusCode> QGrpcHttp2ChannelPrivate::StatusCodeMap;

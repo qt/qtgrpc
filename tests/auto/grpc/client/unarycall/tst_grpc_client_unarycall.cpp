@@ -47,8 +47,6 @@ private Q_SLOTS:
     void inThread();
     void asyncInThread();
     void metadata();
-    void deadline_data();
-    void deadline();
 };
 
 void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
@@ -248,48 +246,6 @@ void QtGrpcClientUnaryCallTest::metadata()
     QCOMPARE_EQ(clientErrorSpy.count(), 0);
     QCOMPARE_EQ(serverHeaderCount, 1);
     QCOMPARE_EQ(clientReturnHeader, "valid_value"_ba);
-}
-
-void QtGrpcClientUnaryCallTest::deadline_data()
-{
-    QTest::addColumn<QGrpcDuration>("timeout");
-    constexpr std::array<qreal, 4> messageLatencyFractions{ 0.7, 0.9, 1.0, 1.3 };
-    for (const auto &fraction : messageLatencyFractions)
-        QTest::newRow(QString("MessageLatency * %1").arg(fraction).toStdString().c_str())
-                << QGrpcDuration(static_cast<int64_t>(MessageLatency * fraction));
-}
-
-void QtGrpcClientUnaryCallTest::deadline()
-{
-    QFETCH(const QGrpcDuration, timeout);
-
-    QGrpcCallOptions opt;
-    opt.setDeadline(timeout);
-
-    SimpleStringMessage request;
-    request.setTestFieldString("sleep");
-
-    QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
-    QVERIFY(clientErrorSpy.isValid());
-
-    auto reply = client()->testMethod(request, opt);
-    QSignalSpy callFinishedSpy(reply.get(), &QGrpcCallReply::finished);
-    QVERIFY(callFinishedSpy.isValid());
-
-    if (timeout.count() < MessageLatency) {
-        QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
-        const auto code = qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code();
-        // Really low timeout can trigger before service becomes available
-        QVERIFY(code == QGrpcStatus::StatusCode::Cancelled
-                || code == QGrpcStatus::StatusCode::Unavailable);
-    } else if (timeout.count() >= MessageLatencyWithThreshold) {
-        QTRY_COMPARE_EQ_WITH_TIMEOUT(callFinishedSpy.count(), 1, MessageLatencyWithThreshold);
-        QCOMPARE(reply->read<SimpleStringMessage>()->testFieldString(), request.testFieldString());
-    } else {
-        // Because we're can't be sure about the result,
-        // cancel the call, that might affect other tests.
-        reply->cancel();
-    }
 }
 
 QTEST_MAIN(QtGrpcClientUnaryCallTest)

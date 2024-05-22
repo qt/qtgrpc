@@ -69,6 +69,72 @@ private:
         ::grpc::ServerContext *context,
         ::grpc::ServerReaderWriter<::qtgrpc::tests::SimpleStringMessage,
                                    ::qtgrpc::tests::SimpleStringMessage> *stream) override;
+
+    grpc::Status testMethodSleep(grpc::ServerContext *context,
+                                 const qtgrpc::tests::SleepMessage *request,
+                                 qtgrpc::tests::Empty * /* response */) override
+    {
+        if (request->has_sleeptimems())
+            QThread::msleep(request->sleeptimems());
+
+        if (context->IsCancelled())
+            return { grpc::StatusCode::CANCELLED, "testMethodSleep" };
+        return grpc::Status::OK;
+    }
+
+    grpc::Status
+    testMethodServerStreamSleep(grpc::ServerContext *context,
+                                const qtgrpc::tests::ServerStreamSleepMessage *request,
+                                grpc::ServerWriter<qtgrpc::tests::Empty> *writer) override
+    {
+        size_t count = 0;
+        while (count < request->amountresponses()) {
+            if (request->sleepmessage().has_sleeptimems())
+                QThread::msleep(request->sleepmessage().sleeptimems());
+            writer->Write(qtgrpc::tests::Empty());
+            ++count;
+        }
+
+        if (context->IsCancelled())
+            return { grpc::StatusCode::CANCELLED, "testMethodServerStreamSleep" };
+        return grpc::Status::OK;
+    }
+
+    grpc::Status
+    testMethodClientStreamSleep(grpc::ServerContext *context,
+                                grpc::ServerReader<qtgrpc::tests::SleepMessage> *reader,
+                                qtgrpc::tests::Empty * /* response */) override
+    {
+        qtgrpc::tests::SleepMessage request;
+        while (reader->Read(&request)) {
+            if (request.has_sleeptimems())
+                QThread::msleep(request.sleeptimems());
+        }
+
+        if (context->IsCancelled())
+            return { grpc::StatusCode::CANCELLED, "testMethodClientStreamSleep" };
+        return grpc::Status::OK;
+    }
+
+    grpc::Status
+    testMethodBiStreamSleep(grpc::ServerContext *context,
+                            grpc::ServerReaderWriter<qtgrpc::tests::Empty,
+                                                     qtgrpc::tests::SleepMessage> *stream) override
+    {
+        qtgrpc::tests::SleepMessage request;
+
+        while (stream->Read(&request)) {
+            if (request.has_sleeptimems())
+                QThread::msleep(request.sleeptimems());
+            if (!stream->Write(Empty()))
+                return { grpc::StatusCode::ABORTED, "testMethodBiStreamSleep failed to write" };
+        }
+
+        if (context->IsCancelled())
+            return { grpc::StatusCode::CANCELLED, "testMethodBiStreamSleep" };
+        return grpc::Status::OK;
+    }
+
     qint64 m_latency;
 };
 }
