@@ -31,10 +31,10 @@ public:
     QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept;
     QGrpcChannelOptions &operator=(QGrpcChannelOptions &&other) noexcept;
 
-    QGrpcChannelOptions &withHost(const QUrl &host);
-    QGrpcChannelOptions &withDeadline(QGrpcDuration deadline);
-    QGrpcChannelOptions &withMetadata(const QGrpcMetadata &metadata);
-    QGrpcChannelOptions &withSerializationFormat(const QGrpcSerializationFormat &format);
+    QGrpcChannelOptions &setHost(const QUrl &host);
+    QGrpcChannelOptions &setDeadline(QGrpcDuration deadline);
+    QGrpcChannelOptions &setMetadata(const QGrpcMetadata &metadata);
+    QGrpcChannelOptions &setSerializationFormat(const QGrpcSerializationFormat &format);
 
     [[nodiscard]] QUrl host() const noexcept;
     [[nodiscard]] std::optional<QGrpcDuration> deadline() const noexcept;

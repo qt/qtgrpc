@@ -395,7 +395,7 @@ void QtGrpcClientServerStreamTest::deadline()
     QFETCH(const int, ExpectedMessageCount);
 
     QGrpcCallOptions opt;
-    opt.withDeadline(timeout);
+    opt.setDeadline(timeout);
 
     SimpleStringMessage request;
     request.setTestFieldString("Stream");

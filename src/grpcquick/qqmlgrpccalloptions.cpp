@@ -24,7 +24,7 @@ qint64 QQmlGrpcCallOptions::deadline() const
 void QQmlGrpcCallOptions::setDeadline(qint64 value)
 {
     QGrpcDuration ms(value);
-    m_options.withDeadline(ms);
+    m_options.setDeadline(ms);
     emit deadlineChanged();
 }
 
@@ -43,9 +43,9 @@ void QQmlGrpcCallOptions::setMetadata(QQmlGrpcMetadata *value)
     if (m_metadata != value) {
         m_metadata = value;
         if (m_metadata)
-            m_options.withMetadata(m_metadata->metadata());
+            m_options.setMetadata(m_metadata->metadata());
         else
-            m_options.withMetadata(QGrpcMetadata());
+            m_options.setMetadata(QGrpcMetadata());
         emit metadataChanged();
     }
 }

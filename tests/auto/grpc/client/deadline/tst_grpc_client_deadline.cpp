@@ -44,7 +44,7 @@ void QtGrpcClientDeadlineTest::channelAndCallDeadlineTest()
     const auto maxTimeoutDuration = QGrpcDuration(static_cast<int64_t>(MessageLatency
                                                                                    * maxTimeout));
     QGrpcCallOptions callOpts;
-    callOpts.withDeadline(minTimeoutDuration);
+    callOpts.setDeadline(minTimeoutDuration);
 
     SimpleStringMessage request;
     request.setTestFieldString("sleep");

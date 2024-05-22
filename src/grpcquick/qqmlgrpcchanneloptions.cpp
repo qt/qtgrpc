@@ -41,7 +41,7 @@ QUrl QQmlGrpcChannelOptions::host() const
 void QQmlGrpcChannelOptions::setHost(const QUrl &newUrl)
 {
     Q_D(QQmlGrpcChannelOptions);
-    d->m_options.withHost(newUrl);
+    d->m_options.setHost(newUrl);
     emit hostChanged();
 }
 
@@ -56,7 +56,7 @@ void QQmlGrpcChannelOptions::setDeadline(qint64 value)
 {
     Q_D(QQmlGrpcChannelOptions);
     QGrpcDuration ms(value);
-    d->m_options.withDeadline(ms);
+    d->m_options.setDeadline(ms);
     emit deadlineChanged();
 }
 
@@ -76,9 +76,9 @@ void QQmlGrpcChannelOptions::setMetadata(QQmlGrpcMetadata *value)
     if (d->m_metadata != value) {
         d->m_metadata = value;
         if (d->m_metadata)
-            d->m_options.withMetadata(d->m_metadata->metadata());
+            d->m_options.setMetadata(d->m_metadata->metadata());
         else
-            d->m_options.withMetadata(QGrpcMetadata());
+            d->m_options.setMetadata(QGrpcMetadata());
         emit metadataChanged();
     }
 }
@@ -94,7 +94,7 @@ void QQmlGrpcChannelOptions::setSerializationFormat(QQmlSerializationFormat::Grp
     Q_D(QQmlGrpcChannelOptions);
     if (d->m_format != format) {
         d->m_format = format;
-        d->m_options.withSerializationFormat(QGrpcSerializationFormat{
+        d->m_options.setSerializationFormat(QGrpcSerializationFormat{
             static_cast<QGrpcSerializationFormat::Format>(format) });
         emit serializationFormatChanged();
     }

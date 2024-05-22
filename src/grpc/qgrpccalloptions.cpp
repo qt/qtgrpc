@@ -65,7 +65,7 @@ QGrpcCallOptions &QGrpcCallOptions::operator=(QGrpcCallOptions &&other) noexcept
 /*!
     Sets deadline value with \a deadline and returns updated QGrpcCallOptions object.
 */
-QGrpcCallOptions &QGrpcCallOptions::withDeadline(QGrpcDuration deadline)
+QGrpcCallOptions &QGrpcCallOptions::setDeadline(QGrpcDuration deadline)
 {
     dPtr->deadline = deadline;
     return *this;
@@ -77,7 +77,7 @@ QGrpcCallOptions &QGrpcCallOptions::withDeadline(QGrpcDuration deadline)
     For HTTP2-based channels, \a metadata is converted into HTTP/2 headers, that
     added to the corresponding HTTP/2 request.
 */
-QGrpcCallOptions &QGrpcCallOptions::withMetadata(const QGrpcMetadata &metadata)
+QGrpcCallOptions &QGrpcCallOptions::setMetadata(const QGrpcMetadata &metadata)
 {
     dPtr->metadata = metadata;
     return *this;
@@ -86,9 +86,9 @@ QGrpcCallOptions &QGrpcCallOptions::withMetadata(const QGrpcMetadata &metadata)
 /*!
     Sets \a metadata for a call and returns updated QGrpcCallOptions object.
 
-    \sa withMetadata()
+    \sa setMetadata()
 */
-QGrpcCallOptions &QGrpcCallOptions::withMetadata(QGrpcMetadata &&metadata) noexcept
+QGrpcCallOptions &QGrpcCallOptions::setMetadata(QGrpcMetadata &&metadata) noexcept
 {
     dPtr->metadata = std::move(metadata);
     return *this;

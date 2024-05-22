@@ -26,9 +26,9 @@ public:
     Q_GRPC_EXPORT QGrpcCallOptions(QGrpcCallOptions &&other) noexcept;
     Q_GRPC_EXPORT QGrpcCallOptions &operator=(QGrpcCallOptions &&other) noexcept;
 
-    Q_GRPC_EXPORT QGrpcCallOptions &withDeadline(QGrpcDuration deadline);
-    Q_GRPC_EXPORT QGrpcCallOptions &withMetadata(const QGrpcMetadata &metadata);
-    Q_GRPC_EXPORT QGrpcCallOptions &withMetadata(QGrpcMetadata &&metadata) noexcept;
+    Q_GRPC_EXPORT QGrpcCallOptions &setDeadline(QGrpcDuration deadline);
+    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(const QGrpcMetadata &metadata);
+    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(QGrpcMetadata &&metadata) noexcept;
 
     [[nodiscard]] Q_GRPC_EXPORT std::optional<QGrpcDuration> deadline() const noexcept;
     [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const & noexcept;

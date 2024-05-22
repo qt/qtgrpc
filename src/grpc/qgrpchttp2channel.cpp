@@ -61,7 +61,7 @@ using namespace Qt::StringLiterals;
     \code
         auto channelJson = std::make_shared<
         QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
-                               .withMetadata({ { "content-type"_ba,
+                               .setMetadata({ { "content-type"_ba,
                                                  "application/grpc+json"_ba } }));
     \endcode
 
@@ -73,7 +73,7 @@ using namespace Qt::StringLiterals;
         };
         auto channel = std::make_shared<
             QGrpcHttp2Channel>(QGrpcChannelOptions{ QUrl("http://localhost:50051", QUrl::StrictMode) }
-                               .withSerializationFormat(QGrpcSerializationFormat{ "dummy",
+                               .setSerializationFormat(QGrpcSerializationFormat{ "dummy",
                                                           std::make_shared<DummySerializer>() }));
     \endcode
 
@@ -593,15 +593,15 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &op
     if (it != channelOptions.metadata().end()) {
         if (formatSuffix.isEmpty() && it->second != DefaultContentType) {
             if (it->second == "application/grpc+json") {
-                channelOptions.withSerializationFormat(QGrpcSerializationFormat{
+                channelOptions.setSerializationFormat(QGrpcSerializationFormat{
                     QGrpcSerializationFormat::Format::Json });
             } else if (it->second == "application/grpc+proto" || it->second == DefaultContentType) {
-                channelOptions.withSerializationFormat(QGrpcSerializationFormat{
+                channelOptions.setSerializationFormat(QGrpcSerializationFormat{
                     QGrpcSerializationFormat::Format::Protobuf });
             } else {
                 qGrpcWarning() << "Cannot choose the serializer for " << ContentTypeHeader
                                << it->second << ". Using protobuf format as the default one.";
-                channelOptions.withSerializationFormat(QGrpcSerializationFormat{
+                channelOptions.setSerializationFormat(QGrpcSerializationFormat{
                     QGrpcSerializationFormat::Format::Default });
             }
         } else if (it->second != contentTypeFromOptions) {

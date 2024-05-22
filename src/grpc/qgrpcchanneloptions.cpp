@@ -84,7 +84,7 @@ QGrpcChannelOptions::~QGrpcChannelOptions() = default;
 /*!
     Sets host value with \a host and returns updated QGrpcChannelOptions object.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::withHost(const QUrl &host)
+QGrpcChannelOptions &QGrpcChannelOptions::setHost(const QUrl &host)
 {
     dPtr->host = host;
     return *this;
@@ -93,7 +93,7 @@ QGrpcChannelOptions &QGrpcChannelOptions::withHost(const QUrl &host)
 /*!
     Sets deadline value with \a deadline and returns updated QGrpcChannelOptions object.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::withDeadline(QGrpcDuration deadline)
+QGrpcChannelOptions &QGrpcChannelOptions::setDeadline(QGrpcDuration deadline)
 {
     dPtr->deadline = deadline;
     return *this;
@@ -105,7 +105,7 @@ QGrpcChannelOptions &QGrpcChannelOptions::withDeadline(QGrpcDuration deadline)
     For HTTP2-based channels, \a metadata is converted into HTTP/2 headers, that
     added to each HTTP/2 request.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::withMetadata(const QGrpcMetadata &metadata)
+QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QGrpcMetadata &metadata)
 {
     dPtr->metadata = metadata;
     return *this;
@@ -120,7 +120,7 @@ QGrpcChannelOptions &QGrpcChannelOptions::withMetadata(const QGrpcMetadata &meta
     implementations.
 */
 QGrpcChannelOptions &
-QGrpcChannelOptions::withSerializationFormat(const QGrpcSerializationFormat &format)
+QGrpcChannelOptions::setSerializationFormat(const QGrpcSerializationFormat &format)
 {
     dPtr->serializationFormat = format;
     return *this;

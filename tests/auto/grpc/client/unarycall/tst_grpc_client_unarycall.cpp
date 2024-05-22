@@ -228,7 +228,10 @@ void QtGrpcClientUnaryCallTest::metadata()
     QVERIFY(clientErrorSpy.isValid());
 
     QGrpcCallOptions opt;
-    opt.withMetadata({ { "client_header", "1" }, { "client_return_header", "valid_value" } });
+    opt.setMetadata({
+        { "client_header",        "1"           },
+        { "client_return_header", "valid_value" }
+    });
     auto reply = client()->testMetadata({}, opt);
 
     QGrpcMetadata metadata;
@@ -269,7 +272,7 @@ void QtGrpcClientUnaryCallTest::deadline()
     QFETCH(const QGrpcDuration, timeout);
 
     QGrpcCallOptions opt;
-    opt.withDeadline(timeout);
+    opt.setDeadline(timeout);
 
     SimpleStringMessage request;
     request.setTestFieldString("sleep");

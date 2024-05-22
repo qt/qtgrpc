@@ -50,7 +50,7 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
         { "user-name", { name.toUtf8() } },
         { "user-password", { password.toUtf8() } },
     };
-    channelOptions.withMetadata(metadata);
+    channelOptions.setMetadata(metadata);
     std::shared_ptr<QAbstractGrpcChannel> channel = std::make_shared<QGrpcHttp2Channel>(
             channelOptions);
     // ![0]

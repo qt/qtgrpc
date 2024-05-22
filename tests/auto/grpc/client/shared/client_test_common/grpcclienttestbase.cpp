@@ -34,13 +34,13 @@ void GrpcClientTestBase::initTestCase_data()
             << QFlags{ Channel::Qt }
             << std::shared_ptr<QAbstractGrpcChannel>(new QGrpcHttp2Channel(QGrpcChannelOptions{
                    QUrl("http://localhost:50051", QUrl::StrictMode) }
-                                                                               .withMetadata(md)));
+                                                                               .setMetadata(md)));
 
         QTest::newRow("Http2ClientJsonUnix")
             << QFlags{ Channel::Qt }
             << std::shared_ptr<QAbstractGrpcChannel>(new QGrpcHttp2Channel(QGrpcChannelOptions{
                    QUrl("unix:///tmp/qtgrpc_test.sock", QUrl::StrictMode) }
-                                                                               .withMetadata(md)));
+                                                                               .setMetadata(md)));
     }
 #endif
 
@@ -81,7 +81,7 @@ void GrpcClientTestBase::initTestCase_data()
             << std::shared_ptr<
                    QAbstractGrpcChannel>(new QGrpcHttp2Channel(QGrpcChannelOptions{
                    QUrl("http://localhost:50051", QUrl::StrictMode) }
-                                                                   .withDeadline(channelTimeout)));
+                                                                   .setDeadline(channelTimeout)));
     }
 }
 
