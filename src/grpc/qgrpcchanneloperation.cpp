@@ -111,7 +111,8 @@ public:
 QGrpcChannelOperation::QGrpcChannelOperation(QLatin1StringView method, QLatin1StringView service,
                                              QByteArrayView arg, const QGrpcCallOptions &options,
                                              std::shared_ptr<QAbstractProtobufSerializer>
-                                                 serializer)
+                                                 serializer,
+                                             PrivateConstructor /*unused*/)
     : QObject(*new QGrpcChannelOperationPrivate(method, service, arg, options,
                                                 std::move(serializer)))
 {

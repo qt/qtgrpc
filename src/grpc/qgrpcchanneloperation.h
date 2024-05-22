@@ -24,10 +24,12 @@ class QGrpcStatus;
 class Q_GRPC_EXPORT QGrpcChannelOperation final : public QObject
 {
     Q_OBJECT
+    struct PrivateConstructor { explicit PrivateConstructor() = default; };
 public:
     explicit QGrpcChannelOperation(QLatin1StringView method, QLatin1StringView service,
                                    QByteArrayView argument, const QGrpcCallOptions &options,
-                                   std::shared_ptr<QAbstractProtobufSerializer> serializer);
+                                   std::shared_ptr<QAbstractProtobufSerializer> serializer,
+                                   PrivateConstructor);
     ~QGrpcChannelOperation() override;
 
     [[nodiscard]] QLatin1StringView method() const noexcept;
@@ -62,6 +64,7 @@ private:
     Q_DISABLE_COPY_MOVE(QGrpcChannelOperation)
     Q_DECLARE_PRIVATE(QGrpcChannelOperation)
 
+    friend class QAbstractGrpcChannel;
 public:
     bool event(QEvent *event) override;
 };

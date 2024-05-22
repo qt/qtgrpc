@@ -130,8 +130,10 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
                                                            QByteArrayView arg,
                                                            const QGrpcCallOptions &options)
 {
-    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options,
-                                                                    serializer());
+    auto channelOperation = std::make_shared<
+        QGrpcChannelOperation>(method, service, arg, options, serializer(),
+                               QGrpcChannelOperation::PrivateConstructor());
+
     QObject::connect(channelOperation.get(), &QGrpcChannelOperation::writeMessageRequested,
                      channelOperation.get(), []() {
                          Q_ASSERT_X(false, "QAbstractGrpcChannel::call",
@@ -162,8 +164,10 @@ std::shared_ptr<QGrpcServerStream>
 QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringView service,
                                         QByteArrayView arg, const QGrpcCallOptions &options)
 {
-    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options,
-                                                                    serializer());
+    auto channelOperation = std::make_shared<
+        QGrpcChannelOperation>(method, service, arg, options, serializer(),
+                               QGrpcChannelOperation::PrivateConstructor());
+
     QObject::connect(channelOperation.get(), &QGrpcChannelOperation::writeMessageRequested,
                      channelOperation.get(), []() {
                          Q_ASSERT_X(false, "QAbstractGrpcChannel::startServerStream",
@@ -194,8 +198,9 @@ std::shared_ptr<QGrpcClientStream>
 QAbstractGrpcChannel::startClientStream(QLatin1StringView method, QLatin1StringView service,
                                         QByteArrayView arg, const QGrpcCallOptions &options)
 {
-    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options,
-                                                                    serializer());
+    auto channelOperation = std::make_shared<
+        QGrpcChannelOperation>(method, service, arg, options, serializer(),
+                               QGrpcChannelOperation::PrivateConstructor());
 
     auto stream = std::make_shared<QGrpcClientStream>(channelOperation);
     startClientStream(channelOperation);
@@ -219,8 +224,9 @@ std::shared_ptr<QGrpcBidirStream>
 QAbstractGrpcChannel::startBidirStream(QLatin1StringView method, QLatin1StringView service,
                                        QByteArrayView arg, const QGrpcCallOptions &options)
 {
-    auto channelOperation = std::make_shared<QGrpcChannelOperation>(method, service, arg, options,
-                                                                    serializer());
+    auto channelOperation = std::make_shared<
+        QGrpcChannelOperation>(method, service, arg, options, serializer(),
+                               QGrpcChannelOperation::PrivateConstructor());
 
     auto stream = std::make_shared<QGrpcBidirStream>(channelOperation);
     startBidirStream(channelOperation);
