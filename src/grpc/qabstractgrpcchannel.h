@@ -35,6 +35,9 @@ public:
     [[nodiscard]] virtual std::shared_ptr<QAbstractProtobufSerializer>
     serializer() const noexcept = 0;
 
+    // Abstract interface should never be a rvalue.
+    void channelOptions() && = delete;
+
 protected:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
                                          QByteArrayView arg,
@@ -54,7 +57,7 @@ protected:
     virtual void startClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
     virtual void startBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
 
-    [[nodiscard]] const QGrpcChannelOptions &channelOptions() const noexcept;
+    [[nodiscard]] const QGrpcChannelOptions &channelOptions() const & noexcept;
 
     friend class QGrpcClientBase;
     explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
