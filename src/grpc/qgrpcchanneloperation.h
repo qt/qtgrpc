@@ -61,6 +61,9 @@ Q_SIGNALS:
 private:
     Q_DISABLE_COPY_MOVE(QGrpcChannelOperation)
     Q_DECLARE_PRIVATE(QGrpcChannelOperation)
+
+public:
+    bool event(QEvent *event) override;
 };
 
 QT_END_NAMESPACE

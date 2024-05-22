@@ -218,6 +218,12 @@ void QGrpcChannelOperation::setServerMetadata(QGrpcMetadata &&metadata)
     d->serverMetadata = std::move(metadata);
 }
 
+// For future extensions
+bool QGrpcChannelOperation::event(QEvent *event)
+{
+    return QObject::event(event);
+}
+
 QT_END_NAMESPACE
 
 #include "moc_qgrpcchanneloperation.cpp"
