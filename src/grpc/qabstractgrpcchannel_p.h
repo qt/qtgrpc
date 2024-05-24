@@ -18,6 +18,8 @@
 #include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/private/qtgrpcglobal_p.h>
 
+#include <QtCore/qthread.h>
+
 QT_BEGIN_NAMESPACE
 
 class QAbstractGrpcChannelPrivate
