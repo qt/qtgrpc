@@ -77,11 +77,9 @@ qt_autogen_tools_initial_setup(tst_protobuf_conformance)
 
 set(test_output_dir "${CMAKE_CURRENT_BINARY_DIR}/results")
 
-get_target_property(protoc_version WrapProtoc::WrapProtoc _qt_internal_protobuf_version)
-
 add_test(NAME tst_protobuf_conformance
     COMMAND "${QT_PROTOBUF_CONFORMANCE_TEST_RUNNER}"
-        --failure_list "${CMAKE_CURRENT_SOURCE_DIR}/expect_failing_tests_v${protoc_version}.txt"
+        --failure_list "${CMAKE_CURRENT_SOURCE_DIR}/expect_failing_tests_v3.21.9.0.txt"
         --output_dir "${CMAKE_CURRENT_BINARY_DIR}"
         $<TARGET_FILE:tst_protobuf_conformance>
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
