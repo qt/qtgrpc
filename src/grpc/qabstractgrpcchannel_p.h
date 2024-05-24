@@ -19,6 +19,8 @@
 #include <QtGrpc/qgrpcclientinterceptormanager.h>
 #include <QtGrpc/private/qtgrpcglobal_p.h>
 
+#include <QtCore/qthread.h>
+
 QT_BEGIN_NAMESPACE
 
 struct QAbstractGrpcChannelPrivate
