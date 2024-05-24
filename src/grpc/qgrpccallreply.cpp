@@ -28,16 +28,10 @@ using namespace Qt::StringLiterals;
     Qt::ConnectionType type = Qt::AutoConnection)
 
     Convenience function to connect the \a finishCallback and
-    \a errorCallback of \a receiver to the QGrpcCallReply::finished and
-    the QGrpcCallReply::errorOccurred signals with the given connection \a type.
-
-    Calling this function is equivalent to the following:
-    \code
-        QObject::connect(this, &QGrpcCallReply::finished, receiver,
-                         std::forward<FinishCallback>(finishCallback), type);
-        QObject::connect(this, &QGrpcCallReply::errorOccurred, receiver,
-                         std::forward<ErrorCallback>(errorCallback), type);
-    \endcode
+    \a errorCallback of \a receiver to the QGrpcCallReply::finished signal with
+    the given connection \a type. The \a finishCallback is called when the
+    QGrpcCallReply is finished with the QGrpcStatus::Ok status code, \a errorCallback is called
+    otherwise.
 */
 
 /*!

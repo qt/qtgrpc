@@ -59,20 +59,20 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
 
     // ![1]
     auto stream = m_client->messageList(qtgrpc::examples::chat::None());
-    QObject::connect(stream.get(), &QGrpcServerStream::errorOccurred, this,
-                     [this, stream](const QGrpcStatus &status) {
+
+    QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
+                     [this, stream] (const QGrpcStatus &status) {
                          qCritical()
                                  << "Stream error(" << status.code() << "):" << status.message();
                          if (status.code() == QGrpcStatus::Unauthenticated) {
                              emit authFailed();
-                         } else {
+                         } else if (status.code() != QGrpcStatus::Ok) {
                              emit networkError(status.message());
+                             setState(Disconnected);
+                         } else {
                              setState(Disconnected);
                          }
                      });
-
-    QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
-                     [this, stream]() { setState(Disconnected); });
 
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this,
                      [this, name, password, stream]() {

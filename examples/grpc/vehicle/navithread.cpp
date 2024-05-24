@@ -38,15 +38,10 @@ void NaviThread::run()
         emit directionChanged(result->direction());
     });
 
-    connect(m_stream.get(), &QGrpcServerStream::errorOccurred, this,
-            [this](const QGrpcStatus &status) {
-                emit totalDistanceChanged(0);
-                emit remainingDistanceChanged(0);
-                emit directionChanged(DirectionEnumGadget::BACKWARD);
-                qWarning() << "Stream error(" << status.code() << "):" << status.message();
-            });
+    connect(m_stream.get(), &QGrpcServerStream::finished, this, [this] (const QGrpcStatus &status) {
+        if (status.code() != QGrpcStatus::StatusCode::Ok)
+            qWarning() << "Stream error(" << status.code() << "):" << status.message();
 
-    connect(m_stream.get(), &QGrpcServerStream::finished, this, [this] {
         emit totalDistanceChanged(0);
         emit remainingDistanceChanged(0);
         emit directionChanged(DirectionEnumGadget::BACKWARD);

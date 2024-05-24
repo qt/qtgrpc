@@ -127,31 +127,17 @@ bool QGrpcClientBasePrivate::checkChannel()
 void QGrpcClientBasePrivate::addStream(std::shared_ptr<QGrpcOperation> grpcStream)
 {
     Q_Q(QGrpcClientBase);
-    auto errorConnection = std::make_shared<QMetaObject::Connection>();
     auto finishedConnection = std::make_shared<QMetaObject::Connection>();
-
-    *errorConnection = QObject::connect(
-            grpcStream.get(), &QGrpcOperation::errorOccurred, q,
-            [this, grpcStream, finishedConnection, errorConnection](const QGrpcStatus &status) {
-                QObject::disconnect(*errorConnection);
-                QObject::disconnect(*finishedConnection);
-
-                qGrpcWarning() << grpcStream->method() << "call" << service
-                               << "stream error: " << status.message();
-                Q_Q(QGrpcClientBase);
-                emit q->errorOccurred(status);
-                removeStream(std::move(grpcStream));
-            });
-
-    *finishedConnection = QObject::connect(
-            grpcStream.get(), &QGrpcOperation::finished, q,
-            [this, grpcStream, errorConnection, finishedConnection]() mutable {
-                QObject::disconnect(*errorConnection);
-                QObject::disconnect(*finishedConnection);
-
-                qGrpcWarning() << grpcStream->method() << "call" << service << "stream finished.";
-                removeStream(std::move(grpcStream));
-            });
+    *finishedConnection = QObject::connect(grpcStream.get(), &QGrpcOperation::finished, q,
+                                           [this, grpcStream, q,
+                                            finishedConnection](const auto &status) mutable {
+                                               if (status != QGrpcStatus::StatusCode::Ok)
+                                                   Q_EMIT q->errorOccurred(status);
+                                               qGrpcWarning() << grpcStream->method() << "call"
+                                                              << service << "stream finished.";
+                                               removeStream(std::move(grpcStream));
+                                               QObject::disconnect(*finishedConnection);
+                                           });
 
     activeStreams.push_back(grpcStream);
 }
@@ -238,19 +224,12 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
     reply = d->channel->call(method, QLatin1StringView(d->service), arg, options);
 
     auto errorConnection = std::make_shared<QMetaObject::Connection>();
-    *errorConnection = connect(reply.get(), &QGrpcCallReply::errorOccurred, this,
+    *errorConnection = connect(reply.get(), &QGrpcCallReply::finished, this,
                                [this, reply, errorConnection](const QGrpcStatus &status) {
+                                   if (status != QGrpcStatus::StatusCode::Ok)
+                                       emit errorOccurred(status);
                                    QObject::disconnect(*errorConnection);
-                                   emit errorOccurred(status);
                                });
-
-
-QT_WARNING_PUSH
-QT_WARNING_DISABLE_MSVC(4573)
-    connect(reply.get(), &QGrpcCallReply::finished, this, [errorConnection] {
-        QObject::disconnect(*errorConnection);
-    });
-QT_WARNING_POP
     return reply;
 }
 

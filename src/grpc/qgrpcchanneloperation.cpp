@@ -50,22 +50,13 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void errorOccurred(const QGrpcStatus &status)
-
-    The signal should be emitted by channel when error occurred in during the
-    communication.
-
-    The signal is implicitly connected to the QGrpcOperation counterpart.
-*/
-
-/*!
-    \fn void finished()
+    \fn void finished(const QGrpcStatus &status)
 
     The signal is emitted when the gRPC communication is finished.
 
-    It usually means that the server closed the connection with no errors.
-    Implementations of \l QAbstractGrpcChannel should detect this situation and
-    emit the signal.
+    It usually means that the server sent the \a status and closed the
+    connection. Implementations of \l QAbstractGrpcChannel should detect this
+    situation and emit the signal.
 
     The signal is implicitly connected to the QGrpcOperation counterpart.
 */
@@ -82,7 +73,7 @@ QT_BEGIN_NAMESPACE
     from a channel is not required and is not recommended.
 
     The client side will be notificated by the
-    \l QGrpcChannelOperation::errorOccurred signal with
+    \l QGrpcChannelOperation::finished signal with
     \l QGrpcStatus::Cancelled status code.
 
     The signal is implicitly connected to the QGrpcOperation counterpart.

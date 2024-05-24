@@ -50,12 +50,13 @@ void QtGrpcClientClientStreamTest::valid()
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
-    QVERIFY(streamErrorSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
-    QCOMPARE(streamErrorSpy.count(), 0);
+
+    auto args = streamFinishedSpy.takeFirst();
+    QCOMPARE(args.count(), 1);
+    QVERIFY(args.takeFirst().value<QGrpcStatus>() == QGrpcStatus::StatusCode::Ok);
 
     const auto result = stream->read<SimpleStringMessage>();
     QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3Stream4");
@@ -78,12 +79,13 @@ void QtGrpcClientClientStreamTest::sequentialSend()
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
-    QVERIFY(streamErrorSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
-    QCOMPARE(streamErrorSpy.count(), 0);
+
+    auto args = streamFinishedSpy.takeFirst();
+    QCOMPARE(args.count(), 1);
+    QVERIFY(args.takeFirst().value<QGrpcStatus>() == QGrpcStatus::StatusCode::Ok);
 
     const auto result = stream->read<SimpleStringMessage>();
     QVERIFY(result.has_value());
@@ -110,12 +112,13 @@ void QtGrpcClientClientStreamTest::sequentialSendWithDone()
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
-    QVERIFY(streamErrorSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
-    QCOMPARE(streamErrorSpy.count(), 0);
+
+    auto args = streamFinishedSpy.first();
+    QCOMPARE(args.count(), 1);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
 
     std::optional<SimpleStringMessage> result = stream->read<SimpleStringMessage>();
     QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3");
@@ -147,12 +150,13 @@ void QtGrpcClientClientStreamTest::sequentialSendWithDoneWhenChannelNotReady()
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
-    QVERIFY(streamErrorSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
-    QCOMPARE(streamErrorSpy.count(), 0);
+
+    auto args = streamFinishedSpy.first();
+    QCOMPARE(args.count(), 1);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
 
     std::optional<SimpleStringMessage> result = stream->read<SimpleStringMessage>();
     QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3");

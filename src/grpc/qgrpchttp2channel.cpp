@@ -204,15 +204,10 @@ private:
     {
         QObject::connect(socket, &T::errorOccurred, channelOperation,
                          [channelOperationPtr = QPointer(channelOperation)](auto error) {
-                             emit channelOperationPtr->errorOccurred(QGrpcStatus{
+                             emit channelOperationPtr->finished(QGrpcStatus{
                                  QGrpcStatus::StatusCode::Unavailable,
                                  QGrpcHttp2ChannelPrivate::tr("Network error occurred %1")
                                      .arg(error) });
-                             // The errorOccured signal can remove the last channelOperation holder,
-                             // and in the same time the last finished signal listener, so we need
-                             // to make sure that channelOperationPtr is still valid before
-                             if (!channelOperationPtr.isNull())
-                                 emit channelOperationPtr->finished();
                          });
     }
 
@@ -283,10 +278,8 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
     m_buffer = new QBuffer(m_stream);
 
     QObject::connect(m_stream.get(), &QHttp2Stream::headersReceived, channelOpPtr,
-                     [this,
-                      channelOpInnerPtr = QPointer(channelOpPtr)](const HPack::HttpHeader &headers,
-                                                                  bool endStream) {
-                         QGrpcMetadata md = channelOpInnerPtr->serverMetadata();
+                     [channelOpPtr, this](const HPack::HttpHeader &headers, bool endStream) {
+                         QGrpcMetadata md = channelOpPtr->serverMetadata();
                          QGrpcStatus::StatusCode statusCode = QGrpcStatus::StatusCode::Ok;
                          QString statusMessage;
                          for (const auto &header : headers) {
@@ -300,21 +293,10 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
                              }
                          }
 
-                         channelOpInnerPtr->setServerMetadata(std::move(md));
+                         channelOpPtr->setServerMetadata(std::move(md));
 
-                         if (statusCode != QGrpcStatus::StatusCode::Ok) {
-                             emit channelOpInnerPtr->errorOccurred(QGrpcStatus{ statusCode,
-                                                                                statusMessage });
-                         }
-
-                         // The errorOccured signal can remove the last channelOperation holder,
-                         // and in the same time the last finished signal listener, so we need
-                         // to make sure that channelOpInnerPtr is still valid before
-                         // emitting the finished signal.
-                         if (endStream && m_handlerState != Cancelled
-                             && !channelOpInnerPtr.isNull()) {
-                             m_handlerState = Finished;
-                             emit channelOpInnerPtr->finished();
+                         if (endStream && m_handlerState != Cancelled) {
+                             emit channelOpPtr->finished(QGrpcStatus{ statusCode, statusMessage });
                          }
                      });
 
@@ -330,7 +312,7 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
 
                              if (!m_operation.expired()) {
                                  auto channelOp = m_operation.lock();
-                                 emit channelOp->errorOccurred(QGrpcStatus{ code, errorString });
+                                 emit channelOp->finished(QGrpcStatus{ code, errorString });
                              }
                          }
                          parentChannel->deleteHandler(this);
@@ -361,7 +343,7 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
                              }
                              if (endStream) {
                                  m_handlerState = Finished;
-                                 emit channelOpPtr->finished();
+                                 emit channelOpPtr->finished({});
                              }
                          }
                      });
@@ -385,16 +367,7 @@ void QGrpcHttp2ChannelPrivate::channelOperationAsyncError(QGrpcChannelOperation 
     Q_ASSERT_X(channelOperation != nullptr, "QGrpcHttp2ChannelPrivate::channelOperationAsyncError",
                "channelOperation is null");
     QTimer::singleShot(0, channelOperation,
-                       [channelOperationPtr = QPointer(channelOperation), status]() {
-                           emit channelOperationPtr->errorOccurred(status);
-
-                           // The errorOccured signal can remove the last channelOperation holder,
-                           // and in the same time the last finished signal listener, so we need
-                           // to make sure that channelOperationPtr is still valid before
-                           // emitting the finished signal.
-                           if (!channelOperationPtr.isNull())
-                               emit channelOperationPtr->finished();
-                       });
+                       [channelOperation, status]() { emit channelOperation->finished(status); });
 }
 
 // The initial headers to be sent before the first data.

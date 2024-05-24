@@ -42,8 +42,7 @@ public:
     [[nodiscard]] bool isFinished() const noexcept;
 
 Q_SIGNALS:
-    void finished();
-    void errorOccurred(const QGrpcStatus &status);
+    void finished(const QGrpcStatus &status);
 
 protected:
     explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation,

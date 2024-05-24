@@ -45,10 +45,9 @@
     The \l QGrpcServerStream handler provides the signals that the client application
     should connect to.
 
-    The \l QGrpcServerStream::errorOccurred signal indicates the error that occurred
-    either on the server side or in the communication channel. Typically, an
-    error results in the connection to the server being closed and
-    the \l QGrpcServerStream::finished signal being emitted.
+    Use the \l QGrpcServerStream::finished signal to handle both errors and
+    the successful stream finishing. The status code indicates the error that
+    happened during the stream communication.
 
     When the server sends new messages to the stream, \l QGrpcServerStream emits the
     \l QGrpcServerStream::messageReceived signal. The slot connected to this signal

@@ -48,12 +48,13 @@ void QtGrpcClientBidirStreamTest::valid()
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
-    QVERIFY(streamErrorSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
-    QCOMPARE(streamErrorSpy.count(), 0);
+
+    auto args = streamFinishedSpy.first();
+    QCOMPARE(args.count(), 1);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
 
     QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33Stream44");
 }
@@ -84,12 +85,13 @@ void QtGrpcClientBidirStreamTest::sequentialSendWithDone()
 
     QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
-    QVERIFY(streamErrorSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
-    QCOMPARE(streamErrorSpy.count(), 0);
+
+    auto args = streamFinishedSpy.first();
+    QCOMPARE(args.count(), 1);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
 
     QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33");
 }

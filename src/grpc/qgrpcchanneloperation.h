@@ -52,8 +52,7 @@ public:
 
 Q_SIGNALS:
     // Outgoing signals of the channel.
-    void errorOccurred(const QGrpcStatus &status);
-    void finished();
+    void finished(const QGrpcStatus &status);
     void messageReceived(const QByteArray &data);
     // Icoming signals from the client.
     void cancelRequested();

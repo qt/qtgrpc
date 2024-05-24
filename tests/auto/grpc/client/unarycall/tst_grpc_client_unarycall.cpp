@@ -59,7 +59,8 @@ void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
 
     bool waitForReply = false;
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
-    reply->subscribe(this, [reply, &result, &waitForReply] {
+    reply->subscribe(this, [reply, &result, &waitForReply](const auto &status) {
+        QCOMPARE_EQ(status.code(), QGrpcStatus::StatusCode::Ok);
         result = reply->read<SimpleStringMessage>();
         waitForReply = true;
     });
@@ -93,28 +94,23 @@ void QtGrpcClientUnaryCallTest::immediateCancel()
 
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
 
-    std::optional<SimpleStringMessage> result = SimpleStringMessage();
-    result->setTestFieldString("Result not changed by echo");
-    QObject::connect(reply.get(), &QGrpcCallReply::finished, this,
-                     [&result, reply] { result = reply->read<SimpleStringMessage>(); });
-
-    QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
     QSignalSpy replyFinishedSpy(reply.get(), &QGrpcCallReply::finished);
     QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
 
-    QVERIFY(replyErrorSpy.isValid());
     QVERIFY(replyFinishedSpy.isValid());
     QVERIFY(clientErrorSpy.isValid());
 
     reply->cancel();
 
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyErrorSpy.count(), 1, FailTimeout);
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 0, FailTimeout);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 1, FailTimeout);
 
-    QCOMPARE_EQ(result->testFieldString(), "Result not changed by echo");
     QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(),
                 QGrpcStatus::Cancelled);
+
+    auto args = replyFinishedSpy.first();
+    QCOMPARE(args.count(), 1);
+    QVERIFY(args.first().value<QGrpcStatus>() == QGrpcStatus::StatusCode::Cancelled);
 }
 
 void QtGrpcClientUnaryCallTest::deferredCancel()
@@ -122,22 +118,17 @@ void QtGrpcClientUnaryCallTest::deferredCancel()
     SimpleStringMessage request;
     request.setTestFieldString("sleep");
 
-    std::optional<SimpleStringMessage> result = SimpleStringMessage();
-    result->setTestFieldString("Result not changed by echo");
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
 
-    QObject::connect(reply.get(), &QGrpcCallReply::finished, this, [reply, &result] {
-        QVERIFY(false);
-        result = reply->read<SimpleStringMessage>();
-    });
-
-    QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
-    QVERIFY(replyErrorSpy.isValid());
+    QSignalSpy replyFinishedSpy(reply.get(), &QGrpcCallReply::finished);
+    QVERIFY(replyFinishedSpy.isValid());
 
     QTimer::singleShot(MessageLatencyThreshold, reply.get(), &QGrpcCallReply::cancel);
 
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyErrorSpy.count(), 1, FailTimeout);
-    QCOMPARE_EQ(result->testFieldString(), "Result not changed by echo");
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 1, FailTimeout);
+    auto args = replyFinishedSpy.first();
+    QCOMPARE(args.count(), 1);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Cancelled);
 }
 
 void QtGrpcClientUnaryCallTest::asyncClientStatusMessage()
@@ -163,12 +154,13 @@ void QtGrpcClientUnaryCallTest::asyncStatusMessage()
 
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethodStatusMessage(request);
 
-    QSignalSpy replyErrorSpy(reply.get(), &QGrpcCallReply::errorOccurred);
-    QVERIFY(replyErrorSpy.isValid());
+    QSignalSpy replyFinishedSpy(reply.get(), &QGrpcCallReply::finished);
+    QVERIFY(replyFinishedSpy.isValid());
 
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyErrorSpy.count(), 1, FailTimeout);
-    QCOMPARE(qvariant_cast<QGrpcStatus>(replyErrorSpy.at(0).first()).message(),
-             request.testFieldString());
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 1, FailTimeout);
+    auto args = replyFinishedSpy.first();
+    QCOMPARE(args.count(), 1);
+    QCOMPARE(args.first().value<QGrpcStatus>().message(), request.testFieldString());
 }
 
 void QtGrpcClientUnaryCallTest::inThread()

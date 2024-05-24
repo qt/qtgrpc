@@ -36,20 +36,12 @@ using namespace Qt::StringLiterals;
 */
 
 /*!
-    \fn void QGrpcOperation::finished()
+    \fn void QGrpcOperation::finished(const QGrpcStatus &status)
 
     This signal indicates the end of communication for this call.
 
-    If this signal is emitted by the stream then this stream is successfully
-    closed either by client or server.
-*/
-
-/*!
-    \fn void QGrpcOperation::errorOccurred(const QGrpcStatus &status)
-
-    This signal is emitted when an error with \a status occurs in the channel.
-
-    \sa QGrpcClientBase::errorOccurred
+    If this signal is emitted the respective operation when it's finished with
+    the respective \a status.
 */
 
 class QGrpcOperationPrivate : public QObjectPrivate
@@ -79,19 +71,12 @@ QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOpe
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'messageReceived' signal");
 
-    valid = QObject::connect(d_func()->channelOperation.get(),
-                             &QGrpcChannelOperation::errorOccurred, this,
-                             [this](const auto &status) {
-                                 d_func()->isFinished.storeRelaxed(true);
-                                 emit this->errorOccurred(status);
-                             });
-    Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
-               "Unable to make connection to the 'errorOccurred' signal");
-
     valid = QObject::connect(d_func()->channelOperation.get(), &QGrpcChannelOperation::finished,
-                             this, [this]() {
-                                 d_func()->isFinished.storeRelaxed(true);
-                                 emit this->finished();
+                             this, [this](const QGrpcStatus &status) {
+                                 if (!isFinished()) {
+                                     d_func()->isFinished.storeRelaxed(true);
+                                     emit this->finished(status);
+                                 }
                              });
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'finished' signal");
@@ -185,19 +170,14 @@ QGrpcChannelOperation *QGrpcOperation::channelOperation() const noexcept
     return d_func()->channelOperation.get();
 }
 
-/*!
-    Attempts to cancel the operation in a channel and immediately emits
-    \l{QGrpcOperation::errorOccurred} with the \l{QGrpcStatus::Cancelled}
-    status code.
-
-    Any manipulation of the operation after this call has no effect.
-*/
 void QGrpcOperation::cancel()
 {
-    d_func()->isFinished.storeRelaxed(true);
-    emit d_func()->channelOperation->cancelRequested();
-    emit errorOccurred(QGrpcStatus{ QGrpcStatus::Cancelled,
-                                    tr("Operation is cancelled by client") });
+    if (!isFinished()) {
+        d_func()->isFinished.storeRelaxed(true);
+        emit d_func()->channelOperation->cancelRequested();
+        Q_EMIT finished(QGrpcStatus{ QGrpcStatus::Cancelled,
+                                     tr("Operation is cancelled by client") });
+    }
 }
 
 /*!

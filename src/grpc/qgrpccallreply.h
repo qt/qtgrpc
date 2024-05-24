@@ -27,10 +27,16 @@ public:
     void subscribe(ReceiverType *receiver, FinishCallback &&finishCallback, ErrorCallback &&errorCallback,
                    Qt::ConnectionType type = Qt::AutoConnection)
     {
-        QObject::connect(this, &QGrpcCallReply::finished, receiver,
-                         std::forward<FinishCallback>(finishCallback), type);
-        QObject::connect(this, &QGrpcCallReply::errorOccurred, receiver,
-                         std::forward<ErrorCallback>(errorCallback), type);
+        QObject::connect(
+            this, &QGrpcCallReply::finished, receiver,
+            [finishCallback, errorCallback](const auto &status) {
+                if (status.code() != QGrpcStatus::StatusCode::Ok) {
+                    errorCallback(status);
+                } else {
+                    finishCallback();
+                }
+            },
+            type);
     }
 
     template <typename ReceiverType, typename FinishCallback>

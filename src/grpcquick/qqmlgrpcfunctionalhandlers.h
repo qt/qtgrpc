@@ -43,15 +43,21 @@ void makeCallConnections(QJSEngine *jsEngine, const std::shared_ptr<QGrpcCallRep
                          const QJSValue &finishCallback, const QJSValue &errorCallback)
 {
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
-    *finishConnection = QObject::connect(reply.get(), &QGrpcCallReply::finished, jsEngine, [=]() {
-        readReturnValue<Ret, QGrpcCallReply>(jsEngine, reply.get(), finishCallback, errorCallback);
-        QObject::disconnect(*finishConnection);
-    });
-    QObject::connect(reply.get(), &QGrpcCallReply::errorOccurred, jsEngine,
-                     [errorCallback, jsEngine](const QGrpcStatus &status) {
-                         if (errorCallback.isCallable())
-                             errorCallback.call(QJSValueList{ jsEngine->toScriptValue(status) });
-                     });
+    *finishConnection = QObject::connect(reply.get(), &QGrpcCallReply::finished, jsEngine,
+                                         [=](const QGrpcStatus &status) {
+                                             if (status.code() == QGrpcStatus::StatusCode::Ok) {
+                                                 readReturnValue<Ret,
+                                                                 QGrpcCallReply>(jsEngine,
+                                                                                 reply.get(),
+                                                                                 finishCallback,
+                                                                                 errorCallback);
+                                             } else {
+                                                 if (errorCallback.isCallable())
+                                                     errorCallback.call(QJSValueList{
+                                                         jsEngine->toScriptValue(status) });
+                                             }
+                                             QObject::disconnect(*finishConnection);
+                                         });
 }
 
 template <typename Ret>
@@ -62,20 +68,22 @@ void makeServerStreamConnections(QJSEngine *jsEngine,
 {
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(stream.get(), &QGrpcServerStream::finished, jsEngine,
-                                         [finishCallback, finishConnection] {
-                                             if (finishCallback.isCallable())
-                                                 finishCallback.call();
+                                         [finishCallback, errorCallback, jsEngine,
+                                          finishConnection](const QGrpcStatus &status) {
+                                             if (status.code() == QGrpcStatus::StatusCode::Ok) {
+                                                 if (finishCallback.isCallable())
+                                                     finishCallback.call();
+                                             } else {
+                                                 if (errorCallback.isCallable())
+                                                     errorCallback.call(QJSValueList{
+                                                         jsEngine->toScriptValue(status) });
+                                             }
                                              QObject::disconnect(*finishConnection);
                                          });
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, jsEngine,
-                     [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback] {
+                     [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback]() {
                          readReturnValue<Ret, QGrpcServerStream>(jsEngine, streamPtr,
                                                                  messageCallback, errorCallback);
-                     });
-    QObject::connect(stream.get(), &QGrpcServerStream::errorOccurred, jsEngine,
-                     [errorCallback, jsEngine](const QGrpcStatus &status) {
-                         if (errorCallback.isCallable())
-                             errorCallback.call(QJSValueList{ jsEngine->toScriptValue(status) });
                      });
 }
 
@@ -89,17 +97,20 @@ Sender *makeClientStreamConnections(QJSEngine *jsEngine,
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(stream.get(), &QGrpcClientStream::finished, jsEngine,
                                          [streamPtr = stream.get(), finishCallback, jsEngine,
-                                          finishConnection, errorCallback] {
-                                             readReturnValue<Ret, QGrpcClientStream>(jsEngine,
-                                                                                     streamPtr,
-                                                                                     finishCallback,
-                                                                                     errorCallback);
+                                          finishConnection,
+                                          errorCallback](const QGrpcStatus &status) {
+                                             if (status.code() == QGrpcStatus::StatusCode::Ok) {
+                                                 readReturnValue<Ret,
+                                                                 QGrpcClientStream>(jsEngine,
+                                                                                    streamPtr,
+                                                                                    finishCallback,
+                                                                                    errorCallback);
+                                             } else {
+                                                 if (errorCallback.isCallable())
+                                                     errorCallback.call(QJSValueList{
+                                                         jsEngine->toScriptValue(status) });
+                                             }
                                          });
-    QObject::connect(stream.get(), &QGrpcClientStream::errorOccurred, jsEngine,
-                     [errorCallback, jsEngine](const QGrpcStatus &status) {
-                         if (errorCallback.isCallable())
-                             errorCallback.call(QJSValueList{ jsEngine->toScriptValue(status) });
-                     });
     return sender;
 }
 
@@ -113,20 +124,22 @@ Sender *makeBidirStreamConnections(QJSEngine *jsEngine,
     QQmlEngine::setObjectOwnership(sender, QQmlEngine::JavaScriptOwnership);
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(stream.get(), &QGrpcBidirStream::finished, jsEngine,
-                                         [finishCallback, finishConnection] {
-                                             if (finishCallback.isCallable())
-                                                 finishCallback.call();
+                                         [finishCallback, errorCallback, jsEngine,
+                                          finishConnection](const QGrpcStatus &status) {
+                                             if (status.code() == QGrpcStatus::StatusCode::Ok) {
+                                                 if (finishCallback.isCallable())
+                                                     finishCallback.call();
+                                             } else {
+                                                 if (errorCallback.isCallable())
+                                                     errorCallback.call(QJSValueList{
+                                                         jsEngine->toScriptValue(status) });
+                                             }
                                              QObject::disconnect(*finishConnection);
                                          });
     QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, jsEngine,
                      [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback] {
                          readReturnValue<Ret, QGrpcBidirStream>(jsEngine, streamPtr,
                                                                 messageCallback, errorCallback);
-                     });
-    QObject::connect(stream.get(), &QGrpcBidirStream::errorOccurred, jsEngine,
-                     [errorCallback, jsEngine](const QGrpcStatus &status) {
-                         if (errorCallback.isCallable())
-                             errorCallback.call(QJSValueList{ jsEngine->toScriptValue(status) });
                      });
     return sender;
 }

@@ -30,14 +30,15 @@ void VehicleThread::run()
 
     Empty fuelLvlRequest;
     std::shared_ptr<QGrpcCallReply> replyFuel = m_client->getFuelLevel(fuelLvlRequest);
-    connect(replyFuel.get(), &QGrpcCallReply::errorOccurred, [this] {
-        emit connectionError(true);
-        emit fuelLevelChanged(0);
-    });
 
-    connect(replyFuel.get(), &QGrpcCallReply::finished, [replyFuel, this] {
-        if (const auto fuelLvl = replyFuel->read<FuelLevelMsg>())
-            emit fuelLevelChanged(fuelLvl->fuelLevel());
+    connect(replyFuel.get(), &QGrpcCallReply::finished, [replyFuel, this] (const QGrpcStatus &status) {
+        if (status.code() == QGrpcStatus::StatusCode::Ok) {
+            if (const auto fuelLvl = replyFuel->read<FuelLevelMsg>())
+                emit fuelLevelChanged(fuelLvl->fuelLevel());
+        } else {
+            emit connectionError(true);
+            emit fuelLevelChanged(0);
+        }
     });
 
     Empty speedRequest;
@@ -47,16 +48,15 @@ void VehicleThread::run()
             emit speedChanged(speedResponse->speed());
     });
 
-    connect(m_streamSpeed.get(), &QGrpcServerStream::errorOccurred, this,
-            [this](const QGrpcStatus &status) {
-                emit connectionError(true);
-                emit speedChanged(0);
-                emit fuelLevelChanged(0);
-                qWarning() << "Stream error(" << status.code() << "):" << status.message();
-            });
-
     connect(m_streamSpeed.get(), &QGrpcServerStream::finished, this,
-            [this] { emit speedChanged(0); });
+            [this](const QGrpcStatus &status) {
+                emit speedChanged(0);
+                if (status.code() != QGrpcStatus::StatusCode::Ok) {
+                    emit connectionError(true);
+                    emit fuelLevelChanged(0);
+                    qWarning() << "Stream error(" << status.code() << "):" << status.message();
+                }
+            });
 
     Empty gearRequest;
     m_streamGear = m_client->getGearStream(gearRequest);
@@ -64,9 +64,6 @@ void VehicleThread::run()
         if (const auto gearResponse = m_streamGear->read<GearMsg>())
             emit rpmChanged(gearResponse->rpm());
     });
-
-    connect(m_streamGear.get(), &QGrpcServerStream::errorOccurred, this,
-            [this] { emit rpmChanged(0); });
 
     connect(m_streamGear.get(), &QGrpcServerStream::finished, this, [this] { emit rpmChanged(0); });
 
