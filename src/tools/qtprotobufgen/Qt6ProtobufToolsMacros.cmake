@@ -270,7 +270,13 @@ function(_qt_internal_protoc_generate_cpp_exports out_generated_file out_generat
     endif()
 
     if(NOT export_macro)
-        set(export_macro "${target_upper}")
+        string(MAKE_C_IDENTIFIER "${target_upper}" target_sanitized)
+        set(export_macro "${target_sanitized}")
+    endif()
+
+    string(MAKE_C_IDENTIFIER "${export_macro}" export_macro_sanitized)
+    if(NOT "${export_macro}" STREQUAL "${export_macro_sanitized}")
+        message(FATAL_ERROR "EXPORT_MACRO should be a valid C identifier.")
     endif()
 
     _qt_internal_protoc_get_export_macro_filename(export_macro_filename ${target})

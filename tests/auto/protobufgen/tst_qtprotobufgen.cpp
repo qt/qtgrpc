@@ -147,6 +147,8 @@ private slots:
     void cmdLineGeneratedFile();
     void cmdLineGeneratedNoOptions_data();
     void cmdLineGeneratedNoOptions();
+    void cmdLineInvalidExportMacro_data();
+    void cmdLineInvalidExportMacro();
 
     void cleanupTestCase();
 
@@ -599,6 +601,41 @@ void tst_qtprotobufgen::cmdLineGeneratedNoOptions()
     }
     // Ensure we do see a failure, even in the unlikely case of a hash collision:
     QVERIFY(generatedData == expectedData);
+}
+
+void tst_qtprotobufgen::cmdLineInvalidExportMacro_data()
+{
+    QTest::addColumn<QString>("exportMacro");
+    QTest::addColumn<int>("result");
+
+    QTest::addRow("contains_dash") << "TST_QTPROTOBUFGEN-FAIL" << 1;
+    QTest::addRow("contains_number_first") << "1Not_ALLoWeD" << 1;
+    QTest::addRow("valid") << "MACRO_NAME_OK" << 0;
+}
+
+void tst_qtprotobufgen::cmdLineInvalidExportMacro()
+{
+    QFETCH(QString, exportMacro);
+    QFETCH(int, result);
+
+    QString folder = "/folder/";
+    QString fileName = "basicmessages";
+    QString generatingOption = "GENERATE_PACKAGE_SUBFOLDERS";
+    QString exportMacroCmd = "EXPORT_MACRO=" + exportMacro;
+
+    QProcess process;
+    process.setWorkingDirectory(m_commandLineGenerated);
+    process.startCommand(protocolBufferCompiler + QString(" ") + protocGenQtprotobufKey
+                         + m_protobufgen + optKey + generatingOption + ";" + exportMacroCmd
+                         + outputKey + m_commandLineGenerated + folder + includeKey + m_protoFiles
+                         + " " + fileName + ".proto" + allow_proto3_optional);
+    QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
+    if (!process.waitForFinished()) {
+        process.kill();
+        QFAIL(msgProcessTimeout(process).constData());
+    }
+    QVERIFY2(process.exitStatus() == QProcess::NormalExit, msgProcessCrashed(process).constData());
+    QVERIFY2(process.exitCode() == result, msgProcessFailed(process).constData());
 }
 
 void tst_qtprotobufgen::cleanupTestCase()
