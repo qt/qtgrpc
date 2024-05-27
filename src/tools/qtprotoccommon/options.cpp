@@ -5,6 +5,8 @@
 #include "options.h"
 
 #include "utils.h"
+#include <regex>
+#include <stdexcept>
 
 using namespace ::qtprotoccommon;
 static const char QmlPluginOption[] = "QML";
@@ -69,6 +71,11 @@ void Options::setFromString(const std::string &options, GeneratorType type)
         } else if (option.find(ExportMacroGenerationOption) == 0) {
             auto export_macro_values = utils::split(extractCompositeOptionValue(option), ":");
             if (!export_macro_values.empty()) {
+                static const std::regex valid_c_identifier("[a-zA-Z_][0-9a-zA-Z_]*");
+                if (!std::regex_match(export_macro_values[0], valid_c_identifier)) {
+                    throw std::invalid_argument("EXPORT_MACRO '" + export_macro_values[0]
+                                                + "' is not a valid C identifier.");
+                }
                 instance.m_exportMacro = export_macro_values[0];
                 QT_PROTOBUF_DEBUG("set m_exportMacro: " << instance.m_exportMacro);
                 if (export_macro_values.size() > 1) {
