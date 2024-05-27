@@ -159,8 +159,8 @@ pragma ValueTypeBehavior: Addressable
                         },
                         {
                             tag: "ComplexMessage testComplexField exact invalid type",
-                            field: complexMsgNoInit.testComplexField as simpleSIntMessage,
-                            answer: null
+                            field: complexMsgNoInit.testComplexField as simpleSIntMessage == undefined,
+                            answer: true
                         },
                         {
                             tag: "ComplexMessage testComplexField.testFieldString type",
