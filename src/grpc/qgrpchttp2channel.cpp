@@ -789,8 +789,10 @@ void QGrpcHttp2ChannelPrivate::sendInitialRequest(Http2Handler *handler)
     const auto streamAttempt = m_connection->createStream();
     if (!streamAttempt.ok()) {
         channelOperationAsyncError(channelOpPtr,
-                                   QGrpcStatus{ QGrpcStatus::Unavailable,
-                                                tr("Unable to create an HTTP/2 stream") });
+                                   QGrpcStatus{
+                                       QGrpcStatus::Unavailable,
+                                       tr("Unable to create an HTTP/2 stream (%1)")
+                                           .arg(QDebug::toString(streamAttempt.error())) });
         return;
     }
     handler->attachStream(streamAttempt.unwrap());
