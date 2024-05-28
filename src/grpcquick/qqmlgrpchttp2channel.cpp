@@ -39,3 +39,5 @@ void QQmlGrpcHttp2Channel::updateChannel()
 }
 
 QT_END_NAMESPACE
+
+#include "moc_qqmlgrpchttp2channel_p.cpp"

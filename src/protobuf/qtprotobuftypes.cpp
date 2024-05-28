@@ -251,3 +251,5 @@ QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
 */
 
 QT_END_NAMESPACE
+
+#include "moc_qtprotobuftypes.cpp"

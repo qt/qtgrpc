@@ -29,3 +29,5 @@ void QQmlGrpcMetadata::setData(const QVariantMap &data)
 }
 
 QT_END_NAMESPACE
+
+#include "moc_qqmlgrpcmetadata_p.cpp"

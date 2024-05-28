@@ -118,3 +118,5 @@ void QQmlGrpcChannelOptions::setSslConfiguration(const QQmlSslConfiguration &con
 #endif // QT_CONFIG(ssl)
 
 QT_END_NAMESPACE
+
+#include "moc_qqmlgrpcchanneloptions_p.cpp"

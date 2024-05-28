@@ -51,3 +51,5 @@ void QQmlGrpcCallOptions::setMetadata(QQmlGrpcMetadata *value)
 }
 
 QT_END_NAMESPACE
+
+#include "moc_qqmlgrpccalloptions_p.cpp"
