@@ -42,16 +42,6 @@ protected:
     {
     }
     bool deserializeObject(QProtobufMessage *) const override { return true; }
-
-    void serializeEnumList(const QList<QtProtobuf::int64> &, const QMetaEnum &,
-                           const QtProtobufPrivate::QProtobufFieldInfo &) const override
-    {
-    }
-
-    bool deserializeEnumList(QList<QtProtobuf::int64> &, const QMetaEnum &) const override
-    {
-        return true;
-    }
 };
 } // namespace
 

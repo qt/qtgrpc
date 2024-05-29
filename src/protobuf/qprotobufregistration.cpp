@@ -221,14 +221,6 @@ void qRegisterProtobufTypes()
 */
 
 /*!
-    \fn template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0> void QtProtobufPrivate::serializeEnumList(
-        const QAbstractProtobufSerializer *serializer, const QVariant &value,
-        const QProtobufFieldInfo &fieldInfo)
-    \internal
-    \brief Default serializer template for enum list types.
-*/
-
-/*!
     \fn template <typename V, typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0> void QtProtobufPrivate::deserializeList(
         const QAbstractProtobufSerializer *serializer, QVariant &previous)
     \internal
@@ -249,13 +241,6 @@ void qRegisterProtobufTypes()
     \internal
     \brief Default deserializer template for map of type key K, value V.
         Specialization for V that inherits from QProtobufMessage.
-*/
-
-/*!
-    \fn template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0> void QtProtobufPrivate::deserializeEnumList(
-        const QAbstractProtobufSerializer *serializer, QVariant &previous)
-    \internal
-    \brief Default deserializer template for enumList type T.
 */
 
 QT_END_NAMESPACE

@@ -75,32 +75,6 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QAbstractProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
-        const QMetaEnum &metaEnum,
-        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
-
-    This function serializes a list, \a value, for enum list associated with property \a fieldInfo.
-    \a metaEnum helps to encode the enum value.
-
-    You should not call this function directly.
-
-    \sa QAbstractProtobufSerializer::deserializeEnumList()
-*/
-
-/*!
-    \fn bool QAbstractProtobufSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value,
-        const QMetaEnum &metaEnum) const
-
-    This function deserializes a list of enum \a value from a wire. \a metaEnum helps to decode
-    the enum value.
-    Returns \c true if deserialization was successful, otherwise \c false.
-
-    You should not call this function directly.
-
-    \sa QAbstractProtobufSerializer::serializeEnumList()
-*/
-
-/*!
     Destroys this QAbstractProtobufSerializer.
 */
 QAbstractProtobufSerializer::~QAbstractProtobufSerializer() = default;

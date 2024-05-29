@@ -293,20 +293,31 @@ public:
             return;
         }
 
-        if (propertyValue.metaType().flags() & QMetaType::IsEnumeration) {
-            const auto metaEnum = getMetaEnum(metaType);
-            Q_ASSERT(metaEnum.isValid());
+        const auto fieldFlags = fieldInfo.getFieldFlags();
+        if (fieldFlags & QtProtobufPrivate::FieldFlag::Enum) {
             QJsonObject activeObject = activeValue.toObject();
-            activeObject.insert(fieldInfo.getJsonName().toString(),
-                                QString::fromUtf8(metaEnum.key(propertyValue.value<int32_t>())));
+            if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated) {
+                const auto stringList = propertyValue.value<QStringList>();
+                if (!stringList.isEmpty()) {
+                    activeObject.insert(fieldInfo.getJsonName().toString(),
+                                        QProtobufJsonSerializerPrivate::serializeList<
+                                            QStringList>(stringList));
+                }
+            } else {
+                const auto metaEnum = getMetaEnum(metaType);
+                Q_ASSERT(metaEnum.isValid());
+                activeObject
+                    .insert(fieldInfo.getJsonName().toString(),
+                            QString::fromUtf8(metaEnum.key(propertyValue.value<int32_t>())));
+            }
             activeValue = activeObject;
             return;
         }
 
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (handler.serializer) {
-            if (fieldInfo.getFieldFlags() & QtProtobufPrivate::FieldFlag::Repeated
-                && !(fieldInfo.getFieldFlags() & QtProtobufPrivate::FieldFlag::Enum)) {
+            if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated
+                && !(fieldFlags & QtProtobufPrivate::FieldFlag::Enum)) {
                 const auto fieldName = fieldInfo.getJsonName().toString();
                 QJsonObject activeObject = activeValue.toObject();
                 activeValue = activeObject.value(fieldName).toArray();
@@ -618,14 +629,22 @@ public:
                 QVariant newPropertyValue = message->property(iter->second, true);
                 bool ok = false;
 
-                if (iter->second.getFieldFlags() & QtProtobufPrivate::FieldFlag::Enum
-                    && !(iter->second.getFieldFlags() & QtProtobufPrivate::FieldFlag::Repeated)) {
-                    const auto metaEnum = getMetaEnum(newPropertyValue.metaType());
-                    Q_ASSERT(metaEnum.isValid());
-                    newPropertyValue.setValue(deserializeEnum(activeValue, metaEnum, ok));
+                const auto fieldFlags = iter->second.getFieldFlags();
+                if (fieldFlags & QtProtobufPrivate::FieldFlag::Enum) {
+                    if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated) {
+                        QMetaType originalMetatype = newPropertyValue.metaType();
+                        newPropertyValue.setValue(deserializeList<QStringList, QString>(activeValue,
+                                                                                        ok));
+                        if (ok)
+                            ok = newPropertyValue.convert(originalMetatype);
+                    } else {
+                        const auto metaEnum = getMetaEnum(newPropertyValue.metaType());
+                        Q_ASSERT(metaEnum.isValid());
+                        newPropertyValue.setValue(deserializeEnum(activeValue, metaEnum, ok));
+                    }
                     if (!ok)
                         setInvalidFormatError();
-                } else if (iter->second.getFieldFlags() & QtProtobufPrivate::FieldFlag::Map) {
+                } else if (fieldFlags & QtProtobufPrivate::FieldFlag::Map) {
                     auto activeValueObj = activeValue.toObject();
                     for (auto it = activeValueObj.begin(); it != activeValueObj.end(); ++it) {
                         auto mapObj = QJsonObject{};
@@ -773,39 +792,6 @@ void QProtobufJsonSerializer::serializeObject(const QProtobufMessage *message,
 bool QProtobufJsonSerializer::deserializeObject(QProtobufMessage *message) const
 {
     return d_ptr->deserializeObject(message);
-}
-
-void QProtobufJsonSerializer::
-    serializeEnumList(const QList<QtProtobuf::int64> &values, const QMetaEnum &metaEnum,
-                      const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
-{
-    if (values.isEmpty())
-        return;
-
-    QJsonArray arr;
-    for (const auto value : values)
-        arr.append(QString::fromUtf8(metaEnum.key(value)));
-    QJsonObject activeObject = d_ptr->activeValue.toObject();
-    activeObject.insert(fieldInfo.getJsonName().toString(), arr);
-    d_ptr->activeValue = activeObject;
-}
-
-bool QProtobufJsonSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value,
-                                                  const QMetaEnum &metaEnum) const
-{
-    QJsonArray arr = d_ptr->activeValue.toArray();
-    bool ok = false;
-    for (const auto &val : arr) {
-        ok = false;
-        QtProtobuf::int64 raw = d_ptr->deserializeEnum(val, metaEnum, ok);
-        if (!ok) {
-            d_ptr->setInvalidFormatError();
-            break;
-        }
-        value.append(raw);
-    }
-    d_ptr->activeValue = {};
-    return ok;
 }
 
 QT_END_NAMESPACE

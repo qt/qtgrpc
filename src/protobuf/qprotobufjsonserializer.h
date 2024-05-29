@@ -34,13 +34,6 @@ private:
         const override;
     bool deserializeObject(QProtobufMessage *message) const override;
 
-    void serializeEnumList(const QList<QtProtobuf::int64> &value, const QMetaEnum &metaEnum,
-                           const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
-        const override;
-
-    bool deserializeEnumList(QList<QtProtobuf::int64> &value,
-                             const QMetaEnum &metaEnum) const override;
-
 private:
     std::unique_ptr<QProtobufJsonSerializerPrivate> d_ptr;
 };

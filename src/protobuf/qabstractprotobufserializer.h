@@ -42,12 +42,6 @@ public:
                     const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const = 0;
     virtual bool deserializeObject(QProtobufMessage *message) const = 0;
 
-    virtual void
-    serializeEnumList(const QList<QtProtobuf::int64> &value, const QMetaEnum &metaEnum,
-                      const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const = 0;
-
-    virtual bool deserializeEnumList(QList<QtProtobuf::int64> &value,
-                                     const QMetaEnum &metaEnum) const = 0;
 protected:
     virtual QByteArray serializeMessage(const QProtobufMessage *message) const = 0;
     virtual bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const = 0;
