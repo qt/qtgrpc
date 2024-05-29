@@ -664,7 +664,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
                                                     "Message received has invalid wiretype for the "
                                                     "field number %1. Expected %2, received %3")
                                 .arg(fieldNumber)
-                                .arg(static_cast<int>(basicHandler->wireType))
+                                .arg(basicHandler ? static_cast<int>(basicHandler->wireType) : -1)
                                 .arg(static_cast<int>(wireType)));
                 return false;
             }
