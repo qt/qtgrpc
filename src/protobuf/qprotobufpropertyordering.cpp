@@ -85,6 +85,8 @@ QUtf8StringView QProtobufPropertyOrdering::getMessageFullName() const
 QUtf8StringView QProtobufPropertyOrdering::getJsonName(int index) const
 {
     Q_ASSERT(data);
+    if (Q_UNLIKELY(index < 0 || index >= fieldCount()))
+        return {}; // Invalid index (out of bounds)
     const uint stringOffset = uint_dataForIndex(index, jsonNameOffsetsOffset);
     const char *name = char_data() + stringOffset;
     // This is fine because we store an extra offset for end-of-string
@@ -96,6 +98,8 @@ QUtf8StringView QProtobufPropertyOrdering::getJsonName(int index) const
 int QProtobufPropertyOrdering::getFieldNumber(int index) const
 {
     Q_ASSERT(data);
+    if (Q_UNLIKELY(index < 0 || index >= fieldCount()))
+        return -1; // Invalid index (out of bounds)
     uint fieldNumber = uint_dataForIndex(index, data->fieldNumberOffset);
     if (Q_UNLIKELY(fieldNumber > uint(std::numeric_limits<int>::max())))
         return -1;
@@ -105,6 +109,8 @@ int QProtobufPropertyOrdering::getFieldNumber(int index) const
 int QProtobufPropertyOrdering::getPropertyIndex(int index) const
 {
     Q_ASSERT(data);
+    if (Q_UNLIKELY(index < 0 || index >= fieldCount()))
+        return -1; // Invalid index (out of bounds)
     uint propertyIndex = uint_dataForIndex(index, data->propertyIndexOffset);
     if (Q_UNLIKELY(propertyIndex > uint(std::numeric_limits<int>::max())))
         return -1;
@@ -126,6 +132,8 @@ int QProtobufPropertyOrdering::indexOfFieldNumber(int fieldNumber) const
 FieldFlags QProtobufPropertyOrdering::getFieldFlags(int index) const
 {
     Q_ASSERT(data);
+    if (Q_UNLIKELY(index < 0 || index >= fieldCount()))
+        return {}; // Invalid index (out of bounds)
     return FieldFlags { int(uint_dataForIndex(index, data->flagsOffset)) };
 }
 
