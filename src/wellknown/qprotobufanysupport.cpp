@@ -220,7 +220,7 @@ bool Any::unpackImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *
         != 0) {
         return false;
     }
-    return serializer->deserializeMessage(message, value());
+    return message->deserialize(serializer, value());
 }
 
 std::optional<Any> Any::unpackAnyImpl(QAbstractProtobufSerializer *serializer) const
@@ -253,7 +253,7 @@ Any Any::fromMessageImpl(QAbstractProtobufSerializer *serializer, const QProtobu
                          QAnyStringView typeUrlPrefix)
 {
     Any any;
-    any.setValue(serializer->serializeMessage(message));
+    any.setValue(message->serialize(serializer));
     any.setTypeUrl(typeUrlPrefix.toString() + u'/'
                    + message->propertyOrdering()->getMessageFullName().toString());
     return { any };

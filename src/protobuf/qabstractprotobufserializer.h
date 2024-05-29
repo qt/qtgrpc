@@ -17,10 +17,6 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace QtProtobuf {
-class Any;
-}
-
 class Q_PROTOBUF_EXPORT QAbstractProtobufSerializer
 {
 public:
@@ -59,8 +55,6 @@ public:
 protected:
     virtual QByteArray serializeMessage(const QProtobufMessage *message) const = 0;
     virtual bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const = 0;
-
-    friend class QtProtobuf::Any;
 };
 
 QT_END_NAMESPACE
