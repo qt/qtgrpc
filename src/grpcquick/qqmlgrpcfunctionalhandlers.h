@@ -44,7 +44,10 @@ void makeCallConnections(QJSEngine *jsEngine, const std::shared_ptr<QGrpcCallRep
 {
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(reply.get(), &QGrpcCallReply::finished, jsEngine,
-                                         [=](const QGrpcStatus &status) {
+                                         [jsEngine, finishCallback, errorCallback, finishConnection,
+                                          reply](const QGrpcStatus &status) {
+                                             // We take 'reply' by copy so that its lifetime
+                                             // is extended until this lambda is destroyed.
                                              if (status.code() == QGrpcStatus::StatusCode::Ok) {
                                                  readReturnValue<Ret,
                                                                  QGrpcCallReply>(jsEngine,
@@ -68,8 +71,10 @@ void makeServerStreamConnections(QJSEngine *jsEngine,
 {
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(stream.get(), &QGrpcServerStream::finished, jsEngine,
-                                         [finishCallback, errorCallback, jsEngine,
-                                          finishConnection](const QGrpcStatus &status) {
+                                         [finishCallback, errorCallback, jsEngine, finishConnection,
+                                          stream](const QGrpcStatus &status) {
+                                             // We take 'stream' by copy so that its lifetime
+                                             // is extended until this lambda is destroyed.
                                              if (status.code() == QGrpcStatus::StatusCode::Ok) {
                                                  if (finishCallback.isCallable())
                                                      finishCallback.call();
@@ -96,13 +101,14 @@ Sender *makeClientStreamConnections(QJSEngine *jsEngine,
     QQmlEngine::setObjectOwnership(sender, QQmlEngine::JavaScriptOwnership);
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(stream.get(), &QGrpcClientStream::finished, jsEngine,
-                                         [streamPtr = stream.get(), finishCallback, jsEngine,
-                                          finishConnection,
+                                         [stream, finishCallback, jsEngine, finishConnection,
                                           errorCallback](const QGrpcStatus &status) {
+                                             // We take 'stream' by copy so that its lifetime
+                                             // is extended until this lambda is destroyed.
                                              if (status.code() == QGrpcStatus::StatusCode::Ok) {
                                                  readReturnValue<Ret,
                                                                  QGrpcClientStream>(jsEngine,
-                                                                                    streamPtr,
+                                                                                    stream.get(),
                                                                                     finishCallback,
                                                                                     errorCallback);
                                              } else {
@@ -110,6 +116,7 @@ Sender *makeClientStreamConnections(QJSEngine *jsEngine,
                                                      errorCallback.call(QJSValueList{
                                                          jsEngine->toScriptValue(status) });
                                              }
+                                             QObject::disconnect(*finishConnection);
                                          });
     return sender;
 }
@@ -124,8 +131,10 @@ Sender *makeBidirStreamConnections(QJSEngine *jsEngine,
     QQmlEngine::setObjectOwnership(sender, QQmlEngine::JavaScriptOwnership);
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(stream.get(), &QGrpcBidirStream::finished, jsEngine,
-                                         [finishCallback, errorCallback, jsEngine,
-                                          finishConnection](const QGrpcStatus &status) {
+                                         [finishCallback, errorCallback, jsEngine, finishConnection,
+                                          stream](const QGrpcStatus &status) {
+                                             // We take 'stream' by copy so that its lifetime
+                                             // is extended until this lambda is destroyed.
                                              if (status.code() == QGrpcStatus::StatusCode::Ok) {
                                                  if (finishCallback.isCallable())
                                                      finishCallback.call();
