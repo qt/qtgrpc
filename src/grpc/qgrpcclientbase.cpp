@@ -133,8 +133,6 @@ void QGrpcClientBasePrivate::addStream(std::shared_ptr<QGrpcOperation> grpcStrea
                                             finishedConnection](const auto &status) mutable {
                                                if (status != QGrpcStatus::StatusCode::Ok)
                                                    Q_EMIT q->errorOccurred(status);
-                                               qGrpcWarning() << grpcStream->method() << "call"
-                                                              << service << "stream finished.";
                                                removeStream(std::move(grpcStream));
                                                QObject::disconnect(*finishedConnection);
                                            });
