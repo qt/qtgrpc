@@ -30,6 +30,8 @@ enum FieldFlag : uint {
     Repeated = 0x40,
     Map = 0x80,
 };
+Q_DECLARE_FLAGS(FieldFlags, FieldFlag)
+Q_DECLARE_OPERATORS_FOR_FLAGS(FieldFlags)
 
 struct QProtobufPropertyOrdering
 {
