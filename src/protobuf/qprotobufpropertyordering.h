@@ -33,6 +33,7 @@ enum FieldFlag : uint {
 Q_DECLARE_FLAGS(FieldFlags, FieldFlag)
 Q_DECLARE_OPERATORS_FOR_FLAGS(FieldFlags)
 
+class QProtobufPropertyOrderingBuilder;
 struct QProtobufPropertyOrdering
 {
     const struct Data
@@ -54,6 +55,7 @@ struct QProtobufPropertyOrdering
     int fieldCount() const { return int(data->numFields); }
 
 private:
+    friend class QProtobufPropertyOrderingBuilder;
     struct NonConstTag {};
     uint *uint_data(NonConstTag) const;
     char *char_data(NonConstTag) const;

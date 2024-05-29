@@ -14,6 +14,7 @@ qt_internal_add_module(Protobuf
         qtprotobuflogging.cpp qtprotobuflogging_p.h
         qprotobufregistration.cpp qprotobufregistration.h
         qprotobufpropertyordering.cpp qprotobufpropertyordering.h
+        qprotobufpropertyorderingbuilder_p.h
         qtprotobuftypes.cpp qtprotobuftypes.h
         qprotobufoneof.cpp qprotobufoneof.h
         qtprotobufdefs_p.h

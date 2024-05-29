@@ -19,6 +19,7 @@ QT_BEGIN_NAMESPACE
 
 constexpr int ProtobufFieldNumMin = 1;
 constexpr int ProtobufFieldNumMax = 536870911;
+constexpr int ProtobufFieldMaxCount = ProtobufFieldNumMax - ProtobufFieldNumMin + 1;
 
 QT_END_NAMESPACE
 
