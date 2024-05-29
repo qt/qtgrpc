@@ -330,8 +330,9 @@ bool QProtobufSerializerPrivate::deserializeObject(QProtobufMessage *message)
         setUnexpectedEndOfStreamError();
         return false;
     }
-    auto store = it;
-    QByteArrayView data = array.value();
+    auto prevIt = it;
+    auto restoreOnReturn = qScopeGuard([&](){ it = prevIt; });
+    QByteArrayView data = *array;
     clearError();
     it = QProtobufSelfcheckIterator::fromView(data);
     while (it.isValid() && it != data.end()) {
@@ -340,7 +341,6 @@ bool QProtobufSerializerPrivate::deserializeObject(QProtobufMessage *message)
     }
     if (!it.isValid())
         setUnexpectedEndOfStreamError();
-    it = store;
     return it.isValid();
 }
 
