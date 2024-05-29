@@ -503,6 +503,11 @@ public:
                          const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo);
     bool deserializeObject(QProtobufMessage *message);
 
+    void serializeEnumList(const QList<QtProtobuf::int64> &value,
+                           const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo);
+
+    bool deserializeEnumList(QList<QtProtobuf::int64> &value);
+
     void serializeMessage(const QProtobufMessage *message);
 
     void serializeProperty(const QVariant &propertyValue,
@@ -535,12 +540,6 @@ isOneofOrOptionalField(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
 {
     return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
         || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
-}
-
-inline bool isEnumField(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
-{
-    return fieldInfo.getFieldFlags() & QtProtobufPrivate::FieldFlag::Enum
-        && !(fieldInfo.getFieldFlags() & QtProtobufPrivate::FieldFlag::Repeated);
 }
 
 QT_END_NAMESPACE

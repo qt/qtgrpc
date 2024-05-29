@@ -105,7 +105,6 @@ Required.Proto3.JsonInput.ValueAcceptObject.JsonOutput
 Required.Proto3.JsonInput.ValueAcceptObject.ProtobufOutput
 Required.Proto3.JsonInput.ValueAcceptString.JsonOutput
 Required.Proto3.JsonInput.ValueAcceptString.ProtobufOutput
-Required.Proto3.ProtobufInput.ValidDataRepeated.ENUM.PackedInput.JsonOutput
 Required.Proto3.ProtobufInput.ValidDataRepeated.ENUM.UnpackedInput.JsonOutput
 Required.Proto3.ProtobufInput.ValidDataScalar.ENUM[3].JsonOutput
 Required.Proto3.ProtobufInput.ValidDataScalar.ENUM[4].JsonOutput

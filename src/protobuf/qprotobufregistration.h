@@ -81,19 +81,6 @@ void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant 
     }
 }
 
-template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void serializeEnumList(const QAbstractProtobufSerializer *serializer, const QVariant &value,
-                       const QProtobufFieldInfo &fieldInfo)
-{
-    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
-    static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
-    QList<QtProtobuf::int64> intList;
-    for (auto enumValue : value.value<QList<T>>()) {
-        intList.append(QtProtobuf::int64(enumValue));
-    }
-    serializer->serializeEnumList(intList, metaEnum, fieldInfo);
-}
-
 template <typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
 void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &previous)
@@ -133,18 +120,52 @@ void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &pre
     }
 }
 
-template <typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
-void deserializeEnumList(const QAbstractProtobufSerializer *serializer, QVariant &previous)
+template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
+static std::optional<QList<T>> intToEnumList(QList<QtProtobuf::int64> v)
 {
-    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
-    static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
-    QList<QtProtobuf::int64> intList;
-    if (!serializer->deserializeEnumList(intList, metaEnum))
-        return;
-    QList<T> enumList = previous.value<QList<T>>();
-    for (auto intValue : intList)
+    QList<T> enumList;
+    for (const auto &intValue : v)
         enumList.append(static_cast<T>(intValue._t));
-    previous = QVariant::fromValue<QList<T>>(enumList);
+
+    return enumList;
+}
+
+template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
+static QList<QtProtobuf::int64> enumToIntList(QList<T> v)
+{
+    QList<QtProtobuf::int64> intList;
+    for (const auto enumValue : v)
+        intList.append(QtProtobuf::int64(enumValue));
+
+    return intList;
+}
+
+template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
+static std::optional<QList<T>> stringToEnumList(QStringList v)
+{
+    static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
+    QList<T> enumList;
+    bool ok = false;
+    for (const auto &stringValue : v) {
+        T enumV = T(metaEnum.keyToValue(stringValue.toUtf8().data(), &ok));
+        if (!ok)
+            return std::nullopt;
+
+        enumList.append(enumV);
+    }
+
+    return enumList;
+}
+
+template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
+static QStringList enumToStringList(QList<T> v)
+{
+    static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
+    QStringList stringList;
+    for (const auto enumValue : v)
+        stringList.append(QString::fromUtf8(metaEnum.valueToKey(enumValue)));
+
+    return stringList;
 }
 } // namespace QtProtobufPrivate
 
@@ -172,12 +193,15 @@ inline void qRegisterProtobufMapType()
 template<typename T>
 inline void qRegisterProtobufEnumType();
 #else // !Q_QDOC
-template<typename T, typename std::enable_if_t<std::is_enum<T>::value, int> = 0>
+template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
 inline void qRegisterProtobufEnumType()
 {
-    QtProtobufPrivate::registerHandler(
-        QMetaType::fromType<QList<T>>(),
-        { QtProtobufPrivate::serializeEnumList<T>, QtProtobufPrivate::deserializeEnumList<T> });
+    QMetaType::registerConverter<QList<T>,
+                                 QList<QtProtobuf::int64>>(QtProtobufPrivate::enumToIntList<T>);
+    QMetaType::registerConverter<QList<QtProtobuf::int64>,
+                                 QList<T>>(QtProtobufPrivate::intToEnumList<T>);
+    QMetaType::registerConverter<QList<T>, QStringList>(QtProtobufPrivate::enumToStringList<T>);
+    QMetaType::registerConverter<QStringList, QList<T>>(QtProtobufPrivate::stringToEnumList<T>);
 }
 #endif // Q_QDOC
 

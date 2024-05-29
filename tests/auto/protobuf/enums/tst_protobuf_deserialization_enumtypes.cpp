@@ -38,12 +38,15 @@ void QtProtobufEnumTypesDeserializationTest::repeatedEnumMessageTest()
     QVERIFY(msg.localEnumList().isEmpty());
 
     msg.deserialize(m_serializer.get(), QByteArray::fromHex("0a06000102010203"));
-    QVERIFY((msg.localEnumList() == RepeatedEnumMessage::LocalEnumRepeated {RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE0,
-                RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE1,
-                RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE2,
-                RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE1,
-                RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE2,
-                RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE3}));
+    const auto expected = RepeatedEnumMessage::LocalEnumRepeated{
+        RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE0,
+        RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE1,
+        RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE2,
+        RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE1,
+        RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE2,
+        RepeatedEnumMessage::LocalEnum::LOCAL_ENUM_VALUE3
+    };
+    QCOMPARE_EQ(msg.localEnumList(), expected);
 }
 
 QTEST_MAIN(QtProtobufEnumTypesDeserializationTest)

@@ -312,9 +312,8 @@ bool QProtobufSerializer::deserializeObject(QProtobufMessage *message) const
     return d_ptr->deserializeObject(message);
 }
 
-void QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &value,
-                                            const QMetaEnum &,
-                                            const QProtobufFieldInfo &fieldInfo) const
+void QProtobufSerializerPrivate::serializeEnumList(const QList<QtProtobuf::int64> &value,
+                                                   const QProtobufFieldInfo &fieldInfo)
 {
     if (value.isEmpty())
         return;
@@ -323,21 +322,19 @@ void QProtobufSerializer::serializeEnumList(const QList<QtProtobuf::int64> &valu
                                                            QtProtobuf::WireTypes::LengthDelimited);
 
     if (fieldInfo.getFieldFlags().testFlag(QtProtobufPrivate::NonPacked))
-        d_ptr->result
+        result
             .append(QProtobufSerializerPrivate::serializeNonPackedList<QtProtobuf::int64>(value,
                                                                                           header));
     else
-        d_ptr->result
-            .append(header
-                    + QProtobufSerializerPrivate::serializeListType<QtProtobuf::int64>(value));
+        result.append(header
+                      + QProtobufSerializerPrivate::serializeListType<QtProtobuf::int64>(value));
 }
 
-bool QProtobufSerializer::deserializeEnumList(QList<QtProtobuf::int64> &value,
-                                              const QMetaEnum &) const
+bool QProtobufSerializerPrivate::deserializeEnumList(QList<QtProtobuf::int64> &value)
 {
     QVariant variantValue;
-    if (!QProtobufSerializerPrivate::deserializeList<QtProtobuf::int64>(d_ptr->it, variantValue)) {
-        d_ptr->setUnexpectedEndOfStreamError();
+    if (!QProtobufSerializerPrivate::deserializeList<QtProtobuf::int64>(it, variantValue)) {
+        setUnexpectedEndOfStreamError();
         return false;
     }
     value = variantValue.value<QList<QtProtobuf::int64>>();
@@ -470,19 +467,26 @@ void QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue
         return;
     }
 
-    if (isEnumField(fieldInfo)) {
-        auto value = propertyValue.value<int64_t>();
-        if (value == 0 && !isOneofOrOptionalField(fieldInfo))
-            return;
-        result.append(QProtobufSerializerPrivate::encodeHeader(fieldInfo.getFieldNumber(),
-                                                               QtProtobuf::WireTypes::Varint));
-        result.append(QProtobufSerializerPrivate::serializeBasic<
-                      QtProtobuf::int64>(propertyValue.value<int64_t>()));
+    const auto fieldFlags = fieldInfo.getFieldFlags();
+    if (fieldFlags.testFlag(QtProtobufPrivate::FieldFlag::Enum)) {
+        if (fieldFlags.testFlag(QtProtobufPrivate::FieldFlag::Repeated)) {
+            auto value = propertyValue.value<QList<QtProtobuf::int64>>();
+            serializeEnumList(value, fieldInfo);
+        } else {
+            auto value = propertyValue.value<int64_t>();
+            if (value == 0 && !isOneofOrOptionalField(fieldInfo))
+                return;
+            result.append(QProtobufSerializerPrivate::encodeHeader(fieldInfo.getFieldNumber(),
+                                                                   QtProtobuf::WireTypes::Varint));
+            result.append(QProtobufSerializerPrivate::serializeBasic<
+                          QtProtobuf::int64>(propertyValue.value<int64_t>()));
+        }
         return;
     }
 
-    auto basicHandler = findIntegratedTypeHandler(
-            metaType, fieldInfo.getFieldFlags().testFlag(QtProtobufPrivate::NonPacked));
+    auto basicHandler = findIntegratedTypeHandler(metaType,
+                                                  fieldFlags
+                                                      .testFlag(QtProtobufPrivate::NonPacked));
     if (basicHandler) {
         bool serializeUninitialized = isOneofOrOptionalField(fieldInfo);
         if (!basicHandler->isPresent(propertyValue) && !serializeUninitialized) {
@@ -560,13 +564,22 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
         return false;
     }
 
-    if (isEnumField(fieldInfo)) {
-        if (deserializeBasic<QtProtobuf::int64>(it, newPropertyValue))
-            return message->setProperty(fieldInfo, std::move(newPropertyValue));
-        return false;
+    const auto fieldFlags = fieldInfo.getFieldFlags();
+    if (fieldFlags.testFlag(QtProtobufPrivate::FieldFlag::Enum)) {
+        if (fieldFlags.testFlag(QtProtobufPrivate::FieldFlag::Repeated)) {
+            auto intList = newPropertyValue.value<QList<QtProtobuf::int64>>();
+            if (deserializeEnumList(intList)) {
+                newPropertyValue.setValue(intList);
+                return message->setProperty(fieldInfo, std::move(newPropertyValue));
+            }
+            return false;
+        } else {
+            if (deserializeBasic<QtProtobuf::int64>(it, newPropertyValue))
+                return message->setProperty(fieldInfo, std::move(newPropertyValue));
+            return false;
+        }
     }
 
-    FieldFlags fieldFlags = fieldInfo.getFieldFlags();
     bool isNonPacked = fieldFlags.testFlag(QtProtobufPrivate::NonPacked);
     auto basicHandler = findIntegratedTypeHandler(metaType, isNonPacked);
 
