@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
 #include "qprotobufpropertyordering.h"
+#include "qprotobufpropertyorderingbuilder_p.h"
 #include "qtprotobuflogging_p.h"
+#include "qtprotobufdefs_p.h"
 #include "qprotobufregistration.h"
 
 
@@ -212,6 +214,117 @@ QProtobufMessagePointer constructMessageByName(const QString &messageType)
     return pointer;
 }
 
+class QProtobufPropertyOrderingBuilderPrivate
+{
+public:
+    struct FieldDefinition
+    {
+        QByteArray jsonName;
+        uint fieldNumber;
+        uint propertyIndex;
+        FieldFlags flags;
+    };
+
+    std::vector<FieldDefinition> fields;
+    QByteArray packageName;
+};
+
+QProtobufPropertyOrderingBuilder::QProtobufPropertyOrderingBuilder(QByteArray packageName)
+    : d_ptr(new QProtobufPropertyOrderingBuilderPrivate())
+{
+
+    d_ptr->packageName = std::move(packageName);
 }
+
+QProtobufPropertyOrderingBuilder::~QProtobufPropertyOrderingBuilder()
+{
+    delete d_ptr;
+}
+
+void QProtobufPropertyOrderingBuilder::addV0Field(QByteArray jsonName, uint fieldNumber,
+                                                  uint propertyIndex, FieldFlags flags)
+{
+    Q_D(QProtobufPropertyOrderingBuilder);
+    Q_ASSERT_X(fieldNumber <= ProtobufFieldNumMax && fieldNumber >= ProtobufFieldNumMin,
+               "QProtobufPropertyOrderingBuilder::addV0Field",
+               "Field number is out of the valid field number range.");
+    Q_ASSERT(d->fields.size() < ProtobufFieldMaxCount);
+    d->fields.push_back({ std::move(jsonName), fieldNumber, propertyIndex, flags });
+}
+
+/*!
+    \internal
+    Builds the QProtobufPropertyOrdering object from the builder data.
+
+    The Data struct must be manually destructed (var->~Data()) and then
+    free()d by the caller.
+*/
+QProtobufPropertyOrdering::Data *QProtobufPropertyOrderingBuilder::build() const
+{
+    Q_D(const QProtobufPropertyOrderingBuilder);
+
+    if (d->fields.size() > ProtobufFieldMaxCount)
+        return nullptr;
+
+    qsizetype charSpaceNeeded = NullTerminator + d->packageName.size() + NullTerminator;
+    for (const auto &field : d->fields)
+        charSpaceNeeded += field.jsonName.size() + NullTerminator;
+
+    const size_t uintSpaceNeeded = sizeof(QProtobufPropertyOrdering::Data)
+        + d->fields.size() * sizeof(uint) * 4 + sizeof(uint) /* eos marker offset */;
+
+    static_assert(sizeof(QProtobufPropertyOrdering::Data) == 24,
+                  "Data size changed, update builder code");
+
+    const size_t spaceNeeded = uintSpaceNeeded + charSpaceNeeded;
+
+    auto *storage = static_cast<char *>(calloc(1, spaceNeeded));
+    auto *data = new (storage) QProtobufPropertyOrdering::Data();
+    auto raii = qScopeGuard([data] { data->~Data(); free(data); });
+
+    data->version = 0u;
+    data->numFields = uint(d->fields.size());
+    data->fieldNumberOffset = uint(d->fields.size() * 1 + 1);
+    data->propertyIndexOffset = uint(d->fields.size() * 2 + 1);
+    data->flagsOffset = uint(d->fields.size() * 3 + 1);
+    data->fullPackageNameSize = uint(d->packageName.size());
+
+    using NonConstTag = QProtobufPropertyOrdering::NonConstTag;
+    QProtobufPropertyOrdering ordering{data};
+
+    uint *uintData = ordering.uint_data(NonConstTag{});
+    uint jsonArrayOffset = data->fullPackageNameSize + NullTerminator;
+    for (uint i = 0; i < data->numFields; ++i) {
+        const auto &field = d->fields[i];
+        if (field.fieldNumber > ProtobufFieldNumMax || field.fieldNumber < ProtobufFieldNumMin)
+            return nullptr;
+
+        uintData[i] = jsonArrayOffset;
+        jsonArrayOffset += field.jsonName.size() + NullTerminator;
+        uintData[i + data->fieldNumberOffset] = field.fieldNumber;
+        uintData[i + data->propertyIndexOffset] = field.propertyIndex;
+        uintData[i + data->flagsOffset] = uint(field.flags.toInt());
+    }
+    uintData[d->fields.size()] = jsonArrayOffset;
+    Q_ASSERT(jsonArrayOffset + NullTerminator == charSpaceNeeded);
+
+    char *charData = ordering.char_data(NonConstTag{});
+    [[maybe_unused]]
+    char * const charStart = charData;
+    charData = std::copy_n(d->packageName.constData(), d->packageName.size() + NullTerminator,
+                           charData);
+    for (auto &field : d->fields) {
+        charData = std::copy_n(field.jsonName.constData(), field.jsonName.size() + NullTerminator,
+                               charData);
+    }
+    charData[0] = '\0'; // Empty string at the end of the char array
+    ++charData; // Trailing null terminator
+    Q_ASSERT(std::distance(charStart, charData) == charSpaceNeeded);
+    Q_ASSERT(quintptr(charData) - quintptr(data) == quintptr(spaceNeeded));
+
+    raii.dismiss();
+    return data;
+}
+} // namespace QtProtobufPrivate
 
 QT_END_NAMESPACE

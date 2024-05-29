@@ -137,7 +137,7 @@ CMakeCache.txt
 cmake_install.cmake
 CTestTestfile.cmake
 CMakeLists.txt.user
-**build*
+**/build/
 
 # vscode specific
 .vscode/
