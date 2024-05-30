@@ -2,10 +2,23 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>, Viktor Kopp <vifactor@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include "qgrpchttp2channel.h"
 
-#include "qgrpcchanneloperation.h"
-#include "qgrpcserializationformat.h"
+#include <QtGrpc/private/qtgrpcglobal_p.h>
+#include <QtGrpc/qgrpcchanneloperation.h>
+#include <QtGrpc/qgrpcdefs.h>
+#include <QtGrpc/qgrpchttp2channel.h>
+#include <QtGrpc/qgrpcserializationformat.h>
+
+#include <QtProtobuf/qprotobufjsonserializer.h>
+#include <QtProtobuf/qprotobufserializer.h>
+
+#include <QtNetwork/private/hpack_p.h>
+#include <QtNetwork/private/qhttp2connection_p.h>
+#include <QtNetwork/qlocalsocket.h>
+#include <QtNetwork/qtcpsocket.h>
+#if QT_CONFIG(ssl)
+#  include <QtNetwork/qsslsocket.h>
+#endif
 
 #include <QtCore/qbytearrayview.h>
 #include <QtCore/qendian.h>
@@ -15,16 +28,6 @@
 #include <QtCore/qqueue.h>
 #include <QtCore/qtimer.h>
 #include <QtCore/qurl.h>
-#include <QtNetwork/private/hpack_p.h>
-#include <QtNetwork/private/qhttp2connection_p.h>
-#include <QtNetwork/qlocalsocket.h>
-#include <QtNetwork/qtcpsocket.h>
-#if QT_CONFIG(ssl)
-#  include <QtNetwork/qsslsocket.h>
-#endif
-#include <QtProtobuf/qprotobufjsonserializer.h>
-#include <QtProtobuf/qprotobufserializer.h>
-#include <qtgrpcglobal_p.h>
 
 #include <functional>
 #include <unordered_map>
