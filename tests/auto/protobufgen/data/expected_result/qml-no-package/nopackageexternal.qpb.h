@@ -32,7 +32,6 @@ enum class QtProtobufFieldEnum;
 class SimpleIntMessageExt_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleIntMessageExt)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)

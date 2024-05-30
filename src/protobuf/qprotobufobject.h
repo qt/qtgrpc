@@ -10,9 +10,12 @@
 #  pragma qt_sync_stop_processing
 #endif
 
+
 #include <QtProtobuf/qprotobufpropertyordering.h>
+#include <QtCore/qtmetamacros.h>
 
 #define Q_PROTOBUF_OBJECT\
+        Q_GADGET\
     public:\
         static const QtProtobufPrivate::QProtobufPropertyOrdering staticPropertyOrdering;\
     private:

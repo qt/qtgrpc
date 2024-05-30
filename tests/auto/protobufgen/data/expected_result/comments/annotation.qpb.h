@@ -78,7 +78,6 @@ enum class QtProtobufFieldEnum;
 class AnnotatedMessage1_QtProtobufData;
 class AnnotatedMessage1 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -124,7 +123,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class AnnotatedMessage2_QtProtobufData;
 class AnnotatedMessage2 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -170,7 +168,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class AnnotatedMessage3_QtProtobufData;
 class AnnotatedMessage3 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -217,7 +214,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class AnnotatedMessage4_QtProtobufData;
 class AnnotatedMessage4 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -260,7 +256,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class AnnotatedMessage5_QtProtobufData;
 class AnnotatedMessage5 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -304,7 +299,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class AnnotatedMessage6_QtProtobufData;
 class AnnotatedMessage6 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -350,7 +344,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class AnnotatedMessage7_QtProtobufData;
 class AnnotatedMessage7 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -396,7 +389,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class AnnotatedMessage8_QtProtobufData;
 class AnnotatedMessage8 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -443,7 +435,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class AnnotatedMessage9_QtProtobufData;
 class AnnotatedMessage9 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 

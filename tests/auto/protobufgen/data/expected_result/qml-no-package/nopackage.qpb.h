@@ -67,7 +67,6 @@ enum class QtProtobufFieldEnum;
 class EmptyMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT EmptyMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(emptyMessage)
 
@@ -102,7 +101,6 @@ QML_NAMED_ELEMENT(EmptyMessage)
 class SimpleIntMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleIntMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
@@ -146,7 +144,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class NoPackageExternalMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(noPackageExternalMessage)
     Q_PROPERTY(SimpleIntMessageExt *testField_p READ testField_p WRITE setTestField_p SCRIPTABLE false)
@@ -196,7 +193,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class NoPackageMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(noPackageMessage)
     Q_PROPERTY(SimpleIntMessage *testField_p READ testField_p WRITE setTestField_p SCRIPTABLE false)

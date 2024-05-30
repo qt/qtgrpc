@@ -217,7 +217,6 @@ const char *CommonTemplates::ClassMessageBeginDeclarationTemplate()
     return "\nclass $dataclassname$;\n"
            "class $export_macro$ $classname$ : public QProtobufMessage\n"
            "{\n"
-           "    Q_GADGET\n"
            "    Q_PROTOBUF_OBJECT\n";
 }
 
@@ -226,7 +225,6 @@ const char *CommonTemplates::ClassMessageBeginDeclarationTemplateEmptyMacros()
     return "\nclass $dataclassname$;\n"
            "class $classname$ : public QProtobufMessage\n"
            "{\n"
-           "    Q_GADGET\n"
            "    Q_PROTOBUF_OBJECT\n";
 }
 

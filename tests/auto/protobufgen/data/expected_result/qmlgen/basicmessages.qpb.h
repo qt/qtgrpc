@@ -129,7 +129,6 @@ enum class QtProtobufFieldEnum;
 class EmptyMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT EmptyMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(emptyMessage)
 
@@ -164,7 +163,6 @@ QML_NAMED_ELEMENT(EmptyMessage)
 class SimpleBoolMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleBoolMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleBoolMessage)
     Q_PROPERTY(bool testFieldBool READ testFieldBool WRITE setTestFieldBool SCRIPTABLE true)
@@ -208,7 +206,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleIntMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleIntMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleIntMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
@@ -252,7 +249,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSIntMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSIntMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleSIntMessage)
     Q_PROPERTY(QtProtobuf::sint32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
@@ -296,7 +292,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUIntMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleUIntMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleUIntMessage)
     Q_PROPERTY(QtProtobuf::uint32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
@@ -340,7 +335,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt64Message_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleInt64Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleInt64Message)
     Q_PROPERTY(QtProtobuf::int64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
@@ -384,7 +378,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt64Message_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSInt64Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleSInt64Message)
     Q_PROPERTY(QtProtobuf::sint64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
@@ -428,7 +421,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt64Message_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleUInt64Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleUInt64Message)
     Q_PROPERTY(QtProtobuf::uint64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
@@ -472,7 +464,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleStringMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleStringMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleStringMessage)
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
@@ -516,7 +507,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFloatMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFloatMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleFloatMessage)
     Q_PROPERTY(float testFieldFloat READ testFieldFloat WRITE setTestFieldFloat SCRIPTABLE true)
@@ -560,7 +550,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleDoubleMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleDoubleMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleDoubleMessage)
     Q_PROPERTY(double testFieldDouble READ testFieldDouble WRITE setTestFieldDouble SCRIPTABLE true)
@@ -604,7 +593,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleBytesMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleBytesMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleBytesMessage)
     Q_PROPERTY(QByteArray testFieldBytes READ testFieldBytes WRITE setTestFieldBytes SCRIPTABLE true)
@@ -648,7 +636,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixedInt32Message_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFixedInt32Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleFixedInt32Message)
     Q_PROPERTY(QtProtobuf::fixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
@@ -692,7 +679,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixedInt64Message_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFixedInt64Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleFixedInt64Message)
     Q_PROPERTY(QtProtobuf::fixed64 testFieldFixedInt64 READ testFieldFixedInt64 WRITE setTestFieldFixedInt64 SCRIPTABLE false)
@@ -736,7 +722,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixedInt32Message_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSFixedInt32Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleSFixedInt32Message)
     Q_PROPERTY(QtProtobuf::sfixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
@@ -780,7 +765,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixedInt64Message_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleSFixedInt64Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleSFixedInt64Message)
     Q_PROPERTY(QtProtobuf::sfixed64 testFieldFixedInt64 READ testFieldFixedInt64 WRITE setTestFieldFixedInt64 SCRIPTABLE false)
@@ -824,7 +808,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class ComplexMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT ComplexMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(complexMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)

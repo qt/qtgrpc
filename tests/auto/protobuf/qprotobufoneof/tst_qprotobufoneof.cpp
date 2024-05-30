@@ -11,7 +11,6 @@
 
 class TestMetaType : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
 public:
     TestMetaType() : QProtobufMessage(&staticMetaObject, &TestMetaType::staticPropertyOrdering) { }

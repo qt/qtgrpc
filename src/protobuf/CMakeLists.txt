@@ -31,6 +31,10 @@ qt_internal_add_docs(Protobuf
     doc/qtprotobuf.qdocconf
 )
 
+if(CMAKE_VERSION GREATER_EQUAL 3.27)
+    set_target_properties(Protobuf PROPERTIES INTERFACE_AUTOMOC_MACRO_NAMES "Q_PROTOBUF_OBJECT")
+endif()
+
 # TODO: Remove this and fix it in qtbase's qt_internal_find_tool directly
 if(QT_HOST_PATH AND Qt6::qtprotobufgen IN_LIST Qt6ProtobufTools_TARGETS
     AND NOT QT_FORCE_BUILD_TOOLS)

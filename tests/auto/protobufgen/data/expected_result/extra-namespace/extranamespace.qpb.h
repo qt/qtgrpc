@@ -41,7 +41,6 @@ enum class QtProtobufFieldEnum;
 class EmptyMessage_QtProtobufData;
 class EmptyMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
 
 public:
@@ -74,7 +73,6 @@ Q_NAMESPACE
 class SimpleStringMessage_QtProtobufData;
 class SimpleStringMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
 
@@ -116,7 +114,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class ComplexMessage_QtProtobufData;
 class ComplexMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(MyTopLevelNamespace::qtprotobufnamespace::tests::SimpleStringMessage *testComplexField_p READ testComplexField_p WRITE setTestComplexField_p SCRIPTABLE false)
