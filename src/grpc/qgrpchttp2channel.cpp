@@ -168,7 +168,6 @@ private:
         void processQueue();
         void cancel();
         void finish();
-        void handleError(quint32 errorCode, const QString &errorString);
 
         void attachStream(QHttp2Stream *stream_);
 
