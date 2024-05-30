@@ -54,7 +54,6 @@ enum class QtProtobufFieldEnum;
 class AnyMessage_QtProtobufData;
 class AnyMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::Any field READ field WRITE setField SCRIPTABLE true)
 
@@ -96,7 +95,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedAnyMessage_QtProtobufData;
 class RepeatedAnyMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QList<QtProtobuf::Any> anysData READ anys WRITE setAnys SCRIPTABLE true)
 
@@ -139,7 +137,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class TwoAnyMessage_QtProtobufData;
 class TwoAnyMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::Any one READ one WRITE setOne SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::Any two READ two WRITE setTwo SCRIPTABLE true)
@@ -186,7 +183,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class Example_QtProtobufData;
 class Example : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QString str READ str WRITE setStr SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::sint32 i READ i WRITE setI SCRIPTABLE true)
@@ -248,7 +244,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleMessage_QtProtobufData;
 class SimpleMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::int32 i READ i WRITE setI SCRIPTABLE true)
 

@@ -37,7 +37,6 @@ enum class QtProtobufFieldEnum;
 class TestStringMessage_QtProtobufData;
 class TestStringMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QString stringField READ stringField WRITE setStringField SCRIPTABLE true)
 
@@ -79,7 +78,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class OptionalMessage_QtProtobufData;
 class OptionalMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::sint32 testFieldOpt READ testFieldOpt_p WRITE setTestFieldOpt_p)

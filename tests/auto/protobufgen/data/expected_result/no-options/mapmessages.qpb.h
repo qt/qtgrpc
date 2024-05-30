@@ -552,7 +552,6 @@ enum class QtProtobufFieldEnum;
 class SimpleSInt32StringMapMessage_QtProtobufData;
 class SimpleSInt32StringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -596,7 +595,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt64StringMapMessage_QtProtobufData;
 class SimpleSInt64StringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -640,7 +638,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt32StringMapMessage_QtProtobufData;
 class SimpleInt32StringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -684,7 +681,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt64StringMapMessage_QtProtobufData;
 class SimpleInt64StringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -728,7 +724,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt32StringMapMessage_QtProtobufData;
 class SimpleUInt32StringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -772,7 +767,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt64StringMapMessage_QtProtobufData;
 class SimpleUInt64StringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -816,7 +810,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed32StringMapMessage_QtProtobufData;
 class SimpleFixed32StringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -860,7 +853,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed64StringMapMessage_QtProtobufData;
 class SimpleFixed64StringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -904,7 +896,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed32StringMapMessage_QtProtobufData;
 class SimpleSFixed32StringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -948,7 +939,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed64StringMapMessage_QtProtobufData;
 class SimpleSFixed64StringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64StringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -992,7 +982,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleStringStringMapMessage_QtProtobufData;
 class SimpleStringStringMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringStringMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1036,7 +1025,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt32SInt32MapMessage_QtProtobufData;
 class SimpleSInt32SInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1080,7 +1068,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt64SInt32MapMessage_QtProtobufData;
 class SimpleSInt64SInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1124,7 +1111,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt32SInt32MapMessage_QtProtobufData;
 class SimpleInt32SInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1168,7 +1154,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt64SInt32MapMessage_QtProtobufData;
 class SimpleInt64SInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1212,7 +1197,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt32SInt32MapMessage_QtProtobufData;
 class SimpleUInt32SInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1256,7 +1240,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt64SInt32MapMessage_QtProtobufData;
 class SimpleUInt64SInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1300,7 +1283,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed32SInt32MapMessage_QtProtobufData;
 class SimpleFixed32SInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1344,7 +1326,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed64SInt32MapMessage_QtProtobufData;
 class SimpleFixed64SInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1388,7 +1369,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed32SInt32MapMessage_QtProtobufData;
 class SimpleSFixed32SInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1432,7 +1412,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed64SInt32MapMessage_QtProtobufData;
 class SimpleSFixed64SInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64SInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1476,7 +1455,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleStringSInt32MapMessage_QtProtobufData;
 class SimpleStringSInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringSInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1520,7 +1498,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt32SInt64MapMessage_QtProtobufData;
 class SimpleSInt32SInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1564,7 +1541,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt64SInt64MapMessage_QtProtobufData;
 class SimpleSInt64SInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1608,7 +1584,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt32SInt64MapMessage_QtProtobufData;
 class SimpleInt32SInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1652,7 +1627,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt64SInt64MapMessage_QtProtobufData;
 class SimpleInt64SInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1696,7 +1670,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt32SInt64MapMessage_QtProtobufData;
 class SimpleUInt32SInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1740,7 +1713,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt64SInt64MapMessage_QtProtobufData;
 class SimpleUInt64SInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1784,7 +1756,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed32SInt64MapMessage_QtProtobufData;
 class SimpleFixed32SInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1828,7 +1799,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed64SInt64MapMessage_QtProtobufData;
 class SimpleFixed64SInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1872,7 +1842,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed32SInt64MapMessage_QtProtobufData;
 class SimpleSFixed32SInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1916,7 +1885,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed64SInt64MapMessage_QtProtobufData;
 class SimpleSFixed64SInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64SInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -1960,7 +1928,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleStringSInt64MapMessage_QtProtobufData;
 class SimpleStringSInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringSInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2004,7 +1971,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt32UInt32MapMessage_QtProtobufData;
 class SimpleSInt32UInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2048,7 +2014,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt64UInt32MapMessage_QtProtobufData;
 class SimpleSInt64UInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2092,7 +2057,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt32UInt32MapMessage_QtProtobufData;
 class SimpleInt32UInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2136,7 +2100,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt64UInt32MapMessage_QtProtobufData;
 class SimpleInt64UInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2180,7 +2143,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt32UInt32MapMessage_QtProtobufData;
 class SimpleUInt32UInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2224,7 +2186,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt64UInt32MapMessage_QtProtobufData;
 class SimpleUInt64UInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2268,7 +2229,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed32UInt32MapMessage_QtProtobufData;
 class SimpleFixed32UInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2312,7 +2272,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed64UInt32MapMessage_QtProtobufData;
 class SimpleFixed64UInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2356,7 +2315,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed32UInt32MapMessage_QtProtobufData;
 class SimpleSFixed32UInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2400,7 +2358,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed64UInt32MapMessage_QtProtobufData;
 class SimpleSFixed64UInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64UInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2444,7 +2401,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleStringUInt32MapMessage_QtProtobufData;
 class SimpleStringUInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringUInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2488,7 +2444,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt32UInt64MapMessage_QtProtobufData;
 class SimpleSInt32UInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2532,7 +2487,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt64UInt64MapMessage_QtProtobufData;
 class SimpleSInt64UInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2576,7 +2530,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt32UInt64MapMessage_QtProtobufData;
 class SimpleInt32UInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2620,7 +2573,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt64UInt64MapMessage_QtProtobufData;
 class SimpleInt64UInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2664,7 +2616,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt32UInt64MapMessage_QtProtobufData;
 class SimpleUInt32UInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2708,7 +2659,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt64UInt64MapMessage_QtProtobufData;
 class SimpleUInt64UInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2752,7 +2702,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed32UInt64MapMessage_QtProtobufData;
 class SimpleFixed32UInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2796,7 +2745,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed64UInt64MapMessage_QtProtobufData;
 class SimpleFixed64UInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2840,7 +2788,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed32UInt64MapMessage_QtProtobufData;
 class SimpleSFixed32UInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2884,7 +2831,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed64UInt64MapMessage_QtProtobufData;
 class SimpleSFixed64UInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64UInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2928,7 +2874,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleStringUInt64MapMessage_QtProtobufData;
 class SimpleStringUInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringUInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -2972,7 +2917,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt32Int32MapMessage_QtProtobufData;
 class SimpleSInt32Int32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3016,7 +2960,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt64Int32MapMessage_QtProtobufData;
 class SimpleSInt64Int32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3060,7 +3003,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt32Int32MapMessage_QtProtobufData;
 class SimpleInt32Int32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3104,7 +3046,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt64Int32MapMessage_QtProtobufData;
 class SimpleInt64Int32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3148,7 +3089,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt32Int32MapMessage_QtProtobufData;
 class SimpleUInt32Int32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3192,7 +3132,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt64Int32MapMessage_QtProtobufData;
 class SimpleUInt64Int32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3236,7 +3175,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed32Int32MapMessage_QtProtobufData;
 class SimpleFixed32Int32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3280,7 +3218,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed64Int32MapMessage_QtProtobufData;
 class SimpleFixed64Int32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3324,7 +3261,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed32Int32MapMessage_QtProtobufData;
 class SimpleSFixed32Int32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3368,7 +3304,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed64Int32MapMessage_QtProtobufData;
 class SimpleSFixed64Int32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64Int32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3412,7 +3347,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleStringInt32MapMessage_QtProtobufData;
 class SimpleStringInt32MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringInt32MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3456,7 +3390,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt32Int64MapMessage_QtProtobufData;
 class SimpleSInt32Int64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3500,7 +3433,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt64Int64MapMessage_QtProtobufData;
 class SimpleSInt64Int64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3544,7 +3476,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt32Int64MapMessage_QtProtobufData;
 class SimpleInt32Int64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3588,7 +3519,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt64Int64MapMessage_QtProtobufData;
 class SimpleInt64Int64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3632,7 +3562,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt32Int64MapMessage_QtProtobufData;
 class SimpleUInt32Int64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3676,7 +3605,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt64Int64MapMessage_QtProtobufData;
 class SimpleUInt64Int64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3720,7 +3648,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed32Int64MapMessage_QtProtobufData;
 class SimpleFixed32Int64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3764,7 +3691,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed64Int64MapMessage_QtProtobufData;
 class SimpleFixed64Int64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3808,7 +3734,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed32Int64MapMessage_QtProtobufData;
 class SimpleSFixed32Int64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3852,7 +3777,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed64Int64MapMessage_QtProtobufData;
 class SimpleSFixed64Int64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64Int64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3896,7 +3820,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleStringInt64MapMessage_QtProtobufData;
 class SimpleStringInt64MapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringInt64MapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3940,7 +3863,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt32ComplexMessageMapMessage_QtProtobufData;
 class SimpleSInt32ComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -3984,7 +3906,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSInt64ComplexMessageMapMessage_QtProtobufData;
 class SimpleSInt64ComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSInt64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -4028,7 +3949,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt32ComplexMessageMapMessage_QtProtobufData;
 class SimpleInt32ComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -4072,7 +3992,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleInt64ComplexMessageMapMessage_QtProtobufData;
 class SimpleInt64ComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleInt64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -4116,7 +4035,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt32ComplexMessageMapMessage_QtProtobufData;
 class SimpleUInt32ComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -4160,7 +4078,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleUInt64ComplexMessageMapMessage_QtProtobufData;
 class SimpleUInt64ComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleUInt64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -4204,7 +4121,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed32ComplexMessageMapMessage_QtProtobufData;
 class SimpleFixed32ComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -4248,7 +4164,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFixed64ComplexMessageMapMessage_QtProtobufData;
 class SimpleFixed64ComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleFixed64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -4292,7 +4207,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed32ComplexMessageMapMessage_QtProtobufData;
 class SimpleSFixed32ComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -4336,7 +4250,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleSFixed64ComplexMessageMapMessage_QtProtobufData;
 class SimpleSFixed64ComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 
@@ -4380,7 +4293,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleStringComplexMessageMapMessage_QtProtobufData;
 class SimpleStringComplexMessageMapMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringComplexMessageMapMessage::MapFieldEntry mapField READ mapField WRITE setMapField SCRIPTABLE true)
 

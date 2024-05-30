@@ -141,7 +141,6 @@ using BEnumRepeated = QList<BEnum>;
 class SimpleEnumMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleEnumMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleEnumMessage)
     Q_PROPERTY(LocalEnum localEnum READ localEnum WRITE setLocalEnum SCRIPTABLE true)
@@ -196,7 +195,6 @@ using LocalEnumRepeated = QList<LocalEnum>;
 class RepeatedEnumMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT RepeatedEnumMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(repeatedEnumMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::RepeatedEnumMessage::LocalEnumRepeated localEnumList READ localEnumList WRITE setLocalEnumList SCRIPTABLE true)
@@ -252,7 +250,6 @@ using LocalEnumRepeated = QList<LocalEnum>;
 class MixedEnumUsageMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT MixedEnumUsageMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(mixedEnumUsageMessage)
     Q_PROPERTY(LocalEnum localEnum READ localEnum WRITE setLocalEnum SCRIPTABLE true)
@@ -331,7 +328,6 @@ using LocalEnumRepeated = QList<LocalEnum>;
 class NestedEnumHolder_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumHolder : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(nestedEnumHolder)
 
@@ -377,7 +373,6 @@ using LocalEnumRepeated = QList<LocalEnum>;
 class NestedEnumHolderLevel1_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumHolderLevel1 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(nestedEnumHolderLevel1)
 
@@ -422,7 +417,6 @@ using LocalEnumRepeated = QList<LocalEnum>;
 class NestedEnumHolderLevel2_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumHolderLevel2 : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(nestedEnumHolderLevel2)
 
@@ -467,7 +461,6 @@ using LocalEnumRepeated = QList<LocalEnum>;
 class NestedEnumMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT NestedEnumMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(nestedEnumMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::MixedEnumUsageMessage::LocalEnum localEnumField READ localEnumField WRITE setLocalEnumField SCRIPTABLE true)
@@ -532,7 +525,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleFileEnumMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleFileEnumMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(simpleFileEnumMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::TestEnumGadget::TestEnum globalEnum READ globalEnum WRITE setGlobalEnum SCRIPTABLE true)
@@ -582,7 +574,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class StepChildEnumMessage_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT StepChildEnumMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(stepChildEnumMessage)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleEnumMessage::LocalEnum localStepChildEnum READ localStepChildEnum WRITE setLocalStepChildEnum SCRIPTABLE true)
@@ -632,7 +623,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class A_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT A : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(a)
     Q_PROPERTY(qtprotobufnamespace::tests::B::BEnum val READ val WRITE setVal SCRIPTABLE true)
@@ -685,7 +675,6 @@ using AEnumRepeated = QList<AEnum>;
 class B_QtProtobufData;
 class QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT B : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     QML_VALUE_TYPE(b)
     Q_PROPERTY(qtprotobufnamespace::tests::A::AEnum val READ val WRITE setVal SCRIPTABLE true)

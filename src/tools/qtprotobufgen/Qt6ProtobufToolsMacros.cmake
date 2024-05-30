@@ -179,6 +179,7 @@ function(_qt_internal_protoc_generate target generator output_directory)
     add_custom_target(${deps_target} DEPENDS ${generated_files})
     set_property(TARGET ${target} APPEND PROPERTY
         AUTOGEN_TARGET_DEPENDS "${deps_target}")
+    set_property(TARGET ${target} APPEND PROPERTY AUTOMOC_MACRO_NAMES "Q_PROTOBUF_OBJECT")
     set_property(TARGET ${target} PROPERTY _qt_${generator}_deps_num "${num_deps}")
     set_source_files_properties(${generated_files} PROPERTIES
         GENERATED TRUE

@@ -47,7 +47,6 @@ enum class QtProtobufFieldEnum;
 class FieldIndexTest1Message_QtProtobufData;
 class FieldIndexTest1Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -89,7 +88,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class FieldIndexTest2Message_QtProtobufData;
 class FieldIndexTest2Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -131,7 +129,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class FieldIndexTest3Message_QtProtobufData;
 class FieldIndexTest3Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -173,7 +170,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class FieldIndexTest4Message_QtProtobufData;
 class FieldIndexTest4Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 

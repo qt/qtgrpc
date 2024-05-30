@@ -40,7 +40,6 @@ enum class SecondOneofFields;
 class OneofSimpleMessage_QtProtobufData;
 class OneofSimpleMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::int32 testOneofFieldInt READ testOneofFieldInt_p WRITE setTestOneofFieldInt_p)
     Q_PROPERTY(bool hasTestOneofFieldInt READ hasTestOneofFieldInt)
@@ -105,7 +104,6 @@ Q_ENUM_NS(TestOneofFields)
 class OneofComplexMessage_QtProtobufData;
 class OneofComplexMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::int32 testOneofFieldInt READ testOneofFieldInt_p WRITE setTestOneofFieldInt_p)

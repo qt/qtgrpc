@@ -42,7 +42,6 @@ enum class QtProtobufFieldEnum;
 class SimpleStringMessage_QtProtobufData;
 class QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleStringMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
 
@@ -84,7 +83,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class SimpleIntMessage_QtProtobufData;
 class QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleIntMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
@@ -126,7 +124,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class BlobMessage_QtProtobufData;
 class QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT BlobMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QByteArray testBytes READ testBytes WRITE setTestBytes SCRIPTABLE true)
 

@@ -120,7 +120,6 @@ enum class QtProtobufFieldEnum;
 class RepeatedStringMessage_QtProtobufData;
 class RepeatedStringMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QStringList testRepeatedString READ testRepeatedString WRITE setTestRepeatedString SCRIPTABLE true)
 
@@ -163,7 +162,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedDoubleMessage_QtProtobufData;
 class RepeatedDoubleMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::doubleList testRepeatedDouble READ testRepeatedDouble WRITE setTestRepeatedDouble SCRIPTABLE true)
 
@@ -206,7 +204,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedBytesMessage_QtProtobufData;
 class RepeatedBytesMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QByteArrayList testRepeatedBytes READ testRepeatedBytes WRITE setTestRepeatedBytes SCRIPTABLE true)
 
@@ -249,7 +246,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedFloatMessage_QtProtobufData;
 class RepeatedFloatMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::floatList testRepeatedFloat READ testRepeatedFloat WRITE setTestRepeatedFloat SCRIPTABLE true)
 
@@ -292,7 +288,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedComplexMessage_QtProtobufData;
 class RepeatedComplexMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(qtprotobufnamespace::tests::ComplexMessageRepeated testRepeatedComplexData READ testRepeatedComplex WRITE setTestRepeatedComplex SCRIPTABLE true)
 
@@ -335,7 +330,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedSIntMessage_QtProtobufData;
 class RepeatedSIntMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
@@ -378,7 +372,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedIntMessage_QtProtobufData;
 class RepeatedIntMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::int32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
@@ -421,7 +414,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedUIntMessage_QtProtobufData;
 class RepeatedUIntMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::uint32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
@@ -464,7 +456,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedSInt64Message_QtProtobufData;
 class RepeatedSInt64Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sint64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
@@ -507,7 +498,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedInt64Message_QtProtobufData;
 class RepeatedInt64Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::int64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
@@ -550,7 +540,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedUInt64Message_QtProtobufData;
 class RepeatedUInt64Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::uint64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
@@ -593,7 +582,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedFixedIntMessage_QtProtobufData;
 class RepeatedFixedIntMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::fixed32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
@@ -636,7 +624,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedSFixedIntMessage_QtProtobufData;
 class RepeatedSFixedIntMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sfixed32List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
@@ -679,7 +666,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedFixedInt64Message_QtProtobufData;
 class RepeatedFixedInt64Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::fixed64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
@@ -722,7 +708,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedSFixedInt64Message_QtProtobufData;
 class RepeatedSFixedInt64Message : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::sfixed64List testRepeatedInt READ testRepeatedInt WRITE setTestRepeatedInt SCRIPTABLE true)
 
@@ -765,7 +750,6 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 class RepeatedBoolMessage_QtProtobufData;
 class RepeatedBoolMessage : public QProtobufMessage
 {
-    Q_GADGET
     Q_PROTOBUF_OBJECT
     Q_PROPERTY(QtProtobuf::boolList testRepeatedBool READ testRepeatedBool WRITE setTestRepeatedBool SCRIPTABLE true)
 
