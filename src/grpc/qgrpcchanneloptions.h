@@ -20,31 +20,34 @@ class QSslConfiguration;
 class QGrpcSerializationFormat;
 class QGrpcChannelOptionsPrivate;
 
-class Q_GRPC_EXPORT QGrpcChannelOptions final
+class QGrpcChannelOptions final
 {
 public:
-    QGrpcChannelOptions();
-    ~QGrpcChannelOptions();
+    Q_GRPC_EXPORT QGrpcChannelOptions();
+    Q_GRPC_EXPORT ~QGrpcChannelOptions();
 
-    QGrpcChannelOptions(const QGrpcChannelOptions &other);
-    QGrpcChannelOptions &operator=(const QGrpcChannelOptions &other);
-    QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept;
-    QGrpcChannelOptions &operator=(QGrpcChannelOptions &&other) noexcept;
+    Q_GRPC_EXPORT QGrpcChannelOptions(const QGrpcChannelOptions &other);
+    Q_GRPC_EXPORT QGrpcChannelOptions &operator=(const QGrpcChannelOptions &other);
+    Q_GRPC_EXPORT QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept;
+    Q_GRPC_EXPORT QGrpcChannelOptions &operator=(QGrpcChannelOptions &&other) noexcept;
 
-    QGrpcChannelOptions &setDeadline(QGrpcDuration deadline);
-    QGrpcChannelOptions &setMetadata(const QGrpcMetadata &metadata);
-    QGrpcChannelOptions &setMetadata(QGrpcMetadata &&metadata);
-    QGrpcChannelOptions &setSerializationFormat(const QGrpcSerializationFormat &format);
+    Q_GRPC_EXPORT QGrpcChannelOptions &setDeadline(QGrpcDuration deadline);
+    Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(const QGrpcMetadata &metadata);
+    Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(QGrpcMetadata &&metadata);
+    Q_GRPC_EXPORT QGrpcChannelOptions &
+    setSerializationFormat(const QGrpcSerializationFormat &format);
 
-    [[nodiscard]] std::optional<QGrpcDuration> deadline() const noexcept;
-    [[nodiscard]] const QGrpcMetadata &metadata() const & noexcept;
-    [[nodiscard]] QGrpcMetadata metadata() && noexcept;
-    [[nodiscard]] const QGrpcSerializationFormat &serializationFormat() const & noexcept;
-    [[nodiscard]] QGrpcSerializationFormat serializationFormat() && noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<QGrpcDuration> deadline() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const & noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT QGrpcMetadata metadata() && noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT const QGrpcSerializationFormat &
+    serializationFormat() const & noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT QGrpcSerializationFormat serializationFormat() && noexcept;
 
 #if QT_CONFIG(ssl)
-    QGrpcChannelOptions &withSslConfiguration(const QSslConfiguration &sslConfiguration);
-    [[nodiscard]] std::optional<QSslConfiguration> sslConfiguration() const noexcept;
+    Q_GRPC_EXPORT QGrpcChannelOptions &
+    withSslConfiguration(const QSslConfiguration &sslConfiguration);
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<QSslConfiguration> sslConfiguration() const noexcept;
 #endif
 
 private:
