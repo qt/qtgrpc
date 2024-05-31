@@ -15,7 +15,7 @@ QT_BEGIN_NAMESPACE
 class QGrpcSerializationFormatPrivate;
 class QAbstractProtobufSerializer;
 
-class Q_GRPC_EXPORT QGrpcSerializationFormat final
+class QGrpcSerializationFormat final
 {
 public:
     enum Format : quint8 {
@@ -24,20 +24,21 @@ public:
         Json,
     };
 
-    explicit QGrpcSerializationFormat(Format format = Format::Default);
-    QGrpcSerializationFormat(QByteArrayView suffix,
-                             std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    Q_GRPC_EXPORT explicit QGrpcSerializationFormat(Format format = Format::Default);
+    Q_GRPC_EXPORT QGrpcSerializationFormat(QByteArrayView suffix,
+                                           std::shared_ptr<QAbstractProtobufSerializer> serializer);
 
-    ~QGrpcSerializationFormat();
+    Q_GRPC_EXPORT ~QGrpcSerializationFormat();
 
-    QGrpcSerializationFormat(const QGrpcSerializationFormat &);
-    QGrpcSerializationFormat(QGrpcSerializationFormat &&);
+    Q_GRPC_EXPORT QGrpcSerializationFormat(const QGrpcSerializationFormat &);
+    Q_GRPC_EXPORT QGrpcSerializationFormat(QGrpcSerializationFormat &&);
 
-    QGrpcSerializationFormat &operator=(const QGrpcSerializationFormat &);
-    QGrpcSerializationFormat &operator=(QGrpcSerializationFormat &&);
+    Q_GRPC_EXPORT QGrpcSerializationFormat &operator=(const QGrpcSerializationFormat &);
+    Q_GRPC_EXPORT QGrpcSerializationFormat &operator=(QGrpcSerializationFormat &&);
 
-    [[nodiscard]] QByteArray suffix() const noexcept;
-    [[nodiscard]] std::shared_ptr<QAbstractProtobufSerializer> serializer() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT QByteArray suffix() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT std::shared_ptr<QAbstractProtobufSerializer>
+    serializer() const noexcept;
 
 private:
     std::unique_ptr<QGrpcSerializationFormatPrivate> dPtr;
