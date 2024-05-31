@@ -123,10 +123,10 @@ int QProtobufPropertyOrdering::indexOfFieldNumber(int fieldNumber) const
     return -1;
 }
 
-uint QProtobufPropertyOrdering::getFieldFlags(int index) const
+FieldFlags QProtobufPropertyOrdering::getFieldFlags(int index) const
 {
     Q_ASSERT(data);
-    return uint_dataForIndex(index, data->flagsOffset);
+    return FieldFlags { int(uint_dataForIndex(index, data->flagsOffset)) };
 }
 
 const uint *QProtobufPropertyOrdering::uint_data() const

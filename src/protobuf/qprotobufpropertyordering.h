@@ -49,7 +49,7 @@ struct QProtobufPropertyOrdering
     Q_PROTOBUF_EXPORT QUtf8StringView getJsonName(int index) const;
     Q_PROTOBUF_EXPORT int getFieldNumber(int index) const;
     Q_PROTOBUF_EXPORT int getPropertyIndex(int index) const;
-    Q_PROTOBUF_EXPORT uint getFieldFlags(int index) const;
+    Q_PROTOBUF_EXPORT FieldFlags getFieldFlags(int index) const;
     Q_PROTOBUF_EXPORT int indexOfFieldNumber(int fieldNumber) const;
     int fieldCount() const { return int(data->numFields); }
 
@@ -72,7 +72,7 @@ struct QProtobufFieldInfo
     QUtf8StringView getJsonName() const { return ordering.getJsonName(index); }
     int getFieldNumber() const { return ordering.getFieldNumber(index); }
     int getPropertyIndex() const { return ordering.getPropertyIndex(index); }
-    uint getFieldFlags() const { return ordering.getFieldFlags(index); }
+    FieldFlags getFieldFlags() const { return ordering.getFieldFlags(index); }
 
 private:
     const QProtobufPropertyOrdering ordering;
