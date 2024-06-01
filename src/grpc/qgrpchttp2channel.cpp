@@ -30,6 +30,7 @@
 #include <QtCore/qurl.h>
 
 #include <functional>
+#include <memory>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -304,21 +305,24 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
 
     auto parentChannel = qobject_cast<QGrpcHttp2ChannelPrivate *>(parent());
     Q_ASSERT(parentChannel != nullptr);
-    QObject::connect(m_stream.get(), &QHttp2Stream::errorOccurred, parentChannel,
-                     [parentChannel, this](quint32 errorCode, const QString &errorString) {
-                         if (errorCode != 0) {
-                             QGrpcStatus::StatusCode code = QGrpcStatus::Unknown;
-                             const auto it = StatusCodeMap.find(errorCode);
-                             if (it != StatusCodeMap.end())
-                                 code = it->second;
+    auto errorConnection = std::make_shared<QMetaObject::Connection>();
+    *errorConnection = QObject::connect(
+        m_stream.get(), &QHttp2Stream::errorOccurred, parentChannel,
+        [parentChannel, errorConnection, this](quint32 errorCode, const QString &errorString) {
+            if (errorCode != 0) {
+                QGrpcStatus::StatusCode code = QGrpcStatus::Unknown;
+                const auto it = StatusCodeMap.find(errorCode);
+                if (it != StatusCodeMap.end())
+                    code = it->second;
 
-                             if (!m_operation.expired()) {
-                                 auto channelOp = m_operation.lock();
-                                 emit channelOp->finished(QGrpcStatus{ code, errorString });
-                             }
-                         }
-                         parentChannel->deleteHandler(this);
-                     });
+                if (!m_operation.expired()) {
+                    auto channelOp = m_operation.lock();
+                    emit channelOp->finished(QGrpcStatus{ code, errorString });
+                }
+            }
+            QObject::disconnect(*errorConnection);
+            parentChannel->deleteHandler(this);
+        });
 
     QObject::connect(m_stream.get(), &QHttp2Stream::dataReceived, channelOpPtr,
                      [channelOpPtr, this](const QByteArray &data, bool endStream) {
@@ -780,7 +784,7 @@ void QGrpcHttp2ChannelPrivate::deleteHandler(Http2Handler *handler)
     const auto it = std::find(m_activeHandlers.constBegin(), m_activeHandlers.constEnd(), handler);
     Q_ASSERT_X(it != m_activeHandlers.constEnd(), "QGrpcHttp2ChannelPrivate::deleteHandler",
                "Attempt to delete unregistered Http2Handler");
-    delete *it;
+    handler->deleteLater();
     m_activeHandlers.erase(it);
 }
 
