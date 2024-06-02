@@ -137,8 +137,9 @@ FieldFlags QProtobufPropertyOrdering::getFieldFlags(int index) const
     return FieldFlags { int(uint_dataForIndex(index, data->flagsOffset)) };
 }
 
-const uint *QProtobufPropertyOrdering::uint_data() const
+uint *QProtobufPropertyOrdering::uint_data(NonConstTag _) const
 {
+    Q_UNUSED(_);
     Q_ASSERT(data);
     Q_ASSERT(data->version == 0);
     quintptr dataPtr = quintptr(data);
@@ -149,19 +150,30 @@ const uint *QProtobufPropertyOrdering::uint_data() const
 #else
     static_assert(alignof(Data) == alignof(uint));
 #endif
-    return reinterpret_cast<const uint *>(dataPtr);
+    return reinterpret_cast<uint *>(dataPtr);
+}
+
+const uint *QProtobufPropertyOrdering::uint_data() const
+{
+    return uint_data(NonConstTag{});
+}
+
+char *QProtobufPropertyOrdering::char_data(NonConstTag _) const
+{
+    Q_UNUSED(_);
+    Q_ASSERT(data);
+    const uint LastOffset = data->flagsOffset;
+    uint *u_data = uint_data(NonConstTag{}) + LastOffset + data->numFields;
+    quintptr uptr_data = quintptr(u_data);
+    if (size_t(uptr_data) % alignof(char) != 0)
+        uptr_data += alignof(char) - size_t(uptr_data) % alignof(char);
+    char *c_data = reinterpret_cast<char *>(uptr_data);
+    return c_data;
 }
 
 const char *QProtobufPropertyOrdering::char_data() const
 {
-    Q_ASSERT(data);
-    const uint LastOffset = data->flagsOffset;
-    const uint *u_data = uint_data() + LastOffset + data->numFields;
-    quintptr uptr_data = quintptr(u_data);
-    if (size_t(uptr_data) % alignof(char) != 0)
-        uptr_data += alignof(char) - size_t(uptr_data) % alignof(char);
-    const char *c_data = reinterpret_cast<const char *>(uptr_data);
-    return c_data;
+    return char_data(NonConstTag{});
 }
 
 const uint &QProtobufPropertyOrdering::uint_dataForIndex(int index, uint offset) const
