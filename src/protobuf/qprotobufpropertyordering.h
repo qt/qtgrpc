@@ -54,6 +54,9 @@ struct QProtobufPropertyOrdering
     int fieldCount() const { return int(data->numFields); }
 
 private:
+    struct NonConstTag {};
+    uint *uint_data(NonConstTag) const;
+    char *char_data(NonConstTag) const;
     const uint *uint_data() const;
     const char *char_data() const;
     const uint &uint_dataForIndex(int index, uint offset) const;
