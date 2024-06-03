@@ -146,9 +146,8 @@ private:
             if (expectedSize == 0) {
                 if (container.size() < GrpcMessageSizeHeaderSize)
                     return false;
-
-                const auto src = *reinterpret_cast<const quint32 *>(container.data() + 1);
-                expectedSize = qFromBigEndian(src) + GrpcMessageSizeHeaderSize;
+                expectedSize = qFromBigEndian<quint32>(container.data() + 1)
+                    + GrpcMessageSizeHeaderSize;
             }
             return true;
         }
