@@ -44,7 +44,7 @@ private:
         serverProc->setReadChannel(QProcess::StandardError);
 
         QObject::connect(serverProc.get(), &QProcess::readyReadStandardOutput, this,
-                         [this] { qInfo() << serverProc->readAllStandardOutput(); });
+                         [this] { qInfo().noquote() << serverProc->readAllStandardOutput(); });
 
         serverProc->setProgram(serverPath);
         serverProc->setWorkingDirectory(QFileInfo(serverPath).dir().absolutePath());
@@ -68,7 +68,7 @@ private:
 
         // Connect remaining error logs to the server
         QObject::connect(serverProc.get(), &QProcess::readyReadStandardError, this,
-                         [this] { qInfo() << serverProc->readAllStandardError(); });
+                         [this] { qWarning().noquote() << serverProc->readAllStandardError(); });
         qInfo() << "Testserver started" << serverPath;
     }
     void stop()
