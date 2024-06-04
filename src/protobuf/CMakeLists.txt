@@ -5,19 +5,19 @@ qt_internal_add_module(Protobuf
     SOURCES
         qtprotobufglobal.h
         qabstractprotobufserializer.cpp qabstractprotobufserializer.h
-        qprotobufmessage.cpp qprotobufmessage.h qprotobufmessage_p.h
-        qprotobuflazymessagepointer.h
-        qprotobufobject.h
-        qprotobufselfcheckiterator_p.h
-        qprotobufserializer.cpp qprotobufserializer.h qprotobufserializer_p.h
         qprotobufjsonserializer.cpp qprotobufjsonserializer.h
-        qtprotobuflogging.cpp qtprotobuflogging_p.h
-        qprotobufregistration.cpp qprotobufregistration.h
+        qprotobuflazymessagepointer.h
+        qprotobufmessage.cpp qprotobufmessage.h qprotobufmessage_p.h
+        qprotobufobject.h
+        qprotobufoneof.cpp qprotobufoneof.h
         qprotobufpropertyordering.cpp qprotobufpropertyordering.h
         qprotobufpropertyorderingbuilder_p.h
-        qtprotobuftypes.cpp qtprotobuftypes.h
-        qprotobufoneof.cpp qprotobufoneof.h
+        qprotobufregistration.cpp qprotobufregistration.h
+        qprotobufselfcheckiterator_p.h
+        qprotobufserializer.cpp qprotobufserializer.h qprotobufserializer_p.h
         qtprotobufdefs_p.h
+        qtprotobuflogging.cpp qtprotobuflogging_p.h
+        qtprotobuftypes.cpp qtprotobuftypes.h
     EXTRA_CMAKE_FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/QtProtobufProperties.cmake.in"
     PUBLIC_LIBRARIES
