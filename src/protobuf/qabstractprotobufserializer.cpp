@@ -175,8 +175,10 @@ bool QAbstractProtobufSerializer::deserialize(QProtobufMessage *message, QByteAr
 {
     Q_ASSERT(message != nullptr && message->propertyOrdering() != nullptr
              && message->propertyOrdering()->data != nullptr);
-    // Wipe the message using the default constructor.
-    message->metaObject()->metaType().construct(message);
+    // Wipe the message by reconstructing it in place.
+    const auto mtype = message->metaObject()->metaType();
+    mtype.destruct(message);
+    mtype.construct(message);
     return deserializeMessage(message, data);
 }
 
