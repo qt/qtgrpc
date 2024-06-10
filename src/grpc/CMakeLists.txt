@@ -23,6 +23,7 @@ qt_internal_add_module(Grpc
         Qt::Core
         Qt::Protobuf
         Qt::Network
+    QT_LICENSE_ID QT_COMMERCIAL_OR_GPL3
 )
 
 qt_internal_add_docs(Grpc
