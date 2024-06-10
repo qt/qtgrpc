@@ -7,6 +7,8 @@ if(NOT QT_BUILD_STANDALONE_TESTS AND NOT QT_BUILDING_QT)
     find_package(Qt6BuildInternals REQUIRED COMPONENTS STANDALONE_TEST)
 endif()
 
+get_target_property(protoc_version WrapProtoc::WrapProtoc _qt_internal_protobuf_version)
+
 qt_internal_add_test(tst_qtprotobufgen
     SOURCES
         tst_qtprotobufgen.cpp
@@ -45,10 +47,18 @@ qt_add_protobuf(tst_qtprotobufgen_gen
         ../shared/data/proto/mapmessages.proto
         ../shared/data/proto/oneofmessages.proto
         ../shared/data/proto/repeatedmessages.proto
-        ../shared/data/proto/optional.proto
     GENERATE_PACKAGE_SUBFOLDERS
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/folder"
 )
+
+if(protoc_version VERSION_GREATER_EQUAL "3.12")
+    qt_add_protobuf(tst_qtprotobufgen_gen
+        PROTO_FILES
+            ../shared/data/proto/optional.proto
+        GENERATE_PACKAGE_SUBFOLDERS
+        OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/folder"
+    )
+endif()
 qt_autogen_tools_initial_setup(tst_qtprotobufgen_gen)
 
 add_library(tst_qtprotobufgen_custom_exports_gen SHARED)
@@ -81,7 +91,6 @@ if(MINGW)
     target_compile_options(tst_qtprotobufgen_gen PRIVATE "-Wa,-mbig-obj")
 endif()
 
-get_target_property(protoc_version WrapProtoc::WrapProtoc _qt_internal_protobuf_version)
 if(protoc_version VERSION_GREATER_EQUAL "3.12" AND protoc_version VERSION_LESS "3.15")
     qt_internal_extend_target(tst_qtprotobufgen
         DEFINES
