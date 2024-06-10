@@ -57,7 +57,7 @@ target_link_libraries(tst_qtgrpcgen_client_grpc_only PRIVATE tst_qtgrpcgen_proto
 
 add_dependencies(tst_qtgrpcgen tst_qtgrpcgen_client_grpc_only)
 
-if(TARGET Qt6::Qml)
+if(TARGET Qt6::GrpcQuick)
     qt_internal_extend_target(tst_qtgrpcgen
         DEFINES
             HAVE_QML
