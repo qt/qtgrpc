@@ -91,7 +91,7 @@ endif()
 
 add_dependencies(tst_qtprotobufgen tst_qtprotobufgen_gen tst_qtprotobufgen_custom_exports_gen)
 
-if(TARGET Qt6::Qml)
+if(TARGET Qt6::ProtobufQuick)
     qt_internal_extend_target(tst_qtprotobufgen
         DEFINES
             HAVE_QML
