@@ -20,6 +20,7 @@ qt_internal_add_qml_module(GrpcQuick
         Qt::Grpc
     PUBLIC_LIBRARIES
         Qt::Quick
+    QT_LICENSE_ID QT_COMMERCIAL_OR_GPL3
 )
 
 qt_internal_extend_target(GrpcQuick CONDITION QT_FEATURE_qml_ssl
