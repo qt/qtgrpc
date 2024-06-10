@@ -14,5 +14,4 @@ qt_internal_add_qml_module(ProtobufQuick
         Qt::Qml
     PUBLIC_LIBRARIES
         Qt::Quick
-    GENERATE_CPP_EXPORTS
 )
