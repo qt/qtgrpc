@@ -227,9 +227,8 @@ ApplicationWindow {
 
     GrpcHttp2Channel {
         id: grpcChannel
+        hostUri: "http://localhost:50051"
         options: GrpcChannelOptions {
-            id: channelOptions
-            host: "http://localhost:50051"
         }
     }
 

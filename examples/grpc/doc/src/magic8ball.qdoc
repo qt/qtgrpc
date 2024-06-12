@@ -37,8 +37,8 @@
     The client application connects to the \c localhost with port
     \c 50051:
     \quotefromfile magic8ball/Main.qml
-    \skipto id: channelOptions
-    \printuntil host: "http://localhost:50051"
+    \skipto id: grpcChannel
+    \printuntil hostUri: "http://localhost:50051"
 
     And sends a request to the server part:
     \quotefromfile magic8ball/Main.qml
