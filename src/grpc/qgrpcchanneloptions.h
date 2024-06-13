@@ -9,6 +9,8 @@
 #if QT_CONFIG(ssl)
 #  include <QtNetwork/qsslconfiguration.h>
 #endif
+
+#include <QtCore/qtclasshelpermacros.h>
 #include <QtCore/qurl.h>
 
 #include <memory>
@@ -28,8 +30,11 @@ public:
 
     Q_GRPC_EXPORT QGrpcChannelOptions(const QGrpcChannelOptions &other);
     Q_GRPC_EXPORT QGrpcChannelOptions &operator=(const QGrpcChannelOptions &other);
-    Q_GRPC_EXPORT QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept;
-    Q_GRPC_EXPORT QGrpcChannelOptions &operator=(QGrpcChannelOptions &&other) noexcept;
+
+    QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept = default;
+    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QGrpcChannelOptions)
+
+    void swap(QGrpcChannelOptions &other) noexcept { dPtr.swap(other.dPtr); }
 
     Q_GRPC_EXPORT QGrpcChannelOptions &setDeadline(QGrpcDuration deadline);
     Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(const QGrpcMetadata &metadata);
@@ -51,7 +56,7 @@ public:
 #endif
 
 private:
-    std::unique_ptr<QGrpcChannelOptionsPrivate> dPtr;
+    std::unique_ptr<QGrpcChannelOptionsPrivate, void (*)(QGrpcChannelOptionsPrivate *)> dPtr;
 
 #ifndef QT_NO_DEBUG_STREAM
     friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts);
