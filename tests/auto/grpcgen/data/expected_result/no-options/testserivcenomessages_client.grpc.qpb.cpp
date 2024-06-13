@@ -17,14 +17,6 @@ std::shared_ptr<QGrpcCallReply> Client::testMethod(const qtprotobufnamespace::te
     return call("testMethod"_L1, arg, options);
 }
 
-void Client::testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg, const QObject *context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback, const QGrpcCallOptions &options)
-{
-    std::shared_ptr<QGrpcCallReply> reply = call("testMethod"_L1, arg, options);
-    QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, callback]() {
-        callback(reply);
-    }, Qt::SingleShotConnection);
-}
-
 } // namespace TestService
 } // namespace qtgrpc::tests::nomessages
 

@@ -17,14 +17,6 @@ std::shared_ptr<QGrpcCallReply> Client::testMethod(const qtgrpc::tests::SimpleSt
     return call("testMethod"_L1, arg, options);
 }
 
-void Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QObject *context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback, const QGrpcCallOptions &options)
-{
-    std::shared_ptr<QGrpcCallReply> reply = call("testMethod"_L1, arg, options);
-    QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, callback]() {
-        callback(reply);
-    }, Qt::SingleShotConnection);
-}
-
 std::shared_ptr<QGrpcServerStream> Client::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
     return startStream<QGrpcServerStream>("testMethodServerStream"_L1, arg, options);

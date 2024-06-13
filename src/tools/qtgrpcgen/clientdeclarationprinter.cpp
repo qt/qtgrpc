@@ -67,7 +67,6 @@ void ClientDeclarationPrinter::printClientMethodsDeclaration()
             m_printer->Print(parameters, GrpcTemplates::ClientMethodStreamDeclarationTemplate());
         } else {
             m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationAsyncTemplate());
-            m_printer->Print(parameters, GrpcTemplates::ClientMethodDeclarationAsync2Template());
         }
         m_printer->Print("\n");
     }

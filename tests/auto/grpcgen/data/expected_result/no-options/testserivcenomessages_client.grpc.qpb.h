@@ -26,7 +26,6 @@ class  Client : public QGrpcClientBase
 public:
     explicit Client(QObject *parent = nullptr);
     std::shared_ptr<QGrpcCallReply> testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options = {});
-    Q_INVOKABLE void testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg, const QObject *context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback, const QGrpcCallOptions &options = {});
 
 
 };
