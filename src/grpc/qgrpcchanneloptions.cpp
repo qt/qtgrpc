@@ -34,10 +34,15 @@ public:
 #endif
 };
 
+static void dPtrDeleter(QGrpcChannelOptionsPrivate *ptr)
+{
+    delete ptr;
+}
+
 /*!
     Constructs a QGrpcChannelOptions.
 */
-QGrpcChannelOptions::QGrpcChannelOptions() : dPtr(std::make_unique<QGrpcChannelOptionsPrivate>())
+QGrpcChannelOptions::QGrpcChannelOptions() : dPtr(new QGrpcChannelOptionsPrivate(), dPtrDeleter)
 {
 }
 
@@ -45,7 +50,7 @@ QGrpcChannelOptions::QGrpcChannelOptions() : dPtr(std::make_unique<QGrpcChannelO
     Construct a copy of QGrpcChannelOptions with \a other object.
 */
 QGrpcChannelOptions::QGrpcChannelOptions(const QGrpcChannelOptions &other)
-    : dPtr(std::make_unique<QGrpcChannelOptionsPrivate>(*other.dPtr))
+    : dPtr(new QGrpcChannelOptionsPrivate(*other.dPtr), dPtrDeleter)
 {
 }
 
@@ -61,15 +66,29 @@ QGrpcChannelOptions &QGrpcChannelOptions::operator=(const QGrpcChannelOptions &o
 }
 
 /*!
-    Move-construct a QGrpcChannelOptions instance, making it point at the same
-    object that \a other was pointing to.
+    \fn QGrpcChannelOptions::QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept
+    Move-constructs a new QGrpcChannelOptions from \a other.
+
+    \note The moved-from object \a other is placed in a partially-formed state,
+    in which the only valid operations are destruction and assignment of a new
+    value.
 */
-QGrpcChannelOptions::QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept = default;
 
 /*!
-    Move-assigns \a other to this QGrpcChannelOptions instance.
+    \fn QGrpcChannelOptions &QGrpcChannelOptions::operator=(QGrpcChannelOptions &&other) noexcept
+    Move-assigns \a other to this QGrpcChannelOptions instance and returns a
+    reference to it.
+
+    \note The moved-from object \a other is placed in a partially-formed state,
+    in which the only valid operations are destruction and assignment of a new
+    value.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::operator=(QGrpcChannelOptions &&other) noexcept = default;
+
+/*!
+    \since 6.8
+    \fn void QGrpcChannelOptions::swap(QGrpcChannelOptions &other) noexcept
+    Swaps this instance with \a other. This operation is very fast and never fails.
+*/
 
 /*!
     Destroys the QGrpcChannelOptions object.
