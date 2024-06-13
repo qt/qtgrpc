@@ -1,10 +1,10 @@
 // Copyright (C) 2024 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include "qgrpcserializationformat.h"
+#include <QtGrpc/qgrpcserializationformat.h>
 
-#include "QtProtobuf/qprotobufjsonserializer.h"
-#include "QtProtobuf/qprotobufserializer.h"
+#include <QtProtobuf/qprotobufjsonserializer.h>
+#include <QtProtobuf/qprotobufserializer.h>
 
 QT_BEGIN_NAMESPACE
 

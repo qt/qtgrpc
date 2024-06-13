@@ -4,9 +4,10 @@
 #ifndef QGRPCSERIALIZATIONFORMAT_H
 #define QGRPCSERIALIZATIONFORMAT_H
 
+#include <QtGrpc/qtgrpcglobal.h>
+
 #include <QtCore/qbytearrayview.h>
 #include <QtCore/qtclasshelpermacros.h>
-#include <QtGrpc/qtgrpcglobal.h>
 
 #include <memory>
 
