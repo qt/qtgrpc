@@ -41,8 +41,8 @@ public:
     [[nodiscard]] const QGrpcMetadata &serverMetadata() const & noexcept;
 
     // Should never happen. Type is not movable.
-    QGrpcMetadata serverMetadata() && noexcept = delete;
-    QGrpcCallOptions callOptions() && noexcept = delete;
+    void serverMetadata() && = delete;
+    void callOptions() && = delete;
 
     void setArgument(QByteArrayView arg);
     void setCallOptions(const QGrpcCallOptions &options);
