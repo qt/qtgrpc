@@ -28,21 +28,23 @@ public:
     Q_GRPC_EXPORT explicit QGrpcSerializationFormat(Format format = Format::Default);
     Q_GRPC_EXPORT QGrpcSerializationFormat(QByteArrayView suffix,
                                            std::shared_ptr<QAbstractProtobufSerializer> serializer);
-
     Q_GRPC_EXPORT ~QGrpcSerializationFormat();
 
     Q_GRPC_EXPORT QGrpcSerializationFormat(const QGrpcSerializationFormat &);
-    Q_GRPC_EXPORT QGrpcSerializationFormat(QGrpcSerializationFormat &&);
-
     Q_GRPC_EXPORT QGrpcSerializationFormat &operator=(const QGrpcSerializationFormat &);
-    Q_GRPC_EXPORT QGrpcSerializationFormat &operator=(QGrpcSerializationFormat &&);
+
+    QGrpcSerializationFormat(QGrpcSerializationFormat &&other) noexcept = default;
+    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QGrpcSerializationFormat)
+
+    void swap(QGrpcSerializationFormat &other) noexcept { dPtr.swap(other.dPtr); }
 
     [[nodiscard]] Q_GRPC_EXPORT QByteArray suffix() const noexcept;
     [[nodiscard]] Q_GRPC_EXPORT std::shared_ptr<QAbstractProtobufSerializer>
     serializer() const noexcept;
 
 private:
-    std::unique_ptr<QGrpcSerializationFormatPrivate> dPtr;
+    std::unique_ptr<QGrpcSerializationFormatPrivate, void (*)(QGrpcSerializationFormatPrivate *)>
+        dPtr;
 };
 
 QT_END_NAMESPACE

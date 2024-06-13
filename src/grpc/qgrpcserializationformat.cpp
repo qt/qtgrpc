@@ -53,6 +53,11 @@ public:
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
 };
 
+static void dPtrDeleter(QGrpcSerializationFormatPrivate *ptr)
+{
+    delete ptr;
+}
+
 /*!
     Creates a new QGrpcSerializationFormat object with the given preset
     \a format.
@@ -61,12 +66,11 @@ public:
 */
 QGrpcSerializationFormat::QGrpcSerializationFormat(Format format)
     : dPtr(format == Format::Json
-               ? std::make_unique<
-                   QGrpcSerializationFormatPrivate>("json",
-                                                    std::make_shared<QProtobufJsonSerializer>())
-               : std::make_unique<
-                   QGrpcSerializationFormatPrivate>(format == Format::Protobuf ? "proto" : "",
-                                                    std::make_shared<QProtobufSerializer>()))
+               ? new QGrpcSerializationFormatPrivate("json",
+                                                     std::make_shared<QProtobufJsonSerializer>())
+               : new QGrpcSerializationFormatPrivate(format == Format::Protobuf ? "proto" : "",
+                                                     std::make_shared<QProtobufSerializer>()),
+           dPtrDeleter)
 {
 }
 
@@ -82,7 +86,8 @@ QGrpcSerializationFormat::~QGrpcSerializationFormat() = default;
 QGrpcSerializationFormat::QGrpcSerializationFormat(QByteArrayView suffix,
                                                    std::shared_ptr<QAbstractProtobufSerializer>
                                                        serializer)
-    : dPtr(std::make_unique<QGrpcSerializationFormatPrivate>(suffix, std::move(serializer)))
+    : dPtr(new QGrpcSerializationFormatPrivate(suffix, std::move(serializer)),
+           dPtrDeleter)
 {
 }
 
@@ -90,15 +95,8 @@ QGrpcSerializationFormat::QGrpcSerializationFormat(QByteArrayView suffix,
     Constructs a copy of \a other.
 */
 QGrpcSerializationFormat::QGrpcSerializationFormat(const QGrpcSerializationFormat &other)
-    : dPtr(std::make_unique<QGrpcSerializationFormatPrivate>(*other.dPtr))
-{
-}
-
-/*!
-    Move-constructs a QGrpcSerializationFormat instance from \a other.
-*/
-QGrpcSerializationFormat::QGrpcSerializationFormat(QGrpcSerializationFormat &&other)
-    : dPtr(std::exchange(other.dPtr, nullptr))
+    : dPtr(new QGrpcSerializationFormatPrivate(*other.dPtr),
+           dPtrDeleter)
 {
 }
 
@@ -113,14 +111,29 @@ QGrpcSerializationFormat &QGrpcSerializationFormat::operator=(const QGrpcSeriali
 }
 
 /*!
-    Moves the \a other QGrpcSerializationFormat object to this one.
+    \fn QGrpcSerializationFormat::QGrpcSerializationFormat(QGrpcSerializationFormat &&other) noexcept
+    Move-constructs a new QGrpcSerializationFormat from \a other.
+
+    \note The moved-from object \a other is placed in a partially-formed state,
+    in which the only valid operations are destruction and assignment of a new
+    value.
 */
-QGrpcSerializationFormat &QGrpcSerializationFormat::operator=(QGrpcSerializationFormat &&other)
-{
-    if (this != &other)
-        dPtr = std::exchange(other.dPtr, nullptr);
-    return *this;
-}
+
+/*!
+    \fn QGrpcSerializationFormat &QGrpcSerializationFormat::operator=(QGrpcSerializationFormat &&other) noexcept
+    Move-assigns \a other to this QGrpcSerializationFormat instance and returns
+    a reference to it.
+
+    \note The moved-from object \a other is placed in a partially-formed state,
+    in which the only valid operations are destruction and assignment of a new
+    value.
+*/
+
+/*!
+    \since 6.8
+    \fn void QGrpcSerializationFormat::swap(QGrpcSerializationFormat &other) noexcept
+    Swaps this instance with \a other. This operation is very fast and never fails.
+*/
 
 /*!
     Returns the content type suffix for this serialization format.
