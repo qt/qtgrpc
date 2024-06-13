@@ -22,14 +22,6 @@ const char *GrpcTemplates::ClientMethodDeclarationAsyncTemplate()
            "QGrpcCallOptions &options = {});\n";
 }
 
-const char *GrpcTemplates::ClientMethodDeclarationAsync2Template()
-{
-    return "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$, const QObject "
-           "*context, "
-           "const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback, const "
-           "QGrpcCallOptions &options = {});\n";
-}
-
 const char *GrpcTemplates::ClientMethodDeclarationQmlTemplate()
 {
     return "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$, "
@@ -67,22 +59,6 @@ const char *GrpcTemplates::ClientMethodDefinitionAsyncTemplate()
            "&$param_name$, const QGrpcCallOptions &options)\n"
            "{\n"
            "    return call(\"$method_name$\"_L1, $param_name$, options);\n"
-           "}\n";
-}
-
-const char *GrpcTemplates::ClientMethodDefinitionAsync2Template()
-{
-    return "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$, const QObject "
-           "*context, const std::function<void(std::shared_ptr<QGrpcCallReply>)> &callback, const "
-           "QGrpcCallOptions &options)\n"
-           "{\n"
-           "    std::shared_ptr<QGrpcCallReply> reply = call(\"$method_name$\"_L1, "
-           "$param_name$, options);\n"
-           "    QObject::connect(reply.get(), &QGrpcCallReply::finished, context, [reply, "
-           "callback]() "
-           "{\n"
-           "        callback(reply);\n"
-           "    }, Qt::SingleShotConnection);\n"
            "}\n\n";
 }
 

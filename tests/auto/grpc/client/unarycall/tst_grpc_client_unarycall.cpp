@@ -39,7 +39,6 @@ public:
 
 private Q_SLOTS:
     void asyncWithSubscribe();
-    void asyncWithLambda();
     void immediateCancel();
     void deferredCancel();
     void asyncClientStatusMessage();
@@ -62,23 +61,6 @@ void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
         result = reply->read<SimpleStringMessage>();
         waitForReply = true;
     });
-
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(waitForReply, true, MessageLatency);
-    QVERIFY(result.has_value());
-    QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
-}
-
-void QtGrpcClientUnaryCallTest::asyncWithLambda()
-{
-    std::optional<SimpleStringMessage> result = SimpleStringMessage();
-    SimpleStringMessage request;
-    request.setTestFieldString("Hello Qt!");
-    bool waitForReply = false;
-    client()->testMethod(request, this,
-                         [&result, &waitForReply](std::shared_ptr<QGrpcCallReply> reply) {
-                             result = reply->read<SimpleStringMessage>();
-                             waitForReply = true;
-                         });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(waitForReply, true, MessageLatency);
     QVERIFY(result.has_value());
