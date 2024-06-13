@@ -5,11 +5,12 @@
 #ifndef QGRPCSTREAM_H
 #define QGRPCSTREAM_H
 
+#include <QtGrpc/qgrpcoperation.h>
+#include <QtGrpc/qtgrpcglobal.h>
+
 #include <QtCore/qbytearray.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qstring.h>
-#include <QtGrpc/qgrpcoperation.h>
-#include <QtGrpc/qtgrpcglobal.h>
 
 #include <memory>
 #include <type_traits>

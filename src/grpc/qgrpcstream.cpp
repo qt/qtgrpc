@@ -2,9 +2,8 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include "qgrpcstream.h"
-
-#include "qgrpcchanneloperation.h"
+#include <QtGrpc/qgrpcchanneloperation.h>
+#include <QtGrpc/qgrpcstream.h>
 
 #include <QtCore/qthread.h>
 
