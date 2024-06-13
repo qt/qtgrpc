@@ -27,10 +27,15 @@ public:
     QGrpcMetadata metadata;
 };
 
+static void dPtrDeleter(QGrpcCallOptionsPrivate *ptr)
+{
+    delete ptr;
+}
+
 /*!
     Constructs an empty QGrpcCallOptions object.
 */
-QGrpcCallOptions::QGrpcCallOptions() : dPtr(std::make_unique<QGrpcCallOptionsPrivate>())
+QGrpcCallOptions::QGrpcCallOptions() : dPtr(new QGrpcCallOptionsPrivate(), dPtrDeleter)
 {
 }
 
@@ -43,7 +48,7 @@ QGrpcCallOptions::~QGrpcCallOptions() = default;
     Construct a copy of QGrpcCallOptions with \a other object.
 */
 QGrpcCallOptions::QGrpcCallOptions(const QGrpcCallOptions &other)
-    : dPtr(std::make_unique<QGrpcCallOptionsPrivate>(*other.dPtr))
+    : dPtr(new QGrpcCallOptionsPrivate(*other.dPtr), dPtrDeleter)
 {
 }
 
@@ -58,9 +63,30 @@ QGrpcCallOptions &QGrpcCallOptions::operator=(const QGrpcCallOptions &other)
     return *this;
 }
 
-QGrpcCallOptions::QGrpcCallOptions(QGrpcCallOptions &&other) noexcept = default;
+/*!
+    \fn QGrpcCallOptions::QGrpcCallOptions(QGrpcCallOptions &&other) noexcept
+    Move-constructs a new QGrpcCallOptions from \a other.
 
-QGrpcCallOptions &QGrpcCallOptions::operator=(QGrpcCallOptions &&other) noexcept = default;
+    \note The moved-from object \a other is placed in a partially-formed state,
+    in which the only valid operations are destruction and assignment of a new
+    value.
+*/
+
+/*!
+    \fn QGrpcCallOptions &QGrpcCallOptions::operator=(QGrpcCallOptions &&other) noexcept
+    Move-assigns \a other to this QGrpcCallOptions instance and returns a
+    reference to it.
+
+    \note The moved-from object \a other is placed in a partially-formed state,
+    in which the only valid operations are destruction and assignment of a new
+    value.
+*/
+
+/*!
+    \since 6.8
+    \fn void QGrpcCallOptions::swap(QGrpcCallOptions &other) noexcept
+    Swaps this instance with \a other. This operation is very fast and never fails.
+*/
 
 /*!
     Sets deadline value with \a deadline and returns updated QGrpcCallOptions object.

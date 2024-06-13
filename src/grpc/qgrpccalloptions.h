@@ -7,6 +7,8 @@
 #include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
+#include <QtCore/qtclasshelpermacros.h>
+
 #include <memory>
 #include <optional>
 
@@ -23,8 +25,11 @@ public:
 
     Q_GRPC_EXPORT QGrpcCallOptions(const QGrpcCallOptions &other);
     Q_GRPC_EXPORT QGrpcCallOptions &operator=(const QGrpcCallOptions &other);
-    Q_GRPC_EXPORT QGrpcCallOptions(QGrpcCallOptions &&other) noexcept;
-    Q_GRPC_EXPORT QGrpcCallOptions &operator=(QGrpcCallOptions &&other) noexcept;
+
+    QGrpcCallOptions(QGrpcCallOptions &&other) noexcept = default;
+    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QGrpcCallOptions)
+
+    void swap(QGrpcCallOptions &other) noexcept { dPtr.swap(other.dPtr); }
 
     Q_GRPC_EXPORT QGrpcCallOptions &setDeadline(QGrpcDuration deadline);
     Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(const QGrpcMetadata &metadata);
@@ -35,7 +40,7 @@ public:
     [[nodiscard]] Q_GRPC_EXPORT QGrpcMetadata metadata() && noexcept;
 
 private:
-    std::unique_ptr<QGrpcCallOptionsPrivate> dPtr;
+    std::unique_ptr<QGrpcCallOptionsPrivate, void (*)(QGrpcCallOptionsPrivate *)> dPtr;
 
 #ifndef QT_NO_DEBUG_STREAM
     friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts);
