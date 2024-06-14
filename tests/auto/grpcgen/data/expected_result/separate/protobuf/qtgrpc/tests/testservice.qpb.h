@@ -16,8 +16,6 @@
 #include <QtCore/qlist.h>
 #include <QtCore/qshareddata.h>
 
-#include <memory>
-
 
 namespace qtgrpc::tests {
 class SimpleStringMessage;

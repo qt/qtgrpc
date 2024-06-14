@@ -178,7 +178,7 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
                                    CommonTemplates::ExternalIncludeTemplate());
     }
 
-    clientHeaderPrinter->Print(CommonTemplates::DefaultSystemIncludesTemplate());
+    clientHeaderPrinter->Print(GrpcTemplates::DefaultSystemIncludesTemplate());
     clientHeaderPrinter->Print("\n");
 
     std::set<std::string> internalIncludes = QGrpcGenerator::GetInternalIncludes(file);
@@ -221,7 +221,7 @@ bool QGrpcGenerator::GenerateServerServices(const FileDescriptor *file,
     if (Options::instance().hasQml())
         serverHeaderPrinter->Print(CommonTemplates::QmlProtobufIncludesTemplate());
 
-    serverHeaderPrinter->Print(CommonTemplates::DefaultSystemIncludesTemplate());
+    serverHeaderPrinter->Print(GrpcTemplates::DefaultSystemIncludesTemplate());
 
     std::set<std::string> externalIncludes;
     for (const auto &include : externalIncludes) {

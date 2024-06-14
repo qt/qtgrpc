@@ -16,8 +16,6 @@
 #include <QtCore/qlist.h>
 #include <QtCore/qshareddata.h>
 
-#include <memory>
-
 
 namespace qtprotobufnamespace::tests {
 class SimpleSInt32StringMapMessage;

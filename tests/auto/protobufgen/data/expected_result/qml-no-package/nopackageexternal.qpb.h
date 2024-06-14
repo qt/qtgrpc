@@ -19,8 +19,6 @@
 #include <QtCore/qlist.h>
 #include <QtCore/qshareddata.h>
 
-#include <memory>
-
 
 class SimpleIntMessageExt;
 using SimpleIntMessageExtRepeated = QList<SimpleIntMessageExt>;
