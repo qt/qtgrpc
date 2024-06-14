@@ -6,6 +6,7 @@
 #define QTPROTOBUFTYPES_H
 
 #include <QtProtobuf/qtprotobufglobal.h>
+
 #include <QtProtobuf/qprotobufmessage.h>
 
 #include <QtCore/qhash.h>

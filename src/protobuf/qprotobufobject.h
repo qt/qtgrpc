@@ -12,6 +12,7 @@
 
 
 #include <QtProtobuf/qprotobufpropertyordering.h>
+
 #include <QtCore/qtmetamacros.h>
 
 #define Q_PROTOBUF_OBJECT\

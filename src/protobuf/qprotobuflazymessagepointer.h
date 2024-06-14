@@ -5,8 +5,9 @@
 #ifndef QPROTOBUFLAZYMESSAGEPOINTER_H
 #define QPROTOBUFLAZYMESSAGEPOINTER_H
 
-#include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qtprotobufglobal.h>
+
+#include <QtProtobuf/qprotobufmessage.h>
 
 QT_BEGIN_NAMESPACE
 namespace QtProtobufPrivate {

@@ -16,17 +16,18 @@
 // We mean it.
 //
 
+#include <QtProtobuf/qabstractprotobufserializer.h>
+#include <QtProtobuf/qprotobufserializer.h>
+#include <QtProtobuf/qtprotobuftypes.h>
+
+#include <QtProtobuf/private/qprotobufselfcheckiterator_p.h>
+#include <QtProtobuf/private/qtprotobuflogging_p.h>
+
 #include <QtCore/qendian.h>
 #include <QtCore/qstring.h>
 #include <QtCore/qbytearray.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qvariant.h>
-
-#include <QtProtobuf/private/qprotobufselfcheckiterator_p.h>
-#include <QtProtobuf/private/qtprotobuflogging_p.h>
-#include <QtProtobuf/qabstractprotobufserializer.h>
-#include <QtProtobuf/qprotobufserializer.h>
-#include <QtProtobuf/qtprotobuftypes.h>
 
 #include <optional>
 #include <type_traits>

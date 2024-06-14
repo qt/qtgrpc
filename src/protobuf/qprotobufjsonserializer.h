@@ -5,8 +5,9 @@
 #define QPROTOBUFJSONSERIALIZER_H
 
 #include <QtProtobuf/qtprotobufglobal.h>
-#include <QtProtobuf/qtprotobuftypes.h>
+
 #include <QtProtobuf/qabstractprotobufserializer.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 
 #include <memory>
 

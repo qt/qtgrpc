@@ -15,9 +15,9 @@
 // We mean it.
 //
 
-#include "qprotobufmessage.h"
-
 #include <QtProtobuf/qtprotobufglobal.h>
+
+#include <QtProtobuf/qprotobufmessage.h>
 
 #include <QtCore/qtconfigmacros.h>
 #include <QtCore/qhash.h>
