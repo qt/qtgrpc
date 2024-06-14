@@ -16,6 +16,7 @@ qt_internal_add_module(Protobuf
         qprotobufpropertyordering.cpp qprotobufpropertyordering.h
         qtprotobuftypes.cpp qtprotobuftypes.h
         qprotobufoneof.cpp qprotobufoneof.h
+        qtprotobufdefs_p.h
     EXTRA_CMAKE_FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/QtProtobufProperties.cmake.in"
     PUBLIC_LIBRARIES
