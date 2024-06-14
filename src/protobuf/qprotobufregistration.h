@@ -9,17 +9,16 @@
 #  pragma qt_sync_stop_processing
 #endif
 
-#include <QtCore/qmetatype.h>
-#include <QtCore/qmetaobject.h>
-#include <QtCore/qhash.h>
-
 #include <QtProtobuf/qtprotobufglobal.h>
-#include <QtProtobuf/qtprotobuftypes.h>
+
 #include <QtProtobuf/qabstractprotobufserializer.h>
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufpropertyordering.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 
-#include <memory>
+#include <QtCore/qmetatype.h>
+#include <QtCore/qmetaobject.h>
+#include <QtCore/qhash.h>
 
 QT_BEGIN_NAMESPACE
 

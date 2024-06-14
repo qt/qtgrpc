@@ -8,11 +8,11 @@
 #  pragma qt_class(QProtobufOneof)
 #endif
 
+#include <QtProtobuf/qprotobufmessage.h>
+#include <QtProtobuf/qtprotobuftypes.h>
+
 #include <QtCore/qmetatype.h>
 #include <QtCore/qvariant.h>
-
-#include <QtProtobuf/qtprotobuftypes.h>
-#include <QtProtobuf/qprotobufmessage.h>
 
 #include <type_traits>
 

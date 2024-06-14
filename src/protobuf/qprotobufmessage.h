@@ -5,6 +5,7 @@
 #define Q_PROTOBUF_MESSAGE_H
 
 #include <QtProtobuf/qtprotobufglobal.h>
+
 #include <QtProtobuf/qprotobufpropertyordering.h>
 
 #include <QtCore/qtconfigmacros.h>
