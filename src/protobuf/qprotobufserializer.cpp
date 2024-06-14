@@ -5,6 +5,7 @@
 #include "qprotobufserializer.h"
 #include "qprotobufserializer_p.h"
 #include "qprotobufregistration.h"
+#include "qtprotobufdefs_p.h"
 #include "qtprotobuftypes.h"
 
 #include <QtCore/qmetatype.h>
@@ -266,7 +267,8 @@ void QProtobufSerializerPrivate::serializeMessage(const QProtobufMessage *messag
 
     for (int index = 0; index < ordering->fieldCount(); ++index) {
         int fieldIndex = ordering->getFieldNumber(index);
-        Q_ASSERT_X(fieldIndex < 536870912 && fieldIndex > 0, "", "fieldIndex is out of range");
+        Q_ASSERT_X(fieldIndex <= ProtobufFieldNumMax && fieldIndex >= ProtobufFieldNumMin, "",
+                   "fieldIndex is out of range");
         QProtobufFieldInfo fieldInfo(*ordering, index);
         QVariant propertyValue = message->property(fieldInfo);
         serializeProperty(propertyValue, fieldInfo);

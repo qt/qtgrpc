@@ -4,6 +4,7 @@
 #include "qprotobufjsonserializer.h"
 #include "qprotobufserializer_p.h"
 #include "qprotobufregistration.h"
+#include "qtprotobufdefs_p.h"
 
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qjsonarray.h>
@@ -341,7 +342,7 @@ public:
             Q_ASSERT(ordering != nullptr);
             for (int index = 0; index < ordering->fieldCount(); ++index) {
                 int fieldIndex = ordering->getFieldNumber(index);
-                Q_ASSERT_X(fieldIndex < 536870912 && fieldIndex > 0,
+                Q_ASSERT_X(fieldIndex <= ProtobufFieldNumMax && fieldIndex >= ProtobufFieldNumMin,
                            "",
                            "fieldIndex is out of range");
                 QProtobufFieldInfo fieldInfo(*ordering, index);
@@ -587,7 +588,8 @@ public:
         std::map<QString, QProtobufFieldInfo> msgContainer; // map<key, fieldInfo>
         for (int index = 0; index < ordering->fieldCount(); ++index) {
             int fieldIndex = ordering->getFieldNumber(index);
-            Q_ASSERT_X(fieldIndex < 536870912 && fieldIndex > 0, "", "fieldIndex is out of range");
+            Q_ASSERT_X(fieldIndex <= ProtobufFieldNumMax && fieldIndex >= ProtobufFieldNumMin, "",
+                       "fieldIndex is out of range");
             QProtobufFieldInfo fieldInfo(*ordering, index);
             QString key = fieldInfo.getJsonName().toString();
             msgContainer.insert(std::pair<QString, QProtobufFieldInfo>(key, fieldInfo));
