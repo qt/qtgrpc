@@ -28,12 +28,20 @@ set(testserver_gen_output
     "${CMAKE_CURRENT_BINARY_DIR}/qtgrpc/tests/testservice_grpc.pb.go"
     "${CMAKE_CURRENT_BINARY_DIR}/qtgrpc/tests/testservice.pb.go"
 )
+
+set(extra_protoc_args "")
+get_target_property(protoc_version WrapProtoc::WrapProtoc _qt_internal_protobuf_version)
+if(protoc_version VERSION_GREATER_EQUAL "3.12" AND protoc_version VERSION_LESS "3.15")
+    list(APPEND extra_protoc_args "--experimental_allow_proto3_optional")
+endif()
+
 add_custom_command(
     OUTPUT
         ${testserver_gen_output}
     COMMAND
         ${CMAKE_COMMAND} -E env "PATH=$ENV{PATH}:${go_path}/bin" "GOPATH=${go_path}" --
         $<TARGET_FILE:WrapProtoc::WrapProtoc>
+        ${extra_protoc_args}
         --go_out=${CMAKE_CURRENT_BINARY_DIR}
         --go-grpc_out=${CMAKE_CURRENT_BINARY_DIR}
         -I${CMAKE_CURRENT_LIST_DIR}/../../../shared/proto
