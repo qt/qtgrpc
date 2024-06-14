@@ -82,12 +82,6 @@ const char *CommonTemplates::DefaultQtIncludesTemplate()
            "#include <QtCore/qshareddata.h>\n";
 }
 
-const char *CommonTemplates::DefaultSystemIncludesTemplate()
-{
-    return "\n"
-           "#include <memory>\n";
-}
-
 const char *CommonTemplates::QmlProtobufIncludesTemplate()
 {
     return "#include <QtQml/qqmlregistration.h>\n"

@@ -219,7 +219,6 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     }
 
     headerPrinter->Print(CommonTemplates::DefaultQtIncludesTemplate());
-    headerPrinter->Print(CommonTemplates::DefaultSystemIncludesTemplate());
     headerPrinter->PrintRaw("\n");
     OpenFileNamespaces(file, headerPrinter.get());
 
