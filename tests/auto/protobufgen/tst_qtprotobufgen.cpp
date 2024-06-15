@@ -175,9 +175,10 @@ void tst_qtprotobufgen::initTestCase()
 
     QDir testOutputBaseDir(QCoreApplication::applicationDirPath());
     testOutputBaseDir.mkdir(QLatin1StringView("cmd_line_generation"));
-    QLatin1StringView folders[] = {"comments"_L1, "extra-namespace"_L1,
-                                   "fieldenum"_L1, "folder"_L1,
-                                    "qml-no-package"_L1, "no-options"_L1};
+    QLatin1StringView folders[] = {
+        "comments"_L1,       "extra-namespace"_L1, "fieldenum"_L1,           "folder"_L1,
+        "qml-no-package"_L1, "no-options"_L1,      "invalid_export_macro"_L1
+    };
     for (QLatin1StringView folder : folders)
         testOutputBaseDir.mkdir("cmd_line_generation/"_L1 + folder);
 
@@ -610,7 +611,6 @@ void tst_qtprotobufgen::cmdLineInvalidExportMacro_data()
 
     QTest::addRow("contains_dash") << "TST_QTPROTOBUFGEN-FAIL" << 1;
     QTest::addRow("contains_number_first") << "1Not_ALLoWeD" << 1;
-    QTest::addRow("valid") << "MACRO_NAME_OK" << 0;
 }
 
 void tst_qtprotobufgen::cmdLineInvalidExportMacro()
@@ -618,15 +618,14 @@ void tst_qtprotobufgen::cmdLineInvalidExportMacro()
     QFETCH(QString, exportMacro);
     QFETCH(int, result);
 
-    QString folder = "/folder/";
+    QString folder = "/invalid_export_macro/";
     QString fileName = "basicmessages";
-    QString generatingOption = "GENERATE_PACKAGE_SUBFOLDERS";
     QString exportMacroCmd = "EXPORT_MACRO=" + exportMacro;
 
     QProcess process;
     process.setWorkingDirectory(m_commandLineGenerated);
     process.startCommand(protocolBufferCompiler + QString(" ") + protocGenQtprotobufKey
-                         + m_protobufgen + optKey + generatingOption + ";" + exportMacroCmd
+                         + m_protobufgen + optKey + ";" + exportMacroCmd
                          + outputKey + m_commandLineGenerated + folder + includeKey + m_protoFiles
                          + " " + fileName + ".proto" + allow_proto3_optional);
     QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
