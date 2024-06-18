@@ -99,7 +99,7 @@ void QQmlGrpcChannelOptions::setSslConfiguration(const QQmlSslConfiguration &con
     Q_D(QQmlGrpcChannelOptions);
     if (d->m_configuration != config) {
         d->m_configuration = config;
-        d->m_options.withSslConfiguration(d->m_configuration.configuration());
+        d->m_options.setSslConfiguration(d->m_configuration.configuration());
         emit sslConfigurationChanged();
     }
 }

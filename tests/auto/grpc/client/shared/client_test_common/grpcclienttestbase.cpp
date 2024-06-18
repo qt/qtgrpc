@@ -63,7 +63,7 @@ void GrpcClientTestBase::initTestCase_data()
             << QFlags{ Channel::Qt, Channel::Ssl }
             << std::shared_ptr<QAbstractGrpcChannel>(
                    new QGrpcHttp2Channel(QUrl("https://localhost:50052", QUrl::StrictMode),
-                                         QGrpcChannelOptions{}.withSslConfiguration(sslConfig)));
+                                         QGrpcChannelOptions{}.setSslConfiguration(sslConfig)));
     }
 
     if (m_channels.testFlag(Channel::SslNoCredentials)) {
@@ -71,7 +71,7 @@ void GrpcClientTestBase::initTestCase_data()
         sslConfig.setProtocol(QSsl::TlsV1_2);
         sslConfig.setAllowedNextProtocols({ QByteArray("h2") });
         QGrpcChannelOptions channelOptions;
-        channelOptions.withSslConfiguration(sslConfig);
+        channelOptions.setSslConfiguration(sslConfig);
 
         QTest::newRow("Http2ClientSSLNoCredentials")
             << QFlags{ Channel::Qt, Channel::SslNoCredentials }

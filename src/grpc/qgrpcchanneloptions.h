@@ -51,7 +51,7 @@ public:
 
 #if QT_CONFIG(ssl)
     Q_GRPC_EXPORT QGrpcChannelOptions &
-    withSslConfiguration(const QSslConfiguration &sslConfiguration);
+    setSslConfiguration(const QSslConfiguration &sslConfiguration);
     [[nodiscard]] Q_GRPC_EXPORT std::optional<QSslConfiguration> sslConfiguration() const noexcept;
 #endif
 
