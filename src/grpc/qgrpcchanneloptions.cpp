@@ -192,7 +192,7 @@ QGrpcSerializationFormat QGrpcChannelOptions::serializationFormat() && noexcept
 /*!
     Sets SSL configuration with \a sslConfiguration and returns updated QGrpcChannelOptions object.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::withSslConfiguration(
+QGrpcChannelOptions &QGrpcChannelOptions::setSslConfiguration(
         const QSslConfiguration &sslConfiguration)
 {
     dPtr->sslConfiguration = sslConfiguration;
