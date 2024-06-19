@@ -21,6 +21,18 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
+    \fn void finished(const QGrpcStatus &status)
+
+    The signal is emitted when the gRPC communication is finished.
+
+    It usually means that the server sent the \a status and closed the
+    connection. Implementations of \l QAbstractGrpcChannel should detect this
+    situation and emit the signal.
+
+    The signal is implicitly connected to the QGrpcOperation counterpart.
+*/
+
+/*!
     \fn void QGrpcChannelOperation::messageReceived(const QByteArray &data)
 
     The signal should be emitted by the channel when the new chunk of \a data is
@@ -31,32 +43,6 @@ QT_BEGIN_NAMESPACE
     finished. For server and bidir streams this signal should be called by
     channel to signalize that receiving of new message is completed and user
     business logic now can process it at the client side.
-
-    The signal is implicitly connected to the QGrpcOperation counterpart.
-*/
-
-/*!
-    \fn void QGrpcChannelOperation::writeMessageRequested(const QByteArray &data)
-
-    The signal is emitted when the client tries to send a new message to the
-    channel.
-
-    This signal can only be emitted by client or bidir streams. Implementations
-    of \l QAbstractGrpcChannel should connect the sending logic to this signal.
-    The \a data should be wrapped with the channel-related headers and sent
-    to the wire.
-
-    The signal is implicitly connected to the QGrpcOperation counterpart.
-*/
-
-/*!
-    \fn void finished(const QGrpcStatus &status)
-
-    The signal is emitted when the gRPC communication is finished.
-
-    It usually means that the server sent the \a status and closed the
-    connection. Implementations of \l QAbstractGrpcChannel should detect this
-    situation and emit the signal.
 
     The signal is implicitly connected to the QGrpcOperation counterpart.
 */
@@ -77,6 +63,26 @@ QT_BEGIN_NAMESPACE
     \l QGrpcStatus::Cancelled status code.
 
     The signal is implicitly connected to the QGrpcOperation counterpart.
+*/
+
+/*!
+    \fn void QGrpcChannelOperation::writeMessageRequested(const QByteArray &data)
+
+    The signal is emitted when the client tries to send a new message to the
+    channel.
+
+    This signal can only be emitted by client or bidir streams. Implementations
+    of \l QAbstractGrpcChannel should connect the sending logic to this signal.
+    The \a data should be wrapped with the channel-related headers and sent
+    to the wire.
+
+    The signal is implicitly connected to the QGrpcOperation counterpart.
+*/
+
+/*!
+    \fn void QGrpcChannelOperation::writesDoneRequested()
+
+    T.B.A
 */
 
 class QGrpcChannelOperationPrivate : public QObjectPrivate
