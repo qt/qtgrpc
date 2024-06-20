@@ -162,14 +162,8 @@ QLatin1StringView QGrpcOperation::method() const noexcept
 }
 
 /*!
-    \internal
-    Returns a pointer to the assigned channel-side QGrpcChannelOperation.
+    T.B.A
 */
-QGrpcChannelOperation *QGrpcOperation::channelOperation() const noexcept
-{
-    return d_func()->channelOperation.get();
-}
-
 void QGrpcOperation::cancel()
 {
     if (!isFinished()) {
@@ -187,6 +181,15 @@ void QGrpcOperation::cancel()
 bool QGrpcOperation::isFinished() const noexcept
 {
     return d_func()->isFinished.loadRelaxed();
+}
+
+/*!
+    \internal
+    Returns a pointer to the assigned channel-side QGrpcChannelOperation.
+*/
+QGrpcChannelOperation *QGrpcOperation::channelOperation() const noexcept
+{
+    return d_func()->channelOperation.get();
 }
 
 QT_END_NAMESPACE
