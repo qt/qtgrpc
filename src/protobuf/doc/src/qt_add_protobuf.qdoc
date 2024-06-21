@@ -153,10 +153,12 @@ Since the \c test_extensions target depends on messages from the
 target_link_libraries(test_extensions PUBLIC test_messages)
 \endcode
 
-\note It's recommended to use the \c PUBLIC linking scope, since messages from
-\c test_messages target are referenced in header files that belong to
-the \c test_extensions target, so targets that link to \c test_extensions should
-have the \c test_messages target as a transitive dependency.
+\note Messages from \c test_messages target are used in header files that belong
+to the \c test_extensions target, so targets that link to \c test_extensions
+should have the \c test_messages target as a transitive dependency. It's
+recommended to use the \c PUBLIC linking scope, to have the proper
+\c INTERFACE_INCLUDE_DIRECTORIES and \c INTERFACE_LINK_LIBRARIES properties for
+protobuf library targets.
 
 \section1 Example
 
