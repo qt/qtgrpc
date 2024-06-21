@@ -13,7 +13,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class QGrpcChannelOperation;
+class QGrpcOperationContext;
 class QGrpcOperationPrivate;
 
 class Q_GRPC_EXPORT QGrpcOperation : public QObject
@@ -45,10 +45,10 @@ Q_SIGNALS:
     void finished(const QGrpcStatus &status);
 
 protected:
-    explicit QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+    explicit QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationContext,
                             QObject *parent = nullptr);
 
-    [[nodiscard]] QGrpcChannelOperation *channelOperation() const noexcept;
+    [[nodiscard]] QGrpcOperationContext *operationContext() const noexcept;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)

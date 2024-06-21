@@ -1,8 +1,8 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#ifndef QGRPCCHANNELOPERATION_H
-#define QGRPCCHANNELOPERATION_H
+#ifndef QGRPCOPERATIONCONTEXT_H
+#define QGRPCOPERATIONCONTEXT_H
 
 #include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
@@ -18,19 +18,20 @@
 QT_BEGIN_NAMESPACE
 
 class QGrpcCallOptions;
-class QGrpcChannelOperationPrivate;
+class QGrpcOperationContextPrivate;
 class QGrpcStatus;
 
-class Q_GRPC_EXPORT QGrpcChannelOperation final : public QObject
+class Q_GRPC_EXPORT QGrpcOperationContext final : public QObject
 {
     Q_OBJECT
     struct PrivateConstructor { explicit PrivateConstructor() = default; };
+
 public:
-    explicit QGrpcChannelOperation(QLatin1StringView method, QLatin1StringView service,
+    explicit QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
                                    QByteArrayView argument, const QGrpcCallOptions &options,
                                    std::shared_ptr<QAbstractProtobufSerializer> serializer,
                                    PrivateConstructor);
-    ~QGrpcChannelOperation() override;
+    ~QGrpcOperationContext() override;
 
     [[nodiscard]] QLatin1StringView method() const noexcept;
     [[nodiscard]] QLatin1StringView service() const noexcept;
@@ -60,8 +61,8 @@ Q_SIGNALS:
     void writesDoneRequested();
 
 private:
-    Q_DISABLE_COPY_MOVE(QGrpcChannelOperation)
-    Q_DECLARE_PRIVATE(QGrpcChannelOperation)
+    Q_DISABLE_COPY_MOVE(QGrpcOperationContext)
+    Q_DECLARE_PRIVATE(QGrpcOperationContext)
 
     friend class QAbstractGrpcChannel;
 public:
@@ -70,4 +71,4 @@ public:
 
 QT_END_NAMESPACE
 
-#endif // QGRPCCHANNELOPERATION_H
+#endif // QGRPCOPERATIONCONTEXT_H

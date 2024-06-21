@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QtGrpc/qgrpccalloptions.h>
-#include <QtGrpc/qgrpcchanneloperation.h>
+#include <QtGrpc/qgrpcoperationcontext.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtProtobuf/qprotobufserializer.h>
 
@@ -13,10 +13,10 @@
 QT_BEGIN_NAMESPACE
 
 /*!
-    \class QGrpcChannelOperation
+    \class QGrpcOperationContext
     \inmodule QtGrpc
     \since 6.7
-    \brief The QGrpcChannelOperation class implements common logic to
+    \brief The QGrpcOperationContext class implements common logic to
            handle the gRPC communication from the channel side.
 */
 
@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QGrpcChannelOperation::messageReceived(const QByteArray &data)
+    \fn void QGrpcOperationContext::messageReceived(const QByteArray &data)
 
     The signal should be emitted by the channel when the new chunk of \a data is
     received.
@@ -48,7 +48,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QGrpcChannelOperation::cancelRequested()
+    \fn void QGrpcOperationContext::cancelRequested()
 
     The signal is emitted when client requests to terminate the communication.
 
@@ -59,14 +59,14 @@ QT_BEGIN_NAMESPACE
     from a channel is not required and is not recommended.
 
     The client side will be notificated by the
-    \l QGrpcChannelOperation::finished signal with
+    \l QGrpcOperationContext::finished signal with
     \l QGrpcStatus::Cancelled status code.
 
     The signal is implicitly connected to the QGrpcOperation counterpart.
 */
 
 /*!
-    \fn void QGrpcChannelOperation::writeMessageRequested(const QByteArray &data)
+    \fn void QGrpcOperationContext::writeMessageRequested(const QByteArray &data)
 
     The signal is emitted when the client tries to send a new message to the
     channel.
@@ -80,16 +80,16 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QGrpcChannelOperation::writesDoneRequested()
+    \fn void QGrpcOperationContext::writesDoneRequested()
 
     T.B.A
 */
 
-class QGrpcChannelOperationPrivate : public QObjectPrivate
+class QGrpcOperationContextPrivate : public QObjectPrivate
 {
-    Q_DECLARE_PUBLIC(QGrpcChannelOperation)
+    Q_DECLARE_PUBLIC(QGrpcOperationContext)
 public:
-    QGrpcChannelOperationPrivate(QLatin1StringView method_, QLatin1StringView service_,
+    QGrpcOperationContextPrivate(QLatin1StringView method_, QLatin1StringView service_,
                                  QByteArrayView argument_, QGrpcCallOptions options_,
                                  std::shared_ptr<QAbstractProtobufSerializer> &&serializer_)
         : method(method_), service(service_), argument(argument_.toByteArray()),
@@ -105,51 +105,51 @@ public:
     QGrpcMetadata serverMetadata;
 };
 
-QGrpcChannelOperation::QGrpcChannelOperation(QLatin1StringView method, QLatin1StringView service,
+QGrpcOperationContext::QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
                                              QByteArrayView arg, const QGrpcCallOptions &options,
                                              std::shared_ptr<QAbstractProtobufSerializer>
                                                  serializer,
                                              PrivateConstructor /*unused*/)
-    : QObject(*new QGrpcChannelOperationPrivate(method, service, arg, options,
+    : QObject(*new QGrpcOperationContextPrivate(method, service, arg, options,
                                                 std::move(serializer)))
 {
 }
 
-QGrpcChannelOperation::~QGrpcChannelOperation() = default;
+QGrpcOperationContext::~QGrpcOperationContext() = default;
 
 /*!
     Returns the method name that is assigned to this operation.
 */
-QLatin1StringView QGrpcChannelOperation::method() const noexcept
+QLatin1StringView QGrpcOperationContext::method() const noexcept
 {
-    Q_D(const QGrpcChannelOperation);
+    Q_D(const QGrpcOperationContext);
     return d->method;
 }
 
 /*!
     Returns the service name that is assigned to this operation.
 */
-QLatin1StringView QGrpcChannelOperation::service() const noexcept
+QLatin1StringView QGrpcOperationContext::service() const noexcept
 {
-    Q_D(const QGrpcChannelOperation);
+    Q_D(const QGrpcOperationContext);
     return d->service;
 }
 
 /*!
     Returns the serialized arguments that are used for this operation.
 */
-QByteArrayView QGrpcChannelOperation::argument() const noexcept
+QByteArrayView QGrpcOperationContext::argument() const noexcept
 {
-    Q_D(const QGrpcChannelOperation);
+    Q_D(const QGrpcOperationContext);
     return d->argument;
 }
 
 /*!
     Return the options that are assigned to this operation.
 */
-const QGrpcCallOptions &QGrpcChannelOperation::callOptions() const & noexcept
+const QGrpcCallOptions &QGrpcOperationContext::callOptions() const & noexcept
 {
-    Q_D(const QGrpcChannelOperation);
+    Q_D(const QGrpcOperationContext);
     return d->options;
 }
 
@@ -157,9 +157,9 @@ const QGrpcCallOptions &QGrpcChannelOperation::callOptions() const & noexcept
     Return the serializer that is assigned to this operation.
 */
 std::shared_ptr<const QAbstractProtobufSerializer>
-QGrpcChannelOperation::serializer() const noexcept
+QGrpcOperationContext::serializer() const noexcept
 {
-    Q_D(const QGrpcChannelOperation);
+    Q_D(const QGrpcOperationContext);
     return d->serializer;
 }
 
@@ -168,9 +168,9 @@ QGrpcChannelOperation::serializer() const noexcept
 
     The method is used implicitly by \l QGrpcOperation counterpart.
 */
-const QGrpcMetadata &QGrpcChannelOperation::serverMetadata() const & noexcept
+const QGrpcMetadata &QGrpcOperationContext::serverMetadata() const & noexcept
 {
-    Q_D(const QGrpcChannelOperation);
+    Q_D(const QGrpcOperationContext);
     return d->serverMetadata;
 }
 
@@ -179,18 +179,18 @@ const QGrpcMetadata &QGrpcChannelOperation::serverMetadata() const & noexcept
 
     The method expects \a arg to be serialized data.
 */
-void QGrpcChannelOperation::setArgument(QByteArrayView arg)
+void QGrpcOperationContext::setArgument(QByteArrayView arg)
 {
-    Q_D(QGrpcChannelOperation);
+    Q_D(QGrpcOperationContext);
     d->argument = arg.toByteArray();
 }
 
 /*!
     Updates the call \a options attribute.
 */
-void QGrpcChannelOperation::setCallOptions(const QGrpcCallOptions &options)
+void QGrpcOperationContext::setCallOptions(const QGrpcCallOptions &options)
 {
-    Q_D(QGrpcChannelOperation);
+    Q_D(QGrpcOperationContext);
     d->options = options;
 }
 
@@ -199,9 +199,9 @@ void QGrpcChannelOperation::setCallOptions(const QGrpcCallOptions &options)
 
     The \a metadata then can be processed on the client side.
 */
-void QGrpcChannelOperation::setServerMetadata(const QGrpcMetadata &metadata)
+void QGrpcOperationContext::setServerMetadata(const QGrpcMetadata &metadata)
 {
-    Q_D(QGrpcChannelOperation);
+    Q_D(QGrpcOperationContext);
     d->serverMetadata = metadata;
 }
 
@@ -210,18 +210,18 @@ void QGrpcChannelOperation::setServerMetadata(const QGrpcMetadata &metadata)
 
     The \a metadata then can be processed on the client side.
 */
-void QGrpcChannelOperation::setServerMetadata(QGrpcMetadata &&metadata)
+void QGrpcOperationContext::setServerMetadata(QGrpcMetadata &&metadata)
 {
-    Q_D(QGrpcChannelOperation);
+    Q_D(QGrpcOperationContext);
     d->serverMetadata = std::move(metadata);
 }
 
 // For future extensions
-bool QGrpcChannelOperation::event(QEvent *event)
+bool QGrpcOperationContext::event(QEvent *event)
 {
     return QObject::event(event);
 }
 
 QT_END_NAMESPACE
 
-#include "moc_qgrpcchanneloperation.cpp"
+#include "moc_qgrpcoperationcontext.cpp"

@@ -7,8 +7,8 @@
 #include <QtCore/qeventloop.h>
 #include <QtCore/qpointer.h>
 #include <QtGrpc/private/qtgrpcglobal_p.h>
-#include <QtGrpc/qgrpcchanneloperation.h>
 #include <QtGrpc/qgrpcoperation.h>
+#include <QtGrpc/qgrpcoperationcontext.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -48,22 +48,23 @@ class QGrpcOperationPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGrpcOperation)
 public:
-    QGrpcOperationPrivate(std::shared_ptr<QGrpcChannelOperation> _channelOperation)
-        : channelOperation(std::move(_channelOperation))
+    QGrpcOperationPrivate(std::shared_ptr<QGrpcOperationContext> operationContext_)
+        : operationContext(std::move(operationContext_))
     {
     }
 
     QByteArray data;
-    std::shared_ptr<QGrpcChannelOperation> channelOperation;
+    std::shared_ptr<QGrpcOperationContext> operationContext;
     QAtomicInteger<bool> isFinished{ false };
 };
 
-QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOperation,
+QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationContext,
                                QObject *parent)
-    : QObject(*new QGrpcOperationPrivate(std::move(channelOperation)), parent)
+    : QObject(*new QGrpcOperationPrivate(std::move(operationContext)), parent)
 {
-    [[maybe_unused]] bool valid = QObject::connect(d_func()->channelOperation.get(),
-                                                   &QGrpcChannelOperation::messageReceived, this,
+    Q_D(QGrpcOperation);
+    [[maybe_unused]] bool valid = QObject::connect(d->operationContext.get(),
+                                                   &QGrpcOperationContext::messageReceived, this,
                                                    [this](const QByteArray &data) {
                                                        Q_D(QGrpcOperation);
                                                        d->data = data;
@@ -71,8 +72,8 @@ QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcChannelOperation> channelOpe
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'messageReceived' signal");
 
-    valid = QObject::connect(d_func()->channelOperation.get(), &QGrpcChannelOperation::finished,
-                             this, [this](const QGrpcStatus &status) {
+    valid = QObject::connect(d->operationContext.get(), &QGrpcOperationContext::finished, this,
+                             [this](const QGrpcStatus &status) {
                                  if (!isFinished()) {
                                      d_func()->isFinished.storeRelaxed(true);
                                      emit this->finished(status);
@@ -110,7 +111,8 @@ bool QGrpcOperation::read(QProtobufMessage *message) const
 {
     Q_ASSERT_X(message != nullptr, "QGrpcOperation::read",
                "Can't read to nullptr QProtobufMessage");
-    const auto ser = d_func()->channelOperation->serializer();
+    Q_D(const QGrpcOperation);
+    const auto ser = d->operationContext->serializer();
     return ser && ser->deserialize(message, data());
 }
 
@@ -123,7 +125,8 @@ bool QGrpcOperation::read(QProtobufMessage *message) const
 */
 QAbstractProtobufSerializer::DeserializationError QGrpcOperation::deserializationError() const
 {
-    const auto ser = d_func()->channelOperation->serializer();
+    Q_D(const QGrpcOperation);
+    const auto ser = d->operationContext->serializer();
     if (!ser)
         return QAbstractProtobufSerializer::NoDeserializerError;
     return ser->deserializationError();
@@ -138,7 +141,8 @@ QAbstractProtobufSerializer::DeserializationError QGrpcOperation::deserializatio
 */
 QString QGrpcOperation::deserializationErrorString() const
 {
-    const auto ser = d_func()->channelOperation->serializer();
+    Q_D(const QGrpcOperation);
+    const auto ser = d->operationContext->serializer();
     if (!ser)
         return QStringLiteral("serializer not available");
     return ser->deserializationErrorString();
@@ -150,7 +154,8 @@ QString QGrpcOperation::deserializationErrorString() const
 */
 const QGrpcMetadata &QGrpcOperation::metadata() const noexcept
 {
-    return d_func()->channelOperation->serverMetadata();
+    Q_D(const QGrpcOperation);
+    return d->operationContext->serverMetadata();
 }
 
 /*!
@@ -158,7 +163,8 @@ const QGrpcMetadata &QGrpcOperation::metadata() const noexcept
 */
 QLatin1StringView QGrpcOperation::method() const noexcept
 {
-    return d_func()->channelOperation->method();
+    Q_D(const QGrpcOperation);
+    return d->operationContext->method();
 }
 
 /*!
@@ -167,8 +173,9 @@ QLatin1StringView QGrpcOperation::method() const noexcept
 void QGrpcOperation::cancel()
 {
     if (!isFinished()) {
-        d_func()->isFinished.storeRelaxed(true);
-        emit d_func()->channelOperation->cancelRequested();
+        Q_D(QGrpcOperation);
+        d->isFinished.storeRelaxed(true);
+        emit d->operationContext->cancelRequested();
         Q_EMIT finished(QGrpcStatus{ QGrpcStatus::Cancelled,
                                      tr("Operation is cancelled by client") });
     }
@@ -185,11 +192,12 @@ bool QGrpcOperation::isFinished() const noexcept
 
 /*!
     \internal
-    Returns a pointer to the assigned channel-side QGrpcChannelOperation.
+    Returns a pointer to the assigned channel-side QGrpcOperationContext.
 */
-QGrpcChannelOperation *QGrpcOperation::channelOperation() const noexcept
+QGrpcOperationContext *QGrpcOperation::operationContext() const noexcept
 {
-    return d_func()->channelOperation.get();
+    Q_D(const QGrpcOperation);
+    return d->operationContext.get();
 }
 
 QT_END_NAMESPACE
