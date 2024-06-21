@@ -109,6 +109,7 @@ The \c qt_add_protobuf command doesn't consider the dependencies between
 
 The project may have two or more \c .proto files with dependencies:
 \badcode
+// test_messages.proto
 syntax = "proto3";
 
 package test.messages;
@@ -119,6 +120,7 @@ message MyMessage {
 \endcode
 
 \badcode
+// test_extensions.proto
 syntax = "proto3";
 
 import "test_messages.proto";
