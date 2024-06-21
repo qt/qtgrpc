@@ -39,8 +39,7 @@ link to.
     \include qtprotoccommon-options.qdocinc 0
     \li \c QML enables QProtobufMessage types in QML context by registering
         them as a QML module.
-        Protobuf types can extend an existing QML module.
-        See code examples:
+        Protobuf types can extend an existing QML module:
         \badcode
             qt_add_qml_module(targetname
                 ...
@@ -52,6 +51,11 @@ link to.
             )
         \endcode
 
+        If \c qt_add_protobuf is called with a non-existing target
+        or the target is not a QML module, a new QML module will be created
+        implicitly. In case of the new QML module creation, the
+        \l {qt_add_qml_module} command is called inside the
+        \c qt_add_protobuf command.
         \badcode
             qt_add_executable(targetname
                 ...
@@ -62,12 +66,11 @@ link to.
                 ...
             )
         \endcode
-        If \c qt_add_protobuf is called with a non-existing target
-        or the target is not a QML module, a new QML module will be created
-        implicitly. In case of the new QML module creation, the
-        \l {qt_add_qml_module} command is called inside the
-        \c qt_add_protobuf command.
-        See code example:
+        Every QML module has to define a \c URI name. Other QML modules may
+        use this name in \l{qtqml-syntax-imports.html}{import statements}
+        to import the module into a user application. Use the \c QML_URI
+        option to set the \c URI name. It has to be specified in dotted
+        notation, e.g. \c {Qt.Protobuf.Package}.
         \badcode
             qt_add_executable(targetname
                 ...
@@ -78,11 +81,6 @@ link to.
                 QML_URI proto.uri.example
             )
         \endcode
-        Every QML module has to define a \c URI name. Other QML modules may
-        use this name in \l{qtqml-syntax-imports.html}{import statements}
-        to import the module into a user application. Use the \c QML_URI
-        option to set the \c URI name. It has to be specified in dotted
-        notation, e.g. \c {Qt.Protobuf.Package}.
         If \c QML_URI is omitted, then the protobuf package name will be used
         as the module \c URI.
         \note If \c QML_URI is passed to \c qt_add_protobuf command
