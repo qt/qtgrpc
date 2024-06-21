@@ -24,10 +24,10 @@ public:
     [[nodiscard]] QUrl hostUri() const noexcept;
 
 private:
-    void call(std::shared_ptr<QGrpcChannelOperation> channelOperation) override;
-    void startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) override;
-    void startClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) override;
-    void startBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) override;
+    void call(std::shared_ptr<QGrpcOperationContext> operationContext) override;
+    void startServerStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
+    void startClientStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
+    void startBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
 
     [[nodiscard]] std::shared_ptr<QAbstractProtobufSerializer> serializer() const noexcept override;
 

@@ -7,8 +7,8 @@
 
 #include <QtCore/qobject.h>
 #include <QtGrpc/qgrpcoperation.h>
+#include <QtGrpc/qgrpcoperationcontext.h>
 #include <QtGrpc/qtgrpcglobal.h>
-#include <QtGrpc/qgrpcchanneloperation.h>
 
 #include <memory>
 #include <utility>
@@ -20,7 +20,7 @@ class Q_GRPC_EXPORT QGrpcCallReply final : public QGrpcOperation
     Q_OBJECT
 
 public:
-    explicit QGrpcCallReply(std::shared_ptr<QGrpcChannelOperation> channelOperation);
+    explicit QGrpcCallReply(std::shared_ptr<QGrpcOperationContext> operationContext);
     ~QGrpcCallReply() override;
 
     template <typename ReceiverType, typename FinishCallback, typename ErrorCallback>

@@ -2,8 +2,8 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include "qgrpccallreply.h"
-#include "qgrpcchanneloperation.h"
+#include <QtGrpc/qgrpccallreply.h>
+#include <QtGrpc/qgrpcoperationcontext.h>
 
 #include <QtCore/qthread.h>
 #include <QtCore/qeventloop.h>
@@ -49,8 +49,8 @@ using namespace Qt::StringLiterals;
     \endcode
 */
 
-QGrpcCallReply::QGrpcCallReply(std::shared_ptr<QGrpcChannelOperation> channelOperation)
-    : QGrpcOperation(std::move(channelOperation))
+QGrpcCallReply::QGrpcCallReply(std::shared_ptr<QGrpcOperationContext> operationContext)
+    : QGrpcOperation(std::move(operationContext))
 {
 }
 

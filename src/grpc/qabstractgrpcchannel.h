@@ -21,7 +21,7 @@ class QAbstractProtobufSerializer;
 class QAbstractGrpcChannelPrivate;
 class QGrpcBidirStream;
 class QGrpcCallReply;
-class QGrpcChannelOperation;
+class QGrpcOperationContext;
 class QGrpcChannelOptions;
 class QGrpcClientBase;
 class QGrpcClientStream;
@@ -52,10 +52,10 @@ protected:
     startBidirStream(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
                      const QGrpcCallOptions &options);
 
-    virtual void call(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
-    virtual void startServerStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
-    virtual void startClientStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
-    virtual void startBidirStream(std::shared_ptr<QGrpcChannelOperation> channelOperation) = 0;
+    virtual void call(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
+    virtual void startServerStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
+    virtual void startClientStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
+    virtual void startBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
 
     [[nodiscard]] const QGrpcChannelOptions &channelOptions() const & noexcept;
 
