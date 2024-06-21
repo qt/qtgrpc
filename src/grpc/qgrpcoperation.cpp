@@ -75,7 +75,8 @@ QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationC
     valid = QObject::connect(d->operationContext.get(), &QGrpcOperationContext::finished, this,
                              [this](const QGrpcStatus &status) {
                                  if (!isFinished()) {
-                                     d_func()->isFinished.storeRelaxed(true);
+                                     Q_D(QGrpcOperation);
+                                     d->isFinished.storeRelaxed(true);
                                      emit this->finished(status);
                                  }
                              });
@@ -91,7 +92,8 @@ QGrpcOperation::~QGrpcOperation() = default;
 */
 QByteArray QGrpcOperation::data() const noexcept
 {
-    return d_func()->data;
+    Q_D(const QGrpcOperation);
+    return d->data;
 }
 
 /*!
@@ -187,7 +189,8 @@ void QGrpcOperation::cancel()
 */
 bool QGrpcOperation::isFinished() const noexcept
 {
-    return d_func()->isFinished.loadRelaxed();
+    Q_D(const QGrpcOperation);
+    return d->isFinished.loadRelaxed();
 }
 
 /*!
