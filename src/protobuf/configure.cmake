@@ -85,7 +85,7 @@ qt_feature("protobufquick" PUBLIC
     LABEL "QML Protobuf support"
     PURPOSE "Allows using the generated Protobuf code from QML"
     AUTODETECT TRUE
-    CONDITION QT_FEATURE_qtprotobufgen AND TARGET Qt6::Quick
+    CONDITION TARGET Qt6::Quick
 )
 qt_configure_add_summary_section(NAME "Qt Protobuf")
 qt_configure_add_summary_entry(ARGS "protobuf-qtcoretypes")
