@@ -35,10 +35,19 @@ public:
     [[nodiscard]] virtual std::shared_ptr<QAbstractProtobufSerializer>
     serializer() const noexcept = 0;
 
-    // Abstract interface should never be a rvalue.
+protected:
+    QAbstractGrpcChannel();
+    explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
+
+    virtual void call(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
+    virtual void startServerStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
+    virtual void startClientStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
+    virtual void startBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
+
+    [[nodiscard]] const QGrpcChannelOptions &channelOptions() const & noexcept;
     void channelOptions() && = delete;
 
-protected:
+private:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
                                          QByteArrayView arg,
                                          const QGrpcCallOptions &options);
@@ -52,18 +61,7 @@ protected:
     startBidirStream(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
                      const QGrpcCallOptions &options);
 
-    virtual void call(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
-    virtual void startServerStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
-    virtual void startClientStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
-    virtual void startBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
-
-    [[nodiscard]] const QGrpcChannelOptions &channelOptions() const & noexcept;
-
     friend class QGrpcClientBase;
-    QAbstractGrpcChannel();
-    explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
-
-private:
     Q_DISABLE_COPY_MOVE(QAbstractGrpcChannel)
     std::unique_ptr<QAbstractGrpcChannelPrivate> dPtr;
 };
