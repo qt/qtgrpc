@@ -22,20 +22,6 @@ using namespace Qt::StringLiterals;
 */
 
 /*!
-    \fn template <typename T> std::optional<T> QGrpcOperation::read() const
-
-    Reads a message from a raw byte array stored within this QGrpcOperation
-    instance.
-
-    Returns an optional deserialized message. On failure, \c {std::nullopt} is
-    returned.
-
-    The error can be retrieved using \l deserializationError.
-
-    \sa read, deserializationError, deserializationErrorString
-*/
-
-/*!
     \fn void QGrpcOperation::finished(const QGrpcStatus &status)
 
     This signal indicates the end of communication for this call.
@@ -87,14 +73,18 @@ QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationC
 QGrpcOperation::~QGrpcOperation() = default;
 
 /*!
-    \internal
-    Getter of the data received from the channel.
+    \fn template <typename T> std::optional<T> QGrpcOperation::read() const
+
+    Reads a message from a raw byte array stored within this QGrpcOperation
+    instance.
+
+    Returns an optional deserialized message. On failure, \c {std::nullopt} is
+    returned.
+
+    The error can be retrieved using \l deserializationError.
+
+    \sa read, deserializationError, deserializationErrorString
 */
-QByteArray QGrpcOperation::data() const noexcept
-{
-    Q_D(const QGrpcOperation);
-    return d->data;
-}
 
 /*!
     \since 6.8
@@ -116,6 +106,20 @@ bool QGrpcOperation::read(QProtobufMessage *message) const
     Q_D(const QGrpcOperation);
     const auto ser = d->operationContext->serializer();
     return ser && ser->deserialize(message, data());
+}
+
+/*!
+    T.B.A
+*/
+void QGrpcOperation::cancel()
+{
+    if (!isFinished()) {
+        Q_D(QGrpcOperation);
+        d->isFinished.storeRelaxed(true);
+        emit d->operationContext->cancelRequested();
+        Q_EMIT finished(QGrpcStatus{ QGrpcStatus::Cancelled,
+                                     tr("Operation is cancelled by client") });
+    }
 }
 
 /*!
@@ -170,20 +174,6 @@ QLatin1StringView QGrpcOperation::method() const noexcept
 }
 
 /*!
-    T.B.A
-*/
-void QGrpcOperation::cancel()
-{
-    if (!isFinished()) {
-        Q_D(QGrpcOperation);
-        d->isFinished.storeRelaxed(true);
-        emit d->operationContext->cancelRequested();
-        Q_EMIT finished(QGrpcStatus{ QGrpcStatus::Cancelled,
-                                     tr("Operation is cancelled by client") });
-    }
-}
-
-/*!
     Returns true when QGrpcOperation finished its workflow,
     meaning it was finished, canceled, or error occurred, otherwise returns false.
 */
@@ -201,6 +191,16 @@ QGrpcOperationContext *QGrpcOperation::operationContext() const noexcept
 {
     Q_D(const QGrpcOperation);
     return d->operationContext.get();
+}
+
+/*!
+    \internal
+    Getter of the data received from the channel.
+*/
+QByteArray QGrpcOperation::data() const noexcept
+{
+    Q_D(const QGrpcOperation);
+    return d->data;
 }
 
 QT_END_NAMESPACE
