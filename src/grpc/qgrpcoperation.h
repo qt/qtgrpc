@@ -29,8 +29,8 @@ public:
         T value;
         return read(&value) ? std::optional<T>(value) : std::nullopt;
     }
-
     bool read(QProtobufMessage *message) const;
+    void cancel();
 
     [[nodiscard]] QAbstractProtobufSerializer::DeserializationError deserializationError() const;
     [[nodiscard]] QString deserializationErrorString() const;
@@ -38,7 +38,6 @@ public:
     [[nodiscard]] const QGrpcMetadata &metadata() const noexcept;
     [[nodiscard]] QLatin1StringView method() const noexcept;
 
-    void cancel();
     [[nodiscard]] bool isFinished() const noexcept;
 
 Q_SIGNALS:
