@@ -662,8 +662,17 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri,
             hostUri.setPort(443);
         }
 
-        if (options.sslConfiguration())
-            sslSocket->setSslConfiguration(options.sslConfiguration().value());
+        if (const auto userSslConfig = options.sslConfiguration(); userSslConfig) {
+            sslSocket->setSslConfiguration(*userSslConfig);
+        } else {
+            static const QByteArray h2NexProtocol = "h2"_ba;
+            auto defautlSslConfig = QSslConfiguration::defaultConfiguration();
+            auto allowedNextProtocols = defautlSslConfig.allowedNextProtocols();
+            if (!allowedNextProtocols.contains(h2NexProtocol))
+                allowedNextProtocols.append(h2NexProtocol);
+            defautlSslConfig.setAllowedNextProtocols(allowedNextProtocols);
+            sslSocket->setSslConfiguration(defautlSslConfig);
+        }
 
         QObject::connect(sslSocket, &QSslSocket::encrypted, this,
                          &QGrpcHttp2ChannelPrivate::createHttp2Connection);
