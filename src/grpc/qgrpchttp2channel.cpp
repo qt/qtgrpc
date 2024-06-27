@@ -20,6 +20,7 @@
 #  include <QtNetwork/qsslsocket.h>
 #endif
 
+#include <QtCore/private/qnoncontiguousbytedevice_p.h>
 #include <QtCore/qbytearrayview.h>
 #include <QtCore/qendian.h>
 #include <QtCore/qhash.h>
@@ -228,7 +229,6 @@ private:
         std::weak_ptr<QGrpcOperationContext> m_operation;
         QQueue<QByteArray> m_queue;
         QPointer<QHttp2Stream> m_stream;
-        QBuffer *m_buffer = nullptr;
         ExpectedData m_expectedData;
         State m_handlerState = Active;
         const bool m_endStreamAtFirstData;
@@ -307,12 +307,11 @@ QGrpcHttp2ChannelPrivate::Http2Handler::~Http2Handler()
 
 void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
 {
-    Q_ASSERT(m_stream == nullptr && m_buffer == nullptr);
+    Q_ASSERT(m_stream == nullptr);
     Q_ASSERT(stream_ != nullptr);
 
     auto *channelOpPtr = operation();
     m_stream = stream_;
-    m_buffer = new QBuffer(m_stream);
 
     auto *parentChannel = qobject_cast<QGrpcHttp2ChannelPrivate *>(parent());
     QObject::connect(m_stream.get(), &QHttp2Stream::headersReceived, channelOpPtr,
@@ -526,12 +525,16 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::processQueue()
     if (m_queue.isEmpty())
         return;
 
-    QByteArray data = m_queue.dequeue();
+    // Take ownership of the byte device.
+    auto *device = QNonContiguousByteDeviceFactory::create(m_queue.dequeue());
+    device->setParent(m_stream);
 
-    m_buffer->close();
-    m_buffer->setData(data);
-    m_buffer->open(QIODevice::ReadOnly);
-    m_stream->sendDATA(m_buffer, data.isEmpty() || m_endStreamAtFirstData);
+    m_stream->sendDATA(device, device->atEnd() || m_endStreamAtFirstData);
+    // Manage the lifetime through the uploadFinished signal (or this
+    // Http2Handler). Don't use QObject::deleteLater here as this function is
+    // expensive and blocking. Delete the byte device directly.
+    //              This is fine in this context.
+    connect(m_stream.get(), &QHttp2Stream::uploadFinished, device, [device] { delete device; });
 }
 
 bool QGrpcHttp2ChannelPrivate::Http2Handler::cancel()
