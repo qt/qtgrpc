@@ -104,6 +104,35 @@ QByteArray msgCannotReadFile(const QFile &file)
     return result.toLocal8Bit();
 }
 
+void compareTwoFiles(const QString &expectedFileName, const QString &actualFileName)
+{
+    QFile expectedResultFile(expectedFileName);
+    QFile generatedFile(actualFileName);
+
+    QVERIFY2(expectedResultFile.exists(), qPrintable(expectedResultFile.fileName()));
+    QVERIFY2(generatedFile.exists(), qPrintable(expectedResultFile.fileName()));
+
+    QVERIFY2(expectedResultFile.open(QIODevice::ReadOnly | QIODevice::Text),
+             msgCannotReadFile(expectedResultFile).constData());
+    QVERIFY2(generatedFile.open(QIODevice::ReadOnly | QIODevice::Text),
+             msgCannotReadFile(generatedFile).constData());
+
+    QByteArray expectedData = expectedResultFile.readAll();
+    QByteArray generatedData = generatedFile.readAll();
+
+    expectedResultFile.close();
+    generatedFile.close();
+
+    if (hash(expectedData).toHex() != hash(generatedData).toHex()) {
+        const QString diff = doCompare(splitToLines(generatedData),
+                                       splitToLines(expectedData));
+        QCOMPARE_GT(diff.size(), 0); // Hashes can only differ if content does.
+        QFAIL(qPrintable(diff));
+    }
+    // Ensure we do see a failure, even in the unlikely case of a hash collision:
+    QVERIFY(generatedData == expectedData);
+}
+
 bool containsString(const QStringList &list, const QString &comment)
 {
     return std::any_of(list.cbegin(), list.cend(),
@@ -308,32 +337,8 @@ void tst_qtprotobufgen::cmakeGeneratedFile()
     QFETCH(QString, folder);
     QFETCH(QString, extension);
 
-    QFile expectedResultFile(m_expectedResult + folder + fileName + extension);
-    QFile generatedFile(m_cmakeGenerated + folder + fileName + extension);
-
-    QVERIFY2(expectedResultFile.exists(), qPrintable(expectedResultFile.fileName()));
-    QVERIFY2(generatedFile.exists(), qPrintable(expectedResultFile.fileName()));
-
-    QVERIFY2(expectedResultFile.open(QIODevice::ReadOnly | QIODevice::Text),
-             msgCannotReadFile(expectedResultFile).constData());
-    QVERIFY2(generatedFile.open(QIODevice::ReadOnly | QIODevice::Text),
-             msgCannotReadFile(generatedFile).constData());
-
-    QByteArray expectedData = expectedResultFile.readAll();
-    QByteArray generatedData = generatedFile.readAll();
-
-    expectedResultFile.close();
-    generatedFile.close();
-
-    if (hash(expectedData).toHex() != hash(generatedData).toHex())
-    {
-        const QString diff = doCompare(splitToLines(generatedData),
-                                       splitToLines(expectedData));
-        QCOMPARE_GT(diff.size(), 0); // Hashes can only differ if content does.
-        QFAIL(qPrintable(diff));
-    }
-    // Ensure we do see a failure, even in the unlikely case of a hash collision:
-    QVERIFY(generatedData == expectedData);
+    const QString filePath = folder + fileName + extension;
+    compareTwoFiles(m_expectedResult + filePath, m_cmakeGenerated + filePath);
 }
 
 void tst_qtprotobufgen::cmdLineGeneratedFile_data()
@@ -459,33 +464,8 @@ void tst_qtprotobufgen::cmdLineGeneratedFile()
     QVERIFY2(process.exitStatus() == QProcess::NormalExit, msgProcessCrashed(process).constData());
     QVERIFY2(process.exitCode() == 0, msgProcessFailed(process).constData());
 
-    QString filePath = folder + generatedFolderStructure;
-    QFile expectedResultFile(m_expectedResult + filePath + fileName  + extension);
-    QFile generatedFile(m_commandLineGenerated + filePath + fileName + extension);
-
-    QVERIFY(generatedFile.exists());
-    QVERIFY(expectedResultFile.exists());
-
-    QVERIFY2(expectedResultFile.open(QIODevice::ReadOnly | QIODevice::Text),
-             msgCannotReadFile(expectedResultFile).constData());
-    QVERIFY2(generatedFile.open(QIODevice::ReadOnly | QIODevice::Text),
-             msgCannotReadFile(generatedFile).constData());
-
-    QByteArray expectedData = expectedResultFile.readAll();
-    QByteArray generatedData = generatedFile.readAll();
-
-    expectedResultFile.close();
-    generatedFile.close();
-
-    if (hash(expectedData).toHex() != hash(generatedData).toHex())
-    {
-        const QString diff = doCompare(splitToLines(generatedData),
-                                       splitToLines(expectedData));
-        QCOMPARE_GT(diff.size(), 0); // Hashes can only differ if content does.
-        QFAIL(qPrintable(diff));
-    }
-    // Ensure we do see a failure, even in the unlikely case of a hash collision:
-    QVERIFY(generatedData == expectedData);
+    const QString filePath = folder + generatedFolderStructure + fileName  + extension;
+    compareTwoFiles(m_expectedResult + filePath, m_commandLineGenerated + filePath);
 }
 
 void tst_qtprotobufgen::cmdLineGeneratedNoOptions_data()
@@ -576,32 +556,8 @@ void tst_qtprotobufgen::cmdLineGeneratedNoOptions()
     QVERIFY2(process.exitStatus() == QProcess::NormalExit, msgProcessCrashed(process).constData());
     QVERIFY2(process.exitCode() == 0, msgProcessFailed(process).constData());
 
-    QFile expectedResultFile(m_expectedResult + folder + fileName  + extension);
-    QFile generatedFile(m_commandLineGenerated + folder + fileName + extension);
-
-    QVERIFY(generatedFile.exists());
-    QVERIFY(expectedResultFile.exists());
-
-    QVERIFY2(expectedResultFile.open(QIODevice::ReadOnly | QIODevice::Text),
-             msgCannotReadFile(expectedResultFile).constData());
-    QVERIFY2(generatedFile.open(QIODevice::ReadOnly | QIODevice::Text),
-             msgCannotReadFile(generatedFile).constData());
-
-    QByteArray expectedData = expectedResultFile.readAll();
-    QByteArray generatedData = generatedFile.readAll();
-
-    expectedResultFile.close();
-    generatedFile.close();
-
-    if (hash(expectedData).toHex() != hash(generatedData).toHex())
-    {
-        const QString diff = doCompare(splitToLines(generatedData),
-                                       splitToLines(expectedData));
-        QCOMPARE_GT(diff.size(), 0); // Hashes can only differ if content does.
-        QFAIL(qPrintable(diff));
-    }
-    // Ensure we do see a failure, even in the unlikely case of a hash collision:
-    QVERIFY(generatedData == expectedData);
+    const QString filePath = folder + fileName  + extension;
+    compareTwoFiles(m_expectedResult + filePath, m_commandLineGenerated + filePath);
 }
 
 void tst_qtprotobufgen::cmdLineInvalidExportMacro_data()
