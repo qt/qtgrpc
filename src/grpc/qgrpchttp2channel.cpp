@@ -439,10 +439,11 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::writeMessage(QByteArrayView data)
         return;
     }
 
-    QByteArray msg(GrpcMessageSizeHeaderSize, '\0');
+    QByteArray msg(GrpcMessageSizeHeaderSize + data.size(), '\0');
     // Args must be 4-byte unsigned int to fit into 4-byte big endian
     qToBigEndian(static_cast<quint32>(data.size()), msg.data() + 1);
-    msg += data;
+    std::memcpy(msg.begin() + GrpcMessageSizeHeaderSize, data.begin(),
+                static_cast<size_t>(data.size()));
 
     m_queue.enqueue(msg);
     processQueue();
