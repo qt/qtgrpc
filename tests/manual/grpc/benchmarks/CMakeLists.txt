@@ -7,3 +7,4 @@ set(qrpcbench_common_include "${CMAKE_CURRENT_LIST_DIR}")
 
 add_subdirectory(asyncbenchserver)
 add_subdirectory(bench_qtgrpcclient)
+add_subdirectory(bench_async_ref_client)
