@@ -172,6 +172,7 @@ function(_qt_internal_protoc_generate target generator output_directory)
         DEPENDS
             ${QT_CMAKE_EXPORT_NAMESPACE}::${generator}
             ${proto_files}
+            $<TARGET_FILE:WrapProtoc::WrapProtoc>
         COMMENT "Generating QtProtobuf ${target} sources for ${generator}..."
         COMMAND_EXPAND_LISTS
         VERBATIM
