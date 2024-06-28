@@ -52,18 +52,22 @@ void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Hello Qt!");
-    std::optional<SimpleStringMessage> result;
 
+    std::shared_ptr<SimpleStringMessage> result = std::make_shared<SimpleStringMessage>();
     bool waitForReply = false;
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
-    reply->subscribe(this, [reply, &result, &waitForReply](const auto &status) {
-        QCOMPARE_EQ(status.code(), QGrpcStatus::StatusCode::Ok);
-        result = reply->read<SimpleStringMessage>();
-        waitForReply = true;
-    });
+    reply->subscribe(reply.get(),
+                     [replyPtr = reply.get(), resultWeak = std::weak_ptr(result),
+                      &waitForReply](const auto &status) {
+                         QCOMPARE_EQ(status.code(), QGrpcStatus::StatusCode::Ok);
+                         auto resultOpt = replyPtr->read<SimpleStringMessage>();
+                         QVERIFY(resultOpt.has_value());
+                         if (auto resultVal = resultWeak.lock(); resultVal)
+                             *resultVal = resultOpt.value();
+                         waitForReply = true;
+                     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(waitForReply, true, MessageLatency);
-    QVERIFY(result.has_value());
     QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
 }
 
@@ -173,21 +177,16 @@ void QtGrpcClientUnaryCallTest::asyncInThread()
     QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
     QVERIFY(clientErrorSpy.isValid());
 
-    std::optional<SimpleStringMessage> result = SimpleStringMessage();
     const std::unique_ptr<QThread> thread(QThread::create([&] {
         QEventLoop waiter;
         std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
         QObject::connect(reply.get(), &QGrpcCallReply::finished, &waiter,
-                         [reply, &result, &waiter] {
-                             result = reply->read<SimpleStringMessage>();
-                             waiter.quit();
-                         });
+                         [&waiter] { waiter.quit(); });
         waiter.exec();
     }));
 
     thread->start();
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
-    QTRY_VERIFY(result.has_value());
     QTRY_VERIFY(
             qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
                     .message()
@@ -208,8 +207,8 @@ void QtGrpcClientUnaryCallTest::metadata()
 
     QGrpcMetadata metadata;
     QEventLoop waiter;
-    reply->subscribe(this, [reply, &metadata, &waiter] {
-        metadata = reply->metadata();
+    reply->subscribe(reply.get(), [replyPtr = reply.get(), &metadata, &waiter] {
+        metadata = replyPtr->metadata();
         waiter.quit();
     });
 
