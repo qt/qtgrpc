@@ -283,13 +283,15 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
     m_stream = stream_;
     m_buffer = new QBuffer(m_stream);
 
+    auto *parentChannel = qobject_cast<QGrpcHttp2ChannelPrivate *>(parent());
     QObject::connect(m_stream.get(), &QHttp2Stream::headersReceived, channelOpPtr,
-                     [channelOpPtr, this](const HPack::HttpHeader &headers, bool endStream) {
+                     [channelOpPtr, parentChannel, this](const HPack::HttpHeader &headers,
+                                                         bool endStream) {
                          QGrpcMetadata md = channelOpPtr->serverMetadata();
                          QGrpcStatus::StatusCode statusCode = QGrpcStatus::StatusCode::Ok;
                          QString statusMessage;
                          for (const auto &header : headers) {
-                             md.insert({header.name, header.value});
+                             md.insert({ header.name, header.value });
                              if (header.name == GrpcStatusHeader) {
                                  statusCode = static_cast<
                                      QGrpcStatus::StatusCode>(QString::fromLatin1(header.value)
@@ -301,12 +303,15 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
 
                          channelOpPtr->setServerMetadata(std::move(md));
 
-                         if (endStream && m_handlerState != Cancelled) {
-                             emit channelOpPtr->finished(QGrpcStatus{ statusCode, statusMessage });
+                         if (endStream) {
+                             if (m_handlerState != Cancelled) {
+                                 emit channelOpPtr->finished(
+                                     QGrpcStatus{ statusCode,statusMessage });
+                             }
+                             parentChannel->deleteHandler(this);
                          }
                      });
 
-    auto parentChannel = qobject_cast<QGrpcHttp2ChannelPrivate *>(parent());
     Q_ASSERT(parentChannel != nullptr);
     auto errorConnection = std::make_shared<QMetaObject::Connection>();
     *errorConnection = QObject::connect(
@@ -323,12 +328,12 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
                     emit channelOp->finished(QGrpcStatus{ code, errorString });
                 }
             }
-            QObject::disconnect(*errorConnection);
             parentChannel->deleteHandler(this);
+            QObject::disconnect(*errorConnection);
         });
 
     QObject::connect(m_stream.get(), &QHttp2Stream::dataReceived, channelOpPtr,
-                     [channelOpPtr, this](const QByteArray &data, bool endStream) {
+                     [channelOpPtr, parentChannel, this](const QByteArray &data, bool endStream) {
                          if (m_handlerState != Cancelled) {
                              m_expectedData.container.append(data);
 
@@ -353,6 +358,7 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
                              if (endStream) {
                                  m_handlerState = Finished;
                                  emit channelOpPtr->finished({});
+                                 parentChannel->deleteHandler(this);
                              }
                          }
                      });
@@ -819,8 +825,8 @@ void QGrpcHttp2ChannelPrivate::sendInitialRequest(Http2Handler *handler)
 void QGrpcHttp2ChannelPrivate::deleteHandler(Http2Handler *handler)
 {
     const auto it = std::find(m_activeHandlers.constBegin(), m_activeHandlers.constEnd(), handler);
-    Q_ASSERT_X(it != m_activeHandlers.constEnd(), "QGrpcHttp2ChannelPrivate::deleteHandler",
-               "Attempt to delete unregistered Http2Handler");
+    if (it == m_activeHandlers.constEnd())
+        return;
     handler->deleteLater();
     m_activeHandlers.erase(it);
 }
