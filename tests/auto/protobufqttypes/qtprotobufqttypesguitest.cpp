@@ -25,7 +25,7 @@ class QtProtobufQtTypesQtGuiTest : public QObject
 
 private Q_SLOTS:
     void initTestCase() {
-        QtProtobuf::qRegisterProtobufQtGuiTypes();
+        QtProtobuf::registerProtobufQtGuiTypes();
     }
 
     void qRgba64();

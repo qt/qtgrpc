@@ -328,7 +328,7 @@ namespace QtProtobuf {
 /*!
     Registers serializers for the Qt::ProtobufQtCoreTypes library.
 */
-void qRegisterProtobufQtCoreTypes() {
+void registerProtobufQtCoreTypes() {
     QtProtobufPrivate::registerQtTypeHandler<QUrl, QtProtobufPrivate::QtCore::QUrl>();
     QtProtobufPrivate::registerQtTypeHandler<QChar, QtProtobufPrivate::QtCore::QChar>();
     QtProtobufPrivate::registerQtTypeHandler<QUuid, QtProtobufPrivate::QtCore::QUuid>();

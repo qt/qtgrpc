@@ -221,7 +221,7 @@ namespace QtProtobuf {
 /*!
     Registers serializers for the Qt::ProtobufQtGuiTypes library.
 */
-void qRegisterProtobufQtGuiTypes() {
+void registerProtobufQtGuiTypes() {
     QtProtobufPrivate::registerQtTypeHandler<QRgba64, QtProtobufPrivate::QtGui::QRgba64>();
     QtProtobufPrivate::registerQtTypeHandler<QColor, QtProtobufPrivate::QtGui::QColor>();
     QtProtobufPrivate::registerQtTypeHandler<QMatrix4x4, QtProtobufPrivate::QtGui::QMatrix4x4>();

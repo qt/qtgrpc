@@ -69,7 +69,7 @@ private:
 
 void QtProtobufQtTypesQtCoreTest::initTestCase()
 {
-    QtProtobuf::qRegisterProtobufQtCoreTypes();
+    QtProtobuf::registerProtobufQtCoreTypes();
 }
 
 using namespace qtprotobufnamespace::qttypes::tests;
