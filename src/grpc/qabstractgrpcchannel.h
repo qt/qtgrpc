@@ -18,7 +18,6 @@
 QT_BEGIN_NAMESPACE
 
 class QAbstractProtobufSerializer;
-class QAbstractGrpcChannelPrivate;
 class QGrpcBidirStream;
 class QGrpcCallReply;
 class QGrpcOperationContext;
@@ -27,6 +26,7 @@ class QGrpcClientBase;
 class QGrpcClientStream;
 class QGrpcServerStream;
 
+class QAbstractGrpcChannelPrivate;
 class Q_GRPC_EXPORT QAbstractGrpcChannel
 {
 public:
