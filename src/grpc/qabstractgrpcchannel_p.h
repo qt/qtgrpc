@@ -15,8 +15,8 @@
 // We mean it.
 //
 
-#include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/private/qtgrpcglobal_p.h>
+#include <QtGrpc/qgrpcchanneloptions.h>
 
 #include <QtCore/qthread.h>
 

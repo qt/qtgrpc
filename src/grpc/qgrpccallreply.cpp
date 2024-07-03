@@ -5,8 +5,8 @@
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
 
-#include <QtCore/qthread.h>
 #include <QtCore/qeventloop.h>
+#include <QtCore/qthread.h>
 
 QT_BEGIN_NAMESPACE
 

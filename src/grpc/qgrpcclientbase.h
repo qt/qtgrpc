@@ -5,13 +5,14 @@
 #ifndef QGRPCLIENTBASE_H
 #define QGRPCLIENTBASE_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qsharedpointer.h>
-#include <QtCore/qbytearray.h>
 #include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
+
+#include <QtCore/qbytearray.h>
+#include <QtCore/qobject.h>
+#include <QtCore/qsharedpointer.h>
 
 #include <memory>
 #include <optional>

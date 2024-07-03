@@ -2,13 +2,14 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
+#include <QtGrpc/private/qtgrpcglobal_p.h>
+#include <QtGrpc/qgrpcoperation.h>
+#include <QtGrpc/qgrpcoperationcontext.h>
+
 #include <QtCore/private/qobject_p.h>
 #include <QtCore/qatomic.h>
 #include <QtCore/qeventloop.h>
 #include <QtCore/qpointer.h>
-#include <QtGrpc/private/qtgrpcglobal_p.h>
-#include <QtGrpc/qgrpcoperation.h>
-#include <QtGrpc/qgrpcoperationcontext.h>
 
 QT_BEGIN_NAMESPACE
 

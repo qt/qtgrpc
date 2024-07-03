@@ -5,11 +5,13 @@
 #ifndef QGRPCOPERATION_H
 #define QGRPCOPERATION_H
 
-#include <QtCore/qobject.h>
+#include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
-#include <QtGrpc/qgrpcdefs.h>
+
 #include <QtProtobuf/qabstractprotobufserializer.h>
+
+#include <QtCore/qobject.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -6,6 +6,7 @@
 
 #include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
+
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
 #include <QtCore/qbytearray.h>
