@@ -6,6 +6,7 @@
 
 #include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
+
 #if QT_CONFIG(ssl)
 #  include <QtNetwork/qsslconfiguration.h>
 #endif

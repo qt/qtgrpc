@@ -17,8 +17,8 @@
 
 #include <QtGrpc/qtgrpcglobal.h>
 
-#include <QtCore/qloggingcategory.h>
 #include <QtCore/private/qglobal_p.h>
+#include <QtCore/qloggingcategory.h>
 
 QT_BEGIN_NAMESPACE
 Q_DECLARE_LOGGING_CATEGORY(Grpc)

@@ -2,19 +2,18 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <QtCore/qthread.h>
-#include <QtCore/qtimer.h>
 #include <QtGrpc/private/qabstractgrpcchannel_p.h>
+#include <QtGrpc/private/qtgrpcglobal_p.h>
 #include <QtGrpc/qgrpccallreply.h>
+#include <QtGrpc/qgrpcclientbase.h>
 #include <QtGrpc/qgrpcstream.h>
+
 #include <QtProtobuf/qprotobufserializer.h>
 
-#include <qtgrpcglobal_p.h>
-
-#include <private/qobject_p.h>
-
-#include "qgrpcclientbase.h"
 #include <QtCore/private/qminimalflatset_p.h>
+#include <QtCore/private/qobject_p.h>
+#include <QtCore/qthread.h>
+#include <QtCore/qtimer.h>
 
 QT_BEGIN_NAMESPACE
 
