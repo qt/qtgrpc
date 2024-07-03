@@ -23,21 +23,7 @@ using namespace Qt::StringLiterals;
 */
 
 /*!
-    \fn template <typename ReceiverType, typename FinishCallback, typename ErrorCallback> void QGrpcCallReply::subscribe(
-    ReceiverType *receiver, FinishCallback &&finishCallback, ErrorCallback &&errorCallback,
-    Qt::ConnectionType type = Qt::AutoConnection)
-
-    Convenience function to connect the \a finishCallback and
-    \a errorCallback of \a receiver to the QGrpcCallReply::finished signal with
-    the given connection \a type. The \a finishCallback is called when the
-    QGrpcCallReply is finished with the QGrpcStatus::Ok status code, \a errorCallback is called
-    otherwise.
-*/
-
-/*!
-    \fn template <typename ReceiverType, typename FinishCallback> void QGrpcCallReply::subscribe(
-    ReceiverType *receiver, FinishCallback &&finishCallback,
-    Qt::ConnectionType type = Qt::AutoConnection)
+    \fn template <typename FinishCallback> void QGrpcCallReply::subscribe(const QObject *receiver, FinishCallback &&finishCallback, Qt::ConnectionType type = Qt::AutoConnection)
 
     Convenience function to connect the \a finishCallback of \a receiver to
     the QGrpcCallReply::finished signal with given connection \a type.

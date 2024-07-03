@@ -34,7 +34,6 @@ private Q_SLOTS:
     void cancel();
     void deferredCancel();
     void hugeBlob();
-    void getAsyncReply();
     void multipleStreams();
     void multipleStreamsCancel();
     void inThread();
@@ -171,57 +170,6 @@ void QtGrpcClientServerStreamTest::hugeBlob()
     QByteArray returnDataHash =
             QCryptographicHash::hash(result.testBytes(), QCryptographicHash::Sha256);
     QCOMPARE_EQ(returnDataHash, dataHash);
-}
-
-void QtGrpcClientServerStreamTest::getAsyncReply()
-{
-    SimpleStringMessage request;
-    request.setTestFieldString("Some status message");
-    QGrpcStatus::StatusCode asyncStatus;
-    QString statusMessage;
-
-    auto reply = client()->testMethodStatusMessage(request);
-
-    bool finishedCalled = false;
-    reply->subscribe(
-            this, [&finishedCalled] { finishedCalled = true; },
-            [&asyncStatus, &statusMessage](const QGrpcStatus &status) {
-                asyncStatus = status.code();
-                statusMessage = status.message();
-            });
-
-    QTRY_COMPARE_WITH_TIMEOUT(statusMessage, request.testFieldString(),
-                              MessageLatencyWithThreshold);
-    QVERIFY(!finishedCalled);
-
-    SimpleStringMessage result;
-    request.setTestFieldString("Hello Qt!");
-
-    reply = client()->testMethod(request);
-    reply->subscribe(this, [reply, &result] {
-        const auto ret = reply->read<SimpleStringMessage>();
-        QVERIFY(ret.has_value());
-        result = *ret;
-    });
-
-    QTRY_COMPARE_WITH_TIMEOUT(result.testFieldString(), request.testFieldString(),
-                              MessageLatencyWithThreshold);
-
-    result.setTestFieldString("");
-    request.setTestFieldString("Hello Qt1!");
-
-    reply = client()->testMethod(request);
-    reply->subscribe(
-        this,
-        [reply, &result] {
-            const auto ret = reply->read<SimpleStringMessage>();
-            QVERIFY(ret.has_value());
-            result = *ret;
-        },
-        [](const auto &) { QVERIFY(false); });
-
-    QTRY_COMPARE_WITH_TIMEOUT(result.testFieldString(), request.testFieldString(),
-                              MessageLatencyWithThreshold);
 }
 
 void QtGrpcClientServerStreamTest::multipleStreams()
