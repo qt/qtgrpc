@@ -51,6 +51,9 @@ public:
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcCallReply)
+
+public:
+    bool event(QEvent *event) override;
 };
 
 QT_END_NAMESPACE

@@ -56,6 +56,11 @@ QGrpcCallReply::QGrpcCallReply(std::shared_ptr<QGrpcOperationContext> operationC
 
 QGrpcCallReply::~QGrpcCallReply() = default;
 
+bool QGrpcCallReply::event(QEvent *event)
+{
+    return QObject::event(event);
+}
+
 QT_END_NAMESPACE
 
 #include "moc_qgrpccallreply.cpp"
