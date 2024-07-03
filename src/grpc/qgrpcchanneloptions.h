@@ -19,7 +19,6 @@
 
 QT_BEGIN_NAMESPACE
 
-class QSslConfiguration;
 class QGrpcSerializationFormat;
 class QGrpcChannelOptionsPrivate;
 
