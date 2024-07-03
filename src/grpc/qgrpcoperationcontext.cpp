@@ -8,6 +8,9 @@
 #include <QtProtobuf/qprotobufserializer.h>
 
 #include <QtCore/private/qobject_p.h>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qbytearrayview.h>
+#include <QtCore/qlatin1stringview.h>
 
 #include <utility>
 

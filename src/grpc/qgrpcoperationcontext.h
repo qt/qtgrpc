@@ -9,10 +9,8 @@
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
-#include <QtCore/qbytearray.h>
-#include <QtCore/qbytearrayview.h>
-#include <QtCore/qlatin1stringview.h>
 #include <QtCore/qobject.h>
+#include <QtCore/qstringfwd.h>
 
 #include <memory>
 
