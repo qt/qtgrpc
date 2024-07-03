@@ -40,7 +40,7 @@ public:
     Any &operator=(Any &&other) noexcept
     {
         qt_ptr_swap(d_ptr, other.d_ptr);
-        QProtobufMessage::operator=(std::move(other));
+        QProtobufMessage::swap(other);
         return *this;
     }
 
