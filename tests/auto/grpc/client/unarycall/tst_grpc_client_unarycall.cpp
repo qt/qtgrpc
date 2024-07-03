@@ -39,6 +39,7 @@ public:
 
 private Q_SLOTS:
     void asyncWithSubscribe();
+    void asyncWithSubscribeMember();
     void immediateCancel();
     void deferredCancel();
     void asyncClientStatusMessage();
@@ -46,6 +47,13 @@ private Q_SLOTS:
     void inThread();
     void asyncInThread();
     void metadata();
+
+private:
+    void subscribeCallback(const QGrpcStatus &status) {
+        if (status.isOk())
+            mTestBool = true;
+    };
+    bool mTestBool = false;
 };
 
 void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
@@ -58,7 +66,7 @@ void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
     reply->subscribe(reply.get(),
                      [replyPtr = reply.get(), resultWeak = std::weak_ptr(result),
-                      &waitForReply](const auto &status) {
+                      &waitForReply](const QGrpcStatus &status) {
                          QCOMPARE_EQ(status.code(), QGrpcStatus::StatusCode::Ok);
                          auto resultOpt = replyPtr->read<SimpleStringMessage>();
                          QVERIFY(resultOpt.has_value());
@@ -69,6 +77,25 @@ void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(waitForReply, true, MessageLatency);
     QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
+}
+
+void QtGrpcClientUnaryCallTest::asyncWithSubscribeMember()
+{
+    SimpleStringMessage request;
+    std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
+    reply->subscribe(this, &QtGrpcClientUnaryCallTest::subscribeCallback);
+
+    QSignalSpy finSpy(reply.get(), &QGrpcOperation::finished);
+    QVERIFY(finSpy.isValid());
+
+    QCOMPARE_EQ(finSpy.count(), 0);
+    QVERIFY(finSpy.wait(2 * MessageLatency));
+    QCOMPARE_EQ(finSpy.count(), 1);
+
+    QVERIFY(mTestBool);
+    mTestBool = false;
+    const auto code = qvariant_cast<QGrpcStatus>(finSpy.at(0).first());
+    QCOMPARE_EQ(code.code(), QGrpcStatus::Ok);
 }
 
 void QtGrpcClientUnaryCallTest::immediateCancel()
@@ -204,10 +231,11 @@ void QtGrpcClientUnaryCallTest::metadata()
 
     QGrpcMetadata metadata;
     QEventLoop waiter;
-    reply->subscribe(reply.get(), [replyPtr = reply.get(), &metadata, &waiter] {
-        metadata = replyPtr->metadata();
-        waiter.quit();
-    });
+    reply->subscribe(reply.get(),
+                     [replyPtr = reply.get(), &metadata, &waiter](const QGrpcStatus &) {
+                         metadata = replyPtr->metadata();
+                         waiter.quit();
+                     });
 
     waiter.exec();
 

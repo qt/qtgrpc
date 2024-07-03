@@ -25,29 +25,20 @@ public:
     explicit QGrpcCallReply(std::shared_ptr<QGrpcOperationContext> operationContext);
     ~QGrpcCallReply() override;
 
-    template <typename ReceiverType, typename FinishCallback, typename ErrorCallback>
-    void subscribe(ReceiverType *receiver, FinishCallback &&finishCallback, ErrorCallback &&errorCallback,
-                   Qt::ConnectionType type = Qt::AutoConnection)
+#ifdef Q_QDOC
+    template <typename FinishCallback>
+    void subscribe(const QObject *receiver, FinishCallback &&finishCallback,
+                   Qt::ConnectionType type = Qt::AutoConnection);
+#else
+    template <typename FinishCallback>
+    void subscribe(const typename QtPrivate::ContextTypeForFunctor<FinishCallback>::ContextType
+                       *receiver,
+                   FinishCallback &&finishCallback, Qt::ConnectionType type = Qt::AutoConnection)
     {
-        QObject::connect(
-            this, &QGrpcCallReply::finished, receiver,
-            [finishCallback, errorCallback](const QGrpcStatus &status) {
-                if (status.isOk()) {
-                    finishCallback();
-                } else {
-                    errorCallback(status);
-                }
-            },
-            type);
+        connect(this, &QGrpcCallReply::finished, receiver,
+                std::forward<FinishCallback>(finishCallback), type);
     }
-
-    template <typename ReceiverType, typename FinishCallback>
-    void subscribe(ReceiverType *receiver, FinishCallback &&finishCallback,
-                   Qt::ConnectionType type = Qt::AutoConnection)
-    {
-        QObject::connect(this, &QGrpcCallReply::finished, receiver,
-                         std::forward<FinishCallback>(finishCallback), type);
-    }
+#endif // Q_QDOC
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcCallReply)
