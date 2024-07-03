@@ -21,18 +21,18 @@ class QAbstractProtobufSerializer;
 
 namespace QtProtobuf {
 class AnyPrivate;
-class Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any : public QProtobufMessage
+class Any : public QProtobufMessage
 {
-    Q_GADGET
+    Q_GADGET_EXPORT(Q_PROTOBUFWELLKNOWNTYPES_EXPORT)
     Q_PROPERTY(QString typeUrl READ typeUrl WRITE setTypeUrl SCRIPTABLE true)
     Q_PROPERTY(QByteArray value READ value WRITE setValue SCRIPTABLE true)
 public:
     static void registerTypes();
 
-    Any();
-    ~Any();
-    Any(const Any &other);
-    Any &operator=(const Any &other);
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any();
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT ~Any();
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any(const Any &other);
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any &operator=(const Any &other);
     Any(Any &&other) noexcept
         : QProtobufMessage(std::move(other)), d_ptr(std::exchange(other.d_ptr, {}))
     {
@@ -44,10 +44,10 @@ public:
         return *this;
     }
 
-    QString typeUrl() const;
-    QByteArray value() const;
-    void setTypeUrl(const QString &typeUrl);
-    void setValue(const QByteArray &value);
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT QString typeUrl() const;
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT QByteArray value() const;
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT void setTypeUrl(const QString &typeUrl);
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT void setValue(const QByteArray &value);
 
     template <typename T>
     std::optional<T> unpack(QAbstractProtobufSerializer *serializer) const
@@ -80,14 +80,19 @@ private:
     AnyPrivate *d_ptr;
     Q_DECLARE_PRIVATE(Any)
 
-    bool unpackImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *message) const;
-    std::optional<Any> unpackAnyImpl(QAbstractProtobufSerializer *serializer) const;
-    static Any fromMessageImpl(QAbstractProtobufSerializer *serializer,
-                               const QProtobufMessage *message, QAnyStringView typeUrlPrefix);
-    static Any fromAnyMessageImpl(QAbstractProtobufSerializer *serializer,
-                                  const Any *message, QAnyStringView typeUrlPrefix);
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT bool unpackImpl(QAbstractProtobufSerializer *serializer,
+                                                    QProtobufMessage *message) const;
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT std::optional<Any>
+    unpackAnyImpl(QAbstractProtobufSerializer *serializer) const;
 
-    static QAnyStringView defaultUrlPrefix();
+    static Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any
+    fromMessageImpl(QAbstractProtobufSerializer *serializer, const QProtobufMessage *message,
+                    QAnyStringView typeUrlPrefix);
+    static Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any
+    fromAnyMessageImpl(QAbstractProtobufSerializer *serializer, const Any *message,
+                       QAnyStringView typeUrlPrefix);
+
+    static Q_PROTOBUFWELLKNOWNTYPES_EXPORT QAnyStringView defaultUrlPrefix();
 
     friend bool comparesEqual(const Any &lhs, const Any &rhs) noexcept
     {
