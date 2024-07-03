@@ -89,16 +89,12 @@ private:
 
     static QAnyStringView defaultUrlPrefix();
 
-    friend Q_PROTOBUFWELLKNOWNTYPES_EXPORT bool
-    comparesEqual(const Any &lhs, const Any &rhs) noexcept;
-    friend bool operator==(const Any &lhs, const Any &rhs) noexcept
+    friend bool comparesEqual(const Any &lhs, const Any &rhs) noexcept
     {
-        return comparesEqual(lhs, rhs);
+        return lhs.typeUrl() == rhs.typeUrl() && lhs.value() == rhs.value();
     }
-    friend bool operator!=(const Any &lhs, const Any &rhs) noexcept
-    {
-        return !comparesEqual(lhs, rhs);
-    }
+
+    Q_DECLARE_EQUALITY_COMPARABLE(Any)
 };
 } // namespace QtProtobuf
 
