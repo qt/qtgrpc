@@ -68,7 +68,6 @@ private:
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(QAbstractGrpcChannel *)
 Q_DECLARE_METATYPE(std::shared_ptr<QAbstractGrpcChannel>)
 
 #endif // QABSTRACTGRPCCHANNEL_H
