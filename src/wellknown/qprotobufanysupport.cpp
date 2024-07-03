@@ -94,6 +94,8 @@ void Any::registerTypes()
     \brief A helper class to simplify working with the protobuf Any type.
     \inmodule QtProtobufWellKnownTypes
 
+    \compares equality
+
     The Any class enables easy casting to and from other types using as() and
     fromMessage().
 
@@ -276,11 +278,6 @@ QAnyStringView Any::defaultUrlPrefix()
     // We don't have support for this, so users have to provide the correct URL.
     // We won't check if it's correct.
     return u"type.googleapis.com";
-}
-
-bool comparesEqual(const Any &lhs, const Any &rhs) noexcept
-{
-    return lhs.typeUrl() == rhs.typeUrl() && lhs.value() == rhs.value();
 }
 
 /*!
