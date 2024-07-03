@@ -31,11 +31,11 @@ public:
     {
         QObject::connect(
             this, &QGrpcCallReply::finished, receiver,
-            [finishCallback, errorCallback](const auto &status) {
-                if (status.code() != QGrpcStatus::StatusCode::Ok) {
-                    errorCallback(status);
-                } else {
+            [finishCallback, errorCallback](const QGrpcStatus &status) {
+                if (status.isOk()) {
                     finishCallback();
+                } else {
+                    errorCallback(status);
                 }
             },
             type);
