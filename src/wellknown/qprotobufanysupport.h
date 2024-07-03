@@ -21,7 +21,7 @@ class QAbstractProtobufSerializer;
 
 namespace QtProtobuf {
 class AnyPrivate;
-class Any : public QProtobufMessage
+class Any final : public QProtobufMessage
 {
     Q_GADGET_EXPORT(Q_PROTOBUFWELLKNOWNTYPES_EXPORT)
     Q_PROPERTY(QString typeUrl READ typeUrl WRITE setTypeUrl SCRIPTABLE true)
