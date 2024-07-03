@@ -51,11 +51,7 @@ protected:
     Q_PROTOBUF_EXPORT QProtobufMessage(const QProtobufMessage &other);
     Q_PROTOBUF_EXPORT QProtobufMessage &operator=(const QProtobufMessage &other);
     QProtobufMessage(QProtobufMessage &&other) noexcept : d_ptr(std::exchange(other.d_ptr, {})) { }
-    QProtobufMessage &operator=(QProtobufMessage &&other) noexcept
-    {
-        qt_ptr_swap(d_ptr, other.d_ptr);
-        return *this;
-    }
+    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QProtobufMessage)
 
     QVariant property(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
                       bool allowInitialize = false) const;
@@ -64,6 +60,10 @@ protected:
     bool setProperty(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
                      QVariant &&value);
 
+    void swap(QProtobufMessage &other) noexcept
+    {
+         qt_ptr_swap(d_ptr, other.d_ptr);
+    }
 private:
     friend Q_PROTOBUF_EXPORT bool comparesEqual(const QProtobufMessage &lhs,
                                                 const QProtobufMessage &rhs) noexcept;
