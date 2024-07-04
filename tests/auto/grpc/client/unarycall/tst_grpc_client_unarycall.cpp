@@ -178,11 +178,8 @@ void QtGrpcClientUnaryCallTest::asyncInThread()
     QVERIFY(clientErrorSpy.isValid());
 
     const std::unique_ptr<QThread> thread(QThread::create([&] {
-        QEventLoop waiter;
         std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
-        QObject::connect(reply.get(), &QGrpcCallReply::finished, &waiter,
-                         [&waiter] { waiter.quit(); });
-        waiter.exec();
+        QVERIFY(!reply);
     }));
 
     thread->start();

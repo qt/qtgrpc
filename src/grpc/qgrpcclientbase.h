@@ -58,36 +58,33 @@ protected:
     std::shared_ptr<StreamType> startStream(QLatin1StringView method, const QProtobufMessage &arg,
                                             const QGrpcCallOptions &options)
     {
-        std::optional<QByteArray> argData = trySerialize(arg);
-        if (!argData) {
-            Q_EMIT errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
-                                              tr("Serializing failed. Serializer is not ready.") });
-            return {};
-        }
         if constexpr (std::is_same_v<StreamType, QGrpcServerStream>) {
-            return startServerStream(method, *argData, options);
+            return startServerStream(method, arg, options);
         } else if constexpr (std::is_same_v<StreamType, QGrpcClientStream>) {
-            return startClientStream(method, *argData, options);
+            return startClientStream(method, arg, options);
         } else if constexpr (std::is_same_v<StreamType, QGrpcBidirStream>) {
-            return startBidirStream(method, *argData, options);
+            return startBidirStream(method, arg, options);
+        } else {
+            static_assert(QtPrivate::type_dependent_false<StreamType>::value,
+                          "Invalid stream type received");
+            Q_UNREACHABLE_RETURN({});
         }
-        Q_UNREACHABLE_RETURN({});
     }
 
 private:
-    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QByteArrayView arg,
-                                         const QGrpcCallOptions &options);
-
     std::shared_ptr<QGrpcServerStream> startServerStream(QLatin1StringView method,
-                                                         QByteArrayView arg,
+                                                         const QProtobufMessage &arg,
                                                          const QGrpcCallOptions &options);
+
     std::shared_ptr<QGrpcClientStream> startClientStream(QLatin1StringView method,
-                                                         QByteArrayView arg,
+                                                         const QProtobufMessage &arg,
                                                          const QGrpcCallOptions &options);
-    std::shared_ptr<QGrpcBidirStream> startBidirStream(QLatin1StringView method, QByteArrayView arg,
+
+    std::shared_ptr<QGrpcBidirStream> startBidirStream(QLatin1StringView method,
+                                                       const QProtobufMessage &arg,
                                                        const QGrpcCallOptions &options);
 
-    std::optional<QByteArray> trySerialize(const QProtobufMessage &arg) const;
+    std::optional<QByteArray> trySerialize(const QProtobufMessage &arg);
 
     Q_DISABLE_COPY_MOVE(QGrpcClientBase)
     Q_DECLARE_PRIVATE(QGrpcClientBase)

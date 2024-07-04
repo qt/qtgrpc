@@ -185,19 +185,6 @@ void QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channe
     emit channelChanged();
 }
 
-std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
-                                                          const QProtobufMessage &arg,
-                                                          const QGrpcCallOptions &options)
-{
-    std::optional<QByteArray> argData = trySerialize(arg);
-    if (!argData) {
-        Q_EMIT errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
-                                          tr("Serializing failed. Serializer is not ready.") });
-        return {};
-    }
-    return call(method, *argData, options);
-}
-
 /*!
     \since 6.7
     Returns the channel attached to this client.
@@ -209,18 +196,21 @@ std::shared_ptr<QAbstractGrpcChannel> QGrpcClientBase::channel() const noexcept
 }
 
 std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
-                                                          QByteArrayView arg,
-                                                          const QGrpcCallOptions &options)
+                                                      const QProtobufMessage &arg,
+                                                      const QGrpcCallOptions &options)
 {
-    std::shared_ptr<QGrpcCallReply> reply;
     Q_D(QGrpcClientBase);
     if (d->checkThread("QGrpcClientBase::call"_L1) != QGrpcStatus::Ok)
-        return reply;
+        return {};
 
     if (!d->checkChannel())
-        return reply;
+        return {};
 
-    reply = d->channel->call(method, QLatin1StringView(d->service), arg, options);
+    std::optional<QByteArray> argData = trySerialize(arg);
+    if (!argData)
+        return {};
+
+    auto reply = d->channel->call(method, d->service, *argData, options);
 
     auto errorConnection = std::make_shared<QMetaObject::Connection>();
     *errorConnection = connect(reply.get(), &QGrpcCallReply::finished, this,
@@ -233,8 +223,8 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
 }
 
 std::shared_ptr<QGrpcServerStream>
-QGrpcClientBase::startServerStream(QLatin1StringView method, QByteArrayView arg,
-                                       const QGrpcCallOptions &options)
+QGrpcClientBase::startServerStream(QLatin1StringView method, const QProtobufMessage &arg,
+                                   const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
 
@@ -244,15 +234,18 @@ QGrpcClientBase::startServerStream(QLatin1StringView method, QByteArrayView arg,
     if (!d->checkChannel())
         return {};
 
-    auto grpcStream =
-            d->channel->startServerStream(method, QLatin1StringView(d->service), arg, options);
+    std::optional<QByteArray> argData = trySerialize(arg);
+    if (!argData)
+        return {};
+
+    auto grpcStream = d->channel->startServerStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }
 
 std::shared_ptr<QGrpcClientStream>
-QGrpcClientBase::startClientStream(QLatin1StringView method, QByteArrayView arg,
-                                       const QGrpcCallOptions &options)
+QGrpcClientBase::startClientStream(QLatin1StringView method, const QProtobufMessage &arg,
+                                   const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
 
@@ -262,15 +255,18 @@ QGrpcClientBase::startClientStream(QLatin1StringView method, QByteArrayView arg,
     if (!d->checkChannel())
         return {};
 
-    auto grpcStream =
-            d->channel->startClientStream(method, QLatin1StringView(d->service), arg, options);
+    std::optional<QByteArray> argData = trySerialize(arg);
+    if (!argData)
+        return {};
+
+    auto grpcStream = d->channel->startClientStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }
 
-std::shared_ptr<QGrpcBidirStream>
-QGrpcClientBase::startBidirStream(QLatin1StringView method, QByteArrayView arg,
-                                      const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcBidirStream> QGrpcClientBase::startBidirStream(QLatin1StringView method,
+                                                                    const QProtobufMessage &arg,
+                                                                    const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
 
@@ -280,19 +276,24 @@ QGrpcClientBase::startBidirStream(QLatin1StringView method, QByteArrayView arg,
     if (!d->checkChannel())
         return {};
 
-    auto grpcStream =
-            d->channel->startBidirStream(method, QLatin1StringView(d->service), arg, options);
+    std::optional<QByteArray> argData = trySerialize(arg);
+    if (!argData)
+        return {};
+
+    auto grpcStream = d->channel->startBidirStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }
 
-std::optional<QByteArray> QGrpcClientBase::trySerialize(const QProtobufMessage &arg) const
+std::optional<QByteArray> QGrpcClientBase::trySerialize(const QProtobufMessage &arg)
 {
     Q_D(const QGrpcClientBase);
-    using namespace Qt::StringLiterals;
     auto serializer = d->serializer();
-    if (serializer == nullptr)
+    if (serializer == nullptr) {
+        emit errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
+                                        tr("Serializing failed. Serializer is not ready.") });
         return std::nullopt;
+    }
 
     return serializer->serialize(&arg);
 }
