@@ -30,9 +30,10 @@ class Q_GRPC_EXPORT QGrpcClientBase : public QObject
     Q_PROPERTY(std::shared_ptr<QAbstractGrpcChannel> channel READ channel
                        WRITE attachChannel NOTIFY channelChanged)
 public:
+    ~QGrpcClientBase() override;
+
     void attachChannel(std::shared_ptr<QAbstractGrpcChannel> channel);
     [[nodiscard]] std::shared_ptr<QAbstractGrpcChannel> channel() const noexcept;
-    ~QGrpcClientBase() override;
 
 Q_SIGNALS:
     void errorOccurred(const QGrpcStatus &status);
