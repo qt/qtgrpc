@@ -20,13 +20,13 @@ QT_BEGIN_NAMESPACE
 using namespace Qt::StringLiterals;
 
 namespace {
-static QString threadSafetyWarning(QLatin1StringView methodName)
+QString threadSafetyWarning(const char *methodName)
 {
-    return QGrpcClientBase::tr("%1 is called from a different thread.\n"
-                                   "Qt GRPC doesn't guarantee thread safety on the channel level.\n"
-                                   "You have to be confident that channel routines are working in "
-                                   "the same thread as QGrpcClientBase.")
-        .arg(methodName);
+    return QGrpcClientBase::tr("QGrpcClientBase::%1 is called from a different thread.\n"
+                               "Qt GRPC doesn't guarantee thread safety on the channel level.\n"
+                               "You have to be confident that channel routines are working in "
+                               "the same thread as QGrpcClientBase.")
+        .arg(QLatin1StringView(methodName));
 }
 } // namespace
 
@@ -83,9 +83,19 @@ public:
     {
     }
 
-    QGrpcStatus checkThread(QLatin1StringView warningPreamble);
+    bool checkThread(const char *methodName);
     bool checkChannel();
     void addStream(QGrpcOperation *stream);
+
+    void sendErrorOccurredForNonMainThread(const char *methodName)
+    {
+        Q_Q(QGrpcClientBase);
+        QGrpcStatus s{ QtGrpc::StatusCode::Internal, threadSafetyWarning(methodName) };
+        auto method = QMetaMethod::fromSignal(&QGrpcClientBase::errorOccurred);
+        Q_ASSERT(method.isValid());
+        method.invoke(q, Qt::AutoConnection, std::move(s));
+    }
+
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const {
         if (const auto &c = channel)
             return c->serializer();
@@ -97,17 +107,14 @@ public:
     QMinimalFlatSet<QGrpcOperation *> activeStreams;
 };
 
-QGrpcStatus QGrpcClientBasePrivate::checkThread(QLatin1StringView warningPreamble)
+bool QGrpcClientBasePrivate::checkThread(const char *methodName)
 {
     Q_Q(QGrpcClientBase);
-
-    QGrpcStatus status;
     if (q->thread() != QThread::currentThread()) {
-        status = QGrpcStatus{ QtGrpc::StatusCode::Unknown, threadSafetyWarning(warningPreamble) };
-        qGrpcCritical() << status.message();
-        emit q->errorOccurred(status);
+        sendErrorOccurredForNonMainThread(methodName);
+        return false;
     }
-    return status;
+    return true;
 }
 
 bool QGrpcClientBasePrivate::checkChannel()
@@ -169,13 +176,12 @@ QGrpcClientBase::~QGrpcClientBase() = default;
 */
 void QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channel)
 {
+    Q_D(QGrpcClientBase);
+    // channel is not a QObject so we compare against the threadId set on construction.
     if (channel->dPtr->threadId != QThread::currentThreadId()) {
-        const QString status = threadSafetyWarning("QGrpcClientBase::attachChannel"_L1);
-        qGrpcCritical() << status;
-        emit errorOccurred(QGrpcStatus{ QtGrpc::StatusCode::Unknown, status });
+        d->sendErrorOccurredForNonMainThread("attachChannel");
         return;
     }
-    Q_D(QGrpcClientBase);
     for (auto &stream : d->activeStreams) {
         assert(stream != nullptr);
         stream->cancel();
@@ -200,7 +206,8 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
                                                       const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
-    if (d->checkThread("QGrpcClientBase::call"_L1) != QtGrpc::StatusCode::Ok)
+
+    if (!d->checkThread("call"))
         return {};
 
     if (!d->checkChannel())
@@ -228,7 +235,7 @@ QGrpcClientBase::startServerStream(QLatin1StringView method, const QProtobufMess
 {
     Q_D(QGrpcClientBase);
 
-    if (d->checkThread("QGrpcClientBase::startStream<QGrpcServerStream>"_L1) != QtGrpc::StatusCode::Ok)
+    if (!d->checkThread("startStream<QGrpcServerStream>"))
         return {};
 
     if (!d->checkChannel())
@@ -249,7 +256,7 @@ QGrpcClientBase::startClientStream(QLatin1StringView method, const QProtobufMess
 {
     Q_D(QGrpcClientBase);
 
-    if (d->checkThread("QGrpcClientBase::startStream<QGrpcClientStream>"_L1) != QtGrpc::StatusCode::Ok)
+    if (!d->checkThread("startStream<QGrpcClientStream>"))
         return {};
 
     if (!d->checkChannel())
@@ -270,7 +277,7 @@ std::shared_ptr<QGrpcBidirStream> QGrpcClientBase::startBidirStream(QLatin1Strin
 {
     Q_D(QGrpcClientBase);
 
-    if (d->checkThread("QGrpcClientBase::startStream<QGrpcBidirStream>"_L1) != QtGrpc::StatusCode::Ok)
+    if (!d->checkThread("startStream<QGrpcBidirStream>"))
         return {};
 
     if (!d->checkChannel())

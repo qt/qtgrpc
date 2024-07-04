@@ -44,8 +44,7 @@ private Q_SLOTS:
     void deferredCancel();
     void asyncClientStatusMessage();
     void asyncStatusMessage();
-    void inThread();
-    void asyncInThread();
+    void nonMainThreadIsInvalid();
     void metadata();
 
 private:
@@ -174,29 +173,7 @@ void QtGrpcClientUnaryCallTest::asyncStatusMessage()
     QCOMPARE(args.first().value<QGrpcStatus>().message(), request.testFieldString());
 }
 
-void QtGrpcClientUnaryCallTest::inThread()
-{
-    SimpleStringMessage request;
-
-    request.setTestFieldString("Hello Qt from thread!");
-
-    QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
-    QVERIFY(clientErrorSpy.isValid());
-
-    std::shared_ptr<QGrpcCallReply> reply;
-    const std::unique_ptr<QThread> thread(QThread::create(
-        [&] { reply = client()->testMethod(request); }));
-
-    thread->start();
-
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, MessageLatencyWithThreshold);
-    QVERIFY(reply == nullptr);
-    QVERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
-                    .message()
-                    .startsWith("QGrpcClientBase::call is called from a different thread."));
-}
-
-void QtGrpcClientUnaryCallTest::asyncInThread()
+void QtGrpcClientUnaryCallTest::nonMainThreadIsInvalid()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Hello Qt from thread!");
