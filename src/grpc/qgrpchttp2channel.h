@@ -33,7 +33,7 @@ private:
 
     Q_DISABLE_COPY_MOVE(QGrpcHttp2Channel)
 
-    std::unique_ptr<QGrpcHttp2ChannelPrivate> dPtr;
+    std::unique_ptr<QGrpcHttp2ChannelPrivate> d_ptr;
 };
 
 QT_END_NAMESPACE
