@@ -20,6 +20,13 @@
 
 QT_BEGIN_NAMESPACE
 
+namespace QtGrpcPrivate {
+template <typename T> inline constexpr bool is_qtgrpc_stream_v = false;
+template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcServerStream> = true;
+template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcClientStream> = true;
+template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcBidirStream> = true;
+}
+
 class QGrpcOperation;
 class QAbstractGrpcChannel;
 class QGrpcClientBasePrivate;
@@ -29,6 +36,10 @@ class Q_GRPC_EXPORT QGrpcClientBase : public QObject
     Q_OBJECT
     Q_PROPERTY(std::shared_ptr<QAbstractGrpcChannel> channel READ channel
                        WRITE attachChannel NOTIFY channelChanged)
+
+    template <typename StreamType>
+    using if_qtgrpc_stream = std::enable_if_t<QtGrpcPrivate::is_qtgrpc_stream_v<StreamType>, bool>;
+
 public:
     ~QGrpcClientBase() override;
 
@@ -45,16 +56,7 @@ protected:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg,
                                          const QGrpcCallOptions &options);
 
-#ifdef Q_QDOC
-    template <typename StreamType>
-#else
-    template <typename StreamType,
-              typename IsCompatibleStream = typename std::enable_if_t<
-                  std::disjunction_v<std::is_same<StreamType, QGrpcServerStream>,
-                                     std::is_same<StreamType, QGrpcClientStream>,
-                                     std::is_same<StreamType, QGrpcBidirStream>>,
-                  bool>>
-#endif
+    template <typename StreamType, if_qtgrpc_stream<StreamType> = true>
     std::shared_ptr<StreamType> startStream(QLatin1StringView method, const QProtobufMessage &arg,
                                             const QGrpcCallOptions &options)
     {
