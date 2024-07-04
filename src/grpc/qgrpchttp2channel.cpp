@@ -835,7 +835,7 @@ void QGrpcHttp2ChannelPrivate::deleteHandler(Http2Handler *handler)
 */
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri)
     : QAbstractGrpcChannel(),
-      dPtr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, QGrpcChannelOptions{}))
+      d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, QGrpcChannelOptions{}))
 {
 }
 
@@ -844,7 +844,7 @@ QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri)
 */
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri, const QGrpcChannelOptions &options)
     : QAbstractGrpcChannel(options),
-      dPtr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, options))
+      d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, options))
 {
 }
 
@@ -858,7 +858,7 @@ QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
 */
 QUrl QGrpcHttp2Channel::hostUri() const noexcept
 {
-    return dPtr->hostUri;
+    return d_ptr->hostUri;
 }
 
 /*!
@@ -867,7 +867,7 @@ QUrl QGrpcHttp2Channel::hostUri() const noexcept
 */
 void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcOperationContext> operationContext)
 {
-    dPtr->processOperation(operationContext, true);
+    d_ptr->processOperation(operationContext, true);
 }
 
 /*!
@@ -876,7 +876,7 @@ void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcOperationContext> operationCon
 */
 void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcOperationContext> operationContext)
 {
-    dPtr->processOperation(operationContext, true);
+    d_ptr->processOperation(operationContext, true);
 }
 
 /*!
@@ -885,7 +885,7 @@ void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcOperationContext>
 */
 void QGrpcHttp2Channel::startClientStream(std::shared_ptr<QGrpcOperationContext> operationContext)
 {
-    dPtr->processOperation(operationContext);
+    d_ptr->processOperation(operationContext);
 }
 
 /*!
@@ -894,7 +894,7 @@ void QGrpcHttp2Channel::startClientStream(std::shared_ptr<QGrpcOperationContext>
 */
 void QGrpcHttp2Channel::startBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext)
 {
-    dPtr->processOperation(operationContext);
+    d_ptr->processOperation(operationContext);
 }
 
 /*!
@@ -902,7 +902,7 @@ void QGrpcHttp2Channel::startBidirStream(std::shared_ptr<QGrpcOperationContext> 
 */
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const noexcept
 {
-    return dPtr->channelOptions.serializationFormat().serializer();
+    return d_ptr->channelOptions.serializationFormat().serializer();
 }
 
 QT_END_NAMESPACE
