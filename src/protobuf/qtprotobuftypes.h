@@ -97,29 +97,6 @@ bool repeatedValueCompare(const QHash<K, V> &a, const QHash<K, V> &b)
     return a == b;
 }
 
-template<typename T>
-struct qMakeUnsignedImpl
-{
-    using type = std::make_unsigned_t<T>;
-};
-template<typename T>
-struct qMakeUnsignedImpl<TransparentWrapper<T, struct fixed_tag>>
-{
-    using type = TransparentWrapper<std::make_unsigned_t<T>, fixed_tag>;
-};
-template<>
-struct qMakeUnsignedImpl<int32>
-{
-    using type = uint32_t;
-};
-template<>
-struct qMakeUnsignedImpl<int64>
-{
-    using type = uint64_t;
-};
-template<typename T>
-using qMakeUnsigned = typename qMakeUnsignedImpl<T>::type;
-
 template <typename T>
 inline constexpr bool IsProtobufScalarValueType = false;
 template <>
