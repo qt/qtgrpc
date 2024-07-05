@@ -23,12 +23,12 @@ namespace QtProtobufPrivate {
 class QProtobufOneofPrivate;
 class QProtobufOneof final
 {
-    template<typename T>
+    template <typename T>
     using IsProtobufMessageType =
-            typename std::enable_if_t<!std::is_pointer_v<T>
-                                              && std::is_base_of_v<QProtobufMessage, T>
-                                              && has_q_protobuf_object_macro_v<T>,
-                                      int>;
+        std::enable_if_t<std::conjunction_v<std::negation<std::is_pointer<T>>,
+                                                     std::is_base_of<QProtobufMessage, T>,
+                                                     has_q_protobuf_object_macro<T>>,
+                                      bool>;
 
     template <typename T>
     using IsNonMessageProtobufType = std::enable_if_t<
@@ -59,14 +59,14 @@ public:
         return rawValue().value<T>();
     }
 
-    template<typename T, IsProtobufMessageType<T> = 0>
+    template <typename T, IsProtobufMessageType<T> = true>
     T *value()
     {
         ensureRawValue(QMetaType::fromType<T>());
         return reinterpret_cast<T *>(rawValue().data());
     }
 
-    template<typename T, IsProtobufMessageType<T> = 0>
+    template <typename T, IsProtobufMessageType<T> = true>
     const T *value() const
     {
         ensureMetaType(QMetaType::fromType<T>(), rawValue().metaType());
@@ -80,7 +80,7 @@ public:
                 && QMetaType::fromType<T>() == rawValue().metaType() && value<T>() == otherValue;
     }
 
-    template<typename T, IsProtobufMessageType<T> = 0>
+    template <typename T, IsProtobufMessageType<T> = true>
     bool isEqual(const T &otherValue, int fieldNumber) const
     {
         return this->fieldNumber() == fieldNumber
