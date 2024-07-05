@@ -120,6 +120,42 @@ struct qMakeUnsignedImpl<int64>
 template<typename T>
 using qMakeUnsigned = typename qMakeUnsignedImpl<T>::type;
 
+template <typename T>
+inline constexpr bool IsProtobufScalarValueType = false;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::int32> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::int64> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::sint32> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::sint64> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::uint32> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::uint64> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::fixed32> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::fixed64> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::sfixed32> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::sfixed64> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<float> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<double> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QtProtobuf::boolean> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QString> = true;
+template <>
+constexpr inline bool IsProtobufScalarValueType<QByteArray> = true;
+
+template <typename T>
+using is_protobuf_scalar_value_type = std::bool_constant<IsProtobufScalarValueType<T>>;
+
 } // namespace QtProtobuf
 
 QT_END_NAMESPACE
