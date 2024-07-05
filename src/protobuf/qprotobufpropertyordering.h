@@ -11,6 +11,7 @@
 
 #include <QtProtobuf/qtprotobufglobal.h>
 
+#include <QtCore/qtclasshelpermacros.h>
 #include <QtCore/qutf8stringview.h>
 
 #include <QtCore/qxptype_traits.h>
@@ -56,7 +57,7 @@ struct QProtobufPropertyOrdering
 
 private:
     friend class QProtobufPropertyOrderingBuilder;
-    struct NonConstTag {};
+    QT_DEFINE_TAG_STRUCT(NonConstTag);
     uint *uint_data(NonConstTag) const;
     char *char_data(NonConstTag) const;
     const uint *uint_data() const;
