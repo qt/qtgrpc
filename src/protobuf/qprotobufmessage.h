@@ -11,7 +11,7 @@
 #include <QtCore/qtconfigmacros.h>
 #include <QtCore/qtmetamacros.h>
 #include <QtCore/qmetaobject.h>
-
+#include <QtCore/qshareddata.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -23,6 +23,8 @@ using QProtobufMessagePointer = std::unique_ptr<QProtobufMessage, QProtobufMessa
 
 class QAbstractProtobufSerializer;
 class QProtobufMessagePrivate;
+QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QProtobufMessagePrivate, Q_PROTOBUF_EXPORT)
+
 class QProtobufMessage
 {
     Q_GADGET_EXPORT(Q_PROTOBUF_EXPORT)
@@ -51,7 +53,7 @@ protected:
     Q_PROTOBUF_EXPORT ~QProtobufMessage();
     Q_PROTOBUF_EXPORT QProtobufMessage(const QProtobufMessage &other);
     Q_PROTOBUF_EXPORT QProtobufMessage &operator=(const QProtobufMessage &other);
-    QProtobufMessage(QProtobufMessage &&other) noexcept : d_ptr(std::exchange(other.d_ptr, {})) { }
+    QProtobufMessage(QProtobufMessage &&other) noexcept = default;
     QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QProtobufMessage)
 
     QVariant property(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
@@ -63,14 +65,12 @@ protected:
 
     void swap(QProtobufMessage &other) noexcept
     {
-         qt_ptr_swap(d_ptr, other.d_ptr);
+        d_ptr.swap(other.d_ptr);
     }
 private:
     friend Q_PROTOBUF_EXPORT bool comparesEqual(const QProtobufMessage &lhs,
                                                 const QProtobufMessage &rhs) noexcept;
     Q_DECLARE_EQUALITY_COMPARABLE(QProtobufMessage);
-
-    void detachPrivate(); // Call before editing the private!
 
     const QMetaObject *metaObject() const;
 
@@ -80,7 +80,7 @@ private:
     friend class QProtobufJsonSerializerPrivate;
     friend struct QProtobufMessageDeleter;
 
-    QProtobufMessagePrivate *d_ptr;
+    QExplicitlySharedDataPointer<QProtobufMessagePrivate> d_ptr;
     Q_DECLARE_PRIVATE(QProtobufMessage)
 };
 

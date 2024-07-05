@@ -56,6 +56,8 @@ const QMetaObject *QProtobufMessage::metaObject() const
     return d_ptr->metaObject;
 }
 
+QT_DEFINE_QESDP_SPECIALIZATION_DTOR(QProtobufMessagePrivate)
+
 /*!
     \internal
 */
@@ -73,9 +75,12 @@ int QProtobufMessagePrivate::getPropertyIndex(QAnyStringView propertyName) const
     });
 }
 
-void QProtobufMessagePrivate::storeUnknownEntry(QByteArrayView entry, int fieldNumber)
+void QProtobufMessagePrivate::storeUnknownEntry(QProtobufMessage *message,
+                                                QByteArrayView entry, int fieldNumber)
 {
-    unknownEntries[fieldNumber].append(entry.toByteArray());
+    Q_ASSERT(message);
+    message->d_ptr.detach();
+    message->d_ptr->unknownEntries[fieldNumber].append(entry.toByteArray());
 }
 
 std::optional<QMetaProperty> QProtobufMessagePrivate::metaProperty(QAnyStringView name) const
@@ -148,36 +153,20 @@ QVariant QProtobufMessage::property(QAnyStringView propertyName) const
     \internal
 */
 QProtobufMessage::QProtobufMessage(const QProtobufMessage &other)
-    : d_ptr(other.d_ptr)
-{
-    d_ptr->ref.ref();
-}
+    = default;
 
 /*!
     \internal
 */
 QProtobufMessage &QProtobufMessage::operator=(const QProtobufMessage &other)
-{
-    if (other.d_ptr == d_ptr)
-        return *this;
+    = default;
 
-    if (d_ptr && !d_ptr->ref.deref())
-        delete d_ptr; // delete d_ptr if it's the last reference
-    d_ptr = other.d_ptr;
-    if (d_ptr)
-        d_ptr->ref.ref();
-
-    return *this;
-}
 
 /*!
     \internal
 */
 QProtobufMessage::~QProtobufMessage()
-{
-    if (d_ptr && !d_ptr->ref.deref())
-        delete d_ptr;
-}
+    = default;
 
 /*!
     \since 6.8
@@ -343,16 +332,6 @@ QByteArray QProtobufMessage::serialize(QAbstractProtobufSerializer *serializer) 
 bool QProtobufMessage::deserialize(QAbstractProtobufSerializer *serializer, QByteArrayView data)
 {
     return serializer->deserialize(this, data);
-}
-
-void QProtobufMessage::detachPrivate()
-{
-    if (d_ptr->ref.loadAcquire() == 1)
-        return;
-    QProtobufMessagePrivate *newD = new QProtobufMessagePrivate(*d_ptr);
-    if (!d_ptr->ref.deref())
-        delete d_ptr;
-    d_ptr = newD;
 }
 
 static bool isProtobufMessage(QMetaType type)

@@ -29,17 +29,11 @@ QT_BEGIN_NAMESPACE
 
 class QMetaProperty;
 
-class QProtobufMessagePrivate
+class QProtobufMessagePrivate : public QSharedData
 {
 public:
     QProtobufMessagePrivate() = default;
-    QProtobufMessagePrivate(const QProtobufMessagePrivate &other)
-        : unknownEntries(other.unknownEntries),
-          metaObject(other.metaObject),
-          ordering(other.ordering),
-          ref(1)
-    {
-    }
+    QProtobufMessagePrivate(const QProtobufMessagePrivate &other) = default;
     QProtobufMessagePrivate(QProtobufMessagePrivate &&other) = delete;
     QProtobufMessagePrivate &operator=(const QProtobufMessagePrivate &other) = delete;
     QProtobufMessagePrivate &operator=(QProtobufMessagePrivate &&other) = delete;
@@ -50,10 +44,8 @@ public:
     const QMetaObject *metaObject = nullptr;
     const QtProtobufPrivate::QProtobufPropertyOrdering *ordering = nullptr;
 
-    QAtomicInt ref = {1};
-
     int getPropertyIndex(QAnyStringView propertyName) const;
-    void storeUnknownEntry(QByteArrayView entry, int fieldNumber);
+    static void storeUnknownEntry(QProtobufMessage *message, QByteArrayView entry, int fieldNumber);
 
     std::optional<QMetaProperty> metaProperty(QAnyStringView name) const;
     std::optional<QMetaProperty>
