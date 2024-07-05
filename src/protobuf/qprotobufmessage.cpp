@@ -247,7 +247,7 @@ QProtobufMessagePointer QProtobufMessage::constructByName(const QString &message
 
     \sa QProtobufMessagePointer
 */
-void QProtobufMessageDeleter::operator()(QProtobufMessage *ptr) noexcept
+void QProtobufMessageDeleter::operator()(QProtobufMessage *ptr) const noexcept
 {
     if (!ptr)
         return;

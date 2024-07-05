@@ -17,7 +17,7 @@ QT_BEGIN_NAMESPACE
 
 class QProtobufMessage;
 struct QProtobufMessageDeleter {
-    Q_PROTOBUF_EXPORT void operator()(QProtobufMessage *ptr) noexcept;
+    Q_PROTOBUF_EXPORT void operator()(QProtobufMessage *ptr) const noexcept;
 };
 using QProtobufMessagePointer = std::unique_ptr<QProtobufMessage, QProtobufMessageDeleter>;
 
