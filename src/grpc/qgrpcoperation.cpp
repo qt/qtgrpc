@@ -74,7 +74,7 @@ QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationC
 QGrpcOperation::~QGrpcOperation() = default;
 
 /*!
-    \fn template <typename T> std::optional<T> QGrpcOperation::read() const
+    \fn template <typename T, QGrpcOperation::if_proto_message<T> = true> std::optional<T> QGrpcOperation::read() const
 
     Reads a message from a raw byte array stored within this QGrpcOperation
     instance.
@@ -83,6 +83,9 @@ QGrpcOperation::~QGrpcOperation() = default;
     returned.
 
     The error can be retrieved using \l deserializationError.
+
+    \note This function only participates in overload resolution if \c T is a
+    subclass of QProtobufMessage.
 
     \sa read, deserializationError, deserializationErrorString
 */
