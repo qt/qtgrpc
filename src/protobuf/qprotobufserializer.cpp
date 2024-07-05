@@ -554,10 +554,10 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
         }
 
         if (preserveUnknownFields) {
-            message->detachPrivate();
-            QProtobufMessagePrivate *messagePrivate = QProtobufMessagePrivate::get(message);
-            messagePrivate->storeUnknownEntry(QByteArrayView(itBeforeHeader.data(), length),
-                                              fieldNumber);
+            QProtobufMessagePrivate::storeUnknownEntry(message,
+                                                       QByteArrayView(itBeforeHeader.data(),
+                                                                      length),
+                                                       fieldNumber);
         }
         return true;
     }
