@@ -24,10 +24,14 @@ class Q_GRPC_EXPORT QGrpcOperation : public QObject
 {
     Q_OBJECT
 
+    template <typename T>
+    using if_proto_message = std::enable_if_t<
+        std::is_base_of_v<QProtobufMessage, T>, bool>;
+
 public:
     ~QGrpcOperation() override;
 
-    template <typename T>
+    template <typename T, if_proto_message<T> = true>
     std::optional<T> read() const
     {
         std::optional<T> r(std::in_place);
