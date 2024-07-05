@@ -41,7 +41,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedStringMessageTest()
 {
     const char *propertyName = "testRepeatedString";
     qProtobufAssertMessagePropertyRegistered<RepeatedStringMessage, QStringList>(1, "QStringList", propertyName);
-    QVERIFY(RepeatedStringMessage::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedStringMessage::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedStringMessage test;
@@ -54,7 +54,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedIntMessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedIntMessage, QtProtobuf::int32List>(1, "QtProtobuf::int32List", propertyName);
-    QVERIFY(RepeatedIntMessage::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedIntMessage::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedIntMessage test;
@@ -73,7 +73,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedDoubleMessageTest()
 {
     const char *propertyName = "testRepeatedDouble";
     qProtobufAssertMessagePropertyRegistered<RepeatedDoubleMessage, QtProtobuf::doubleList>(1, "QtProtobuf::doubleList", propertyName);
-    QVERIFY(RepeatedDoubleMessage::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedDoubleMessage::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedDoubleMessage test;
@@ -92,7 +92,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedFloatMessageTest()
 {
     const char *propertyName = "testRepeatedFloat";
     qProtobufAssertMessagePropertyRegistered<RepeatedFloatMessage, QtProtobuf::floatList>(1, "QtProtobuf::floatList", propertyName);
-    QVERIFY(RepeatedFloatMessage::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedFloatMessage::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedFloatMessage test;
@@ -111,7 +111,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedBytesMessageTest()
 {
     const char *propertyName = "testRepeatedBytes";
     qProtobufAssertMessagePropertyRegistered<RepeatedBytesMessage, QByteArrayList>(1, "QByteArrayList", propertyName);
-    QVERIFY(RepeatedBytesMessage::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedBytesMessage::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     QByteArrayList bList;
@@ -136,7 +136,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedSIntMessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedSIntMessage, QtProtobuf::sint32List>(1, "QtProtobuf::sint32List", propertyName);
-    QVERIFY(RepeatedSIntMessage::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedSIntMessage::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedSIntMessage test;
@@ -155,7 +155,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedUIntMessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedUIntMessage, QtProtobuf::uint32List>(1, "QtProtobuf::uint32List", propertyName);
-    QVERIFY(RepeatedUIntMessage::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedUIntMessage::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedUIntMessage test;
@@ -174,7 +174,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedInt64MessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedInt64Message, QtProtobuf::int64List>(1, "QtProtobuf::int64List", propertyName);
-    QVERIFY(RepeatedInt64Message::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedInt64Message::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedInt64Message test;
@@ -193,7 +193,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedSInt64MessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedSInt64Message, QtProtobuf::sint64List>(1, "QtProtobuf::sint64List", propertyName);
-    QVERIFY(RepeatedSInt64Message::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedSInt64Message::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedSInt64Message test;
@@ -212,7 +212,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedUInt64MessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedUInt64Message, QtProtobuf::uint64List>(1, "QtProtobuf::uint64List", propertyName);
-    QVERIFY(RepeatedUInt64Message::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedUInt64Message::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedUInt64Message test;
@@ -231,7 +231,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedFixedIntMessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedFixedIntMessage, QtProtobuf::fixed32List>(1, "QtProtobuf::fixed32List", propertyName);
-    QVERIFY(RepeatedFixedIntMessage::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedFixedIntMessage::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedFixedIntMessage test;
@@ -250,7 +250,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedFixedInt64MessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedFixedInt64Message, QtProtobuf::fixed64List>(1, "QtProtobuf::fixed64List", propertyName);
-    QVERIFY(RepeatedFixedInt64Message::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedFixedInt64Message::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedFixedInt64Message test;
@@ -269,7 +269,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedSFixedIntMessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedSFixedIntMessage, QtProtobuf::sfixed32List>(1, "QtProtobuf::sfixed32List", propertyName);
-    QVERIFY(RepeatedSFixedIntMessage::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedSFixedIntMessage::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedSFixedIntMessage test;
@@ -288,7 +288,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedSFixedInt64MessageTest()
 {
     const char *propertyName = "testRepeatedInt";
     qProtobufAssertMessagePropertyRegistered<RepeatedSFixedInt64Message, QtProtobuf::sfixed64List>(1, "QtProtobuf::sfixed64List", propertyName);
-    QVERIFY(RepeatedSFixedInt64Message::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedSFixedInt64Message::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedSFixedInt64Message test;
@@ -308,7 +308,7 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedBoolTest()
     const char *propertyName = "testRepeatedBool";
     qProtobufAssertMessagePropertyRegistered<RepeatedBoolMessage, QtProtobuf::boolList>(
             1, "QtProtobuf::boolList", propertyName);
-    QVERIFY(RepeatedBoolMessage::staticPropertyOrdering.getFieldFlags(0)
+    QVERIFY(RepeatedBoolMessage::staticPropertyOrdering.fieldFlags(0)
             & QtProtobufPrivate::FieldFlag::Repeated);
 
     RepeatedBoolMessage test;

@@ -544,8 +544,8 @@ private:
 inline bool
 isOneofOrOptionalField(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
 {
-    return fieldInfo.getFieldFlags() & QtProtobufPrivate::Oneof
-        || fieldInfo.getFieldFlags() & QtProtobufPrivate::Optional;
+    return fieldInfo.fieldFlags() & QtProtobufPrivate::Oneof
+        || fieldInfo.fieldFlags() & QtProtobufPrivate::Optional;
 }
 
 QT_END_NAMESPACE

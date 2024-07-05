@@ -218,7 +218,7 @@ bool Any::unpackImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *
     qsizetype lastSegmentIndex = tUrl.lastIndexOf(u'/') + 1;
     if (QStringView(tUrl)
             .mid(lastSegmentIndex)
-            .compare(message->propertyOrdering()->getMessageFullName())
+            .compare(message->propertyOrdering()->messageFullName())
         != 0) {
         return false;
     }
@@ -257,7 +257,7 @@ Any Any::fromMessageImpl(QAbstractProtobufSerializer *serializer, const QProtobu
     Any any;
     any.setValue(message->serialize(serializer));
     any.setTypeUrl(typeUrlPrefix.toString() + u'/'
-                   + message->propertyOrdering()->getMessageFullName().toString());
+                   + message->propertyOrdering()->messageFullName().toString());
     return { any };
 }
 

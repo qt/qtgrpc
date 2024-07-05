@@ -46,11 +46,11 @@ struct QProtobufPropertyOrdering
         uint fullPackageNameSize;
     } *data;
 
-    Q_PROTOBUF_EXPORT QUtf8StringView getMessageFullName() const;
-    Q_PROTOBUF_EXPORT QUtf8StringView getJsonName(int index) const;
-    Q_PROTOBUF_EXPORT int getFieldNumber(int index) const;
-    Q_PROTOBUF_EXPORT int getPropertyIndex(int index) const;
-    Q_PROTOBUF_EXPORT FieldFlags getFieldFlags(int index) const;
+    Q_PROTOBUF_EXPORT QUtf8StringView messageFullName() const;
+    Q_PROTOBUF_EXPORT QUtf8StringView jsonName(int index) const;
+    Q_PROTOBUF_EXPORT int fieldNumber(int index) const;
+    Q_PROTOBUF_EXPORT int propertyIndex(int index) const;
+    Q_PROTOBUF_EXPORT FieldFlags fieldFlags(int index) const;
     Q_PROTOBUF_EXPORT int indexOfFieldNumber(int fieldNumber) const;
     int fieldCount() const { return int(data->numFields); }
 
@@ -73,10 +73,10 @@ struct QProtobufFieldInfo
         Q_ASSERT(index >= 0);
     }
 
-    QUtf8StringView getJsonName() const { return ordering.getJsonName(index); }
-    int getFieldNumber() const { return ordering.getFieldNumber(index); }
-    int getPropertyIndex() const { return ordering.getPropertyIndex(index); }
-    FieldFlags getFieldFlags() const { return ordering.getFieldFlags(index); }
+    QUtf8StringView jsonName() const { return ordering.jsonName(index); }
+    int fieldNumber() const { return ordering.fieldNumber(index); }
+    int propertyIndex() const { return ordering.propertyIndex(index); }
+    FieldFlags fieldFlags() const { return ordering.fieldFlags(index); }
 
 private:
     const QProtobufPropertyOrdering ordering;

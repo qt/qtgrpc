@@ -90,7 +90,7 @@ std::optional<QMetaProperty> QProtobufMessagePrivate::metaProperty(QAnyStringVie
 std::optional<QMetaProperty>
 QProtobufMessagePrivate::metaProperty(QtProtobufPrivate::QProtobufFieldInfo info) const
 {
-    const int propertyIndex = info.getPropertyIndex() + metaObject->propertyOffset();
+    const int propertyIndex = info.propertyIndex() + metaObject->propertyOffset();
     const QMetaProperty metaProperty = metaObject->property(propertyIndex);
     if (metaProperty.isValid())
         return metaProperty;
@@ -260,13 +260,13 @@ QVariant
 QProtobufMessage::property(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
                            bool allowInitialize) const
 {
-    int propertyIndex = fieldInfo.getPropertyIndex() + metaObject()->propertyOffset();
+    int propertyIndex = fieldInfo.propertyIndex() + metaObject()->propertyOffset();
     QMetaProperty metaProperty = metaObject()->property(propertyIndex);
 
     if (!metaProperty.isValid())
         return {};
 
-    if (fieldInfo.getFieldFlags() & QtProtobufPrivate::ExplicitPresence && !allowInitialize) {
+    if (fieldInfo.fieldFlags() & QtProtobufPrivate::ExplicitPresence && !allowInitialize) {
         int hasPropertyIndex = propertyIndex + 1;
         QMetaProperty hasProperty = metaObject()->property(hasPropertyIndex);
         Q_ASSERT_X(hasProperty.isValid() && hasProperty.metaType().id() == QMetaType::Bool,

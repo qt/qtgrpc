@@ -30,7 +30,7 @@ struct ProtobufOrderingRegistry
     void registerOrdering(QMetaType type, QtProtobufPrivate::QProtobufPropertyOrdering ordering)
     {
         QWriteLocker locker(&m_lock);
-        m_registry[ordering.getMessageFullName().toString()] =
+        m_registry[ordering.messageFullName().toString()] =
             ProtobufOrderingRegistryRecord(type, ordering);
     }
 
@@ -80,14 +80,14 @@ static_assert(std::is_trivially_destructible_v<QProtobufPropertyOrdering>);
 constexpr uint jsonNameOffsetsOffset = 0;
 // Use this constant to make the +/- 1 more easily readable
 constexpr int NullTerminator = 1;
-QUtf8StringView QProtobufPropertyOrdering::getMessageFullName() const
+QUtf8StringView QProtobufPropertyOrdering::messageFullName() const
 {
     Q_ASSERT(data);
     const char *name = char_data();
     return { name, qsizetype(data->fullPackageNameSize) };
 }
 
-QUtf8StringView QProtobufPropertyOrdering::getJsonName(int index) const
+QUtf8StringView QProtobufPropertyOrdering::jsonName(int index) const
 {
     Q_ASSERT(data);
     if (Q_UNLIKELY(index < 0 || index >= fieldCount()))
@@ -100,7 +100,7 @@ QUtf8StringView QProtobufPropertyOrdering::getJsonName(int index) const
     return { name, qsizetype(nameLength) };
 }
 
-int QProtobufPropertyOrdering::getFieldNumber(int index) const
+int QProtobufPropertyOrdering::fieldNumber(int index) const
 {
     Q_ASSERT(data);
     if (Q_UNLIKELY(index < 0 || index >= fieldCount()))
@@ -111,7 +111,7 @@ int QProtobufPropertyOrdering::getFieldNumber(int index) const
     return int(fieldNumber);
 }
 
-int QProtobufPropertyOrdering::getPropertyIndex(int index) const
+int QProtobufPropertyOrdering::propertyIndex(int index) const
 {
     Q_ASSERT(data);
     if (Q_UNLIKELY(index < 0 || index >= fieldCount()))
@@ -134,7 +134,7 @@ int QProtobufPropertyOrdering::indexOfFieldNumber(int fieldNumber) const
     return -1;
 }
 
-FieldFlags QProtobufPropertyOrdering::getFieldFlags(int index) const
+FieldFlags QProtobufPropertyOrdering::fieldFlags(int index) const
 {
     Q_ASSERT(data);
     if (Q_UNLIKELY(index < 0 || index >= fieldCount()))
