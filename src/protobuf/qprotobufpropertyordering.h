@@ -63,7 +63,6 @@ private:
     const char *char_data() const;
     const uint &uint_dataForIndex(int index, uint offset) const;
 };
-static_assert(std::is_trivially_destructible_v<QProtobufPropertyOrdering>);
 
 // Convenience structure to hold a reference to a single field information
 struct QProtobufFieldInfo
