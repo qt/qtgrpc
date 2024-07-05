@@ -85,18 +85,6 @@ using floatList = QList<float>;
 using doubleList = QList<double>;
 using boolList = QList<bool>;
 
-template<typename T>
-bool repeatedValueCompare(const QList<T> &a, const QList<T> &b)
-{
-    return std::equal(a.begin(), a.end(), b.begin(), b.end());
-}
-
-template<typename K, typename V>
-bool repeatedValueCompare(const QHash<K, V> &a, const QHash<K, V> &b)
-{
-    return a == b;
-}
-
 template <typename T>
 inline constexpr bool IsProtobufScalarValueType = false;
 template <>

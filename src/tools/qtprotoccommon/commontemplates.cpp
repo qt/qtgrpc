@@ -439,8 +439,7 @@ const char *CommonTemplates::EqualOperatorMemberMessageTemplate()
 }
 const char *CommonTemplates::EqualOperatorMemberRepeatedTemplate()
 {
-    return "QtProtobuf::repeatedValueCompare(lhs.dptr->m_$property_name$, "
-           "rhs.dptr->m_$property_name$)";
+    return "lhs.dptr->m_$property_name$ == rhs.dptr->m_$property_name$";
 }
 const char *CommonTemplates::EqualOperatorMemberOneofTemplate()
 {

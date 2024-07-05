@@ -568,7 +568,7 @@ bool comparesEqual(const RepeatedComplexMessage &lhs, const RepeatedComplexMessa
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
                        static_cast<const QProtobufMessage&>(rhs))
-        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_testRepeatedComplex, rhs.dptr->m_testRepeatedComplex);
+        && lhs.dptr->m_testRepeatedComplex == rhs.dptr->m_testRepeatedComplex;
 }
 
 ComplexMessageRepeated RepeatedComplexMessage::testRepeatedComplex() const

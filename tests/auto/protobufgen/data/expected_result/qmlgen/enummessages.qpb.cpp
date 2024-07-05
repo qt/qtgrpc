@@ -859,8 +859,8 @@ bool comparesEqual(const MixedEnumUsageMessage &lhs, const MixedEnumUsageMessage
                        static_cast<const QProtobufMessage&>(rhs))
         && lhs.dptr->m_localEnum == rhs.dptr->m_localEnum
         && lhs.dptr->m_localEnumList == rhs.dptr->m_localEnumList
-        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_localEnumMap, rhs.dptr->m_localEnumMap)
-        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_msgList, rhs.dptr->m_msgList);
+        && lhs.dptr->m_localEnumMap == rhs.dptr->m_localEnumMap
+        && lhs.dptr->m_msgList == rhs.dptr->m_msgList;
 }
 
 MixedEnumUsageMessage_QtProtobufNested::LocalEnum MixedEnumUsageMessage::localEnum() const
