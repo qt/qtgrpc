@@ -30,18 +30,9 @@ class QProtobufOneof final
                                               && has_q_protobuf_object_macro_v<T>,
                                       int>;
 
-    template<typename T>
-    using IsNonMessageProtobufType = typename std::enable_if_t<
-            std::disjunction_v<
-                    std::is_same<T, QtProtobuf::int32>, std::is_same<T, QtProtobuf::int64>,
-                    std::is_same<T, QtProtobuf::sint32>, std::is_same<T, QtProtobuf::sint64>,
-                    std::is_same<T, QtProtobuf::uint32>, std::is_same<T, QtProtobuf::uint64>,
-                    std::is_same<T, QtProtobuf::fixed32>, std::is_same<T, QtProtobuf::fixed64>,
-                    std::is_same<T, QtProtobuf::sfixed32>, std::is_same<T, QtProtobuf::sfixed64>,
-                    std::is_same<T, float>, std::is_same<T, double>,
-                    std::is_same<T, QtProtobuf::boolean>, std::is_enum<T>,
-                    std::is_same<T, QString>, std::is_same<T, QByteArray>>,
-            int>;
+    template <typename T>
+    using IsNonMessageProtobufType = std::enable_if_t<
+        std::disjunction_v<std::is_enum<T>, QtProtobuf::is_protobuf_scalar_value_type<T>>, bool>;
 
 public:
     Q_PROTOBUF_EXPORT  QProtobufOneof();
@@ -61,7 +52,7 @@ public:
         setValue(QVariant::fromValue<T>(value), fieldNumber);
     }
 
-    template<typename T, IsNonMessageProtobufType<T> = 0>
+    template <typename T, IsNonMessageProtobufType<T> = true>
     T value() const
     {
         Q_ASSERT(QMetaType::fromType<T>() == rawValue().metaType());
@@ -83,7 +74,7 @@ public:
         return reinterpret_cast<const T *>(rawValue().data());
     }
 
-    template<typename T, IsNonMessageProtobufType<T> = 0>
+    template <typename T, IsNonMessageProtobufType<T> = true>
     bool isEqual(const T &otherValue, int fieldNumber) const
     {
         return this->fieldNumber() == fieldNumber
