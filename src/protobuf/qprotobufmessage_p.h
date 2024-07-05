@@ -44,7 +44,7 @@ public:
     const QMetaObject *metaObject = nullptr;
     const QtProtobufPrivate::QProtobufPropertyOrdering *ordering = nullptr;
 
-    int getPropertyIndex(QAnyStringView propertyName) const;
+    int propertyIndex(QAnyStringView propertyName) const;
     static void storeUnknownEntry(QProtobufMessage *message, QByteArrayView entry, int fieldNumber);
 
     std::optional<QMetaProperty> metaProperty(QAnyStringView name) const;

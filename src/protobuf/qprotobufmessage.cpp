@@ -61,7 +61,7 @@ QT_DEFINE_QESDP_SPECIALIZATION_DTOR(QProtobufMessagePrivate)
 /*!
     \internal
 */
-int QProtobufMessagePrivate::getPropertyIndex(QAnyStringView propertyName) const
+int QProtobufMessagePrivate::propertyIndex(QAnyStringView propertyName) const
 {
     return propertyName.visit([this](auto propertyName) {
         if constexpr (std::is_same_v<QStringView, decltype(propertyName)>) {
@@ -85,7 +85,7 @@ void QProtobufMessagePrivate::storeUnknownEntry(QProtobufMessage *message,
 
 std::optional<QMetaProperty> QProtobufMessagePrivate::metaProperty(QAnyStringView name) const
 {
-    const int index = getPropertyIndex(name);
+    const int index = propertyIndex(name);
     const QMetaProperty property = metaObject->property(index);
     if (property.isValid())
         return property;
