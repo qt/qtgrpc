@@ -13,6 +13,8 @@
 
 #include <QtCore/qobject.h>
 
+#include <optional>
+
 QT_BEGIN_NAMESPACE
 
 class QGrpcOperationContext;
@@ -28,8 +30,10 @@ public:
     template <typename T>
     std::optional<T> read() const
     {
-        T value;
-        return read(&value) ? std::optional<T>(value) : std::nullopt;
+        std::optional<T> r(std::in_place);
+        if (!read(&r.value()))
+            r.reset();
+        return r;
     }
     bool read(QProtobufMessage *message) const;
 
