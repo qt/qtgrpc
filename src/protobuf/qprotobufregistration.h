@@ -46,7 +46,8 @@ struct SerializationHandler
 };
 
 extern Q_PROTOBUF_EXPORT SerializationHandler findHandler(QMetaType type);
-extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, const SerializationHandler &handlers);
+extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, Serializer serializer,
+                                              Deserializer deserializer);
 
 inline void ensureSerializer(const QAbstractProtobufSerializer *serializer)
 {
@@ -183,17 +184,17 @@ inline void qRegisterProtobufType()
 {
     T::registerTypes();
     QtProtobufPrivate::registerOrdering(QMetaType::fromType<T>(), T::staticPropertyOrdering);
-    QtProtobufPrivate::registerHandler(
-        QMetaType::fromType<QList<T>>(),
-        { QtProtobufPrivate::serializeList<T>, QtProtobufPrivate::deserializeList<T> });
+    QtProtobufPrivate::registerHandler(QMetaType::fromType<QList<T>>(),
+                                       QtProtobufPrivate::serializeList<T>,
+                                       QtProtobufPrivate::deserializeList<T>);
 }
 
 template <typename K, typename V>
 inline void qRegisterProtobufMapType()
 {
     QtProtobufPrivate::registerHandler(QMetaType::fromType<QHash<K, V>>(),
-                                       { QtProtobufPrivate::serializeMap<K, V>,
-                                         QtProtobufPrivate::deserializeMap<K, V> });
+                                       QtProtobufPrivate::serializeMap<K, V>,
+                                       QtProtobufPrivate::deserializeMap<K, V>);
 }
 
 #ifdef Q_QDOC
