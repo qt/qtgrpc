@@ -81,12 +81,10 @@ static void deserializerProxy(const QAbstractProtobufSerializer *deserializer, Q
 
 void Any::registerTypes()
 {
-    QtProtobufPrivate::registerHandler(
-            QMetaType::fromType<Any>(),
-            SerializationHandler{ &serializerProxy, &deserializerProxy });
-    QtProtobufPrivate::registerHandler(
-            QMetaType::fromType<QList<Any>>(),
-            { &listSerializerProxy, &listDeserializerProxy });
+    QtProtobufPrivate::registerHandler(QMetaType::fromType<Any>(), &serializerProxy,
+                                       &deserializerProxy);
+    QtProtobufPrivate::registerHandler(QMetaType::fromType<QList<Any>>(), &listSerializerProxy,
+                                       &listDeserializerProxy);
 }
 
 /*!

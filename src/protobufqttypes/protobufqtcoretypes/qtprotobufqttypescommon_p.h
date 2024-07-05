@@ -41,7 +41,7 @@ template<typename QType, typename PType>
 void registerQtTypeHandler()
 {
     registerHandler(QMetaType::fromType<QType>(),
-                    { [](const QAbstractProtobufSerializer *serializer, const QVariant &value,
+                    [](const QAbstractProtobufSerializer *serializer, const QVariant &value,
                          const QProtobufFieldInfo &info) {
                          auto do_convert = [](const QType &qtype) {
                              auto res = convert(qtype);
@@ -71,7 +71,7 @@ void registerQtTypeHandler()
                           } else {
                               value = QVariant::fromValue<QType>(res);
                           }
-                      } });
+                      });
 }
 } // namespace QtProtobufPrivate
 

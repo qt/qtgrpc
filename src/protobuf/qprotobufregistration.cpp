@@ -117,20 +117,20 @@ static void qRegisterBaseTypes()
 */
 struct HandlersRegistry
 {
-    void registerHandler(QMetaType type, const QtProtobufPrivate::SerializationHandler &handlers)
+    void registerHandler(QMetaType type, QtProtobufPrivate::Serializer serializer,
+                         QtProtobufPrivate::Deserializer deserializer)
     {
         QWriteLocker locker(&m_lock);
-        m_registry[type] = handlers;
+        m_registry[type] = { serializer, deserializer };
     }
 
     QtProtobufPrivate::SerializationHandler findHandler(QMetaType type)
     {
-        QtProtobufPrivate::SerializationHandler handler;
         QReadLocker locker(&m_lock);
         auto it = m_registry.constFind(type);
         if (it != m_registry.constEnd())
-            handler = it.value();
-        return handler;
+            return it.value();
+        return {};
     }
 
 private:
@@ -143,10 +143,10 @@ Q_GLOBAL_STATIC(HandlersRegistry, handlersRegistry)
 Q_CONSTINIT QBasicMutex registerMutex;
 }
 
-void QtProtobufPrivate::registerHandler(QMetaType type,
-                                        const QtProtobufPrivate::SerializationHandler &handlers)
+void QtProtobufPrivate::registerHandler(QMetaType type, Serializer serializer,
+                                        Deserializer deserializer)
 {
-    handlersRegistry->registerHandler(type, handlers);
+    handlersRegistry->registerHandler(type, serializer, deserializer);
 }
 
 QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType type)
