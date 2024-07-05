@@ -30,7 +30,6 @@ public:
         return read(&value) ? std::optional<T>(value) : std::nullopt;
     }
     bool read(QProtobufMessage *message) const;
-    void cancel();
 
     [[nodiscard]] QAbstractProtobufSerializer::DeserializationError deserializationError() const;
     [[nodiscard]] QString deserializationErrorString() const;
@@ -44,6 +43,9 @@ public:
 
 Q_SIGNALS:
     void finished(const QGrpcStatus &status);
+
+public Q_SLOTS:
+    void cancel();
 
 protected:
     explicit QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationContext,
