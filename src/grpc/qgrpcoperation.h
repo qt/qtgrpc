@@ -37,7 +37,9 @@ public:
     [[nodiscard]] QAbstractProtobufSerializer::DeserializationError deserializationError() const;
     [[nodiscard]] QString deserializationErrorString() const;
 
-    [[nodiscard]] const QGrpcMetadata &metadata() const noexcept;
+    [[nodiscard]] const QGrpcMetadata &metadata() const & noexcept;
+    void metadata() const && = delete;
+
     [[nodiscard]] QLatin1StringView method() const noexcept;
 
     [[nodiscard]] bool isFinished() const noexcept;

@@ -159,7 +159,7 @@ QString QGrpcOperation::deserializationErrorString() const
     Getter of the metadata received from the channel. For the HTTP2 channels it
     usually contains the HTTP headers received from the server.
 */
-const QGrpcMetadata &QGrpcOperation::metadata() const noexcept
+const QGrpcMetadata &QGrpcOperation::metadata() const & noexcept
 {
     Q_D(const QGrpcOperation);
     return d->operationContext->serverMetadata();
