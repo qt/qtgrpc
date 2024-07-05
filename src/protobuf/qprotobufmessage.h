@@ -44,9 +44,10 @@ public:
     Q_PROTOBUF_EXPORT const QtProtobufPrivate::QProtobufPropertyOrdering *propertyOrdering() const;
 
 protected:
-    Q_PROTOBUF_EXPORT explicit QProtobufMessage(const QMetaObject *metaObject,
-                                                const QtProtobufPrivate::QProtobufPropertyOrdering
-                                                    *ordering);
+    Q_PROTOBUF_EXPORT
+    explicit QProtobufMessage(const QMetaObject *metaObject,
+                              const QtProtobufPrivate::QProtobufPropertyOrdering *ordering);
+
     Q_PROTOBUF_EXPORT ~QProtobufMessage();
     Q_PROTOBUF_EXPORT QProtobufMessage(const QProtobufMessage &other);
     Q_PROTOBUF_EXPORT QProtobufMessage &operator=(const QProtobufMessage &other);
