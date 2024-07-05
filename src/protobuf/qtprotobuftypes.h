@@ -42,7 +42,7 @@ struct TransparentWrapper
     T _t;
     operator T &() { return _t; }
     operator T() const { return _t; }
-    TransparentWrapper &operator=(const T &t)
+    TransparentWrapper &operator=(T t)
     {
         _t = t;
         return *this;
