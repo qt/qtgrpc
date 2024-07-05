@@ -211,7 +211,7 @@ bool comparesEqual(const RepeatedAnyMessage &lhs, const RepeatedAnyMessage &rhs)
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
                        static_cast<const QProtobufMessage&>(rhs))
-        && QtProtobuf::repeatedValueCompare(lhs.dptr->m_anys, rhs.dptr->m_anys);
+        && lhs.dptr->m_anys == rhs.dptr->m_anys;
 }
 
 QList<QtProtobuf::Any> RepeatedAnyMessage::anys() const
