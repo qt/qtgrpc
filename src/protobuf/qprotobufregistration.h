@@ -48,12 +48,18 @@ struct SerializationHandler
 extern Q_PROTOBUF_EXPORT SerializationHandler findHandler(QMetaType type);
 extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, const SerializationHandler &handlers);
 
+inline void ensureSerializer(const QAbstractProtobufSerializer *serializer)
+{
+    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
+}
+
 template <typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
 void serializeList(const QAbstractProtobufSerializer *serializer, const QVariant &listValue,
                    const QProtobufFieldInfo &fieldInfo)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
+    ensureSerializer(serializer);
+
     for (const auto &value : listValue.value<QList<V>>()) {
         serializer->serializeObject(&value, fieldInfo);
     }
@@ -63,7 +69,8 @@ template <typename K, typename V>
 void serializeMap(const QAbstractProtobufSerializer *serializer, const QVariant &value,
                   const QProtobufFieldInfo &fieldInfo)
 {
-    Q_ASSERT_X(serializer != nullptr, "QProtobufSerializer", "Serializer is null");
+    ensureSerializer(serializer);
+
     using QProtobufMapEntry = QProtobufMapEntry<K, V>;
     static_assert(!std::is_pointer_v<typename QProtobufMapEntry::KeyType>,
                   "Map key must not be message");
@@ -84,7 +91,7 @@ template <typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
 void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
-    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
+    ensureSerializer(serializer);
 
     Q_ASSERT_X(previous.metaType() == QMetaType::fromType<QList<V>>() && previous.data(),
                "QAbstractProtobufSerializer::deserializeList",
@@ -99,7 +106,8 @@ void deserializeList(const QAbstractProtobufSerializer *serializer, QVariant &pr
 template <typename K, typename V>
 void deserializeMap(const QAbstractProtobufSerializer *serializer, QVariant &previous)
 {
-    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
+    ensureSerializer(serializer);
+
     Q_ASSERT_X((previous.metaType() == QMetaType::fromType<QHash<K, V>>()) && previous.data(),
                "QAbstractProtobufSerializer::deserializeMap",
                "Previous value metatype doesn't match the map metatype");
