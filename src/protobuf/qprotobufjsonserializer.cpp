@@ -288,18 +288,18 @@ public:
             activeValue = QJsonObject();
             auto *messageProperty = propertyValue.value<QProtobufMessage *>();
             serializeObject(messageProperty);
-            store.insert(fieldInfo.getJsonName().toString(), activeValue);
+            store.insert(fieldInfo.jsonName().toString(), activeValue);
             activeValue = store;
             return;
         }
 
-        const auto fieldFlags = fieldInfo.getFieldFlags();
+        const auto fieldFlags = fieldInfo.fieldFlags();
         if (fieldFlags & QtProtobufPrivate::FieldFlag::Enum) {
             QJsonObject activeObject = activeValue.toObject();
             if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated) {
                 const auto stringList = propertyValue.value<QStringList>();
                 if (!stringList.isEmpty()) {
-                    activeObject.insert(fieldInfo.getJsonName().toString(),
+                    activeObject.insert(fieldInfo.jsonName().toString(),
                                         QProtobufJsonSerializerPrivate::serializeList<
                                             QStringList>(stringList));
                 }
@@ -307,7 +307,7 @@ public:
                 const auto metaEnum = getMetaEnum(metaType);
                 Q_ASSERT(metaEnum.isValid());
                 activeObject
-                    .insert(fieldInfo.getJsonName().toString(),
+                    .insert(fieldInfo.jsonName().toString(),
                             QString::fromUtf8(metaEnum.key(propertyValue.value<int32_t>())));
             }
             activeValue = activeObject;
@@ -318,7 +318,7 @@ public:
         if (handler.serializer) {
             if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated
                 && !(fieldFlags & QtProtobufPrivate::FieldFlag::Enum)) {
-                const auto fieldName = fieldInfo.getJsonName().toString();
+                const auto fieldName = fieldInfo.jsonName().toString();
                 QJsonObject activeObject = activeValue.toObject();
                 activeValue = activeObject.value(fieldName).toArray();
                 handler.serializer(qPtr, propertyValue, fieldInfo);
@@ -337,7 +337,7 @@ public:
             if (!handler.isPresent(propertyValue) && !isOneofOrOptionalField(fieldInfo))
                 return;
 
-            activeObject.insert(fieldInfo.getJsonName().toString(),
+            activeObject.insert(fieldInfo.jsonName().toString(),
                                 handler.serializer
                                     ? handler.serializer(propertyValue)
                                     : QJsonValue::fromVariant(propertyValue));
@@ -352,7 +352,7 @@ public:
             auto ordering = message->propertyOrdering();
             Q_ASSERT(ordering != nullptr);
             for (int index = 0; index < ordering->fieldCount(); ++index) {
-                int fieldIndex = ordering->getFieldNumber(index);
+                int fieldIndex = ordering->fieldNumber(index);
                 Q_ASSERT_X(fieldIndex <= ProtobufFieldNumMax && fieldIndex >= ProtobufFieldNumMin,
                            "",
                            "fieldIndex is out of range");
@@ -608,11 +608,11 @@ public:
 
         std::map<QString, QProtobufFieldInfo> msgContainer; // map<key, fieldInfo>
         for (int index = 0; index < ordering->fieldCount(); ++index) {
-            int fieldIndex = ordering->getFieldNumber(index);
+            int fieldIndex = ordering->fieldNumber(index);
             Q_ASSERT_X(fieldIndex <= ProtobufFieldNumMax && fieldIndex >= ProtobufFieldNumMin, "",
                        "fieldIndex is out of range");
             QProtobufFieldInfo fieldInfo(*ordering, index);
-            QString key = fieldInfo.getJsonName().toString();
+            QString key = fieldInfo.jsonName().toString();
             msgContainer.insert(std::pair<QString, QProtobufFieldInfo>(key, fieldInfo));
         }
 
@@ -636,7 +636,7 @@ public:
                 auto store = activeValue;
                 activeValue = activeObject.value(key);
 
-                if (auto index = ordering->indexOfFieldNumber(iter->second.getFieldNumber());
+                if (auto index = ordering->indexOfFieldNumber(iter->second.fieldNumber());
                     index != cachedIndex) {
                     if (!storeCachedValue(message))
                         return false;
@@ -646,7 +646,7 @@ public:
 
                 bool ok = false;
 
-                const auto fieldFlags = iter->second.getFieldFlags();
+                const auto fieldFlags = iter->second.fieldFlags();
                 if (fieldFlags & QtProtobufPrivate::FieldFlag::Enum) {
                     if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated) {
                         QMetaType originalMetatype = cachedPropertyValue.metaType();
@@ -812,9 +812,9 @@ void QProtobufJsonSerializer::serializeObject(const QProtobufMessage *message,
         d_ptr->activeValue = store;
     } else {
         auto store = d_ptr->activeValue.toObject();
-        const QString fieldName = fieldInfo.getJsonName().toString();
+        const QString fieldName = fieldInfo.jsonName().toString();
         d_ptr->activeValue = QJsonObject();
-        if (fieldInfo.getFieldFlags() & QtProtobufPrivate::FieldFlag::Map) {
+        if (fieldInfo.fieldFlags() & QtProtobufPrivate::FieldFlag::Map) {
             QJsonObject mapObject = store.value(fieldName).toObject();
             d_ptr->serializeObject(message);
             mapObject.insert(message->property("key").toString(),

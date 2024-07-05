@@ -30,7 +30,7 @@ void tst_QProtobufPropertyOrderingBuilder::buildObject()
     std::unique_ptr<QProtobufPropertyOrdering::Data, DataDeleter> data(builder.build());
 
     QProtobufPropertyOrdering ordering{data.get()};
-    QCOMPARE(ordering.getMessageFullName(), QByteArray("TestMessage"));
+    QCOMPARE(ordering.messageFullName(), QByteArray("TestMessage"));
     QCOMPARE(ordering.fieldCount(), 3);
 
     QCOMPARE(ordering.indexOfFieldNumber(1), 0);
@@ -38,25 +38,25 @@ void tst_QProtobufPropertyOrderingBuilder::buildObject()
     QCOMPARE(ordering.indexOfFieldNumber(30), 2);
     QCOMPARE(ordering.indexOfFieldNumber(10), -1);
 
-    QCOMPARE(ordering.getPropertyIndex(0), 0);
-    QCOMPARE(ordering.getPropertyIndex(1), 1);
-    QCOMPARE(ordering.getPropertyIndex(2), 60);
-    QCOMPARE(ordering.getPropertyIndex(3), -1);
+    QCOMPARE(ordering.propertyIndex(0), 0);
+    QCOMPARE(ordering.propertyIndex(1), 1);
+    QCOMPARE(ordering.propertyIndex(2), 60);
+    QCOMPARE(ordering.propertyIndex(3), -1);
 
-    QCOMPARE(ordering.getFieldNumber(0), 1);
-    QCOMPARE(ordering.getFieldNumber(1), 6);
-    QCOMPARE(ordering.getFieldNumber(2), 30);
-    QCOMPARE(ordering.getFieldNumber(3), -1);
+    QCOMPARE(ordering.fieldNumber(0), 1);
+    QCOMPARE(ordering.fieldNumber(1), 6);
+    QCOMPARE(ordering.fieldNumber(2), 30);
+    QCOMPARE(ordering.fieldNumber(3), -1);
 
-    QCOMPARE(ordering.getJsonName(0), QByteArray("field1"));
-    QCOMPARE(ordering.getJsonName(1), QByteArray("field6"));
-    QCOMPARE(ordering.getJsonName(2), QByteArray("field30"));
-    QCOMPARE(ordering.getJsonName(3), QByteArray());
+    QCOMPARE(ordering.jsonName(0), QByteArray("field1"));
+    QCOMPARE(ordering.jsonName(1), QByteArray("field6"));
+    QCOMPARE(ordering.jsonName(2), QByteArray("field30"));
+    QCOMPARE(ordering.jsonName(3), QByteArray());
 
-    QCOMPARE(ordering.getFieldFlags(0), FieldFlag::Optional);
-    QCOMPARE(ordering.getFieldFlags(1), FieldFlag::Repeated | FieldFlag::Enum);
-    QCOMPARE(ordering.getFieldFlags(2), FieldFlag::NoFlags);
-    QCOMPARE(ordering.getFieldFlags(3), FieldFlag::NoFlags);
+    QCOMPARE(ordering.fieldFlags(0), FieldFlag::Optional);
+    QCOMPARE(ordering.fieldFlags(1), FieldFlag::Repeated | FieldFlag::Enum);
+    QCOMPARE(ordering.fieldFlags(2), FieldFlag::NoFlags);
+    QCOMPARE(ordering.fieldFlags(3), FieldFlag::NoFlags);
 }
 
 QTEST_MAIN(tst_QProtobufPropertyOrderingBuilder)
