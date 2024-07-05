@@ -55,7 +55,7 @@ public:
         if constexpr (std::is_same_v<T, Any>) {
             return unpackAnyImpl(serializer);
         } else {
-            static_assert(QtProtobufPrivate::HasProtobufPropertyOrdering<T>,
+            static_assert(QtProtobufPrivate::has_q_protobuf_object_macro_v<T>,
                           "T must have the Q_PROTOBUF_OBJECT macro");
             T obj;
             if (unpackImpl(serializer, &obj))
@@ -71,7 +71,7 @@ public:
         if constexpr (std::is_same_v<T, Any>)
             return fromAnyMessageImpl(serializer, &message, typeUrlPrefix);
 
-        static_assert(QtProtobufPrivate::HasProtobufPropertyOrdering<T>,
+        static_assert(QtProtobufPrivate::has_q_protobuf_object_macro_v<T>,
                       "T must have the Q_PROTOBUF_OBJECT macro");
         return fromMessageImpl(serializer, &message, typeUrlPrefix);
     }

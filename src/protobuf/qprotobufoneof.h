@@ -27,7 +27,7 @@ class QProtobufOneof final
     using IsProtobufMessageType =
             typename std::enable_if_t<!std::is_pointer_v<T>
                                               && std::is_base_of_v<QProtobufMessage, T>
-                                              && HasProtobufPropertyOrdering<T>,
+                                              && has_q_protobuf_object_macro_v<T>,
                                       int>;
 
     template<typename T>

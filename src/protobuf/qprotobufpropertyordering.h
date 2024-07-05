@@ -13,7 +13,7 @@
 
 #include <QtCore/qutf8stringview.h>
 
-#include <type_traits>
+#include <QtCore/qxptype_traits.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -84,13 +84,15 @@ private:
     const int index;
 };
 
-template<typename>
-using sfinae = void;
-template<typename T, typename = void>
-[[maybe_unused]] static constexpr bool HasProtobufPropertyOrdering = false;
 template<typename T>
-[[maybe_unused]] static constexpr bool
-    HasProtobufPropertyOrdering<T, sfinae<decltype(T::staticPropertyOrdering)>> = true;
+using HasProtobufStaticPropertyOrdering = decltype(T::staticPropertyOrdering);
+
+template <typename T>
+using has_q_protobuf_object_macro = qxp::is_detected<HasProtobufStaticPropertyOrdering, T>;
+
+template <typename T>
+constexpr bool has_q_protobuf_object_macro_v = has_q_protobuf_object_macro<T>::value;
+
 } // namespace QtProtobufPrivate
 
 QT_END_NAMESPACE
