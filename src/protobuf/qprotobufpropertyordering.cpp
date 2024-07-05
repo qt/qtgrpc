@@ -74,6 +74,9 @@ Q_GLOBAL_STATIC(ProtobufOrderingRegistry, orderingRegistry)
 QT_BEGIN_NAMESPACE
 
 namespace QtProtobufPrivate {
+
+static_assert(std::is_trivially_destructible_v<QProtobufPropertyOrdering>);
+
 constexpr uint jsonNameOffsetsOffset = 0;
 // Use this constant to make the +/- 1 more easily readable
 constexpr int NullTerminator = 1;
