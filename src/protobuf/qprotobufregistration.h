@@ -132,7 +132,7 @@ static std::optional<QList<T>> intToEnumList(QList<QtProtobuf::int64> v)
 {
     QList<T> enumList;
     for (const auto &intValue : v)
-        enumList.append(static_cast<T>(intValue._t));
+        enumList.append(static_cast<T>(intValue.t));
 
     return enumList;
 }
