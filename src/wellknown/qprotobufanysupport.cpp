@@ -25,13 +25,13 @@ public:
     static AnyPrivate *get(const Any *any) { return any->d_ptr; }
 };
 
-static void serializerProxy(const QAbstractProtobufSerializer *serializer, const QVariant &object,
+static void serializerProxy(const QAbstractProtobufSerializer *serializer, const void *object,
                             const QProtobufFieldInfo &fieldInfo)
 {
-    if (object.isNull())
+    if (object == nullptr)
         return;
 
-    Any any = object.value<Any>();
+    const auto &any = *static_cast<const Any *>(object);
     if (any.typeUrl().isEmpty())
         return;
 
@@ -41,10 +41,13 @@ static void serializerProxy(const QAbstractProtobufSerializer *serializer, const
     serializer->serializeObject(&realAny, fieldInfo);
 }
 
-static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, const QVariant &object,
+static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, const void *object,
                                 const QProtobufFieldInfo &fieldInfo)
 {
-    const auto anyList = object.value<QList<Any>>();
+    if (object == nullptr)
+        return;
+
+    const auto &anyList = *static_cast<const QList<Any> *>(object);
     for (const Any &any : anyList) {
         google::protobuf::Any realAny;
         realAny.setValue(any.value());
@@ -53,9 +56,12 @@ static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, c
     }
 }
 
-static void listDeserializerProxy(const QAbstractProtobufSerializer *deserializer, QVariant &object)
+static void listDeserializerProxy(const QAbstractProtobufSerializer *deserializer, void *object)
 {
-    auto anyList = object.value<QList<Any>>();
+    if (object == nullptr)
+        return;
+
+    auto &anyList = *static_cast<QList<Any> *>(object);
     google::protobuf::Any realAny;
     if (deserializer->deserializeObject(&realAny)) {
         Any any;
@@ -65,17 +71,18 @@ static void listDeserializerProxy(const QAbstractProtobufSerializer *deserialize
     } else {
         return; // unexpected end of data
     }
-    object.setValue(std::move(anyList));
 }
 
-static void deserializerProxy(const QAbstractProtobufSerializer *deserializer, QVariant &object)
+static void deserializerProxy(const QAbstractProtobufSerializer *deserializer, void *object)
 {
+    if (object == nullptr)
+        return;
+
     google::protobuf::Any realAny;
     if (deserializer->deserializeObject(&realAny)) {
-        Any any;
+        auto &any = *static_cast<Any *>(object);
         any.setTypeUrl(realAny.typeUrl());
         any.setValue(realAny.value());
-        object.setValue(std::move(any));
     }
 }
 

@@ -130,12 +130,12 @@ class QProtobufMapEntry : public QProtobufMapEntryBase
 
     template <typename T, typename = void>
     struct ResolveType {
-        using type = T;
+        using type = std::remove_const_t<T>;
         static constexpr bool NeedsHasFunction = false;
     };
     template<typename T>
     struct ResolveType<T, std::enable_if_t<std::is_base_of_v<QProtobufMessage, T>>> {
-        using type = T *;
+        using type = std::conditional_t<std::is_const_v<T>, T const *,  T *>;
         static constexpr bool NeedsHasFunction = true;
     };
 

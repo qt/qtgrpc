@@ -307,12 +307,12 @@ public:
                 const auto fieldName = fieldInfo.jsonName().toString();
                 QJsonObject activeObject = activeValue.toObject();
                 activeValue = activeObject.value(fieldName).toArray();
-                handler.serializer(qPtr, propertyValue, fieldInfo);
+                handler.serializer(qPtr, propertyValue.constData(), fieldInfo);
                 if (!activeValue.toArray().empty())
                     activeObject.insert(fieldName, activeValue);
                 activeValue = activeObject;
             } else {
-                handler.serializer(qPtr, propertyValue, fieldInfo);
+                handler.serializer(qPtr, propertyValue.constData(), fieldInfo);
             }
         } else {
             QJsonObject activeObject = activeValue.toObject();
@@ -539,13 +539,13 @@ public:
                 }
 
                 if (!array.at(0).isObject()) { // Enum array
-                    handler.deserializer(qPtr, propertyData);
+                    handler.deserializer(qPtr, propertyData.data());
                     ok = propertyData.isValid();
                 } else {
                     while (!array.isEmpty() &&
                            deserializationError == QAbstractProtobufSerializer::NoError) {
                         activeValue = array.takeAt(0);
-                        handler.deserializer(qPtr, propertyData);
+                        handler.deserializer(qPtr, propertyData.data());
                     }
                     ok = propertyData.isValid();
                 }
@@ -554,7 +554,7 @@ public:
                 // This is required to deserialize the map fields.
                 while (!activeValue.isNull()
                        && deserializationError == QAbstractProtobufSerializer::NoError) {
-                    handler.deserializer(qPtr, propertyData);
+                    handler.deserializer(qPtr, propertyData.data());
                 }
                 ok = propertyData.isValid();
             }
