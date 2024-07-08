@@ -160,6 +160,17 @@ int QProtobufOneof::fieldNumber() const
     return d->fieldNumber;
 }
 
+/*!
+    \internal
+    Ensures that underlying QVariant holds the required QMetaType. Initializes variant with the
+    default-constructed QMetaType if QVariant holds the different type.
+*/
+void QProtobufOneof::ensureRawValue(QMetaType metaType)
+{
+    Q_D(QProtobufOneof);
+    if (metaType != d->value.metaType())
+        d->value = QVariant::fromMetaType(metaType);
+}
 } // namespace QtProtobufPrivate
 
 QT_END_NAMESPACE

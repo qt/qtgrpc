@@ -62,8 +62,7 @@ public:
     template<typename T, IsProtobufMessageType<T> = 0>
     T *value()
     {
-        if (rawValue().isNull() || QMetaType::fromType<T>() != rawValue().metaType())
-            rawValue().setValue(T());
+        ensureRawValue(QMetaType::fromType<T>());
         return reinterpret_cast<T *>(rawValue().data());
     }
 
@@ -97,6 +96,8 @@ private:
     {
         Q_ASSERT(lhs == rhs);
     }
+
+    Q_PROTOBUF_EXPORT void ensureRawValue(QMetaType metaType);
 
     friend Q_PROTOBUF_EXPORT bool comparesEqual(const QProtobufOneof &lhs,
                                                 const QProtobufOneof &rhs) noexcept;
