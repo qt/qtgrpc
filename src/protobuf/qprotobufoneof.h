@@ -24,14 +24,13 @@ class QProtobufOneofPrivate;
 class QProtobufOneof final
 {
     template <typename T>
-    using IsProtobufMessageType =
-        std::enable_if_t<std::conjunction_v<std::negation<std::is_pointer<T>>,
-                                                     std::is_base_of<QProtobufMessage, T>,
-                                                     has_q_protobuf_object_macro<T>>,
-                                      bool>;
+    using if_protobuf_message = std::enable_if_t<
+        std::conjunction_v<std::negation<std::is_pointer<T>>, std::is_base_of<QProtobufMessage, T>,
+                           has_q_protobuf_object_macro<T>>,
+        bool>;
 
     template <typename T>
-    using IsNonMessageProtobufType = std::enable_if_t<
+    using if_non_message_protobuf_type = std::enable_if_t<
         std::disjunction_v<std::is_enum<T>, QtProtobuf::is_protobuf_scalar_value_type<T>>, bool>;
 
 public:
@@ -52,35 +51,35 @@ public:
         setValue(QVariant::fromValue<T>(value), fieldNumber);
     }
 
-    template <typename T, IsNonMessageProtobufType<T> = true>
+    template <typename T, if_non_message_protobuf_type<T> = true>
     T value() const
     {
         ensureMetaType(QMetaType::fromType<T>(), rawValue().metaType());
         return rawValue().value<T>();
     }
 
-    template <typename T, IsProtobufMessageType<T> = true>
+    template <typename T, if_protobuf_message<T> = true>
     T *value()
     {
         ensureRawValue(QMetaType::fromType<T>());
         return reinterpret_cast<T *>(rawValue().data());
     }
 
-    template <typename T, IsProtobufMessageType<T> = true>
+    template <typename T, if_protobuf_message<T> = true>
     const T *value() const
     {
         ensureMetaType(QMetaType::fromType<T>(), rawValue().metaType());
         return reinterpret_cast<const T *>(rawValue().data());
     }
 
-    template <typename T, IsNonMessageProtobufType<T> = true>
+    template <typename T, if_non_message_protobuf_type<T> = true>
     bool isEqual(const T &otherValue, int fieldNumber) const
     {
         return this->fieldNumber() == fieldNumber
                 && QMetaType::fromType<T>() == rawValue().metaType() && value<T>() == otherValue;
     }
 
-    template <typename T, IsProtobufMessageType<T> = true>
+    template <typename T, if_protobuf_message<T> = true>
     bool isEqual(const T &otherValue, int fieldNumber) const
     {
         return this->fieldNumber() == fieldNumber
