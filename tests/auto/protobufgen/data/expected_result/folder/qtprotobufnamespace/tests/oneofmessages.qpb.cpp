@@ -341,7 +341,7 @@ ComplexMessage *OneofComplexMessage::testOneofComplexField_p()
 {
     if (!dptr->m_testOneof.holdsField(3))
         dptr.detach();
-    return dptr->m_testOneof.value<ComplexMessage>();
+    return dptr->m_testOneof.message<ComplexMessage>();
 }
 
 bool OneofComplexMessage::hasTestOneofComplexField() const
@@ -351,14 +351,14 @@ bool OneofComplexMessage::hasTestOneofComplexField() const
 ComplexMessage &OneofComplexMessage::testOneofComplexField() const
 {
     Q_ASSERT(dptr->m_testOneof.holdsField(3));
-    return *(dptr->m_testOneof.value<ComplexMessage>());
+    return *(dptr->m_testOneof.message<ComplexMessage>());
 }
 
 ComplexMessage *OneofComplexMessage::testOneofSecondComplexField_p()
 {
     if (!dptr->m_testOneof.holdsField(4))
         dptr.detach();
-    return dptr->m_testOneof.value<ComplexMessage>();
+    return dptr->m_testOneof.message<ComplexMessage>();
 }
 
 bool OneofComplexMessage::hasTestOneofSecondComplexField() const
@@ -368,7 +368,7 @@ bool OneofComplexMessage::hasTestOneofSecondComplexField() const
 ComplexMessage &OneofComplexMessage::testOneofSecondComplexField() const
 {
     Q_ASSERT(dptr->m_testOneof.holdsField(4));
-    return *(dptr->m_testOneof.value<ComplexMessage>());
+    return *(dptr->m_testOneof.message<ComplexMessage>());
 }
 
 QtProtobuf::int32 OneofComplexMessage::secondFieldInt_p() const
@@ -391,7 +391,7 @@ ComplexMessage *OneofComplexMessage::secondComplexField_p()
 {
     if (!dptr->m_secondOneof.holdsField(5))
         dptr.detach();
-    return dptr->m_secondOneof.value<ComplexMessage>();
+    return dptr->m_secondOneof.message<ComplexMessage>();
 }
 
 bool OneofComplexMessage::hasSecondComplexField() const
@@ -401,14 +401,14 @@ bool OneofComplexMessage::hasSecondComplexField() const
 ComplexMessage &OneofComplexMessage::secondComplexField() const
 {
     Q_ASSERT(dptr->m_secondOneof.holdsField(5));
-    return *(dptr->m_secondOneof.value<ComplexMessage>());
+    return *(dptr->m_secondOneof.message<ComplexMessage>());
 }
 
 ComplexMessage *OneofComplexMessage::secondSecondComplexField_p()
 {
     if (!dptr->m_secondOneof.holdsField(6))
         dptr.detach();
-    return dptr->m_secondOneof.value<ComplexMessage>();
+    return dptr->m_secondOneof.message<ComplexMessage>();
 }
 
 bool OneofComplexMessage::hasSecondSecondComplexField() const
@@ -418,7 +418,7 @@ bool OneofComplexMessage::hasSecondSecondComplexField() const
 ComplexMessage &OneofComplexMessage::secondSecondComplexField() const
 {
     Q_ASSERT(dptr->m_secondOneof.holdsField(6));
-    return *(dptr->m_secondOneof.value<ComplexMessage>());
+    return *(dptr->m_secondOneof.message<ComplexMessage>());
 }
 
 QtProtobuf::int32 OneofComplexMessage::testSnakeCaseField_p() const
