@@ -28,6 +28,8 @@ public:
 static void serializerProxy(const QAbstractProtobufSerializer *serializer, const void *object,
                             const QProtobufFieldInfo &fieldInfo)
 {
+    QtProtobufPrivate::ensureSerializer(serializer);
+
     if (object == nullptr)
         return;
 
@@ -44,6 +46,8 @@ static void serializerProxy(const QAbstractProtobufSerializer *serializer, const
 static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, const void *object,
                                 const QProtobufFieldInfo &fieldInfo)
 {
+    QtProtobufPrivate::ensureSerializer(serializer);
+
     if (object == nullptr)
         return;
 
@@ -58,6 +62,8 @@ static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, c
 
 static void listDeserializerProxy(const QAbstractProtobufSerializer *deserializer, void *object)
 {
+    QtProtobufPrivate::ensureSerializer(deserializer);
+
     if (object == nullptr)
         return;
 
@@ -75,6 +81,8 @@ static void listDeserializerProxy(const QAbstractProtobufSerializer *deserialize
 
 static void deserializerProxy(const QAbstractProtobufSerializer *deserializer, void *object)
 {
+    QtProtobufPrivate::ensureSerializer(deserializer);
+
     if (object == nullptr)
         return;
 
