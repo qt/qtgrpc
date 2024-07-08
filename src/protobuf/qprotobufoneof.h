@@ -59,14 +59,14 @@ public:
     }
 
     template <typename T, if_protobuf_message<T> = true>
-    T *value()
+    T *message()
     {
         ensureRawValue(QMetaType::fromType<T>());
         return reinterpret_cast<T *>(rawValue().data());
     }
 
     template <typename T, if_protobuf_message<T> = true>
-    const T *value() const
+    const T *message() const
     {
         ensureMetaType(QMetaType::fromType<T>(), rawValue().metaType());
         return reinterpret_cast<const T *>(rawValue().data());
@@ -83,8 +83,8 @@ public:
     bool isEqual(const T &otherValue, int fieldNumber) const
     {
         return this->fieldNumber() == fieldNumber
-                && QMetaType::fromType<T>() == rawValue().metaType() && value<T>()
-                && *(value<T>()) == otherValue;
+                && QMetaType::fromType<T>() == rawValue().metaType() && message<T>()
+                && *(message<T>()) == otherValue;
     }
 
     Q_PROTOBUF_EXPORT int fieldNumber() const;

@@ -531,7 +531,7 @@ const char *CommonTemplates::PrivateGetterOneofMessageDefinitionTemplate()
     return "$getter_type$ *$classname$::$property_name$_p()\n{\n"
            "    if (!dptr->m_$optional_property_name$.holdsField($number$))\n"
            "        dptr.detach();\n"
-           "    return dptr->m_$optional_property_name$.value<$getter_type$>();\n"
+           "    return dptr->m_$optional_property_name$.message<$getter_type$>();\n"
            "}\n\n";
 }
 
@@ -585,7 +585,7 @@ const char *CommonTemplates::GetterOneofMessageDefinitionTemplate()
            "}\n"
            "$getter_type$ &$classname$::$property_name$() const\n{\n"
            "    Q_ASSERT(dptr->m_$optional_property_name$.holdsField($number$));\n"
-           "    return *(dptr->m_$optional_property_name$.value<$getter_type$>());\n"
+           "    return *(dptr->m_$optional_property_name$.message<$getter_type$>());\n"
            "}\n\n";
 }
 
