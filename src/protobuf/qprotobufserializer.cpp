@@ -449,10 +449,10 @@ qsizetype QProtobufSerializerPrivate::skipSerializedFieldBytes(QProtobufSelfchec
         skipVarint(it);
         break;
     case QtProtobuf::WireTypes::Fixed32:
-        it += sizeof(decltype(QtProtobuf::fixed32::_t));
+        it += sizeof(decltype(QtProtobuf::fixed32::t));
         break;
     case QtProtobuf::WireTypes::Fixed64:
-        it += sizeof(decltype(QtProtobuf::fixed64::_t));
+        it += sizeof(decltype(QtProtobuf::fixed64::t));
         break;
     case QtProtobuf::WireTypes::LengthDelimited:
         skipLengthDelimited(it);

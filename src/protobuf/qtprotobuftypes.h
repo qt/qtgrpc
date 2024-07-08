@@ -38,26 +38,26 @@ Q_ENUM_NS(WireTypes)
 template<typename T, typename tag>
 struct TransparentWrapper
 {
-    TransparentWrapper(T t = T()) : _t(t) { }
-    T _t;
-    operator T &() { return _t; }
-    operator T() const { return _t; }
-    TransparentWrapper &operator=(T t)
+    TransparentWrapper(T t_ = T()) : t(t_) { }
+    T t;
+    operator T &() { return t; }
+    operator T() const { return t; }
+    TransparentWrapper &operator=(T t_)
     {
-        _t = t;
+        t = t_;
         return *this;
     }
 
-    static T toType(TransparentWrapper t) { return t._t; }
-    static TransparentWrapper fromType(T _t) { return TransparentWrapper(_t); }
+    static T toType(TransparentWrapper t) { return t.t; }
+    static TransparentWrapper fromType(T t) { return TransparentWrapper(t); }
 
-    static QString toString(TransparentWrapper t) { return QString::number(t._t); }
+    static QString toString(TransparentWrapper t) { return QString::number(t.t); }
 };
 
 template<typename T, typename tag>
 constexpr TransparentWrapper<T, tag> qbswap(TransparentWrapper<T, tag> source)
 {
-    return { QT_PREPEND_NAMESPACE(qbswap)(source._t) };
+    return { QT_PREPEND_NAMESPACE(qbswap)(source.t) };
 }
 
 using int32 = TransparentWrapper<int32_t, struct int_tag>;
