@@ -82,9 +82,13 @@ public:
     template <typename T, if_protobuf_message<T> = true>
     bool isEqual(const T &otherValue, int fieldNumber) const
     {
-        return this->fieldNumber() == fieldNumber
-                && QMetaType::fromType<T>() == rawValue().metaType() && message<T>()
-                && *(message<T>()) == otherValue;
+        if (this->fieldNumber() != fieldNumber
+            || QMetaType::fromType<T>() != rawValue().metaType()) {
+            return false;
+        }
+
+        const auto *messagePtr = message<T>();
+        return messagePtr && *messagePtr == otherValue;
     }
 
     Q_PROTOBUF_EXPORT int fieldNumber() const;
