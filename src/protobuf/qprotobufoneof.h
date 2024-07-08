@@ -55,7 +55,7 @@ public:
     template <typename T, IsNonMessageProtobufType<T> = true>
     T value() const
     {
-        Q_ASSERT(QMetaType::fromType<T>() == rawValue().metaType());
+        ensureMetaType(QMetaType::fromType<T>(), rawValue().metaType());
         return rawValue().value<T>();
     }
 
@@ -70,7 +70,7 @@ public:
     template<typename T, IsProtobufMessageType<T> = 0>
     const T *value() const
     {
-        Q_ASSERT(QMetaType::fromType<T>() == rawValue().metaType());
+        ensureMetaType(QMetaType::fromType<T>(), rawValue().metaType());
         return reinterpret_cast<const T *>(rawValue().data());
     }
 
@@ -93,6 +93,11 @@ public:
     Q_PROTOBUF_EXPORT bool holdsField(int fieldNumber) const;
 
 private:
+    Q_ALWAYS_INLINE static void ensureMetaType(QMetaType lhs, QMetaType rhs)
+    {
+        Q_ASSERT(lhs == rhs);
+    }
+
     friend Q_PROTOBUF_EXPORT bool comparesEqual(const QProtobufOneof &lhs,
                                                 const QProtobufOneof &rhs) noexcept;
     Q_DECLARE_EQUALITY_COMPARABLE(QProtobufOneof)
