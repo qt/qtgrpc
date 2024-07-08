@@ -266,7 +266,7 @@ QProtobufMessage::property(const QtProtobufPrivate::QProtobufFieldInfo &fieldInf
     if (!metaProperty.isValid())
         return {};
 
-    if (fieldInfo.fieldFlags() & QtProtobufPrivate::ExplicitPresence && !allowInitialize) {
+    if (fieldInfo.fieldFlags() & QtProtobufPrivate::FieldFlag::ExplicitPresence && !allowInitialize) {
         int hasPropertyIndex = propertyIndex + 1;
         QMetaProperty hasProperty = metaObject()->property(hasPropertyIndex);
         Q_ASSERT_X(hasProperty.isValid() && hasProperty.metaType().id() == QMetaType::Bool,
@@ -386,18 +386,19 @@ QMetaObject *buildMetaObject(QMetaType key, QMetaType value, StaticMetaCallFn me
 
 QtProtobufPrivate::FieldFlags getFlagForType(QMetaType type)
 {
-    QtProtobufPrivate::FieldFlags flag = QtProtobufPrivate::NoFlags;
+    using FieldFlag = QtProtobufPrivate::FieldFlag;
+    QtProtobufPrivate::FieldFlags flag = {};
 
     if (isProtobufMessage(type))
-        flag |= QtProtobufPrivate::Message | QtProtobufPrivate::ExplicitPresence;
+        flag |= FieldFlag::Message | FieldFlag::ExplicitPresence;
     if (type.flags() & QMetaType::IsEnumeration)
-        flag |= QtProtobufPrivate::Enum;
+        flag |= FieldFlag::Enum;
     if (QByteArrayView(type.name()).startsWith("QList<")) // Surely there's a better way
-        flag |= QtProtobufPrivate::Repeated;
+        flag |= FieldFlag::Repeated;
     if (QByteArrayView(type.name()).startsWith("QHash<")) // Surely there's a better way
-        flag |= QtProtobufPrivate::Map;
+        flag |= FieldFlag::Map;
 
-    flag |= QtProtobufPrivate::Optional; // Hardcoded for MapEntry uses...
+    flag |= FieldFlag::Optional; // Hardcoded for MapEntry uses...
 
     // Need to get this info::
     // NonPacked = 0x1,

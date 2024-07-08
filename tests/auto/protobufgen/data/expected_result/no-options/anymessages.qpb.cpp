@@ -49,7 +49,7 @@ static constexpr struct {
         // Property indices:
         0, /* = field */
         // Field flags:
-        QtProtobufPrivate::Message, /* = field */
+        uint(QtProtobufPrivate::FieldFlag::Message), /* = field */
     },
     // char_data
     /* metadata char_data: */
@@ -160,7 +160,7 @@ static constexpr struct {
         // Property indices:
         0, /* = anys */
         // Field flags:
-        QtProtobufPrivate::Repeated | QtProtobufPrivate::Message, /* = anys */
+        uint(QtProtobufPrivate::FieldFlag::Repeated | QtProtobufPrivate::FieldFlag::Message), /* = anys */
     },
     // char_data
     /* metadata char_data: */
@@ -282,8 +282,8 @@ static constexpr struct {
         0, /* = one */
         1, /* = two */
         // Field flags:
-        QtProtobufPrivate::Message, /* = one */
-        QtProtobufPrivate::Message, /* = two */
+        uint(QtProtobufPrivate::FieldFlag::Message), /* = one */
+        uint(QtProtobufPrivate::FieldFlag::Message), /* = two */
     },
     // char_data
     /* metadata char_data: */
@@ -431,11 +431,11 @@ static constexpr struct {
         3, /* = h */
         4, /* = str2 */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = str */
-        QtProtobufPrivate::NoFlags, /* = i */
-        QtProtobufPrivate::NoFlags, /* = j */
-        QtProtobufPrivate::NoFlags, /* = h */
-        QtProtobufPrivate::NoFlags, /* = str2 */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = str */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = i */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = j */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = h */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = str2 */
     },
     // char_data
     /* metadata char_data: */
@@ -603,7 +603,7 @@ static constexpr struct {
         // Property indices:
         0, /* = i */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = i */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = i */
     },
     // char_data
     /* metadata char_data: */

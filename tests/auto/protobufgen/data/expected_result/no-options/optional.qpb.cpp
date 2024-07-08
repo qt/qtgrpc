@@ -49,7 +49,7 @@ static constexpr struct {
         // Property indices:
         0, /* = stringField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = stringField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = stringField */
     },
     // char_data
     /* metadata char_data: */
@@ -213,16 +213,16 @@ static constexpr struct {
         12, /* = testFieldMessage */
         14, /* = testFieldMessageOpt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
-        QtProtobufPrivate::Optional | QtProtobufPrivate::ExplicitPresence, /* = testFieldOpt */
-        QtProtobufPrivate::NoFlags, /* = testFieldBool */
-        QtProtobufPrivate::Optional | QtProtobufPrivate::ExplicitPresence, /* = testFieldBoolOpt */
-        QtProtobufPrivate::NoFlags, /* = testFieldBytes */
-        QtProtobufPrivate::Optional | QtProtobufPrivate::ExplicitPresence, /* = testFieldBytesOpt */
-        QtProtobufPrivate::NoFlags, /* = testFieldString */
-        QtProtobufPrivate::Optional | QtProtobufPrivate::ExplicitPresence, /* = testFieldStringOpt */
-        QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = testFieldMessage */
-        QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = testFieldMessageOpt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testField */
+        uint(QtProtobufPrivate::FieldFlag::Optional | QtProtobufPrivate::FieldFlag::ExplicitPresence), /* = testFieldOpt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldBool */
+        uint(QtProtobufPrivate::FieldFlag::Optional | QtProtobufPrivate::FieldFlag::ExplicitPresence), /* = testFieldBoolOpt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldBytes */
+        uint(QtProtobufPrivate::FieldFlag::Optional | QtProtobufPrivate::FieldFlag::ExplicitPresence), /* = testFieldBytesOpt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldString */
+        uint(QtProtobufPrivate::FieldFlag::Optional | QtProtobufPrivate::FieldFlag::ExplicitPresence), /* = testFieldStringOpt */
+        uint(QtProtobufPrivate::FieldFlag::ExplicitPresence | QtProtobufPrivate::FieldFlag::Message), /* = testFieldMessage */
+        uint(QtProtobufPrivate::FieldFlag::ExplicitPresence | QtProtobufPrivate::FieldFlag::Message), /* = testFieldMessageOpt */
     },
     // char_data
     /* metadata char_data: */
