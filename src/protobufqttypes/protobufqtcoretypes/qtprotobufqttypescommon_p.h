@@ -41,10 +41,13 @@ template<typename QType, typename PType>
 void registerQtTypeHandler()
 {
     registerHandler(QMetaType::fromType<QType>(),
-                    [](const QAbstractProtobufSerializer *serializer, const QVariant &value,
+                    [](const QAbstractProtobufSerializer *serializer, const void *valuePtr,
                          const QProtobufFieldInfo &info) {
-                         auto do_convert = [](const QType &qtype) {
-                             auto res = convert(qtype);
+                         QtProtobufPrivate::ensureSerializer(serializer);
+                         QtProtobufPrivate::ensureValue(valuePtr);
+
+                         auto do_convert = [](const QType *qtype) {
+                             auto res = convert(*qtype);
                              if constexpr (is_optional_v<decltype(res)>) {
                                  return res;
                              } else {
@@ -52,24 +55,29 @@ void registerQtTypeHandler()
                              }
                          };
 
-                         std::optional<PType> object = do_convert(value.value<QType>());
+                         std::optional<PType> object =
+                             do_convert(static_cast<const QType *>(valuePtr));
                          if (object) {
                              serializer->serializeObject(&(object.value()), info);
                          } else {
                              warnTypeConversionError();
                          }
                      },
-                      [](const QAbstractProtobufSerializer *serializer, QVariant &value) {
+                      [](const QAbstractProtobufSerializer *serializer, void *valuePtr) {
+                          QtProtobufPrivate::ensureSerializer(serializer);
+                          QtProtobufPrivate::ensureValue(valuePtr);
+
                           PType object;
                           serializer->deserializeObject(&object);
                           auto res = convert(object);
+                          auto *qtypePtr = static_cast<QType *>(valuePtr);
                           if constexpr (is_optional_v<decltype(res)>) {
                               if (!res)
                                   warnTypeConversionError();
                               else
-                                  value = QVariant::fromValue<QType>(*res);
+                                  *qtypePtr = std::move(*res);
                           } else {
-                              value = QVariant::fromValue<QType>(res);
+                              *qtypePtr = std::move(res);
                           }
                       });
 }

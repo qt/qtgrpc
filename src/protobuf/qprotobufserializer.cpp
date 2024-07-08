@@ -517,7 +517,7 @@ void QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue
         qProtoWarning() << "No serializer for type" << propertyValue.typeName();
         return;
     }
-    handler.serializer(q_ptr, propertyValue, fieldInfo);
+    handler.serializer(q_ptr, propertyValue.constData(), fieldInfo);
 }
 
 bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
@@ -641,7 +641,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
                 QCoreApplication::translate("QtProtobuf", error.toUtf8().data()));
             return false;
         }
-        handler.deserializer(q_ptr, cachedPropertyValue);
+        handler.deserializer(q_ptr, cachedPropertyValue.data());
     }
 
     return true;
