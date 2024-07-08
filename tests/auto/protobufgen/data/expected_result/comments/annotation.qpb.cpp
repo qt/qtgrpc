@@ -50,7 +50,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testField */
     },
     // char_data
     /* metadata char_data: */
@@ -162,7 +162,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testField */
     },
     // char_data
     /* metadata char_data: */
@@ -274,7 +274,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testField */
     },
     // char_data
     /* metadata char_data: */
@@ -386,7 +386,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testField */
     },
     // char_data
     /* metadata char_data: */
@@ -498,7 +498,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testField */
     },
     // char_data
     /* metadata char_data: */
@@ -610,7 +610,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testField */
     },
     // char_data
     /* metadata char_data: */
@@ -722,7 +722,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testField */
     },
     // char_data
     /* metadata char_data: */
@@ -834,7 +834,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testField */
     },
     // char_data
     /* metadata char_data: */
@@ -946,7 +946,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testField */
     },
     // char_data
     /* metadata char_data: */

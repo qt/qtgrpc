@@ -76,6 +76,7 @@ QT_BEGIN_NAMESPACE
 namespace QtProtobufPrivate {
 
 static_assert(std::is_trivially_destructible_v<QProtobufPropertyOrdering>);
+static_assert(std::is_same_v<std::underlying_type_t<QtProtobufPrivate::FieldFlag>, uint>);
 
 constexpr uint jsonNameOffsetsOffset = 0;
 // Use this constant to make the +/- 1 more easily readable

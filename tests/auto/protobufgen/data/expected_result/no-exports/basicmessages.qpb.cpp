@@ -141,7 +141,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldBool */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldBool */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldBool */
     },
     // char_data
     /* metadata char_data: */
@@ -253,7 +253,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldInt */
     },
     // char_data
     /* metadata char_data: */
@@ -365,7 +365,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldInt */
     },
     // char_data
     /* metadata char_data: */
@@ -477,7 +477,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldInt */
     },
     // char_data
     /* metadata char_data: */
@@ -589,7 +589,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldInt */
     },
     // char_data
     /* metadata char_data: */
@@ -701,7 +701,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldInt */
     },
     // char_data
     /* metadata char_data: */
@@ -813,7 +813,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldInt */
     },
     // char_data
     /* metadata char_data: */
@@ -924,7 +924,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldString */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldString */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldString */
     },
     // char_data
     /* metadata char_data: */
@@ -1036,7 +1036,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldFloat */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldFloat */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldFloat */
     },
     // char_data
     /* metadata char_data: */
@@ -1149,7 +1149,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldDouble */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldDouble */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldDouble */
     },
     // char_data
     /* metadata char_data: */
@@ -1261,7 +1261,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldBytes */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldBytes */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldBytes */
     },
     // char_data
     /* metadata char_data: */
@@ -1373,7 +1373,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldFixedInt32 */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldFixedInt32 */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldFixedInt32 */
     },
     // char_data
     /* metadata char_data: */
@@ -1485,7 +1485,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldFixedInt64 */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldFixedInt64 */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldFixedInt64 */
     },
     // char_data
     /* metadata char_data: */
@@ -1596,7 +1596,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldFixedInt32 */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldFixedInt32 */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldFixedInt32 */
     },
     // char_data
     /* metadata char_data: */
@@ -1707,7 +1707,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldFixedInt64 */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldFixedInt64 */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldFixedInt64 */
     },
     // char_data
     /* metadata char_data: */
@@ -1827,8 +1827,8 @@ static constexpr struct {
         0, /* = testFieldInt */
         1, /* = testComplexField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldInt */
-        QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = testComplexField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::ExplicitPresence | QtProtobufPrivate::FieldFlag::Message), /* = testComplexField */
     },
     // char_data
     /* metadata char_data: */

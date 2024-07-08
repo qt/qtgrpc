@@ -66,7 +66,7 @@ static constexpr struct {
         // Property indices:
         0, /* = localEnum */
         // Field flags:
-        QtProtobufPrivate::Enum, /* = localEnum */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = localEnum */
     },
     // char_data
     /* metadata char_data: */
@@ -180,7 +180,7 @@ static constexpr struct {
         // Property indices:
         0, /* = localEnumList */
         // Field flags:
-        QtProtobufPrivate::Repeated | QtProtobufPrivate::Enum, /* = localEnumList */
+        uint(QtProtobufPrivate::FieldFlag::Repeated | QtProtobufPrivate::FieldFlag::Enum), /* = localEnumList */
     },
     // char_data
     /* metadata char_data: */
@@ -610,11 +610,11 @@ static constexpr struct {
         3, /* = localEnumField4 */
         4, /* = localEnumField5 */
         // Field flags:
-        QtProtobufPrivate::Enum, /* = localEnumField */
-        QtProtobufPrivate::Enum, /* = localEnumField2 */
-        QtProtobufPrivate::Enum, /* = localEnumField3 */
-        QtProtobufPrivate::Enum, /* = localEnumField4 */
-        QtProtobufPrivate::Enum, /* = localEnumField5 */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = localEnumField */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = localEnumField2 */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = localEnumField3 */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = localEnumField4 */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = localEnumField5 */
     },
     // char_data
     /* metadata char_data: */
@@ -798,10 +798,10 @@ static constexpr struct {
         2, /* = localEnumMap */
         3, /* = msgList */
         // Field flags:
-        QtProtobufPrivate::Enum, /* = localEnum */
-        QtProtobufPrivate::Repeated | QtProtobufPrivate::Enum, /* = localEnumList */
-        QtProtobufPrivate::Map | QtProtobufPrivate::Message, /* = localEnumMap */
-        QtProtobufPrivate::Repeated | QtProtobufPrivate::Message, /* = msgList */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = localEnum */
+        uint(QtProtobufPrivate::FieldFlag::Repeated | QtProtobufPrivate::FieldFlag::Enum), /* = localEnumList */
+        uint(QtProtobufPrivate::FieldFlag::Map | QtProtobufPrivate::FieldFlag::Message), /* = localEnumMap */
+        uint(QtProtobufPrivate::FieldFlag::Repeated | QtProtobufPrivate::FieldFlag::Message), /* = msgList */
     },
     // char_data
     /* metadata char_data: */
@@ -983,8 +983,8 @@ static constexpr struct {
         0, /* = globalEnum */
         1, /* = globalEnumList */
         // Field flags:
-        QtProtobufPrivate::Enum, /* = globalEnum */
-        QtProtobufPrivate::Repeated | QtProtobufPrivate::Enum, /* = globalEnumList */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = globalEnum */
+        uint(QtProtobufPrivate::FieldFlag::Repeated | QtProtobufPrivate::FieldFlag::Enum), /* = globalEnumList */
     },
     // char_data
     /* metadata char_data: */
@@ -1121,8 +1121,8 @@ static constexpr struct {
         0, /* = localStepChildEnum */
         1, /* = localStepChildList */
         // Field flags:
-        QtProtobufPrivate::Enum, /* = localStepChildEnum */
-        QtProtobufPrivate::Repeated | QtProtobufPrivate::Enum, /* = localStepChildList */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = localStepChildEnum */
+        uint(QtProtobufPrivate::FieldFlag::Repeated | QtProtobufPrivate::FieldFlag::Enum), /* = localStepChildList */
     },
     // char_data
     /* metadata char_data: */
@@ -1254,7 +1254,7 @@ static constexpr struct {
         // Property indices:
         0, /* = val */
         // Field flags:
-        QtProtobufPrivate::Enum, /* = val */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = val */
     },
     // char_data
     /* metadata char_data: */
@@ -1369,7 +1369,7 @@ static constexpr struct {
         // Property indices:
         0, /* = val */
         // Field flags:
-        QtProtobufPrivate::Enum, /* = val */
+        uint(QtProtobufPrivate::FieldFlag::Enum), /* = val */
     },
     // char_data
     /* metadata char_data: */

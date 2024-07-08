@@ -49,7 +49,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldInt */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldInt */
     },
     // char_data
     /* metadata char_data: */

@@ -140,7 +140,7 @@ static constexpr struct {
         // Property indices:
         0, /* = testFieldString */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldString */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldString */
     },
     // char_data
     /* metadata char_data: */
@@ -260,8 +260,8 @@ static constexpr struct {
         0, /* = testFieldInt */
         1, /* = testComplexField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldInt */
-        QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = testComplexField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::ExplicitPresence | QtProtobufPrivate::FieldFlag::Message), /* = testComplexField */
     },
     // char_data
     /* metadata char_data: */

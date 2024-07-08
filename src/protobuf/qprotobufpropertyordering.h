@@ -19,7 +19,7 @@ QT_BEGIN_NAMESPACE
 
 namespace QtProtobufPrivate {
 
-enum FieldFlag : uint {
+enum class FieldFlag : uint {
     NoFlags = 0x0,
     NonPacked = 0x1,
     Oneof = 0x02,

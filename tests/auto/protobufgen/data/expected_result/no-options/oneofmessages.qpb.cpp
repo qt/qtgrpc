@@ -52,8 +52,8 @@ static constexpr struct {
         0, /* = testOneofFieldInt */
         2, /* = testOneofFieldSecondInt */
         // Field flags:
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = testOneofFieldInt */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = testOneofFieldSecondInt */
+        uint(QtProtobufPrivate::FieldFlag::Oneof | QtProtobufPrivate::FieldFlag::ExplicitPresence), /* = testOneofFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::Oneof | QtProtobufPrivate::FieldFlag::ExplicitPresence), /* = testOneofFieldSecondInt */
     },
     // char_data
     /* metadata char_data: */
@@ -252,14 +252,14 @@ static constexpr struct {
         11, /* = secondSecondComplexField */
         13, /* = testSnakeCaseField */
         // Field flags:
-        QtProtobufPrivate::NoFlags, /* = testFieldInt */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = testOneofFieldInt */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = testOneofComplexField */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = testOneofSecondComplexField */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = secondFieldInt */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = secondComplexField */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence | QtProtobufPrivate::Message, /* = secondSecondComplexField */
-        QtProtobufPrivate::Oneof | QtProtobufPrivate::ExplicitPresence, /* = testSnakeCaseField */
+        uint(QtProtobufPrivate::FieldFlag::NoFlags), /* = testFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::Oneof | QtProtobufPrivate::FieldFlag::ExplicitPresence), /* = testOneofFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::Oneof | QtProtobufPrivate::FieldFlag::ExplicitPresence | QtProtobufPrivate::FieldFlag::Message), /* = testOneofComplexField */
+        uint(QtProtobufPrivate::FieldFlag::Oneof | QtProtobufPrivate::FieldFlag::ExplicitPresence | QtProtobufPrivate::FieldFlag::Message), /* = testOneofSecondComplexField */
+        uint(QtProtobufPrivate::FieldFlag::Oneof | QtProtobufPrivate::FieldFlag::ExplicitPresence), /* = secondFieldInt */
+        uint(QtProtobufPrivate::FieldFlag::Oneof | QtProtobufPrivate::FieldFlag::ExplicitPresence | QtProtobufPrivate::FieldFlag::Message), /* = secondComplexField */
+        uint(QtProtobufPrivate::FieldFlag::Oneof | QtProtobufPrivate::FieldFlag::ExplicitPresence | QtProtobufPrivate::FieldFlag::Message), /* = secondSecondComplexField */
+        uint(QtProtobufPrivate::FieldFlag::Oneof | QtProtobufPrivate::FieldFlag::ExplicitPresence), /* = testSnakeCaseField */
     },
     // char_data
     /* metadata char_data: */
