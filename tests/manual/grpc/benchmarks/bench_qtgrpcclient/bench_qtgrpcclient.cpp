@@ -18,8 +18,11 @@ class QtGrpcClientBenchmark : public QObject
 {
     Q_OBJECT
 public:
-    explicit QtGrpcClientBenchmark(quint64 calls) : mCalls(calls)
+    explicit QtGrpcClientBenchmark(quint64 calls, qsizetype payload = 0) : mCalls(calls)
     {
+        if (payload > 0)
+            sData = QByteArray(payload, 'x');
+
         QUrl uri(QString("http://") + HostUri.data());
         mClient.attachChannel(std::make_shared<QGrpcHttp2Channel>(std::move(uri)));
     }
@@ -44,6 +47,8 @@ private:
     QEventLoop mLoop;
     QElapsedTimer mTimer;
     uint64_t mCalls;
+
+    inline static QByteArray sData;
 };
 
 void QtGrpcClientBenchmark::unaryCall()
@@ -83,24 +88,29 @@ void QtGrpcClientBenchmark::unaryCallHelper(qt::bench::UnaryCallRequest &request
 void QtGrpcClientBenchmark::serverStreaming()
 {
     quint64 counter = 0;
+    quint64 recvBytes = 0;
+
     qt::bench::ServerStreamingRequest request;
+    if (!sData.isEmpty())
+        request.setPayload(sData);
     request.setPing(mCalls);
     const auto stream = mClient.ServerStreaming(request);
 
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this,
-                     [this, stream, &counter]() {
+                     [this, stream, &counter, &recvBytes]() {
                          if (counter == 0)
                              mTimer.start();
                          const auto response = stream->read<qt::bench::ServerStreamingResponse>();
-                         Q_ASSERT(response->pong() == counter);
+                         if (response->hasPayload())
+                             recvBytes += static_cast<quint64>(response->payload().size());
                          ++counter;
                      });
 
     QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
-                     [this, &counter](const QGrpcStatus &status) {
+                     [this, &counter, &recvBytes](const QGrpcStatus &status) {
                          if (status.isOk()) {
                              Client::printRpcResult("ServerStreaming", mTimer.nsecsElapsed(),
-                                                    counter);
+                                                    counter, recvBytes, sData.size());
                          } else {
                              qDebug() << "FAILED: " << status;
                          }
@@ -112,13 +122,21 @@ void QtGrpcClientBenchmark::serverStreaming()
 void QtGrpcClientBenchmark::clientStreaming()
 {
     quint64 counter = 0;
+    quint64 sendBytes = 0;
+
     qt::bench::ClientStreamingRequest request;
+    if (!sData.isEmpty())
+        request.setPayload(sData);
+    request.setPing(10);
+
     const auto stream = mClient.ClientStreaming(request);
 
-    QTimer::singleShot(0, [this, &stream, &counter, &request]() {
+    QTimer::singleShot(0, [this, &stream, &counter, &request, &sendBytes]() {
         // Run on event loop
         mTimer.start();
         for (; counter < mCalls; ++counter) {
+            if (request.hasPayload())
+                sendBytes += static_cast<quint64>(request.payload().size());
             request.setPing(counter);
             stream->writeMessage(request);
         }
@@ -126,11 +144,14 @@ void QtGrpcClientBenchmark::clientStreaming()
     });
 
     QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
-                     [this, &stream, &counter](const QGrpcStatus &status) {
+                     [this, &stream, &counter, &sendBytes](const QGrpcStatus &status) {
                          if (status.isOk()) {
-                             Client::printRpcResult("ClientStreaming", mTimer.nsecsElapsed(),
-                                                    counter);
+                             quint64 recvBytes = 0;
                              const auto resp = stream->read<qt::bench::ClientStreamingResponse>();
+                             if (resp->hasPayload())
+                                recvBytes = static_cast<quint64>(resp->payload().size());
+                             Client::printRpcResult("ClientStreaming", mTimer.nsecsElapsed(),
+                                                    counter, recvBytes, sendBytes);
                          } else {
                              qDebug() << "FAILED: " << status;
                          }
@@ -142,18 +163,27 @@ void QtGrpcClientBenchmark::clientStreaming()
 void QtGrpcClientBenchmark::bidirStreaming()
 {
     quint64 counter = 0;
+    quint64 recvBytes = 0;
+    quint64 sendBytes = 0;
+
     qt::bench::BiDirStreamingRequest request;
+    if (!sData.isEmpty())
+        request.setPayload(sData);
     qt::bench::BiDirStreamingResponse response;
     const auto stream = mClient.BiDirStreaming(request);
 
     QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, this,
-                     [this, stream, &counter, &response, &request]() {
+                     [this, stream, &counter, &response, &request, &recvBytes, &sendBytes]() {
                          if (counter == 0)
                              mTimer.start();
                          if (stream->read(&response)) {
                              if (counter < mCalls) {
+                                 if (response.hasPayload())
+                                    recvBytes += static_cast<quint64>(response.payload().size());
                                  request.setPing(counter);
                                  stream->writeMessage(&request);
+                                 if (request.hasPayload())
+                                     sendBytes += static_cast<quint64>(request.payload().size());
                                  ++counter;
                              } else {
                                  stream->writesDone();
@@ -165,10 +195,10 @@ void QtGrpcClientBenchmark::bidirStreaming()
                      });
 
     QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
-                     [this, &counter](const QGrpcStatus &status) {
+                     [this, &counter, &recvBytes, &sendBytes](const QGrpcStatus &status) {
                          if (status.isOk()) {
                              Client::printRpcResult("BidirStreaming", mTimer.nsecsElapsed(),
-                                                    counter);
+                                                    counter, recvBytes, sendBytes);
                          } else {
                              qDebug() << "FAILED: " << status;
                          }

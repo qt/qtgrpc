@@ -117,7 +117,10 @@ public:
         case State::Created: {
             new ServerStreaming(mCQ, mService);
 
+            if (mRequest.has_payload())
+                mResponse.mutable_payload()->assign(mRequest.payload().size(), 'x');
             mResponse.set_pong(mPongCount);
+
             mServerStream.Write(mResponse, this);
             mState = State::Writing;
         } break;
@@ -190,6 +193,8 @@ public:
                 mState = State::Finished;
             } else {
                 ++mPingCount;
+                if (mRequest.has_payload() && !mResponse.has_payload())
+                    mResponse.mutable_payload()->assign(mRequest.payload().size(), 'x');
                 mRequest.set_ping(mPingCount);
                 mClientStream.Read(&mRequest, this);
             }
@@ -257,7 +262,10 @@ public:
                 return;
             }
             ++mPingCount;
+            if (mRequest.has_payload() && !mResponse.has_payload())
+                mResponse.mutable_payload()->assign(mRequest.payload().size(), 'x');
             mResponse.set_pong(mRequest.ping());
+
             mStream.Write(mResponse, this);
             mState = State::Writing;
         } break;

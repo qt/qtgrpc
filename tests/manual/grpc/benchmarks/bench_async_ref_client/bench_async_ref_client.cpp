@@ -12,8 +12,10 @@
 class AsyncGrpcClientBenchmark
 {
 public:
-    explicit AsyncGrpcClientBenchmark(uint64_t calls) : mCalls(calls)
+    explicit AsyncGrpcClientBenchmark(uint64_t calls, size_t payload = 0) : mCalls(calls)
     {
+        if (payload > 0)
+            sData.assign(payload, 'x');
         auto channel = grpc::CreateChannel(HostUri.data(), grpc::InsecureChannelCredentials());
         mStub = qt::bench::BenchmarkService::NewStub(std::move(channel));
     }
@@ -27,6 +29,8 @@ private:
     std::unique_ptr<qt::bench::BenchmarkService::Stub> mStub;
     QElapsedTimer mTimer;
     uint64_t mCalls;
+
+    inline static std::string sData;
 };
 
 void AsyncGrpcClientBenchmark::unaryCall()
@@ -65,6 +69,7 @@ void AsyncGrpcClientBenchmark::unaryCall()
                 startCall(counter);
                 continue;
             } else {
+                delete rpcResult;
                 break;
             }
         } else {
@@ -97,18 +102,22 @@ void AsyncGrpcClientBenchmark::serverStreaming()
     bool ok = false;
 
     uint64_t counter = 0;
+    uint64_t recvBytes = 0;
 
     auto *call = new ServerStreamingData();
-    call->readHandler = [call, &counter](bool ok) {
+    call->readHandler = [call, &counter, &recvBytes](bool ok) {
         if (ok) {
             call->stream->Read(&call->response, &call->readHandler);
+            if (call->response.has_payload())
+                recvBytes += call->response.payload().size();
             ++counter;
         }
         return true;
     };
-    call->finishHandler = [this, call, &counter](bool ok) {
+    call->finishHandler = [this, call, &counter, &recvBytes](bool ok) {
         if (ok && call->status.ok()) {
-            Client::printRpcResult("ServerStreaming", mTimer.nsecsElapsed(), counter);
+            Client::printRpcResult("ServerStreaming", mTimer.nsecsElapsed(), counter, recvBytes,
+                                   sData.size());
         } else {
             std::cout << "FAILED: " << call->status.error_message();
         }
@@ -126,6 +135,8 @@ void AsyncGrpcClientBenchmark::serverStreaming()
         }
     };
 
+    if (!sData.empty())
+        call->request.set_payload(sData);
     call->request.set_ping(mCalls);
     call->stream = mStub->AsyncServerStreaming(&call->context, call->request, &cq,
                                                &call->callHandler);
@@ -159,13 +170,17 @@ void AsyncGrpcClientBenchmark::clientStreaming()
     grpc::CompletionQueue cq;
     void *rawTag = nullptr;
     bool ok = false;
+
     uint64_t counter = 0;
+    uint64_t sendBytes = 0;
 
     auto *call = new ClientStreamingData();
-    call->writeHandler = [this, call, &counter](bool ok) {
+    call->writeHandler = [this, call, &counter, &sendBytes](bool ok) {
         if (ok && counter < mCalls) {
             call->request.set_ping(counter);
             call->stream->Write(call->request, &call->writeHandler);
+            if (call->request.has_payload())
+                sendBytes += call->request.payload().size();
             ++counter;
         } else if (ok && counter >= mCalls) {
             call->stream->WritesDone(&call->writesDoneHandler);
@@ -173,9 +188,13 @@ void AsyncGrpcClientBenchmark::clientStreaming()
         return true;
     };
     call->writesDoneHandler = [](bool) { return true; };
-    call->finishHandler = [this, call, &counter](bool ok) {
+    call->finishHandler = [this, call, &counter, &sendBytes](bool ok) {
         if (ok && call->status.ok()) {
-            Client::printRpcResult("ClientStreaming", mTimer.nsecsElapsed(), counter);
+            uint64_t recvBytes = 0;
+            if (call->response.has_payload())
+                recvBytes += call->response.payload().size();
+            Client::printRpcResult("ClientStreaming", mTimer.nsecsElapsed(), counter, recvBytes,
+                                   sendBytes);
         } else {
             std::cout << "FAILED: " << call->status.error_message();
         }
@@ -193,6 +212,8 @@ void AsyncGrpcClientBenchmark::clientStreaming()
         }
     };
 
+    if (!sData.empty())
+        call->request.set_payload(sData);
     call->stream = mStub->AsyncClientStreaming(&call->context, &call->response, &cq,
                                                &call->callHandler);
 
@@ -227,11 +248,16 @@ void AsyncGrpcClientBenchmark::bidirStreaming()
     grpc::CompletionQueue cq;
     void *rawTag = nullptr;
     bool ok = false;
+
     uint64_t counter = 0;
+    uint64_t recvBytes = 0;
+    uint64_t sendBytes = 0;
 
     auto *call = new BidirStreamingData();
-    call->writeHandler = [this, call, &counter](bool ok) {
+    call->writeHandler = [this, call, &counter, &sendBytes](bool ok) {
         if (ok && counter < mCalls) {
+            if (call->request.has_payload())
+                sendBytes += call->request.payload().size();
             call->request.set_ping(counter);
             call->stream->Write(call->request, &call->writeHandler);
             ++counter;
@@ -241,15 +267,18 @@ void AsyncGrpcClientBenchmark::bidirStreaming()
         return true;
     };
     call->writesDoneHandler = [](bool) { return true; };
-    call->readHandler = [call](bool ok) {
+    call->readHandler = [call, &recvBytes](bool ok) {
         if (ok) {
+            if (call->response.has_payload())
+                recvBytes += call->response.payload().size();
             call->stream->Read(&call->response, &call->readHandler);
         }
         return true;
     };
-    call->finishHandler = [this, call, &counter](bool ok) {
+    call->finishHandler = [this, call, &counter, &recvBytes, &sendBytes](bool ok) {
         if (ok && call->status.ok()) {
-            Client::printRpcResult("BidirStreaming", mTimer.nsecsElapsed(), counter);
+            Client::printRpcResult("BidirStreaming", mTimer.nsecsElapsed(), counter, recvBytes,
+                                   sendBytes);
         } else {
             std::cout << "FAILED: " << call->status.error_message();
         }
@@ -268,6 +297,8 @@ void AsyncGrpcClientBenchmark::bidirStreaming()
         }
     };
 
+    if (!sData.empty())
+        call->request.set_payload(sData);
     call->stream = mStub->AsyncBiDirStreaming(&call->context, &cq, &call->callHandler);
 
     while (cq.Next(&rawTag, &ok)) {
