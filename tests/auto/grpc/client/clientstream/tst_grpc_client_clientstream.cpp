@@ -34,13 +34,14 @@ void QtGrpcClientClientStreamTest::valid()
     const int ExpectedMessageCount = 4;
 
     SimpleStringMessage request;
-    request.setTestFieldString("Stream");
+    request.setTestFieldString("Stream1");
 
     auto stream = client()->testMethodClientStream(request);
 
     int i = 0;
     QTimer sendTimer;
     QObject::connect(&sendTimer, &QTimer::timeout, this, [&]() {
+        request.setTestFieldString("Stream" + QString::number(i + 2));
         stream->writeMessage(request);
         if (++i == ExpectedMessageCount)
             sendTimer.stop();
@@ -59,7 +60,7 @@ void QtGrpcClientClientStreamTest::valid()
     QVERIFY(args.takeFirst().value<QGrpcStatus>() == QGrpcStatus::StatusCode::Ok);
 
     const auto result = stream->read<SimpleStringMessage>();
-    QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3Stream4");
+    QCOMPARE_EQ(result->testFieldString(), "Stream11Stream22Stream33Stream44");
 }
 
 void QtGrpcClientClientStreamTest::sequentialSend()
@@ -135,13 +136,14 @@ void QtGrpcClientClientStreamTest::sequentialSendWithDoneWhenChannelNotReady()
     const int ExpectedMessageCount = 4;
 
     SimpleStringMessage request;
-    request.setTestFieldString("Stream");
+    request.setTestFieldString("Stream1");
 
     auto stream = client->testMethodClientStreamWithDone(request);
 
     // Ensure that messages are not lost during the sequential sending right after the stream is
     // instanciated.
     for (int i = 1; i < (ExpectedMessageCount - 1); ++i) {
+        request.setTestFieldString(QString("Stream") + QString::number(i + 1));
         stream->writeMessage(request);
     }
     stream->writesDone();
@@ -159,7 +161,7 @@ void QtGrpcClientClientStreamTest::sequentialSendWithDoneWhenChannelNotReady()
     QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
 
     std::optional<SimpleStringMessage> result = stream->read<SimpleStringMessage>();
-    QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3");
+    QCOMPARE_EQ(result->testFieldString(), "Stream11Stream22Stream33");
 }
 
 QTEST_MAIN(QtGrpcClientClientStreamTest)
