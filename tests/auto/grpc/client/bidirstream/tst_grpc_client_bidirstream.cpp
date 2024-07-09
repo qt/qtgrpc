@@ -25,6 +25,7 @@ public:
 private Q_SLOTS:
     void valid();
     void sequentialSendWithDone();
+    void multipleImmediateSendsWithDone();
 };
 
 void QtGrpcClientBidirStreamTest::valid()
@@ -94,6 +95,47 @@ void QtGrpcClientBidirStreamTest::sequentialSendWithDone()
     QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
 
     QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33");
+}
+
+void QtGrpcClientBidirStreamTest::multipleImmediateSendsWithDone()
+{
+    const int ExpectedMessageCount = 4;
+
+    SimpleStringMessage request;
+    request.setTestFieldString("Stream1");
+
+    auto stream = client()->testMethodBiStreamWithDone(request);
+
+    QString fullResponse;
+
+    for (int i = 0; i < (ExpectedMessageCount - 1); ++i) {
+        request.setTestFieldString("Stream" + QString::number(i + 2));
+        stream->writeMessage(request);
+    }
+
+    int i = 1;
+    QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, this,
+                     [stream, &fullResponse, &i, ExpectedMessageCount]() {
+                         Q_UNUSED(ExpectedMessageCount)
+                         if (const auto rsp = stream->read<SimpleStringMessage>()) {
+                             fullResponse += rsp->testFieldString();
+                             ++i;
+                             if (i == (ExpectedMessageCount - 1))
+                                 stream->writesDone();
+                         }
+                     });
+
+    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QVERIFY(streamFinishedSpy.isValid());
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
+                                 MessageLatencyWithThreshold * ExpectedMessageCount);
+
+    auto args = streamFinishedSpy.first();
+    QCOMPARE(args.count(), 1);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
+
+    QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33Stream44");
 }
 
 QTEST_MAIN(QtGrpcClientBidirStreamTest)
