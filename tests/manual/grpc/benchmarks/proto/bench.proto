@@ -22,24 +22,30 @@ message UnaryCallResponse {
 
 message ServerStreamingRequest {
     uint64 ping = 1;
+    optional bytes payload = 2;
 }
 
 message ServerStreamingResponse {
     uint64 pong = 1;
+    optional bytes payload = 2;
 }
 
 message ClientStreamingRequest {
     uint64 ping = 1;
+    optional bytes payload = 2;
 }
 
 message ClientStreamingResponse {
     uint64 pong = 1;
+    optional bytes payload = 2;
 }
 
 message BiDirStreamingRequest {
     uint64 ping = 1;
+    optional bytes payload = 2;
 }
 
 message BiDirStreamingResponse {
     uint64 pong = 1;
+    optional bytes payload = 2;
 }
