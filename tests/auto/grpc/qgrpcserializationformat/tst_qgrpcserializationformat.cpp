@@ -10,6 +10,8 @@
 
 #include <memory>
 
+using namespace QtGrpc;
+
 class QGrpcSerializationFormatTest : public QObject
 {
     Q_OBJECT
@@ -24,15 +26,15 @@ private Q_SLOTS:
 
 void QGrpcSerializationFormatTest::constructEmbedded()
 {
-    QGrpcSerializationFormat defaultFormat(QGrpcSerializationFormat::Format::Default);
+    QGrpcSerializationFormat defaultFormat = SerializationFormat::Default;
     QCOMPARE(defaultFormat.suffix(), "");
     QVERIFY(dynamic_cast<QProtobufSerializer *>(defaultFormat.serializer().get()) != nullptr);
 
-    QGrpcSerializationFormat jsonFormat(QGrpcSerializationFormat::Format::Json);
+    QGrpcSerializationFormat jsonFormat = SerializationFormat::Json;
     QCOMPARE(jsonFormat.suffix(), "json");
     QVERIFY(dynamic_cast<QProtobufJsonSerializer *>(jsonFormat.serializer().get()) != nullptr);
 
-    QGrpcSerializationFormat protobufFormat(QGrpcSerializationFormat::Format::Protobuf);
+    QGrpcSerializationFormat protobufFormat = SerializationFormat::Protobuf;
     QCOMPARE(protobufFormat.suffix(), "proto");
     QVERIFY(dynamic_cast<QProtobufSerializer *>(protobufFormat.serializer().get()) != nullptr);
 }
@@ -46,7 +48,7 @@ void QGrpcSerializationFormatTest::constructCustom()
 
 void QGrpcSerializationFormatTest::copyMove()
 {
-    QGrpcSerializationFormat f1(QGrpcSerializationFormat::Format::Json);
+    QGrpcSerializationFormat f1(SerializationFormat::Json);
 
     {
         QGrpcSerializationFormat f2(f1);

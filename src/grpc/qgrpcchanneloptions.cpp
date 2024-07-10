@@ -4,12 +4,14 @@
 #include <QtGrpc/private/qtgrpcglobal_p.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qgrpcserializationformat.h>
+#include <QtGrpc/qtgrpcnamespace.h>
 
 #include <QtCore/qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
+using namespace QtGrpc;
 
 /*!
     \class QGrpcChannelOptions
@@ -24,7 +26,7 @@ using namespace Qt::StringLiterals;
 class QGrpcChannelOptionsPrivate
 {
 public:
-    QGrpcChannelOptionsPrivate() : serializationFormat(QGrpcSerializationFormat::Default) { }
+    QGrpcChannelOptionsPrivate() : serializationFormat(SerializationFormat::Default) { }
 
     std::optional<QGrpcDuration> deadline;
     QGrpcMetadata metadata;

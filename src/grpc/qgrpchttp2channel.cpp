@@ -39,6 +39,7 @@
 QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
+using namespace QtGrpc;
 
 /*!
     \class QGrpcHttp2Channel
@@ -601,16 +602,13 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri,
     if (it != channelOptions.metadata().end()) {
         if (formatSuffix.isEmpty() && it->second != DefaultContentType) {
             if (it->second == "application/grpc+json") {
-                channelOptions.setSerializationFormat(QGrpcSerializationFormat{
-                    QGrpcSerializationFormat::Format::Json });
+                channelOptions.setSerializationFormat(SerializationFormat::Json);
             } else if (it->second == "application/grpc+proto" || it->second == DefaultContentType) {
-                channelOptions.setSerializationFormat(QGrpcSerializationFormat{
-                    QGrpcSerializationFormat::Format::Protobuf });
+                channelOptions.setSerializationFormat(SerializationFormat::Protobuf);
             } else {
                 qGrpcWarning() << "Cannot choose the serializer for " << ContentTypeHeader
                                << it->second << ". Using protobuf format as the default one.";
-                channelOptions.setSerializationFormat(QGrpcSerializationFormat{
-                    QGrpcSerializationFormat::Format::Default });
+                channelOptions.setSerializationFormat(SerializationFormat::Default);
             }
         } else if (it->second != contentTypeFromOptions) {
             warnAboutFormatConflict = true;

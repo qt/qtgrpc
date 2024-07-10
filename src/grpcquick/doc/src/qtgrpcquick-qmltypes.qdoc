@@ -77,7 +77,7 @@
 /*!
     \qmlproperty enumeration QQmlGrpcChannelOptions::serializationFormat
     Sets the serialization format for the channel.
-    The \c {GrpcSerializationFormat::Default}
+    The \l {QtGrpc::SerializationFormat::Default}
     format is used by default.
     \value GrpcSerializationFormat.Default  The default GrpcSerializationFormat preset. This preset
                                             constructs \l QProtobufSerializer with an empty content
@@ -89,7 +89,7 @@
                                             This preset constructs \l QProtobufJsonSerializer
                                             with the \c json content type suffix.
     \note This enumeration is the Qt Quick equivalent of QGrpcSerializationFormat::Format.
-    \sa QGrpcChannelOptions::serializationFormat, QGrpcSerializationFormat::Format
+    \sa QGrpcChannelOptions::serializationFormat, QtGrpc::SerializationFormat
     \since 6.8
 */
 

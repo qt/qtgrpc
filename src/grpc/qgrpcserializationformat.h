@@ -5,6 +5,7 @@
 #define QGRPCSERIALIZATIONFORMAT_H
 
 #include <QtGrpc/qtgrpcglobal.h>
+#include <QtGrpc/qtgrpcnamespace.h>
 
 #include <QtCore/qbytearrayview.h>
 #include <QtCore/qtclasshelpermacros.h>
@@ -19,13 +20,7 @@ class QAbstractProtobufSerializer;
 class QGrpcSerializationFormat final
 {
 public:
-    enum Format : quint8 {
-        Default = 0,
-        Protobuf,
-        Json,
-    };
-
-    Q_GRPC_EXPORT Q_IMPLICIT QGrpcSerializationFormat(Format format = Format::Default);
+    Q_GRPC_EXPORT Q_IMPLICIT QGrpcSerializationFormat(QtGrpc::SerializationFormat format = {});
     Q_GRPC_EXPORT QGrpcSerializationFormat(QByteArrayView suffix,
                                            std::shared_ptr<QAbstractProtobufSerializer> serializer);
     Q_GRPC_EXPORT ~QGrpcSerializationFormat();

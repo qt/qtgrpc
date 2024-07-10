@@ -6,6 +6,8 @@
 #include <QtProtobuf/qprotobufjsonserializer.h>
 #include <QtProtobuf/qprotobufserializer.h>
 
+using namespace QtGrpc;
+
 QT_BEGIN_NAMESPACE
 
 /*!
@@ -22,23 +24,6 @@ QT_BEGIN_NAMESPACE
     serializer.
 
     \sa QAbstractGrpcChannel
-*/
-
-/*!
-    \enum QGrpcSerializationFormat::Format
-
-    Holds presets for setting the protobuf serializer format.
-
-    \value Default   The default QGrpcSerializationFormat preset. This preset
-                     constructs \l QProtobufSerializer with an empty content
-                     type suffix.
-    \value Protobuf  The embedded protobuf QGrpcSerializationFormat preset. This
-                     preset constructs \l QProtobufSerializer with the \c proto
-                     content type suffix.
-    \value Json      The embedded JSON QGrpcSerializationFormat preset. This
-                     preset constructs \l QProtobufJsonSerializer with the
-                     \c json content type suffix.
-    \sa suffix(), serializer()
 */
 
 class QGrpcSerializationFormatPrivate
@@ -62,13 +47,15 @@ static void dPtrDeleter(QGrpcSerializationFormatPrivate *ptr)
     Creates a new QGrpcSerializationFormat object with the given preset
     \a format.
 
-    The \l QGrpcSerializationFormat::Default format is used by default.
+    A \l QtGrpc::SerializationFormat::Default format is used by default.
 */
-QGrpcSerializationFormat::QGrpcSerializationFormat(Format format)
-    : dPtr(format == Format::Json
+QGrpcSerializationFormat::QGrpcSerializationFormat(SerializationFormat format)
+    : dPtr(format == SerializationFormat::Json
                ? new QGrpcSerializationFormatPrivate("json",
                                                      std::make_shared<QProtobufJsonSerializer>())
-               : new QGrpcSerializationFormatPrivate(format == Format::Protobuf ? "proto" : "",
+               : new QGrpcSerializationFormatPrivate(format == SerializationFormat::Protobuf
+                                                         ? "proto"
+                                                         : "",
                                                      std::make_shared<QProtobufSerializer>()),
            dPtrDeleter)
 {
