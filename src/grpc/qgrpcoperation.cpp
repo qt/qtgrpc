@@ -106,7 +106,7 @@ bool QGrpcOperation::read(QProtobufMessage *message) const
                "Can't read to nullptr QProtobufMessage");
     Q_D(const QGrpcOperation);
     const auto ser = d->operationContext->serializer();
-    return ser && ser->deserialize(message, data());
+    return ser && ser->deserialize(message, d->data);
 }
 
 /*!
@@ -192,16 +192,6 @@ QGrpcOperationContext *QGrpcOperation::operationContext() const noexcept
 {
     Q_D(const QGrpcOperation);
     return d->operationContext.get();
-}
-
-/*!
-    \internal
-    Getter of the data received from the channel.
-*/
-QByteArray QGrpcOperation::data() const noexcept
-{
-    Q_D(const QGrpcOperation);
-    return d->data;
 }
 
 QT_END_NAMESPACE

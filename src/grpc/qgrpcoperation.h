@@ -58,8 +58,6 @@ protected:
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
     Q_DECLARE_PRIVATE(QGrpcOperation)
-
-    [[nodiscard]] QByteArray data() const noexcept;
 };
 
 QT_END_NAMESPACE
