@@ -538,7 +538,8 @@ public:
         if (metaType.flags() & QMetaType::IsPointer) {
             auto *messageProperty = propertyData.value<QProtobufMessage *>();
             Q_ASSERT(messageProperty != nullptr);
-            return deserializeObject(messageProperty);
+            ok = deserializeObject(messageProperty);
+            return propertyData;
         }
 
         auto handler = QtProtobufPrivate::findHandler(metaType);
@@ -593,6 +594,15 @@ public:
     {
         Q_ASSERT(message != nullptr);
 
+        auto restoreOnReturn = qScopeGuard([prevCachedPropertyValue = cachedPropertyValue,
+                                            prevCachedIndex = cachedIndex, this]() {
+            cachedPropertyValue = prevCachedPropertyValue;
+            cachedIndex = prevCachedIndex;
+        });
+
+        cachedPropertyValue.clear();
+        cachedIndex = -1;
+
         auto ordering = message->propertyOrdering();
         Q_ASSERT(ordering != nullptr);
 
@@ -626,21 +636,28 @@ public:
                 auto store = activeValue;
                 activeValue = activeObject.value(key);
 
-                QVariant newPropertyValue = message->property(iter->second, true);
+                if (auto index = ordering->indexOfFieldNumber(iter->second.getFieldNumber());
+                    index != cachedIndex) {
+                    if (!storeCachedValue(message))
+                        return false;
+                    cachedPropertyValue = message->property(iter->second, true);
+                    cachedIndex = index;
+                }
+
                 bool ok = false;
 
                 const auto fieldFlags = iter->second.getFieldFlags();
                 if (fieldFlags & QtProtobufPrivate::FieldFlag::Enum) {
                     if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated) {
-                        QMetaType originalMetatype = newPropertyValue.metaType();
-                        newPropertyValue.setValue(deserializeList<QStringList, QString>(activeValue,
-                                                                                        ok));
+                        QMetaType originalMetatype = cachedPropertyValue.metaType();
+                        cachedPropertyValue
+                            .setValue(deserializeList<QStringList, QString>(activeValue, ok));
                         if (ok)
-                            ok = newPropertyValue.convert(originalMetatype);
+                            ok = cachedPropertyValue.convert(originalMetatype);
                     } else {
-                        const auto metaEnum = getMetaEnum(newPropertyValue.metaType());
+                        const auto metaEnum = getMetaEnum(cachedPropertyValue.metaType());
                         Q_ASSERT(metaEnum.isValid());
-                        newPropertyValue.setValue(deserializeEnum(activeValue, metaEnum, ok));
+                        cachedPropertyValue.setValue(deserializeEnum(activeValue, metaEnum, ok));
                     }
                     if (!ok)
                         setInvalidFormatError();
@@ -651,15 +668,17 @@ public:
                         mapObj.insert("key"_L1, it.key());
                         mapObj.insert("value"_L1, it.value());
                         activeValue = mapObj;
-                        newPropertyValue = deserializeValue(newPropertyValue, ok);
+                        cachedPropertyValue = deserializeValue(cachedPropertyValue, ok);
                     }
                     activeValue = store;
                 } else {
-                    newPropertyValue = deserializeValue(newPropertyValue, ok);
+                    cachedPropertyValue = deserializeValue(cachedPropertyValue, ok);
                     activeValue = store;
                 }
-                if (ok)
-                    message->setProperty(iter->second, newPropertyValue);
+                if (!ok) {
+                    cachedPropertyValue.clear();
+                    cachedIndex = -1;
+                }
             }
         }
 
@@ -667,7 +686,7 @@ public:
         // to deserialize
         activeValue = {};
 
-        return true;
+        return storeCachedValue(message);
     }
 
     void setDeserializationError(QAbstractProtobufSerializer::DeserializationError error,
@@ -701,9 +720,27 @@ public:
 
     static SerializerRegistry handlers;
 
+    [[nodiscard]] bool storeCachedValue(QProtobufMessage *message);
+
+    QVariant cachedPropertyValue;
+    int cachedIndex = -1;
+
 private:
     QProtobufJsonSerializer *qPtr;
 };
+
+bool QProtobufJsonSerializerPrivate::storeCachedValue(QProtobufMessage *message)
+{
+    bool ok = true;
+    if (cachedIndex >= 0 && !cachedPropertyValue.isNull()) {
+        const auto *ordering = message->propertyOrdering();
+        QProtobufFieldInfo fieldInfo(*ordering, cachedIndex);
+        ok = message->setProperty(fieldInfo, cachedPropertyValue);
+        cachedPropertyValue.clear();
+        cachedIndex = -1;
+    }
+    return ok;
+}
 
 QProtobufJsonSerializerPrivate::SerializerRegistry QProtobufJsonSerializerPrivate::handlers = {};
 
@@ -759,6 +796,8 @@ bool QProtobufJsonSerializer::deserializeMessage(QProtobufMessage *message,
     }
     d_ptr->activeValue = document.object();
 
+    d_ptr->cachedPropertyValue.clear();
+    d_ptr->cachedIndex = -1;
     return d_ptr->deserializeObject(message);
 }
 
