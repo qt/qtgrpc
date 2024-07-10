@@ -520,6 +520,8 @@ public:
     void clearError();
     void setUnexpectedEndOfStreamError();
 
+    [[nodiscard]] bool storeCachedValue(QProtobufMessage *message);
+
     QAbstractProtobufSerializer::DeserializationError deserializationError =
             QAbstractProtobufSerializer::NoDeserializerError;
     QString deserializationErrorString;
@@ -530,6 +532,9 @@ public:
     bool preserveUnknownFields = true;
 
     static const QtProtobufPrivate::QProtobufFieldInfo mapValueOrdering;
+
+    QVariant cachedPropertyValue;
+    int cachedIndex = -1;
 
 private:
     Q_DISABLE_COPY_MOVE(QProtobufSerializerPrivate)

@@ -251,12 +251,22 @@ void QProtobufSerializerPrivate::clearError()
 
 bool QProtobufSerializer::deserializeMessage(QProtobufMessage *message, QByteArrayView data) const
 {
+    d_ptr->cachedPropertyValue = QVariant();
+    d_ptr->cachedIndex = -1;
     d_ptr->clearError();
     d_ptr->it = QProtobufSelfcheckIterator::fromView(data);
+
+    bool ok = true;
     while (d_ptr->it.isValid() && d_ptr->it != data.end()) {
-        if (!d_ptr->deserializeProperty(message))
-            return false;
+        if (!d_ptr->deserializeProperty(message)) {
+            ok = false;
+            break;
+        }
     }
+
+    if (!d_ptr->storeCachedValue(message) || !ok)
+        return false;
+
     if (!d_ptr->it.isValid())
         d_ptr->setUnexpectedEndOfStreamError();
     return d_ptr->it.isValid();
@@ -287,15 +297,31 @@ bool QProtobufSerializerPrivate::deserializeObject(QProtobufMessage *message)
         setUnexpectedEndOfStreamError();
         return false;
     }
-    auto prevIt = it;
-    auto restoreOnReturn = qScopeGuard([&](){ it = prevIt; });
+
+    auto restoreOnReturn = qScopeGuard([prevIt = it, prevCachedPropertyValue = cachedPropertyValue,
+                                        prevCachedIndex = cachedIndex, this]() {
+        it = prevIt;
+        cachedPropertyValue = prevCachedPropertyValue;
+        cachedIndex = prevCachedIndex;
+    });
+
+    cachedPropertyValue.clear();
+    cachedIndex = -1;
+
     QByteArrayView data = *array;
     clearError();
     it = QProtobufSelfcheckIterator::fromView(data);
+    bool ok = true;
     while (it.isValid() && it != data.end()) {
-        if (!deserializeProperty(message))
-            return false;
+        if (!deserializeProperty(message)) {
+            ok = false;
+            break;
+        }
     }
+
+    if (!storeCachedValue(message) || !ok)
+        return false;
+
     if (!it.isValid())
         setUnexpectedEndOfStreamError();
     return it.isValid();
@@ -550,32 +576,36 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
     }
 
     QProtobufFieldInfo fieldInfo(*ordering, index);
-    QVariant newPropertyValue = message->property(fieldInfo, true);
-    QMetaType metaType = newPropertyValue.metaType();
+    if (cachedIndex != index) {
+        if (!storeCachedValue(message))
+            return false;
+
+        cachedPropertyValue = message->property(fieldInfo, true);
+        cachedIndex = index;
+    }
+    QMetaType metaType = cachedPropertyValue.metaType();
 
     qProtoDebug() << "wireType:" << wireType << "metaType:" << metaType.name()
                   << "currentByte:" << QString::number((*it), 16);
 
     if (metaType.flags() & QMetaType::IsPointer) {
-        auto *messageProperty = newPropertyValue.value<QProtobufMessage *>();
+        auto *messageProperty = cachedPropertyValue.value<QProtobufMessage *>();
         Q_ASSERT(messageProperty != nullptr);
-        if (deserializeObject(messageProperty))
-            return message->setProperty(fieldInfo, std::move(newPropertyValue));
-        return false;
+        return deserializeObject(messageProperty);
     }
 
     const auto fieldFlags = fieldInfo.getFieldFlags();
     if (fieldFlags.testFlag(QtProtobufPrivate::FieldFlag::Enum)) {
         if (fieldFlags.testFlag(QtProtobufPrivate::FieldFlag::Repeated)) {
-            auto intList = newPropertyValue.value<QList<QtProtobuf::int64>>();
+            auto intList = cachedPropertyValue.value<QList<QtProtobuf::int64>>();
             if (deserializeEnumList(intList)) {
-                newPropertyValue.setValue(intList);
-                return message->setProperty(fieldInfo, std::move(newPropertyValue));
+                cachedPropertyValue.setValue(intList);
+                return true;
             }
             return false;
         } else {
-            if (deserializeBasic<QtProtobuf::int64>(it, newPropertyValue))
-                return message->setProperty(fieldInfo, std::move(newPropertyValue));
+            if (deserializeBasic<QtProtobuf::int64>(it, cachedPropertyValue))
+                return true;
             return false;
         }
     }
@@ -608,7 +638,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
             }
         }
 
-        if (!basicHandler->deserializer(it, newPropertyValue)) {
+        if (!basicHandler->deserializer(it, cachedPropertyValue)) {
             setUnexpectedEndOfStreamError();
             return false;
         }
@@ -624,10 +654,23 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
                 QCoreApplication::translate("QtProtobuf", error.toUtf8().data()));
             return false;
         }
-        handler.deserializer(q_ptr, newPropertyValue);
+        handler.deserializer(q_ptr, cachedPropertyValue);
     }
 
-    return message->setProperty(fieldInfo, std::move(newPropertyValue));
+    return true;
+}
+
+bool QProtobufSerializerPrivate::storeCachedValue(QProtobufMessage *message)
+{
+    bool ok = true;
+    if (cachedIndex >= 0 && !cachedPropertyValue.isNull()) {
+        const auto *ordering = message->propertyOrdering();
+        QProtobufFieldInfo fieldInfo(*ordering, cachedIndex);
+        ok = message->setProperty(fieldInfo, cachedPropertyValue);
+        cachedPropertyValue.clear();
+        cachedIndex = -1;
+    }
+    return ok;
 }
 
 QAbstractProtobufSerializer::DeserializationError QProtobufSerializer::deserializationError() const
