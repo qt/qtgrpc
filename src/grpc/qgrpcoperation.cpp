@@ -197,6 +197,11 @@ QGrpcOperationContext *QGrpcOperation::operationContext() const noexcept
     return d->operationContext.get();
 }
 
+bool QGrpcOperation::event(QEvent *event)
+{
+    return QObject::event(event);
+}
+
 QT_END_NAMESPACE
 
 #include "moc_qgrpcoperation.cpp"

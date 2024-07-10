@@ -37,6 +37,11 @@ QGrpcServerStream::QGrpcServerStream(std::shared_ptr<QGrpcOperationContext> oper
 */
 QGrpcServerStream::~QGrpcServerStream() = default;
 
+bool QGrpcServerStream::event(QEvent *event)
+{
+    return QGrpcOperation::event(event);
+}
+
 /*!
     \class QGrpcClientStream
     \inmodule QtGrpc
@@ -74,6 +79,11 @@ void QGrpcClientStream::writeMessage(const QProtobufMessage &message)
 void QGrpcClientStream::writesDone()
 {
     emit QGrpcOperation::operationContext()->writesDoneRequested();
+}
+
+bool QGrpcClientStream::event(QEvent *event)
+{
+    return QGrpcOperation::event(event);
 }
 
 /*!
@@ -121,6 +131,11 @@ void QGrpcBidirStream::writeMessage(const QProtobufMessage &message)
 void QGrpcBidirStream::writesDone()
 {
     emit QGrpcOperation::operationContext()->writesDoneRequested();
+}
+
+bool QGrpcBidirStream::event(QEvent *event)
+{
+    return QGrpcOperation::event(event);
 }
 
 QT_END_NAMESPACE

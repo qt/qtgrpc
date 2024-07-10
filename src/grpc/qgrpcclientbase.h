@@ -90,6 +90,9 @@ private:
 
     Q_DISABLE_COPY_MOVE(QGrpcClientBase)
     Q_DECLARE_PRIVATE(QGrpcClientBase)
+
+public:
+    bool event(QEvent *event) override;
 };
 
 QT_END_NAMESPACE

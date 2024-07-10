@@ -305,6 +305,11 @@ std::optional<QByteArray> QGrpcClientBase::trySerialize(const QProtobufMessage &
     return serializer->serialize(&arg);
 }
 
+bool QGrpcClientBase::event(QEvent *event)
+{
+    return QObject::event(event);
+}
+
 QT_END_NAMESPACE
 
 #include "moc_qgrpcclientbase.cpp"
