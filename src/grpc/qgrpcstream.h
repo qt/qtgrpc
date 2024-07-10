@@ -26,6 +26,9 @@ Q_SIGNALS:
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcServerStream)
+
+public:
+    bool event(QEvent *event) override;
 };
 
 class Q_GRPC_EXPORT QGrpcClientStream final : public QGrpcOperation
@@ -42,6 +45,9 @@ public:
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcClientStream)
+
+public:
+    bool event(QEvent *event) override;
 };
 
 class Q_GRPC_EXPORT QGrpcBidirStream final : public QGrpcOperation
@@ -61,6 +67,9 @@ Q_SIGNALS:
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcBidirStream)
+
+public:
+    bool event(QEvent *event) override;
 };
 
 QT_END_NAMESPACE

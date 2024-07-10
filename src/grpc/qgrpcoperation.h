@@ -66,6 +66,9 @@ protected:
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
     Q_DECLARE_PRIVATE(QGrpcOperation)
+
+public:
+    bool event(QEvent *event) override;
 };
 
 QT_END_NAMESPACE

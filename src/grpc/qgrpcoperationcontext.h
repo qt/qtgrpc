@@ -64,6 +64,7 @@ private:
     Q_DECLARE_PRIVATE(QGrpcOperationContext)
 
     friend class QAbstractGrpcChannel;
+
 public:
     bool event(QEvent *event) override;
 };
