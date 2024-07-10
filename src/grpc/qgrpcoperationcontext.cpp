@@ -64,7 +64,7 @@ QT_BEGIN_NAMESPACE
 
     The client side will be notificated by the
     \l QGrpcOperationContext::finished signal with
-    \l QGrpcStatus::Cancelled status code.
+    \l QtGrpc::StatusCode::Cancelled status code.
 
     The signal is implicitly connected to the QGrpcOperation counterpart.
 */

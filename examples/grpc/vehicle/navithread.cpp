@@ -39,7 +39,7 @@ void NaviThread::run()
     });
 
     connect(m_stream.get(), &QGrpcServerStream::finished, this, [this] (const QGrpcStatus &status) {
-        if (status.code() != QGrpcStatus::StatusCode::Ok)
+        if (status.code() != QtGrpc::StatusCode::Ok)
             qWarning() << "Stream error(" << status.code() << "):" << status.message();
 
         emit totalDistanceChanged(0);

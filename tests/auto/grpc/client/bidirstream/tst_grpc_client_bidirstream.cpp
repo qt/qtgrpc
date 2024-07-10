@@ -55,7 +55,7 @@ void QtGrpcClientBidirStreamTest::valid()
 
     auto args = streamFinishedSpy.first();
     QCOMPARE(args.count(), 1);
-    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QtGrpc::StatusCode::Ok);
 
     QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33Stream44");
 }
@@ -92,7 +92,7 @@ void QtGrpcClientBidirStreamTest::sequentialSendWithDone()
 
     auto args = streamFinishedSpy.first();
     QCOMPARE(args.count(), 1);
-    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QtGrpc::StatusCode::Ok);
 
     QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33");
 }
@@ -133,7 +133,7 @@ void QtGrpcClientBidirStreamTest::multipleImmediateSendsWithDone()
 
     auto args = streamFinishedSpy.first();
     QCOMPARE(args.count(), 1);
-    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QtGrpc::StatusCode::Ok);
 
     QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33Stream44");
 }

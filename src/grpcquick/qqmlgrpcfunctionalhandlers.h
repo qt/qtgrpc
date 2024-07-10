@@ -25,7 +25,7 @@ void readReturnValue(QJSEngine *jsEngine, Operation *operation, const QJSValue &
         if (result) {
             successCallback.call(QJSValueList{ jsEngine->toScriptValue(*result) });
         } else if (errorCallback.isCallable()) {
-            using StatusCode = QGrpcStatus::StatusCode;
+            using StatusCode = QtGrpc::StatusCode;
             auto status = QGrpcStatus{
                 operation->deserializationError()
                         == QAbstractProtobufSerializer::UnexpectedEndOfStreamError
@@ -48,7 +48,7 @@ void makeCallConnections(QJSEngine *jsEngine, const std::shared_ptr<QGrpcCallRep
                                           reply](const QGrpcStatus &status) {
                                              // We take 'reply' by copy so that its lifetime
                                              // is extended until this lambda is destroyed.
-                                             if (status.code() == QGrpcStatus::StatusCode::Ok) {
+                                             if (status.code() == QtGrpc::StatusCode::Ok) {
                                                  readReturnValue<Ret,
                                                                  QGrpcCallReply>(jsEngine,
                                                                                  reply.get(),
@@ -75,7 +75,7 @@ void makeServerStreamConnections(QJSEngine *jsEngine,
                                           stream](const QGrpcStatus &status) {
                                              // We take 'stream' by copy so that its lifetime
                                              // is extended until this lambda is destroyed.
-                                             if (status.code() == QGrpcStatus::StatusCode::Ok) {
+                                             if (status.code() == QtGrpc::StatusCode::Ok) {
                                                  if (finishCallback.isCallable())
                                                      finishCallback.call();
                                              } else {
@@ -105,7 +105,7 @@ Sender *makeClientStreamConnections(QJSEngine *jsEngine,
                                           errorCallback](const QGrpcStatus &status) {
                                              // We take 'stream' by copy so that its lifetime
                                              // is extended until this lambda is destroyed.
-                                             if (status.code() == QGrpcStatus::StatusCode::Ok) {
+                                             if (status.code() == QtGrpc::StatusCode::Ok) {
                                                  readReturnValue<Ret,
                                                                  QGrpcClientStream>(jsEngine,
                                                                                     stream.get(),
@@ -135,7 +135,7 @@ Sender *makeBidirStreamConnections(QJSEngine *jsEngine,
                                           stream](const QGrpcStatus &status) {
                                              // We take 'stream' by copy so that its lifetime
                                              // is extended until this lambda is destroyed.
-                                             if (status.code() == QGrpcStatus::StatusCode::Ok) {
+                                             if (status.code() == QtGrpc::StatusCode::Ok) {
                                                  if (finishCallback.isCallable())
                                                      finishCallback.call();
                                              } else {

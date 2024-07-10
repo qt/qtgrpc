@@ -14,21 +14,22 @@ QT_BEGIN_NAMESPACE
     \class QGrpcStatus
     \inmodule QtGrpc
     \compares equality
-    \compareswith equality StatusCode
+    \compareswith equality QtGrpc::StatusCode
     \endcompareswith
 
-    \brief This class combines a \l StatusCode and a string message.
+    \brief This class combines a \l QtGrpc::StatusCode and a string message.
 
     The QGrpcStatus class contains information about the last gRPC operation
     returned from the respective channel, or other functions in the QtGrpc
     library.
 
-    If a RPC operation failed, contains a \l StatusCode other than \l {Ok}.
+    If a RPC operation failed, contains a \l {QtGrpc::} {StatusCode} other than
+    \l {QtGrpc::StatusCode::} {Ok}.
 */
 
 /*!
     \property QGrpcStatus::code
-    \brief QGrpcStatus::StatusCode received for prior gRPC call.
+    \brief \l {QtGrpc::} {StatusCode} received for prior gRPC call.
 */
 
 /*!
@@ -37,55 +38,10 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \enum QGrpcStatus::StatusCode
-
-    \brief Channel's status codes.
-
-    \value Ok No error
-    \value Cancelled The operation was cancelled, typically by the caller.
-    \omitvalue Unknown
-    \value InvalidArgument The client specified an invalid argument,
-    \value DeadlineExceeded The deadline expired before the operation
-    could complete,
-    \value NotFound Some requested entity (e.g., file or directory) was
-    not found.
-    \value AlreadyExists The entity that a client attempted to create
-    (e.g., file or directory) already exists.
-    \value PermissionDenied  The caller does not have permission to execute
-    the specified operation.
-    \c PermissionDenied must not be used for rejections caused by exhausting
-    some resource (use \c ResourceExhausted instead for those errors).
-    \c PermissionDenied must not be used if the caller can not be identified
-    (use \c Unauthenticated instead for those errors).
-    This error code does not imply the request is valid or the requested
-    entity exists or satisfies other pre-conditions.
-    \value ResourceExhausted Some resource has been exhausted, perhaps
-    a per-user quota, or perhaps the entire file system is out of space.
-    \value FailedPrecondition The operation was rejected because the system
-    is not in a state required for the operation's execution.
-    \value Aborted The operation was aborted, typically due to
-    a concurrency issue such as a sequencer check failure or transaction abort.
-    \value OutOfRange The operation was attempted past the valid range.
-    \value Unimplemented The operation is not implemented or is
-    not supported/enabled in this service.
-    \value Internal This means that some invariants expected by
-    the underlying system have been broken.
-    \value Unavailable The service is currently unavailable.
-    This is most likely a transient condition, which can be corrected
-    by retrying with a backoff. Note that it is not always safe
-    to retry non-idempotent operations.
-    \value DataLoss Unrecoverable data loss or corruption.
-    \value Unauthenticated The request does not have valid authentication
-    credentials for the operation.
-
-    \sa{https://github.com/grpc/grpc/blob/master/doc/statuscodes.md}{gRPC status codes}
-*/
-
-/*!
     Constructs a QGrpcStatus with the status code \a code and the string \a
     message.
 */
-QGrpcStatus::QGrpcStatus(StatusCode code, QAnyStringView message)
+QGrpcStatus::QGrpcStatus(QtGrpc::StatusCode code, QAnyStringView message)
     : m_code(code), m_message(message.toString())
 {
 }
@@ -141,8 +97,8 @@ QGrpcStatus::operator QVariant() const
 */
 
 /*!
-    \fn QGrpcStatus::StatusCode QGrpcStatus::code() const noexcept
-    Returns the contained \l StatusCode.
+    \fn QtGrpc::StatusCode QGrpcStatus::code() const noexcept
+    Returns the contained \l {QtGrpc::} {StatusCode}.
 */
 
 /*!
@@ -153,16 +109,16 @@ QGrpcStatus::operator QVariant() const
 /*!
     \since 6.8
     \fn bool QGrpcStatus::isOk() const noexcept
-    Returns \c true if code() is equal to \l {Ok}.
+    Returns \c true if code() is equal to \l {QtGrpc::StatusCode::} {Ok}.
 */
 
 /*!
-    \fn bool QGrpcStatus::operator==(const QGrpcStatus &lhs, const StatusCode &rhs) noexcept
+    \fn bool QGrpcStatus::operator==(const QGrpcStatus &lhs, const QtGrpc::StatusCode &rhs) noexcept
     Returns \c true if the status codes in \a lhs and \a rhs are equal.
 */
 
 /*!
-    \fn bool QGrpcStatus::operator!=(const QGrpcStatus &lhs, const StatusCode &rhs) noexcept
+    \fn bool QGrpcStatus::operator!=(const QGrpcStatus &lhs, const QtGrpc::StatusCode &rhs) noexcept
     Returns \c true if the status codes in \a lhs and \a rhs are not equal.
 */
 
