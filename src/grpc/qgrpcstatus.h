@@ -44,8 +44,10 @@ public:
     }
 
     [[nodiscard]] QtGrpc::StatusCode code() const noexcept { return m_code; }
-    [[nodiscard]] QString message() const noexcept { return m_message; }
     [[nodiscard]] bool isOk() const noexcept { return code() == QtGrpc::StatusCode::Ok; }
+
+    [[nodiscard]] const QString &message() const & noexcept { return m_message; }
+    [[nodiscard]] QString message() && noexcept { return std::move(m_message); }
 
 private:
     QtGrpc::StatusCode m_code;
