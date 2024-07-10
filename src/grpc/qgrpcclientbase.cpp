@@ -103,7 +103,7 @@ QGrpcStatus QGrpcClientBasePrivate::checkThread(QLatin1StringView warningPreambl
 
     QGrpcStatus status;
     if (q->thread() != QThread::currentThread()) {
-        status = QGrpcStatus{ QGrpcStatus::Unknown, threadSafetyWarning(warningPreamble) };
+        status = QGrpcStatus{ QtGrpc::StatusCode::Unknown, threadSafetyWarning(warningPreamble) };
         qGrpcCritical() << status.message();
         emit q->errorOccurred(status);
     }
@@ -115,7 +115,7 @@ bool QGrpcClientBasePrivate::checkChannel()
     Q_Q(QGrpcClientBase);
 
     if (!channel) {
-        emit q->errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
+        emit q->errorOccurred(QGrpcStatus{ QtGrpc::StatusCode::Unknown,
                                            q->tr("No channel(s) attached.") });
         return false;
     }
@@ -140,7 +140,7 @@ void QGrpcClientBasePrivate::addStream(QGrpcOperation *grpcStream)
     *finishedConnection = QObject::connect(grpcStream, &QGrpcOperation::finished, q,
                                            [this, grpcStream, q,
                                             finishedConnection](const auto &status) mutable {
-                                               if (status != QGrpcStatus::StatusCode::Ok)
+                                               if (status != QtGrpc::StatusCode::Ok)
                                                    Q_EMIT q->errorOccurred(status);
                                                Q_ASSERT(activeStreams.contains(grpcStream));
                                                activeStreams.remove(grpcStream);
@@ -172,7 +172,7 @@ void QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channe
     if (channel->dPtr->threadId != QThread::currentThreadId()) {
         const QString status = threadSafetyWarning("QGrpcClientBase::attachChannel"_L1);
         qGrpcCritical() << status;
-        emit errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown, status });
+        emit errorOccurred(QGrpcStatus{ QtGrpc::StatusCode::Unknown, status });
         return;
     }
     Q_D(QGrpcClientBase);
@@ -200,7 +200,7 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
                                                       const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
-    if (d->checkThread("QGrpcClientBase::call"_L1) != QGrpcStatus::Ok)
+    if (d->checkThread("QGrpcClientBase::call"_L1) != QtGrpc::StatusCode::Ok)
         return {};
 
     if (!d->checkChannel())
@@ -215,7 +215,7 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
     auto errorConnection = std::make_shared<QMetaObject::Connection>();
     *errorConnection = connect(reply.get(), &QGrpcCallReply::finished, this,
                                [this, reply, errorConnection](const QGrpcStatus &status) {
-                                   if (status != QGrpcStatus::StatusCode::Ok)
+                                   if (status != QtGrpc::StatusCode::Ok)
                                        emit errorOccurred(status);
                                    QObject::disconnect(*errorConnection);
                                });
@@ -228,7 +228,7 @@ QGrpcClientBase::startServerStream(QLatin1StringView method, const QProtobufMess
 {
     Q_D(QGrpcClientBase);
 
-    if (d->checkThread("QGrpcClientBase::startStream<QGrpcServerStream>"_L1) != QGrpcStatus::Ok)
+    if (d->checkThread("QGrpcClientBase::startStream<QGrpcServerStream>"_L1) != QtGrpc::StatusCode::Ok)
         return {};
 
     if (!d->checkChannel())
@@ -249,7 +249,7 @@ QGrpcClientBase::startClientStream(QLatin1StringView method, const QProtobufMess
 {
     Q_D(QGrpcClientBase);
 
-    if (d->checkThread("QGrpcClientBase::startStream<QGrpcClientStream>"_L1) != QGrpcStatus::Ok)
+    if (d->checkThread("QGrpcClientBase::startStream<QGrpcClientStream>"_L1) != QtGrpc::StatusCode::Ok)
         return {};
 
     if (!d->checkChannel())
@@ -270,7 +270,7 @@ std::shared_ptr<QGrpcBidirStream> QGrpcClientBase::startBidirStream(QLatin1Strin
 {
     Q_D(QGrpcClientBase);
 
-    if (d->checkThread("QGrpcClientBase::startStream<QGrpcBidirStream>"_L1) != QGrpcStatus::Ok)
+    if (d->checkThread("QGrpcClientBase::startStream<QGrpcBidirStream>"_L1) != QtGrpc::StatusCode::Ok)
         return {};
 
     if (!d->checkChannel())
@@ -290,7 +290,7 @@ std::optional<QByteArray> QGrpcClientBase::trySerialize(const QProtobufMessage &
     Q_D(const QGrpcClientBase);
     auto serializer = d->serializer();
     if (serializer == nullptr) {
-        emit errorOccurred(QGrpcStatus{ QGrpcStatus::Unknown,
+        emit errorOccurred(QGrpcStatus{ QtGrpc::StatusCode::Unknown,
                                         tr("Serializing failed. Serializer is not ready.") });
         return std::nullopt;
     }

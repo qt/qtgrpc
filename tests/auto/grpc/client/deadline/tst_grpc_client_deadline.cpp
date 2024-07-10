@@ -48,7 +48,7 @@ void QtGrpcClientDeadlineTest::channelDeadlineCallExceeds()
     QCOMPARE_EQ(finSpy.count(), 1);
 
     const auto code = qvariant_cast<QGrpcStatus>(finSpy.at(0).first());
-    QCOMPARE_EQ(code.code(), QGrpcStatus::DeadlineExceeded);
+    QCOMPARE_EQ(code.code(), QtGrpc::StatusCode::DeadlineExceeded);
     QCOMPARE_EQ(code.message(), QString("Deadline Exceeded"));
 }
 
@@ -78,7 +78,7 @@ void QtGrpcClientDeadlineTest::channelDeadlineServerStreamExceeds()
     QCOMPARE_EQ(finSpy.count(), 1);
 
     const auto code = qvariant_cast<QGrpcStatus>(finSpy.at(0).first());
-    QCOMPARE_EQ(code.code(), QGrpcStatus::DeadlineExceeded);
+    QCOMPARE_EQ(code.code(), QtGrpc::StatusCode::DeadlineExceeded);
 }
 
 void QtGrpcClientDeadlineTest::channelDeadlineServerStreamFinishes()
@@ -118,7 +118,7 @@ void QtGrpcClientDeadlineTest::callDeadlineClientStreamExceeds()
     QCOMPARE_EQ(finSpy.count(), 1);
 
     const auto code = qvariant_cast<QGrpcStatus>(finSpy.at(0).first());
-    QCOMPARE_EQ(code.code(), QGrpcStatus::DeadlineExceeded);
+    QCOMPARE_EQ(code.code(), QtGrpc::StatusCode::DeadlineExceeded);
 }
 
 void QtGrpcClientDeadlineTest::callDeadlineClientStreamFinishes()
@@ -159,7 +159,7 @@ void QtGrpcClientDeadlineTest::callDeadlineBiStreamExceeds()
     QCOMPARE_EQ(finSpy.count(), 1);
 
     const auto code = qvariant_cast<QGrpcStatus>(finSpy.at(0).first());
-    QCOMPARE_EQ(code.code(), QGrpcStatus::DeadlineExceeded);
+    QCOMPARE_EQ(code.code(), QtGrpc::StatusCode::DeadlineExceeded);
     QCOMPARE_EQ(msgSpy.count(), 2);
 }
 
@@ -204,7 +204,7 @@ void QtGrpcClientDeadlineTest::clientCancelBeforeTimeout()
     QCOMPARE_EQ(finSpy.count(), 1);
 
     const auto code = qvariant_cast<QGrpcStatus>(finSpy.at(0).first());
-    QCOMPARE_EQ(code.code(), QGrpcStatus::Cancelled);
+    QCOMPARE_EQ(code.code(), QtGrpc::StatusCode::Cancelled);
 }
 
 QTEST_MAIN(QtGrpcClientDeadlineTest)

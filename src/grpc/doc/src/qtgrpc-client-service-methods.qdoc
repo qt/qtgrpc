@@ -35,7 +35,7 @@ gRPC lets you define four kinds of service methods:
 gRPC communication always starts at the client side and ends at the server side.
 The client initiates the communication by sending the first message to the
 server. The server ends the communication of any type by replying with the
-\l{QGrpcStatus::StatusCode}{status code}.
+\l{QtGrpc::StatusCode}{status code}.
 
 To use the Qt GRPC C++ API, start with defining the \c pingpong.proto schema for
 your project:
@@ -144,7 +144,7 @@ message using the \l{QGrpcCallReply::read} method.
 If the server does not respond or the request caused an error in the server, the
 \l{QGrpcCallReply::errorOccurred} signal is emitted with the corresponding
 \l{QGrpcStatus}{status code}. If the server answered with the
-\l{QGrpcStatus::Ok} code, the \c{QGrpcCallReply::errorOccurred}
+\l{QtGrpc::StatusCode::Ok} code, the \c{QGrpcCallReply::errorOccurred}
 signal is not emitted.
 
 \section2 Call reply handling using callbacks

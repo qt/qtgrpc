@@ -57,7 +57,7 @@ void QtGrpcClientClientStreamTest::valid()
 
     auto args = streamFinishedSpy.takeFirst();
     QCOMPARE(args.count(), 1);
-    QVERIFY(args.takeFirst().value<QGrpcStatus>() == QGrpcStatus::StatusCode::Ok);
+    QVERIFY(args.takeFirst().value<QGrpcStatus>() == QtGrpc::StatusCode::Ok);
 
     const auto result = stream->read<SimpleStringMessage>();
     QCOMPARE_EQ(result->testFieldString(), "Stream11Stream22Stream33Stream44");
@@ -86,7 +86,7 @@ void QtGrpcClientClientStreamTest::sequentialSend()
 
     auto args = streamFinishedSpy.takeFirst();
     QCOMPARE(args.count(), 1);
-    QVERIFY(args.takeFirst().value<QGrpcStatus>() == QGrpcStatus::StatusCode::Ok);
+    QVERIFY(args.takeFirst().value<QGrpcStatus>() == QtGrpc::StatusCode::Ok);
 
     const auto result = stream->read<SimpleStringMessage>();
     QVERIFY(result.has_value());
@@ -119,7 +119,7 @@ void QtGrpcClientClientStreamTest::sequentialSendWithDone()
 
     auto args = streamFinishedSpy.first();
     QCOMPARE(args.count(), 1);
-    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QtGrpc::StatusCode::Ok);
 
     std::optional<SimpleStringMessage> result = stream->read<SimpleStringMessage>();
     QCOMPARE_EQ(result->testFieldString(), "Stream1Stream2Stream3");
@@ -158,7 +158,7 @@ void QtGrpcClientClientStreamTest::sequentialSendWithDoneWhenChannelNotReady()
 
     auto args = streamFinishedSpy.first();
     QCOMPARE(args.count(), 1);
-    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Ok);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QtGrpc::StatusCode::Ok);
 
     std::optional<SimpleStringMessage> result = stream->read<SimpleStringMessage>();
     QCOMPARE_EQ(result->testFieldString(), "Stream11Stream22Stream33");

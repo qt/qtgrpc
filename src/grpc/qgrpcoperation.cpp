@@ -121,7 +121,7 @@ void QGrpcOperation::cancel()
         Q_D(QGrpcOperation);
         d->isFinished.storeRelaxed(true);
         emit d->operationContext->cancelRequested();
-        Q_EMIT finished(QGrpcStatus{ QGrpcStatus::Cancelled,
+        Q_EMIT finished(QGrpcStatus{ QtGrpc::StatusCode::Cancelled,
                                      tr("Operation is cancelled by client") });
     }
 }

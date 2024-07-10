@@ -7,6 +7,7 @@
 #include <QtTest/qtest.h>
 
 using namespace Qt::StringLiterals;
+using namespace QtGrpc;
 
 class QGrpcStatusTest : public QObject
 {
@@ -26,10 +27,10 @@ void QGrpcStatusTest::defaultConstructedIsOk() const
 {
     QGrpcStatus s1;
     QVERIFY(s1.message().isEmpty());
-    QCOMPARE_EQ(s1.code(), QGrpcStatus::Ok);
+    QCOMPARE_EQ(s1.code(), StatusCode::Ok);
     QVERIFY(s1.isOk());
 
-    QGrpcStatus s2(QGrpcStatus::Ok);
+    QGrpcStatus s2(StatusCode::Ok);
     QCOMPARE_EQ(s1.code(), s2.code());
     QCOMPARE_EQ(s1.message(), s2.message());
 }
@@ -42,8 +43,8 @@ void QGrpcStatusTest::hasSpecialMemberFunctions() const
     };
 
     QString msg = u"(◕д◕✿)😀"_s;
-    QGrpcStatus s1 = { QGrpcStatus::PermissionDenied, msg };
-    QCOMPARE_EQ(s1.code(), QGrpcStatus::PermissionDenied);
+    QGrpcStatus s1 = { StatusCode::PermissionDenied, msg };
+    QCOMPARE_EQ(s1.code(), StatusCode::PermissionDenied);
     QCOMPARE_EQ(s1.message(), msg);
     QVERIFY(!s1.isOk());
 
@@ -60,7 +61,7 @@ void QGrpcStatusTest::hasSpecialMemberFunctions() const
 
 void QGrpcStatusTest::hasImplicitQVariant() const
 {
-    QGrpcStatus s1(QGrpcStatus::DataLoss, "testcase");
+    QGrpcStatus s1(StatusCode::DataLoss, "testcase");
     QVariant var1 = s1;
     QVERIFY(var1.isValid());
     const auto s2 = var1.value<QGrpcStatus>();
@@ -70,11 +71,11 @@ void QGrpcStatusTest::hasImplicitQVariant() const
 
 void QGrpcStatusTest::hasMemberSwap() const
 {
-    QGrpcStatus s1(QGrpcStatus::DataLoss, "testcase");
+    QGrpcStatus s1(StatusCode::DataLoss, "testcase");
     QGrpcStatus s2(s1);
     QGrpcStatus s3 = {};
     s1.swap(s3);
-    QCOMPARE_EQ(s1.code(), QGrpcStatus::Ok);
+    QCOMPARE_EQ(s1.code(), StatusCode::Ok);
     QVERIFY(s1.message().isEmpty());
     QCOMPARE_EQ(s3.code(), s2.code());
     QCOMPARE_EQ(s3.message(), s2.message());
@@ -83,22 +84,22 @@ void QGrpcStatusTest::hasMemberSwap() const
 void QGrpcStatusTest::equalityComparable() const
 {
     QGrpcStatus s1;
-    QGrpcStatus s2(QGrpcStatus::Internal);
+    QGrpcStatus s2(StatusCode::Internal);
     QCOMPARE_NE(s1, s2);
     s1 = s2;
     QCOMPARE_EQ(s1, s2);
-    s1 = { QGrpcStatus::Internal, "message is ignored" };
+    s1 = { StatusCode::Internal, "message is ignored" };
     QCOMPARE_EQ(s1, s2);
 }
 
 void QGrpcStatusTest::qHashOnlyStatusCodes() const
 {
     QGrpcStatus s1;
-    QGrpcStatus s2(QGrpcStatus::Internal);
+    QGrpcStatus s2(StatusCode::Internal);
     const auto hash1 = qHash(s1);
     const auto hash2 = qHash(s2);
     QCOMPARE_NE(hash1, hash2);
-    QGrpcStatus s3(QGrpcStatus::Internal, "ignored");
+    QGrpcStatus s3(StatusCode::Internal, "ignored");
     const auto hash3 = qHash(s3);
     QCOMPARE_EQ(hash2, hash3);
     QCOMPARE_NE(hash1, hash3);
@@ -107,7 +108,7 @@ void QGrpcStatusTest::qHashOnlyStatusCodes() const
 void QGrpcStatusTest::streamsToDebug() const
 {
     QGrpcStatus s1;
-    QGrpcStatus s2 = { QGrpcStatus::OutOfRange, "test" };
+    QGrpcStatus s2 = { StatusCode::OutOfRange, "test" };
 
     QByteArray storage;
     QBuffer buf(&storage);
@@ -123,8 +124,8 @@ void QGrpcStatusTest::streamsToDebug() const
 void QGrpcStatusTest::streamsToDataStream() const
 {
     QGrpcStatus s1;
-    QGrpcStatus s2 = { QGrpcStatus::OutOfRange };
-    QGrpcStatus s3 = { QGrpcStatus::Unimplemented, "test" };
+    QGrpcStatus s2 = { StatusCode::OutOfRange };
+    QGrpcStatus s3 = { StatusCode::Unimplemented, "test" };
 
     QByteArray storage;
     QBuffer buf(&storage);

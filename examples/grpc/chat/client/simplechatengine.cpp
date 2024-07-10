@@ -64,9 +64,9 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
                      [this, stream] (const QGrpcStatus &status) {
                          qCritical()
                                  << "Stream error(" << status.code() << "):" << status.message();
-                         if (status.code() == QGrpcStatus::Unauthenticated) {
+                         if (status.code() == QtGrpc::StatusCode::Unauthenticated) {
                              emit authFailed();
-                         } else if (status.code() != QGrpcStatus::Ok) {
+                         } else if (status.code() != QtGrpc::StatusCode::Ok) {
                              emit networkError(status.message());
                              setState(Disconnected);
                          } else {

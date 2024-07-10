@@ -6,6 +6,7 @@
 #define QGRPCSTATUS_H
 
 #include <QtGrpc/qtgrpcglobal.h>
+#include <QtGrpc/qtgrpcnamespace.h>
 
 #include <QtCore/qanystringview.h>
 #include <QtCore/qcompare.h>
@@ -23,32 +24,11 @@ class QVariant;
 class QGrpcStatus final
 {
     Q_GADGET_EXPORT(Q_GRPC_EXPORT)
-    Q_PROPERTY(StatusCode code READ code CONSTANT)
+    Q_PROPERTY(QtGrpc::StatusCode code READ code CONSTANT)
     Q_PROPERTY(QString message READ message CONSTANT)
 
 public:
-    enum StatusCode : uint8_t {
-        Ok = 0,
-        Cancelled = 1,
-        Unknown = 2,
-        InvalidArgument = 3,
-        DeadlineExceeded = 4,
-        NotFound = 5,
-        AlreadyExists = 6,
-        PermissionDenied = 7,
-        ResourceExhausted = 8,
-        FailedPrecondition = 9,
-        Aborted = 10,
-        OutOfRange = 11,
-        Unimplemented = 12,
-        Internal = 13,
-        Unavailable = 14,
-        DataLoss = 15,
-        Unauthenticated = 16,
-    };
-    Q_ENUM(StatusCode)
-
-    Q_GRPC_EXPORT Q_IMPLICIT QGrpcStatus(StatusCode code = Ok, QAnyStringView message = {});
+    Q_GRPC_EXPORT Q_IMPLICIT QGrpcStatus(QtGrpc::StatusCode code = {}, QAnyStringView message = {});
     Q_GRPC_EXPORT ~QGrpcStatus();
     Q_GRPC_EXPORT QGrpcStatus(const QGrpcStatus &other);
     Q_GRPC_EXPORT QGrpcStatus &operator=(const QGrpcStatus &other);
@@ -63,15 +43,15 @@ public:
         m_message.swap(other.m_message);
     }
 
-    [[nodiscard]] StatusCode code() const noexcept { return m_code; }
+    [[nodiscard]] QtGrpc::StatusCode code() const noexcept { return m_code; }
     [[nodiscard]] QString message() const noexcept { return m_message; }
-    [[nodiscard]] bool isOk() const noexcept { return code() == Ok; }
+    [[nodiscard]] bool isOk() const noexcept { return code() == QtGrpc::StatusCode::Ok; }
 
 private:
-    QGrpcStatus::StatusCode m_code;
+    QtGrpc::StatusCode m_code;
     QString m_message;
 
-    friend bool comparesEqual(const QGrpcStatus &lhs, StatusCode rhs) noexcept
+    friend bool comparesEqual(const QGrpcStatus &lhs, QtGrpc::StatusCode rhs) noexcept
     {
         return lhs.code() == rhs;
     }
@@ -79,7 +59,7 @@ private:
     {
         return lhs.code() == rhs.code();
     }
-    Q_DECLARE_EQUALITY_COMPARABLE(QGrpcStatus, StatusCode)
+    Q_DECLARE_EQUALITY_COMPARABLE(QGrpcStatus, QtGrpc::StatusCode)
     Q_DECLARE_EQUALITY_COMPARABLE(QGrpcStatus)
 
     friend size_t qHash(const QGrpcStatus &key, size_t seed = 0) noexcept

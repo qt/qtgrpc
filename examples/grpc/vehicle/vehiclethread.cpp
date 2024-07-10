@@ -32,7 +32,7 @@ void VehicleThread::run()
     std::shared_ptr<QGrpcCallReply> replyFuel = m_client->getFuelLevel(fuelLvlRequest);
 
     connect(replyFuel.get(), &QGrpcCallReply::finished, [replyFuel, this] (const QGrpcStatus &status) {
-        if (status.code() == QGrpcStatus::StatusCode::Ok) {
+        if (status.code() == QtGrpc::StatusCode::Ok) {
             if (const auto fuelLvl = replyFuel->read<FuelLevelMsg>())
                 emit fuelLevelChanged(fuelLvl->fuelLevel());
         } else {
@@ -51,7 +51,7 @@ void VehicleThread::run()
     connect(m_streamSpeed.get(), &QGrpcServerStream::finished, this,
             [this](const QGrpcStatus &status) {
                 emit speedChanged(0);
-                if (status.code() != QGrpcStatus::StatusCode::Ok) {
+                if (status.code() != QtGrpc::StatusCode::Ok) {
                     emit connectionError(true);
                     emit fuelLevelChanged(0);
                     qWarning() << "Stream error(" << status.code() << "):" << status.message();

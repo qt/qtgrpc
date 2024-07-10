@@ -7,6 +7,7 @@
 #include <QtGrpc/qgrpchttp2channel.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
 #include <QtGrpc/qgrpcserializationformat.h>
+#include <QtGrpc/qtgrpcnamespace.h>
 
 #include <QtProtobuf/qprotobufjsonserializer.h>
 #include <QtProtobuf/qprotobufserializer.h>
@@ -119,9 +120,8 @@ constexpr QByteArrayView DefaultContentType = "application/grpc";
 //     https://www.rfc-editor.org/rfc/rfc7540#section-7
 //     https://github.com/grpc/grpc/blob/master/doc/statuscodes.md
 //     https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md
-constexpr QGrpcStatus::StatusCode http2ErrorToStatusCode(const quint32 http2Error)
+constexpr StatusCode http2ErrorToStatusCode(const quint32 http2Error)
 {
-    using StatusCode = QGrpcStatus::StatusCode;
     using Http2Error = Http2::Http2Error;
 
     switch (http2Error) {
@@ -246,7 +246,7 @@ private:
         QObject::connect(socket, &T::errorOccurred, operationContext,
                          [operationContextPtr = QPointer(operationContext)](auto error) {
                              emit operationContextPtr->finished(QGrpcStatus{
-                                 QGrpcStatus::StatusCode::Unavailable,
+                                 StatusCode::Unavailable,
                                  QGrpcHttp2ChannelPrivate::tr("Network error occurred %1")
                                      .arg(error) });
                          });
@@ -267,7 +267,6 @@ private:
         m_socket = std::move(p);
         return typedSocket;
     }
-
 
     std::unique_ptr<QIODevice> m_socket = nullptr;
     QHttp2Connection *m_connection = nullptr;
@@ -322,14 +321,13 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
                      [channelOpPtr, parentChannel, this](const HPack::HttpHeader &headers,
                                                          bool endStream) {
                          QGrpcMetadata md = channelOpPtr->serverMetadata();
-                         QGrpcStatus::StatusCode statusCode = QGrpcStatus::StatusCode::Ok;
+                         QtGrpc::StatusCode statusCode = StatusCode::Ok;
                          QString statusMessage;
                          for (const auto &header : headers) {
                              md.insert({ header.name, header.value });
                              if (header.name == GrpcStatusHeader) {
                                  statusCode = static_cast<
-                                     QGrpcStatus::StatusCode>(QString::fromLatin1(header.value)
-                                                                  .toShort());
+                                     StatusCode>(QString::fromLatin1(header.value).toShort());
                              } else if (header.name == GrpcStatusMessageHeader) {
                                  statusMessage = QString::fromUtf8(header.value);
                              }
@@ -351,10 +349,10 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
     *errorConnection = QObject::connect(
         m_stream.get(), &QHttp2Stream::errorOccurred, parentChannel,
         [parentChannel, errorConnection, this](quint32 http2ErrorCode, const QString &errorString) {
-            QGrpcStatus::StatusCode code = http2ErrorToStatusCode(http2ErrorCode);
             if (!m_operation.expired()) {
                 auto channelOp = m_operation.lock();
-                emit channelOp->finished(QGrpcStatus{ code, errorString });
+                emit channelOp->finished(QGrpcStatus{ http2ErrorToStatusCode(http2ErrorCode),
+                                                      errorString });
             }
             parentChannel->deleteHandler(this);
             QObject::disconnect(*errorConnection);
@@ -496,7 +494,7 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::sendInitialRequest()
     if (!m_stream->sendHEADERS(m_initialHeaders, false)) {
         operationContextAsyncError(operation(),
                                    QGrpcStatus{
-                                       QGrpcStatus::Unavailable,
+                                       StatusCode::Unavailable,
                                        tr("Unable to send initial headers to an HTTP/2 stream") });
         return;
     }
@@ -577,8 +575,8 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::onDeadlineTimeout()
     // cancel the stream by sending the RST_FRAME and report
     // the status back to our user.
     if (cancel()) {
-        emit m_operation.lock()->finished({ QGrpcStatus::DeadlineExceeded,
-                                                 "Deadline Exceeded" });
+        emit m_operation.lock()->finished({ StatusCode::DeadlineExceeded,
+                                            "Deadline Exceeded" });
     } else {
         qGrpcWarning("Cancellation failed on deadline timeout.");
     }
@@ -721,7 +719,7 @@ void QGrpcHttp2ChannelPrivate::processOperation(const std::shared_ptr<QGrpcOpera
 
     if (!m_socket->isWritable()) {
         operationContextAsyncError(operationContextPtr,
-                                   QGrpcStatus{ QGrpcStatus::StatusCode::Unavailable,
+                                   QGrpcStatus{ StatusCode::Unavailable,
                                                 m_socket->errorString() });
         return;
     }
@@ -792,7 +790,7 @@ void QGrpcHttp2ChannelPrivate::sendInitialRequest(Http2Handler *handler)
     if (!m_connection) {
         operationContextAsyncError(channelOpPtr,
                                    QGrpcStatus{
-                                       QGrpcStatus::Unavailable,
+                                       StatusCode::Unavailable,
                                        tr("Unable to establish an HTTP/2 connection") });
         return;
     }
@@ -801,7 +799,7 @@ void QGrpcHttp2ChannelPrivate::sendInitialRequest(Http2Handler *handler)
     if (!streamAttempt.ok()) {
         operationContextAsyncError(channelOpPtr,
                                    QGrpcStatus{
-                                       QGrpcStatus::Unavailable,
+                                       StatusCode::Unavailable,
                                        tr("Unable to create an HTTP/2 stream (%1)")
                                            .arg(QDebug::toString(streamAttempt.error())) });
         return;

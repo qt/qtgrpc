@@ -67,7 +67,7 @@ void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
     reply->subscribe(reply.get(),
                      [replyPtr = reply.get(), resultWeak = std::weak_ptr(result),
                       &waitForReply](const QGrpcStatus &status) {
-                         QCOMPARE_EQ(status.code(), QGrpcStatus::StatusCode::Ok);
+                         QCOMPARE_EQ(status.code(), QtGrpc::StatusCode::Ok);
                          auto resultOpt = replyPtr->read<SimpleStringMessage>();
                          QVERIFY(resultOpt.has_value());
                          if (auto resultVal = resultWeak.lock(); resultVal)
@@ -95,7 +95,7 @@ void QtGrpcClientUnaryCallTest::asyncWithSubscribeMember()
     QVERIFY(mTestBool);
     mTestBool = false;
     const auto code = qvariant_cast<QGrpcStatus>(finSpy.at(0).first());
-    QCOMPARE_EQ(code.code(), QGrpcStatus::Ok);
+    QCOMPARE_EQ(code.code(), QtGrpc::StatusCode::Ok);
 }
 
 void QtGrpcClientUnaryCallTest::immediateCancel()
@@ -117,11 +117,11 @@ void QtGrpcClientUnaryCallTest::immediateCancel()
     QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 1, FailTimeout);
 
     QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(),
-                QGrpcStatus::Cancelled);
+                QtGrpc::StatusCode::Cancelled);
 
     auto args = replyFinishedSpy.first();
     QCOMPARE(args.count(), 1);
-    QVERIFY(args.first().value<QGrpcStatus>() == QGrpcStatus::StatusCode::Cancelled);
+    QVERIFY(args.first().value<QGrpcStatus>() == QtGrpc::StatusCode::Cancelled);
 }
 
 void QtGrpcClientUnaryCallTest::deferredCancel()
@@ -139,7 +139,7 @@ void QtGrpcClientUnaryCallTest::deferredCancel()
     QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 1, FailTimeout);
     auto args = replyFinishedSpy.first();
     QCOMPARE(args.count(), 1);
-    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QGrpcStatus::StatusCode::Cancelled);
+    QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QtGrpc::StatusCode::Cancelled);
 }
 
 void QtGrpcClientUnaryCallTest::asyncClientStatusMessage()
