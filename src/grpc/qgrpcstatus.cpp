@@ -102,7 +102,8 @@ QGrpcStatus::operator QVariant() const
 */
 
 /*!
-    \fn QString QGrpcStatus::message() const noexcept
+    \fn const QString &QGrpcStatus::message() const & noexcept
+    \fn QString QGrpcStatus::message() && noexcept
     Returns the contained status message.
 */
 
