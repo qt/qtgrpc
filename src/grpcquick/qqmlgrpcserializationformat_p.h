@@ -28,9 +28,9 @@ QML_NAMED_ELEMENT(GrpcSerializationFormat)
 QML_ADDED_IN_VERSION(6, 8)
 
 enum GrpcSerializationFormat : quint8 {
-    Default = QGrpcSerializationFormat::Format::Default,
-    Protobuf = QGrpcSerializationFormat::Format::Protobuf,
-    Json = QGrpcSerializationFormat::Format::Json
+    Default = qToUnderlying(QtGrpc::SerializationFormat::Default),
+    Protobuf = qToUnderlying(QtGrpc::SerializationFormat::Protobuf),
+    Json = qToUnderlying(QtGrpc::SerializationFormat::Json),
 };
 Q_ENUM_NS(GrpcSerializationFormat)
 };

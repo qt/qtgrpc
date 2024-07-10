@@ -3,6 +3,7 @@
 
 #include "qqmlgrpcchanneloptions_p.h"
 #include "qqmlgrpcmetadata_p.h"
+#include <QtGrpc/qgrpcserializationformat.h>
 #include <QtCore/private/qobject_p.h>
 
 #include <chrono>
@@ -82,8 +83,7 @@ void QQmlGrpcChannelOptions::setSerializationFormat(QQmlSerializationFormat::Grp
     Q_D(QQmlGrpcChannelOptions);
     if (d->m_format != format) {
         d->m_format = format;
-        d->m_options.setSerializationFormat(QGrpcSerializationFormat{
-            static_cast<QGrpcSerializationFormat::Format>(format) });
+        d->m_options.setSerializationFormat(static_cast<QtGrpc::SerializationFormat>(format));
         emit serializationFormatChanged();
     }
 }

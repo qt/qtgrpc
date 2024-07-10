@@ -1,0 +1,31 @@
+// Copyright (C) 2024 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
+
+/*!
+    \inmodule QtGrpc
+    \namespace QtGrpc
+    \keyword QtGrpc Namespace
+    \inheaderfile QtGrpcNamespace
+
+    \brief The QtGrpc namespace contains miscellaneous identifiers
+    used throughout the QtGrpc library.
+*/
+
+/*!
+    \enum QtGrpc::SerializationFormat
+
+    \brief Contains preset values for setting the protobuf serializer format.
+
+    \sa QGrpcSerializationFormat
+
+    \value Default   The default QGrpcSerializationFormat preset. This preset
+                     constructs a \l QProtobufSerializer with an empty content
+                     type suffix.
+    \value Protobuf  The embedded protobuf QGrpcSerializationFormat preset. This
+                     preset constructs a \l QProtobufSerializer with the \c proto
+                     content type suffix.
+    \value Json      The embedded JSON QGrpcSerializationFormat preset. This
+                     preset constructs a \l QProtobufJsonSerializer with the
+                     \c json content type suffix.
+*/
+
