@@ -25,7 +25,7 @@ public:
         Json,
     };
 
-    Q_GRPC_EXPORT explicit QGrpcSerializationFormat(Format format = Format::Default);
+    Q_GRPC_EXPORT Q_IMPLICIT QGrpcSerializationFormat(Format format = Format::Default);
     Q_GRPC_EXPORT QGrpcSerializationFormat(QByteArrayView suffix,
                                            std::shared_ptr<QAbstractProtobufSerializer> serializer);
     Q_GRPC_EXPORT ~QGrpcSerializationFormat();
