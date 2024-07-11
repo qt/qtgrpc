@@ -1,10 +1,13 @@
 // Copyright (C) 2024 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
+#include <QtGrpc/qgrpcstatus.h>
+
+#include <QtTest/qtest.h>
+
 #include <QtCore/qbuffer.h>
 #include <QtCore/qobject.h>
-#include <QtGrpc/qgrpcstatus.h>
-#include <QtTest/qtest.h>
+#include <QtCore/qttypetraits.h>
 
 using namespace Qt::StringLiterals;
 using namespace QtGrpc;
@@ -22,6 +25,24 @@ private Q_SLOTS:
     void streamsToDebug() const;
     void streamsToDataStream() const;
 };
+
+static_assert(qToUnderlying(StatusCode::Ok) == 0);
+static_assert(qToUnderlying(StatusCode::Cancelled) == 1);
+static_assert(qToUnderlying(StatusCode::Unknown) == 2);
+static_assert(qToUnderlying(StatusCode::InvalidArgument) == 3);
+static_assert(qToUnderlying(StatusCode::DeadlineExceeded) == 4);
+static_assert(qToUnderlying(StatusCode::NotFound) == 5);
+static_assert(qToUnderlying(StatusCode::AlreadyExists) == 6);
+static_assert(qToUnderlying(StatusCode::PermissionDenied) == 7);
+static_assert(qToUnderlying(StatusCode::ResourceExhausted) == 8);
+static_assert(qToUnderlying(StatusCode::FailedPrecondition) == 9);
+static_assert(qToUnderlying(StatusCode::Aborted) == 10);
+static_assert(qToUnderlying(StatusCode::OutOfRange) == 11);
+static_assert(qToUnderlying(StatusCode::Unimplemented) == 12);
+static_assert(qToUnderlying(StatusCode::Internal) == 13);
+static_assert(qToUnderlying(StatusCode::Unavailable) == 14);
+static_assert(qToUnderlying(StatusCode::DataLoss) == 15);
+static_assert(qToUnderlying(StatusCode::Unauthenticated) == 16);
 
 void QGrpcStatusTest::defaultConstructedIsOk() const
 {
