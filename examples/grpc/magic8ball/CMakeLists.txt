@@ -13,6 +13,7 @@ set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/grpc/magic8ball")
 find_package(Qt6 REQUIRED COMPONENTS
     Core
     Protobuf
+    ProtobufQuick
     Grpc
     GrpcQuick
     GrpcTools
