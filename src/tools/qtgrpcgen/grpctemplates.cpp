@@ -90,16 +90,16 @@ const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
 
 const char *GrpcTemplates::ClientMethodStreamDeclarationTemplate()
 {
-    return "std::shared_ptr<$stream_type$> $method_name$(const $param_type$ "
+    return "std::shared_ptr<QGrpc$stream_type$Stream> $method_name$(const $param_type$ "
            "&$param_name$, const QGrpcCallOptions &options = {});\n";
 }
 
 const char *GrpcTemplates::ClientMethodStreamDefinitionTemplate()
 {
-    return "std::shared_ptr<$stream_type$> $classname$::$method_name$("
+    return "std::shared_ptr<QGrpc$stream_type$Stream> $classname$::$method_name$("
            "const $param_type$ &$param_name$, const QGrpcCallOptions &options)\n"
            "{\n"
-           "    return startStream<$stream_type$>(\"$method_name$\"_L1, "
+           "    return startStream<QGrpc$stream_type$Stream>(\"$method_name$\"_L1, "
            "$param_name$, options);\n"
            "}\n\n";
 }
@@ -109,20 +109,15 @@ const char *GrpcTemplates::StreamSenderDeclarationQmlTemplate()
     // We use the Q_MOC_RUN trick here to fool qmltyperegistrar. The template base class doesn't
     // have any meta-type extras, and it cannot have them. So from the meta-type information
     // perspective it behaves in exactly the same way as QObject.
-    return "class $export_macro$ $sender_class_name$ : public\n"
-           "#ifdef Q_MOC_RUN\n"
-           "    QObject\n"
-           "#else\n"
-           "    QQmlGrpcStreamSender<$stream_type$, $param_type$>\n"
-           "#endif\n"
+    return "class $export_macro$ $sender_class_name$ : public QQmlGrpc$stream_type$StreamSender\n"
            "{\n"
            "    Q_OBJECT\n"
            "    QML_NAMED_ELEMENT($sender_qml_name$)\n"
            "    QML_UNCREATABLE(\"$sender_qml_name$ can only be created by gRPC "
            "client instance\")\n"
            "public:\n"
-           "    $sender_class_name$(std::shared_ptr<$stream_type$> stream) : "
-           "QQmlGrpcStreamSender(std::move(stream)) {}\n"
+           "    $sender_class_name$(std::shared_ptr<QGrpc$stream_type$Stream> stream) : "
+           "QQmlGrpc$stream_type$StreamSender(std::move(stream)) {}\n"
            "    Q_INVOKABLE void writeMessage(const $param_type$ &$param_name$)\n"
            "    {\n"
            "        writeMessageImpl($param_name$);\n"

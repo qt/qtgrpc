@@ -351,11 +351,11 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
 
     std::string streamType;
     if (method->client_streaming() && method->server_streaming()) {
-        streamType = "QGrpcBidirStream";
+        streamType = "Bidir";
     } else if (method->server_streaming()) {
-        streamType = "QGrpcServerStream";
+        streamType = "Server";
     } else if (method->client_streaming()) {
-        streamType = "QGrpcClientStream";
+        streamType = "Client";
     }
 
     const std::string exportMacro = common::buildExportMacro(Options::instance().exportMacro());

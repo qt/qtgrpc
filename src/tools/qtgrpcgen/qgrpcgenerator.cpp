@@ -26,7 +26,7 @@ using namespace ::google::protobuf::compiler;
 
 static const std::set<std::string> externalQmlIncludes = {
     "QtQml/qqmlengine.h", "QtQml/qjsengine.h", "QtQml/qjsvalue.h",
-    "QtGrpcQuick/qqmlgrpcfunctionalhandlers.h", "QtGrpcQuick/qqmlgrpcstreamsender.h"
+    "QtGrpcQuick/qqmlgrpcfunctionalhandlers.h", "QtGrpcQuick/qtqmlgrpcstreamsender.h"
 };
 
 static const std::set<std::string> externalIncludes = {"QtGrpc/qgrpcclientbase.h",
