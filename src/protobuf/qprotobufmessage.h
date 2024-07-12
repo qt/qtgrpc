@@ -186,7 +186,7 @@ public:
     {
         m_key = key;
     }
-    void setKey(const KeyType &&key)
+    void setKey(KeyType &&key)
     {
         m_key = std::move(key);
     }
@@ -194,7 +194,7 @@ public:
     {
         m_value = value;
     }
-    void setValue(const ValueType &&value)
+    void setValue(ValueType &&value)
     {
         m_value = std::move(value);
     }
