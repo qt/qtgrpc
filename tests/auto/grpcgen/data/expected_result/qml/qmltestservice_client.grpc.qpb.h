@@ -6,43 +6,33 @@
 #include <QtProtobuf/qprotobufmessage.h>
 #include "testservice_client.grpc.qpb.h"
 #include <QtGrpcQuick/qqmlgrpcfunctionalhandlers.h>
-#include <QtGrpcQuick/qqmlgrpcstreamsender.h>
+#include <QtGrpcQuick/qtqmlgrpcstreamsender.h>
 #include <QtQml/qjsengine.h>
 #include <QtQml/qjsvalue.h>
 #include <QtQml/qqmlengine.h>
 
 namespace qtgrpc::tests {
 namespace TestService {
-class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodClientStreamSender : public
-#ifdef Q_MOC_RUN
-    QObject
-#else
-    QQmlGrpcStreamSender<QGrpcClientStream, qtgrpc::tests::SimpleStringMessage>
-#endif
+class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodClientStreamSender : public QQmlGrpcClientStreamSender
 {
     Q_OBJECT
     QML_NAMED_ELEMENT(TestServiceTestMethodClientStreamSender)
     QML_UNCREATABLE("TestServiceTestMethodClientStreamSender can only be created by gRPC client instance")
 public:
-    TestMethodClientStreamSender(std::shared_ptr<QGrpcClientStream> stream) : QQmlGrpcStreamSender(std::move(stream)) {}
+    TestMethodClientStreamSender(std::shared_ptr<QGrpcClientStream> stream) : QQmlGrpcClientStreamSender(std::move(stream)) {}
     Q_INVOKABLE void writeMessage(const qtgrpc::tests::SimpleStringMessage &arg)
     {
         writeMessageImpl(arg);
     }
 };
 
-class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodBiStreamSender : public
-#ifdef Q_MOC_RUN
-    QObject
-#else
-    QQmlGrpcStreamSender<QGrpcBidirStream, qtgrpc::tests::SimpleStringMessage>
-#endif
+class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodBiStreamSender : public QQmlGrpcBidirStreamSender
 {
     Q_OBJECT
     QML_NAMED_ELEMENT(TestServiceTestMethodBiStreamSender)
     QML_UNCREATABLE("TestServiceTestMethodBiStreamSender can only be created by gRPC client instance")
 public:
-    TestMethodBiStreamSender(std::shared_ptr<QGrpcBidirStream> stream) : QQmlGrpcStreamSender(std::move(stream)) {}
+    TestMethodBiStreamSender(std::shared_ptr<QGrpcBidirStream> stream) : QQmlGrpcBidirStreamSender(std::move(stream)) {}
     Q_INVOKABLE void writeMessage(const qtgrpc::tests::SimpleStringMessage &arg)
     {
         writeMessageImpl(arg);
