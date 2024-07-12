@@ -18,7 +18,7 @@ qhp.QtProtobuf.virtualFolder       = qtprotobuf
 qhp.QtProtobuf.indexTitle          = Qt Protobuf
 qhp.QtProtobuf.indexRoot           =
 
-qhp.QtProtobuf.subprojects = qmltypes examples classes \
+qhp.QtProtobuf.subprojects = manual examples qmltypes classes \
                              protobufcoreclasses protobufguiclasses \
                              wellknowntypes
 
@@ -51,6 +51,10 @@ qhp.QtProtobuf.subprojects.wellknowntypes.indexTitle = Qt Protobuf Well-known Ty
 qhp.QtProtobuf.subprojects.wellknowntypes.selectors  = module:QtProtobufWellKnownTypes
 qhp.QtProtobuf.subprojects.wellknowntypes.sortPages  = true
 
+qhp.QtProtobuf.subprojects.manual.title = Qt Protobuf
+qhp.QtProtobuf.subprojects.manual.indexTitle = Qt Protobuf module topics
+qhp.QtProtobuf.subprojects.manual.type = manual
+
 depends += qtdoc qtcore qtgui qtcmake qtgrpc qtwidgets qtqml qtquickcontrols
 
 {headerdirs,sourcedirs} += .. \
@@ -68,6 +72,9 @@ imagedirs   += images \
 navigation.landingpage = "Qt Protobuf"
 navigation.cppclassespage = "Qt Protobuf C++ Classes"
 navigation.qmltypespage = "Qt Protobuf QML Types"
+# Auto-generate navigation linking based on "Qt Protobuf module topics":
+navigation.toctitles = "Qt Protobuf module topics"
+navigation.toctitles.inclusive = false
 
 manifestmeta.highlighted.names = "QtProtobuf/Sensors"
 
