@@ -16,12 +16,12 @@ QT_BEGIN_NAMESPACE
 
 namespace QtGrpcQuickFunctional {
 
-template <typename Ret, typename Operation>
-void readReturnValue(QJSEngine *jsEngine, Operation *operation, const QJSValue &successCallback,
-                     const QJSValue &errorCallback)
+template <typename Ret>
+void readReturnValue(QJSEngine *jsEngine, QGrpcOperation *operation,
+                     const QJSValue &successCallback, const QJSValue &errorCallback)
 {
     if (successCallback.isCallable()) {
-        std::optional<Ret> result = operation->template read<Ret>();
+        std::optional<Ret> result = operation->read<Ret>();
         if (result) {
             successCallback.call(QJSValueList{ jsEngine->toScriptValue(*result) });
         } else if (errorCallback.isCallable()) {
@@ -49,11 +49,9 @@ void makeCallConnections(QJSEngine *jsEngine, const std::shared_ptr<QGrpcCallRep
                                              // We take 'reply' by copy so that its lifetime
                                              // is extended until this lambda is destroyed.
                                              if (status.code() == QtGrpc::StatusCode::Ok) {
-                                                 readReturnValue<Ret,
-                                                                 QGrpcCallReply>(jsEngine,
-                                                                                 reply.get(),
-                                                                                 finishCallback,
-                                                                                 errorCallback);
+                                                 readReturnValue<Ret>(jsEngine, reply.get(),
+                                                                      finishCallback,
+                                                                      errorCallback);
                                              } else {
                                                  if (errorCallback.isCallable())
                                                      errorCallback.call(QJSValueList{
@@ -87,8 +85,7 @@ void makeServerStreamConnections(QJSEngine *jsEngine,
                                          });
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, jsEngine,
                      [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback]() {
-                         readReturnValue<Ret, QGrpcServerStream>(jsEngine, streamPtr,
-                                                                 messageCallback, errorCallback);
+                         readReturnValue<Ret>(jsEngine, streamPtr, messageCallback, errorCallback);
                      });
 }
 
@@ -106,11 +103,9 @@ Sender *makeClientStreamConnections(QJSEngine *jsEngine,
                                              // We take 'stream' by copy so that its lifetime
                                              // is extended until this lambda is destroyed.
                                              if (status.code() == QtGrpc::StatusCode::Ok) {
-                                                 readReturnValue<Ret,
-                                                                 QGrpcClientStream>(jsEngine,
-                                                                                    stream.get(),
-                                                                                    finishCallback,
-                                                                                    errorCallback);
+                                                 readReturnValue<Ret>(jsEngine, stream.get(),
+                                                                      finishCallback,
+                                                                      errorCallback);
                                              } else {
                                                  if (errorCallback.isCallable())
                                                      errorCallback.call(QJSValueList{
@@ -147,8 +142,7 @@ Sender *makeBidirStreamConnections(QJSEngine *jsEngine,
                                          });
     QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, jsEngine,
                      [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback] {
-                         readReturnValue<Ret, QGrpcBidirStream>(jsEngine, streamPtr,
-                                                                messageCallback, errorCallback);
+                         readReturnValue<Ret>(jsEngine, streamPtr, messageCallback, errorCallback);
                      });
     return sender;
 }
