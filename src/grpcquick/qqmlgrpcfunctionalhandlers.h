@@ -4,13 +4,13 @@
 #ifndef QQMLGRPCFUNCTIONALHANDLERS_H
 #define QQMLGRPCFUNCTIONALHANDLERS_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qtconfigmacros.h>
-
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcstream.h>
 
 #include <QtQml/qqmlengine.h>
+
+#include <QtCore/qobject.h>
+#include <QtCore/qtconfigmacros.h>
 
 QT_BEGIN_NAMESPACE
 
