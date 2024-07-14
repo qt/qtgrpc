@@ -4,6 +4,8 @@
 #ifndef QQMLGRPCFUNCTIONALHANDLERS_H
 #define QQMLGRPCFUNCTIONALHANDLERS_H
 
+#include <QtGrpcQuick/qtgrpcquickexports.h>
+
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcstream.h>
 
@@ -15,6 +17,12 @@
 QT_BEGIN_NAMESPACE
 
 namespace QtGrpcQuickFunctional {
+
+Q_GRPCQUICK_EXPORT
+void connectMultipleReceiveOperationFinished(QJSEngine *jsEngine,
+                                            const std::shared_ptr<QGrpcOperation> &operation,
+                                            const QJSValue &successCallback,
+                                            const QJSValue &errorCallback);
 
 template <typename Ret>
 void readReturnValue(QJSEngine *jsEngine, QGrpcOperation *operation,
@@ -67,22 +75,8 @@ void makeServerStreamConnections(QJSEngine *jsEngine,
                                  const QJSValue &messageCallback, const QJSValue &finishCallback,
                                  const QJSValue &errorCallback)
 {
-    auto finishConnection = std::make_shared<QMetaObject::Connection>();
-    *finishConnection = QObject::connect(stream.get(), &QGrpcServerStream::finished, jsEngine,
-                                         [finishCallback, errorCallback, jsEngine, finishConnection,
-                                          stream](const QGrpcStatus &status) {
-                                             // We take 'stream' by copy so that its lifetime
-                                             // is extended until this lambda is destroyed.
-                                             if (status.code() == QtGrpc::StatusCode::Ok) {
-                                                 if (finishCallback.isCallable())
-                                                     finishCallback.call();
-                                             } else {
-                                                 if (errorCallback.isCallable())
-                                                     errorCallback.call(QJSValueList{
-                                                         jsEngine->toScriptValue(status) });
-                                             }
-                                             QObject::disconnect(*finishConnection);
-                                         });
+    QtGrpcQuickFunctional::connectMultipleReceiveOperationFinished(jsEngine, stream,
+                                            finishCallback, errorCallback);
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, jsEngine,
                      [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback]() {
                          readReturnValue<Ret>(jsEngine, streamPtr, messageCallback, errorCallback);
@@ -124,22 +118,9 @@ Sender *makeBidirStreamConnections(QJSEngine *jsEngine,
 {
     Sender *sender = new Sender(stream);
     QQmlEngine::setObjectOwnership(sender, QQmlEngine::JavaScriptOwnership);
-    auto finishConnection = std::make_shared<QMetaObject::Connection>();
-    *finishConnection = QObject::connect(stream.get(), &QGrpcBidirStream::finished, jsEngine,
-                                         [finishCallback, errorCallback, jsEngine, finishConnection,
-                                          stream](const QGrpcStatus &status) {
-                                             // We take 'stream' by copy so that its lifetime
-                                             // is extended until this lambda is destroyed.
-                                             if (status.code() == QtGrpc::StatusCode::Ok) {
-                                                 if (finishCallback.isCallable())
-                                                     finishCallback.call();
-                                             } else {
-                                                 if (errorCallback.isCallable())
-                                                     errorCallback.call(QJSValueList{
-                                                         jsEngine->toScriptValue(status) });
-                                             }
-                                             QObject::disconnect(*finishConnection);
-                                         });
+    QtGrpcQuickFunctional::connectMultipleReceiveOperationFinished(jsEngine, stream,
+                                            finishCallback, errorCallback);
+
     QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, jsEngine,
                      [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback] {
                          readReturnValue<Ret>(jsEngine, streamPtr, messageCallback, errorCallback);
