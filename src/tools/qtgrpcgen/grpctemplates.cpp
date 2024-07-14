@@ -115,13 +115,15 @@ const char *GrpcTemplates::StreamSenderDeclarationQmlTemplate()
            "    QML_NAMED_ELEMENT($sender_qml_name$)\n"
            "    QML_UNCREATABLE(\"$sender_qml_name$ can only be created by gRPC "
            "client instance\")\n"
-           "public:\n"
+           "\n"
            "    $sender_class_name$(std::shared_ptr<QGrpc$stream_type$Stream> stream) : "
-           "QQmlGrpc$stream_type$StreamSender(std::move(stream)) {}\n"
+           "QQmlGrpc$stream_type$StreamSender(std::move(stream)) {}\n\n"
+           "public:\n"
            "    Q_INVOKABLE void writeMessage(const $param_type$ &$param_name$)\n"
            "    {\n"
            "        writeMessageImpl($param_name$);\n"
            "    }\n"
+           "    friend class $service_name$::$classname$;\n"
            "};\n\n";
 }
 
@@ -188,12 +190,13 @@ const char *GrpcTemplates::ClientMethodClientStreamDefinitionQmlTemplate()
            "from JS engine context\";\n"
            "        return nullptr;\n"
            "    }\n\n"
-           "    return QtGrpcQuickFunctional::makeClientStreamConnections<$sender_class_name$, "
-           "$return_type$>(jsEngine,\n"
-           "                        startStream<QGrpcClientStream>(\"$method_name$\"_L1,"
-           " $param_name$, options),\n"
-           "                        finishCallback, errorCallback);\n"
-
+           "    auto stream = startStream<QGrpcClientStream>(\"$method_name$\"_L1,"
+           " $param_name$, options);\n"
+           "    QtGrpcQuickFunctional::makeClientStreamConnections<$return_type$>(jsEngine,\n"
+           "                        stream, finishCallback, errorCallback);\n"
+           "    auto *sender = new $sender_class_name$(std::move(stream));\n"
+           "    QJSEngine::setObjectOwnership(sender, QJSEngine::JavaScriptOwnership);\n"
+           "    return sender;\n"
            "}\n\n";
 }
 
@@ -212,11 +215,13 @@ const char *GrpcTemplates::ClientMethodBidirStreamDefinitionQmlTemplate()
            "from JS engine context\";\n"
            "        return nullptr;\n"
            "    }\n\n"
-           "    return QtGrpcQuickFunctional::makeBidirStreamConnections<$sender_class_name$, "
-           "$return_type$>(jsEngine,\n"
-           "                        startStream<QGrpcBidirStream>(\"$method_name$\"_L1,"
-           " $param_name$, options),\n"
-           "                        messageCallback, finishCallback, errorCallback);\n"
+           "    auto stream = startStream<QGrpcBidirStream>(\"$method_name$\"_L1,"
+           " $param_name$, options);\n"
+           "    QtGrpcQuickFunctional::makeBidirStreamConnections<$return_type$>(jsEngine,\n"
+           "                        stream, messageCallback, finishCallback, errorCallback);\n"
+           "    auto *sender = new $sender_class_name$(std::move(stream));\n"
+           "    QJSEngine::setObjectOwnership(sender, QJSEngine::JavaScriptOwnership);\n"
+           "    return sender;\n"
            "}\n\n";
 }
 

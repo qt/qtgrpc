@@ -34,6 +34,8 @@ void QmlClientDeclarationPrinter::printOpenNamespace()
 {
     m_printer->Print({ { "scope_namespaces", m_typeMap["scope_type"] } },
                      CommonTemplates::NamespaceTemplate());
+    m_printer->Print(m_typeMap,
+                     CommonTemplates::ClassMessageForwardDeclarationTemplate());
 }
 
 void QmlClientDeclarationPrinter::printStreamSenders()

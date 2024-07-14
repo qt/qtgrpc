@@ -83,13 +83,11 @@ void makeServerStreamConnections(QJSEngine *jsEngine,
                      });
 }
 
-template <typename Sender, typename Ret>
-Sender *makeClientStreamConnections(QJSEngine *jsEngine,
+template <typename Ret>
+void makeClientStreamConnections(QJSEngine *jsEngine,
                                     const std::shared_ptr<QGrpcClientStream> &stream,
                                     const QJSValue &finishCallback, const QJSValue &errorCallback)
 {
-    Sender *sender = new Sender(stream);
-    QQmlEngine::setObjectOwnership(sender, QQmlEngine::JavaScriptOwnership);
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(stream.get(), &QGrpcClientStream::finished, jsEngine,
                                          [stream, finishCallback, jsEngine, finishConnection,
@@ -107,17 +105,14 @@ Sender *makeClientStreamConnections(QJSEngine *jsEngine,
                                              }
                                              QObject::disconnect(*finishConnection);
                                          });
-    return sender;
 }
 
-template <typename Sender, typename Ret>
-Sender *makeBidirStreamConnections(QJSEngine *jsEngine,
+template <typename Ret>
+void makeBidirStreamConnections(QJSEngine *jsEngine,
                                    const std::shared_ptr<QGrpcBidirStream> &stream,
                                    const QJSValue &messageCallback, const QJSValue &finishCallback,
                                    const QJSValue &errorCallback)
 {
-    Sender *sender = new Sender(stream);
-    QQmlEngine::setObjectOwnership(sender, QQmlEngine::JavaScriptOwnership);
     QtGrpcQuickFunctional::connectMultipleReceiveOperationFinished(jsEngine, stream,
                                             finishCallback, errorCallback);
 
@@ -125,7 +120,6 @@ Sender *makeBidirStreamConnections(QJSEngine *jsEngine,
                      [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback] {
                          readReturnValue<Ret>(jsEngine, streamPtr, messageCallback, errorCallback);
                      });
-    return sender;
 }
 
 } // namespace QtGrpcQuickFunctional
