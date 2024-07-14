@@ -345,8 +345,10 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
     std::string senderName = methodNameUpper;
     senderName += "Sender";
 
+    std::string serviceName = method->service()->name();
+
     //Make sure that we don't clash the same stream names from different services
-    std::string senderQmlName = method->service()->name();
+    std::string senderQmlName = serviceName;
     senderQmlName += senderName;
 
     std::string streamType;
@@ -371,7 +373,8 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
         { "param_name",         "arg"                              },
         { "stream_type",        streamType                         },
         { "return_name",        "ret"                              },
-        { "export_macro",       exportMacro                        }
+        { "export_macro",       exportMacro                        },
+        { "service_name",       serviceName                        },
     };
 }
 
