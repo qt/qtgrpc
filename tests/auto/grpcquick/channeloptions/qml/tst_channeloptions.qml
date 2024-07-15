@@ -26,7 +26,7 @@ Item {
         }
         optionsWithChangedProperties.metadata = null
         optionsWithChangedProperties.deadline = 3000
-        options.serializationFormat = GrpcSerializationFormat.Json
+        options.serializationFormat = QtGrpc.SerializationFormat.Json
 
     }
 
@@ -38,7 +38,7 @@ Item {
             data: ({ "user-name": "localhost",
                      "user-password": "qwerty"})
         }
-        serializationFormat: {GrpcSerializationFormat.Protobuf}
+        serializationFormat: {QtGrpc.SerializationFormat.Protobuf}
     }
 
     GrpcChannelOptions {
@@ -48,7 +48,7 @@ Item {
                        "user-password": "qwerty"})
         }
         deadline: { 1000 }
-        serializationFormat: {GrpcSerializationFormat.Json}
+        serializationFormat: {QtGrpc.SerializationFormat.Json}
     }
 
     TestCase {
@@ -94,10 +94,10 @@ Item {
                             field: typeof options.metadata.data, answer: "object" },
                         { tag: "grpcData is an object",
                             field: typeof grpcData, answer: "object" },
-                        { tag: "GrpcSerializationFormat.Protobuf == 1",
-                            field: GrpcSerializationFormat.Protobuf, answer: 1 },
-                        { tag: "GrpcSerializationFormat.Json == 2",
-                            field: GrpcSerializationFormat.Json, answer: 2 }
+                        { tag: "QtGrpc.SerializationFormat.Protobuf == 1",
+                            field: QtGrpc.SerializationFormat.Protobuf, answer: 1 },
+                        { tag: "QtGrpc.SerializationFormat.Json == 2",
+                            field: QtGrpc.SerializationFormat.Json, answer: 2 }
                     ]
         }
 
@@ -130,12 +130,12 @@ Item {
 
         function test_serializationFormat_data() {
             return [
-                        { tag: "options.serializationFormat == GrpcSerializationFormat.Json",
+                        { tag: "options.serializationFormat == QtGrpc.SerializationFormat.Json",
                             field: options.serializationFormat,
-                            answer: GrpcSerializationFormat.Json },
-                        { tag: "qtgrpcSslChannelOptionsTest.serializationFormat == GrpcSerializationFormat.Json",
+                            answer: QtGrpc.SerializationFormat.Json },
+                        { tag: "qtgrpcSslChannelOptionsTest.serializationFormat == QtGrpc.SerializationFormat.Json",
                             field: optionsWithChangedProperties.serializationFormat,
-                            answer: GrpcSerializationFormat.Json },
+                            answer: QtGrpc.SerializationFormat.Json },
                         { tag: "optionsWithChangedProperties.metadata == null",
                             field: optionsWithChangedProperties.metadata, answer: null },
                         { tag: "optionsWithChangedProperties.deadline == 3000",
