@@ -18,15 +18,23 @@
 
     \sa QGrpcSerializationFormat
 
-    \value Default   The default QGrpcSerializationFormat preset. This preset
-                     constructs a \l QProtobufSerializer with an empty content
-                     type suffix.
-    \value Protobuf  The embedded protobuf QGrpcSerializationFormat preset. This
-                     preset constructs a \l QProtobufSerializer with the \c proto
-                     content type suffix.
-    \value Json      The embedded JSON QGrpcSerializationFormat preset. This
-                     preset constructs a \l QProtobufJsonSerializer with the
-                     \c json content type suffix.
+    \value Default
+//! [serialization-format-default]
+    The default QGrpcSerializationFormat preset. This preset constructs a \l
+    QProtobufSerializer with an empty content type suffix.
+//! [serialization-format-default]
+
+    \value Protobuf
+//! [serialization-format-protobuf]
+    The embedded protobuf QGrpcSerializationFormat preset. This preset
+    constructs a \l QProtobufSerializer with the \c proto content type suffix.
+//! [serialization-format-protobuf]
+
+    \value Json
+//! [serialization-format-json]
+    The embedded JSON QGrpcSerializationFormat preset. This preset constructs a
+    \l QProtobufJsonSerializer with the \c json content type suffix.
+//! [serialization-format-json]
 */
 
 /*!

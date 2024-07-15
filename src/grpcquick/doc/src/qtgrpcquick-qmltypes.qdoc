@@ -79,17 +79,16 @@
     Sets the serialization format for the channel.
     The \l {QtGrpc::SerializationFormat::Default}
     format is used by default.
-    \value GrpcSerializationFormat.Default  The default GrpcSerializationFormat preset. This preset
-                                            constructs \l QProtobufSerializer with an empty content
-                                            type suffix.
-    \value GrpcSerializationFormat.Protobuf The embedded protobuf GrpcSerializationFormat preset.
-                                            This preset constructs \l QProtobufSerializer with
-                                            the \c proto content type suffix.
-    \value GrpcSerializationFormat.Json     The embedded JSON GrpcSerializationFormat preset.
-                                            This preset constructs \l QProtobufJsonSerializer
-                                            with the \c json content type suffix.
-    \note This enumeration is the Qt Quick equivalent of QGrpcSerializationFormat::Format.
-    \sa QGrpcChannelOptions::serializationFormat, QtGrpc::SerializationFormat
+
+    \value QtGrpc.SerializationFormat.Default
+    \include qtgrpcnamespace.qdoc serialization-format-default
+    \value QtGrpc.SerializationFormat.Protobuf
+    \include qtgrpcnamespace.qdoc serialization-format-protobuf
+    \value QtGrpc.SerializationFormat.Json
+    \include qtgrpcnamespace.qdoc serialization-format-json
+
+    \sa QGrpcChannelOptions::serializationFormat, QtGrpc::SerializationFormat,
+    QGrpcSerializationFormat
     \since 6.8
 */
 
