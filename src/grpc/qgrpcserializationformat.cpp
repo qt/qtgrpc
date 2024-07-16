@@ -6,6 +6,10 @@
 #include <QtProtobuf/qprotobufjsonserializer.h>
 #include <QtProtobuf/qprotobufserializer.h>
 
+#include <QtCore/qbytearray.h>
+#include <QtCore/qdebug.h>
+#include <QtCore/qvariant.h>
+
 using namespace QtGrpc;
 
 QT_BEGIN_NAMESPACE
@@ -13,6 +17,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \class QGrpcSerializationFormat
     \inmodule QtGrpc
+    \compares equality
     \brief The QGrpcSerializationFormat class holds the protobuf message
            serializer and the related content type suffix.
     \since 6.8
@@ -26,7 +31,7 @@ QT_BEGIN_NAMESPACE
     \sa QAbstractGrpcChannel
 */
 
-class QGrpcSerializationFormatPrivate
+class QGrpcSerializationFormatPrivate : public QSharedData
 {
 public:
     QGrpcSerializationFormatPrivate(QByteArrayView suffix_,
@@ -34,14 +39,12 @@ public:
         : suffix(suffix_.toByteArray()), serializer(std::move(serializer_))
     {
     }
+
     QByteArray suffix;
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
 };
 
-static void dPtrDeleter(QGrpcSerializationFormatPrivate *ptr)
-{
-    delete ptr;
-}
+QT_DEFINE_QESDP_SPECIALIZATION_DTOR(QGrpcSerializationFormatPrivate)
 
 /*!
     Creates a new QGrpcSerializationFormat object with the given preset
@@ -50,14 +53,13 @@ static void dPtrDeleter(QGrpcSerializationFormatPrivate *ptr)
     A \l QtGrpc::SerializationFormat::Default format is used by default.
 */
 QGrpcSerializationFormat::QGrpcSerializationFormat(SerializationFormat format)
-    : dPtr(format == SerializationFormat::Json
-               ? new QGrpcSerializationFormatPrivate("json",
-                                                     std::make_shared<QProtobufJsonSerializer>())
-               : new QGrpcSerializationFormatPrivate(format == SerializationFormat::Protobuf
-                                                         ? "proto"
-                                                         : "",
-                                                     std::make_shared<QProtobufSerializer>()),
-           dPtrDeleter)
+    : d_ptr(format == SerializationFormat::Json
+                ? new QGrpcSerializationFormatPrivate("json",
+                                                      std::make_shared<QProtobufJsonSerializer>())
+                : new QGrpcSerializationFormatPrivate(format == SerializationFormat::Protobuf
+                                                          ? "proto"
+                                                          : "",
+                                                      std::make_shared<QProtobufSerializer>()))
 {
 }
 
@@ -73,29 +75,20 @@ QGrpcSerializationFormat::~QGrpcSerializationFormat() = default;
 QGrpcSerializationFormat::QGrpcSerializationFormat(QByteArrayView suffix,
                                                    std::shared_ptr<QAbstractProtobufSerializer>
                                                        serializer)
-    : dPtr(new QGrpcSerializationFormatPrivate(suffix, std::move(serializer)),
-           dPtrDeleter)
+    : d_ptr(new QGrpcSerializationFormatPrivate(suffix, std::move(serializer)))
 {
 }
 
 /*!
     Constructs a copy of \a other.
 */
-QGrpcSerializationFormat::QGrpcSerializationFormat(const QGrpcSerializationFormat &other)
-    : dPtr(new QGrpcSerializationFormatPrivate(*other.dPtr),
-           dPtrDeleter)
-{
-}
+QGrpcSerializationFormat::QGrpcSerializationFormat(const QGrpcSerializationFormat &other) = default;
 
 /*!
     Assigns the \a other QGrpcSerializationFormat object to this one.
 */
-QGrpcSerializationFormat &QGrpcSerializationFormat::operator=(const QGrpcSerializationFormat &other)
-{
-    if (this != &other)
-        *dPtr = *other.dPtr;
-    return *this;
-}
+QGrpcSerializationFormat &
+QGrpcSerializationFormat::operator=(const QGrpcSerializationFormat &other) = default;
 
 /*!
     \fn QGrpcSerializationFormat::QGrpcSerializationFormat(QGrpcSerializationFormat &&other) noexcept
@@ -123,11 +116,21 @@ QGrpcSerializationFormat &QGrpcSerializationFormat::operator=(const QGrpcSeriali
 */
 
 /*!
+    \since 6.8
+    Constructs a new QVariant object from this QGrpcSerializationFormat.
+*/
+QGrpcSerializationFormat::operator QVariant() const
+{
+    return QVariant::fromValue(*this);
+}
+
+/*!
     Returns the content type suffix for this serialization format.
 */
-QByteArray QGrpcSerializationFormat::suffix() const noexcept
+QByteArrayView QGrpcSerializationFormat::suffix() const noexcept
 {
-    return dPtr->suffix;
+    Q_D(const QGrpcSerializationFormat);
+    return d->suffix;
 }
 
 /*!
@@ -137,7 +140,25 @@ QByteArray QGrpcSerializationFormat::suffix() const noexcept
 */
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcSerializationFormat::serializer() const noexcept
 {
-    return dPtr->serializer;
+    Q_D(const QGrpcSerializationFormat);
+    return d->serializer;
 }
+
+#ifndef QT_NO_DEBUG_STREAM
+/*!
+    \since 6.8
+    \fn QDebug QGrpcSerializationFormat::operator<<(QDebug debug, const QGrpcSerializationFormat &sfmt)
+    Writes \a sfmt to the specified stream \a debug.
+*/
+QDebug operator<<(QDebug debug, const QGrpcSerializationFormat &sfmt)
+{
+    const QDebugStateSaver save(debug);
+    debug.nospace().noquote();
+    debug << "QGrpcSerializationFormat(suffix: " << sfmt.suffix() << ", serializer: { "
+          << static_cast<void *>(sfmt.serializer().get())
+          << ", useCount: " << sfmt.serializer().use_count() << " })";
+    return debug;
+}
+#endif
 
 QT_END_NAMESPACE
