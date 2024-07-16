@@ -1,12 +1,12 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <QtGrpc/private/qtgrpcglobal_p.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qgrpcserializationformat.h>
 #include <QtGrpc/qtgrpcnamespace.h>
 
 #include <QtCore/qdebug.h>
+#include <QtCore/qvariant.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -23,11 +23,9 @@ using namespace QtGrpc;
     options that are used by gRPC channels to communicate with the services.
 */
 
-class QGrpcChannelOptionsPrivate
+class QGrpcChannelOptionsPrivate : public QSharedData
 {
 public:
-    QGrpcChannelOptionsPrivate() : serializationFormat(SerializationFormat::Default) { }
-
     std::optional<QGrpcDuration> deadline;
     QGrpcMetadata metadata;
     QGrpcSerializationFormat serializationFormat;
@@ -36,36 +34,25 @@ public:
 #endif
 };
 
-static void dPtrDeleter(QGrpcChannelOptionsPrivate *ptr)
-{
-    delete ptr;
-}
+QT_DEFINE_QESDP_SPECIALIZATION_DTOR(QGrpcChannelOptionsPrivate)
 
 /*!
     Constructs a QGrpcChannelOptions.
 */
-QGrpcChannelOptions::QGrpcChannelOptions() : dPtr(new QGrpcChannelOptionsPrivate(), dPtrDeleter)
+QGrpcChannelOptions::QGrpcChannelOptions() : d_ptr(new QGrpcChannelOptionsPrivate())
 {
 }
 
 /*!
     Construct a copy of QGrpcChannelOptions with \a other object.
 */
-QGrpcChannelOptions::QGrpcChannelOptions(const QGrpcChannelOptions &other)
-    : dPtr(new QGrpcChannelOptionsPrivate(*other.dPtr), dPtrDeleter)
-{
-}
+QGrpcChannelOptions::QGrpcChannelOptions(const QGrpcChannelOptions &other) = default;
 
 /*!
     Assigns \a other to this QGrpcChannelOptions and returns a reference to this
     QGrpcChannelOptions.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::operator=(const QGrpcChannelOptions &other)
-{
-    if (this != &other)
-        *dPtr = *other.dPtr;
-    return *this;
-}
+QGrpcChannelOptions &QGrpcChannelOptions::operator=(const QGrpcChannelOptions &other) = default;
 
 /*!
     \fn QGrpcChannelOptions::QGrpcChannelOptions(QGrpcChannelOptions &&other) noexcept
@@ -98,11 +85,24 @@ QGrpcChannelOptions &QGrpcChannelOptions::operator=(const QGrpcChannelOptions &o
 QGrpcChannelOptions::~QGrpcChannelOptions() = default;
 
 /*!
+    \since 6.8
+    Constructs a new QVariant object from this QGrpcChannelOptions.
+*/
+QGrpcChannelOptions::operator QVariant() const
+{
+    return QVariant::fromValue(*this);
+}
+
+/*!
     Sets deadline value with \a deadline and returns updated QGrpcChannelOptions object.
 */
 QGrpcChannelOptions &QGrpcChannelOptions::setDeadline(QGrpcDuration deadline)
 {
-    dPtr->deadline = deadline;
+    if (d_ptr->deadline == deadline)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->deadline = deadline;
     return *this;
 }
 
@@ -117,13 +117,21 @@ QGrpcChannelOptions &QGrpcChannelOptions::setDeadline(QGrpcDuration deadline)
 */
 QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QGrpcMetadata &metadata)
 {
-    dPtr->metadata = metadata;
+    if (d_ptr->metadata == metadata)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->metadata = metadata;
     return *this;
 }
 
 QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(QGrpcMetadata &&metadata)
 {
-    dPtr->metadata = std::move(metadata);
+    if (d_ptr->metadata == metadata)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->metadata = std::move(metadata);
     return *this;
 }
 
@@ -138,7 +146,11 @@ QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(QGrpcMetadata &&metadata)
 QGrpcChannelOptions &
 QGrpcChannelOptions::setSerializationFormat(const QGrpcSerializationFormat &format)
 {
-    dPtr->serializationFormat = format;
+    if (d_ptr->serializationFormat == format)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->serializationFormat = format;
     return *this;
 }
 
@@ -152,7 +164,8 @@ QGrpcChannelOptions::setSerializationFormat(const QGrpcSerializationFormat &form
 */
 std::optional<QGrpcDuration> QGrpcChannelOptions::deadline() const noexcept
 {
-    return dPtr->deadline;
+    Q_D(const QGrpcChannelOptions);
+    return d->deadline;
 }
 
 /*!
@@ -165,39 +178,40 @@ std::optional<QGrpcDuration> QGrpcChannelOptions::deadline() const noexcept
 */
 const QGrpcMetadata &QGrpcChannelOptions::metadata() const & noexcept
 {
-    return dPtr->metadata;
+    Q_D(const QGrpcChannelOptions);
+    return d->metadata;
 }
 
-QGrpcMetadata QGrpcChannelOptions::metadata() && noexcept
+QGrpcMetadata QGrpcChannelOptions::metadata() &&
 {
-    return std::move(dPtr->metadata);
+    Q_D(QGrpcChannelOptions);
+    if (d->ref.loadRelaxed() != 1) // return copy if shared
+        return { d->metadata };
+    return std::move(d->metadata);
 }
 
 /*!
     \since 6.8
-    \fn const QGrpcSerializationFormat &QGrpcChannelOptions::serializationFormat() const & noexcept
-    \fn QGrpcSerializationFormat QGrpcChannelOptions::serializationFormat() && noexcept
-
     Returns the serialization format used in \l QAbstractGrpcChannel implementations.
  */
-const QGrpcSerializationFormat &QGrpcChannelOptions::serializationFormat() const & noexcept
+QGrpcSerializationFormat QGrpcChannelOptions::serializationFormat() const
 {
-    return dPtr->serializationFormat;
-}
-
-QGrpcSerializationFormat QGrpcChannelOptions::serializationFormat() && noexcept
-{
-    return std::move(dPtr->serializationFormat);
+    Q_D(const QGrpcChannelOptions);
+    return d->serializationFormat;
 }
 
 #if QT_CONFIG(ssl)
 /*!
     Sets SSL configuration with \a sslConfiguration and returns updated QGrpcChannelOptions object.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::setSslConfiguration(
-        const QSslConfiguration &sslConfiguration)
+QGrpcChannelOptions &
+QGrpcChannelOptions::setSslConfiguration(const QSslConfiguration &sslConfiguration)
 {
-    dPtr->sslConfiguration = sslConfiguration;
+    if (d_ptr->sslConfiguration == sslConfiguration)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->sslConfiguration = sslConfiguration;
     return *this;
 }
 
@@ -208,7 +222,8 @@ QGrpcChannelOptions &QGrpcChannelOptions::setSslConfiguration(
 */
 std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const noexcept
 {
-    return dPtr->sslConfiguration;
+    Q_D(const QGrpcChannelOptions);
+    return d->sslConfiguration;
 }
 #endif
 
@@ -220,9 +235,8 @@ std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const n
 */
 QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
 {
-    QDebugStateSaver save(debug);
-    debug.nospace();
-    debug.noquote();
+    const QDebugStateSaver save(debug);
+    debug.nospace().noquote();
     debug << "QGrpcChannelOptions(deadline: " << chOpts.deadline()
           << ", metadata: " << chOpts.metadata()
           << ", serializationFormat: " << chOpts.serializationFormat().suffix()
