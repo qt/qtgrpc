@@ -75,6 +75,18 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
+   \fn QAbstractProtobufSerializer::DeserializationError QAbstractProtobufSerializer::deserializationError() const
+   Returns the last deserialization error for the serializer instance.
+   \sa deserializationErrorString()
+*/
+
+/*!
+   \fn QString QAbstractProtobufSerializer::deserializationErrorString() const
+   Returns the last deserialization error string for the serializer instance.
+   \sa deserializationError()
+*/
+
+/*!
     Destroys this QAbstractProtobufSerializer.
 */
 QAbstractProtobufSerializer::~QAbstractProtobufSerializer() = default;
