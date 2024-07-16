@@ -8,14 +8,19 @@
 #include <QtGrpc/qtgrpcnamespace.h>
 
 #include <QtCore/qbytearrayview.h>
+#include <QtCore/qshareddata.h>
 #include <QtCore/qtclasshelpermacros.h>
 
 #include <memory>
 
 QT_BEGIN_NAMESPACE
 
-class QGrpcSerializationFormatPrivate;
 class QAbstractProtobufSerializer;
+class QDebug;
+class QVariant;
+
+class QGrpcSerializationFormatPrivate;
+QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QGrpcSerializationFormatPrivate, Q_GRPC_EXPORT)
 
 class QGrpcSerializationFormat final
 {
@@ -29,18 +34,39 @@ public:
     Q_GRPC_EXPORT QGrpcSerializationFormat &operator=(const QGrpcSerializationFormat &);
 
     QGrpcSerializationFormat(QGrpcSerializationFormat &&other) noexcept = default;
-    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QGrpcSerializationFormat)
+    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QGrpcSerializationFormat)
 
-    void swap(QGrpcSerializationFormat &other) noexcept { dPtr.swap(other.dPtr); }
+    Q_GRPC_EXPORT Q_IMPLICIT operator QVariant() const;
 
-    [[nodiscard]] Q_GRPC_EXPORT QByteArray suffix() const noexcept;
+    void swap(QGrpcSerializationFormat &other) noexcept { d_ptr.swap(other.d_ptr); }
+
+    [[nodiscard]] Q_GRPC_EXPORT QByteArrayView suffix() const noexcept;
     [[nodiscard]] Q_GRPC_EXPORT std::shared_ptr<QAbstractProtobufSerializer>
     serializer() const noexcept;
 
 private:
-    std::unique_ptr<QGrpcSerializationFormatPrivate, void (*)(QGrpcSerializationFormatPrivate *)>
-        dPtr;
+    QExplicitlySharedDataPointer<QGrpcSerializationFormatPrivate> d_ptr;
+
+    friend bool comparesEqual(const QGrpcSerializationFormat &lhs,
+                              const QGrpcSerializationFormat &rhs) noexcept
+    {
+        return lhs.suffix() == rhs.suffix() && lhs.serializer() == rhs.serializer();
+    }
+    Q_DECLARE_EQUALITY_COMPARABLE(QGrpcSerializationFormat)
+
+    friend size_t qHash(const QGrpcSerializationFormat &key, size_t seed = 0) noexcept
+    {
+        return qHashMulti(seed, key.suffix(), key.serializer().get());
+    }
+
+#ifndef QT_NO_DEBUG_STREAM
+    friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcSerializationFormat &sfmt);
+#endif
+
+    Q_DECLARE_PRIVATE(QGrpcSerializationFormat)
 };
+
+Q_DECLARE_SHARED(QGrpcSerializationFormat)
 
 QT_END_NAMESPACE
 

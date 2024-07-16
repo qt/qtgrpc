@@ -391,7 +391,7 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
     QObject::connect(m_stream.get(), &QHttp2Stream::uploadFinished, this,
                      &Http2Handler::processQueue);
 
-    std::optional<QGrpcDuration> deadline;
+    std::optional<std::chrono::milliseconds> deadline;
     if (channelOpPtr->callOptions().deadline())
         deadline = channelOpPtr->callOptions().deadline();
     else if (parentChannel->channelOptions.deadline())
@@ -589,7 +589,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri,
                                                    const QGrpcChannelOptions &options)
     : hostUri(uri), channelOptions(options)
 {
-    const QByteArray formatSuffix = channelOptions.serializationFormat().suffix();
+    auto formatSuffix = channelOptions.serializationFormat().suffix();
     const QByteArray defaultContentType = DefaultContentType.toByteArray();
     const QByteArray contentTypeFromOptions = !formatSuffix.isEmpty()
         ? defaultContentType + '+' + formatSuffix
