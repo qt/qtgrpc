@@ -7,15 +7,19 @@
 #include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
+#include <QtCore/qshareddata.h>
+#include <QtCore/qstringfwd.h>
 #include <QtCore/qtclasshelpermacros.h>
 
-#include <memory>
 #include <optional>
 
 QT_BEGIN_NAMESPACE
 
 class QDebug;
+class QVariant;
+
 class QGrpcCallOptionsPrivate;
+QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QGrpcCallOptionsPrivate, Q_GRPC_EXPORT)
 
 class QGrpcCallOptions final
 {
@@ -27,25 +31,31 @@ public:
     Q_GRPC_EXPORT QGrpcCallOptions &operator=(const QGrpcCallOptions &other);
 
     QGrpcCallOptions(QGrpcCallOptions &&other) noexcept = default;
-    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QGrpcCallOptions)
+    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QGrpcCallOptions)
 
-    void swap(QGrpcCallOptions &other) noexcept { dPtr.swap(other.dPtr); }
+    Q_GRPC_EXPORT Q_IMPLICIT operator QVariant() const;
+
+    void swap(QGrpcCallOptions &other) noexcept { d_ptr.swap(other.d_ptr); }
 
     Q_GRPC_EXPORT QGrpcCallOptions &setDeadline(QGrpcDuration deadline);
     Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(const QGrpcMetadata &metadata);
-    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(QGrpcMetadata &&metadata) noexcept;
+    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(QGrpcMetadata &&metadata);
 
     [[nodiscard]] Q_GRPC_EXPORT std::optional<QGrpcDuration> deadline() const noexcept;
     [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const & noexcept;
-    [[nodiscard]] Q_GRPC_EXPORT QGrpcMetadata metadata() && noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT QGrpcMetadata metadata() &&;
 
 private:
-    std::unique_ptr<QGrpcCallOptionsPrivate, void (*)(QGrpcCallOptionsPrivate *)> dPtr;
+    QExplicitlySharedDataPointer<QGrpcCallOptionsPrivate> d_ptr;
 
 #ifndef QT_NO_DEBUG_STREAM
     friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts);
 #endif
+
+    Q_DECLARE_PRIVATE(QGrpcCallOptions)
 };
+
+Q_DECLARE_SHARED(QGrpcCallOptions)
 
 QT_END_NAMESPACE
 
