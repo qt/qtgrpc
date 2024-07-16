@@ -1,10 +1,10 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <QtGrpc/private/qtgrpcglobal_p.h>
 #include <QtGrpc/qgrpccalloptions.h>
 
 #include <QtCore/qdebug.h>
+#include <QtCore/qvariant.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -20,22 +20,19 @@ using namespace Qt::StringLiterals;
     that are used by gRPC channels to communicate with the services.
 */
 
-class QGrpcCallOptionsPrivate
+class QGrpcCallOptionsPrivate : public QSharedData
 {
 public:
     std::optional<QGrpcDuration> deadline;
     QGrpcMetadata metadata;
 };
 
-static void dPtrDeleter(QGrpcCallOptionsPrivate *ptr)
-{
-    delete ptr;
-}
+QT_DEFINE_QESDP_SPECIALIZATION_DTOR(QGrpcCallOptionsPrivate)
 
 /*!
     Constructs an empty QGrpcCallOptions object.
 */
-QGrpcCallOptions::QGrpcCallOptions() : dPtr(new QGrpcCallOptionsPrivate(), dPtrDeleter)
+QGrpcCallOptions::QGrpcCallOptions() : d_ptr(new QGrpcCallOptionsPrivate())
 {
 }
 
@@ -47,21 +44,13 @@ QGrpcCallOptions::~QGrpcCallOptions() = default;
 /*!
     Construct a copy of QGrpcCallOptions with \a other object.
 */
-QGrpcCallOptions::QGrpcCallOptions(const QGrpcCallOptions &other)
-    : dPtr(new QGrpcCallOptionsPrivate(*other.dPtr), dPtrDeleter)
-{
-}
+QGrpcCallOptions::QGrpcCallOptions(const QGrpcCallOptions &other) = default;
 
 /*!
     Assigns \a other to this QGrpcCallOptions and returns a reference to this
     QGrpcCallOptions.
 */
-QGrpcCallOptions &QGrpcCallOptions::operator=(const QGrpcCallOptions &other)
-{
-    if (this != &other)
-        *dPtr = *other.dPtr;
-    return *this;
-}
+QGrpcCallOptions &QGrpcCallOptions::operator=(const QGrpcCallOptions &other) = default;
 
 /*!
     \fn QGrpcCallOptions::QGrpcCallOptions(QGrpcCallOptions &&other) noexcept
@@ -84,6 +73,15 @@ QGrpcCallOptions &QGrpcCallOptions::operator=(const QGrpcCallOptions &other)
 
 /*!
     \since 6.8
+    Constructs a new QVariant object from this QGrpcCallOptions.
+*/
+QGrpcCallOptions::operator QVariant() const
+{
+    return QVariant::fromValue(*this);
+}
+
+/*!
+    \since 6.8
     \fn void QGrpcCallOptions::swap(QGrpcCallOptions &other) noexcept
     Swaps this instance with \a other. This operation is very fast and never fails.
 */
@@ -93,7 +91,11 @@ QGrpcCallOptions &QGrpcCallOptions::operator=(const QGrpcCallOptions &other)
 */
 QGrpcCallOptions &QGrpcCallOptions::setDeadline(QGrpcDuration deadline)
 {
-    dPtr->deadline = deadline;
+    if (d_ptr->deadline == deadline)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcCallOptions);
+    d->deadline = deadline;
     return *this;
 }
 
@@ -105,7 +107,11 @@ QGrpcCallOptions &QGrpcCallOptions::setDeadline(QGrpcDuration deadline)
 */
 QGrpcCallOptions &QGrpcCallOptions::setMetadata(const QGrpcMetadata &metadata)
 {
-    dPtr->metadata = metadata;
+    if (d_ptr->metadata == metadata)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcCallOptions);
+    d->metadata = metadata;
     return *this;
 }
 
@@ -114,9 +120,13 @@ QGrpcCallOptions &QGrpcCallOptions::setMetadata(const QGrpcMetadata &metadata)
 
     \sa setMetadata()
 */
-QGrpcCallOptions &QGrpcCallOptions::setMetadata(QGrpcMetadata &&metadata) noexcept
+QGrpcCallOptions &QGrpcCallOptions::setMetadata(QGrpcMetadata &&metadata)
 {
-    dPtr->metadata = std::move(metadata);
+    if (d_ptr->metadata == metadata)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcCallOptions);
+    d->metadata = std::move(metadata);
     return *this;
 }
 
@@ -131,7 +141,8 @@ QGrpcCallOptions &QGrpcCallOptions::setMetadata(QGrpcMetadata &&metadata) noexce
 */
 std::optional<QGrpcDuration> QGrpcCallOptions::deadline() const noexcept
 {
-    return dPtr->deadline;
+    Q_D(const QGrpcCallOptions);
+    return d->deadline;
 }
 
 /*!
@@ -144,12 +155,16 @@ std::optional<QGrpcDuration> QGrpcCallOptions::deadline() const noexcept
 */
 const QGrpcMetadata &QGrpcCallOptions::metadata() const & noexcept
 {
-    return dPtr->metadata;
+    Q_D(const QGrpcCallOptions);
+    return d->metadata;
 }
 
-QGrpcMetadata QGrpcCallOptions::metadata() && noexcept
+QGrpcMetadata QGrpcCallOptions::metadata() &&
 {
-    return std::move(dPtr->metadata);
+    Q_D(QGrpcCallOptions);
+    if (d->ref.loadRelaxed() != 1) // return copy if shared
+        return { d->metadata };
+    return std::move(d->metadata);
 }
 
 #ifndef QT_NO_DEBUG_STREAM
@@ -160,9 +175,8 @@ QGrpcMetadata QGrpcCallOptions::metadata() && noexcept
 */
 QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts)
 {
-    QDebugStateSaver save(debug);
-    debug.nospace();
-    debug.noquote();
+    const QDebugStateSaver save(debug);
+    debug.nospace().noquote();
     debug << "QGrpcCallOptions(deadline: " << callOpts.deadline()
           << ", metadata: " << callOpts.metadata() << ')';
     return debug;
