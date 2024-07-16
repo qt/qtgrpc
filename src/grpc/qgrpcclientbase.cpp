@@ -71,8 +71,6 @@ QString threadSafetyWarning(const char *methodName)
 
     This signal is emitted when an error with \a status occurs in the channel
     or during serialization.
-
-    \sa QGrpcOperation::errorOccurred
 */
 
 class QGrpcClientBasePrivate : public QObjectPrivate

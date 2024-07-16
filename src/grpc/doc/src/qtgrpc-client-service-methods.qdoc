@@ -142,10 +142,8 @@ from the server and can be deserialized to the \c ping::pong::Pong protobuf
 message using the \l{QGrpcCallReply::read} method.
 
 If the server does not respond or the request caused an error in the server, the
-\l{QGrpcCallReply::errorOccurred} signal is emitted with the corresponding
-\l{QGrpcStatus}{status code}. If the server answered with the
-\l{QtGrpc::StatusCode::Ok} code, the \c{QGrpcCallReply::errorOccurred}
-signal is not emitted.
+\l {QGrpcCallReply::finished} signal is emitted with a \l {QtGrpc::StatusCode}
+{status code} other than \c Ok.
 
 \section2 Call reply handling using callbacks
 The overloaded function is similar to the one that returns the

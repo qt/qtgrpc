@@ -25,7 +25,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void finished(const QGrpcStatus &status)
+    \fn void QGrpcOperationContext::finished(const QGrpcStatus &status)
 
     The signal is emitted when the gRPC communication is finished.
 
