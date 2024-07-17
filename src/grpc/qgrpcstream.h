@@ -8,12 +8,7 @@
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
-#include <QtCore/qbytearray.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qstring.h>
-
 #include <memory>
-#include <type_traits>
 
 QT_BEGIN_NAMESPACE
 
@@ -41,17 +36,8 @@ public:
     explicit QGrpcClientStream(std::shared_ptr<QGrpcOperationContext> operationContext,
                                QObject *parent = nullptr);
     ~QGrpcClientStream() override;
-#ifdef Q_QDOC
-    template <typename T>
-#else
-    template <typename T, std::enable_if_t<!std::is_pointer_v<T>, bool> = true>
-#endif
-    void writeMessage(const T &message)
-    {
-        writeMessage(&message);
-    }
 
-    void writeMessage(const QProtobufMessage *message);
+    void writeMessage(const QProtobufMessage &message);
     void writesDone();
 
 private:
@@ -67,19 +53,9 @@ public:
                               QObject *parent = nullptr);
     ~QGrpcBidirStream() override;
 
-#ifdef Q_QDOC
-    template <typename T>
-#else
-    template <typename T, std::enable_if_t<!std::is_pointer_v<T>, bool> = true>
-#endif
-    void writeMessage(const T &message)
-    {
-        writeMessage(&message);
-    }
-
-    void writeMessage(const QProtobufMessage *message);
-
+    void writeMessage(const QProtobufMessage &message);
     void writesDone();
+
 Q_SIGNALS:
     void messageReceived();
 

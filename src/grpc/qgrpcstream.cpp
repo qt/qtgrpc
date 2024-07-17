@@ -5,8 +5,6 @@
 #include <QtGrpc/qgrpcoperationcontext.h>
 #include <QtGrpc/qgrpcstream.h>
 
-#include <QtCore/qthread.h>
-
 QT_BEGIN_NAMESPACE
 
 /*!
@@ -48,12 +46,6 @@ QGrpcServerStream::~QGrpcServerStream() = default;
     client-side gRPC stream functionality from gRPC client side.
 */
 
-/*!
-    \fn template<typename T> void QGrpcClientStream::writeMessage(const T &message)
-
-    Serializes \a message and sends it to the server.
-*/
-
 QGrpcClientStream::QGrpcClientStream(std::shared_ptr<QGrpcOperationContext> operationContext,
                                      QObject *parent)
     : QGrpcOperation(std::move(operationContext), parent)
@@ -66,12 +58,11 @@ QGrpcClientStream::QGrpcClientStream(std::shared_ptr<QGrpcOperationContext> oper
 QGrpcClientStream::~QGrpcClientStream() = default;
 
 /*!
-    \since 6.8
     Serializes \a message and sends it to the server.
 */
-void QGrpcClientStream::writeMessage(const QProtobufMessage *message)
+void QGrpcClientStream::writeMessage(const QProtobufMessage &message)
 {
-    QByteArray data = QGrpcOperation::operationContext()->serializer()->serialize(message);
+    QByteArray data = QGrpcOperation::operationContext()->serializer()->serialize(&message);
     emit QGrpcOperation::operationContext()->writeMessageRequested(data);
 }
 
@@ -100,12 +91,6 @@ void QGrpcClientStream::writesDone()
     The signal is emitted when the stream receives an updated value from server.
 */
 
-/*!
-    \fn template<typename T> void QGrpcBidirStream::writeMessage(const T &message)
-
-    Serializes \a message and sends it to the server.
-*/
-
 QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext,
                                    QObject *parent)
     : QGrpcOperation(std::move(operationContext), parent)
@@ -120,12 +105,11 @@ QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcOperationContext> operat
 QGrpcBidirStream::~QGrpcBidirStream() = default;
 
 /*!
-    \since 6.8
     Serializes \a message and sends it to the server.
 */
-void QGrpcBidirStream::writeMessage(const QProtobufMessage *message)
+void QGrpcBidirStream::writeMessage(const QProtobufMessage &message)
 {
-    QByteArray data = QGrpcOperation::operationContext()->serializer()->serialize(message);
+    QByteArray data = QGrpcOperation::operationContext()->serializer()->serialize(&message);
     emit QGrpcOperation::operationContext()->writeMessageRequested(data);
 }
 
