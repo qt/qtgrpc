@@ -592,6 +592,7 @@ function(qt6_add_protobuf target)
             PLUGIN_TARGET "${target}plugin"
             VERSION 1.0
             OUTPUT_DIRECTORY "${qml_module_output_full_path}"
+            OUTPUT_TARGETS qml_output_targets
         )
         set_target_properties(${target}plugin
             PROPERTIES
@@ -601,7 +602,12 @@ function(qt6_add_protobuf target)
             ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
         )
 
-        list(APPEND ${arg_OUTPUT_TARGETS} ${target}plugin)
+        if(DEFINED arg_OUTPUT_TARGETS)
+            if(qml_output_targets)
+                list(APPEND ${arg_OUTPUT_TARGETS} ${qml_output_targets})
+            endif()
+            list(APPEND ${arg_OUTPUT_TARGETS} "${target}plugin")
+        endif()
     endif()
 
     if(DEFINED arg_OUTPUT_HEADERS)
@@ -609,6 +615,7 @@ function(qt6_add_protobuf target)
     endif()
 
     if(DEFINED arg_OUTPUT_TARGETS)
+        list(REMOVE_DUPLICATES ${arg_OUTPUT_TARGETS})
         set(${arg_OUTPUT_TARGETS} "${${arg_OUTPUT_TARGETS}}" PARENT_SCOPE)
     endif()
 endfunction()
