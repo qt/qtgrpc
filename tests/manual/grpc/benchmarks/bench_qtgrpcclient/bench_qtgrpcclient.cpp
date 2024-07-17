@@ -181,7 +181,7 @@ void QtGrpcClientBenchmark::bidirStreaming()
                                  if (response.hasPayload())
                                     recvBytes += static_cast<quint64>(response.payload().size());
                                  request.setPing(counter);
-                                 stream->writeMessage(&request);
+                                 stream->writeMessage(request);
                                  if (request.hasPayload())
                                      sendBytes += static_cast<quint64>(request.payload().size());
                                  ++counter;

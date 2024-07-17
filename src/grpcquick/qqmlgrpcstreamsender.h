@@ -28,7 +28,7 @@ protected:
             qWarning() << "Unable to write message; stream is finished";
             return;
         }
-        m_stream->writeMessage(&message);
+        m_stream->writeMessage(message);
     }
 
 private:
