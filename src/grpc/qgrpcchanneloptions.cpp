@@ -26,7 +26,7 @@ using namespace QtGrpc;
 class QGrpcChannelOptionsPrivate : public QSharedData
 {
 public:
-    std::optional<QGrpcDuration> deadline;
+    std::optional<std::chrono::milliseconds> deadline;
     QGrpcMetadata metadata;
     QGrpcSerializationFormat serializationFormat;
 #if QT_CONFIG(ssl)
@@ -96,7 +96,7 @@ QGrpcChannelOptions::operator QVariant() const
 /*!
     Sets deadline value with \a deadline and returns updated QGrpcChannelOptions object.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::setDeadline(QGrpcDuration deadline)
+QGrpcChannelOptions &QGrpcChannelOptions::setDeadline(std::chrono::milliseconds deadline)
 {
     if (d_ptr->deadline == deadline)
         return *this;
@@ -162,7 +162,7 @@ QGrpcChannelOptions::setSerializationFormat(const QGrpcSerializationFormat &form
 
     If value was not set returns empty std::optional.
 */
-std::optional<QGrpcDuration> QGrpcChannelOptions::deadline() const noexcept
+std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const noexcept
 {
     Q_D(const QGrpcChannelOptions);
     return d->deadline;

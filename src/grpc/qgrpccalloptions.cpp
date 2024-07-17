@@ -23,7 +23,7 @@ using namespace Qt::StringLiterals;
 class QGrpcCallOptionsPrivate : public QSharedData
 {
 public:
-    std::optional<QGrpcDuration> deadline;
+    std::optional<std::chrono::milliseconds> deadline;
     QGrpcMetadata metadata;
 };
 
@@ -89,7 +89,7 @@ QGrpcCallOptions::operator QVariant() const
 /*!
     Sets deadline value with \a deadline and returns updated QGrpcCallOptions object.
 */
-QGrpcCallOptions &QGrpcCallOptions::setDeadline(QGrpcDuration deadline)
+QGrpcCallOptions &QGrpcCallOptions::setDeadline(std::chrono::milliseconds deadline)
 {
     if (d_ptr->deadline == deadline)
         return *this;
@@ -139,7 +139,7 @@ QGrpcCallOptions &QGrpcCallOptions::setMetadata(QGrpcMetadata &&metadata)
 
     If value was not set returns empty std::optional.
 */
-std::optional<QGrpcDuration> QGrpcCallOptions::deadline() const noexcept
+std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadline() const noexcept
 {
     Q_D(const QGrpcCallOptions);
     return d->deadline;

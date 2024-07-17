@@ -65,7 +65,7 @@ void QGrpcChannelOptionsTest::hasImplicitQVariant() const
 
 void QGrpcChannelOptionsTest::hasMemberSwap() const
 {
-    constexpr QGrpcDuration Dur = 50ms;
+    constexpr std::chrono::milliseconds Dur = 50ms;
 
     QGrpcChannelOptions o1;
     o1.setDeadline(Dur);
@@ -104,7 +104,7 @@ void QGrpcChannelOptionsTest::propertyMetadata() const
 
 void QGrpcChannelOptionsTest::propertyDeadline() const
 {
-    constexpr QGrpcDuration Dur = 50ms;
+    constexpr std::chrono::milliseconds Dur = 50ms;
 
     QGrpcChannelOptions o1;
     auto o1Detach = o1;

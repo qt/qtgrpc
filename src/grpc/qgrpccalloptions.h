@@ -11,6 +11,7 @@
 #include <QtCore/qstringfwd.h>
 #include <QtCore/qtclasshelpermacros.h>
 
+#include <chrono>
 #include <optional>
 
 QT_BEGIN_NAMESPACE
@@ -37,11 +38,11 @@ public:
 
     void swap(QGrpcCallOptions &other) noexcept { d_ptr.swap(other.d_ptr); }
 
-    Q_GRPC_EXPORT QGrpcCallOptions &setDeadline(QGrpcDuration deadline);
+    Q_GRPC_EXPORT QGrpcCallOptions &setDeadline(std::chrono::milliseconds deadline);
     Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(const QGrpcMetadata &metadata);
     Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(QGrpcMetadata &&metadata);
 
-    [[nodiscard]] Q_GRPC_EXPORT std::optional<QGrpcDuration> deadline() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<std::chrono::milliseconds> deadline() const noexcept;
     [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const & noexcept;
     [[nodiscard]] Q_GRPC_EXPORT QGrpcMetadata metadata() &&;
 
