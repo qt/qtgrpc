@@ -5,6 +5,8 @@
 
 #include <chrono>
 
+using namespace std::chrono_literals;
+
 QT_BEGIN_NAMESPACE
 
 QQmlGrpcCallOptions::QQmlGrpcCallOptions(QObject *parent)
@@ -17,13 +19,13 @@ QQmlGrpcCallOptions::~QQmlGrpcCallOptions() = default;
 
 qint64 QQmlGrpcCallOptions::deadline() const
 {
-    QGrpcDuration ms = m_options.deadline().value_or(QGrpcDuration(0));
+    std::chrono::milliseconds ms = m_options.deadline().value_or(0ms);
     return ms.count();
 }
 
 void QQmlGrpcCallOptions::setDeadline(qint64 value)
 {
-    QGrpcDuration ms(value);
+    std::chrono::milliseconds ms(value);
     m_options.setDeadline(ms);
     emit deadlineChanged();
 }

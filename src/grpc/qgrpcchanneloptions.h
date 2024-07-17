@@ -16,6 +16,7 @@
 #include <QtCore/qtclasshelpermacros.h>
 #include <QtCore/qurl.h>
 
+#include <chrono>
 #include <optional>
 
 QT_BEGIN_NAMESPACE
@@ -43,13 +44,13 @@ public:
 
     void swap(QGrpcChannelOptions &other) noexcept { d_ptr.swap(other.d_ptr); }
 
-    Q_GRPC_EXPORT QGrpcChannelOptions &setDeadline(QGrpcDuration deadline);
+    Q_GRPC_EXPORT QGrpcChannelOptions &setDeadline(std::chrono::milliseconds deadline);
     Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(const QGrpcMetadata &metadata);
     Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(QGrpcMetadata &&metadata);
     Q_GRPC_EXPORT QGrpcChannelOptions &
     setSerializationFormat(const QGrpcSerializationFormat &format);
 
-    [[nodiscard]] Q_GRPC_EXPORT std::optional<QGrpcDuration> deadline() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<std::chrono::milliseconds> deadline() const noexcept;
     [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const & noexcept;
     [[nodiscard]] Q_GRPC_EXPORT QGrpcMetadata metadata() &&;
     [[nodiscard]] Q_GRPC_EXPORT QGrpcSerializationFormat serializationFormat() const;

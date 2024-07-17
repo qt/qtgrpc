@@ -8,6 +8,8 @@
 
 #include <chrono>
 
+using namespace std::chrono_literals;
+
 QT_BEGIN_NAMESPACE
 
 class QQmlGrpcChannelOptionsPrivate : public QObjectPrivate
@@ -36,15 +38,14 @@ QQmlGrpcChannelOptions::QQmlGrpcChannelOptions(QObject *parent)
 
 qint64 QQmlGrpcChannelOptions::deadline() const
 {
-    QGrpcDuration
-        ms = d_func()->m_options.deadline().value_or(QGrpcDuration(0));
+    std::chrono::milliseconds ms = d_func()->m_options.deadline().value_or(0ms);
     return ms.count();
 }
 
 void QQmlGrpcChannelOptions::setDeadline(qint64 value)
 {
     Q_D(QQmlGrpcChannelOptions);
-    QGrpcDuration ms(value);
+    std::chrono::milliseconds ms(value);
     d->m_options.setDeadline(ms);
     emit deadlineChanged();
 }

@@ -61,7 +61,7 @@ void QGrpcCallOptionsTest::hasImplicitQVariant() const
 
 void QGrpcCallOptionsTest::hasMemberSwap() const
 {
-    constexpr QGrpcDuration Dur = 50ms;
+    constexpr std::chrono::milliseconds Dur = 50ms;
 
     QGrpcCallOptions o1;
     o1.setDeadline(Dur);
@@ -101,7 +101,7 @@ void QGrpcCallOptionsTest::propertyMetadata() const
 
 void QGrpcCallOptionsTest::propertyDeadline() const
 {
-    constexpr QGrpcDuration Dur = 50ms;
+    constexpr std::chrono::milliseconds Dur = 50ms;
 
     QGrpcCallOptions o1;
     auto o1Detach = o1;
