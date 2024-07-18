@@ -45,9 +45,9 @@ void QtGrpcClientClientStreamTest::Valid()
 
     sendTimer.start(MessageLatency);
 
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcClientStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
+    QSignalSpy streamErrorSpy(stream.get(), &QGrpcClientStream::errorOccurred);
     QVERIFY(streamErrorSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,

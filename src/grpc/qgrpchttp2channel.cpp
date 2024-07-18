@@ -15,6 +15,7 @@
 #include <QtCore/qlist.h>
 #include <QtCore/qqueue.h>
 #include <QtNetwork/private/hpack_p.h>
+#include <QtNetwork/private/http2protocol_p.h>
 #include <QtNetwork/private/qhttp2connection_p.h>
 #include <QtNetwork/qlocalsocket.h>
 #include <QtNetwork/qtcpsocket.h>
@@ -68,7 +69,43 @@ constexpr QByteArrayView GrpcAcceptEncodingHeader("grpc-accept-encoding");
 constexpr QByteArrayView GrpcStatusHeader("grpc-status");
 constexpr QByteArrayView GrpcStatusMessageHeader("grpc-message");
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
+
+// This HTTP/2 Error Codes to QGrpcStatus::StatusCode mapping should be kept in sync
+// with the following docs:
+//     https://www.rfc-editor.org/rfc/rfc7540#section-7
+//     https://github.com/grpc/grpc/blob/master/doc/statuscodes.md
+//     https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md
+constexpr QGrpcStatus::StatusCode http2ErrorToStatusCode(const quint32 http2Error)
+{
+    using StatusCode = QGrpcStatus::StatusCode;
+    using Http2Error = Http2::Http2Error;
+    switch (http2Error) {
+    case Http2Error::HTTP2_NO_ERROR:
+    case Http2Error::PROTOCOL_ERROR:
+    case Http2Error::INTERNAL_ERROR:
+    case Http2Error::FLOW_CONTROL_ERROR:
+    case Http2Error::SETTINGS_TIMEOUT:
+    case Http2Error::STREAM_CLOSED:
+    case Http2Error::FRAME_SIZE_ERROR:
+        return StatusCode::Internal;
+    case Http2Error::REFUSE_STREAM:
+        return StatusCode::Unavailable;
+    case Http2Error::CANCEL:
+        return StatusCode::Cancelled;
+    case Http2Error::COMPRESSION_ERROR:
+    case Http2Error::CONNECT_ERROR:
+        return StatusCode::Internal;
+    case Http2Error::ENHANCE_YOUR_CALM:
+        return StatusCode::ResourceExhausted;
+    case Http2Error::INADEQUATE_SECURITY:
+        return StatusCode::PermissionDenied;
+    case Http2Error::HTTP_1_1_REQUIRED:
+        return StatusCode::Unknown;
+    }
+    return StatusCode::Internal;
 }
+
+} // namespace
 
 class QGrpcSocketHandler;
 
@@ -175,10 +212,6 @@ private:
         m_socket = std::move(p);
         return typedSocket;
     }
-
-    // This QNetworkReply::NetworkError -> QGrpcStatus::StatusCode mapping should be kept in sync
-    // with original https://github.com/grpc/grpc/blob/master/doc/statuscodes.md
-    static std::unordered_map<quint32, QGrpcStatus::StatusCode> StatusCodeMap;
 
     QGrpcChannelOptions m_channelOptions;
     std::unique_ptr<QIODevice> m_socket = nullptr;
@@ -288,50 +321,9 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::cancel()
     processQueue();
 }
 
-std::unordered_map<quint32, QGrpcStatus::StatusCode> QGrpcHttp2ChannelPrivate::StatusCodeMap;
-
 QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QGrpcChannelOptions &options)
     : m_channelOptions(options)
 {
-    [[maybe_unused]] static bool statusCodeMapInitialized = []() -> bool {
-        QGrpcHttp2ChannelPrivate::StatusCodeMap = {
-            { QNetworkReply::ConnectionRefusedError, QGrpcStatus::Unavailable },
-            { QNetworkReply::RemoteHostClosedError, QGrpcStatus::Unavailable },
-            { QNetworkReply::HostNotFoundError, QGrpcStatus::Unavailable },
-            { QNetworkReply::TimeoutError, QGrpcStatus::DeadlineExceeded },
-            { QNetworkReply::OperationCanceledError, QGrpcStatus::Unavailable },
-            { QNetworkReply::SslHandshakeFailedError, QGrpcStatus::PermissionDenied },
-            { QNetworkReply::TemporaryNetworkFailureError, QGrpcStatus::Unknown },
-            { QNetworkReply::NetworkSessionFailedError, QGrpcStatus::Unavailable },
-            { QNetworkReply::BackgroundRequestNotAllowedError, QGrpcStatus::Unknown },
-            { QNetworkReply::TooManyRedirectsError, QGrpcStatus::Unavailable },
-            { QNetworkReply::InsecureRedirectError, QGrpcStatus::PermissionDenied },
-            { QNetworkReply::UnknownNetworkError, QGrpcStatus::Unknown },
-            { QNetworkReply::ProxyConnectionRefusedError, QGrpcStatus::Unavailable },
-            { QNetworkReply::ProxyConnectionClosedError, QGrpcStatus::Unavailable },
-            { QNetworkReply::ProxyNotFoundError, QGrpcStatus::Unavailable },
-            { QNetworkReply::ProxyTimeoutError, QGrpcStatus::DeadlineExceeded },
-            { QNetworkReply::ProxyAuthenticationRequiredError, QGrpcStatus::Unauthenticated },
-            { QNetworkReply::UnknownProxyError, QGrpcStatus::Unknown },
-            { QNetworkReply::ContentAccessDenied, QGrpcStatus::PermissionDenied },
-            { QNetworkReply::ContentOperationNotPermittedError, QGrpcStatus::PermissionDenied },
-            { QNetworkReply::ContentNotFoundError, QGrpcStatus::NotFound },
-            { QNetworkReply::AuthenticationRequiredError, QGrpcStatus::PermissionDenied },
-            { QNetworkReply::ContentReSendError, QGrpcStatus::DataLoss },
-            { QNetworkReply::ContentConflictError, QGrpcStatus::InvalidArgument },
-            { QNetworkReply::ContentGoneError, QGrpcStatus::DataLoss },
-            { QNetworkReply::UnknownContentError, QGrpcStatus::Unknown },
-            { QNetworkReply::ProtocolUnknownError, QGrpcStatus::Unknown },
-            { QNetworkReply::ProtocolInvalidOperationError, QGrpcStatus::Unimplemented },
-            { QNetworkReply::ProtocolFailure, QGrpcStatus::Unknown },
-            { QNetworkReply::InternalServerError, QGrpcStatus::Internal },
-            { QNetworkReply::OperationNotImplementedError, QGrpcStatus::Unimplemented },
-            { QNetworkReply::ServiceUnavailableError, QGrpcStatus::Unavailable },
-            { QNetworkReply::UnknownServerError, QGrpcStatus::Unknown }
-        };
-        return true;
-    }();
-
     QUrl url = m_channelOptions.host();
     if (url.scheme() == "unix"_L1) {
         auto *localSocket = initSocket<QLocalSocket>();
@@ -533,16 +525,14 @@ void QGrpcHttp2ChannelPrivate::sendRequest(const ChannelOperation &channelOperat
                      });
 
     QObject::connect(handler->stream.get(), &QHttp2Stream::errorOccurred, channelOpPtr,
-                     [this, channelOpPtr, handler](quint32 errorCode, const QString &errorString) {
+                     [this, channelOpPtr, handler](quint32 http2ErrorCode, const QString &errorString) {
                          deleteHandler(handler);
-                         if (errorCode == 0) {
+                         // Check for HTTP2_NO_ERROR to avoid invalid error emission.
+                         // This is fixed in Qt6.8
+                         if (http2ErrorCode == 0) {
                              return;
                          }
-                         QGrpcStatus::StatusCode code = QGrpcStatus::Unknown;
-                         const auto it = StatusCodeMap.find(errorCode);
-                         if (it != StatusCodeMap.end()) {
-                             code = it->second;
-                         }
+                         QGrpcStatus::StatusCode code = http2ErrorToStatusCode(http2ErrorCode);
                          emit channelOpPtr->errorOccurred({ code, errorString });
                      });
 

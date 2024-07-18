@@ -44,9 +44,9 @@ void QtGrpcClientBidirStreamTest::Valid()
                          stream->sendMessage(request);
                      });
 
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcBidirStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
-    QSignalSpy streamErrorSpy(stream.get(), &QGrpcServerStream::errorOccurred);
+    QSignalSpy streamErrorSpy(stream.get(), &QGrpcBidirStream::errorOccurred);
     QVERIFY(streamErrorSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
