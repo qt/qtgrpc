@@ -34,7 +34,7 @@ public:
 
     virtual ~QAbstractProtobufSerializer();
 
-    virtual QAbstractProtobufSerializer::DeserializationError deserializationError() const = 0;
+    virtual DeserializationError deserializationError() const = 0;
     virtual QString deserializationErrorString() const = 0;
 
     virtual void
