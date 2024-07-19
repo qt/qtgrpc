@@ -16,6 +16,8 @@ qt_internal_add_executable(
     INCLUDE_DIRECTORIES
         "${proto_out_include}"
         "${qrpcbench_common_include}"
+    OUTPUT_DIRECTORY
+        "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
 qt_add_protobuf(bench_qtgrpcclient
