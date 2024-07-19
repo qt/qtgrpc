@@ -5,6 +5,8 @@
 #include <QtGrpc/qabstractgrpcclient.h>
 #include <QtGrpc/qgrpchttp2channel.h>
 
+#include <QtCore/qdebug.h>
+
 QT_BEGIN_NAMESPACE
 
 QQmlGrpcHttp2Channel::QQmlGrpcHttp2Channel(QObject *parent)
