@@ -52,13 +52,13 @@ struct TransparentWrapper
     static TransparentWrapper fromType(T t) { return TransparentWrapper(t); }
 
     static QString toString(TransparentWrapper t) { return QString::number(t.t); }
-};
 
-template<typename T, typename tag>
-constexpr TransparentWrapper<T, tag> qbswap(TransparentWrapper<T, tag> source)
-{
-    return { QT_PREPEND_NAMESPACE(qbswap)(source.t) };
-}
+private:
+    friend constexpr TransparentWrapper qbswap(TransparentWrapper source)
+    {
+        return { QT_PREPEND_NAMESPACE(qbswap)(source.t) };
+    }
+};
 
 using int32 = TransparentWrapper<int32_t, struct int_tag>;
 using int64 = TransparentWrapper<int64_t, struct int_tag>;
