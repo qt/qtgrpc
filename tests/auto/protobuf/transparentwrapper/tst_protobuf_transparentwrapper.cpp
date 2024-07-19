@@ -20,6 +20,8 @@ void ProtobufTransparentWrapperTest::specialFunctions() const
     TransparentWrapper<int32_t, struct int_tag> v(42);
 
     QCOMPARE_EQ(qHash(v), qHash(v.t));
+
+    QCOMPARE_EQ(qbswap(v), qbswap(v.t));
 }
 
 void ProtobufTransparentWrapperTest::hashValueDoesNotDependOnTag() const
