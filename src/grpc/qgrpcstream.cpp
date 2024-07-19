@@ -31,7 +31,7 @@ QGrpcServerStream::QGrpcServerStream(std::shared_ptr<QGrpcOperationContext> oper
     : QGrpcOperation(std::move(operationContext), parent)
 {
     QObject::connect(QGrpcOperation::operationContext(), &QGrpcOperationContext::messageReceived,
-                     this, [this] { emit messageReceived(); });
+                     this, &QGrpcServerStream::messageReceived);
 }
 
 /*!
@@ -111,7 +111,7 @@ QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcOperationContext> operat
     : QGrpcOperation(std::move(operationContext), parent)
 {
     QObject::connect(QGrpcOperation::operationContext(), &QGrpcOperationContext::messageReceived,
-                     this, [this] { emit messageReceived(); });
+                     this, &QGrpcBidirStream::messageReceived);
 }
 
 /*!
