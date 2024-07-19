@@ -34,20 +34,6 @@ QT_BEGIN_NAMESPACE
     \l {The qtprotobufgen Tool} {qtprotobufgen} directly.
 */
 
-
-/*!
-    \fn QAbstractProtobufSerializer::DeserializationError QProtobufJsonSerializer::deserializationError() const
-
-    Returns the last deserialization error.
-*/
-
-/*!
-    \fn QString QProtobufJsonSerializer::deserializationErrorString() const
-
-    Returns a human-readable string describing the last deserialization error.
-    If there was no error, an empty string is returned.
-*/
-
 using namespace Qt::StringLiterals;
 using namespace QtProtobufPrivate;
 
@@ -600,12 +586,20 @@ QProtobufJsonSerializer::QProtobufJsonSerializer() :
 
 QProtobufJsonSerializer::~QProtobufJsonSerializer() = default;
 
+/*!
+   Returns the last deserialization error for the serializer instance.
+   \sa deserializationErrorString()
+*/
 QAbstractProtobufSerializer::DeserializationError
 QProtobufJsonSerializer::deserializationError() const
 {
     return d_ptr->deserializationError;
 }
 
+/*!
+   Returns the last deserialization error string for the serializer instance.
+   \sa deserializationError()
+*/
 QString QProtobufJsonSerializer::deserializationErrorString() const
 {
     return d_ptr->deserializationErrorString;
