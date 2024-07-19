@@ -23,7 +23,7 @@ public:
     QProtobufSerializer();
     ~QProtobufSerializer() override;
 
-    QProtobufSerializer::DeserializationError deserializationError() const override;
+    DeserializationError deserializationError() const override;
     QString deserializationErrorString() const override;
 
     void shouldPreserveUnknownFields(bool preserveUnknownFields);

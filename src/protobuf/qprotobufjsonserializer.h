@@ -22,7 +22,7 @@ public:
     QProtobufJsonSerializer();
     ~QProtobufJsonSerializer() override;
 
-    QAbstractProtobufSerializer::DeserializationError deserializationError() const override;
+    DeserializationError deserializationError() const override;
     QString deserializationErrorString() const override;
 
 private:
