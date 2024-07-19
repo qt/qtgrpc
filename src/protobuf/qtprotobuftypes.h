@@ -58,6 +58,11 @@ private:
     {
         return { QT_PREPEND_NAMESPACE(qbswap)(source.t) };
     }
+
+    friend size_t qHash(TransparentWrapper key, size_t seed = 0) noexcept
+    {
+        return QT_PREPEND_NAMESPACE(qHash)(seed, key.t);
+    }
 };
 
 using int32 = TransparentWrapper<int32_t, struct int_tag>;
