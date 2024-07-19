@@ -257,7 +257,7 @@ QGrpcHttp2ChannelPrivate::Http2Handler::Http2Handler(const std::shared_ptr<QGrpc
                      &Http2Handler::finish);
     if (!m_endStreamAtFirstData) {
         QObject::connect(channelOpPtr, &QGrpcOperationContext::writeMessageRequested, this,
-                         [this](const QByteArray &data) { writeMessage(data); });
+                         &Http2Handler::writeMessage);
     }
     QObject::connect(channelOpPtr, &QGrpcOperationContext::finished, &m_deadlineTimer,
                      &QTimer::stop);
