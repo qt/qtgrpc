@@ -49,6 +49,7 @@ protected:
     Q_PROTOBUF_EXPORT
     explicit QProtobufMessage(const QMetaObject *metaObject,
                               const QtProtobufPrivate::QProtobufPropertyOrdering *ordering);
+    Q_PROTOBUF_EXPORT explicit QProtobufMessage(QProtobufMessagePrivate &dd);
 
     Q_PROTOBUF_EXPORT ~QProtobufMessage();
     Q_PROTOBUF_EXPORT QProtobufMessage(const QProtobufMessage &other);
@@ -80,8 +81,10 @@ private:
     friend class QProtobufJsonSerializerPrivate;
     friend struct QProtobufMessageDeleter;
 
-    QExplicitlySharedDataPointer<QProtobufMessagePrivate> d_ptr;
     Q_DECLARE_PRIVATE(QProtobufMessage)
+
+protected:
+    QExplicitlySharedDataPointer<QProtobufMessagePrivate> d_ptr;
 };
 
 class QProtobufMapEntryBasePrivate;
@@ -98,7 +101,6 @@ protected:
     Q_DISABLE_COPY_MOVE(QProtobufMapEntryBase)
 
 private:
-    QProtobufMapEntryBasePrivate *d_ptr;
     Q_DECLARE_PRIVATE(QProtobufMapEntryBase)
 };
 
