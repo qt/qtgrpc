@@ -152,7 +152,8 @@ public:
     bool operator !=(const NoPackageExternalMessage &other) const;
 
     bool hasTestField() const;
-    SimpleIntMessageExt &testField() const;
+    SimpleIntMessageExt &testField();
+    const SimpleIntMessageExt &testField() const;
     Q_INVOKABLE void clearTestField();
     void setTestField(const SimpleIntMessageExt &testField);
     static void registerTypes();
@@ -195,7 +196,8 @@ public:
     bool operator !=(const NoPackageMessage &other) const;
 
     bool hasTestField() const;
-    SimpleIntMessage &testField() const;
+    SimpleIntMessage &testField();
+    const SimpleIntMessage &testField() const;
     Q_INVOKABLE void clearTestField();
     void setTestField(const SimpleIntMessage &testField);
     static void registerTypes();

@@ -488,14 +488,21 @@ const char *CommonTemplates::ClearMessageDefinitionTemplate()
 const char *CommonTemplates::GetterMessageDeclarationTemplate()
 {
     return "bool has$property_name_cap$() const;\n"
-           "$getter_type$ &$property_name$() const;\n";
+           "$getter_type$ &$property_name$();\n"
+           "const $getter_type$ &$property_name$() const;\n";
 }
 const char *CommonTemplates::GetterMessageDefinitionTemplate()
 {
     return "bool $classname$::has$property_name_cap$() const\n{\n"
            "    return dptr->m_$property_name$.operator bool();\n"
            "}\n\n"
-           "$getter_type$ &$classname$::$property_name$() const\n{\n"
+           "$getter_type$ &$classname$::$property_name$()\n"
+           "{\n"
+           "    dptr.detach();\n"
+           "    return *dptr->m_$property_name$;\n"
+           "}\n"
+           "const $getter_type$ &$classname$::$property_name$() const\n"
+           "{\n"
            "    return *dptr->m_$property_name$;\n"
            "}\n\n";
 }

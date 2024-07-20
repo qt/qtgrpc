@@ -749,7 +749,8 @@ public:
     QtProtobuf::int32 testFieldInt() const;
 
     bool hasTestComplexField() const;
-    SimpleStringMessage &testComplexField() const;
+    SimpleStringMessage &testComplexField();
+    const SimpleStringMessage &testComplexField() const;
     Q_INVOKABLE void clearTestComplexField();
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
     void setTestComplexField(const SimpleStringMessage &testComplexField);

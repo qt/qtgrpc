@@ -1967,7 +1967,12 @@ bool ComplexMessage::hasTestComplexField() const
     return dptr->m_testComplexField.operator bool();
 }
 
-SimpleStringMessage &ComplexMessage::testComplexField() const
+SimpleStringMessage &ComplexMessage::testComplexField()
+{
+    dptr.detach();
+    return *dptr->m_testComplexField;
+}
+const SimpleStringMessage &ComplexMessage::testComplexField() const
 {
     return *dptr->m_testComplexField;
 }
