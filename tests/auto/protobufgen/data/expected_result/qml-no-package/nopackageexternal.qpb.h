@@ -41,7 +41,16 @@ public:
     SimpleIntMessageExt(const SimpleIntMessageExt &other);
     SimpleIntMessageExt &operator =(const SimpleIntMessageExt &other);
     SimpleIntMessageExt(SimpleIntMessageExt &&other) noexcept;
-    SimpleIntMessageExt &operator =(SimpleIntMessageExt &&other) noexcept;
+    SimpleIntMessageExt &operator =(SimpleIntMessageExt &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleIntMessageExt &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int32 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);

@@ -81,20 +81,14 @@ TestStringMessage::TestStringMessage(const TestStringMessage &other)
 }
 TestStringMessage &TestStringMessage::operator =(const TestStringMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    TestStringMessage temp(other);
+    swap(temp);
     return *this;
 }
 TestStringMessage::TestStringMessage(TestStringMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-TestStringMessage &TestStringMessage::operator =(TestStringMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const TestStringMessage &lhs, const TestStringMessage &rhs) noexcept
 {
@@ -255,20 +249,14 @@ OptionalMessage::OptionalMessage(const OptionalMessage &other)
 }
 OptionalMessage &OptionalMessage::operator =(const OptionalMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    OptionalMessage temp(other);
+    swap(temp);
     return *this;
 }
 OptionalMessage::OptionalMessage(OptionalMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-OptionalMessage &OptionalMessage::operator =(OptionalMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const OptionalMessage &lhs, const OptionalMessage &rhs) noexcept
 {

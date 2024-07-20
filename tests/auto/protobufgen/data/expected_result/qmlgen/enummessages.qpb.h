@@ -152,7 +152,16 @@ public:
     SimpleEnumMessage(const SimpleEnumMessage &other);
     SimpleEnumMessage &operator =(const SimpleEnumMessage &other);
     SimpleEnumMessage(SimpleEnumMessage &&other) noexcept;
-    SimpleEnumMessage &operator =(SimpleEnumMessage &&other) noexcept;
+    SimpleEnumMessage &operator =(SimpleEnumMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleEnumMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleEnumMessage_QtProtobufNested::LocalEnum localEnum() const;
     void setLocalEnum(const SimpleEnumMessage_QtProtobufNested::LocalEnum &localEnum);
@@ -206,7 +215,16 @@ public:
     RepeatedEnumMessage(const RepeatedEnumMessage &other);
     RepeatedEnumMessage &operator =(const RepeatedEnumMessage &other);
     RepeatedEnumMessage(RepeatedEnumMessage &&other) noexcept;
-    RepeatedEnumMessage &operator =(RepeatedEnumMessage &&other) noexcept;
+    RepeatedEnumMessage &operator =(RepeatedEnumMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedEnumMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated localEnumList() const;
     RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated &localEnumList();
@@ -271,7 +289,16 @@ public:
     MixedEnumUsageMessage(const MixedEnumUsageMessage &other);
     MixedEnumUsageMessage &operator =(const MixedEnumUsageMessage &other);
     MixedEnumUsageMessage(MixedEnumUsageMessage &&other) noexcept;
-    MixedEnumUsageMessage &operator =(MixedEnumUsageMessage &&other) noexcept;
+    MixedEnumUsageMessage &operator =(MixedEnumUsageMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(MixedEnumUsageMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     MixedEnumUsageMessage_QtProtobufNested::LocalEnum localEnum() const;
 
@@ -338,7 +365,16 @@ public:
     NestedEnumHolder(const NestedEnumHolder &other);
     NestedEnumHolder &operator =(const NestedEnumHolder &other);
     NestedEnumHolder(NestedEnumHolder &&other) noexcept;
-    NestedEnumHolder &operator =(NestedEnumHolder &&other) noexcept;
+    NestedEnumHolder &operator =(NestedEnumHolder &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(NestedEnumHolder &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
     static void registerTypes();
 
 private:
@@ -385,7 +421,16 @@ public:
     NestedEnumHolderLevel1(const NestedEnumHolderLevel1 &other);
     NestedEnumHolderLevel1 &operator =(const NestedEnumHolderLevel1 &other);
     NestedEnumHolderLevel1(NestedEnumHolderLevel1 &&other) noexcept;
-    NestedEnumHolderLevel1 &operator =(NestedEnumHolderLevel1 &&other) noexcept;
+    NestedEnumHolderLevel1 &operator =(NestedEnumHolderLevel1 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(NestedEnumHolderLevel1 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
     static void registerTypes();
 
 private:
@@ -427,7 +472,16 @@ public:
     NestedEnumHolderLevel2(const NestedEnumHolderLevel2 &other);
     NestedEnumHolderLevel2 &operator =(const NestedEnumHolderLevel2 &other);
     NestedEnumHolderLevel2(NestedEnumHolderLevel2 &&other) noexcept;
-    NestedEnumHolderLevel2 &operator =(NestedEnumHolderLevel2 &&other) noexcept;
+    NestedEnumHolderLevel2 &operator =(NestedEnumHolderLevel2 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(NestedEnumHolderLevel2 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
     static void registerTypes();
 
 private:
@@ -474,7 +528,16 @@ public:
     NestedEnumMessage(const NestedEnumMessage &other);
     NestedEnumMessage &operator =(const NestedEnumMessage &other);
     NestedEnumMessage(NestedEnumMessage &&other) noexcept;
-    NestedEnumMessage &operator =(NestedEnumMessage &&other) noexcept;
+    NestedEnumMessage &operator =(NestedEnumMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(NestedEnumMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     MixedEnumUsageMessage_QtProtobufNested::LocalEnum localEnumField() const;
 
@@ -535,7 +598,16 @@ public:
     SimpleFileEnumMessage(const SimpleFileEnumMessage &other);
     SimpleFileEnumMessage &operator =(const SimpleFileEnumMessage &other);
     SimpleFileEnumMessage(SimpleFileEnumMessage &&other) noexcept;
-    SimpleFileEnumMessage &operator =(SimpleFileEnumMessage &&other) noexcept;
+    SimpleFileEnumMessage &operator =(SimpleFileEnumMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFileEnumMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     TestEnumGadget::TestEnum globalEnum() const;
 
@@ -584,7 +656,16 @@ public:
     StepChildEnumMessage(const StepChildEnumMessage &other);
     StepChildEnumMessage &operator =(const StepChildEnumMessage &other);
     StepChildEnumMessage(StepChildEnumMessage &&other) noexcept;
-    StepChildEnumMessage &operator =(StepChildEnumMessage &&other) noexcept;
+    StepChildEnumMessage &operator =(StepChildEnumMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(StepChildEnumMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleEnumMessage_QtProtobufNested::LocalEnum localStepChildEnum() const;
 
@@ -634,7 +715,16 @@ public:
     A(const A &other);
     A &operator =(const A &other);
     A(A &&other) noexcept;
-    A &operator =(A &&other) noexcept;
+    A &operator =(A &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(A &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     B_QtProtobufNested::BEnum val() const;
     void setVal(const B_QtProtobufNested::BEnum &val);
@@ -686,7 +776,16 @@ public:
     B(const B &other);
     B &operator =(const B &other);
     B(B &&other) noexcept;
-    B &operator =(B &&other) noexcept;
+    B &operator =(B &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(B &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     A_QtProtobufNested::AEnum val() const;
     void setVal(const A_QtProtobufNested::AEnum &val);

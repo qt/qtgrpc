@@ -116,6 +116,8 @@ void MessageDeclarationPrinter::printMoveSemantic()
     m_printer->Print(m_typeMap, CommonTemplates::MoveConstructorDeclarationTemplate());
 
     m_printer->Print(m_typeMap, CommonTemplates::MoveAssignmentOperatorDeclarationTemplate());
+
+    m_printer->Print(m_typeMap, CommonTemplates::SwapDeclarationTemplate());
 }
 
 void MessageDeclarationPrinter::printComparisonOperators()

@@ -53,7 +53,16 @@ public:
     OneofSimpleMessage(const OneofSimpleMessage &other);
     OneofSimpleMessage &operator =(const OneofSimpleMessage &other);
     OneofSimpleMessage(OneofSimpleMessage &&other) noexcept;
-    OneofSimpleMessage &operator =(OneofSimpleMessage &&other) noexcept;
+    OneofSimpleMessage &operator =(OneofSimpleMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(OneofSimpleMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     bool hasTestOneofFieldInt() const;
     QtProtobuf::int32 testOneofFieldInt() const;
@@ -129,7 +138,16 @@ public:
     OneofComplexMessage(const OneofComplexMessage &other);
     OneofComplexMessage &operator =(const OneofComplexMessage &other);
     OneofComplexMessage(OneofComplexMessage &&other) noexcept;
-    OneofComplexMessage &operator =(OneofComplexMessage &&other) noexcept;
+    OneofComplexMessage &operator =(OneofComplexMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(OneofComplexMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int32 testFieldInt() const;
 

@@ -45,7 +45,16 @@ public:
     TestStringMessage(const TestStringMessage &other);
     TestStringMessage &operator =(const TestStringMessage &other);
     TestStringMessage(TestStringMessage &&other) noexcept;
-    TestStringMessage &operator =(TestStringMessage &&other) noexcept;
+    TestStringMessage &operator =(TestStringMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(TestStringMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QString stringField() const;
     void setStringField(const QString &stringField);
@@ -101,7 +110,16 @@ public:
     OptionalMessage(const OptionalMessage &other);
     OptionalMessage &operator =(const OptionalMessage &other);
     OptionalMessage(OptionalMessage &&other) noexcept;
-    OptionalMessage &operator =(OptionalMessage &&other) noexcept;
+    OptionalMessage &operator =(OptionalMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(OptionalMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
 

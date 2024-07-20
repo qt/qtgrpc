@@ -81,20 +81,14 @@ SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other)
 }
 SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringMessage::SimpleStringMessage(SimpleStringMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringMessage &SimpleStringMessage::operator =(SimpleStringMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
 {
@@ -193,20 +187,14 @@ SimpleIntMessage::SimpleIntMessage(const SimpleIntMessage &other)
 }
 SimpleIntMessage &SimpleIntMessage::operator =(const SimpleIntMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleIntMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleIntMessage::SimpleIntMessage(SimpleIntMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleIntMessage &SimpleIntMessage::operator =(SimpleIntMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
 {
@@ -304,20 +292,14 @@ BlobMessage::BlobMessage(const BlobMessage &other)
 }
 BlobMessage &BlobMessage::operator =(const BlobMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    BlobMessage temp(other);
+    swap(temp);
     return *this;
 }
 BlobMessage::BlobMessage(BlobMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-BlobMessage &BlobMessage::operator =(BlobMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const BlobMessage &lhs, const BlobMessage &rhs) noexcept
 {

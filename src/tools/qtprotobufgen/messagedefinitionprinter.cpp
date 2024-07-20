@@ -336,7 +336,6 @@ void MessageDefinitionPrinter::printMoveSemantic()
 {
     assert(m_descriptor != nullptr);
     m_printer->Print(m_typeMap, CommonTemplates::MoveConstructorDefinitionTemplate());
-    m_printer->Print(m_typeMap, CommonTemplates::MoveAssignmentOperatorDefinitionTemplate());
 }
 
 void MessageDefinitionPrinter::printComparisonOperators()

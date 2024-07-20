@@ -561,7 +561,16 @@ public:
     SimpleSInt32StringMapMessage(const SimpleSInt32StringMapMessage &other);
     SimpleSInt32StringMapMessage &operator =(const SimpleSInt32StringMapMessage &other);
     SimpleSInt32StringMapMessage(SimpleSInt32StringMapMessage &&other) noexcept;
-    SimpleSInt32StringMapMessage &operator =(SimpleSInt32StringMapMessage &&other) noexcept;
+    SimpleSInt32StringMapMessage &operator =(SimpleSInt32StringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt32StringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt32StringMapMessage::MapFieldEntry mapField() const;
     SimpleSInt32StringMapMessage::MapFieldEntry &mapField();
@@ -604,7 +613,16 @@ public:
     SimpleSInt64StringMapMessage(const SimpleSInt64StringMapMessage &other);
     SimpleSInt64StringMapMessage &operator =(const SimpleSInt64StringMapMessage &other);
     SimpleSInt64StringMapMessage(SimpleSInt64StringMapMessage &&other) noexcept;
-    SimpleSInt64StringMapMessage &operator =(SimpleSInt64StringMapMessage &&other) noexcept;
+    SimpleSInt64StringMapMessage &operator =(SimpleSInt64StringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt64StringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt64StringMapMessage::MapFieldEntry mapField() const;
     SimpleSInt64StringMapMessage::MapFieldEntry &mapField();
@@ -647,7 +665,16 @@ public:
     SimpleInt32StringMapMessage(const SimpleInt32StringMapMessage &other);
     SimpleInt32StringMapMessage &operator =(const SimpleInt32StringMapMessage &other);
     SimpleInt32StringMapMessage(SimpleInt32StringMapMessage &&other) noexcept;
-    SimpleInt32StringMapMessage &operator =(SimpleInt32StringMapMessage &&other) noexcept;
+    SimpleInt32StringMapMessage &operator =(SimpleInt32StringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt32StringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt32StringMapMessage::MapFieldEntry mapField() const;
     SimpleInt32StringMapMessage::MapFieldEntry &mapField();
@@ -690,7 +717,16 @@ public:
     SimpleInt64StringMapMessage(const SimpleInt64StringMapMessage &other);
     SimpleInt64StringMapMessage &operator =(const SimpleInt64StringMapMessage &other);
     SimpleInt64StringMapMessage(SimpleInt64StringMapMessage &&other) noexcept;
-    SimpleInt64StringMapMessage &operator =(SimpleInt64StringMapMessage &&other) noexcept;
+    SimpleInt64StringMapMessage &operator =(SimpleInt64StringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt64StringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt64StringMapMessage::MapFieldEntry mapField() const;
     SimpleInt64StringMapMessage::MapFieldEntry &mapField();
@@ -733,7 +769,16 @@ public:
     SimpleUInt32StringMapMessage(const SimpleUInt32StringMapMessage &other);
     SimpleUInt32StringMapMessage &operator =(const SimpleUInt32StringMapMessage &other);
     SimpleUInt32StringMapMessage(SimpleUInt32StringMapMessage &&other) noexcept;
-    SimpleUInt32StringMapMessage &operator =(SimpleUInt32StringMapMessage &&other) noexcept;
+    SimpleUInt32StringMapMessage &operator =(SimpleUInt32StringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt32StringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt32StringMapMessage::MapFieldEntry mapField() const;
     SimpleUInt32StringMapMessage::MapFieldEntry &mapField();
@@ -776,7 +821,16 @@ public:
     SimpleUInt64StringMapMessage(const SimpleUInt64StringMapMessage &other);
     SimpleUInt64StringMapMessage &operator =(const SimpleUInt64StringMapMessage &other);
     SimpleUInt64StringMapMessage(SimpleUInt64StringMapMessage &&other) noexcept;
-    SimpleUInt64StringMapMessage &operator =(SimpleUInt64StringMapMessage &&other) noexcept;
+    SimpleUInt64StringMapMessage &operator =(SimpleUInt64StringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt64StringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt64StringMapMessage::MapFieldEntry mapField() const;
     SimpleUInt64StringMapMessage::MapFieldEntry &mapField();
@@ -819,7 +873,16 @@ public:
     SimpleFixed32StringMapMessage(const SimpleFixed32StringMapMessage &other);
     SimpleFixed32StringMapMessage &operator =(const SimpleFixed32StringMapMessage &other);
     SimpleFixed32StringMapMessage(SimpleFixed32StringMapMessage &&other) noexcept;
-    SimpleFixed32StringMapMessage &operator =(SimpleFixed32StringMapMessage &&other) noexcept;
+    SimpleFixed32StringMapMessage &operator =(SimpleFixed32StringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed32StringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed32StringMapMessage::MapFieldEntry mapField() const;
     SimpleFixed32StringMapMessage::MapFieldEntry &mapField();
@@ -862,7 +925,16 @@ public:
     SimpleFixed64StringMapMessage(const SimpleFixed64StringMapMessage &other);
     SimpleFixed64StringMapMessage &operator =(const SimpleFixed64StringMapMessage &other);
     SimpleFixed64StringMapMessage(SimpleFixed64StringMapMessage &&other) noexcept;
-    SimpleFixed64StringMapMessage &operator =(SimpleFixed64StringMapMessage &&other) noexcept;
+    SimpleFixed64StringMapMessage &operator =(SimpleFixed64StringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed64StringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed64StringMapMessage::MapFieldEntry mapField() const;
     SimpleFixed64StringMapMessage::MapFieldEntry &mapField();
@@ -905,7 +977,16 @@ public:
     SimpleSFixed32StringMapMessage(const SimpleSFixed32StringMapMessage &other);
     SimpleSFixed32StringMapMessage &operator =(const SimpleSFixed32StringMapMessage &other);
     SimpleSFixed32StringMapMessage(SimpleSFixed32StringMapMessage &&other) noexcept;
-    SimpleSFixed32StringMapMessage &operator =(SimpleSFixed32StringMapMessage &&other) noexcept;
+    SimpleSFixed32StringMapMessage &operator =(SimpleSFixed32StringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed32StringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed32StringMapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32StringMapMessage::MapFieldEntry &mapField();
@@ -948,7 +1029,16 @@ public:
     SimpleSFixed64StringMapMessage(const SimpleSFixed64StringMapMessage &other);
     SimpleSFixed64StringMapMessage &operator =(const SimpleSFixed64StringMapMessage &other);
     SimpleSFixed64StringMapMessage(SimpleSFixed64StringMapMessage &&other) noexcept;
-    SimpleSFixed64StringMapMessage &operator =(SimpleSFixed64StringMapMessage &&other) noexcept;
+    SimpleSFixed64StringMapMessage &operator =(SimpleSFixed64StringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed64StringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed64StringMapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64StringMapMessage::MapFieldEntry &mapField();
@@ -991,7 +1081,16 @@ public:
     SimpleStringStringMapMessage(const SimpleStringStringMapMessage &other);
     SimpleStringStringMapMessage &operator =(const SimpleStringStringMapMessage &other);
     SimpleStringStringMapMessage(SimpleStringStringMapMessage &&other) noexcept;
-    SimpleStringStringMapMessage &operator =(SimpleStringStringMapMessage &&other) noexcept;
+    SimpleStringStringMapMessage &operator =(SimpleStringStringMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringStringMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleStringStringMapMessage::MapFieldEntry mapField() const;
     SimpleStringStringMapMessage::MapFieldEntry &mapField();
@@ -1034,7 +1133,16 @@ public:
     SimpleSInt32SInt32MapMessage(const SimpleSInt32SInt32MapMessage &other);
     SimpleSInt32SInt32MapMessage &operator =(const SimpleSInt32SInt32MapMessage &other);
     SimpleSInt32SInt32MapMessage(SimpleSInt32SInt32MapMessage &&other) noexcept;
-    SimpleSInt32SInt32MapMessage &operator =(SimpleSInt32SInt32MapMessage &&other) noexcept;
+    SimpleSInt32SInt32MapMessage &operator =(SimpleSInt32SInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt32SInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt32SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32SInt32MapMessage::MapFieldEntry &mapField();
@@ -1077,7 +1185,16 @@ public:
     SimpleSInt64SInt32MapMessage(const SimpleSInt64SInt32MapMessage &other);
     SimpleSInt64SInt32MapMessage &operator =(const SimpleSInt64SInt32MapMessage &other);
     SimpleSInt64SInt32MapMessage(SimpleSInt64SInt32MapMessage &&other) noexcept;
-    SimpleSInt64SInt32MapMessage &operator =(SimpleSInt64SInt32MapMessage &&other) noexcept;
+    SimpleSInt64SInt32MapMessage &operator =(SimpleSInt64SInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt64SInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt64SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64SInt32MapMessage::MapFieldEntry &mapField();
@@ -1120,7 +1237,16 @@ public:
     SimpleInt32SInt32MapMessage(const SimpleInt32SInt32MapMessage &other);
     SimpleInt32SInt32MapMessage &operator =(const SimpleInt32SInt32MapMessage &other);
     SimpleInt32SInt32MapMessage(SimpleInt32SInt32MapMessage &&other) noexcept;
-    SimpleInt32SInt32MapMessage &operator =(SimpleInt32SInt32MapMessage &&other) noexcept;
+    SimpleInt32SInt32MapMessage &operator =(SimpleInt32SInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt32SInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt32SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleInt32SInt32MapMessage::MapFieldEntry &mapField();
@@ -1163,7 +1289,16 @@ public:
     SimpleInt64SInt32MapMessage(const SimpleInt64SInt32MapMessage &other);
     SimpleInt64SInt32MapMessage &operator =(const SimpleInt64SInt32MapMessage &other);
     SimpleInt64SInt32MapMessage(SimpleInt64SInt32MapMessage &&other) noexcept;
-    SimpleInt64SInt32MapMessage &operator =(SimpleInt64SInt32MapMessage &&other) noexcept;
+    SimpleInt64SInt32MapMessage &operator =(SimpleInt64SInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt64SInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt64SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleInt64SInt32MapMessage::MapFieldEntry &mapField();
@@ -1206,7 +1341,16 @@ public:
     SimpleUInt32SInt32MapMessage(const SimpleUInt32SInt32MapMessage &other);
     SimpleUInt32SInt32MapMessage &operator =(const SimpleUInt32SInt32MapMessage &other);
     SimpleUInt32SInt32MapMessage(SimpleUInt32SInt32MapMessage &&other) noexcept;
-    SimpleUInt32SInt32MapMessage &operator =(SimpleUInt32SInt32MapMessage &&other) noexcept;
+    SimpleUInt32SInt32MapMessage &operator =(SimpleUInt32SInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt32SInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt32SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32SInt32MapMessage::MapFieldEntry &mapField();
@@ -1249,7 +1393,16 @@ public:
     SimpleUInt64SInt32MapMessage(const SimpleUInt64SInt32MapMessage &other);
     SimpleUInt64SInt32MapMessage &operator =(const SimpleUInt64SInt32MapMessage &other);
     SimpleUInt64SInt32MapMessage(SimpleUInt64SInt32MapMessage &&other) noexcept;
-    SimpleUInt64SInt32MapMessage &operator =(SimpleUInt64SInt32MapMessage &&other) noexcept;
+    SimpleUInt64SInt32MapMessage &operator =(SimpleUInt64SInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt64SInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt64SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64SInt32MapMessage::MapFieldEntry &mapField();
@@ -1292,7 +1445,16 @@ public:
     SimpleFixed32SInt32MapMessage(const SimpleFixed32SInt32MapMessage &other);
     SimpleFixed32SInt32MapMessage &operator =(const SimpleFixed32SInt32MapMessage &other);
     SimpleFixed32SInt32MapMessage(SimpleFixed32SInt32MapMessage &&other) noexcept;
-    SimpleFixed32SInt32MapMessage &operator =(SimpleFixed32SInt32MapMessage &&other) noexcept;
+    SimpleFixed32SInt32MapMessage &operator =(SimpleFixed32SInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed32SInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed32SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32SInt32MapMessage::MapFieldEntry &mapField();
@@ -1335,7 +1497,16 @@ public:
     SimpleFixed64SInt32MapMessage(const SimpleFixed64SInt32MapMessage &other);
     SimpleFixed64SInt32MapMessage &operator =(const SimpleFixed64SInt32MapMessage &other);
     SimpleFixed64SInt32MapMessage(SimpleFixed64SInt32MapMessage &&other) noexcept;
-    SimpleFixed64SInt32MapMessage &operator =(SimpleFixed64SInt32MapMessage &&other) noexcept;
+    SimpleFixed64SInt32MapMessage &operator =(SimpleFixed64SInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed64SInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed64SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64SInt32MapMessage::MapFieldEntry &mapField();
@@ -1378,7 +1549,16 @@ public:
     SimpleSFixed32SInt32MapMessage(const SimpleSFixed32SInt32MapMessage &other);
     SimpleSFixed32SInt32MapMessage &operator =(const SimpleSFixed32SInt32MapMessage &other);
     SimpleSFixed32SInt32MapMessage(SimpleSFixed32SInt32MapMessage &&other) noexcept;
-    SimpleSFixed32SInt32MapMessage &operator =(SimpleSFixed32SInt32MapMessage &&other) noexcept;
+    SimpleSFixed32SInt32MapMessage &operator =(SimpleSFixed32SInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed32SInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed32SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32SInt32MapMessage::MapFieldEntry &mapField();
@@ -1421,7 +1601,16 @@ public:
     SimpleSFixed64SInt32MapMessage(const SimpleSFixed64SInt32MapMessage &other);
     SimpleSFixed64SInt32MapMessage &operator =(const SimpleSFixed64SInt32MapMessage &other);
     SimpleSFixed64SInt32MapMessage(SimpleSFixed64SInt32MapMessage &&other) noexcept;
-    SimpleSFixed64SInt32MapMessage &operator =(SimpleSFixed64SInt32MapMessage &&other) noexcept;
+    SimpleSFixed64SInt32MapMessage &operator =(SimpleSFixed64SInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed64SInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed64SInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64SInt32MapMessage::MapFieldEntry &mapField();
@@ -1464,7 +1653,16 @@ public:
     SimpleStringSInt32MapMessage(const SimpleStringSInt32MapMessage &other);
     SimpleStringSInt32MapMessage &operator =(const SimpleStringSInt32MapMessage &other);
     SimpleStringSInt32MapMessage(SimpleStringSInt32MapMessage &&other) noexcept;
-    SimpleStringSInt32MapMessage &operator =(SimpleStringSInt32MapMessage &&other) noexcept;
+    SimpleStringSInt32MapMessage &operator =(SimpleStringSInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringSInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleStringSInt32MapMessage::MapFieldEntry mapField() const;
     SimpleStringSInt32MapMessage::MapFieldEntry &mapField();
@@ -1507,7 +1705,16 @@ public:
     SimpleSInt32SInt64MapMessage(const SimpleSInt32SInt64MapMessage &other);
     SimpleSInt32SInt64MapMessage &operator =(const SimpleSInt32SInt64MapMessage &other);
     SimpleSInt32SInt64MapMessage(SimpleSInt32SInt64MapMessage &&other) noexcept;
-    SimpleSInt32SInt64MapMessage &operator =(SimpleSInt32SInt64MapMessage &&other) noexcept;
+    SimpleSInt32SInt64MapMessage &operator =(SimpleSInt32SInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt32SInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt32SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32SInt64MapMessage::MapFieldEntry &mapField();
@@ -1550,7 +1757,16 @@ public:
     SimpleSInt64SInt64MapMessage(const SimpleSInt64SInt64MapMessage &other);
     SimpleSInt64SInt64MapMessage &operator =(const SimpleSInt64SInt64MapMessage &other);
     SimpleSInt64SInt64MapMessage(SimpleSInt64SInt64MapMessage &&other) noexcept;
-    SimpleSInt64SInt64MapMessage &operator =(SimpleSInt64SInt64MapMessage &&other) noexcept;
+    SimpleSInt64SInt64MapMessage &operator =(SimpleSInt64SInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt64SInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt64SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64SInt64MapMessage::MapFieldEntry &mapField();
@@ -1593,7 +1809,16 @@ public:
     SimpleInt32SInt64MapMessage(const SimpleInt32SInt64MapMessage &other);
     SimpleInt32SInt64MapMessage &operator =(const SimpleInt32SInt64MapMessage &other);
     SimpleInt32SInt64MapMessage(SimpleInt32SInt64MapMessage &&other) noexcept;
-    SimpleInt32SInt64MapMessage &operator =(SimpleInt32SInt64MapMessage &&other) noexcept;
+    SimpleInt32SInt64MapMessage &operator =(SimpleInt32SInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt32SInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt32SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleInt32SInt64MapMessage::MapFieldEntry &mapField();
@@ -1636,7 +1861,16 @@ public:
     SimpleInt64SInt64MapMessage(const SimpleInt64SInt64MapMessage &other);
     SimpleInt64SInt64MapMessage &operator =(const SimpleInt64SInt64MapMessage &other);
     SimpleInt64SInt64MapMessage(SimpleInt64SInt64MapMessage &&other) noexcept;
-    SimpleInt64SInt64MapMessage &operator =(SimpleInt64SInt64MapMessage &&other) noexcept;
+    SimpleInt64SInt64MapMessage &operator =(SimpleInt64SInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt64SInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt64SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleInt64SInt64MapMessage::MapFieldEntry &mapField();
@@ -1679,7 +1913,16 @@ public:
     SimpleUInt32SInt64MapMessage(const SimpleUInt32SInt64MapMessage &other);
     SimpleUInt32SInt64MapMessage &operator =(const SimpleUInt32SInt64MapMessage &other);
     SimpleUInt32SInt64MapMessage(SimpleUInt32SInt64MapMessage &&other) noexcept;
-    SimpleUInt32SInt64MapMessage &operator =(SimpleUInt32SInt64MapMessage &&other) noexcept;
+    SimpleUInt32SInt64MapMessage &operator =(SimpleUInt32SInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt32SInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt32SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32SInt64MapMessage::MapFieldEntry &mapField();
@@ -1722,7 +1965,16 @@ public:
     SimpleUInt64SInt64MapMessage(const SimpleUInt64SInt64MapMessage &other);
     SimpleUInt64SInt64MapMessage &operator =(const SimpleUInt64SInt64MapMessage &other);
     SimpleUInt64SInt64MapMessage(SimpleUInt64SInt64MapMessage &&other) noexcept;
-    SimpleUInt64SInt64MapMessage &operator =(SimpleUInt64SInt64MapMessage &&other) noexcept;
+    SimpleUInt64SInt64MapMessage &operator =(SimpleUInt64SInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt64SInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt64SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64SInt64MapMessage::MapFieldEntry &mapField();
@@ -1765,7 +2017,16 @@ public:
     SimpleFixed32SInt64MapMessage(const SimpleFixed32SInt64MapMessage &other);
     SimpleFixed32SInt64MapMessage &operator =(const SimpleFixed32SInt64MapMessage &other);
     SimpleFixed32SInt64MapMessage(SimpleFixed32SInt64MapMessage &&other) noexcept;
-    SimpleFixed32SInt64MapMessage &operator =(SimpleFixed32SInt64MapMessage &&other) noexcept;
+    SimpleFixed32SInt64MapMessage &operator =(SimpleFixed32SInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed32SInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed32SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32SInt64MapMessage::MapFieldEntry &mapField();
@@ -1808,7 +2069,16 @@ public:
     SimpleFixed64SInt64MapMessage(const SimpleFixed64SInt64MapMessage &other);
     SimpleFixed64SInt64MapMessage &operator =(const SimpleFixed64SInt64MapMessage &other);
     SimpleFixed64SInt64MapMessage(SimpleFixed64SInt64MapMessage &&other) noexcept;
-    SimpleFixed64SInt64MapMessage &operator =(SimpleFixed64SInt64MapMessage &&other) noexcept;
+    SimpleFixed64SInt64MapMessage &operator =(SimpleFixed64SInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed64SInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed64SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64SInt64MapMessage::MapFieldEntry &mapField();
@@ -1851,7 +2121,16 @@ public:
     SimpleSFixed32SInt64MapMessage(const SimpleSFixed32SInt64MapMessage &other);
     SimpleSFixed32SInt64MapMessage &operator =(const SimpleSFixed32SInt64MapMessage &other);
     SimpleSFixed32SInt64MapMessage(SimpleSFixed32SInt64MapMessage &&other) noexcept;
-    SimpleSFixed32SInt64MapMessage &operator =(SimpleSFixed32SInt64MapMessage &&other) noexcept;
+    SimpleSFixed32SInt64MapMessage &operator =(SimpleSFixed32SInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed32SInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed32SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32SInt64MapMessage::MapFieldEntry &mapField();
@@ -1894,7 +2173,16 @@ public:
     SimpleSFixed64SInt64MapMessage(const SimpleSFixed64SInt64MapMessage &other);
     SimpleSFixed64SInt64MapMessage &operator =(const SimpleSFixed64SInt64MapMessage &other);
     SimpleSFixed64SInt64MapMessage(SimpleSFixed64SInt64MapMessage &&other) noexcept;
-    SimpleSFixed64SInt64MapMessage &operator =(SimpleSFixed64SInt64MapMessage &&other) noexcept;
+    SimpleSFixed64SInt64MapMessage &operator =(SimpleSFixed64SInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed64SInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed64SInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64SInt64MapMessage::MapFieldEntry &mapField();
@@ -1937,7 +2225,16 @@ public:
     SimpleStringSInt64MapMessage(const SimpleStringSInt64MapMessage &other);
     SimpleStringSInt64MapMessage &operator =(const SimpleStringSInt64MapMessage &other);
     SimpleStringSInt64MapMessage(SimpleStringSInt64MapMessage &&other) noexcept;
-    SimpleStringSInt64MapMessage &operator =(SimpleStringSInt64MapMessage &&other) noexcept;
+    SimpleStringSInt64MapMessage &operator =(SimpleStringSInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringSInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleStringSInt64MapMessage::MapFieldEntry mapField() const;
     SimpleStringSInt64MapMessage::MapFieldEntry &mapField();
@@ -1980,7 +2277,16 @@ public:
     SimpleSInt32UInt32MapMessage(const SimpleSInt32UInt32MapMessage &other);
     SimpleSInt32UInt32MapMessage &operator =(const SimpleSInt32UInt32MapMessage &other);
     SimpleSInt32UInt32MapMessage(SimpleSInt32UInt32MapMessage &&other) noexcept;
-    SimpleSInt32UInt32MapMessage &operator =(SimpleSInt32UInt32MapMessage &&other) noexcept;
+    SimpleSInt32UInt32MapMessage &operator =(SimpleSInt32UInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt32UInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt32UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32UInt32MapMessage::MapFieldEntry &mapField();
@@ -2023,7 +2329,16 @@ public:
     SimpleSInt64UInt32MapMessage(const SimpleSInt64UInt32MapMessage &other);
     SimpleSInt64UInt32MapMessage &operator =(const SimpleSInt64UInt32MapMessage &other);
     SimpleSInt64UInt32MapMessage(SimpleSInt64UInt32MapMessage &&other) noexcept;
-    SimpleSInt64UInt32MapMessage &operator =(SimpleSInt64UInt32MapMessage &&other) noexcept;
+    SimpleSInt64UInt32MapMessage &operator =(SimpleSInt64UInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt64UInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt64UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64UInt32MapMessage::MapFieldEntry &mapField();
@@ -2066,7 +2381,16 @@ public:
     SimpleInt32UInt32MapMessage(const SimpleInt32UInt32MapMessage &other);
     SimpleInt32UInt32MapMessage &operator =(const SimpleInt32UInt32MapMessage &other);
     SimpleInt32UInt32MapMessage(SimpleInt32UInt32MapMessage &&other) noexcept;
-    SimpleInt32UInt32MapMessage &operator =(SimpleInt32UInt32MapMessage &&other) noexcept;
+    SimpleInt32UInt32MapMessage &operator =(SimpleInt32UInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt32UInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt32UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleInt32UInt32MapMessage::MapFieldEntry &mapField();
@@ -2109,7 +2433,16 @@ public:
     SimpleInt64UInt32MapMessage(const SimpleInt64UInt32MapMessage &other);
     SimpleInt64UInt32MapMessage &operator =(const SimpleInt64UInt32MapMessage &other);
     SimpleInt64UInt32MapMessage(SimpleInt64UInt32MapMessage &&other) noexcept;
-    SimpleInt64UInt32MapMessage &operator =(SimpleInt64UInt32MapMessage &&other) noexcept;
+    SimpleInt64UInt32MapMessage &operator =(SimpleInt64UInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt64UInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt64UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleInt64UInt32MapMessage::MapFieldEntry &mapField();
@@ -2152,7 +2485,16 @@ public:
     SimpleUInt32UInt32MapMessage(const SimpleUInt32UInt32MapMessage &other);
     SimpleUInt32UInt32MapMessage &operator =(const SimpleUInt32UInt32MapMessage &other);
     SimpleUInt32UInt32MapMessage(SimpleUInt32UInt32MapMessage &&other) noexcept;
-    SimpleUInt32UInt32MapMessage &operator =(SimpleUInt32UInt32MapMessage &&other) noexcept;
+    SimpleUInt32UInt32MapMessage &operator =(SimpleUInt32UInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt32UInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt32UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32UInt32MapMessage::MapFieldEntry &mapField();
@@ -2195,7 +2537,16 @@ public:
     SimpleUInt64UInt32MapMessage(const SimpleUInt64UInt32MapMessage &other);
     SimpleUInt64UInt32MapMessage &operator =(const SimpleUInt64UInt32MapMessage &other);
     SimpleUInt64UInt32MapMessage(SimpleUInt64UInt32MapMessage &&other) noexcept;
-    SimpleUInt64UInt32MapMessage &operator =(SimpleUInt64UInt32MapMessage &&other) noexcept;
+    SimpleUInt64UInt32MapMessage &operator =(SimpleUInt64UInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt64UInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt64UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64UInt32MapMessage::MapFieldEntry &mapField();
@@ -2238,7 +2589,16 @@ public:
     SimpleFixed32UInt32MapMessage(const SimpleFixed32UInt32MapMessage &other);
     SimpleFixed32UInt32MapMessage &operator =(const SimpleFixed32UInt32MapMessage &other);
     SimpleFixed32UInt32MapMessage(SimpleFixed32UInt32MapMessage &&other) noexcept;
-    SimpleFixed32UInt32MapMessage &operator =(SimpleFixed32UInt32MapMessage &&other) noexcept;
+    SimpleFixed32UInt32MapMessage &operator =(SimpleFixed32UInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed32UInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed32UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32UInt32MapMessage::MapFieldEntry &mapField();
@@ -2281,7 +2641,16 @@ public:
     SimpleFixed64UInt32MapMessage(const SimpleFixed64UInt32MapMessage &other);
     SimpleFixed64UInt32MapMessage &operator =(const SimpleFixed64UInt32MapMessage &other);
     SimpleFixed64UInt32MapMessage(SimpleFixed64UInt32MapMessage &&other) noexcept;
-    SimpleFixed64UInt32MapMessage &operator =(SimpleFixed64UInt32MapMessage &&other) noexcept;
+    SimpleFixed64UInt32MapMessage &operator =(SimpleFixed64UInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed64UInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed64UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64UInt32MapMessage::MapFieldEntry &mapField();
@@ -2324,7 +2693,16 @@ public:
     SimpleSFixed32UInt32MapMessage(const SimpleSFixed32UInt32MapMessage &other);
     SimpleSFixed32UInt32MapMessage &operator =(const SimpleSFixed32UInt32MapMessage &other);
     SimpleSFixed32UInt32MapMessage(SimpleSFixed32UInt32MapMessage &&other) noexcept;
-    SimpleSFixed32UInt32MapMessage &operator =(SimpleSFixed32UInt32MapMessage &&other) noexcept;
+    SimpleSFixed32UInt32MapMessage &operator =(SimpleSFixed32UInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed32UInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed32UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32UInt32MapMessage::MapFieldEntry &mapField();
@@ -2367,7 +2745,16 @@ public:
     SimpleSFixed64UInt32MapMessage(const SimpleSFixed64UInt32MapMessage &other);
     SimpleSFixed64UInt32MapMessage &operator =(const SimpleSFixed64UInt32MapMessage &other);
     SimpleSFixed64UInt32MapMessage(SimpleSFixed64UInt32MapMessage &&other) noexcept;
-    SimpleSFixed64UInt32MapMessage &operator =(SimpleSFixed64UInt32MapMessage &&other) noexcept;
+    SimpleSFixed64UInt32MapMessage &operator =(SimpleSFixed64UInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed64UInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed64UInt32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64UInt32MapMessage::MapFieldEntry &mapField();
@@ -2410,7 +2797,16 @@ public:
     SimpleStringUInt32MapMessage(const SimpleStringUInt32MapMessage &other);
     SimpleStringUInt32MapMessage &operator =(const SimpleStringUInt32MapMessage &other);
     SimpleStringUInt32MapMessage(SimpleStringUInt32MapMessage &&other) noexcept;
-    SimpleStringUInt32MapMessage &operator =(SimpleStringUInt32MapMessage &&other) noexcept;
+    SimpleStringUInt32MapMessage &operator =(SimpleStringUInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringUInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleStringUInt32MapMessage::MapFieldEntry mapField() const;
     SimpleStringUInt32MapMessage::MapFieldEntry &mapField();
@@ -2453,7 +2849,16 @@ public:
     SimpleSInt32UInt64MapMessage(const SimpleSInt32UInt64MapMessage &other);
     SimpleSInt32UInt64MapMessage &operator =(const SimpleSInt32UInt64MapMessage &other);
     SimpleSInt32UInt64MapMessage(SimpleSInt32UInt64MapMessage &&other) noexcept;
-    SimpleSInt32UInt64MapMessage &operator =(SimpleSInt32UInt64MapMessage &&other) noexcept;
+    SimpleSInt32UInt64MapMessage &operator =(SimpleSInt32UInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt32UInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt32UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32UInt64MapMessage::MapFieldEntry &mapField();
@@ -2496,7 +2901,16 @@ public:
     SimpleSInt64UInt64MapMessage(const SimpleSInt64UInt64MapMessage &other);
     SimpleSInt64UInt64MapMessage &operator =(const SimpleSInt64UInt64MapMessage &other);
     SimpleSInt64UInt64MapMessage(SimpleSInt64UInt64MapMessage &&other) noexcept;
-    SimpleSInt64UInt64MapMessage &operator =(SimpleSInt64UInt64MapMessage &&other) noexcept;
+    SimpleSInt64UInt64MapMessage &operator =(SimpleSInt64UInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt64UInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt64UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64UInt64MapMessage::MapFieldEntry &mapField();
@@ -2539,7 +2953,16 @@ public:
     SimpleInt32UInt64MapMessage(const SimpleInt32UInt64MapMessage &other);
     SimpleInt32UInt64MapMessage &operator =(const SimpleInt32UInt64MapMessage &other);
     SimpleInt32UInt64MapMessage(SimpleInt32UInt64MapMessage &&other) noexcept;
-    SimpleInt32UInt64MapMessage &operator =(SimpleInt32UInt64MapMessage &&other) noexcept;
+    SimpleInt32UInt64MapMessage &operator =(SimpleInt32UInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt32UInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt32UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleInt32UInt64MapMessage::MapFieldEntry &mapField();
@@ -2582,7 +3005,16 @@ public:
     SimpleInt64UInt64MapMessage(const SimpleInt64UInt64MapMessage &other);
     SimpleInt64UInt64MapMessage &operator =(const SimpleInt64UInt64MapMessage &other);
     SimpleInt64UInt64MapMessage(SimpleInt64UInt64MapMessage &&other) noexcept;
-    SimpleInt64UInt64MapMessage &operator =(SimpleInt64UInt64MapMessage &&other) noexcept;
+    SimpleInt64UInt64MapMessage &operator =(SimpleInt64UInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt64UInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt64UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleInt64UInt64MapMessage::MapFieldEntry &mapField();
@@ -2625,7 +3057,16 @@ public:
     SimpleUInt32UInt64MapMessage(const SimpleUInt32UInt64MapMessage &other);
     SimpleUInt32UInt64MapMessage &operator =(const SimpleUInt32UInt64MapMessage &other);
     SimpleUInt32UInt64MapMessage(SimpleUInt32UInt64MapMessage &&other) noexcept;
-    SimpleUInt32UInt64MapMessage &operator =(SimpleUInt32UInt64MapMessage &&other) noexcept;
+    SimpleUInt32UInt64MapMessage &operator =(SimpleUInt32UInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt32UInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt32UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32UInt64MapMessage::MapFieldEntry &mapField();
@@ -2668,7 +3109,16 @@ public:
     SimpleUInt64UInt64MapMessage(const SimpleUInt64UInt64MapMessage &other);
     SimpleUInt64UInt64MapMessage &operator =(const SimpleUInt64UInt64MapMessage &other);
     SimpleUInt64UInt64MapMessage(SimpleUInt64UInt64MapMessage &&other) noexcept;
-    SimpleUInt64UInt64MapMessage &operator =(SimpleUInt64UInt64MapMessage &&other) noexcept;
+    SimpleUInt64UInt64MapMessage &operator =(SimpleUInt64UInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt64UInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt64UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64UInt64MapMessage::MapFieldEntry &mapField();
@@ -2711,7 +3161,16 @@ public:
     SimpleFixed32UInt64MapMessage(const SimpleFixed32UInt64MapMessage &other);
     SimpleFixed32UInt64MapMessage &operator =(const SimpleFixed32UInt64MapMessage &other);
     SimpleFixed32UInt64MapMessage(SimpleFixed32UInt64MapMessage &&other) noexcept;
-    SimpleFixed32UInt64MapMessage &operator =(SimpleFixed32UInt64MapMessage &&other) noexcept;
+    SimpleFixed32UInt64MapMessage &operator =(SimpleFixed32UInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed32UInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed32UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32UInt64MapMessage::MapFieldEntry &mapField();
@@ -2754,7 +3213,16 @@ public:
     SimpleFixed64UInt64MapMessage(const SimpleFixed64UInt64MapMessage &other);
     SimpleFixed64UInt64MapMessage &operator =(const SimpleFixed64UInt64MapMessage &other);
     SimpleFixed64UInt64MapMessage(SimpleFixed64UInt64MapMessage &&other) noexcept;
-    SimpleFixed64UInt64MapMessage &operator =(SimpleFixed64UInt64MapMessage &&other) noexcept;
+    SimpleFixed64UInt64MapMessage &operator =(SimpleFixed64UInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed64UInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed64UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64UInt64MapMessage::MapFieldEntry &mapField();
@@ -2797,7 +3265,16 @@ public:
     SimpleSFixed32UInt64MapMessage(const SimpleSFixed32UInt64MapMessage &other);
     SimpleSFixed32UInt64MapMessage &operator =(const SimpleSFixed32UInt64MapMessage &other);
     SimpleSFixed32UInt64MapMessage(SimpleSFixed32UInt64MapMessage &&other) noexcept;
-    SimpleSFixed32UInt64MapMessage &operator =(SimpleSFixed32UInt64MapMessage &&other) noexcept;
+    SimpleSFixed32UInt64MapMessage &operator =(SimpleSFixed32UInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed32UInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed32UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32UInt64MapMessage::MapFieldEntry &mapField();
@@ -2840,7 +3317,16 @@ public:
     SimpleSFixed64UInt64MapMessage(const SimpleSFixed64UInt64MapMessage &other);
     SimpleSFixed64UInt64MapMessage &operator =(const SimpleSFixed64UInt64MapMessage &other);
     SimpleSFixed64UInt64MapMessage(SimpleSFixed64UInt64MapMessage &&other) noexcept;
-    SimpleSFixed64UInt64MapMessage &operator =(SimpleSFixed64UInt64MapMessage &&other) noexcept;
+    SimpleSFixed64UInt64MapMessage &operator =(SimpleSFixed64UInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed64UInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed64UInt64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64UInt64MapMessage::MapFieldEntry &mapField();
@@ -2883,7 +3369,16 @@ public:
     SimpleStringUInt64MapMessage(const SimpleStringUInt64MapMessage &other);
     SimpleStringUInt64MapMessage &operator =(const SimpleStringUInt64MapMessage &other);
     SimpleStringUInt64MapMessage(SimpleStringUInt64MapMessage &&other) noexcept;
-    SimpleStringUInt64MapMessage &operator =(SimpleStringUInt64MapMessage &&other) noexcept;
+    SimpleStringUInt64MapMessage &operator =(SimpleStringUInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringUInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleStringUInt64MapMessage::MapFieldEntry mapField() const;
     SimpleStringUInt64MapMessage::MapFieldEntry &mapField();
@@ -2926,7 +3421,16 @@ public:
     SimpleSInt32Int32MapMessage(const SimpleSInt32Int32MapMessage &other);
     SimpleSInt32Int32MapMessage &operator =(const SimpleSInt32Int32MapMessage &other);
     SimpleSInt32Int32MapMessage(SimpleSInt32Int32MapMessage &&other) noexcept;
-    SimpleSInt32Int32MapMessage &operator =(SimpleSInt32Int32MapMessage &&other) noexcept;
+    SimpleSInt32Int32MapMessage &operator =(SimpleSInt32Int32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt32Int32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt32Int32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32Int32MapMessage::MapFieldEntry &mapField();
@@ -2969,7 +3473,16 @@ public:
     SimpleSInt64Int32MapMessage(const SimpleSInt64Int32MapMessage &other);
     SimpleSInt64Int32MapMessage &operator =(const SimpleSInt64Int32MapMessage &other);
     SimpleSInt64Int32MapMessage(SimpleSInt64Int32MapMessage &&other) noexcept;
-    SimpleSInt64Int32MapMessage &operator =(SimpleSInt64Int32MapMessage &&other) noexcept;
+    SimpleSInt64Int32MapMessage &operator =(SimpleSInt64Int32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt64Int32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt64Int32MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64Int32MapMessage::MapFieldEntry &mapField();
@@ -3012,7 +3525,16 @@ public:
     SimpleInt32Int32MapMessage(const SimpleInt32Int32MapMessage &other);
     SimpleInt32Int32MapMessage &operator =(const SimpleInt32Int32MapMessage &other);
     SimpleInt32Int32MapMessage(SimpleInt32Int32MapMessage &&other) noexcept;
-    SimpleInt32Int32MapMessage &operator =(SimpleInt32Int32MapMessage &&other) noexcept;
+    SimpleInt32Int32MapMessage &operator =(SimpleInt32Int32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt32Int32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt32Int32MapMessage::MapFieldEntry mapField() const;
     SimpleInt32Int32MapMessage::MapFieldEntry &mapField();
@@ -3055,7 +3577,16 @@ public:
     SimpleInt64Int32MapMessage(const SimpleInt64Int32MapMessage &other);
     SimpleInt64Int32MapMessage &operator =(const SimpleInt64Int32MapMessage &other);
     SimpleInt64Int32MapMessage(SimpleInt64Int32MapMessage &&other) noexcept;
-    SimpleInt64Int32MapMessage &operator =(SimpleInt64Int32MapMessage &&other) noexcept;
+    SimpleInt64Int32MapMessage &operator =(SimpleInt64Int32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt64Int32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt64Int32MapMessage::MapFieldEntry mapField() const;
     SimpleInt64Int32MapMessage::MapFieldEntry &mapField();
@@ -3098,7 +3629,16 @@ public:
     SimpleUInt32Int32MapMessage(const SimpleUInt32Int32MapMessage &other);
     SimpleUInt32Int32MapMessage &operator =(const SimpleUInt32Int32MapMessage &other);
     SimpleUInt32Int32MapMessage(SimpleUInt32Int32MapMessage &&other) noexcept;
-    SimpleUInt32Int32MapMessage &operator =(SimpleUInt32Int32MapMessage &&other) noexcept;
+    SimpleUInt32Int32MapMessage &operator =(SimpleUInt32Int32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt32Int32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt32Int32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32Int32MapMessage::MapFieldEntry &mapField();
@@ -3141,7 +3681,16 @@ public:
     SimpleUInt64Int32MapMessage(const SimpleUInt64Int32MapMessage &other);
     SimpleUInt64Int32MapMessage &operator =(const SimpleUInt64Int32MapMessage &other);
     SimpleUInt64Int32MapMessage(SimpleUInt64Int32MapMessage &&other) noexcept;
-    SimpleUInt64Int32MapMessage &operator =(SimpleUInt64Int32MapMessage &&other) noexcept;
+    SimpleUInt64Int32MapMessage &operator =(SimpleUInt64Int32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt64Int32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt64Int32MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64Int32MapMessage::MapFieldEntry &mapField();
@@ -3184,7 +3733,16 @@ public:
     SimpleFixed32Int32MapMessage(const SimpleFixed32Int32MapMessage &other);
     SimpleFixed32Int32MapMessage &operator =(const SimpleFixed32Int32MapMessage &other);
     SimpleFixed32Int32MapMessage(SimpleFixed32Int32MapMessage &&other) noexcept;
-    SimpleFixed32Int32MapMessage &operator =(SimpleFixed32Int32MapMessage &&other) noexcept;
+    SimpleFixed32Int32MapMessage &operator =(SimpleFixed32Int32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed32Int32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed32Int32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32Int32MapMessage::MapFieldEntry &mapField();
@@ -3227,7 +3785,16 @@ public:
     SimpleFixed64Int32MapMessage(const SimpleFixed64Int32MapMessage &other);
     SimpleFixed64Int32MapMessage &operator =(const SimpleFixed64Int32MapMessage &other);
     SimpleFixed64Int32MapMessage(SimpleFixed64Int32MapMessage &&other) noexcept;
-    SimpleFixed64Int32MapMessage &operator =(SimpleFixed64Int32MapMessage &&other) noexcept;
+    SimpleFixed64Int32MapMessage &operator =(SimpleFixed64Int32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed64Int32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed64Int32MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64Int32MapMessage::MapFieldEntry &mapField();
@@ -3270,7 +3837,16 @@ public:
     SimpleSFixed32Int32MapMessage(const SimpleSFixed32Int32MapMessage &other);
     SimpleSFixed32Int32MapMessage &operator =(const SimpleSFixed32Int32MapMessage &other);
     SimpleSFixed32Int32MapMessage(SimpleSFixed32Int32MapMessage &&other) noexcept;
-    SimpleSFixed32Int32MapMessage &operator =(SimpleSFixed32Int32MapMessage &&other) noexcept;
+    SimpleSFixed32Int32MapMessage &operator =(SimpleSFixed32Int32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed32Int32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed32Int32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32Int32MapMessage::MapFieldEntry &mapField();
@@ -3313,7 +3889,16 @@ public:
     SimpleSFixed64Int32MapMessage(const SimpleSFixed64Int32MapMessage &other);
     SimpleSFixed64Int32MapMessage &operator =(const SimpleSFixed64Int32MapMessage &other);
     SimpleSFixed64Int32MapMessage(SimpleSFixed64Int32MapMessage &&other) noexcept;
-    SimpleSFixed64Int32MapMessage &operator =(SimpleSFixed64Int32MapMessage &&other) noexcept;
+    SimpleSFixed64Int32MapMessage &operator =(SimpleSFixed64Int32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed64Int32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed64Int32MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64Int32MapMessage::MapFieldEntry &mapField();
@@ -3356,7 +3941,16 @@ public:
     SimpleStringInt32MapMessage(const SimpleStringInt32MapMessage &other);
     SimpleStringInt32MapMessage &operator =(const SimpleStringInt32MapMessage &other);
     SimpleStringInt32MapMessage(SimpleStringInt32MapMessage &&other) noexcept;
-    SimpleStringInt32MapMessage &operator =(SimpleStringInt32MapMessage &&other) noexcept;
+    SimpleStringInt32MapMessage &operator =(SimpleStringInt32MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringInt32MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleStringInt32MapMessage::MapFieldEntry mapField() const;
     SimpleStringInt32MapMessage::MapFieldEntry &mapField();
@@ -3399,7 +3993,16 @@ public:
     SimpleSInt32Int64MapMessage(const SimpleSInt32Int64MapMessage &other);
     SimpleSInt32Int64MapMessage &operator =(const SimpleSInt32Int64MapMessage &other);
     SimpleSInt32Int64MapMessage(SimpleSInt32Int64MapMessage &&other) noexcept;
-    SimpleSInt32Int64MapMessage &operator =(SimpleSInt32Int64MapMessage &&other) noexcept;
+    SimpleSInt32Int64MapMessage &operator =(SimpleSInt32Int64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt32Int64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt32Int64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt32Int64MapMessage::MapFieldEntry &mapField();
@@ -3442,7 +4045,16 @@ public:
     SimpleSInt64Int64MapMessage(const SimpleSInt64Int64MapMessage &other);
     SimpleSInt64Int64MapMessage &operator =(const SimpleSInt64Int64MapMessage &other);
     SimpleSInt64Int64MapMessage(SimpleSInt64Int64MapMessage &&other) noexcept;
-    SimpleSInt64Int64MapMessage &operator =(SimpleSInt64Int64MapMessage &&other) noexcept;
+    SimpleSInt64Int64MapMessage &operator =(SimpleSInt64Int64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt64Int64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt64Int64MapMessage::MapFieldEntry mapField() const;
     SimpleSInt64Int64MapMessage::MapFieldEntry &mapField();
@@ -3485,7 +4097,16 @@ public:
     SimpleInt32Int64MapMessage(const SimpleInt32Int64MapMessage &other);
     SimpleInt32Int64MapMessage &operator =(const SimpleInt32Int64MapMessage &other);
     SimpleInt32Int64MapMessage(SimpleInt32Int64MapMessage &&other) noexcept;
-    SimpleInt32Int64MapMessage &operator =(SimpleInt32Int64MapMessage &&other) noexcept;
+    SimpleInt32Int64MapMessage &operator =(SimpleInt32Int64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt32Int64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt32Int64MapMessage::MapFieldEntry mapField() const;
     SimpleInt32Int64MapMessage::MapFieldEntry &mapField();
@@ -3528,7 +4149,16 @@ public:
     SimpleInt64Int64MapMessage(const SimpleInt64Int64MapMessage &other);
     SimpleInt64Int64MapMessage &operator =(const SimpleInt64Int64MapMessage &other);
     SimpleInt64Int64MapMessage(SimpleInt64Int64MapMessage &&other) noexcept;
-    SimpleInt64Int64MapMessage &operator =(SimpleInt64Int64MapMessage &&other) noexcept;
+    SimpleInt64Int64MapMessage &operator =(SimpleInt64Int64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt64Int64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt64Int64MapMessage::MapFieldEntry mapField() const;
     SimpleInt64Int64MapMessage::MapFieldEntry &mapField();
@@ -3571,7 +4201,16 @@ public:
     SimpleUInt32Int64MapMessage(const SimpleUInt32Int64MapMessage &other);
     SimpleUInt32Int64MapMessage &operator =(const SimpleUInt32Int64MapMessage &other);
     SimpleUInt32Int64MapMessage(SimpleUInt32Int64MapMessage &&other) noexcept;
-    SimpleUInt32Int64MapMessage &operator =(SimpleUInt32Int64MapMessage &&other) noexcept;
+    SimpleUInt32Int64MapMessage &operator =(SimpleUInt32Int64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt32Int64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt32Int64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt32Int64MapMessage::MapFieldEntry &mapField();
@@ -3614,7 +4253,16 @@ public:
     SimpleUInt64Int64MapMessage(const SimpleUInt64Int64MapMessage &other);
     SimpleUInt64Int64MapMessage &operator =(const SimpleUInt64Int64MapMessage &other);
     SimpleUInt64Int64MapMessage(SimpleUInt64Int64MapMessage &&other) noexcept;
-    SimpleUInt64Int64MapMessage &operator =(SimpleUInt64Int64MapMessage &&other) noexcept;
+    SimpleUInt64Int64MapMessage &operator =(SimpleUInt64Int64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt64Int64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt64Int64MapMessage::MapFieldEntry mapField() const;
     SimpleUInt64Int64MapMessage::MapFieldEntry &mapField();
@@ -3657,7 +4305,16 @@ public:
     SimpleFixed32Int64MapMessage(const SimpleFixed32Int64MapMessage &other);
     SimpleFixed32Int64MapMessage &operator =(const SimpleFixed32Int64MapMessage &other);
     SimpleFixed32Int64MapMessage(SimpleFixed32Int64MapMessage &&other) noexcept;
-    SimpleFixed32Int64MapMessage &operator =(SimpleFixed32Int64MapMessage &&other) noexcept;
+    SimpleFixed32Int64MapMessage &operator =(SimpleFixed32Int64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed32Int64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed32Int64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed32Int64MapMessage::MapFieldEntry &mapField();
@@ -3700,7 +4357,16 @@ public:
     SimpleFixed64Int64MapMessage(const SimpleFixed64Int64MapMessage &other);
     SimpleFixed64Int64MapMessage &operator =(const SimpleFixed64Int64MapMessage &other);
     SimpleFixed64Int64MapMessage(SimpleFixed64Int64MapMessage &&other) noexcept;
-    SimpleFixed64Int64MapMessage &operator =(SimpleFixed64Int64MapMessage &&other) noexcept;
+    SimpleFixed64Int64MapMessage &operator =(SimpleFixed64Int64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed64Int64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed64Int64MapMessage::MapFieldEntry mapField() const;
     SimpleFixed64Int64MapMessage::MapFieldEntry &mapField();
@@ -3743,7 +4409,16 @@ public:
     SimpleSFixed32Int64MapMessage(const SimpleSFixed32Int64MapMessage &other);
     SimpleSFixed32Int64MapMessage &operator =(const SimpleSFixed32Int64MapMessage &other);
     SimpleSFixed32Int64MapMessage(SimpleSFixed32Int64MapMessage &&other) noexcept;
-    SimpleSFixed32Int64MapMessage &operator =(SimpleSFixed32Int64MapMessage &&other) noexcept;
+    SimpleSFixed32Int64MapMessage &operator =(SimpleSFixed32Int64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed32Int64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed32Int64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32Int64MapMessage::MapFieldEntry &mapField();
@@ -3786,7 +4461,16 @@ public:
     SimpleSFixed64Int64MapMessage(const SimpleSFixed64Int64MapMessage &other);
     SimpleSFixed64Int64MapMessage &operator =(const SimpleSFixed64Int64MapMessage &other);
     SimpleSFixed64Int64MapMessage(SimpleSFixed64Int64MapMessage &&other) noexcept;
-    SimpleSFixed64Int64MapMessage &operator =(SimpleSFixed64Int64MapMessage &&other) noexcept;
+    SimpleSFixed64Int64MapMessage &operator =(SimpleSFixed64Int64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed64Int64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed64Int64MapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64Int64MapMessage::MapFieldEntry &mapField();
@@ -3829,7 +4513,16 @@ public:
     SimpleStringInt64MapMessage(const SimpleStringInt64MapMessage &other);
     SimpleStringInt64MapMessage &operator =(const SimpleStringInt64MapMessage &other);
     SimpleStringInt64MapMessage(SimpleStringInt64MapMessage &&other) noexcept;
-    SimpleStringInt64MapMessage &operator =(SimpleStringInt64MapMessage &&other) noexcept;
+    SimpleStringInt64MapMessage &operator =(SimpleStringInt64MapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringInt64MapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleStringInt64MapMessage::MapFieldEntry mapField() const;
     SimpleStringInt64MapMessage::MapFieldEntry &mapField();
@@ -3872,7 +4565,16 @@ public:
     SimpleSInt32ComplexMessageMapMessage(const SimpleSInt32ComplexMessageMapMessage &other);
     SimpleSInt32ComplexMessageMapMessage &operator =(const SimpleSInt32ComplexMessageMapMessage &other);
     SimpleSInt32ComplexMessageMapMessage(SimpleSInt32ComplexMessageMapMessage &&other) noexcept;
-    SimpleSInt32ComplexMessageMapMessage &operator =(SimpleSInt32ComplexMessageMapMessage &&other) noexcept;
+    SimpleSInt32ComplexMessageMapMessage &operator =(SimpleSInt32ComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt32ComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3915,7 +4617,16 @@ public:
     SimpleSInt64ComplexMessageMapMessage(const SimpleSInt64ComplexMessageMapMessage &other);
     SimpleSInt64ComplexMessageMapMessage &operator =(const SimpleSInt64ComplexMessageMapMessage &other);
     SimpleSInt64ComplexMessageMapMessage(SimpleSInt64ComplexMessageMapMessage &&other) noexcept;
-    SimpleSInt64ComplexMessageMapMessage &operator =(SimpleSInt64ComplexMessageMapMessage &&other) noexcept;
+    SimpleSInt64ComplexMessageMapMessage &operator =(SimpleSInt64ComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt64ComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -3958,7 +4669,16 @@ public:
     SimpleInt32ComplexMessageMapMessage(const SimpleInt32ComplexMessageMapMessage &other);
     SimpleInt32ComplexMessageMapMessage &operator =(const SimpleInt32ComplexMessageMapMessage &other);
     SimpleInt32ComplexMessageMapMessage(SimpleInt32ComplexMessageMapMessage &&other) noexcept;
-    SimpleInt32ComplexMessageMapMessage &operator =(SimpleInt32ComplexMessageMapMessage &&other) noexcept;
+    SimpleInt32ComplexMessageMapMessage &operator =(SimpleInt32ComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt32ComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleInt32ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -4001,7 +4721,16 @@ public:
     SimpleInt64ComplexMessageMapMessage(const SimpleInt64ComplexMessageMapMessage &other);
     SimpleInt64ComplexMessageMapMessage &operator =(const SimpleInt64ComplexMessageMapMessage &other);
     SimpleInt64ComplexMessageMapMessage(SimpleInt64ComplexMessageMapMessage &&other) noexcept;
-    SimpleInt64ComplexMessageMapMessage &operator =(SimpleInt64ComplexMessageMapMessage &&other) noexcept;
+    SimpleInt64ComplexMessageMapMessage &operator =(SimpleInt64ComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt64ComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleInt64ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -4044,7 +4773,16 @@ public:
     SimpleUInt32ComplexMessageMapMessage(const SimpleUInt32ComplexMessageMapMessage &other);
     SimpleUInt32ComplexMessageMapMessage &operator =(const SimpleUInt32ComplexMessageMapMessage &other);
     SimpleUInt32ComplexMessageMapMessage(SimpleUInt32ComplexMessageMapMessage &&other) noexcept;
-    SimpleUInt32ComplexMessageMapMessage &operator =(SimpleUInt32ComplexMessageMapMessage &&other) noexcept;
+    SimpleUInt32ComplexMessageMapMessage &operator =(SimpleUInt32ComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt32ComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -4087,7 +4825,16 @@ public:
     SimpleUInt64ComplexMessageMapMessage(const SimpleUInt64ComplexMessageMapMessage &other);
     SimpleUInt64ComplexMessageMapMessage &operator =(const SimpleUInt64ComplexMessageMapMessage &other);
     SimpleUInt64ComplexMessageMapMessage(SimpleUInt64ComplexMessageMapMessage &&other) noexcept;
-    SimpleUInt64ComplexMessageMapMessage &operator =(SimpleUInt64ComplexMessageMapMessage &&other) noexcept;
+    SimpleUInt64ComplexMessageMapMessage &operator =(SimpleUInt64ComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt64ComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleUInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -4130,7 +4877,16 @@ public:
     SimpleFixed32ComplexMessageMapMessage(const SimpleFixed32ComplexMessageMapMessage &other);
     SimpleFixed32ComplexMessageMapMessage &operator =(const SimpleFixed32ComplexMessageMapMessage &other);
     SimpleFixed32ComplexMessageMapMessage(SimpleFixed32ComplexMessageMapMessage &&other) noexcept;
-    SimpleFixed32ComplexMessageMapMessage &operator =(SimpleFixed32ComplexMessageMapMessage &&other) noexcept;
+    SimpleFixed32ComplexMessageMapMessage &operator =(SimpleFixed32ComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed32ComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -4173,7 +4929,16 @@ public:
     SimpleFixed64ComplexMessageMapMessage(const SimpleFixed64ComplexMessageMapMessage &other);
     SimpleFixed64ComplexMessageMapMessage &operator =(const SimpleFixed64ComplexMessageMapMessage &other);
     SimpleFixed64ComplexMessageMapMessage(SimpleFixed64ComplexMessageMapMessage &&other) noexcept;
-    SimpleFixed64ComplexMessageMapMessage &operator =(SimpleFixed64ComplexMessageMapMessage &&other) noexcept;
+    SimpleFixed64ComplexMessageMapMessage &operator =(SimpleFixed64ComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixed64ComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -4216,7 +4981,16 @@ public:
     SimpleSFixed32ComplexMessageMapMessage(const SimpleSFixed32ComplexMessageMapMessage &other);
     SimpleSFixed32ComplexMessageMapMessage &operator =(const SimpleSFixed32ComplexMessageMapMessage &other);
     SimpleSFixed32ComplexMessageMapMessage(SimpleSFixed32ComplexMessageMapMessage &&other) noexcept;
-    SimpleSFixed32ComplexMessageMapMessage &operator =(SimpleSFixed32ComplexMessageMapMessage &&other) noexcept;
+    SimpleSFixed32ComplexMessageMapMessage &operator =(SimpleSFixed32ComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed32ComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -4259,7 +5033,16 @@ public:
     SimpleSFixed64ComplexMessageMapMessage(const SimpleSFixed64ComplexMessageMapMessage &other);
     SimpleSFixed64ComplexMessageMapMessage &operator =(const SimpleSFixed64ComplexMessageMapMessage &other);
     SimpleSFixed64ComplexMessageMapMessage(SimpleSFixed64ComplexMessageMapMessage &&other) noexcept;
-    SimpleSFixed64ComplexMessageMapMessage &operator =(SimpleSFixed64ComplexMessageMapMessage &&other) noexcept;
+    SimpleSFixed64ComplexMessageMapMessage &operator =(SimpleSFixed64ComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixed64ComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &mapField();
@@ -4302,7 +5085,16 @@ public:
     SimpleStringComplexMessageMapMessage(const SimpleStringComplexMessageMapMessage &other);
     SimpleStringComplexMessageMapMessage &operator =(const SimpleStringComplexMessageMapMessage &other);
     SimpleStringComplexMessageMapMessage(SimpleStringComplexMessageMapMessage &&other) noexcept;
-    SimpleStringComplexMessageMapMessage &operator =(SimpleStringComplexMessageMapMessage &&other) noexcept;
+    SimpleStringComplexMessageMapMessage &operator =(SimpleStringComplexMessageMapMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringComplexMessageMapMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     SimpleStringComplexMessageMapMessage::MapFieldEntry mapField() const;
     SimpleStringComplexMessageMapMessage::MapFieldEntry &mapField();

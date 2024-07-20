@@ -75,20 +75,14 @@ EmptyMessage::EmptyMessage(const EmptyMessage &other)
 }
 EmptyMessage &EmptyMessage::operator =(const EmptyMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    EmptyMessage temp(other);
+    swap(temp);
     return *this;
 }
 EmptyMessage::EmptyMessage(EmptyMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-EmptyMessage &EmptyMessage::operator =(EmptyMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
 {
@@ -172,20 +166,14 @@ SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other)
 }
 SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringMessage::SimpleStringMessage(SimpleStringMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringMessage &SimpleStringMessage::operator =(SimpleStringMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
 {
@@ -293,20 +281,14 @@ ComplexMessage::ComplexMessage(const ComplexMessage &other)
 }
 ComplexMessage &ComplexMessage::operator =(const ComplexMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    ComplexMessage temp(other);
+    swap(temp);
     return *this;
 }
 ComplexMessage::ComplexMessage(ComplexMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-ComplexMessage &ComplexMessage::operator =(ComplexMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept
 {
