@@ -29,15 +29,17 @@ QT_BEGIN_NAMESPACE
 
 class QMetaProperty;
 
-class QProtobufMessagePrivate : public QSharedData
+class Q_PROTOBUF_EXPORT QProtobufMessagePrivate : public QSharedData
 {
 public:
     QProtobufMessagePrivate() = default;
+    explicit QProtobufMessagePrivate(const QMetaObject *metaObject,
+                                     const QtProtobufPrivate::QProtobufPropertyOrdering *ordering);
     QProtobufMessagePrivate(const QProtobufMessagePrivate &other) = default;
     QProtobufMessagePrivate(QProtobufMessagePrivate &&other) = delete;
     QProtobufMessagePrivate &operator=(const QProtobufMessagePrivate &other) = delete;
     QProtobufMessagePrivate &operator=(QProtobufMessagePrivate &&other) = delete;
-    ~QProtobufMessagePrivate() = default;
+    virtual ~QProtobufMessagePrivate();
 
     // QHash of form <field index, data>.
     QHash<qint32, QByteArrayList> unknownEntries;

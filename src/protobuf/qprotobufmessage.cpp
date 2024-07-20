@@ -41,10 +41,17 @@ static std::string nullTerminate(QLatin1StringView l1) noexcept
 */
 QProtobufMessage::QProtobufMessage(const QMetaObject *metaObject,
                                    const QtProtobufPrivate::QProtobufPropertyOrdering *ordering)
-    : d_ptr(new QProtobufMessagePrivate)
+    : d_ptr(new QProtobufMessagePrivate(metaObject, ordering))
 {
-    d_ptr->metaObject = metaObject;
-    d_ptr->ordering = ordering;
+}
+
+/*!
+    \internal
+    Allows constructing QProtobufMessage using the private message implementation from the
+    derived class.
+*/
+QProtobufMessage::QProtobufMessage(QProtobufMessagePrivate &dd) : d_ptr(&dd)
+{
 }
 
 /*!
@@ -53,10 +60,21 @@ QProtobufMessage::QProtobufMessage(const QMetaObject *metaObject,
 */
 const QMetaObject *QProtobufMessage::metaObject() const
 {
-    return d_ptr->metaObject;
+    Q_D(const QProtobufMessage);
+    return d->metaObject;
 }
 
 QT_DEFINE_QESDP_SPECIALIZATION_DTOR(QProtobufMessagePrivate)
+
+QProtobufMessagePrivate::QProtobufMessagePrivate(const QMetaObject *metaObject,
+                                                 const QtProtobufPrivate::QProtobufPropertyOrdering
+                                                     *ordering)
+    : metaObject(metaObject), ordering(ordering)
+{
+}
+
+QProtobufMessagePrivate::~QProtobufMessagePrivate()
+    = default;
 
 /*!
     \internal
@@ -174,7 +192,8 @@ QProtobufMessage::~QProtobufMessage()
 */
 const QtProtobufPrivate::QProtobufPropertyOrdering *QProtobufMessage::propertyOrdering() const
 {
-    return d_ptr->ordering;
+    Q_D(const QProtobufMessage);
+    return d->ordering;
 }
 
 /*!
@@ -297,7 +316,8 @@ bool QProtobufMessage::setProperty(const QtProtobufPrivate::QProtobufFieldInfo &
  */
 QList<qint32> QProtobufMessage::unknownFieldNumbers() const
 {
-    return d_func()->unknownEntries.keys();
+    Q_D(const QProtobufMessage);
+    return d->unknownEntries.keys();
 }
 
 /*!
@@ -307,7 +327,8 @@ QList<qint32> QProtobufMessage::unknownFieldNumbers() const
 */
 QList<QByteArray> QProtobufMessage::unknownFieldData(qint32 field) const
 {
-    return d_func()->unknownEntries.value(field);
+    Q_D(const QProtobufMessage);
+    return d->unknownEntries.value(field);
 }
 
 /*!
@@ -404,41 +425,43 @@ QtProtobufPrivate::QProtobufPropertyOrdering::Data *buildMapEntryOrdering(QMetaT
     return builder.build();
 }
 
-class QProtobufMapEntryBasePrivate
+class QProtobufMapEntryBasePrivate : public QProtobufMessagePrivate
 {
     Q_DISABLE_COPY_MOVE(QProtobufMapEntryBasePrivate)
 public:
-    QProtobufMapEntryBasePrivate() = default;
-    ~QProtobufMapEntryBasePrivate();
+    QProtobufMapEntryBasePrivate(QMetaType key, QMetaType value, StaticMetaCallFn metaCall);
+    ~QProtobufMapEntryBasePrivate() override;
 
     QtProtobufPrivate::QProtobufPropertyOrdering::Data *data = nullptr;
-    QtProtobufPrivate::QProtobufPropertyOrdering ordering{};
-    QMetaObject *metaObject = nullptr;
+    QtProtobufPrivate::QProtobufPropertyOrdering mutableOrdering{};
+    QMetaObject *mutableMetaObject = nullptr;
 };
 
 QProtobufMapEntryBase::QProtobufMapEntryBase(QMetaType key, QMetaType value,
                                              StaticMetaCallFn metaCall)
-    : QProtobufMessage(nullptr, nullptr),
-      d_ptr(new QProtobufMapEntryBasePrivate())
+    : QProtobufMessage(*new QProtobufMapEntryBasePrivate(key, value, metaCall))
 {
-    d_ptr->data = buildMapEntryOrdering(key, value);
-    d_ptr->ordering.data = d_ptr->data;
-    d_ptr->metaObject = buildMetaObject(key, value, metaCall);
-    auto *priv = QProtobufMessagePrivate::get(this);
-    priv->ordering = &d_ptr->ordering;
-    priv->metaObject = d_ptr->metaObject;
+}
+
+QProtobufMapEntryBasePrivate::QProtobufMapEntryBasePrivate(QMetaType key, QMetaType value,
+                                                           StaticMetaCallFn metaCall)
+    : QProtobufMessagePrivate(),
+      data(buildMapEntryOrdering(key, value)),
+      mutableMetaObject(buildMetaObject(key, value, metaCall))
+{
+    mutableOrdering.data = data;
+    QProtobufMessagePrivate::ordering = &mutableOrdering;
+    QProtobufMessagePrivate::metaObject = mutableMetaObject;
 }
 
 QProtobufMapEntryBase::~QProtobufMapEntryBase()
-{
-    delete d_ptr;
-}
+    = default;
 
 QProtobufMapEntryBasePrivate::~QProtobufMapEntryBasePrivate()
 {
     data->~Data();
     free(data);
-    free(metaObject);
+    free(mutableMetaObject);
 }
 
 QT_END_NAMESPACE
