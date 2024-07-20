@@ -33,15 +33,11 @@ public:
     Q_PROTOBUFWELLKNOWNTYPES_EXPORT ~Any();
     Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any(const Any &other);
     Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any &operator=(const Any &other);
-    Any(Any &&other) noexcept
-        : QProtobufMessage(std::move(other)), d_ptr(std::exchange(other.d_ptr, {}))
+    Any(Any &&other) noexcept = default;
+    Any &operator =(Any &&other) noexcept = default;
+    void swap(Any &other) noexcept
     {
-    }
-    Any &operator=(Any &&other) noexcept
-    {
-        qt_ptr_swap(d_ptr, other.d_ptr);
         QProtobufMessage::swap(other);
-        return *this;
     }
 
     Q_PROTOBUFWELLKNOWNTYPES_EXPORT QString typeUrl() const;
@@ -77,7 +73,6 @@ public:
     }
 
 private:
-    AnyPrivate *d_ptr;
     Q_DECLARE_PRIVATE(Any)
 
     Q_PROTOBUFWELLKNOWNTYPES_EXPORT bool unpackImpl(QAbstractProtobufSerializer *serializer,
@@ -101,6 +96,9 @@ private:
 
     Q_DECLARE_EQUALITY_COMPARABLE(Any)
 };
+
+Q_DECLARE_SHARED_NS(QtProtobuf, Any)
+
 } // namespace QtProtobuf
 
 QT_END_NAMESPACE
