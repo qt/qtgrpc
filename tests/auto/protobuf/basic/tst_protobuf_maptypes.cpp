@@ -39,15 +39,9 @@ void QtProtobufMapTypesGenerationTest::sInt32StringMapMessageTest()
     test.setMapField(testMap);
     QCOMPARE(test.property(propertyName).value<SimpleSInt32StringMapMessage::MapFieldEntry>(), testMap);
     QCOMPARE(test.mapField(), testMap);
-    QCOMPARE(test.mapField()[10], "Some 10"_L1);
-    QCOMPARE(test.mapField()[0], "Some 0"_L1);
-    QCOMPARE(test.mapField()[44], "Some 44"_L1);
-
-    test.mapField()[66] = "Some 66";
-    QCOMPARE(test.mapField()[66], "Some 66"_L1);
-
-    test.mapField()[66] = "Some default";
-    QCOMPARE(test.mapField()[66], "Some default"_L1);
+    QCOMPARE(test.mapField().value(10), "Some 10"_L1);
+    QCOMPARE(test.mapField().value(0), "Some 0"_L1);
+    QCOMPARE(test.mapField().value(44), "Some 44"_L1);
 }
 
 void QtProtobufMapTypesGenerationTest::stringStringMapMessageTest()
@@ -64,15 +58,9 @@ void QtProtobufMapTypesGenerationTest::stringStringMapMessageTest()
     test.setMapField(testMap);
     QCOMPARE(test.property(propertyName).value<SimpleStringStringMapMessage::MapFieldEntry>(), testMap);
     QCOMPARE(test.mapField(), testMap);
-    QCOMPARE(test.mapField()["key 10"], "Some 10"_L1);
-    QCOMPARE(test.mapField()["key 0"], "Some 0"_L1);
-    QCOMPARE(test.mapField()["key 44"], "Some 44"_L1);
-
-    test.mapField()["key 66"] = "Some 66";
-    QCOMPARE(test.mapField()["key 66"], "Some 66"_L1);
-
-    test.mapField()["key 66"] = "Some default";
-    QCOMPARE(test.mapField()["key 66"], "Some default"_L1);
+    QCOMPARE(test.mapField().value("key 10"), "Some 10"_L1);
+    QCOMPARE(test.mapField().value("key 0"), "Some 0"_L1);
+    QCOMPARE(test.mapField().value("key 44"), "Some 44"_L1);
 }
 
 void QtProtobufMapTypesGenerationTest::simpleInt32ComplexMessageMapMessageCompareTest()

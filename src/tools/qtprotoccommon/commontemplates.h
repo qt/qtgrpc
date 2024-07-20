@@ -114,8 +114,6 @@ public:
     static const char *GetterOneofMessageDefinitionTemplate();
     static const char *GetterDeclarationTemplate();
     static const char *GetterDefinitionTemplate();
-    static const char *GetterComplexDeclarationTemplate();
-    static const char *GetterComplexDefinitionTemplate();
     static const char *PrivateSetterMessageDeclarationTemplate();
     static const char *PrivateSetterMessageDefinitionTemplate();
     static const char *SetterMessageDeclarationTemplate();

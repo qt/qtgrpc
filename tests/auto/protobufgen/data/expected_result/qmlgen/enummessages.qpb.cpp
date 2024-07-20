@@ -230,12 +230,6 @@ RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated RepeatedEnumMessage::loc
     return dptr->m_localEnumList;
 }
 
-RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated &RepeatedEnumMessage::localEnumList()
-{
-    dptr.detach();
-    return dptr->m_localEnumList;
-}
-
 void RepeatedEnumMessage::setLocalEnumList(const RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated &localEnumList)
 {
     if (dptr->m_localEnumList != localEnumList) {
@@ -831,31 +825,13 @@ MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated MixedEnumUsageMessage:
     return dptr->m_localEnumList;
 }
 
-MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated &MixedEnumUsageMessage::localEnumList()
-{
-    dptr.detach();
-    return dptr->m_localEnumList;
-}
-
 MixedEnumUsageMessage::LocalEnumMapEntry MixedEnumUsageMessage::localEnumMap() const
 {
     return dptr->m_localEnumMap;
 }
 
-MixedEnumUsageMessage::LocalEnumMapEntry &MixedEnumUsageMessage::localEnumMap()
-{
-    dptr.detach();
-    return dptr->m_localEnumMap;
-}
-
 MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated MixedEnumUsageMessage::msgList() const
 {
-    return dptr->m_msgList;
-}
-
-MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated &MixedEnumUsageMessage::msgList()
-{
-    dptr.detach();
     return dptr->m_msgList;
 }
 
@@ -1001,12 +977,6 @@ TestEnumGadget::TestEnumRepeated SimpleFileEnumMessage::globalEnumList() const
     return dptr->m_globalEnumList;
 }
 
-TestEnumGadget::TestEnumRepeated &SimpleFileEnumMessage::globalEnumList()
-{
-    dptr.detach();
-    return dptr->m_globalEnumList;
-}
-
 void SimpleFileEnumMessage::setGlobalEnum(const TestEnumGadget::TestEnum &globalEnum)
 {
     if (dptr->m_globalEnum != globalEnum) {
@@ -1130,12 +1100,6 @@ SimpleEnumMessage_QtProtobufNested::LocalEnum StepChildEnumMessage::localStepChi
 
 SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated StepChildEnumMessage::localStepChildList() const
 {
-    return dptr->m_localStepChildList;
-}
-
-SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated &StepChildEnumMessage::localStepChildList()
-{
-    dptr.detach();
     return dptr->m_localStepChildList;
 }
 

@@ -102,12 +102,6 @@ QStringList RepeatedStringMessage::testRepeatedString() const
     return dptr->m_testRepeatedString;
 }
 
-QStringList &RepeatedStringMessage::testRepeatedString()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedString;
-}
-
 void RepeatedStringMessage::setTestRepeatedString(const QStringList &testRepeatedString)
 {
     if (dptr->m_testRepeatedString != testRepeatedString) {
@@ -210,12 +204,6 @@ bool comparesEqual(const RepeatedDoubleMessage &lhs, const RepeatedDoubleMessage
 
 QtProtobuf::doubleList RepeatedDoubleMessage::testRepeatedDouble() const
 {
-    return dptr->m_testRepeatedDouble;
-}
-
-QtProtobuf::doubleList &RepeatedDoubleMessage::testRepeatedDouble()
-{
-    dptr.detach();
     return dptr->m_testRepeatedDouble;
 }
 
@@ -324,12 +312,6 @@ QByteArrayList RepeatedBytesMessage::testRepeatedBytes() const
     return dptr->m_testRepeatedBytes;
 }
 
-QByteArrayList &RepeatedBytesMessage::testRepeatedBytes()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedBytes;
-}
-
 void RepeatedBytesMessage::setTestRepeatedBytes(const QByteArrayList &testRepeatedBytes)
 {
     if (dptr->m_testRepeatedBytes != testRepeatedBytes) {
@@ -432,12 +414,6 @@ bool comparesEqual(const RepeatedFloatMessage &lhs, const RepeatedFloatMessage &
 
 QtProtobuf::floatList RepeatedFloatMessage::testRepeatedFloat() const
 {
-    return dptr->m_testRepeatedFloat;
-}
-
-QtProtobuf::floatList &RepeatedFloatMessage::testRepeatedFloat()
-{
-    dptr.detach();
     return dptr->m_testRepeatedFloat;
 }
 
@@ -546,12 +522,6 @@ ComplexMessageRepeated RepeatedComplexMessage::testRepeatedComplex() const
     return dptr->m_testRepeatedComplex;
 }
 
-ComplexMessageRepeated &RepeatedComplexMessage::testRepeatedComplex()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedComplex;
-}
-
 void RepeatedComplexMessage::setTestRepeatedComplex(const ComplexMessageRepeated &testRepeatedComplex)
 {
     if (dptr->m_testRepeatedComplex != testRepeatedComplex) {
@@ -654,12 +624,6 @@ bool comparesEqual(const RepeatedSIntMessage &lhs, const RepeatedSIntMessage &rh
 
 QtProtobuf::sint32List RepeatedSIntMessage::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::sint32List &RepeatedSIntMessage::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 
@@ -768,12 +732,6 @@ QtProtobuf::int32List RepeatedIntMessage::testRepeatedInt() const
     return dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::int32List &RepeatedIntMessage::testRepeatedInt()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedInt;
-}
-
 void RepeatedIntMessage::setTestRepeatedInt(const QtProtobuf::int32List &testRepeatedInt)
 {
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
@@ -876,12 +834,6 @@ bool comparesEqual(const RepeatedUIntMessage &lhs, const RepeatedUIntMessage &rh
 
 QtProtobuf::uint32List RepeatedUIntMessage::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::uint32List &RepeatedUIntMessage::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 
@@ -990,12 +942,6 @@ QtProtobuf::sint64List RepeatedSInt64Message::testRepeatedInt() const
     return dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::sint64List &RepeatedSInt64Message::testRepeatedInt()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedInt;
-}
-
 void RepeatedSInt64Message::setTestRepeatedInt(const QtProtobuf::sint64List &testRepeatedInt)
 {
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
@@ -1098,12 +1044,6 @@ bool comparesEqual(const RepeatedInt64Message &lhs, const RepeatedInt64Message &
 
 QtProtobuf::int64List RepeatedInt64Message::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::int64List &RepeatedInt64Message::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 
@@ -1212,12 +1152,6 @@ QtProtobuf::uint64List RepeatedUInt64Message::testRepeatedInt() const
     return dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::uint64List &RepeatedUInt64Message::testRepeatedInt()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedInt;
-}
-
 void RepeatedUInt64Message::setTestRepeatedInt(const QtProtobuf::uint64List &testRepeatedInt)
 {
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
@@ -1320,12 +1254,6 @@ bool comparesEqual(const RepeatedFixedIntMessage &lhs, const RepeatedFixedIntMes
 
 QtProtobuf::fixed32List RepeatedFixedIntMessage::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::fixed32List &RepeatedFixedIntMessage::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 
@@ -1434,12 +1362,6 @@ QtProtobuf::sfixed32List RepeatedSFixedIntMessage::testRepeatedInt() const
     return dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::sfixed32List &RepeatedSFixedIntMessage::testRepeatedInt()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedInt;
-}
-
 void RepeatedSFixedIntMessage::setTestRepeatedInt(const QtProtobuf::sfixed32List &testRepeatedInt)
 {
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
@@ -1542,12 +1464,6 @@ bool comparesEqual(const RepeatedFixedInt64Message &lhs, const RepeatedFixedInt6
 
 QtProtobuf::fixed64List RepeatedFixedInt64Message::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::fixed64List &RepeatedFixedInt64Message::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 
@@ -1656,12 +1572,6 @@ QtProtobuf::sfixed64List RepeatedSFixedInt64Message::testRepeatedInt() const
     return dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::sfixed64List &RepeatedSFixedInt64Message::testRepeatedInt()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedInt;
-}
-
 void RepeatedSFixedInt64Message::setTestRepeatedInt(const QtProtobuf::sfixed64List &testRepeatedInt)
 {
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
@@ -1764,12 +1674,6 @@ bool comparesEqual(const RepeatedBoolMessage &lhs, const RepeatedBoolMessage &rh
 
 QtProtobuf::boolList RepeatedBoolMessage::testRepeatedBool() const
 {
-    return dptr->m_testRepeatedBool;
-}
-
-QtProtobuf::boolList &RepeatedBoolMessage::testRepeatedBool()
-{
-    dptr.detach();
     return dptr->m_testRepeatedBool;
 }
 

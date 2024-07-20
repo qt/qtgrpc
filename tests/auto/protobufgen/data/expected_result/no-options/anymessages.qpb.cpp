@@ -207,12 +207,6 @@ QList<QtProtobuf::Any> RepeatedAnyMessage::anys() const
     return dptr->m_anys;
 }
 
-QList<QtProtobuf::Any> &RepeatedAnyMessage::anys()
-{
-    dptr.detach();
-    return dptr->m_anys;
-}
-
 void RepeatedAnyMessage::setAnys(const QList<QtProtobuf::Any> &anys)
 {
     if (dptr->m_anys != anys) {

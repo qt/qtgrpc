@@ -415,10 +415,6 @@ void MessageDefinitionPrinter::printGetters()
                 } else {
                     m_printer->Print(propertyMap, CommonTemplates::GetterDefinitionTemplate());
                 }
-                if (field->is_repeated()) {
-                    m_printer->Print(propertyMap,
-                                     CommonTemplates::GetterComplexDefinitionTemplate());
-                }
             });
 
     common::iterateMessageFields(

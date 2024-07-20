@@ -124,7 +124,6 @@ public:
     }
 
     QList<QtProtobuf::Any> anys() const;
-    QList<QtProtobuf::Any> &anys();
     void setAnys(const QList<QtProtobuf::Any> &anys);
     static void registerTypes();
 

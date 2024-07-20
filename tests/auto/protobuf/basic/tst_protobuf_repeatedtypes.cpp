@@ -61,12 +61,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedIntMessageTest()
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::int32List>({1, 2, 3, 4, 5})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::int32List>(), QtProtobuf::int32List({1, 2, 3, 4, 5}));
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::int32List({1, 2, 3, 4, 5}));
-
-    test.testRepeatedInt().append(66);
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::int32List({1, 2, 3, 4, 5, 66}));
-
-    test.testRepeatedInt().pop_back();
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::int32List({1, 2, 3, 4, 5}));
 }
 
 void QtProtobufRepeatedTypesGenerationTest::repeatedDoubleMessageTest()
@@ -80,12 +74,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedDoubleMessageTest()
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::doubleList>({1.0, 2.3, 3, 4.7, 5.9})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::doubleList>(), QtProtobuf::doubleList({1.0, 2.3, 3, 4.7, 5.9}));
     QCOMPARE(test.testRepeatedDouble(), QtProtobuf::doubleList({1.0, 2.3, 3, 4.7, 5.9}));
-
-    test.testRepeatedDouble().append(6.6);
-    QCOMPARE(test.testRepeatedDouble(), QtProtobuf::doubleList({1.0, 2.3, 3, 4.7, 5.9, 6.6}));
-
-    test.testRepeatedDouble().pop_back();
-    QCOMPARE(test.testRepeatedDouble(), QtProtobuf::doubleList({1.0, 2.3, 3, 4.7, 5.9}));
 }
 
 void QtProtobufRepeatedTypesGenerationTest::repeatedFloatMessageTest()
@@ -98,12 +86,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedFloatMessageTest()
     RepeatedFloatMessage test;
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::floatList>({1.0f, 2.3f, 3, 4.7f, 5.9f})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::floatList>(), QtProtobuf::floatList({1.0f, 2.3f, 3, 4.7f, 5.9f}));
-    QCOMPARE(test.testRepeatedFloat(), QtProtobuf::floatList({1.0f, 2.3f, 3, 4.7f, 5.9f}));
-
-    test.testRepeatedFloat().append(6.6f);
-    QCOMPARE(test.testRepeatedFloat(), QtProtobuf::floatList({1.0f, 2.3f, 3, 4.7f, 5.9f, 6.6f}));
-
-    test.testRepeatedFloat().pop_back();
     QCOMPARE(test.testRepeatedFloat(), QtProtobuf::floatList({1.0f, 2.3f, 3, 4.7f, 5.9f}));
 }
 
@@ -122,14 +104,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedBytesMessageTest()
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QByteArrayList>(bList)));
     QCOMPARE(test.property(propertyName).value<QByteArrayList>(), bList);
     QCOMPARE(test.testRepeatedBytes(), bList);
-
-    bList << "\x01\x05\x03\x03";
-    test.testRepeatedBytes() << "\x01\x05\x03\x03";
-    QCOMPARE(test.testRepeatedBytes(), bList);
-
-    bList.pop_back();
-    test.testRepeatedBytes().pop_back();
-    QCOMPARE(test.testRepeatedBytes(), bList);
 }
 
 void QtProtobufRepeatedTypesGenerationTest::repeatedSIntMessageTest()
@@ -142,12 +116,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedSIntMessageTest()
     RepeatedSIntMessage test;
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::sint32List>({1, 2, 3, 4, 5})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::sint32List>(), QtProtobuf::sint32List({1, 2, 3, 4, 5}));
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::sint32List({1, 2, 3, 4, 5}));
-
-    test.testRepeatedInt() << 6;
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::sint32List({1, 2, 3, 4, 5, 6}));
-
-    test.testRepeatedInt().pop_back();
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::sint32List({1, 2, 3, 4, 5}));
 }
 
@@ -162,12 +130,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedUIntMessageTest()
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::uint32List>({1, 2, 3, 4, 5})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::uint32List>(), QtProtobuf::uint32List({1, 2, 3, 4, 5}));
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::uint32List({1, 2, 3, 4, 5}));
-
-    test.testRepeatedInt().append(6);
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::uint32List({1, 2, 3, 4, 5,6}));
-
-    test.testRepeatedInt().pop_back();
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::uint32List({1, 2, 3, 4, 5}));
 }
 
 void QtProtobufRepeatedTypesGenerationTest::repeatedInt64MessageTest()
@@ -180,12 +142,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedInt64MessageTest()
     RepeatedInt64Message test;
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::int64List>({1, 2, 3, 4, 5})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::int64List>(), QtProtobuf::int64List({1, 2, 3, 4, 5}));
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::int64List({1, 2, 3, 4, 5}));
-
-    test.testRepeatedInt().append(69);
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::int64List({1, 2, 3, 4, 5, 69}));
-
-    test.testRepeatedInt().pop_back();
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::int64List({1, 2, 3, 4, 5}));
 }
 
@@ -200,12 +156,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedSInt64MessageTest()
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::sint64List>({1, 2, 3, 4, 5})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::sint64List>(), QtProtobuf::sint64List({1, 2, 3, 4, 5}));
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::sint64List({1, 2, 3, 4, 5}));
-
-    test.testRepeatedInt() << 96;
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::sint64List({1, 2, 3, 4, 5, 96}));
-
-    test.testRepeatedInt().pop_back();
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::sint64List({1, 2, 3, 4, 5}));
 }
 
 void QtProtobufRepeatedTypesGenerationTest::repeatedUInt64MessageTest()
@@ -218,12 +168,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedUInt64MessageTest()
     RepeatedUInt64Message test;
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::uint64List>({1, 2, 3, 4, 5})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::uint64List>(), QtProtobuf::uint64List({1, 2, 3, 4, 5}));
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::uint64List({1, 2, 3, 4, 5}));
-
-    test.testRepeatedInt().append(96);
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::uint64List({1, 2, 3, 4, 5, 96}));
-
-    test.testRepeatedInt().pop_back();
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::uint64List({1, 2, 3, 4, 5}));
 }
 
@@ -238,12 +182,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedFixedIntMessageTest()
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::fixed32List>({1, 2, 3, 4, 5})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::fixed32List>(), QtProtobuf::fixed32List({1, 2, 3, 4, 5}));
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::fixed32List({1, 2, 3, 4, 5}));
-
-    test.testRepeatedInt() << 0;
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::fixed32List({1, 2, 3, 4, 5, 0}));
-
-    test.testRepeatedInt().pop_back();
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::fixed32List({1, 2, 3, 4, 5}));
 }
 
 void QtProtobufRepeatedTypesGenerationTest::repeatedFixedInt64MessageTest()
@@ -256,12 +194,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedFixedInt64MessageTest()
     RepeatedFixedInt64Message test;
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::fixed64List>({1, 2, 3, 4, 5})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::fixed64List>(), QtProtobuf::fixed64List({1, 2, 3, 4, 5}));
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::fixed64List({1, 2, 3, 4, 5}));
-
-    test.testRepeatedInt() << 0;
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::fixed64List({1, 2, 3, 4, 5, 0}));
-
-    test.testRepeatedInt().pop_back();
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::fixed64List({1, 2, 3, 4, 5}));
 }
 
@@ -276,12 +208,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedSFixedIntMessageTest()
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::sfixed32List>({1, 2, 3, 4, 5})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::sfixed32List>(), QtProtobuf::sfixed32List({1, 2, 3, 4, 5}));
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::sfixed32List({1, 2, 3, 4, 5}));
-
-    test.testRepeatedInt() << 0;
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::sfixed32List({1, 2, 3, 4, 5, 0}));
-
-    test.testRepeatedInt().pop_back();
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::sfixed32List({1, 2, 3, 4, 5}));
 }
 
 void QtProtobufRepeatedTypesGenerationTest::repeatedSFixedInt64MessageTest()
@@ -294,12 +220,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedSFixedInt64MessageTest()
     RepeatedSFixedInt64Message test;
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue<QtProtobuf::sfixed64List>({1, 2, 3, 4, 5})));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::sfixed64List>(), QtProtobuf::sfixed64List({1, 2, 3, 4, 5}));
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::sfixed64List({1, 2, 3, 4, 5}));
-
-    test.testRepeatedInt() << 0;
-    QCOMPARE(test.testRepeatedInt(), QtProtobuf::sfixed64List({1, 2, 3, 4, 5, 0}));
-
-    test.testRepeatedInt().pop_back();
     QCOMPARE(test.testRepeatedInt(), QtProtobuf::sfixed64List({1, 2, 3, 4, 5}));
 }
 
@@ -315,14 +235,6 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedBoolTest()
     QtProtobuf::boolList list { false, false, false, true, false };
     QVERIFY(test.setProperty(propertyName, QVariant::fromValue(list)));
     QCOMPARE(test.property(propertyName).value<QtProtobuf::boolList>(), list);
-    QCOMPARE(test.testRepeatedBool(), list);
-
-    test.testRepeatedBool() << true;
-    QtProtobuf::boolList listCopy = list;
-    listCopy.append(true);
-    QCOMPARE(test.testRepeatedBool(), listCopy);
-
-    test.testRepeatedBool().pop_back();
     QCOMPARE(test.testRepeatedBool(), list);
 }
 

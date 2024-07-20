@@ -65,9 +65,9 @@ void QtProtobufMapTypesDeserializationTest::simpleFixed32ComplexMapDeserializeTe
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[42], expected2);
-    QCOMPARE(test.mapField()[65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(42), expected2);
+    QCOMPARE(test.mapField().value(65555), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleSFixed32ComplexMapDeserializeTest()
@@ -97,9 +97,9 @@ void QtProtobufMapTypesDeserializationTest::simpleSFixed32ComplexMapDeserializeT
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[-42], expected2);
-    QCOMPARE(test.mapField()[65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(-42), expected2);
+    QCOMPARE(test.mapField().value(65555), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleInt32ComplexMapDeserializeTest()
@@ -129,9 +129,9 @@ void QtProtobufMapTypesDeserializationTest::simpleInt32ComplexMapDeserializeTest
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[-42], expected2);
-    QCOMPARE(test.mapField()[65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(-42), expected2);
+    QCOMPARE(test.mapField().value(65555), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleSInt32ComplexMapDeserializeTest()
@@ -160,9 +160,9 @@ void QtProtobufMapTypesDeserializationTest::simpleSInt32ComplexMapDeserializeTes
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[42], expected2);
-    QCOMPARE(test.mapField()[-65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(42), expected2);
+    QCOMPARE(test.mapField().value(-65555), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleUInt32ComplexMapDeserializeTest()
@@ -192,9 +192,9 @@ void QtProtobufMapTypesDeserializationTest::simpleUInt32ComplexMapDeserializeTes
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[42], expected2);
-    QCOMPARE(test.mapField()[65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(42), expected2);
+    QCOMPARE(test.mapField().value(65555), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleFixed64ComplexMapDeserializeTest()
@@ -224,9 +224,9 @@ void QtProtobufMapTypesDeserializationTest::simpleFixed64ComplexMapDeserializeTe
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[UINT64_MAX], expected2);
-    QCOMPARE(test.mapField()[65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(UINT64_MAX), expected2);
+    QCOMPARE(test.mapField().value(65555), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleSFixed64ComplexMapDeserializeTest()
@@ -256,9 +256,9 @@ void QtProtobufMapTypesDeserializationTest::simpleSFixed64ComplexMapDeserializeT
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[-42], expected2);
-    QCOMPARE(test.mapField()[65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(-42), expected2);
+    QCOMPARE(test.mapField().value(65555), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleInt64ComplexMapDeserializeTest()
@@ -288,9 +288,9 @@ void QtProtobufMapTypesDeserializationTest::simpleInt64ComplexMapDeserializeTest
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[-42], expected2);
-    QCOMPARE(test.mapField()[65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(-42), expected2);
+    QCOMPARE(test.mapField().value(65555), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleSInt64ComplexMapDeserializeTest()
@@ -319,9 +319,9 @@ void QtProtobufMapTypesDeserializationTest::simpleSInt64ComplexMapDeserializeTes
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[-42], expected2);
-    QCOMPARE(test.mapField()[65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(-42), expected2);
+    QCOMPARE(test.mapField().value(65555), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleUInt64ComplexMapDeserializeTest()
@@ -351,9 +351,9 @@ void QtProtobufMapTypesDeserializationTest::simpleUInt64ComplexMapDeserializeTes
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[42], expected2);
-    QCOMPARE(test.mapField()[65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(42), expected2);
+    QCOMPARE(test.mapField().value(65555), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleStringComplexMapDeserializeTest()
@@ -383,9 +383,9 @@ void QtProtobufMapTypesDeserializationTest::simpleStringComplexMapDeserializeTes
     expected3.setTestFieldInt(10);
     expected3.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()["ben"], expected1);
-    QCOMPARE(test.mapField()["where is my car dude?"], expected2);
-    QCOMPARE(test.mapField()["WUT??"], expected3);
+    QCOMPARE(test.mapField().value("ben"), expected1);
+    QCOMPARE(test.mapField().value("where is my car dude?"), expected2);
+    QCOMPARE(test.mapField().value("WUT??"), expected3);
 }
 
 void QtProtobufMapTypesDeserializationTest::simpleUInt64ComplexMapInvalidLengthDeserializeTest()
@@ -422,8 +422,8 @@ void QtProtobufMapTypesDeserializationTest::simpleStringComplexMapInvalidLengthD
     expected2.setTestFieldInt(10);
     expected2.setTestComplexField(stringMsg);
 
-    QCOMPARE(test.mapField()["ben"], expected1);
-    QCOMPARE(test.mapField()["WUT??"], expected2);
+    QCOMPARE(test.mapField().value("ben"), expected1);
+    QCOMPARE(test.mapField().value("WUT??"), expected2);
     QVERIFY(!test.mapField().contains("where is my car dude?"));
 }
 

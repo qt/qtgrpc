@@ -102,12 +102,6 @@ QtProtobuf::int32List RepeatedNonPackedIntMessage::testRepeatedInt() const
     return dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::int32List &RepeatedNonPackedIntMessage::testRepeatedInt()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedInt;
-}
-
 void RepeatedNonPackedIntMessage::setTestRepeatedInt(const QtProtobuf::int32List &testRepeatedInt)
 {
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
@@ -210,12 +204,6 @@ bool comparesEqual(const RepeatedNonPackedSIntMessage &lhs, const RepeatedNonPac
 
 QtProtobuf::sint32List RepeatedNonPackedSIntMessage::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::sint32List &RepeatedNonPackedSIntMessage::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 
@@ -324,12 +312,6 @@ QtProtobuf::uint32List RepeatedNonPackedUIntMessage::testRepeatedInt() const
     return dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::uint32List &RepeatedNonPackedUIntMessage::testRepeatedInt()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedInt;
-}
-
 void RepeatedNonPackedUIntMessage::setTestRepeatedInt(const QtProtobuf::uint32List &testRepeatedInt)
 {
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
@@ -432,12 +414,6 @@ bool comparesEqual(const RepeatedNonPackedInt64Message &lhs, const RepeatedNonPa
 
 QtProtobuf::int64List RepeatedNonPackedInt64Message::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::int64List &RepeatedNonPackedInt64Message::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 
@@ -546,12 +522,6 @@ QtProtobuf::sint64List RepeatedNonPackedSInt64Message::testRepeatedInt() const
     return dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::sint64List &RepeatedNonPackedSInt64Message::testRepeatedInt()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedInt;
-}
-
 void RepeatedNonPackedSInt64Message::setTestRepeatedInt(const QtProtobuf::sint64List &testRepeatedInt)
 {
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
@@ -654,12 +624,6 @@ bool comparesEqual(const RepeatedNonPackedUInt64Message &lhs, const RepeatedNonP
 
 QtProtobuf::uint64List RepeatedNonPackedUInt64Message::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::uint64List &RepeatedNonPackedUInt64Message::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 
@@ -768,12 +732,6 @@ QtProtobuf::fixed32List RepeatedNonPackedFixedIntMessage::testRepeatedInt() cons
     return dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::fixed32List &RepeatedNonPackedFixedIntMessage::testRepeatedInt()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedInt;
-}
-
 void RepeatedNonPackedFixedIntMessage::setTestRepeatedInt(const QtProtobuf::fixed32List &testRepeatedInt)
 {
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
@@ -876,12 +834,6 @@ bool comparesEqual(const RepeatedNonPackedSFixedIntMessage &lhs, const RepeatedN
 
 QtProtobuf::sfixed32List RepeatedNonPackedSFixedIntMessage::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::sfixed32List &RepeatedNonPackedSFixedIntMessage::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 
@@ -990,12 +942,6 @@ QtProtobuf::fixed64List RepeatedNonPackedFixedInt64Message::testRepeatedInt() co
     return dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::fixed64List &RepeatedNonPackedFixedInt64Message::testRepeatedInt()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedInt;
-}
-
 void RepeatedNonPackedFixedInt64Message::setTestRepeatedInt(const QtProtobuf::fixed64List &testRepeatedInt)
 {
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
@@ -1098,12 +1044,6 @@ bool comparesEqual(const RepeatedNonPackedSFixedInt64Message &lhs, const Repeate
 
 QtProtobuf::sfixed64List RepeatedNonPackedSFixedInt64Message::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::sfixed64List &RepeatedNonPackedSFixedInt64Message::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 
@@ -1212,12 +1152,6 @@ QtProtobuf::boolList RepeatedNonPackedBoolMessage::testRepeatedBool() const
     return dptr->m_testRepeatedBool;
 }
 
-QtProtobuf::boolList &RepeatedNonPackedBoolMessage::testRepeatedBool()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedBool;
-}
-
 void RepeatedNonPackedBoolMessage::setTestRepeatedBool(const QtProtobuf::boolList &testRepeatedBool)
 {
     if (dptr->m_testRepeatedBool != testRepeatedBool) {
@@ -1323,12 +1257,6 @@ QtProtobuf::doubleList RepeatedNonPackedDoubleMessage::testRepeatedDouble() cons
     return dptr->m_testRepeatedDouble;
 }
 
-QtProtobuf::doubleList &RepeatedNonPackedDoubleMessage::testRepeatedDouble()
-{
-    dptr.detach();
-    return dptr->m_testRepeatedDouble;
-}
-
 void RepeatedNonPackedDoubleMessage::setTestRepeatedDouble(const QtProtobuf::doubleList &testRepeatedDouble)
 {
     if (dptr->m_testRepeatedDouble != testRepeatedDouble) {
@@ -1431,12 +1359,6 @@ bool comparesEqual(const RepeatedNonPackedFloatMessage &lhs, const RepeatedNonPa
 
 QtProtobuf::floatList RepeatedNonPackedFloatMessage::testRepeatedFloat() const
 {
-    return dptr->m_testRepeatedFloat;
-}
-
-QtProtobuf::floatList &RepeatedNonPackedFloatMessage::testRepeatedFloat()
-{
-    dptr.detach();
     return dptr->m_testRepeatedFloat;
 }
 
@@ -1549,12 +1471,6 @@ bool comparesEqual(const NonPackedIntMessageWithExtraMember &lhs, const NonPacke
 
 QtProtobuf::int32List NonPackedIntMessageWithExtraMember::testRepeatedInt() const
 {
-    return dptr->m_testRepeatedInt;
-}
-
-QtProtobuf::int32List &NonPackedIntMessageWithExtraMember::testRepeatedInt()
-{
-    dptr.detach();
     return dptr->m_testRepeatedInt;
 }
 

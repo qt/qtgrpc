@@ -227,7 +227,6 @@ public:
     }
 
     RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated localEnumList() const;
-    RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated &localEnumList();
     void setLocalEnumList(const RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated &localEnumList);
     static void registerTypes();
 
@@ -303,13 +302,10 @@ public:
     MixedEnumUsageMessage_QtProtobufNested::LocalEnum localEnum() const;
 
     MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated localEnumList() const;
-    MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated &localEnumList();
 
     MixedEnumUsageMessage::LocalEnumMapEntry localEnumMap() const;
-    MixedEnumUsageMessage::LocalEnumMapEntry &localEnumMap();
 
     MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated msgList() const;
-    MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated &msgList();
     void setLocalEnum(const MixedEnumUsageMessage_QtProtobufNested::LocalEnum &localEnum);
     void setLocalEnumList(const MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated &localEnumList);
     void setLocalEnumMap(const MixedEnumUsageMessage::LocalEnumMapEntry &localEnumMap);
@@ -612,7 +608,6 @@ public:
     TestEnumGadget::TestEnum globalEnum() const;
 
     TestEnumGadget::TestEnumRepeated globalEnumList() const;
-    TestEnumGadget::TestEnumRepeated &globalEnumList();
     void setGlobalEnum(const TestEnumGadget::TestEnum &globalEnum);
     void setGlobalEnumList(const TestEnumGadget::TestEnumRepeated &globalEnumList);
     static void registerTypes();
@@ -670,7 +665,6 @@ public:
     SimpleEnumMessage_QtProtobufNested::LocalEnum localStepChildEnum() const;
 
     SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated localStepChildList() const;
-    SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated &localStepChildList();
     void setLocalStepChildEnum(const SimpleEnumMessage_QtProtobufNested::LocalEnum &localStepChildEnum);
     void setLocalStepChildList(const SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated &localStepChildList);
     static void registerTypes();
