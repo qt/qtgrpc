@@ -459,6 +459,11 @@ void QtProtobufTypesGenerationTest::accessMessageFieldsFromGetter()
     actual.testComplexField().setTestFieldString("AccessMessageFieldsFromGetter");
 
     QCOMPARE(actual, expected);
+
+    ComplexMessage actualCopy = actual;
+    actual.testComplexField().setTestFieldString("Ensure detach");
+
+    QCOMPARE_NE(actual, actualCopy);
 }
 
 void QtProtobufTypesGenerationTest::invalidMessageConstructorTest()
