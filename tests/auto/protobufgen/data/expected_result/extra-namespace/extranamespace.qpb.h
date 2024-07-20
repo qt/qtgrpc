@@ -48,7 +48,16 @@ public:
     EmptyMessage(const EmptyMessage &other);
     EmptyMessage &operator =(const EmptyMessage &other);
     EmptyMessage(EmptyMessage &&other) noexcept;
-    EmptyMessage &operator =(EmptyMessage &&other) noexcept;
+    EmptyMessage &operator =(EmptyMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(EmptyMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
     static void registerTypes();
 
 private:
@@ -81,7 +90,16 @@ public:
     SimpleStringMessage(const SimpleStringMessage &other);
     SimpleStringMessage &operator =(const SimpleStringMessage &other);
     SimpleStringMessage(SimpleStringMessage &&other) noexcept;
-    SimpleStringMessage &operator =(SimpleStringMessage &&other) noexcept;
+    SimpleStringMessage &operator =(SimpleStringMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
@@ -124,7 +142,16 @@ public:
     ComplexMessage(const ComplexMessage &other);
     ComplexMessage &operator =(const ComplexMessage &other);
     ComplexMessage(ComplexMessage &&other) noexcept;
-    ComplexMessage &operator =(ComplexMessage &&other) noexcept;
+    ComplexMessage &operator =(ComplexMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(ComplexMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int32 testFieldInt() const;
 

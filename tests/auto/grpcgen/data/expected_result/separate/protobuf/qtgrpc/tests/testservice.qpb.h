@@ -50,7 +50,16 @@ public:
     SimpleStringMessage(const SimpleStringMessage &other);
     SimpleStringMessage &operator =(const SimpleStringMessage &other);
     SimpleStringMessage(SimpleStringMessage &&other) noexcept;
-    SimpleStringMessage &operator =(SimpleStringMessage &&other) noexcept;
+    SimpleStringMessage &operator =(SimpleStringMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
@@ -91,7 +100,16 @@ public:
     SimpleIntMessage(const SimpleIntMessage &other);
     SimpleIntMessage &operator =(const SimpleIntMessage &other);
     SimpleIntMessage(SimpleIntMessage &&other) noexcept;
-    SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept;
+    SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleIntMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -132,7 +150,16 @@ public:
     BlobMessage(const BlobMessage &other);
     BlobMessage &operator =(const BlobMessage &other);
     BlobMessage(BlobMessage &&other) noexcept;
-    BlobMessage &operator =(BlobMessage &&other) noexcept;
+    BlobMessage &operator =(BlobMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(BlobMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QByteArray testBytes() const;
     void setTestBytes(const QByteArray &testBytes);

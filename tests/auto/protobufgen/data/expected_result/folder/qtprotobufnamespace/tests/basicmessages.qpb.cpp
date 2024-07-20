@@ -75,20 +75,14 @@ EmptyMessage::EmptyMessage(const EmptyMessage &other)
 }
 EmptyMessage &EmptyMessage::operator =(const EmptyMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    EmptyMessage temp(other);
+    swap(temp);
     return *this;
 }
 EmptyMessage::EmptyMessage(EmptyMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-EmptyMessage &EmptyMessage::operator =(EmptyMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
 {
@@ -173,20 +167,14 @@ SimpleBoolMessage::SimpleBoolMessage(const SimpleBoolMessage &other)
 }
 SimpleBoolMessage &SimpleBoolMessage::operator =(const SimpleBoolMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleBoolMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleBoolMessage::SimpleBoolMessage(SimpleBoolMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleBoolMessage &SimpleBoolMessage::operator =(SimpleBoolMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleBoolMessage &lhs, const SimpleBoolMessage &rhs) noexcept
 {
@@ -285,20 +273,14 @@ SimpleIntMessage::SimpleIntMessage(const SimpleIntMessage &other)
 }
 SimpleIntMessage &SimpleIntMessage::operator =(const SimpleIntMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleIntMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleIntMessage::SimpleIntMessage(SimpleIntMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleIntMessage &SimpleIntMessage::operator =(SimpleIntMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
 {
@@ -397,20 +379,14 @@ SimpleSIntMessage::SimpleSIntMessage(const SimpleSIntMessage &other)
 }
 SimpleSIntMessage &SimpleSIntMessage::operator =(const SimpleSIntMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSIntMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSIntMessage::SimpleSIntMessage(SimpleSIntMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSIntMessage &SimpleSIntMessage::operator =(SimpleSIntMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSIntMessage &lhs, const SimpleSIntMessage &rhs) noexcept
 {
@@ -509,20 +485,14 @@ SimpleUIntMessage::SimpleUIntMessage(const SimpleUIntMessage &other)
 }
 SimpleUIntMessage &SimpleUIntMessage::operator =(const SimpleUIntMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUIntMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUIntMessage::SimpleUIntMessage(SimpleUIntMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUIntMessage &SimpleUIntMessage::operator =(SimpleUIntMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUIntMessage &lhs, const SimpleUIntMessage &rhs) noexcept
 {
@@ -621,20 +591,14 @@ SimpleInt64Message::SimpleInt64Message(const SimpleInt64Message &other)
 }
 SimpleInt64Message &SimpleInt64Message::operator =(const SimpleInt64Message &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt64Message temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt64Message::SimpleInt64Message(SimpleInt64Message &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt64Message &SimpleInt64Message::operator =(SimpleInt64Message &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt64Message &lhs, const SimpleInt64Message &rhs) noexcept
 {
@@ -733,20 +697,14 @@ SimpleSInt64Message::SimpleSInt64Message(const SimpleSInt64Message &other)
 }
 SimpleSInt64Message &SimpleSInt64Message::operator =(const SimpleSInt64Message &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt64Message temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt64Message::SimpleSInt64Message(SimpleSInt64Message &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt64Message &SimpleSInt64Message::operator =(SimpleSInt64Message &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt64Message &lhs, const SimpleSInt64Message &rhs) noexcept
 {
@@ -845,20 +803,14 @@ SimpleUInt64Message::SimpleUInt64Message(const SimpleUInt64Message &other)
 }
 SimpleUInt64Message &SimpleUInt64Message::operator =(const SimpleUInt64Message &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt64Message temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt64Message::SimpleUInt64Message(SimpleUInt64Message &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt64Message &SimpleUInt64Message::operator =(SimpleUInt64Message &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt64Message &lhs, const SimpleUInt64Message &rhs) noexcept
 {
@@ -956,20 +908,14 @@ SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other)
 }
 SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringMessage::SimpleStringMessage(SimpleStringMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringMessage &SimpleStringMessage::operator =(SimpleStringMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
 {
@@ -1068,20 +1014,14 @@ SimpleFloatMessage::SimpleFloatMessage(const SimpleFloatMessage &other)
 }
 SimpleFloatMessage &SimpleFloatMessage::operator =(const SimpleFloatMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFloatMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFloatMessage::SimpleFloatMessage(SimpleFloatMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFloatMessage &SimpleFloatMessage::operator =(SimpleFloatMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFloatMessage &lhs, const SimpleFloatMessage &rhs) noexcept
 {
@@ -1181,20 +1121,14 @@ SimpleDoubleMessage::SimpleDoubleMessage(const SimpleDoubleMessage &other)
 }
 SimpleDoubleMessage &SimpleDoubleMessage::operator =(const SimpleDoubleMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleDoubleMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleDoubleMessage::SimpleDoubleMessage(SimpleDoubleMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleDoubleMessage &SimpleDoubleMessage::operator =(SimpleDoubleMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleDoubleMessage &lhs, const SimpleDoubleMessage &rhs) noexcept
 {
@@ -1293,20 +1227,14 @@ SimpleBytesMessage::SimpleBytesMessage(const SimpleBytesMessage &other)
 }
 SimpleBytesMessage &SimpleBytesMessage::operator =(const SimpleBytesMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleBytesMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleBytesMessage::SimpleBytesMessage(SimpleBytesMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleBytesMessage &SimpleBytesMessage::operator =(SimpleBytesMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleBytesMessage &lhs, const SimpleBytesMessage &rhs) noexcept
 {
@@ -1405,20 +1333,14 @@ SimpleFixedInt32Message::SimpleFixedInt32Message(const SimpleFixedInt32Message &
 }
 SimpleFixedInt32Message &SimpleFixedInt32Message::operator =(const SimpleFixedInt32Message &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixedInt32Message temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixedInt32Message::SimpleFixedInt32Message(SimpleFixedInt32Message &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixedInt32Message &SimpleFixedInt32Message::operator =(SimpleFixedInt32Message &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixedInt32Message &lhs, const SimpleFixedInt32Message &rhs) noexcept
 {
@@ -1517,20 +1439,14 @@ SimpleFixedInt64Message::SimpleFixedInt64Message(const SimpleFixedInt64Message &
 }
 SimpleFixedInt64Message &SimpleFixedInt64Message::operator =(const SimpleFixedInt64Message &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixedInt64Message temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixedInt64Message::SimpleFixedInt64Message(SimpleFixedInt64Message &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixedInt64Message &SimpleFixedInt64Message::operator =(SimpleFixedInt64Message &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixedInt64Message &lhs, const SimpleFixedInt64Message &rhs) noexcept
 {
@@ -1628,20 +1544,14 @@ SimpleSFixedInt32Message::SimpleSFixedInt32Message(const SimpleSFixedInt32Messag
 }
 SimpleSFixedInt32Message &SimpleSFixedInt32Message::operator =(const SimpleSFixedInt32Message &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixedInt32Message temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixedInt32Message::SimpleSFixedInt32Message(SimpleSFixedInt32Message &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixedInt32Message &SimpleSFixedInt32Message::operator =(SimpleSFixedInt32Message &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixedInt32Message &lhs, const SimpleSFixedInt32Message &rhs) noexcept
 {
@@ -1739,20 +1649,14 @@ SimpleSFixedInt64Message::SimpleSFixedInt64Message(const SimpleSFixedInt64Messag
 }
 SimpleSFixedInt64Message &SimpleSFixedInt64Message::operator =(const SimpleSFixedInt64Message &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixedInt64Message temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixedInt64Message::SimpleSFixedInt64Message(SimpleSFixedInt64Message &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixedInt64Message &SimpleSFixedInt64Message::operator =(SimpleSFixedInt64Message &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixedInt64Message &lhs, const SimpleSFixedInt64Message &rhs) noexcept
 {
@@ -1860,20 +1764,14 @@ ComplexMessage::ComplexMessage(const ComplexMessage &other)
 }
 ComplexMessage &ComplexMessage::operator =(const ComplexMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    ComplexMessage temp(other);
+    swap(temp);
     return *this;
 }
 ComplexMessage::ComplexMessage(ComplexMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-ComplexMessage &ComplexMessage::operator =(ComplexMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept
 {

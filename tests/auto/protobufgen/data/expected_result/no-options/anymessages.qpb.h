@@ -62,7 +62,16 @@ public:
     AnyMessage(const AnyMessage &other);
     AnyMessage &operator =(const AnyMessage &other);
     AnyMessage(AnyMessage &&other) noexcept;
-    AnyMessage &operator =(AnyMessage &&other) noexcept;
+    AnyMessage &operator =(AnyMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(AnyMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::Any field() const;
     void setField(const QtProtobuf::Any &field);
@@ -103,7 +112,16 @@ public:
     RepeatedAnyMessage(const RepeatedAnyMessage &other);
     RepeatedAnyMessage &operator =(const RepeatedAnyMessage &other);
     RepeatedAnyMessage(RepeatedAnyMessage &&other) noexcept;
-    RepeatedAnyMessage &operator =(RepeatedAnyMessage &&other) noexcept;
+    RepeatedAnyMessage &operator =(RepeatedAnyMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedAnyMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QList<QtProtobuf::Any> anys() const;
     QList<QtProtobuf::Any> &anys();
@@ -146,7 +164,16 @@ public:
     TwoAnyMessage(const TwoAnyMessage &other);
     TwoAnyMessage &operator =(const TwoAnyMessage &other);
     TwoAnyMessage(TwoAnyMessage &&other) noexcept;
-    TwoAnyMessage &operator =(TwoAnyMessage &&other) noexcept;
+    TwoAnyMessage &operator =(TwoAnyMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(TwoAnyMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::Any one() const;
 
@@ -195,7 +222,16 @@ public:
     Example(const Example &other);
     Example &operator =(const Example &other);
     Example(Example &&other) noexcept;
-    Example &operator =(Example &&other) noexcept;
+    Example &operator =(Example &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(Example &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QString str() const;
 
@@ -252,7 +288,16 @@ public:
     SimpleMessage(const SimpleMessage &other);
     SimpleMessage &operator =(const SimpleMessage &other);
     SimpleMessage(SimpleMessage &&other) noexcept;
-    SimpleMessage &operator =(SimpleMessage &&other) noexcept;
+    SimpleMessage &operator =(SimpleMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int32 i() const;
     void setI(const QtProtobuf::int32 &i);

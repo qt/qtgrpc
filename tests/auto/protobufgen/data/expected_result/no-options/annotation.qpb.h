@@ -85,7 +85,16 @@ public:
     AnnotatedMessage1(const AnnotatedMessage1 &other);
     AnnotatedMessage1 &operator =(const AnnotatedMessage1 &other);
     AnnotatedMessage1(AnnotatedMessage1 &&other) noexcept;
-    AnnotatedMessage1 &operator =(AnnotatedMessage1 &&other) noexcept;
+    AnnotatedMessage1 &operator =(AnnotatedMessage1 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(AnnotatedMessage1 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -126,7 +135,16 @@ public:
     AnnotatedMessage2(const AnnotatedMessage2 &other);
     AnnotatedMessage2 &operator =(const AnnotatedMessage2 &other);
     AnnotatedMessage2(AnnotatedMessage2 &&other) noexcept;
-    AnnotatedMessage2 &operator =(AnnotatedMessage2 &&other) noexcept;
+    AnnotatedMessage2 &operator =(AnnotatedMessage2 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(AnnotatedMessage2 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -167,7 +185,16 @@ public:
     AnnotatedMessage3(const AnnotatedMessage3 &other);
     AnnotatedMessage3 &operator =(const AnnotatedMessage3 &other);
     AnnotatedMessage3(AnnotatedMessage3 &&other) noexcept;
-    AnnotatedMessage3 &operator =(AnnotatedMessage3 &&other) noexcept;
+    AnnotatedMessage3 &operator =(AnnotatedMessage3 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(AnnotatedMessage3 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -208,7 +235,16 @@ public:
     AnnotatedMessage4(const AnnotatedMessage4 &other);
     AnnotatedMessage4 &operator =(const AnnotatedMessage4 &other);
     AnnotatedMessage4(AnnotatedMessage4 &&other) noexcept;
-    AnnotatedMessage4 &operator =(AnnotatedMessage4 &&other) noexcept;
+    AnnotatedMessage4 &operator =(AnnotatedMessage4 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(AnnotatedMessage4 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -249,7 +285,16 @@ public:
     AnnotatedMessage5(const AnnotatedMessage5 &other);
     AnnotatedMessage5 &operator =(const AnnotatedMessage5 &other);
     AnnotatedMessage5(AnnotatedMessage5 &&other) noexcept;
-    AnnotatedMessage5 &operator =(AnnotatedMessage5 &&other) noexcept;
+    AnnotatedMessage5 &operator =(AnnotatedMessage5 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(AnnotatedMessage5 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -290,7 +335,16 @@ public:
     AnnotatedMessage6(const AnnotatedMessage6 &other);
     AnnotatedMessage6 &operator =(const AnnotatedMessage6 &other);
     AnnotatedMessage6(AnnotatedMessage6 &&other) noexcept;
-    AnnotatedMessage6 &operator =(AnnotatedMessage6 &&other) noexcept;
+    AnnotatedMessage6 &operator =(AnnotatedMessage6 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(AnnotatedMessage6 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -331,7 +385,16 @@ public:
     AnnotatedMessage7(const AnnotatedMessage7 &other);
     AnnotatedMessage7 &operator =(const AnnotatedMessage7 &other);
     AnnotatedMessage7(AnnotatedMessage7 &&other) noexcept;
-    AnnotatedMessage7 &operator =(AnnotatedMessage7 &&other) noexcept;
+    AnnotatedMessage7 &operator =(AnnotatedMessage7 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(AnnotatedMessage7 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -372,7 +435,16 @@ public:
     AnnotatedMessage8(const AnnotatedMessage8 &other);
     AnnotatedMessage8 &operator =(const AnnotatedMessage8 &other);
     AnnotatedMessage8(AnnotatedMessage8 &&other) noexcept;
-    AnnotatedMessage8 &operator =(AnnotatedMessage8 &&other) noexcept;
+    AnnotatedMessage8 &operator =(AnnotatedMessage8 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(AnnotatedMessage8 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -413,7 +485,16 @@ public:
     AnnotatedMessage9(const AnnotatedMessage9 &other);
     AnnotatedMessage9 &operator =(const AnnotatedMessage9 &other);
     AnnotatedMessage9(AnnotatedMessage9 &&other) noexcept;
-    AnnotatedMessage9 &operator =(AnnotatedMessage9 &&other) noexcept;
+    AnnotatedMessage9 &operator =(AnnotatedMessage9 &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(AnnotatedMessage9 &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);

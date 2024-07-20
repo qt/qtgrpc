@@ -55,7 +55,16 @@ public:
     FieldIndexTest1Message(const FieldIndexTest1Message &other);
     FieldIndexTest1Message &operator =(const FieldIndexTest1Message &other);
     FieldIndexTest1Message(FieldIndexTest1Message &&other) noexcept;
-    FieldIndexTest1Message &operator =(FieldIndexTest1Message &&other) noexcept;
+    FieldIndexTest1Message &operator =(FieldIndexTest1Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(FieldIndexTest1Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -96,7 +105,16 @@ public:
     FieldIndexTest2Message(const FieldIndexTest2Message &other);
     FieldIndexTest2Message &operator =(const FieldIndexTest2Message &other);
     FieldIndexTest2Message(FieldIndexTest2Message &&other) noexcept;
-    FieldIndexTest2Message &operator =(FieldIndexTest2Message &&other) noexcept;
+    FieldIndexTest2Message &operator =(FieldIndexTest2Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(FieldIndexTest2Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -137,7 +155,16 @@ public:
     FieldIndexTest3Message(const FieldIndexTest3Message &other);
     FieldIndexTest3Message &operator =(const FieldIndexTest3Message &other);
     FieldIndexTest3Message(FieldIndexTest3Message &&other) noexcept;
-    FieldIndexTest3Message &operator =(FieldIndexTest3Message &&other) noexcept;
+    FieldIndexTest3Message &operator =(FieldIndexTest3Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(FieldIndexTest3Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);
@@ -178,7 +205,16 @@ public:
     FieldIndexTest4Message(const FieldIndexTest4Message &other);
     FieldIndexTest4Message &operator =(const FieldIndexTest4Message &other);
     FieldIndexTest4Message(FieldIndexTest4Message &&other) noexcept;
-    FieldIndexTest4Message &operator =(FieldIndexTest4Message &&other) noexcept;
+    FieldIndexTest4Message &operator =(FieldIndexTest4Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(FieldIndexTest4Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testField() const;
     void setTestField(const QtProtobuf::sint32 &testField);

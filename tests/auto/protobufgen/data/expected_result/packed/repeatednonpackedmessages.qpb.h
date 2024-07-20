@@ -115,7 +115,16 @@ public:
     RepeatedNonPackedIntMessage(const RepeatedNonPackedIntMessage &other);
     RepeatedNonPackedIntMessage &operator =(const RepeatedNonPackedIntMessage &other);
     RepeatedNonPackedIntMessage(RepeatedNonPackedIntMessage &&other) noexcept;
-    RepeatedNonPackedIntMessage &operator =(RepeatedNonPackedIntMessage &&other) noexcept;
+    RepeatedNonPackedIntMessage &operator =(RepeatedNonPackedIntMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedIntMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int32List testRepeatedInt() const;
     QtProtobuf::int32List &testRepeatedInt();
@@ -157,7 +166,16 @@ public:
     RepeatedNonPackedSIntMessage(const RepeatedNonPackedSIntMessage &other);
     RepeatedNonPackedSIntMessage &operator =(const RepeatedNonPackedSIntMessage &other);
     RepeatedNonPackedSIntMessage(RepeatedNonPackedSIntMessage &&other) noexcept;
-    RepeatedNonPackedSIntMessage &operator =(RepeatedNonPackedSIntMessage &&other) noexcept;
+    RepeatedNonPackedSIntMessage &operator =(RepeatedNonPackedSIntMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedSIntMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32List testRepeatedInt() const;
     QtProtobuf::sint32List &testRepeatedInt();
@@ -199,7 +217,16 @@ public:
     RepeatedNonPackedUIntMessage(const RepeatedNonPackedUIntMessage &other);
     RepeatedNonPackedUIntMessage &operator =(const RepeatedNonPackedUIntMessage &other);
     RepeatedNonPackedUIntMessage(RepeatedNonPackedUIntMessage &&other) noexcept;
-    RepeatedNonPackedUIntMessage &operator =(RepeatedNonPackedUIntMessage &&other) noexcept;
+    RepeatedNonPackedUIntMessage &operator =(RepeatedNonPackedUIntMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedUIntMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::uint32List testRepeatedInt() const;
     QtProtobuf::uint32List &testRepeatedInt();
@@ -241,7 +268,16 @@ public:
     RepeatedNonPackedInt64Message(const RepeatedNonPackedInt64Message &other);
     RepeatedNonPackedInt64Message &operator =(const RepeatedNonPackedInt64Message &other);
     RepeatedNonPackedInt64Message(RepeatedNonPackedInt64Message &&other) noexcept;
-    RepeatedNonPackedInt64Message &operator =(RepeatedNonPackedInt64Message &&other) noexcept;
+    RepeatedNonPackedInt64Message &operator =(RepeatedNonPackedInt64Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedInt64Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int64List testRepeatedInt() const;
     QtProtobuf::int64List &testRepeatedInt();
@@ -283,7 +319,16 @@ public:
     RepeatedNonPackedSInt64Message(const RepeatedNonPackedSInt64Message &other);
     RepeatedNonPackedSInt64Message &operator =(const RepeatedNonPackedSInt64Message &other);
     RepeatedNonPackedSInt64Message(RepeatedNonPackedSInt64Message &&other) noexcept;
-    RepeatedNonPackedSInt64Message &operator =(RepeatedNonPackedSInt64Message &&other) noexcept;
+    RepeatedNonPackedSInt64Message &operator =(RepeatedNonPackedSInt64Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedSInt64Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint64List testRepeatedInt() const;
     QtProtobuf::sint64List &testRepeatedInt();
@@ -325,7 +370,16 @@ public:
     RepeatedNonPackedUInt64Message(const RepeatedNonPackedUInt64Message &other);
     RepeatedNonPackedUInt64Message &operator =(const RepeatedNonPackedUInt64Message &other);
     RepeatedNonPackedUInt64Message(RepeatedNonPackedUInt64Message &&other) noexcept;
-    RepeatedNonPackedUInt64Message &operator =(RepeatedNonPackedUInt64Message &&other) noexcept;
+    RepeatedNonPackedUInt64Message &operator =(RepeatedNonPackedUInt64Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedUInt64Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::uint64List testRepeatedInt() const;
     QtProtobuf::uint64List &testRepeatedInt();
@@ -367,7 +421,16 @@ public:
     RepeatedNonPackedFixedIntMessage(const RepeatedNonPackedFixedIntMessage &other);
     RepeatedNonPackedFixedIntMessage &operator =(const RepeatedNonPackedFixedIntMessage &other);
     RepeatedNonPackedFixedIntMessage(RepeatedNonPackedFixedIntMessage &&other) noexcept;
-    RepeatedNonPackedFixedIntMessage &operator =(RepeatedNonPackedFixedIntMessage &&other) noexcept;
+    RepeatedNonPackedFixedIntMessage &operator =(RepeatedNonPackedFixedIntMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedFixedIntMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::fixed32List testRepeatedInt() const;
     QtProtobuf::fixed32List &testRepeatedInt();
@@ -409,7 +472,16 @@ public:
     RepeatedNonPackedSFixedIntMessage(const RepeatedNonPackedSFixedIntMessage &other);
     RepeatedNonPackedSFixedIntMessage &operator =(const RepeatedNonPackedSFixedIntMessage &other);
     RepeatedNonPackedSFixedIntMessage(RepeatedNonPackedSFixedIntMessage &&other) noexcept;
-    RepeatedNonPackedSFixedIntMessage &operator =(RepeatedNonPackedSFixedIntMessage &&other) noexcept;
+    RepeatedNonPackedSFixedIntMessage &operator =(RepeatedNonPackedSFixedIntMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedSFixedIntMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sfixed32List testRepeatedInt() const;
     QtProtobuf::sfixed32List &testRepeatedInt();
@@ -451,7 +523,16 @@ public:
     RepeatedNonPackedFixedInt64Message(const RepeatedNonPackedFixedInt64Message &other);
     RepeatedNonPackedFixedInt64Message &operator =(const RepeatedNonPackedFixedInt64Message &other);
     RepeatedNonPackedFixedInt64Message(RepeatedNonPackedFixedInt64Message &&other) noexcept;
-    RepeatedNonPackedFixedInt64Message &operator =(RepeatedNonPackedFixedInt64Message &&other) noexcept;
+    RepeatedNonPackedFixedInt64Message &operator =(RepeatedNonPackedFixedInt64Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedFixedInt64Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::fixed64List testRepeatedInt() const;
     QtProtobuf::fixed64List &testRepeatedInt();
@@ -493,7 +574,16 @@ public:
     RepeatedNonPackedSFixedInt64Message(const RepeatedNonPackedSFixedInt64Message &other);
     RepeatedNonPackedSFixedInt64Message &operator =(const RepeatedNonPackedSFixedInt64Message &other);
     RepeatedNonPackedSFixedInt64Message(RepeatedNonPackedSFixedInt64Message &&other) noexcept;
-    RepeatedNonPackedSFixedInt64Message &operator =(RepeatedNonPackedSFixedInt64Message &&other) noexcept;
+    RepeatedNonPackedSFixedInt64Message &operator =(RepeatedNonPackedSFixedInt64Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedSFixedInt64Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sfixed64List testRepeatedInt() const;
     QtProtobuf::sfixed64List &testRepeatedInt();
@@ -535,7 +625,16 @@ public:
     RepeatedNonPackedBoolMessage(const RepeatedNonPackedBoolMessage &other);
     RepeatedNonPackedBoolMessage &operator =(const RepeatedNonPackedBoolMessage &other);
     RepeatedNonPackedBoolMessage(RepeatedNonPackedBoolMessage &&other) noexcept;
-    RepeatedNonPackedBoolMessage &operator =(RepeatedNonPackedBoolMessage &&other) noexcept;
+    RepeatedNonPackedBoolMessage &operator =(RepeatedNonPackedBoolMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedBoolMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::boolList testRepeatedBool() const;
     QtProtobuf::boolList &testRepeatedBool();
@@ -577,7 +676,16 @@ public:
     RepeatedNonPackedDoubleMessage(const RepeatedNonPackedDoubleMessage &other);
     RepeatedNonPackedDoubleMessage &operator =(const RepeatedNonPackedDoubleMessage &other);
     RepeatedNonPackedDoubleMessage(RepeatedNonPackedDoubleMessage &&other) noexcept;
-    RepeatedNonPackedDoubleMessage &operator =(RepeatedNonPackedDoubleMessage &&other) noexcept;
+    RepeatedNonPackedDoubleMessage &operator =(RepeatedNonPackedDoubleMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedDoubleMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::doubleList testRepeatedDouble() const;
     QtProtobuf::doubleList &testRepeatedDouble();
@@ -619,7 +727,16 @@ public:
     RepeatedNonPackedFloatMessage(const RepeatedNonPackedFloatMessage &other);
     RepeatedNonPackedFloatMessage &operator =(const RepeatedNonPackedFloatMessage &other);
     RepeatedNonPackedFloatMessage(RepeatedNonPackedFloatMessage &&other) noexcept;
-    RepeatedNonPackedFloatMessage &operator =(RepeatedNonPackedFloatMessage &&other) noexcept;
+    RepeatedNonPackedFloatMessage &operator =(RepeatedNonPackedFloatMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(RepeatedNonPackedFloatMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::floatList testRepeatedFloat() const;
     QtProtobuf::floatList &testRepeatedFloat();
@@ -662,7 +779,16 @@ public:
     NonPackedIntMessageWithExtraMember(const NonPackedIntMessageWithExtraMember &other);
     NonPackedIntMessageWithExtraMember &operator =(const NonPackedIntMessageWithExtraMember &other);
     NonPackedIntMessageWithExtraMember(NonPackedIntMessageWithExtraMember &&other) noexcept;
-    NonPackedIntMessageWithExtraMember &operator =(NonPackedIntMessageWithExtraMember &&other) noexcept;
+    NonPackedIntMessageWithExtraMember &operator =(NonPackedIntMessageWithExtraMember &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(NonPackedIntMessageWithExtraMember &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int32List testRepeatedInt() const;
     QtProtobuf::int32List &testRepeatedInt();

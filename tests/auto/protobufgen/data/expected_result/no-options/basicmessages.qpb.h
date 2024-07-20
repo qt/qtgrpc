@@ -132,7 +132,16 @@ public:
     EmptyMessage(const EmptyMessage &other);
     EmptyMessage &operator =(const EmptyMessage &other);
     EmptyMessage(EmptyMessage &&other) noexcept;
-    EmptyMessage &operator =(EmptyMessage &&other) noexcept;
+    EmptyMessage &operator =(EmptyMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(EmptyMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
     static void registerTypes();
 
 private:
@@ -165,7 +174,16 @@ public:
     SimpleBoolMessage(const SimpleBoolMessage &other);
     SimpleBoolMessage &operator =(const SimpleBoolMessage &other);
     SimpleBoolMessage(SimpleBoolMessage &&other) noexcept;
-    SimpleBoolMessage &operator =(SimpleBoolMessage &&other) noexcept;
+    SimpleBoolMessage &operator =(SimpleBoolMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleBoolMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     bool testFieldBool() const;
     void setTestFieldBool(const bool &testFieldBool);
@@ -206,7 +224,16 @@ public:
     SimpleIntMessage(const SimpleIntMessage &other);
     SimpleIntMessage &operator =(const SimpleIntMessage &other);
     SimpleIntMessage(SimpleIntMessage &&other) noexcept;
-    SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept;
+    SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleIntMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int32 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
@@ -247,7 +274,16 @@ public:
     SimpleSIntMessage(const SimpleSIntMessage &other);
     SimpleSIntMessage &operator =(const SimpleSIntMessage &other);
     SimpleSIntMessage(SimpleSIntMessage &&other) noexcept;
-    SimpleSIntMessage &operator =(SimpleSIntMessage &&other) noexcept;
+    SimpleSIntMessage &operator =(SimpleSIntMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSIntMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint32 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::sint32 &testFieldInt);
@@ -288,7 +324,16 @@ public:
     SimpleUIntMessage(const SimpleUIntMessage &other);
     SimpleUIntMessage &operator =(const SimpleUIntMessage &other);
     SimpleUIntMessage(SimpleUIntMessage &&other) noexcept;
-    SimpleUIntMessage &operator =(SimpleUIntMessage &&other) noexcept;
+    SimpleUIntMessage &operator =(SimpleUIntMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUIntMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::uint32 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::uint32 &testFieldInt);
@@ -329,7 +374,16 @@ public:
     SimpleInt64Message(const SimpleInt64Message &other);
     SimpleInt64Message &operator =(const SimpleInt64Message &other);
     SimpleInt64Message(SimpleInt64Message &&other) noexcept;
-    SimpleInt64Message &operator =(SimpleInt64Message &&other) noexcept;
+    SimpleInt64Message &operator =(SimpleInt64Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleInt64Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int64 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::int64 &testFieldInt);
@@ -370,7 +424,16 @@ public:
     SimpleSInt64Message(const SimpleSInt64Message &other);
     SimpleSInt64Message &operator =(const SimpleSInt64Message &other);
     SimpleSInt64Message(SimpleSInt64Message &&other) noexcept;
-    SimpleSInt64Message &operator =(SimpleSInt64Message &&other) noexcept;
+    SimpleSInt64Message &operator =(SimpleSInt64Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSInt64Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sint64 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::sint64 &testFieldInt);
@@ -411,7 +474,16 @@ public:
     SimpleUInt64Message(const SimpleUInt64Message &other);
     SimpleUInt64Message &operator =(const SimpleUInt64Message &other);
     SimpleUInt64Message(SimpleUInt64Message &&other) noexcept;
-    SimpleUInt64Message &operator =(SimpleUInt64Message &&other) noexcept;
+    SimpleUInt64Message &operator =(SimpleUInt64Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleUInt64Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::uint64 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::uint64 &testFieldInt);
@@ -452,7 +524,16 @@ public:
     SimpleStringMessage(const SimpleStringMessage &other);
     SimpleStringMessage &operator =(const SimpleStringMessage &other);
     SimpleStringMessage(SimpleStringMessage &&other) noexcept;
-    SimpleStringMessage &operator =(SimpleStringMessage &&other) noexcept;
+    SimpleStringMessage &operator =(SimpleStringMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleStringMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
@@ -493,7 +574,16 @@ public:
     SimpleFloatMessage(const SimpleFloatMessage &other);
     SimpleFloatMessage &operator =(const SimpleFloatMessage &other);
     SimpleFloatMessage(SimpleFloatMessage &&other) noexcept;
-    SimpleFloatMessage &operator =(SimpleFloatMessage &&other) noexcept;
+    SimpleFloatMessage &operator =(SimpleFloatMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFloatMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     float testFieldFloat() const;
     void setTestFieldFloat(const float &testFieldFloat);
@@ -534,7 +624,16 @@ public:
     SimpleDoubleMessage(const SimpleDoubleMessage &other);
     SimpleDoubleMessage &operator =(const SimpleDoubleMessage &other);
     SimpleDoubleMessage(SimpleDoubleMessage &&other) noexcept;
-    SimpleDoubleMessage &operator =(SimpleDoubleMessage &&other) noexcept;
+    SimpleDoubleMessage &operator =(SimpleDoubleMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleDoubleMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     double testFieldDouble() const;
     void setTestFieldDouble(const double &testFieldDouble);
@@ -575,7 +674,16 @@ public:
     SimpleBytesMessage(const SimpleBytesMessage &other);
     SimpleBytesMessage &operator =(const SimpleBytesMessage &other);
     SimpleBytesMessage(SimpleBytesMessage &&other) noexcept;
-    SimpleBytesMessage &operator =(SimpleBytesMessage &&other) noexcept;
+    SimpleBytesMessage &operator =(SimpleBytesMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleBytesMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QByteArray testFieldBytes() const;
     void setTestFieldBytes(const QByteArray &testFieldBytes);
@@ -616,7 +724,16 @@ public:
     SimpleFixedInt32Message(const SimpleFixedInt32Message &other);
     SimpleFixedInt32Message &operator =(const SimpleFixedInt32Message &other);
     SimpleFixedInt32Message(SimpleFixedInt32Message &&other) noexcept;
-    SimpleFixedInt32Message &operator =(SimpleFixedInt32Message &&other) noexcept;
+    SimpleFixedInt32Message &operator =(SimpleFixedInt32Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixedInt32Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::fixed32 testFieldFixedInt32() const;
     void setTestFieldFixedInt32(const QtProtobuf::fixed32 &testFieldFixedInt32);
@@ -657,7 +774,16 @@ public:
     SimpleFixedInt64Message(const SimpleFixedInt64Message &other);
     SimpleFixedInt64Message &operator =(const SimpleFixedInt64Message &other);
     SimpleFixedInt64Message(SimpleFixedInt64Message &&other) noexcept;
-    SimpleFixedInt64Message &operator =(SimpleFixedInt64Message &&other) noexcept;
+    SimpleFixedInt64Message &operator =(SimpleFixedInt64Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleFixedInt64Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::fixed64 testFieldFixedInt64() const;
     void setTestFieldFixedInt64(const QtProtobuf::fixed64 &testFieldFixedInt64);
@@ -698,7 +824,16 @@ public:
     SimpleSFixedInt32Message(const SimpleSFixedInt32Message &other);
     SimpleSFixedInt32Message &operator =(const SimpleSFixedInt32Message &other);
     SimpleSFixedInt32Message(SimpleSFixedInt32Message &&other) noexcept;
-    SimpleSFixedInt32Message &operator =(SimpleSFixedInt32Message &&other) noexcept;
+    SimpleSFixedInt32Message &operator =(SimpleSFixedInt32Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixedInt32Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sfixed32 testFieldFixedInt32() const;
     void setTestFieldFixedInt32(const QtProtobuf::sfixed32 &testFieldFixedInt32);
@@ -739,7 +874,16 @@ public:
     SimpleSFixedInt64Message(const SimpleSFixedInt64Message &other);
     SimpleSFixedInt64Message &operator =(const SimpleSFixedInt64Message &other);
     SimpleSFixedInt64Message(SimpleSFixedInt64Message &&other) noexcept;
-    SimpleSFixedInt64Message &operator =(SimpleSFixedInt64Message &&other) noexcept;
+    SimpleSFixedInt64Message &operator =(SimpleSFixedInt64Message &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleSFixedInt64Message &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::sfixed64 testFieldFixedInt64() const;
     void setTestFieldFixedInt64(const QtProtobuf::sfixed64 &testFieldFixedInt64);
@@ -782,7 +926,16 @@ public:
     ComplexMessage(const ComplexMessage &other);
     ComplexMessage &operator =(const ComplexMessage &other);
     ComplexMessage(ComplexMessage &&other) noexcept;
-    ComplexMessage &operator =(ComplexMessage &&other) noexcept;
+    ComplexMessage &operator =(ComplexMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(ComplexMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int32 testFieldInt() const;
 

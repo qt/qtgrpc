@@ -387,23 +387,27 @@ const char *CommonTemplates::AssignmentOperatorDefinitionTemplate()
 {
     return "$classname$ &$classname$::operator =(const $classname$ &other)\n"
            "{\n"
-           "    QProtobufMessage::operator=(other);\n"
-           "    dptr = other.dptr;\n"
+           "    $classname$ temp(other);\n"
+           "    swap(temp);\n"
            "    return *this;\n"
            "}\n";
 }
 
 const char *CommonTemplates::MoveAssignmentOperatorDeclarationTemplate()
 {
-    return "$classname$ &operator =($classname$ &&other) noexcept;\n";
-}
-const char *CommonTemplates::MoveAssignmentOperatorDefinitionTemplate()
-{
-    return "$classname$ &$classname$::operator =($classname$ &&other) noexcept\n"
+    return "$classname$ &operator =($classname$ &&other) noexcept\n"
            "{\n"
-           "    QProtobufMessage::operator=(std::move(other));\n"
-           "    dptr.swap(other.dptr);\n"
+           "    swap(other);\n"
            "    return *this;\n"
+           "}\n";
+}
+
+const char *CommonTemplates::SwapDeclarationTemplate()
+{
+    return "void swap($classname$ &other) noexcept\n"
+           "{\n"
+           "    QProtobufMessage::swap(other);\n"
+           "    dptr.swap(other.dptr);\n"
            "}\n";
 }
 

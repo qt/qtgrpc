@@ -75,7 +75,16 @@ public:
     EmptyMessage(const EmptyMessage &other);
     EmptyMessage &operator =(const EmptyMessage &other);
     EmptyMessage(EmptyMessage &&other) noexcept;
-    EmptyMessage &operator =(EmptyMessage &&other) noexcept;
+    EmptyMessage &operator =(EmptyMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(EmptyMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
     static void registerTypes();
 
 private:
@@ -110,7 +119,16 @@ public:
     SimpleIntMessage(const SimpleIntMessage &other);
     SimpleIntMessage &operator =(const SimpleIntMessage &other);
     SimpleIntMessage(SimpleIntMessage &&other) noexcept;
-    SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept;
+    SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(SimpleIntMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     QtProtobuf::int32 testFieldInt() const;
     void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
@@ -155,7 +173,16 @@ public:
     NoPackageExternalMessage(const NoPackageExternalMessage &other);
     NoPackageExternalMessage &operator =(const NoPackageExternalMessage &other);
     NoPackageExternalMessage(NoPackageExternalMessage &&other) noexcept;
-    NoPackageExternalMessage &operator =(NoPackageExternalMessage &&other) noexcept;
+    NoPackageExternalMessage &operator =(NoPackageExternalMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(NoPackageExternalMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     bool hasTestField() const;
     SimpleIntMessageExt &testField();
@@ -205,7 +232,16 @@ public:
     NoPackageMessage(const NoPackageMessage &other);
     NoPackageMessage &operator =(const NoPackageMessage &other);
     NoPackageMessage(NoPackageMessage &&other) noexcept;
-    NoPackageMessage &operator =(NoPackageMessage &&other) noexcept;
+    NoPackageMessage &operator =(NoPackageMessage &&other) noexcept
+    {
+        swap(other);
+        return *this;
+    }
+    void swap(NoPackageMessage &other) noexcept
+    {
+        QProtobufMessage::swap(other);
+        dptr.swap(other.dptr);
+    }
 
     bool hasTestField() const;
     SimpleIntMessage &testField();

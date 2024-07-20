@@ -83,20 +83,14 @@ SimpleSInt32StringMapMessage::SimpleSInt32StringMapMessage(const SimpleSInt32Str
 }
 SimpleSInt32StringMapMessage &SimpleSInt32StringMapMessage::operator =(const SimpleSInt32StringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt32StringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt32StringMapMessage::SimpleSInt32StringMapMessage(SimpleSInt32StringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt32StringMapMessage &SimpleSInt32StringMapMessage::operator =(SimpleSInt32StringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt32StringMapMessage &lhs, const SimpleSInt32StringMapMessage &rhs) noexcept
 {
@@ -202,20 +196,14 @@ SimpleSInt64StringMapMessage::SimpleSInt64StringMapMessage(const SimpleSInt64Str
 }
 SimpleSInt64StringMapMessage &SimpleSInt64StringMapMessage::operator =(const SimpleSInt64StringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt64StringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt64StringMapMessage::SimpleSInt64StringMapMessage(SimpleSInt64StringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt64StringMapMessage &SimpleSInt64StringMapMessage::operator =(SimpleSInt64StringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt64StringMapMessage &lhs, const SimpleSInt64StringMapMessage &rhs) noexcept
 {
@@ -321,20 +309,14 @@ SimpleInt32StringMapMessage::SimpleInt32StringMapMessage(const SimpleInt32String
 }
 SimpleInt32StringMapMessage &SimpleInt32StringMapMessage::operator =(const SimpleInt32StringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt32StringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt32StringMapMessage::SimpleInt32StringMapMessage(SimpleInt32StringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt32StringMapMessage &SimpleInt32StringMapMessage::operator =(SimpleInt32StringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt32StringMapMessage &lhs, const SimpleInt32StringMapMessage &rhs) noexcept
 {
@@ -440,20 +422,14 @@ SimpleInt64StringMapMessage::SimpleInt64StringMapMessage(const SimpleInt64String
 }
 SimpleInt64StringMapMessage &SimpleInt64StringMapMessage::operator =(const SimpleInt64StringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt64StringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt64StringMapMessage::SimpleInt64StringMapMessage(SimpleInt64StringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt64StringMapMessage &SimpleInt64StringMapMessage::operator =(SimpleInt64StringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt64StringMapMessage &lhs, const SimpleInt64StringMapMessage &rhs) noexcept
 {
@@ -559,20 +535,14 @@ SimpleUInt32StringMapMessage::SimpleUInt32StringMapMessage(const SimpleUInt32Str
 }
 SimpleUInt32StringMapMessage &SimpleUInt32StringMapMessage::operator =(const SimpleUInt32StringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt32StringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt32StringMapMessage::SimpleUInt32StringMapMessage(SimpleUInt32StringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt32StringMapMessage &SimpleUInt32StringMapMessage::operator =(SimpleUInt32StringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt32StringMapMessage &lhs, const SimpleUInt32StringMapMessage &rhs) noexcept
 {
@@ -678,20 +648,14 @@ SimpleUInt64StringMapMessage::SimpleUInt64StringMapMessage(const SimpleUInt64Str
 }
 SimpleUInt64StringMapMessage &SimpleUInt64StringMapMessage::operator =(const SimpleUInt64StringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt64StringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt64StringMapMessage::SimpleUInt64StringMapMessage(SimpleUInt64StringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt64StringMapMessage &SimpleUInt64StringMapMessage::operator =(SimpleUInt64StringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt64StringMapMessage &lhs, const SimpleUInt64StringMapMessage &rhs) noexcept
 {
@@ -797,20 +761,14 @@ SimpleFixed32StringMapMessage::SimpleFixed32StringMapMessage(const SimpleFixed32
 }
 SimpleFixed32StringMapMessage &SimpleFixed32StringMapMessage::operator =(const SimpleFixed32StringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed32StringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed32StringMapMessage::SimpleFixed32StringMapMessage(SimpleFixed32StringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed32StringMapMessage &SimpleFixed32StringMapMessage::operator =(SimpleFixed32StringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed32StringMapMessage &lhs, const SimpleFixed32StringMapMessage &rhs) noexcept
 {
@@ -916,20 +874,14 @@ SimpleFixed64StringMapMessage::SimpleFixed64StringMapMessage(const SimpleFixed64
 }
 SimpleFixed64StringMapMessage &SimpleFixed64StringMapMessage::operator =(const SimpleFixed64StringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed64StringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed64StringMapMessage::SimpleFixed64StringMapMessage(SimpleFixed64StringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed64StringMapMessage &SimpleFixed64StringMapMessage::operator =(SimpleFixed64StringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed64StringMapMessage &lhs, const SimpleFixed64StringMapMessage &rhs) noexcept
 {
@@ -1035,20 +987,14 @@ SimpleSFixed32StringMapMessage::SimpleSFixed32StringMapMessage(const SimpleSFixe
 }
 SimpleSFixed32StringMapMessage &SimpleSFixed32StringMapMessage::operator =(const SimpleSFixed32StringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed32StringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed32StringMapMessage::SimpleSFixed32StringMapMessage(SimpleSFixed32StringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed32StringMapMessage &SimpleSFixed32StringMapMessage::operator =(SimpleSFixed32StringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed32StringMapMessage &lhs, const SimpleSFixed32StringMapMessage &rhs) noexcept
 {
@@ -1154,20 +1100,14 @@ SimpleSFixed64StringMapMessage::SimpleSFixed64StringMapMessage(const SimpleSFixe
 }
 SimpleSFixed64StringMapMessage &SimpleSFixed64StringMapMessage::operator =(const SimpleSFixed64StringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed64StringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed64StringMapMessage::SimpleSFixed64StringMapMessage(SimpleSFixed64StringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed64StringMapMessage &SimpleSFixed64StringMapMessage::operator =(SimpleSFixed64StringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed64StringMapMessage &lhs, const SimpleSFixed64StringMapMessage &rhs) noexcept
 {
@@ -1273,20 +1213,14 @@ SimpleStringStringMapMessage::SimpleStringStringMapMessage(const SimpleStringStr
 }
 SimpleStringStringMapMessage &SimpleStringStringMapMessage::operator =(const SimpleStringStringMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringStringMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringStringMapMessage::SimpleStringStringMapMessage(SimpleStringStringMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringStringMapMessage &SimpleStringStringMapMessage::operator =(SimpleStringStringMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringStringMapMessage &lhs, const SimpleStringStringMapMessage &rhs) noexcept
 {
@@ -1392,20 +1326,14 @@ SimpleSInt32SInt32MapMessage::SimpleSInt32SInt32MapMessage(const SimpleSInt32SIn
 }
 SimpleSInt32SInt32MapMessage &SimpleSInt32SInt32MapMessage::operator =(const SimpleSInt32SInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt32SInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt32SInt32MapMessage::SimpleSInt32SInt32MapMessage(SimpleSInt32SInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt32SInt32MapMessage &SimpleSInt32SInt32MapMessage::operator =(SimpleSInt32SInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt32SInt32MapMessage &lhs, const SimpleSInt32SInt32MapMessage &rhs) noexcept
 {
@@ -1511,20 +1439,14 @@ SimpleSInt64SInt32MapMessage::SimpleSInt64SInt32MapMessage(const SimpleSInt64SIn
 }
 SimpleSInt64SInt32MapMessage &SimpleSInt64SInt32MapMessage::operator =(const SimpleSInt64SInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt64SInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt64SInt32MapMessage::SimpleSInt64SInt32MapMessage(SimpleSInt64SInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt64SInt32MapMessage &SimpleSInt64SInt32MapMessage::operator =(SimpleSInt64SInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt64SInt32MapMessage &lhs, const SimpleSInt64SInt32MapMessage &rhs) noexcept
 {
@@ -1630,20 +1552,14 @@ SimpleInt32SInt32MapMessage::SimpleInt32SInt32MapMessage(const SimpleInt32SInt32
 }
 SimpleInt32SInt32MapMessage &SimpleInt32SInt32MapMessage::operator =(const SimpleInt32SInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt32SInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt32SInt32MapMessage::SimpleInt32SInt32MapMessage(SimpleInt32SInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt32SInt32MapMessage &SimpleInt32SInt32MapMessage::operator =(SimpleInt32SInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt32SInt32MapMessage &lhs, const SimpleInt32SInt32MapMessage &rhs) noexcept
 {
@@ -1749,20 +1665,14 @@ SimpleInt64SInt32MapMessage::SimpleInt64SInt32MapMessage(const SimpleInt64SInt32
 }
 SimpleInt64SInt32MapMessage &SimpleInt64SInt32MapMessage::operator =(const SimpleInt64SInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt64SInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt64SInt32MapMessage::SimpleInt64SInt32MapMessage(SimpleInt64SInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt64SInt32MapMessage &SimpleInt64SInt32MapMessage::operator =(SimpleInt64SInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt64SInt32MapMessage &lhs, const SimpleInt64SInt32MapMessage &rhs) noexcept
 {
@@ -1868,20 +1778,14 @@ SimpleUInt32SInt32MapMessage::SimpleUInt32SInt32MapMessage(const SimpleUInt32SIn
 }
 SimpleUInt32SInt32MapMessage &SimpleUInt32SInt32MapMessage::operator =(const SimpleUInt32SInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt32SInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt32SInt32MapMessage::SimpleUInt32SInt32MapMessage(SimpleUInt32SInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt32SInt32MapMessage &SimpleUInt32SInt32MapMessage::operator =(SimpleUInt32SInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt32SInt32MapMessage &lhs, const SimpleUInt32SInt32MapMessage &rhs) noexcept
 {
@@ -1987,20 +1891,14 @@ SimpleUInt64SInt32MapMessage::SimpleUInt64SInt32MapMessage(const SimpleUInt64SIn
 }
 SimpleUInt64SInt32MapMessage &SimpleUInt64SInt32MapMessage::operator =(const SimpleUInt64SInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt64SInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt64SInt32MapMessage::SimpleUInt64SInt32MapMessage(SimpleUInt64SInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt64SInt32MapMessage &SimpleUInt64SInt32MapMessage::operator =(SimpleUInt64SInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt64SInt32MapMessage &lhs, const SimpleUInt64SInt32MapMessage &rhs) noexcept
 {
@@ -2106,20 +2004,14 @@ SimpleFixed32SInt32MapMessage::SimpleFixed32SInt32MapMessage(const SimpleFixed32
 }
 SimpleFixed32SInt32MapMessage &SimpleFixed32SInt32MapMessage::operator =(const SimpleFixed32SInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed32SInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed32SInt32MapMessage::SimpleFixed32SInt32MapMessage(SimpleFixed32SInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed32SInt32MapMessage &SimpleFixed32SInt32MapMessage::operator =(SimpleFixed32SInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed32SInt32MapMessage &lhs, const SimpleFixed32SInt32MapMessage &rhs) noexcept
 {
@@ -2225,20 +2117,14 @@ SimpleFixed64SInt32MapMessage::SimpleFixed64SInt32MapMessage(const SimpleFixed64
 }
 SimpleFixed64SInt32MapMessage &SimpleFixed64SInt32MapMessage::operator =(const SimpleFixed64SInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed64SInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed64SInt32MapMessage::SimpleFixed64SInt32MapMessage(SimpleFixed64SInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed64SInt32MapMessage &SimpleFixed64SInt32MapMessage::operator =(SimpleFixed64SInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed64SInt32MapMessage &lhs, const SimpleFixed64SInt32MapMessage &rhs) noexcept
 {
@@ -2344,20 +2230,14 @@ SimpleSFixed32SInt32MapMessage::SimpleSFixed32SInt32MapMessage(const SimpleSFixe
 }
 SimpleSFixed32SInt32MapMessage &SimpleSFixed32SInt32MapMessage::operator =(const SimpleSFixed32SInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed32SInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed32SInt32MapMessage::SimpleSFixed32SInt32MapMessage(SimpleSFixed32SInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed32SInt32MapMessage &SimpleSFixed32SInt32MapMessage::operator =(SimpleSFixed32SInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed32SInt32MapMessage &lhs, const SimpleSFixed32SInt32MapMessage &rhs) noexcept
 {
@@ -2463,20 +2343,14 @@ SimpleSFixed64SInt32MapMessage::SimpleSFixed64SInt32MapMessage(const SimpleSFixe
 }
 SimpleSFixed64SInt32MapMessage &SimpleSFixed64SInt32MapMessage::operator =(const SimpleSFixed64SInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed64SInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed64SInt32MapMessage::SimpleSFixed64SInt32MapMessage(SimpleSFixed64SInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed64SInt32MapMessage &SimpleSFixed64SInt32MapMessage::operator =(SimpleSFixed64SInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed64SInt32MapMessage &lhs, const SimpleSFixed64SInt32MapMessage &rhs) noexcept
 {
@@ -2582,20 +2456,14 @@ SimpleStringSInt32MapMessage::SimpleStringSInt32MapMessage(const SimpleStringSIn
 }
 SimpleStringSInt32MapMessage &SimpleStringSInt32MapMessage::operator =(const SimpleStringSInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringSInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringSInt32MapMessage::SimpleStringSInt32MapMessage(SimpleStringSInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringSInt32MapMessage &SimpleStringSInt32MapMessage::operator =(SimpleStringSInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringSInt32MapMessage &lhs, const SimpleStringSInt32MapMessage &rhs) noexcept
 {
@@ -2701,20 +2569,14 @@ SimpleSInt32SInt64MapMessage::SimpleSInt32SInt64MapMessage(const SimpleSInt32SIn
 }
 SimpleSInt32SInt64MapMessage &SimpleSInt32SInt64MapMessage::operator =(const SimpleSInt32SInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt32SInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt32SInt64MapMessage::SimpleSInt32SInt64MapMessage(SimpleSInt32SInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt32SInt64MapMessage &SimpleSInt32SInt64MapMessage::operator =(SimpleSInt32SInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt32SInt64MapMessage &lhs, const SimpleSInt32SInt64MapMessage &rhs) noexcept
 {
@@ -2820,20 +2682,14 @@ SimpleSInt64SInt64MapMessage::SimpleSInt64SInt64MapMessage(const SimpleSInt64SIn
 }
 SimpleSInt64SInt64MapMessage &SimpleSInt64SInt64MapMessage::operator =(const SimpleSInt64SInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt64SInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt64SInt64MapMessage::SimpleSInt64SInt64MapMessage(SimpleSInt64SInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt64SInt64MapMessage &SimpleSInt64SInt64MapMessage::operator =(SimpleSInt64SInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt64SInt64MapMessage &lhs, const SimpleSInt64SInt64MapMessage &rhs) noexcept
 {
@@ -2939,20 +2795,14 @@ SimpleInt32SInt64MapMessage::SimpleInt32SInt64MapMessage(const SimpleInt32SInt64
 }
 SimpleInt32SInt64MapMessage &SimpleInt32SInt64MapMessage::operator =(const SimpleInt32SInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt32SInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt32SInt64MapMessage::SimpleInt32SInt64MapMessage(SimpleInt32SInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt32SInt64MapMessage &SimpleInt32SInt64MapMessage::operator =(SimpleInt32SInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt32SInt64MapMessage &lhs, const SimpleInt32SInt64MapMessage &rhs) noexcept
 {
@@ -3058,20 +2908,14 @@ SimpleInt64SInt64MapMessage::SimpleInt64SInt64MapMessage(const SimpleInt64SInt64
 }
 SimpleInt64SInt64MapMessage &SimpleInt64SInt64MapMessage::operator =(const SimpleInt64SInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt64SInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt64SInt64MapMessage::SimpleInt64SInt64MapMessage(SimpleInt64SInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt64SInt64MapMessage &SimpleInt64SInt64MapMessage::operator =(SimpleInt64SInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt64SInt64MapMessage &lhs, const SimpleInt64SInt64MapMessage &rhs) noexcept
 {
@@ -3177,20 +3021,14 @@ SimpleUInt32SInt64MapMessage::SimpleUInt32SInt64MapMessage(const SimpleUInt32SIn
 }
 SimpleUInt32SInt64MapMessage &SimpleUInt32SInt64MapMessage::operator =(const SimpleUInt32SInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt32SInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt32SInt64MapMessage::SimpleUInt32SInt64MapMessage(SimpleUInt32SInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt32SInt64MapMessage &SimpleUInt32SInt64MapMessage::operator =(SimpleUInt32SInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt32SInt64MapMessage &lhs, const SimpleUInt32SInt64MapMessage &rhs) noexcept
 {
@@ -3296,20 +3134,14 @@ SimpleUInt64SInt64MapMessage::SimpleUInt64SInt64MapMessage(const SimpleUInt64SIn
 }
 SimpleUInt64SInt64MapMessage &SimpleUInt64SInt64MapMessage::operator =(const SimpleUInt64SInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt64SInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt64SInt64MapMessage::SimpleUInt64SInt64MapMessage(SimpleUInt64SInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt64SInt64MapMessage &SimpleUInt64SInt64MapMessage::operator =(SimpleUInt64SInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt64SInt64MapMessage &lhs, const SimpleUInt64SInt64MapMessage &rhs) noexcept
 {
@@ -3415,20 +3247,14 @@ SimpleFixed32SInt64MapMessage::SimpleFixed32SInt64MapMessage(const SimpleFixed32
 }
 SimpleFixed32SInt64MapMessage &SimpleFixed32SInt64MapMessage::operator =(const SimpleFixed32SInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed32SInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed32SInt64MapMessage::SimpleFixed32SInt64MapMessage(SimpleFixed32SInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed32SInt64MapMessage &SimpleFixed32SInt64MapMessage::operator =(SimpleFixed32SInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed32SInt64MapMessage &lhs, const SimpleFixed32SInt64MapMessage &rhs) noexcept
 {
@@ -3534,20 +3360,14 @@ SimpleFixed64SInt64MapMessage::SimpleFixed64SInt64MapMessage(const SimpleFixed64
 }
 SimpleFixed64SInt64MapMessage &SimpleFixed64SInt64MapMessage::operator =(const SimpleFixed64SInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed64SInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed64SInt64MapMessage::SimpleFixed64SInt64MapMessage(SimpleFixed64SInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed64SInt64MapMessage &SimpleFixed64SInt64MapMessage::operator =(SimpleFixed64SInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed64SInt64MapMessage &lhs, const SimpleFixed64SInt64MapMessage &rhs) noexcept
 {
@@ -3653,20 +3473,14 @@ SimpleSFixed32SInt64MapMessage::SimpleSFixed32SInt64MapMessage(const SimpleSFixe
 }
 SimpleSFixed32SInt64MapMessage &SimpleSFixed32SInt64MapMessage::operator =(const SimpleSFixed32SInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed32SInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed32SInt64MapMessage::SimpleSFixed32SInt64MapMessage(SimpleSFixed32SInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed32SInt64MapMessage &SimpleSFixed32SInt64MapMessage::operator =(SimpleSFixed32SInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed32SInt64MapMessage &lhs, const SimpleSFixed32SInt64MapMessage &rhs) noexcept
 {
@@ -3772,20 +3586,14 @@ SimpleSFixed64SInt64MapMessage::SimpleSFixed64SInt64MapMessage(const SimpleSFixe
 }
 SimpleSFixed64SInt64MapMessage &SimpleSFixed64SInt64MapMessage::operator =(const SimpleSFixed64SInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed64SInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed64SInt64MapMessage::SimpleSFixed64SInt64MapMessage(SimpleSFixed64SInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed64SInt64MapMessage &SimpleSFixed64SInt64MapMessage::operator =(SimpleSFixed64SInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed64SInt64MapMessage &lhs, const SimpleSFixed64SInt64MapMessage &rhs) noexcept
 {
@@ -3891,20 +3699,14 @@ SimpleStringSInt64MapMessage::SimpleStringSInt64MapMessage(const SimpleStringSIn
 }
 SimpleStringSInt64MapMessage &SimpleStringSInt64MapMessage::operator =(const SimpleStringSInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringSInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringSInt64MapMessage::SimpleStringSInt64MapMessage(SimpleStringSInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringSInt64MapMessage &SimpleStringSInt64MapMessage::operator =(SimpleStringSInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringSInt64MapMessage &lhs, const SimpleStringSInt64MapMessage &rhs) noexcept
 {
@@ -4010,20 +3812,14 @@ SimpleSInt32UInt32MapMessage::SimpleSInt32UInt32MapMessage(const SimpleSInt32UIn
 }
 SimpleSInt32UInt32MapMessage &SimpleSInt32UInt32MapMessage::operator =(const SimpleSInt32UInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt32UInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt32UInt32MapMessage::SimpleSInt32UInt32MapMessage(SimpleSInt32UInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt32UInt32MapMessage &SimpleSInt32UInt32MapMessage::operator =(SimpleSInt32UInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt32UInt32MapMessage &lhs, const SimpleSInt32UInt32MapMessage &rhs) noexcept
 {
@@ -4129,20 +3925,14 @@ SimpleSInt64UInt32MapMessage::SimpleSInt64UInt32MapMessage(const SimpleSInt64UIn
 }
 SimpleSInt64UInt32MapMessage &SimpleSInt64UInt32MapMessage::operator =(const SimpleSInt64UInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt64UInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt64UInt32MapMessage::SimpleSInt64UInt32MapMessage(SimpleSInt64UInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt64UInt32MapMessage &SimpleSInt64UInt32MapMessage::operator =(SimpleSInt64UInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt64UInt32MapMessage &lhs, const SimpleSInt64UInt32MapMessage &rhs) noexcept
 {
@@ -4248,20 +4038,14 @@ SimpleInt32UInt32MapMessage::SimpleInt32UInt32MapMessage(const SimpleInt32UInt32
 }
 SimpleInt32UInt32MapMessage &SimpleInt32UInt32MapMessage::operator =(const SimpleInt32UInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt32UInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt32UInt32MapMessage::SimpleInt32UInt32MapMessage(SimpleInt32UInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt32UInt32MapMessage &SimpleInt32UInt32MapMessage::operator =(SimpleInt32UInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt32UInt32MapMessage &lhs, const SimpleInt32UInt32MapMessage &rhs) noexcept
 {
@@ -4367,20 +4151,14 @@ SimpleInt64UInt32MapMessage::SimpleInt64UInt32MapMessage(const SimpleInt64UInt32
 }
 SimpleInt64UInt32MapMessage &SimpleInt64UInt32MapMessage::operator =(const SimpleInt64UInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt64UInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt64UInt32MapMessage::SimpleInt64UInt32MapMessage(SimpleInt64UInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt64UInt32MapMessage &SimpleInt64UInt32MapMessage::operator =(SimpleInt64UInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt64UInt32MapMessage &lhs, const SimpleInt64UInt32MapMessage &rhs) noexcept
 {
@@ -4486,20 +4264,14 @@ SimpleUInt32UInt32MapMessage::SimpleUInt32UInt32MapMessage(const SimpleUInt32UIn
 }
 SimpleUInt32UInt32MapMessage &SimpleUInt32UInt32MapMessage::operator =(const SimpleUInt32UInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt32UInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt32UInt32MapMessage::SimpleUInt32UInt32MapMessage(SimpleUInt32UInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt32UInt32MapMessage &SimpleUInt32UInt32MapMessage::operator =(SimpleUInt32UInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt32UInt32MapMessage &lhs, const SimpleUInt32UInt32MapMessage &rhs) noexcept
 {
@@ -4605,20 +4377,14 @@ SimpleUInt64UInt32MapMessage::SimpleUInt64UInt32MapMessage(const SimpleUInt64UIn
 }
 SimpleUInt64UInt32MapMessage &SimpleUInt64UInt32MapMessage::operator =(const SimpleUInt64UInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt64UInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt64UInt32MapMessage::SimpleUInt64UInt32MapMessage(SimpleUInt64UInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt64UInt32MapMessage &SimpleUInt64UInt32MapMessage::operator =(SimpleUInt64UInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt64UInt32MapMessage &lhs, const SimpleUInt64UInt32MapMessage &rhs) noexcept
 {
@@ -4724,20 +4490,14 @@ SimpleFixed32UInt32MapMessage::SimpleFixed32UInt32MapMessage(const SimpleFixed32
 }
 SimpleFixed32UInt32MapMessage &SimpleFixed32UInt32MapMessage::operator =(const SimpleFixed32UInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed32UInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed32UInt32MapMessage::SimpleFixed32UInt32MapMessage(SimpleFixed32UInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed32UInt32MapMessage &SimpleFixed32UInt32MapMessage::operator =(SimpleFixed32UInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed32UInt32MapMessage &lhs, const SimpleFixed32UInt32MapMessage &rhs) noexcept
 {
@@ -4843,20 +4603,14 @@ SimpleFixed64UInt32MapMessage::SimpleFixed64UInt32MapMessage(const SimpleFixed64
 }
 SimpleFixed64UInt32MapMessage &SimpleFixed64UInt32MapMessage::operator =(const SimpleFixed64UInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed64UInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed64UInt32MapMessage::SimpleFixed64UInt32MapMessage(SimpleFixed64UInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed64UInt32MapMessage &SimpleFixed64UInt32MapMessage::operator =(SimpleFixed64UInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed64UInt32MapMessage &lhs, const SimpleFixed64UInt32MapMessage &rhs) noexcept
 {
@@ -4962,20 +4716,14 @@ SimpleSFixed32UInt32MapMessage::SimpleSFixed32UInt32MapMessage(const SimpleSFixe
 }
 SimpleSFixed32UInt32MapMessage &SimpleSFixed32UInt32MapMessage::operator =(const SimpleSFixed32UInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed32UInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed32UInt32MapMessage::SimpleSFixed32UInt32MapMessage(SimpleSFixed32UInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed32UInt32MapMessage &SimpleSFixed32UInt32MapMessage::operator =(SimpleSFixed32UInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed32UInt32MapMessage &lhs, const SimpleSFixed32UInt32MapMessage &rhs) noexcept
 {
@@ -5081,20 +4829,14 @@ SimpleSFixed64UInt32MapMessage::SimpleSFixed64UInt32MapMessage(const SimpleSFixe
 }
 SimpleSFixed64UInt32MapMessage &SimpleSFixed64UInt32MapMessage::operator =(const SimpleSFixed64UInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed64UInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed64UInt32MapMessage::SimpleSFixed64UInt32MapMessage(SimpleSFixed64UInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed64UInt32MapMessage &SimpleSFixed64UInt32MapMessage::operator =(SimpleSFixed64UInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed64UInt32MapMessage &lhs, const SimpleSFixed64UInt32MapMessage &rhs) noexcept
 {
@@ -5200,20 +4942,14 @@ SimpleStringUInt32MapMessage::SimpleStringUInt32MapMessage(const SimpleStringUIn
 }
 SimpleStringUInt32MapMessage &SimpleStringUInt32MapMessage::operator =(const SimpleStringUInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringUInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringUInt32MapMessage::SimpleStringUInt32MapMessage(SimpleStringUInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringUInt32MapMessage &SimpleStringUInt32MapMessage::operator =(SimpleStringUInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringUInt32MapMessage &lhs, const SimpleStringUInt32MapMessage &rhs) noexcept
 {
@@ -5319,20 +5055,14 @@ SimpleSInt32UInt64MapMessage::SimpleSInt32UInt64MapMessage(const SimpleSInt32UIn
 }
 SimpleSInt32UInt64MapMessage &SimpleSInt32UInt64MapMessage::operator =(const SimpleSInt32UInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt32UInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt32UInt64MapMessage::SimpleSInt32UInt64MapMessage(SimpleSInt32UInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt32UInt64MapMessage &SimpleSInt32UInt64MapMessage::operator =(SimpleSInt32UInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt32UInt64MapMessage &lhs, const SimpleSInt32UInt64MapMessage &rhs) noexcept
 {
@@ -5438,20 +5168,14 @@ SimpleSInt64UInt64MapMessage::SimpleSInt64UInt64MapMessage(const SimpleSInt64UIn
 }
 SimpleSInt64UInt64MapMessage &SimpleSInt64UInt64MapMessage::operator =(const SimpleSInt64UInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt64UInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt64UInt64MapMessage::SimpleSInt64UInt64MapMessage(SimpleSInt64UInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt64UInt64MapMessage &SimpleSInt64UInt64MapMessage::operator =(SimpleSInt64UInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt64UInt64MapMessage &lhs, const SimpleSInt64UInt64MapMessage &rhs) noexcept
 {
@@ -5557,20 +5281,14 @@ SimpleInt32UInt64MapMessage::SimpleInt32UInt64MapMessage(const SimpleInt32UInt64
 }
 SimpleInt32UInt64MapMessage &SimpleInt32UInt64MapMessage::operator =(const SimpleInt32UInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt32UInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt32UInt64MapMessage::SimpleInt32UInt64MapMessage(SimpleInt32UInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt32UInt64MapMessage &SimpleInt32UInt64MapMessage::operator =(SimpleInt32UInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt32UInt64MapMessage &lhs, const SimpleInt32UInt64MapMessage &rhs) noexcept
 {
@@ -5676,20 +5394,14 @@ SimpleInt64UInt64MapMessage::SimpleInt64UInt64MapMessage(const SimpleInt64UInt64
 }
 SimpleInt64UInt64MapMessage &SimpleInt64UInt64MapMessage::operator =(const SimpleInt64UInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt64UInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt64UInt64MapMessage::SimpleInt64UInt64MapMessage(SimpleInt64UInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt64UInt64MapMessage &SimpleInt64UInt64MapMessage::operator =(SimpleInt64UInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt64UInt64MapMessage &lhs, const SimpleInt64UInt64MapMessage &rhs) noexcept
 {
@@ -5795,20 +5507,14 @@ SimpleUInt32UInt64MapMessage::SimpleUInt32UInt64MapMessage(const SimpleUInt32UIn
 }
 SimpleUInt32UInt64MapMessage &SimpleUInt32UInt64MapMessage::operator =(const SimpleUInt32UInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt32UInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt32UInt64MapMessage::SimpleUInt32UInt64MapMessage(SimpleUInt32UInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt32UInt64MapMessage &SimpleUInt32UInt64MapMessage::operator =(SimpleUInt32UInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt32UInt64MapMessage &lhs, const SimpleUInt32UInt64MapMessage &rhs) noexcept
 {
@@ -5914,20 +5620,14 @@ SimpleUInt64UInt64MapMessage::SimpleUInt64UInt64MapMessage(const SimpleUInt64UIn
 }
 SimpleUInt64UInt64MapMessage &SimpleUInt64UInt64MapMessage::operator =(const SimpleUInt64UInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt64UInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt64UInt64MapMessage::SimpleUInt64UInt64MapMessage(SimpleUInt64UInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt64UInt64MapMessage &SimpleUInt64UInt64MapMessage::operator =(SimpleUInt64UInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt64UInt64MapMessage &lhs, const SimpleUInt64UInt64MapMessage &rhs) noexcept
 {
@@ -6033,20 +5733,14 @@ SimpleFixed32UInt64MapMessage::SimpleFixed32UInt64MapMessage(const SimpleFixed32
 }
 SimpleFixed32UInt64MapMessage &SimpleFixed32UInt64MapMessage::operator =(const SimpleFixed32UInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed32UInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed32UInt64MapMessage::SimpleFixed32UInt64MapMessage(SimpleFixed32UInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed32UInt64MapMessage &SimpleFixed32UInt64MapMessage::operator =(SimpleFixed32UInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed32UInt64MapMessage &lhs, const SimpleFixed32UInt64MapMessage &rhs) noexcept
 {
@@ -6152,20 +5846,14 @@ SimpleFixed64UInt64MapMessage::SimpleFixed64UInt64MapMessage(const SimpleFixed64
 }
 SimpleFixed64UInt64MapMessage &SimpleFixed64UInt64MapMessage::operator =(const SimpleFixed64UInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed64UInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed64UInt64MapMessage::SimpleFixed64UInt64MapMessage(SimpleFixed64UInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed64UInt64MapMessage &SimpleFixed64UInt64MapMessage::operator =(SimpleFixed64UInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed64UInt64MapMessage &lhs, const SimpleFixed64UInt64MapMessage &rhs) noexcept
 {
@@ -6271,20 +5959,14 @@ SimpleSFixed32UInt64MapMessage::SimpleSFixed32UInt64MapMessage(const SimpleSFixe
 }
 SimpleSFixed32UInt64MapMessage &SimpleSFixed32UInt64MapMessage::operator =(const SimpleSFixed32UInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed32UInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed32UInt64MapMessage::SimpleSFixed32UInt64MapMessage(SimpleSFixed32UInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed32UInt64MapMessage &SimpleSFixed32UInt64MapMessage::operator =(SimpleSFixed32UInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed32UInt64MapMessage &lhs, const SimpleSFixed32UInt64MapMessage &rhs) noexcept
 {
@@ -6390,20 +6072,14 @@ SimpleSFixed64UInt64MapMessage::SimpleSFixed64UInt64MapMessage(const SimpleSFixe
 }
 SimpleSFixed64UInt64MapMessage &SimpleSFixed64UInt64MapMessage::operator =(const SimpleSFixed64UInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed64UInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed64UInt64MapMessage::SimpleSFixed64UInt64MapMessage(SimpleSFixed64UInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed64UInt64MapMessage &SimpleSFixed64UInt64MapMessage::operator =(SimpleSFixed64UInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed64UInt64MapMessage &lhs, const SimpleSFixed64UInt64MapMessage &rhs) noexcept
 {
@@ -6509,20 +6185,14 @@ SimpleStringUInt64MapMessage::SimpleStringUInt64MapMessage(const SimpleStringUIn
 }
 SimpleStringUInt64MapMessage &SimpleStringUInt64MapMessage::operator =(const SimpleStringUInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringUInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringUInt64MapMessage::SimpleStringUInt64MapMessage(SimpleStringUInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringUInt64MapMessage &SimpleStringUInt64MapMessage::operator =(SimpleStringUInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringUInt64MapMessage &lhs, const SimpleStringUInt64MapMessage &rhs) noexcept
 {
@@ -6628,20 +6298,14 @@ SimpleSInt32Int32MapMessage::SimpleSInt32Int32MapMessage(const SimpleSInt32Int32
 }
 SimpleSInt32Int32MapMessage &SimpleSInt32Int32MapMessage::operator =(const SimpleSInt32Int32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt32Int32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt32Int32MapMessage::SimpleSInt32Int32MapMessage(SimpleSInt32Int32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt32Int32MapMessage &SimpleSInt32Int32MapMessage::operator =(SimpleSInt32Int32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt32Int32MapMessage &lhs, const SimpleSInt32Int32MapMessage &rhs) noexcept
 {
@@ -6747,20 +6411,14 @@ SimpleSInt64Int32MapMessage::SimpleSInt64Int32MapMessage(const SimpleSInt64Int32
 }
 SimpleSInt64Int32MapMessage &SimpleSInt64Int32MapMessage::operator =(const SimpleSInt64Int32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt64Int32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt64Int32MapMessage::SimpleSInt64Int32MapMessage(SimpleSInt64Int32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt64Int32MapMessage &SimpleSInt64Int32MapMessage::operator =(SimpleSInt64Int32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt64Int32MapMessage &lhs, const SimpleSInt64Int32MapMessage &rhs) noexcept
 {
@@ -6866,20 +6524,14 @@ SimpleInt32Int32MapMessage::SimpleInt32Int32MapMessage(const SimpleInt32Int32Map
 }
 SimpleInt32Int32MapMessage &SimpleInt32Int32MapMessage::operator =(const SimpleInt32Int32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt32Int32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt32Int32MapMessage::SimpleInt32Int32MapMessage(SimpleInt32Int32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt32Int32MapMessage &SimpleInt32Int32MapMessage::operator =(SimpleInt32Int32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt32Int32MapMessage &lhs, const SimpleInt32Int32MapMessage &rhs) noexcept
 {
@@ -6985,20 +6637,14 @@ SimpleInt64Int32MapMessage::SimpleInt64Int32MapMessage(const SimpleInt64Int32Map
 }
 SimpleInt64Int32MapMessage &SimpleInt64Int32MapMessage::operator =(const SimpleInt64Int32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt64Int32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt64Int32MapMessage::SimpleInt64Int32MapMessage(SimpleInt64Int32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt64Int32MapMessage &SimpleInt64Int32MapMessage::operator =(SimpleInt64Int32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt64Int32MapMessage &lhs, const SimpleInt64Int32MapMessage &rhs) noexcept
 {
@@ -7104,20 +6750,14 @@ SimpleUInt32Int32MapMessage::SimpleUInt32Int32MapMessage(const SimpleUInt32Int32
 }
 SimpleUInt32Int32MapMessage &SimpleUInt32Int32MapMessage::operator =(const SimpleUInt32Int32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt32Int32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt32Int32MapMessage::SimpleUInt32Int32MapMessage(SimpleUInt32Int32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt32Int32MapMessage &SimpleUInt32Int32MapMessage::operator =(SimpleUInt32Int32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt32Int32MapMessage &lhs, const SimpleUInt32Int32MapMessage &rhs) noexcept
 {
@@ -7223,20 +6863,14 @@ SimpleUInt64Int32MapMessage::SimpleUInt64Int32MapMessage(const SimpleUInt64Int32
 }
 SimpleUInt64Int32MapMessage &SimpleUInt64Int32MapMessage::operator =(const SimpleUInt64Int32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt64Int32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt64Int32MapMessage::SimpleUInt64Int32MapMessage(SimpleUInt64Int32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt64Int32MapMessage &SimpleUInt64Int32MapMessage::operator =(SimpleUInt64Int32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt64Int32MapMessage &lhs, const SimpleUInt64Int32MapMessage &rhs) noexcept
 {
@@ -7342,20 +6976,14 @@ SimpleFixed32Int32MapMessage::SimpleFixed32Int32MapMessage(const SimpleFixed32In
 }
 SimpleFixed32Int32MapMessage &SimpleFixed32Int32MapMessage::operator =(const SimpleFixed32Int32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed32Int32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed32Int32MapMessage::SimpleFixed32Int32MapMessage(SimpleFixed32Int32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed32Int32MapMessage &SimpleFixed32Int32MapMessage::operator =(SimpleFixed32Int32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed32Int32MapMessage &lhs, const SimpleFixed32Int32MapMessage &rhs) noexcept
 {
@@ -7461,20 +7089,14 @@ SimpleFixed64Int32MapMessage::SimpleFixed64Int32MapMessage(const SimpleFixed64In
 }
 SimpleFixed64Int32MapMessage &SimpleFixed64Int32MapMessage::operator =(const SimpleFixed64Int32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed64Int32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed64Int32MapMessage::SimpleFixed64Int32MapMessage(SimpleFixed64Int32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed64Int32MapMessage &SimpleFixed64Int32MapMessage::operator =(SimpleFixed64Int32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed64Int32MapMessage &lhs, const SimpleFixed64Int32MapMessage &rhs) noexcept
 {
@@ -7580,20 +7202,14 @@ SimpleSFixed32Int32MapMessage::SimpleSFixed32Int32MapMessage(const SimpleSFixed3
 }
 SimpleSFixed32Int32MapMessage &SimpleSFixed32Int32MapMessage::operator =(const SimpleSFixed32Int32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed32Int32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed32Int32MapMessage::SimpleSFixed32Int32MapMessage(SimpleSFixed32Int32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed32Int32MapMessage &SimpleSFixed32Int32MapMessage::operator =(SimpleSFixed32Int32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed32Int32MapMessage &lhs, const SimpleSFixed32Int32MapMessage &rhs) noexcept
 {
@@ -7699,20 +7315,14 @@ SimpleSFixed64Int32MapMessage::SimpleSFixed64Int32MapMessage(const SimpleSFixed6
 }
 SimpleSFixed64Int32MapMessage &SimpleSFixed64Int32MapMessage::operator =(const SimpleSFixed64Int32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed64Int32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed64Int32MapMessage::SimpleSFixed64Int32MapMessage(SimpleSFixed64Int32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed64Int32MapMessage &SimpleSFixed64Int32MapMessage::operator =(SimpleSFixed64Int32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed64Int32MapMessage &lhs, const SimpleSFixed64Int32MapMessage &rhs) noexcept
 {
@@ -7818,20 +7428,14 @@ SimpleStringInt32MapMessage::SimpleStringInt32MapMessage(const SimpleStringInt32
 }
 SimpleStringInt32MapMessage &SimpleStringInt32MapMessage::operator =(const SimpleStringInt32MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringInt32MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringInt32MapMessage::SimpleStringInt32MapMessage(SimpleStringInt32MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringInt32MapMessage &SimpleStringInt32MapMessage::operator =(SimpleStringInt32MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringInt32MapMessage &lhs, const SimpleStringInt32MapMessage &rhs) noexcept
 {
@@ -7937,20 +7541,14 @@ SimpleSInt32Int64MapMessage::SimpleSInt32Int64MapMessage(const SimpleSInt32Int64
 }
 SimpleSInt32Int64MapMessage &SimpleSInt32Int64MapMessage::operator =(const SimpleSInt32Int64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt32Int64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt32Int64MapMessage::SimpleSInt32Int64MapMessage(SimpleSInt32Int64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt32Int64MapMessage &SimpleSInt32Int64MapMessage::operator =(SimpleSInt32Int64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt32Int64MapMessage &lhs, const SimpleSInt32Int64MapMessage &rhs) noexcept
 {
@@ -8056,20 +7654,14 @@ SimpleSInt64Int64MapMessage::SimpleSInt64Int64MapMessage(const SimpleSInt64Int64
 }
 SimpleSInt64Int64MapMessage &SimpleSInt64Int64MapMessage::operator =(const SimpleSInt64Int64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt64Int64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt64Int64MapMessage::SimpleSInt64Int64MapMessage(SimpleSInt64Int64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt64Int64MapMessage &SimpleSInt64Int64MapMessage::operator =(SimpleSInt64Int64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt64Int64MapMessage &lhs, const SimpleSInt64Int64MapMessage &rhs) noexcept
 {
@@ -8175,20 +7767,14 @@ SimpleInt32Int64MapMessage::SimpleInt32Int64MapMessage(const SimpleInt32Int64Map
 }
 SimpleInt32Int64MapMessage &SimpleInt32Int64MapMessage::operator =(const SimpleInt32Int64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt32Int64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt32Int64MapMessage::SimpleInt32Int64MapMessage(SimpleInt32Int64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt32Int64MapMessage &SimpleInt32Int64MapMessage::operator =(SimpleInt32Int64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt32Int64MapMessage &lhs, const SimpleInt32Int64MapMessage &rhs) noexcept
 {
@@ -8294,20 +7880,14 @@ SimpleInt64Int64MapMessage::SimpleInt64Int64MapMessage(const SimpleInt64Int64Map
 }
 SimpleInt64Int64MapMessage &SimpleInt64Int64MapMessage::operator =(const SimpleInt64Int64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt64Int64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt64Int64MapMessage::SimpleInt64Int64MapMessage(SimpleInt64Int64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt64Int64MapMessage &SimpleInt64Int64MapMessage::operator =(SimpleInt64Int64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt64Int64MapMessage &lhs, const SimpleInt64Int64MapMessage &rhs) noexcept
 {
@@ -8413,20 +7993,14 @@ SimpleUInt32Int64MapMessage::SimpleUInt32Int64MapMessage(const SimpleUInt32Int64
 }
 SimpleUInt32Int64MapMessage &SimpleUInt32Int64MapMessage::operator =(const SimpleUInt32Int64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt32Int64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt32Int64MapMessage::SimpleUInt32Int64MapMessage(SimpleUInt32Int64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt32Int64MapMessage &SimpleUInt32Int64MapMessage::operator =(SimpleUInt32Int64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt32Int64MapMessage &lhs, const SimpleUInt32Int64MapMessage &rhs) noexcept
 {
@@ -8532,20 +8106,14 @@ SimpleUInt64Int64MapMessage::SimpleUInt64Int64MapMessage(const SimpleUInt64Int64
 }
 SimpleUInt64Int64MapMessage &SimpleUInt64Int64MapMessage::operator =(const SimpleUInt64Int64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt64Int64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt64Int64MapMessage::SimpleUInt64Int64MapMessage(SimpleUInt64Int64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt64Int64MapMessage &SimpleUInt64Int64MapMessage::operator =(SimpleUInt64Int64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt64Int64MapMessage &lhs, const SimpleUInt64Int64MapMessage &rhs) noexcept
 {
@@ -8651,20 +8219,14 @@ SimpleFixed32Int64MapMessage::SimpleFixed32Int64MapMessage(const SimpleFixed32In
 }
 SimpleFixed32Int64MapMessage &SimpleFixed32Int64MapMessage::operator =(const SimpleFixed32Int64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed32Int64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed32Int64MapMessage::SimpleFixed32Int64MapMessage(SimpleFixed32Int64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed32Int64MapMessage &SimpleFixed32Int64MapMessage::operator =(SimpleFixed32Int64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed32Int64MapMessage &lhs, const SimpleFixed32Int64MapMessage &rhs) noexcept
 {
@@ -8770,20 +8332,14 @@ SimpleFixed64Int64MapMessage::SimpleFixed64Int64MapMessage(const SimpleFixed64In
 }
 SimpleFixed64Int64MapMessage &SimpleFixed64Int64MapMessage::operator =(const SimpleFixed64Int64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed64Int64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed64Int64MapMessage::SimpleFixed64Int64MapMessage(SimpleFixed64Int64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed64Int64MapMessage &SimpleFixed64Int64MapMessage::operator =(SimpleFixed64Int64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed64Int64MapMessage &lhs, const SimpleFixed64Int64MapMessage &rhs) noexcept
 {
@@ -8889,20 +8445,14 @@ SimpleSFixed32Int64MapMessage::SimpleSFixed32Int64MapMessage(const SimpleSFixed3
 }
 SimpleSFixed32Int64MapMessage &SimpleSFixed32Int64MapMessage::operator =(const SimpleSFixed32Int64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed32Int64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed32Int64MapMessage::SimpleSFixed32Int64MapMessage(SimpleSFixed32Int64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed32Int64MapMessage &SimpleSFixed32Int64MapMessage::operator =(SimpleSFixed32Int64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed32Int64MapMessage &lhs, const SimpleSFixed32Int64MapMessage &rhs) noexcept
 {
@@ -9008,20 +8558,14 @@ SimpleSFixed64Int64MapMessage::SimpleSFixed64Int64MapMessage(const SimpleSFixed6
 }
 SimpleSFixed64Int64MapMessage &SimpleSFixed64Int64MapMessage::operator =(const SimpleSFixed64Int64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed64Int64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed64Int64MapMessage::SimpleSFixed64Int64MapMessage(SimpleSFixed64Int64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed64Int64MapMessage &SimpleSFixed64Int64MapMessage::operator =(SimpleSFixed64Int64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed64Int64MapMessage &lhs, const SimpleSFixed64Int64MapMessage &rhs) noexcept
 {
@@ -9127,20 +8671,14 @@ SimpleStringInt64MapMessage::SimpleStringInt64MapMessage(const SimpleStringInt64
 }
 SimpleStringInt64MapMessage &SimpleStringInt64MapMessage::operator =(const SimpleStringInt64MapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringInt64MapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringInt64MapMessage::SimpleStringInt64MapMessage(SimpleStringInt64MapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringInt64MapMessage &SimpleStringInt64MapMessage::operator =(SimpleStringInt64MapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringInt64MapMessage &lhs, const SimpleStringInt64MapMessage &rhs) noexcept
 {
@@ -9246,20 +8784,14 @@ SimpleSInt32ComplexMessageMapMessage::SimpleSInt32ComplexMessageMapMessage(const
 }
 SimpleSInt32ComplexMessageMapMessage &SimpleSInt32ComplexMessageMapMessage::operator =(const SimpleSInt32ComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt32ComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt32ComplexMessageMapMessage::SimpleSInt32ComplexMessageMapMessage(SimpleSInt32ComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt32ComplexMessageMapMessage &SimpleSInt32ComplexMessageMapMessage::operator =(SimpleSInt32ComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt32ComplexMessageMapMessage &lhs, const SimpleSInt32ComplexMessageMapMessage &rhs) noexcept
 {
@@ -9365,20 +8897,14 @@ SimpleSInt64ComplexMessageMapMessage::SimpleSInt64ComplexMessageMapMessage(const
 }
 SimpleSInt64ComplexMessageMapMessage &SimpleSInt64ComplexMessageMapMessage::operator =(const SimpleSInt64ComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSInt64ComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSInt64ComplexMessageMapMessage::SimpleSInt64ComplexMessageMapMessage(SimpleSInt64ComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSInt64ComplexMessageMapMessage &SimpleSInt64ComplexMessageMapMessage::operator =(SimpleSInt64ComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSInt64ComplexMessageMapMessage &lhs, const SimpleSInt64ComplexMessageMapMessage &rhs) noexcept
 {
@@ -9484,20 +9010,14 @@ SimpleInt32ComplexMessageMapMessage::SimpleInt32ComplexMessageMapMessage(const S
 }
 SimpleInt32ComplexMessageMapMessage &SimpleInt32ComplexMessageMapMessage::operator =(const SimpleInt32ComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt32ComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt32ComplexMessageMapMessage::SimpleInt32ComplexMessageMapMessage(SimpleInt32ComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt32ComplexMessageMapMessage &SimpleInt32ComplexMessageMapMessage::operator =(SimpleInt32ComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt32ComplexMessageMapMessage &lhs, const SimpleInt32ComplexMessageMapMessage &rhs) noexcept
 {
@@ -9603,20 +9123,14 @@ SimpleInt64ComplexMessageMapMessage::SimpleInt64ComplexMessageMapMessage(const S
 }
 SimpleInt64ComplexMessageMapMessage &SimpleInt64ComplexMessageMapMessage::operator =(const SimpleInt64ComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleInt64ComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleInt64ComplexMessageMapMessage::SimpleInt64ComplexMessageMapMessage(SimpleInt64ComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleInt64ComplexMessageMapMessage &SimpleInt64ComplexMessageMapMessage::operator =(SimpleInt64ComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleInt64ComplexMessageMapMessage &lhs, const SimpleInt64ComplexMessageMapMessage &rhs) noexcept
 {
@@ -9722,20 +9236,14 @@ SimpleUInt32ComplexMessageMapMessage::SimpleUInt32ComplexMessageMapMessage(const
 }
 SimpleUInt32ComplexMessageMapMessage &SimpleUInt32ComplexMessageMapMessage::operator =(const SimpleUInt32ComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt32ComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt32ComplexMessageMapMessage::SimpleUInt32ComplexMessageMapMessage(SimpleUInt32ComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt32ComplexMessageMapMessage &SimpleUInt32ComplexMessageMapMessage::operator =(SimpleUInt32ComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt32ComplexMessageMapMessage &lhs, const SimpleUInt32ComplexMessageMapMessage &rhs) noexcept
 {
@@ -9841,20 +9349,14 @@ SimpleUInt64ComplexMessageMapMessage::SimpleUInt64ComplexMessageMapMessage(const
 }
 SimpleUInt64ComplexMessageMapMessage &SimpleUInt64ComplexMessageMapMessage::operator =(const SimpleUInt64ComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleUInt64ComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleUInt64ComplexMessageMapMessage::SimpleUInt64ComplexMessageMapMessage(SimpleUInt64ComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleUInt64ComplexMessageMapMessage &SimpleUInt64ComplexMessageMapMessage::operator =(SimpleUInt64ComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleUInt64ComplexMessageMapMessage &lhs, const SimpleUInt64ComplexMessageMapMessage &rhs) noexcept
 {
@@ -9960,20 +9462,14 @@ SimpleFixed32ComplexMessageMapMessage::SimpleFixed32ComplexMessageMapMessage(con
 }
 SimpleFixed32ComplexMessageMapMessage &SimpleFixed32ComplexMessageMapMessage::operator =(const SimpleFixed32ComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed32ComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed32ComplexMessageMapMessage::SimpleFixed32ComplexMessageMapMessage(SimpleFixed32ComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed32ComplexMessageMapMessage &SimpleFixed32ComplexMessageMapMessage::operator =(SimpleFixed32ComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed32ComplexMessageMapMessage &lhs, const SimpleFixed32ComplexMessageMapMessage &rhs) noexcept
 {
@@ -10079,20 +9575,14 @@ SimpleFixed64ComplexMessageMapMessage::SimpleFixed64ComplexMessageMapMessage(con
 }
 SimpleFixed64ComplexMessageMapMessage &SimpleFixed64ComplexMessageMapMessage::operator =(const SimpleFixed64ComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFixed64ComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFixed64ComplexMessageMapMessage::SimpleFixed64ComplexMessageMapMessage(SimpleFixed64ComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFixed64ComplexMessageMapMessage &SimpleFixed64ComplexMessageMapMessage::operator =(SimpleFixed64ComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFixed64ComplexMessageMapMessage &lhs, const SimpleFixed64ComplexMessageMapMessage &rhs) noexcept
 {
@@ -10198,20 +9688,14 @@ SimpleSFixed32ComplexMessageMapMessage::SimpleSFixed32ComplexMessageMapMessage(c
 }
 SimpleSFixed32ComplexMessageMapMessage &SimpleSFixed32ComplexMessageMapMessage::operator =(const SimpleSFixed32ComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed32ComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed32ComplexMessageMapMessage::SimpleSFixed32ComplexMessageMapMessage(SimpleSFixed32ComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed32ComplexMessageMapMessage &SimpleSFixed32ComplexMessageMapMessage::operator =(SimpleSFixed32ComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed32ComplexMessageMapMessage &lhs, const SimpleSFixed32ComplexMessageMapMessage &rhs) noexcept
 {
@@ -10317,20 +9801,14 @@ SimpleSFixed64ComplexMessageMapMessage::SimpleSFixed64ComplexMessageMapMessage(c
 }
 SimpleSFixed64ComplexMessageMapMessage &SimpleSFixed64ComplexMessageMapMessage::operator =(const SimpleSFixed64ComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleSFixed64ComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleSFixed64ComplexMessageMapMessage::SimpleSFixed64ComplexMessageMapMessage(SimpleSFixed64ComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleSFixed64ComplexMessageMapMessage &SimpleSFixed64ComplexMessageMapMessage::operator =(SimpleSFixed64ComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleSFixed64ComplexMessageMapMessage &lhs, const SimpleSFixed64ComplexMessageMapMessage &rhs) noexcept
 {
@@ -10436,20 +9914,14 @@ SimpleStringComplexMessageMapMessage::SimpleStringComplexMessageMapMessage(const
 }
 SimpleStringComplexMessageMapMessage &SimpleStringComplexMessageMapMessage::operator =(const SimpleStringComplexMessageMapMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleStringComplexMessageMapMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleStringComplexMessageMapMessage::SimpleStringComplexMessageMapMessage(SimpleStringComplexMessageMapMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleStringComplexMessageMapMessage &SimpleStringComplexMessageMapMessage::operator =(SimpleStringComplexMessageMapMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleStringComplexMessageMapMessage &lhs, const SimpleStringComplexMessageMapMessage &rhs) noexcept
 {

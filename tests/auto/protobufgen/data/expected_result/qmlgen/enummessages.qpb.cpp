@@ -101,20 +101,14 @@ SimpleEnumMessage::SimpleEnumMessage(const SimpleEnumMessage &other)
 }
 SimpleEnumMessage &SimpleEnumMessage::operator =(const SimpleEnumMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleEnumMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleEnumMessage::SimpleEnumMessage(SimpleEnumMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleEnumMessage &SimpleEnumMessage::operator =(SimpleEnumMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleEnumMessage &lhs, const SimpleEnumMessage &rhs) noexcept
 {
@@ -215,20 +209,14 @@ RepeatedEnumMessage::RepeatedEnumMessage(const RepeatedEnumMessage &other)
 }
 RepeatedEnumMessage &RepeatedEnumMessage::operator =(const RepeatedEnumMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    RepeatedEnumMessage temp(other);
+    swap(temp);
     return *this;
 }
 RepeatedEnumMessage::RepeatedEnumMessage(RepeatedEnumMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-RepeatedEnumMessage &RepeatedEnumMessage::operator =(RepeatedEnumMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const RepeatedEnumMessage &lhs, const RepeatedEnumMessage &rhs) noexcept
 {
@@ -330,20 +318,14 @@ NestedEnumHolder::NestedEnumHolder(const NestedEnumHolder &other)
 }
 NestedEnumHolder &NestedEnumHolder::operator =(const NestedEnumHolder &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    NestedEnumHolder temp(other);
+    swap(temp);
     return *this;
 }
 NestedEnumHolder::NestedEnumHolder(NestedEnumHolder &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-NestedEnumHolder &NestedEnumHolder::operator =(NestedEnumHolder &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const NestedEnumHolder &lhs, const NestedEnumHolder &rhs) noexcept
 {
@@ -425,20 +407,14 @@ NestedEnumHolderLevel2::NestedEnumHolderLevel2(const NestedEnumHolderLevel2 &oth
 }
 NestedEnumHolderLevel2 &NestedEnumHolderLevel2::operator =(const NestedEnumHolderLevel2 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    NestedEnumHolderLevel2 temp(other);
+    swap(temp);
     return *this;
 }
 NestedEnumHolderLevel2::NestedEnumHolderLevel2(NestedEnumHolderLevel2 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-NestedEnumHolderLevel2 &NestedEnumHolderLevel2::operator =(NestedEnumHolderLevel2 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const NestedEnumHolderLevel2 &lhs, const NestedEnumHolderLevel2 &rhs) noexcept
 {
@@ -520,20 +496,14 @@ NestedEnumHolderLevel1::NestedEnumHolderLevel1(const NestedEnumHolderLevel1 &oth
 }
 NestedEnumHolderLevel1 &NestedEnumHolderLevel1::operator =(const NestedEnumHolderLevel1 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    NestedEnumHolderLevel1 temp(other);
+    swap(temp);
     return *this;
 }
 NestedEnumHolderLevel1::NestedEnumHolderLevel1(NestedEnumHolderLevel1 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-NestedEnumHolderLevel1 &NestedEnumHolderLevel1::operator =(NestedEnumHolderLevel1 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const NestedEnumHolderLevel1 &lhs, const NestedEnumHolderLevel1 &rhs) noexcept
 {
@@ -646,20 +616,14 @@ NestedEnumMessage::NestedEnumMessage(const NestedEnumMessage &other)
 }
 NestedEnumMessage &NestedEnumMessage::operator =(const NestedEnumMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    NestedEnumMessage temp(other);
+    swap(temp);
     return *this;
 }
 NestedEnumMessage::NestedEnumMessage(NestedEnumMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-NestedEnumMessage &NestedEnumMessage::operator =(NestedEnumMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const NestedEnumMessage &lhs, const NestedEnumMessage &rhs) noexcept
 {
@@ -838,20 +802,14 @@ MixedEnumUsageMessage::MixedEnumUsageMessage(const MixedEnumUsageMessage &other)
 }
 MixedEnumUsageMessage &MixedEnumUsageMessage::operator =(const MixedEnumUsageMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    MixedEnumUsageMessage temp(other);
+    swap(temp);
     return *this;
 }
 MixedEnumUsageMessage::MixedEnumUsageMessage(MixedEnumUsageMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-MixedEnumUsageMessage &MixedEnumUsageMessage::operator =(MixedEnumUsageMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const MixedEnumUsageMessage &lhs, const MixedEnumUsageMessage &rhs) noexcept
 {
@@ -1016,20 +974,14 @@ SimpleFileEnumMessage::SimpleFileEnumMessage(const SimpleFileEnumMessage &other)
 }
 SimpleFileEnumMessage &SimpleFileEnumMessage::operator =(const SimpleFileEnumMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    SimpleFileEnumMessage temp(other);
+    swap(temp);
     return *this;
 }
 SimpleFileEnumMessage::SimpleFileEnumMessage(SimpleFileEnumMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-SimpleFileEnumMessage &SimpleFileEnumMessage::operator =(SimpleFileEnumMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const SimpleFileEnumMessage &lhs, const SimpleFileEnumMessage &rhs) noexcept
 {
@@ -1154,20 +1106,14 @@ StepChildEnumMessage::StepChildEnumMessage(const StepChildEnumMessage &other)
 }
 StepChildEnumMessage &StepChildEnumMessage::operator =(const StepChildEnumMessage &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    StepChildEnumMessage temp(other);
+    swap(temp);
     return *this;
 }
 StepChildEnumMessage::StepChildEnumMessage(StepChildEnumMessage &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-StepChildEnumMessage &StepChildEnumMessage::operator =(StepChildEnumMessage &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const StepChildEnumMessage &lhs, const StepChildEnumMessage &rhs) noexcept
 {
@@ -1289,20 +1235,14 @@ A::A(const A &other)
 }
 A &A::operator =(const A &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    A temp(other);
+    swap(temp);
     return *this;
 }
 A::A(A &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-A &A::operator =(A &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const A &lhs, const A &rhs) noexcept
 {
@@ -1404,20 +1344,14 @@ B::B(const B &other)
 }
 B &B::operator =(const B &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    B temp(other);
+    swap(temp);
     return *this;
 }
 B::B(B &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-B &B::operator =(B &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const B &lhs, const B &rhs) noexcept
 {

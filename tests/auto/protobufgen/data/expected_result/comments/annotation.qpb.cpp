@@ -82,20 +82,14 @@ AnnotatedMessage1::AnnotatedMessage1(const AnnotatedMessage1 &other)
 }
 AnnotatedMessage1 &AnnotatedMessage1::operator =(const AnnotatedMessage1 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    AnnotatedMessage1 temp(other);
+    swap(temp);
     return *this;
 }
 AnnotatedMessage1::AnnotatedMessage1(AnnotatedMessage1 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-AnnotatedMessage1 &AnnotatedMessage1::operator =(AnnotatedMessage1 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const AnnotatedMessage1 &lhs, const AnnotatedMessage1 &rhs) noexcept
 {
@@ -194,20 +188,14 @@ AnnotatedMessage2::AnnotatedMessage2(const AnnotatedMessage2 &other)
 }
 AnnotatedMessage2 &AnnotatedMessage2::operator =(const AnnotatedMessage2 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    AnnotatedMessage2 temp(other);
+    swap(temp);
     return *this;
 }
 AnnotatedMessage2::AnnotatedMessage2(AnnotatedMessage2 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-AnnotatedMessage2 &AnnotatedMessage2::operator =(AnnotatedMessage2 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const AnnotatedMessage2 &lhs, const AnnotatedMessage2 &rhs) noexcept
 {
@@ -306,20 +294,14 @@ AnnotatedMessage3::AnnotatedMessage3(const AnnotatedMessage3 &other)
 }
 AnnotatedMessage3 &AnnotatedMessage3::operator =(const AnnotatedMessage3 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    AnnotatedMessage3 temp(other);
+    swap(temp);
     return *this;
 }
 AnnotatedMessage3::AnnotatedMessage3(AnnotatedMessage3 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-AnnotatedMessage3 &AnnotatedMessage3::operator =(AnnotatedMessage3 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const AnnotatedMessage3 &lhs, const AnnotatedMessage3 &rhs) noexcept
 {
@@ -418,20 +400,14 @@ AnnotatedMessage4::AnnotatedMessage4(const AnnotatedMessage4 &other)
 }
 AnnotatedMessage4 &AnnotatedMessage4::operator =(const AnnotatedMessage4 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    AnnotatedMessage4 temp(other);
+    swap(temp);
     return *this;
 }
 AnnotatedMessage4::AnnotatedMessage4(AnnotatedMessage4 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-AnnotatedMessage4 &AnnotatedMessage4::operator =(AnnotatedMessage4 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const AnnotatedMessage4 &lhs, const AnnotatedMessage4 &rhs) noexcept
 {
@@ -530,20 +506,14 @@ AnnotatedMessage5::AnnotatedMessage5(const AnnotatedMessage5 &other)
 }
 AnnotatedMessage5 &AnnotatedMessage5::operator =(const AnnotatedMessage5 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    AnnotatedMessage5 temp(other);
+    swap(temp);
     return *this;
 }
 AnnotatedMessage5::AnnotatedMessage5(AnnotatedMessage5 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-AnnotatedMessage5 &AnnotatedMessage5::operator =(AnnotatedMessage5 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const AnnotatedMessage5 &lhs, const AnnotatedMessage5 &rhs) noexcept
 {
@@ -642,20 +612,14 @@ AnnotatedMessage6::AnnotatedMessage6(const AnnotatedMessage6 &other)
 }
 AnnotatedMessage6 &AnnotatedMessage6::operator =(const AnnotatedMessage6 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    AnnotatedMessage6 temp(other);
+    swap(temp);
     return *this;
 }
 AnnotatedMessage6::AnnotatedMessage6(AnnotatedMessage6 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-AnnotatedMessage6 &AnnotatedMessage6::operator =(AnnotatedMessage6 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const AnnotatedMessage6 &lhs, const AnnotatedMessage6 &rhs) noexcept
 {
@@ -754,20 +718,14 @@ AnnotatedMessage7::AnnotatedMessage7(const AnnotatedMessage7 &other)
 }
 AnnotatedMessage7 &AnnotatedMessage7::operator =(const AnnotatedMessage7 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    AnnotatedMessage7 temp(other);
+    swap(temp);
     return *this;
 }
 AnnotatedMessage7::AnnotatedMessage7(AnnotatedMessage7 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-AnnotatedMessage7 &AnnotatedMessage7::operator =(AnnotatedMessage7 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const AnnotatedMessage7 &lhs, const AnnotatedMessage7 &rhs) noexcept
 {
@@ -866,20 +824,14 @@ AnnotatedMessage8::AnnotatedMessage8(const AnnotatedMessage8 &other)
 }
 AnnotatedMessage8 &AnnotatedMessage8::operator =(const AnnotatedMessage8 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    AnnotatedMessage8 temp(other);
+    swap(temp);
     return *this;
 }
 AnnotatedMessage8::AnnotatedMessage8(AnnotatedMessage8 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-AnnotatedMessage8 &AnnotatedMessage8::operator =(AnnotatedMessage8 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const AnnotatedMessage8 &lhs, const AnnotatedMessage8 &rhs) noexcept
 {
@@ -978,20 +930,14 @@ AnnotatedMessage9::AnnotatedMessage9(const AnnotatedMessage9 &other)
 }
 AnnotatedMessage9 &AnnotatedMessage9::operator =(const AnnotatedMessage9 &other)
 {
-    QProtobufMessage::operator=(other);
-    dptr = other.dptr;
+    AnnotatedMessage9 temp(other);
+    swap(temp);
     return *this;
 }
 AnnotatedMessage9::AnnotatedMessage9(AnnotatedMessage9 &&other) noexcept
     : QProtobufMessage(std::move(other)),
       dptr(std::move(other.dptr))
 {
-}
-AnnotatedMessage9 &AnnotatedMessage9::operator =(AnnotatedMessage9 &&other) noexcept
-{
-    QProtobufMessage::operator=(std::move(other));
-    dptr.swap(other.dptr);
-    return *this;
 }
 bool comparesEqual(const AnnotatedMessage9 &lhs, const AnnotatedMessage9 &rhs) noexcept
 {
