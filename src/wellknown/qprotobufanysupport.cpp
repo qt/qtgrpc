@@ -3,8 +3,9 @@
 
 #include <QtProtobufWellKnownTypes/qtprotobufwellknowntypesglobal.h>
 
-#include <QtProtobuf/qabstractprotobufserializer.h>
+#include <QtProtobuf/private/qprotobufmessage_p.h>
 #include <QtProtobuf/private/qprotobufserializer_p.h>
+#include <QtProtobuf/qabstractprotobufserializer.h>
 
 #include "qprotobufanysupport.h"
 #include "qprotobufregistration.h"
@@ -16,14 +17,23 @@ QT_BEGIN_NAMESPACE
 namespace QtProtobuf {
 using namespace QtProtobufPrivate;
 
-class AnyPrivate
+class AnyPrivate : public QProtobufMessagePrivate
 {
 public:
+    AnyPrivate(const QMetaObject *metaObject,
+               const QtProtobufPrivate::QProtobufPropertyOrdering *ordering);
+
+    static const AnyPrivate *get(const Any *any) { return any->d_func(); }
+
     QString typeUrl;
     QByteArray value;
-
-    static AnyPrivate *get(const Any *any) { return any->d_ptr; }
 };
+
+AnyPrivate::AnyPrivate(const QMetaObject *metaObject,
+                       const QtProtobufPrivate::QProtobufPropertyOrdering *ordering)
+    : QProtobufMessagePrivate(metaObject, ordering)
+{
+}
 
 static void serializerProxy(const QAbstractProtobufSerializer *serializer, const void *object,
                             const QProtobufFieldInfo &fieldInfo)
@@ -121,8 +131,8 @@ void Any::registerTypes()
     Constructs a defaulted, empty, instance of Any.
 */
 Any::Any()
-    : QProtobufMessage(&Any::staticMetaObject, &google::protobuf::Any::staticPropertyOrdering),
-      d_ptr(new AnyPrivate())
+    : QProtobufMessage(*new AnyPrivate(&Any::staticMetaObject,
+                                       &google::protobuf::Any::staticPropertyOrdering))
 {
 }
 
@@ -130,30 +140,19 @@ Any::Any()
     Destroys this instance of Any
 */
 Any::~Any()
-{
-    delete d_ptr;
-}
+    = default;
 
 /*!
     Constructs a copy of \a other.
 */
 Any::Any(const Any &other)
-    : QProtobufMessage(other),
-      d_ptr(new AnyPrivate(*other.d_ptr))
-{
-}
+    = default;
 
 /*!
     Copies the data of \a other into this instance.
 */
 Any &Any::operator=(const Any &other)
-{
-    if (this == &other)
-        return *this;
-    QProtobufMessage::operator=(other);
-    *d_ptr = *other.d_ptr;
-    return *this;
-}
+    = default;
 
 /*!
     Returns the type URL of the Any object.
@@ -167,7 +166,8 @@ Any &Any::operator=(const Any &other)
 */
 QString Any::typeUrl() const
 {
-    return d_func()->typeUrl;
+    Q_D(const Any);
+    return d->typeUrl;
 }
 
 /*!
@@ -179,7 +179,8 @@ QString Any::typeUrl() const
 */
 QByteArray Any::value() const
 {
-    return d_func()->value;
+    Q_D(const Any);
+    return d->value;
 }
 
 /*!
