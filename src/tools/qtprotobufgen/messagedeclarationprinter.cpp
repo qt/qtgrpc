@@ -277,11 +277,6 @@ void MessageDeclarationPrinter::printGetters()
                 } else {
                     m_printer->Print(propertyMap, CommonTemplates::GetterDeclarationTemplate());
                 }
-
-                if (field->is_repeated()) {
-                    m_printer->Print(propertyMap,
-                                     CommonTemplates::GetterComplexDeclarationTemplate());
-                }
             });
     common::iterateOneofFields(
             m_descriptor, [&](const OneofDescriptor *, const PropertyMap &propertyMap) {

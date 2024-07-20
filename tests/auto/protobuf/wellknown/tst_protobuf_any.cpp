@@ -143,9 +143,12 @@ void tst_protobuf_any::repeatedAnyMessage()
     if (serializer.deserializationError() != QAbstractProtobufSerializer::NoError)
         QFAIL(qPrintable(serializer.deserializationErrorString()));
     QCOMPARE_EQ(message2.anys().size(), message.anys().size());
-    for (int i = 0; i < message2.anys().size(); ++i) {
-        const QtProtobuf::Any &lhs = message2.anys()[i];
-        const QtProtobuf::Any &rhs = message.anys()[i];
+
+    const auto anys = message.anys();
+    const auto anys2 = message2.anys();
+    for (int i = 0; i < anys2.size(); ++i) {
+        QtProtobuf::Any lhs = anys2.at(i);
+        QtProtobuf::Any rhs = anys.at(i);
 
         QCOMPARE_EQ(lhs, rhs);
     }

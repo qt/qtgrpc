@@ -605,19 +605,6 @@ const char *CommonTemplates::GetterDefinitionTemplate()
            "}\n\n";
 }
 
-const char *CommonTemplates::GetterComplexDeclarationTemplate()
-{
-    return "$getter_type$ &$property_name$();\n";
-}
-
-const char *CommonTemplates::GetterComplexDefinitionTemplate()
-{
-    return "$getter_type$ &$classname$::$property_name$()\n{\n"
-           "    dptr.detach();\n"
-           "    return dptr->m_$property_name$;\n"
-           "}\n\n";
-}
-
 const char *CommonTemplates::PrivateSetterMessageDeclarationTemplate()
 {
     return "void set$property_name_cap$_p($setter_type$ *$property_name$);\n";

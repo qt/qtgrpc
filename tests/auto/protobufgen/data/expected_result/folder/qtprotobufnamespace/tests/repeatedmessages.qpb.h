@@ -141,7 +141,6 @@ public:
     }
 
     QStringList testRepeatedString() const;
-    QStringList &testRepeatedString();
     void setTestRepeatedString(const QStringList &testRepeatedString);
     static void registerTypes();
 
@@ -192,7 +191,6 @@ public:
     }
 
     QtProtobuf::doubleList testRepeatedDouble() const;
-    QtProtobuf::doubleList &testRepeatedDouble();
     void setTestRepeatedDouble(const QtProtobuf::doubleList &testRepeatedDouble);
     static void registerTypes();
 
@@ -243,7 +241,6 @@ public:
     }
 
     QByteArrayList testRepeatedBytes() const;
-    QByteArrayList &testRepeatedBytes();
     void setTestRepeatedBytes(const QByteArrayList &testRepeatedBytes);
     static void registerTypes();
 
@@ -294,7 +291,6 @@ public:
     }
 
     QtProtobuf::floatList testRepeatedFloat() const;
-    QtProtobuf::floatList &testRepeatedFloat();
     void setTestRepeatedFloat(const QtProtobuf::floatList &testRepeatedFloat);
     static void registerTypes();
 
@@ -345,7 +341,6 @@ public:
     }
 
     ComplexMessageRepeated testRepeatedComplex() const;
-    ComplexMessageRepeated &testRepeatedComplex();
     void setTestRepeatedComplex(const ComplexMessageRepeated &testRepeatedComplex);
     static void registerTypes();
 
@@ -396,7 +391,6 @@ public:
     }
 
     QtProtobuf::sint32List testRepeatedInt() const;
-    QtProtobuf::sint32List &testRepeatedInt();
     void setTestRepeatedInt(const QtProtobuf::sint32List &testRepeatedInt);
     static void registerTypes();
 
@@ -447,7 +441,6 @@ public:
     }
 
     QtProtobuf::int32List testRepeatedInt() const;
-    QtProtobuf::int32List &testRepeatedInt();
     void setTestRepeatedInt(const QtProtobuf::int32List &testRepeatedInt);
     static void registerTypes();
 
@@ -498,7 +491,6 @@ public:
     }
 
     QtProtobuf::uint32List testRepeatedInt() const;
-    QtProtobuf::uint32List &testRepeatedInt();
     void setTestRepeatedInt(const QtProtobuf::uint32List &testRepeatedInt);
     static void registerTypes();
 
@@ -549,7 +541,6 @@ public:
     }
 
     QtProtobuf::sint64List testRepeatedInt() const;
-    QtProtobuf::sint64List &testRepeatedInt();
     void setTestRepeatedInt(const QtProtobuf::sint64List &testRepeatedInt);
     static void registerTypes();
 
@@ -600,7 +591,6 @@ public:
     }
 
     QtProtobuf::int64List testRepeatedInt() const;
-    QtProtobuf::int64List &testRepeatedInt();
     void setTestRepeatedInt(const QtProtobuf::int64List &testRepeatedInt);
     static void registerTypes();
 
@@ -651,7 +641,6 @@ public:
     }
 
     QtProtobuf::uint64List testRepeatedInt() const;
-    QtProtobuf::uint64List &testRepeatedInt();
     void setTestRepeatedInt(const QtProtobuf::uint64List &testRepeatedInt);
     static void registerTypes();
 
@@ -702,7 +691,6 @@ public:
     }
 
     QtProtobuf::fixed32List testRepeatedInt() const;
-    QtProtobuf::fixed32List &testRepeatedInt();
     void setTestRepeatedInt(const QtProtobuf::fixed32List &testRepeatedInt);
     static void registerTypes();
 
@@ -753,7 +741,6 @@ public:
     }
 
     QtProtobuf::sfixed32List testRepeatedInt() const;
-    QtProtobuf::sfixed32List &testRepeatedInt();
     void setTestRepeatedInt(const QtProtobuf::sfixed32List &testRepeatedInt);
     static void registerTypes();
 
@@ -804,7 +791,6 @@ public:
     }
 
     QtProtobuf::fixed64List testRepeatedInt() const;
-    QtProtobuf::fixed64List &testRepeatedInt();
     void setTestRepeatedInt(const QtProtobuf::fixed64List &testRepeatedInt);
     static void registerTypes();
 
@@ -855,7 +841,6 @@ public:
     }
 
     QtProtobuf::sfixed64List testRepeatedInt() const;
-    QtProtobuf::sfixed64List &testRepeatedInt();
     void setTestRepeatedInt(const QtProtobuf::sfixed64List &testRepeatedInt);
     static void registerTypes();
 
@@ -906,7 +891,6 @@ public:
     }
 
     QtProtobuf::boolList testRepeatedBool() const;
-    QtProtobuf::boolList &testRepeatedBool();
     void setTestRepeatedBool(const QtProtobuf::boolList &testRepeatedBool);
     static void registerTypes();
 

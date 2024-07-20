@@ -317,9 +317,11 @@ static std::optional<QtProtobufPrivate::QtCore::QVersionNumber> convert(const QV
         return std::nullopt;
 
     QtProtobufPrivate::QtCore::QVersionNumber version;
+    QtProtobuf::int32List newSegments;
     const auto segments = from.segments();
     for (const auto &segment : segments)
-        version.segments().append(segment);
+        newSegments.append(segment);
+    version.setSegments(std::move(newSegments));
     return version;
 }
 

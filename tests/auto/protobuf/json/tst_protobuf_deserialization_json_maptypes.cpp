@@ -200,9 +200,9 @@ void QtProtobufJsonMapTypesDeserializationTest::simpleFixed32ComplexMapDeseriali
     SimpleFixed32ComplexMessageMapMessage expected;
     expected.setMapField({ { 10, expected1 }, { 42, expected2 }, { 65555, expected3 } });
 
-    QCOMPARE(test.mapField()[10], expected1);
-    QCOMPARE(test.mapField()[42], expected2);
-    QCOMPARE(test.mapField()[65555], expected3);
+    QCOMPARE(test.mapField().value(10), expected1);
+    QCOMPARE(test.mapField().value(42), expected2);
+    QCOMPARE(test.mapField().value(65555), expected3);
 }
 
 void QtProtobufJsonMapTypesDeserializationTest::boolBoolMapDeserializeTest()
@@ -211,8 +211,8 @@ void QtProtobufJsonMapTypesDeserializationTest::boolBoolMapDeserializeTest()
     test.deserialize(serializer.get(), "{\"mapField\":{\"true\":\"false\",\"false\":\"true\"}}");
     QCOMPARE(QAbstractProtobufSerializer::NoError, serializer->deserializationError());
 
-    QCOMPARE(test.mapField()[true], false);
-    QCOMPARE(test.mapField()[false], true);
+    QCOMPARE(test.mapField().value(true), false);
+    QCOMPARE(test.mapField().value(false), true);
 }
 
 void QtProtobufJsonMapTypesDeserializationTest::malformedJsonTest()
