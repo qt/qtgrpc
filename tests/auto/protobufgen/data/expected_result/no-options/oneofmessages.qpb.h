@@ -227,6 +227,4 @@ Q_ENUM_NS(SecondOneofFields)
 } // namespace OneofComplexMessage_QtProtobufNested
 } // namespace qtprotobufnamespace::tests
 
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::OneofSimpleMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::OneofComplexMessage)
 #endif // QPROTOBUF_ONEOFMESSAGES_H

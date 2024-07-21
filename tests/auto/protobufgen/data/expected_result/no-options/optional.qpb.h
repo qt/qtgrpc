@@ -190,6 +190,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace OptionalMessage_QtProtobufNested
 } // namespace qtprotobufnamespace::optional::tests
 
-Q_DECLARE_METATYPE(qtprotobufnamespace::optional::tests::TestStringMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::optional::tests::OptionalMessage)
 #endif // QPROTOBUF_OPTIONAL_H

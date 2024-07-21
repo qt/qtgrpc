@@ -696,18 +696,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace NonPackedIntMessageWithExtraMember_QtProtobufNested
 } // namespace qtprotobufnamespace::tests
 
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedSIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedUIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedSInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedUInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedFixedIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedSFixedIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedFixedInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedSFixedInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedBoolMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedDoubleMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedNonPackedFloatMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::NonPackedIntMessageWithExtraMember)
 #endif // QPROTOBUF_REPEATEDNONPACKEDMESSAGES_H

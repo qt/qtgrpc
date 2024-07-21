@@ -723,15 +723,4 @@ using BEnumRepeated = QList<BEnum>;
 } // namespace B_QtProtobufNested
 } // namespace qtprotobufnamespace::tests
 
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleEnumMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedEnumMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::MixedEnumUsageMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::MixedEnumUsageMessage::NestedEnumHolder)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::MixedEnumUsageMessage::NestedEnumHolderLevel1)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::MixedEnumUsageMessage::NestedEnumHolderLevel1::NestedEnumHolderLevel2)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::MixedEnumUsageMessage::NestedEnumMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleFileEnumMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::StepChildEnumMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::A)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::B)
 #endif // QPROTOBUF_ENUMMESSAGES_H

@@ -442,13 +442,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace AnnotatedMessage9_QtProtobufNested
 } // namespace qtprotobufnamespace::tests
 
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::AnnotatedMessage1)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::AnnotatedMessage2)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::AnnotatedMessage3)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::AnnotatedMessage4)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::AnnotatedMessage5)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::AnnotatedMessage6)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::AnnotatedMessage7)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::AnnotatedMessage8)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::AnnotatedMessage9)
 #endif // QPROTOBUF_ANNOTATION_H

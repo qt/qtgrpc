@@ -161,7 +161,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace ComplexMessage_QtProtobufNested
 } // namespace qtprotobufnamespace::tests
 
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::EmptyMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleStringMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::ComplexMessage)
 #endif // QPROTOBUF_EXTRANAMESPACE_H

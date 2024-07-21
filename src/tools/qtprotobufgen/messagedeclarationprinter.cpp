@@ -187,16 +187,6 @@ void MessageDeclarationPrinter::printClassDeclarationBegin()
     }
 }
 
-void MessageDeclarationPrinter::printMetaTypesDeclaration()
-{
-    m_printer->Print(m_typeMap, CommonTemplates::DeclareMetaTypeTemplate());
-
-    common::iterateNestedMessages(m_descriptor, [&](const Descriptor *nestedMessage) {
-        MessageDeclarationPrinter nestedPrinter(nestedMessage, m_printer);
-        nestedPrinter.printMetaTypesDeclaration();
-    });
-}
-
 void MessageDeclarationPrinter::printProperties()
 {
     assert(m_descriptor != nullptr);

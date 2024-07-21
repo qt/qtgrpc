@@ -207,8 +207,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace FieldIndexTest4Message_QtProtobufNested
 } // namespace qtprotobufnamespace::tests
 
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::FieldIndexTest1Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::FieldIndexTest2Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::FieldIndexTest3Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::FieldIndexTest4Message)
 #endif // QPROTOBUF_FIELDINDEXRANGE_H
