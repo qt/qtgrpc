@@ -281,9 +281,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleMessage_QtProtobufNested
 } // namespace qtproto::tests
 
-Q_DECLARE_METATYPE(qtproto::tests::AnyMessage)
-Q_DECLARE_METATYPE(qtproto::tests::RepeatedAnyMessage)
-Q_DECLARE_METATYPE(qtproto::tests::TwoAnyMessage)
-Q_DECLARE_METATYPE(qtproto::tests::Example)
-Q_DECLARE_METATYPE(qtproto::tests::SimpleMessage)
 #endif // QPROTOBUF_ANYMESSAGES_H

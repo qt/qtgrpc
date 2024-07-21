@@ -820,21 +820,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace ComplexMessage_QtProtobufNested
 } // namespace qtprotobufnamespace::tests
 
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::EmptyMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleBoolMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleSIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleUIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleSInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleUInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleStringMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleFloatMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleDoubleMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleBytesMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleFixedInt32Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleFixedInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleSFixedInt32Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::SimpleSFixedInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::ComplexMessage)
 #endif // QPROTOBUF_BASICMESSAGES_H

@@ -237,8 +237,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 
 } // namespace NoPackageMessage_QtProtobufNested
 
-Q_DECLARE_METATYPE(EmptyMessage)
-Q_DECLARE_METATYPE(SimpleIntMessage)
-Q_DECLARE_METATYPE(NoPackageExternalMessage)
-Q_DECLARE_METATYPE(NoPackageMessage)
 #endif // QPROTOBUF_NOPACKAGE_H

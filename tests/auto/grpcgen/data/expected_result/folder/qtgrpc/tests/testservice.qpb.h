@@ -160,7 +160,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace BlobMessage_QtProtobufNested
 } // namespace qtgrpc::tests
 
-Q_DECLARE_METATYPE(qtgrpc::tests::SimpleStringMessage)
-Q_DECLARE_METATYPE(qtgrpc::tests::SimpleIntMessage)
-Q_DECLARE_METATYPE(qtgrpc::tests::BlobMessage)
 #endif // QPROTOBUF_TESTSERVICE_H

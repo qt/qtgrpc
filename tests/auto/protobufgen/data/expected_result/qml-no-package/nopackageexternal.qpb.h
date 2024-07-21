@@ -70,5 +70,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 
 } // namespace SimpleIntMessageExt_QtProtobufNested
 
-Q_DECLARE_METATYPE(SimpleIntMessageExt)
 #endif // QPROTOBUF_NOPACKAGEEXTERNAL_H

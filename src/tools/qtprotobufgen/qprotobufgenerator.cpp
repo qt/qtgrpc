@@ -243,7 +243,6 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
 
     common::iterateMessages(file, [&headerPrinter](const Descriptor *message) {
         MessageDeclarationPrinter messageDef(message, headerPrinter);
-        messageDef.printMetaTypesDeclaration();
     });
 
     headerPrinter->Print({{"filename", fileNameToUpper}}, CommonTemplates::FooterTemplate());

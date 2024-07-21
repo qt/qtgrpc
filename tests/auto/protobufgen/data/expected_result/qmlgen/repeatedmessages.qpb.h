@@ -824,20 +824,4 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace RepeatedBoolMessage_QtProtobufNested
 } // namespace qtprotobufnamespace::tests
 
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedStringMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedDoubleMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedBytesMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedFloatMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedComplexMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedSIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedUIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedSInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedUInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedFixedIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedSFixedIntMessage)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedFixedInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedSFixedInt64Message)
-Q_DECLARE_METATYPE(qtprotobufnamespace::tests::RepeatedBoolMessage)
 #endif // QPROTOBUF_REPEATEDMESSAGES_H
