@@ -19,6 +19,7 @@ public:
     static const char *GrpcClientFileSuffix();
     static const char *GrpcServiceFileSuffix();
 
+    static const char *ClientConstructorDeclarationTemplate();
     static const char *ClientConstructorDefinitionTemplate();
     static const char *ClientQmlConstructorDefinitionTemplate();
 

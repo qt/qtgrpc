@@ -38,18 +38,18 @@ enum class QtProtobufFieldEnum;
 
 
 class SimpleStringMessage_QtProtobufData;
-class QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleStringMessage : public QProtobufMessage
+class SimpleStringMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT)
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleStringMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleStringMessage();
-    ~SimpleStringMessage();
-    SimpleStringMessage(const SimpleStringMessage &other);
-    SimpleStringMessage &operator =(const SimpleStringMessage &other);
-    SimpleStringMessage(SimpleStringMessage &&other) noexcept;
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleStringMessage();
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT ~SimpleStringMessage();
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleStringMessage(const SimpleStringMessage &other);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleStringMessage &operator =(const SimpleStringMessage &other);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleStringMessage(SimpleStringMessage &&other) noexcept;
     SimpleStringMessage &operator =(SimpleStringMessage &&other) noexcept
     {
         swap(other);
@@ -61,9 +61,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QString testFieldString() const;
-    void setTestFieldString(const QString &testFieldString);
-    static void registerTypes();
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT QString testFieldString() const;
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestFieldString(const QString &testFieldString);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept;
@@ -88,18 +88,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleStringMessage_QtProtobufNested
 
 class SimpleIntMessage_QtProtobufData;
-class QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleIntMessage : public QProtobufMessage
+class SimpleIntMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleIntMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleIntMessage();
-    ~SimpleIntMessage();
-    SimpleIntMessage(const SimpleIntMessage &other);
-    SimpleIntMessage &operator =(const SimpleIntMessage &other);
-    SimpleIntMessage(SimpleIntMessage &&other) noexcept;
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleIntMessage();
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT ~SimpleIntMessage();
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleIntMessage(const SimpleIntMessage &other);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleIntMessage &operator =(const SimpleIntMessage &other);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT SimpleIntMessage(SimpleIntMessage &&other) noexcept;
     SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept
     {
         swap(other);
@@ -111,9 +111,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::sint32 testField() const;
-    void setTestField(const QtProtobuf::sint32 &testField);
-    static void registerTypes();
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT QtProtobuf::sint32 testField() const;
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestField(const QtProtobuf::sint32 &testField);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept;
@@ -138,18 +138,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleIntMessage_QtProtobufNested
 
 class BlobMessage_QtProtobufData;
-class QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT BlobMessage : public QProtobufMessage
+class BlobMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT)
     Q_PROPERTY(QByteArray testBytes READ testBytes WRITE setTestBytes SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = BlobMessage_QtProtobufNested::QtProtobufFieldEnum;
-    BlobMessage();
-    ~BlobMessage();
-    BlobMessage(const BlobMessage &other);
-    BlobMessage &operator =(const BlobMessage &other);
-    BlobMessage(BlobMessage &&other) noexcept;
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT BlobMessage();
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT ~BlobMessage();
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT BlobMessage(const BlobMessage &other);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT BlobMessage &operator =(const BlobMessage &other);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT BlobMessage(BlobMessage &&other) noexcept;
     BlobMessage &operator =(BlobMessage &&other) noexcept
     {
         swap(other);
@@ -161,9 +161,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QByteArray testBytes() const;
-    void setTestBytes(const QByteArray &testBytes);
-    static void registerTypes();
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT QByteArray testBytes() const;
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestBytes(const QByteArray &testBytes);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT bool comparesEqual(const BlobMessage &lhs, const BlobMessage &rhs) noexcept;

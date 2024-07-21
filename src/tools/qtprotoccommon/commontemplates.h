@@ -46,7 +46,8 @@ public:
     static const char *EnumForwardDeclarationTemplate();
     static const char *EnumClassForwardDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplate();
-    static const char *ClassMessageBeginDeclarationTemplateEmptyMacros();
+    static const char *Q_PROTOBUF_OBJECTMacro();
+    static const char *Q_PROTOBUF_OBJECT_EXPORTMacro();
     static const char *ClassMessageQmlBeginDeclarationTemplate();
     static const char *ClassMessageDataBeginDeclarationTemplate();
     static const char *ConstructorMessageDataDefinitionTemplate();
@@ -160,6 +161,8 @@ public:
     static const char *QmlRegisterGlobalEnumTypeTemplate();
     static const char *QmlRegisterMessageTypeTemplate();
 
+    static const char *QDateTimeExtrasTemplate();
+
     static const char *RepeatedSuffix();
     static const char *ProtoFileSuffix();
     static const char *EnumClassSuffix();
@@ -179,7 +182,6 @@ public:
     static const char *ExportMacroTemplate();
 
     static const char *QmlNamedElement();
-    static const char *QObjectConstructorMessageDeclarationTemplate();
     static const char *MocIncludeTemplate();
 };
 

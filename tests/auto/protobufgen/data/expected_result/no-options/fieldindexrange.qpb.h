@@ -71,7 +71,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const FieldIndexTest1Message &lhs, const FieldIndexTest1Message &rhs) noexcept;
+    friend bool comparesEqual(const FieldIndexTest1Message &lhs, const FieldIndexTest1Message &rhs) noexcept;
     friend bool operator==(const FieldIndexTest1Message &lhs, const FieldIndexTest1Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -121,7 +121,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const FieldIndexTest2Message &lhs, const FieldIndexTest2Message &rhs) noexcept;
+    friend bool comparesEqual(const FieldIndexTest2Message &lhs, const FieldIndexTest2Message &rhs) noexcept;
     friend bool operator==(const FieldIndexTest2Message &lhs, const FieldIndexTest2Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -171,7 +171,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const FieldIndexTest3Message &lhs, const FieldIndexTest3Message &rhs) noexcept;
+    friend bool comparesEqual(const FieldIndexTest3Message &lhs, const FieldIndexTest3Message &rhs) noexcept;
     friend bool operator==(const FieldIndexTest3Message &lhs, const FieldIndexTest3Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -221,7 +221,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const FieldIndexTest4Message &lhs, const FieldIndexTest4Message &rhs) noexcept;
+    friend bool comparesEqual(const FieldIndexTest4Message &lhs, const FieldIndexTest4Message &rhs) noexcept;
     friend bool operator==(const FieldIndexTest4Message &lhs, const FieldIndexTest4Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);

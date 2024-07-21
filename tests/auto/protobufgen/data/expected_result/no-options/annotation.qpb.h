@@ -101,7 +101,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const AnnotatedMessage1 &lhs, const AnnotatedMessage1 &rhs) noexcept;
+    friend bool comparesEqual(const AnnotatedMessage1 &lhs, const AnnotatedMessage1 &rhs) noexcept;
     friend bool operator==(const AnnotatedMessage1 &lhs, const AnnotatedMessage1 &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -151,7 +151,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const AnnotatedMessage2 &lhs, const AnnotatedMessage2 &rhs) noexcept;
+    friend bool comparesEqual(const AnnotatedMessage2 &lhs, const AnnotatedMessage2 &rhs) noexcept;
     friend bool operator==(const AnnotatedMessage2 &lhs, const AnnotatedMessage2 &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -201,7 +201,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const AnnotatedMessage3 &lhs, const AnnotatedMessage3 &rhs) noexcept;
+    friend bool comparesEqual(const AnnotatedMessage3 &lhs, const AnnotatedMessage3 &rhs) noexcept;
     friend bool operator==(const AnnotatedMessage3 &lhs, const AnnotatedMessage3 &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -251,7 +251,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const AnnotatedMessage4 &lhs, const AnnotatedMessage4 &rhs) noexcept;
+    friend bool comparesEqual(const AnnotatedMessage4 &lhs, const AnnotatedMessage4 &rhs) noexcept;
     friend bool operator==(const AnnotatedMessage4 &lhs, const AnnotatedMessage4 &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -301,7 +301,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const AnnotatedMessage5 &lhs, const AnnotatedMessage5 &rhs) noexcept;
+    friend bool comparesEqual(const AnnotatedMessage5 &lhs, const AnnotatedMessage5 &rhs) noexcept;
     friend bool operator==(const AnnotatedMessage5 &lhs, const AnnotatedMessage5 &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -351,7 +351,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const AnnotatedMessage6 &lhs, const AnnotatedMessage6 &rhs) noexcept;
+    friend bool comparesEqual(const AnnotatedMessage6 &lhs, const AnnotatedMessage6 &rhs) noexcept;
     friend bool operator==(const AnnotatedMessage6 &lhs, const AnnotatedMessage6 &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -401,7 +401,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const AnnotatedMessage7 &lhs, const AnnotatedMessage7 &rhs) noexcept;
+    friend bool comparesEqual(const AnnotatedMessage7 &lhs, const AnnotatedMessage7 &rhs) noexcept;
     friend bool operator==(const AnnotatedMessage7 &lhs, const AnnotatedMessage7 &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -451,7 +451,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const AnnotatedMessage8 &lhs, const AnnotatedMessage8 &rhs) noexcept;
+    friend bool comparesEqual(const AnnotatedMessage8 &lhs, const AnnotatedMessage8 &rhs) noexcept;
     friend bool operator==(const AnnotatedMessage8 &lhs, const AnnotatedMessage8 &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -501,7 +501,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const AnnotatedMessage9 &lhs, const AnnotatedMessage9 &rhs) noexcept;
+    friend bool comparesEqual(const AnnotatedMessage9 &lhs, const AnnotatedMessage9 &rhs) noexcept;
     friend bool operator==(const AnnotatedMessage9 &lhs, const AnnotatedMessage9 &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);

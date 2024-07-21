@@ -40,12 +40,7 @@ struct common {
         NEIGHBOR_ENUM
     };
 
-    static std::string buildExportMacro(std::string identifier)
-    {
-        if (identifier.empty())
-            return identifier;
-        return "QPB_" + identifier + "_EXPORT";
-    }
+    static std::string buildExportMacro(bool addTrailingSpace = true);
 
     static std::string getFullNamespace(std::string_view fullDescriptorName,
                                         std::string_view separator,

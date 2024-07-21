@@ -34,18 +34,18 @@ enum class QtProtobufFieldEnum;
 
 
 class TestStringMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage : public QProtobufMessage
+class TestStringMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     Q_PROPERTY(QString stringField READ stringField WRITE setStringField SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = TestStringMessage_QtProtobufNested::QtProtobufFieldEnum;
-    TestStringMessage();
-    ~TestStringMessage();
-    TestStringMessage(const TestStringMessage &other);
-    TestStringMessage &operator =(const TestStringMessage &other);
-    TestStringMessage(TestStringMessage &&other) noexcept;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ~TestStringMessage();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage(const TestStringMessage &other);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage &operator =(const TestStringMessage &other);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage(TestStringMessage &&other) noexcept;
     TestStringMessage &operator =(TestStringMessage &&other) noexcept
     {
         swap(other);
@@ -57,9 +57,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QString stringField() const;
-    void setStringField(const QString &stringField);
-    static void registerTypes();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QString stringField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setStringField(const QString &stringField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool comparesEqual(const TestStringMessage &lhs, const TestStringMessage &rhs) noexcept;
@@ -84,9 +84,9 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace TestStringMessage_QtProtobufNested
 
 class OptionalMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OptionalMessage : public QProtobufMessage
+class OptionalMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::sint32 testFieldOpt READ testFieldOpt_p WRITE setTestFieldOpt_p)
     Q_PROPERTY(bool hasTestFieldOpt READ hasTestFieldOpt)
@@ -106,11 +106,11 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OptionalMessage : public QProtobufMessage
 
 public:
     using QtProtobufFieldEnum = OptionalMessage_QtProtobufNested::QtProtobufFieldEnum;
-    OptionalMessage();
-    ~OptionalMessage();
-    OptionalMessage(const OptionalMessage &other);
-    OptionalMessage &operator =(const OptionalMessage &other);
-    OptionalMessage(OptionalMessage &&other) noexcept;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OptionalMessage();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ~OptionalMessage();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OptionalMessage(const OptionalMessage &other);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OptionalMessage &operator =(const OptionalMessage &other);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OptionalMessage(OptionalMessage &&other) noexcept;
     OptionalMessage &operator =(OptionalMessage &&other) noexcept
     {
         swap(other);
@@ -122,50 +122,50 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::sint32 testField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sint32 testField() const;
 
-    bool hasTestFieldOpt() const;
-    QtProtobuf::sint32 testFieldOpt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldOpt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sint32 testFieldOpt() const;
 
-    bool testFieldBool() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool testFieldBool() const;
 
-    bool hasTestFieldBoolOpt() const;
-    bool testFieldBoolOpt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldBoolOpt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool testFieldBoolOpt() const;
 
-    QByteArray testFieldBytes() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QByteArray testFieldBytes() const;
 
-    bool hasTestFieldBytesOpt() const;
-    QByteArray testFieldBytesOpt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldBytesOpt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QByteArray testFieldBytesOpt() const;
 
-    QString testFieldString() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QString testFieldString() const;
 
-    bool hasTestFieldStringOpt() const;
-    QString testFieldStringOpt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldStringOpt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QString testFieldStringOpt() const;
 
-    bool hasTestFieldMessage() const;
-    TestStringMessage &testFieldMessage();
-    const TestStringMessage &testFieldMessage() const;
-    void clearTestFieldMessage();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldMessage() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage &testFieldMessage();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const TestStringMessage &testFieldMessage() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldMessage();
 
-    bool hasTestFieldMessageOpt() const;
-    TestStringMessage &testFieldMessageOpt();
-    const TestStringMessage &testFieldMessageOpt() const;
-    void clearTestFieldMessageOpt();
-    void setTestField(const QtProtobuf::sint32 &testField);
-    void setTestFieldOpt(const QtProtobuf::sint32 &testFieldOpt);
-    void clearTestFieldOpt();
-    void setTestFieldBool(const bool &testFieldBool);
-    void setTestFieldBoolOpt(const bool &testFieldBoolOpt);
-    void clearTestFieldBoolOpt();
-    void setTestFieldBytes(const QByteArray &testFieldBytes);
-    void setTestFieldBytesOpt(const QByteArray &testFieldBytesOpt);
-    void clearTestFieldBytesOpt();
-    void setTestFieldString(const QString &testFieldString);
-    void setTestFieldStringOpt(const QString &testFieldStringOpt);
-    void clearTestFieldStringOpt();
-    void setTestFieldMessage(const TestStringMessage &testFieldMessage);
-    void setTestFieldMessageOpt(const TestStringMessage &testFieldMessageOpt);
-    static void registerTypes();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldMessageOpt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage &testFieldMessageOpt();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const TestStringMessage &testFieldMessageOpt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldMessageOpt();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestField(const QtProtobuf::sint32 &testField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldOpt(const QtProtobuf::sint32 &testFieldOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldOpt();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBool(const bool &testFieldBool);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBoolOpt(const bool &testFieldBoolOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldBoolOpt();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBytes(const QByteArray &testFieldBytes);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBytesOpt(const QByteArray &testFieldBytesOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldBytesOpt();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldString(const QString &testFieldString);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldStringOpt(const QString &testFieldStringOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldStringOpt();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldMessage(const TestStringMessage &testFieldMessage);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldMessageOpt(const TestStringMessage &testFieldMessageOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool comparesEqual(const OptionalMessage &lhs, const OptionalMessage &rhs) noexcept;
@@ -177,18 +177,18 @@ private:
     {
         return !comparesEqual(lhs, rhs);
     }
-    QtProtobuf::sint32 testFieldOpt_p() const;
-    bool testFieldBoolOpt_p() const;
-    QByteArray testFieldBytesOpt_p() const;
-    QString testFieldStringOpt_p() const;
-    TestStringMessage *testFieldMessage_p();
-    TestStringMessage *testFieldMessageOpt_p();
-    void setTestFieldOpt_p(QtProtobuf::sint32 testFieldOpt);
-    void setTestFieldBoolOpt_p(bool testFieldBoolOpt);
-    void setTestFieldBytesOpt_p(QByteArray testFieldBytesOpt);
-    void setTestFieldStringOpt_p(QString testFieldStringOpt);
-    void setTestFieldMessage_p(TestStringMessage *testFieldMessage);
-    void setTestFieldMessageOpt_p(TestStringMessage *testFieldMessageOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sint32 testFieldOpt_p() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool testFieldBoolOpt_p() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QByteArray testFieldBytesOpt_p() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QString testFieldStringOpt_p() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage *testFieldMessage_p();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage *testFieldMessageOpt_p();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldOpt_p(QtProtobuf::sint32 testFieldOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBoolOpt_p(bool testFieldBoolOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBytesOpt_p(QByteArray testFieldBytesOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldStringOpt_p(QString testFieldStringOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldMessage_p(TestStringMessage *testFieldMessage);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldMessageOpt_p(TestStringMessage *testFieldMessageOpt);
     QExplicitlySharedDataPointer<OptionalMessage_QtProtobufData> dptr;
 };
 namespace OptionalMessage_QtProtobufNested {

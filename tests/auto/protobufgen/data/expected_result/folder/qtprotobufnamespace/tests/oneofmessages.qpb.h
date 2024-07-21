@@ -37,9 +37,9 @@ enum class SecondOneofFields;
 
 
 class OneofSimpleMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofSimpleMessage : public QProtobufMessage
+class OneofSimpleMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     Q_PROPERTY(QtProtobuf::int32 testOneofFieldInt READ testOneofFieldInt_p WRITE setTestOneofFieldInt_p)
     Q_PROPERTY(bool hasTestOneofFieldInt READ hasTestOneofFieldInt)
     Q_PROPERTY(QtProtobuf::int32 testOneofFieldSecondInt READ testOneofFieldSecondInt_p WRITE setTestOneofFieldSecondInt_p)
@@ -48,11 +48,11 @@ class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofSimpleMessage : public QProtobufMess
 public:
     using QtProtobufFieldEnum = OneofSimpleMessage_QtProtobufNested::QtProtobufFieldEnum;
     using TestOneofFields = OneofSimpleMessage_QtProtobufNested::TestOneofFields;
-    OneofSimpleMessage();
-    ~OneofSimpleMessage();
-    OneofSimpleMessage(const OneofSimpleMessage &other);
-    OneofSimpleMessage &operator =(const OneofSimpleMessage &other);
-    OneofSimpleMessage(OneofSimpleMessage &&other) noexcept;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofSimpleMessage();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ~OneofSimpleMessage();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofSimpleMessage(const OneofSimpleMessage &other);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofSimpleMessage &operator =(const OneofSimpleMessage &other);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofSimpleMessage(OneofSimpleMessage &&other) noexcept;
     OneofSimpleMessage &operator =(OneofSimpleMessage &&other) noexcept
     {
         swap(other);
@@ -64,16 +64,16 @@ public:
         dptr.swap(other.dptr);
     }
 
-    bool hasTestOneofFieldInt() const;
-    QtProtobuf::int32 testOneofFieldInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestOneofFieldInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testOneofFieldInt() const;
 
-    bool hasTestOneofFieldSecondInt() const;
-    QtProtobuf::int32 testOneofFieldSecondInt() const;
-    TestOneofFields testOneofField() const;
-    void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
-    void setTestOneofFieldSecondInt(const QtProtobuf::int32 &testOneofFieldSecondInt);
-    void clearTestOneof();
-    static void registerTypes();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestOneofFieldSecondInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testOneofFieldSecondInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestOneofFields testOneofField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldSecondInt(const QtProtobuf::int32 &testOneofFieldSecondInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestOneof();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool comparesEqual(const OneofSimpleMessage &lhs, const OneofSimpleMessage &rhs) noexcept;
@@ -85,10 +85,10 @@ private:
     {
         return !comparesEqual(lhs, rhs);
     }
-    QtProtobuf::int32 testOneofFieldInt_p() const;
-    QtProtobuf::int32 testOneofFieldSecondInt_p() const;
-    void setTestOneofFieldInt_p(QtProtobuf::int32 testOneofFieldInt);
-    void setTestOneofFieldSecondInt_p(QtProtobuf::int32 testOneofFieldSecondInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testOneofFieldInt_p() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testOneofFieldSecondInt_p() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldInt_p(QtProtobuf::int32 testOneofFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldSecondInt_p(QtProtobuf::int32 testOneofFieldSecondInt);
     QExplicitlySharedDataPointer<OneofSimpleMessage_QtProtobufData> dptr;
 };
 namespace OneofSimpleMessage_QtProtobufNested {
@@ -110,9 +110,9 @@ Q_ENUM_NS(TestOneofFields)
 } // namespace OneofSimpleMessage_QtProtobufNested
 
 class OneofComplexMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofComplexMessage : public QProtobufMessage
+class OneofComplexMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(QtProtobuf::int32 testOneofFieldInt READ testOneofFieldInt_p WRITE setTestOneofFieldInt_p)
     Q_PROPERTY(bool hasTestOneofFieldInt READ hasTestOneofFieldInt)
@@ -133,11 +133,11 @@ public:
     using QtProtobufFieldEnum = OneofComplexMessage_QtProtobufNested::QtProtobufFieldEnum;
     using TestOneofFields = OneofComplexMessage_QtProtobufNested::TestOneofFields;
     using SecondOneofFields = OneofComplexMessage_QtProtobufNested::SecondOneofFields;
-    OneofComplexMessage();
-    ~OneofComplexMessage();
-    OneofComplexMessage(const OneofComplexMessage &other);
-    OneofComplexMessage &operator =(const OneofComplexMessage &other);
-    OneofComplexMessage(OneofComplexMessage &&other) noexcept;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofComplexMessage();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ~OneofComplexMessage();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofComplexMessage(const OneofComplexMessage &other);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofComplexMessage &operator =(const OneofComplexMessage &other);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT OneofComplexMessage(OneofComplexMessage &&other) noexcept;
     OneofComplexMessage &operator =(OneofComplexMessage &&other) noexcept
     {
         swap(other);
@@ -149,41 +149,41 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::int32 testFieldInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testFieldInt() const;
 
-    bool hasTestOneofFieldInt() const;
-    QtProtobuf::int32 testOneofFieldInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestOneofFieldInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testOneofFieldInt() const;
 
-    bool hasTestOneofComplexField() const;
-    ComplexMessage &testOneofComplexField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestOneofComplexField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ComplexMessage &testOneofComplexField() const;
 
-    bool hasTestOneofSecondComplexField() const;
-    ComplexMessage &testOneofSecondComplexField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestOneofSecondComplexField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ComplexMessage &testOneofSecondComplexField() const;
 
-    bool hasSecondFieldInt() const;
-    QtProtobuf::int32 secondFieldInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasSecondFieldInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 secondFieldInt() const;
 
-    bool hasSecondComplexField() const;
-    ComplexMessage &secondComplexField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasSecondComplexField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ComplexMessage &secondComplexField() const;
 
-    bool hasSecondSecondComplexField() const;
-    ComplexMessage &secondSecondComplexField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasSecondSecondComplexField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ComplexMessage &secondSecondComplexField() const;
 
-    bool hasTestSnakeCaseField() const;
-    QtProtobuf::int32 testSnakeCaseField() const;
-    TestOneofFields testOneofField() const;
-    SecondOneofFields secondOneofField() const;
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
-    void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
-    void setTestOneofComplexField(const ComplexMessage &testOneofComplexField);
-    void setTestOneofSecondComplexField(const ComplexMessage &testOneofSecondComplexField);
-    void setSecondFieldInt(const QtProtobuf::int32 &secondFieldInt);
-    void setSecondComplexField(const ComplexMessage &secondComplexField);
-    void setSecondSecondComplexField(const ComplexMessage &secondSecondComplexField);
-    void setTestSnakeCaseField(const QtProtobuf::int32 &testSnakeCaseField);
-    void clearTestOneof();
-    void clearSecondOneof();
-    static void registerTypes();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestSnakeCaseField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testSnakeCaseField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestOneofFields testOneofField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SecondOneofFields secondOneofField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofComplexField(const ComplexMessage &testOneofComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofSecondComplexField(const ComplexMessage &testOneofSecondComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondFieldInt(const QtProtobuf::int32 &secondFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondComplexField(const ComplexMessage &secondComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondSecondComplexField(const ComplexMessage &secondSecondComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestSnakeCaseField(const QtProtobuf::int32 &testSnakeCaseField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestOneof();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearSecondOneof();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool comparesEqual(const OneofComplexMessage &lhs, const OneofComplexMessage &rhs) noexcept;
@@ -195,20 +195,20 @@ private:
     {
         return !comparesEqual(lhs, rhs);
     }
-    QtProtobuf::int32 testOneofFieldInt_p() const;
-    ComplexMessage *testOneofComplexField_p();
-    ComplexMessage *testOneofSecondComplexField_p();
-    QtProtobuf::int32 secondFieldInt_p() const;
-    ComplexMessage *secondComplexField_p();
-    ComplexMessage *secondSecondComplexField_p();
-    QtProtobuf::int32 testSnakeCaseField_p() const;
-    void setTestOneofFieldInt_p(QtProtobuf::int32 testOneofFieldInt);
-    void setTestOneofComplexField_p(ComplexMessage *testOneofComplexField);
-    void setTestOneofSecondComplexField_p(ComplexMessage *testOneofSecondComplexField);
-    void setSecondFieldInt_p(QtProtobuf::int32 secondFieldInt);
-    void setSecondComplexField_p(ComplexMessage *secondComplexField);
-    void setSecondSecondComplexField_p(ComplexMessage *secondSecondComplexField);
-    void setTestSnakeCaseField_p(QtProtobuf::int32 testSnakeCaseField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testOneofFieldInt_p() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ComplexMessage *testOneofComplexField_p();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ComplexMessage *testOneofSecondComplexField_p();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 secondFieldInt_p() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ComplexMessage *secondComplexField_p();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ComplexMessage *secondSecondComplexField_p();
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testSnakeCaseField_p() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldInt_p(QtProtobuf::int32 testOneofFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofComplexField_p(ComplexMessage *testOneofComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofSecondComplexField_p(ComplexMessage *testOneofSecondComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondFieldInt_p(QtProtobuf::int32 secondFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondComplexField_p(ComplexMessage *secondComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondSecondComplexField_p(ComplexMessage *secondSecondComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestSnakeCaseField_p(QtProtobuf::int32 testSnakeCaseField);
     QExplicitlySharedDataPointer<OneofComplexMessage_QtProtobufData> dptr;
 };
 namespace OneofComplexMessage_QtProtobufNested {

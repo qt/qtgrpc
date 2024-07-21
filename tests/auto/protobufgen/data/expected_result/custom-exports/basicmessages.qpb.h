@@ -122,17 +122,17 @@ enum class QtProtobufFieldEnum;
 
 
 class EmptyMessage_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT EmptyMessage : public QProtobufMessage
+class EmptyMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
 
 public:
     using QtProtobufFieldEnum = EmptyMessage_QtProtobufNested::QtProtobufFieldEnum;
-    EmptyMessage();
-    ~EmptyMessage();
-    EmptyMessage(const EmptyMessage &other);
-    EmptyMessage &operator =(const EmptyMessage &other);
-    EmptyMessage(EmptyMessage &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT EmptyMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~EmptyMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT EmptyMessage(const EmptyMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT EmptyMessage &operator =(const EmptyMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT EmptyMessage(EmptyMessage &&other) noexcept;
     EmptyMessage &operator =(EmptyMessage &&other) noexcept
     {
         swap(other);
@@ -143,7 +143,7 @@ public:
         QProtobufMessage::swap(other);
         dptr.swap(other.dptr);
     }
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept;
@@ -163,18 +163,18 @@ Q_NAMESPACE_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
 } // namespace EmptyMessage_QtProtobufNested
 
 class SimpleBoolMessage_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleBoolMessage : public QProtobufMessage
+class SimpleBoolMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(bool testFieldBool READ testFieldBool WRITE setTestFieldBool SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleBoolMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleBoolMessage();
-    ~SimpleBoolMessage();
-    SimpleBoolMessage(const SimpleBoolMessage &other);
-    SimpleBoolMessage &operator =(const SimpleBoolMessage &other);
-    SimpleBoolMessage(SimpleBoolMessage &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleBoolMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleBoolMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleBoolMessage(const SimpleBoolMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleBoolMessage &operator =(const SimpleBoolMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleBoolMessage(SimpleBoolMessage &&other) noexcept;
     SimpleBoolMessage &operator =(SimpleBoolMessage &&other) noexcept
     {
         swap(other);
@@ -186,9 +186,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    bool testFieldBool() const;
-    void setTestFieldBool(const bool &testFieldBool);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT bool testFieldBool() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldBool(const bool &testFieldBool);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleBoolMessage &lhs, const SimpleBoolMessage &rhs) noexcept;
@@ -213,18 +213,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleBoolMessage_QtProtobufNested
 
 class SimpleIntMessage_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleIntMessage : public QProtobufMessage
+class SimpleIntMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleIntMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleIntMessage();
-    ~SimpleIntMessage();
-    SimpleIntMessage(const SimpleIntMessage &other);
-    SimpleIntMessage &operator =(const SimpleIntMessage &other);
-    SimpleIntMessage(SimpleIntMessage &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleIntMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleIntMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleIntMessage(const SimpleIntMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleIntMessage &operator =(const SimpleIntMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleIntMessage(SimpleIntMessage &&other) noexcept;
     SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept
     {
         swap(other);
@@ -236,9 +236,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::int32 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::int32 testFieldInt() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept;
@@ -263,18 +263,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleIntMessage_QtProtobufNested
 
 class SimpleSIntMessage_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSIntMessage : public QProtobufMessage
+class SimpleSIntMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleSIntMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleSIntMessage();
-    ~SimpleSIntMessage();
-    SimpleSIntMessage(const SimpleSIntMessage &other);
-    SimpleSIntMessage &operator =(const SimpleSIntMessage &other);
-    SimpleSIntMessage(SimpleSIntMessage &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSIntMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleSIntMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSIntMessage(const SimpleSIntMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSIntMessage &operator =(const SimpleSIntMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSIntMessage(SimpleSIntMessage &&other) noexcept;
     SimpleSIntMessage &operator =(SimpleSIntMessage &&other) noexcept
     {
         swap(other);
@@ -286,9 +286,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::sint32 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::sint32 &testFieldInt);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::sint32 testFieldInt() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldInt(const QtProtobuf::sint32 &testFieldInt);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleSIntMessage &lhs, const SimpleSIntMessage &rhs) noexcept;
@@ -313,18 +313,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleSIntMessage_QtProtobufNested
 
 class SimpleUIntMessage_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleUIntMessage : public QProtobufMessage
+class SimpleUIntMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::uint32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleUIntMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleUIntMessage();
-    ~SimpleUIntMessage();
-    SimpleUIntMessage(const SimpleUIntMessage &other);
-    SimpleUIntMessage &operator =(const SimpleUIntMessage &other);
-    SimpleUIntMessage(SimpleUIntMessage &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleUIntMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleUIntMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleUIntMessage(const SimpleUIntMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleUIntMessage &operator =(const SimpleUIntMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleUIntMessage(SimpleUIntMessage &&other) noexcept;
     SimpleUIntMessage &operator =(SimpleUIntMessage &&other) noexcept
     {
         swap(other);
@@ -336,9 +336,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::uint32 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::uint32 &testFieldInt);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::uint32 testFieldInt() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldInt(const QtProtobuf::uint32 &testFieldInt);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleUIntMessage &lhs, const SimpleUIntMessage &rhs) noexcept;
@@ -363,18 +363,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleUIntMessage_QtProtobufNested
 
 class SimpleInt64Message_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleInt64Message : public QProtobufMessage
+class SimpleInt64Message : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::int64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
 
 public:
     using QtProtobufFieldEnum = SimpleInt64Message_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleInt64Message();
-    ~SimpleInt64Message();
-    SimpleInt64Message(const SimpleInt64Message &other);
-    SimpleInt64Message &operator =(const SimpleInt64Message &other);
-    SimpleInt64Message(SimpleInt64Message &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleInt64Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleInt64Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleInt64Message(const SimpleInt64Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleInt64Message &operator =(const SimpleInt64Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleInt64Message(SimpleInt64Message &&other) noexcept;
     SimpleInt64Message &operator =(SimpleInt64Message &&other) noexcept
     {
         swap(other);
@@ -386,9 +386,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::int64 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::int64 &testFieldInt);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::int64 testFieldInt() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldInt(const QtProtobuf::int64 &testFieldInt);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleInt64Message &lhs, const SimpleInt64Message &rhs) noexcept;
@@ -413,18 +413,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleInt64Message_QtProtobufNested
 
 class SimpleSInt64Message_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSInt64Message : public QProtobufMessage
+class SimpleSInt64Message : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::sint64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE false)
 
 public:
     using QtProtobufFieldEnum = SimpleSInt64Message_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleSInt64Message();
-    ~SimpleSInt64Message();
-    SimpleSInt64Message(const SimpleSInt64Message &other);
-    SimpleSInt64Message &operator =(const SimpleSInt64Message &other);
-    SimpleSInt64Message(SimpleSInt64Message &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSInt64Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleSInt64Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSInt64Message(const SimpleSInt64Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSInt64Message &operator =(const SimpleSInt64Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSInt64Message(SimpleSInt64Message &&other) noexcept;
     SimpleSInt64Message &operator =(SimpleSInt64Message &&other) noexcept
     {
         swap(other);
@@ -436,9 +436,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::sint64 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::sint64 &testFieldInt);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::sint64 testFieldInt() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldInt(const QtProtobuf::sint64 &testFieldInt);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleSInt64Message &lhs, const SimpleSInt64Message &rhs) noexcept;
@@ -463,18 +463,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleSInt64Message_QtProtobufNested
 
 class SimpleUInt64Message_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleUInt64Message : public QProtobufMessage
+class SimpleUInt64Message : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::uint64 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleUInt64Message_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleUInt64Message();
-    ~SimpleUInt64Message();
-    SimpleUInt64Message(const SimpleUInt64Message &other);
-    SimpleUInt64Message &operator =(const SimpleUInt64Message &other);
-    SimpleUInt64Message(SimpleUInt64Message &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleUInt64Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleUInt64Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleUInt64Message(const SimpleUInt64Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleUInt64Message &operator =(const SimpleUInt64Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleUInt64Message(SimpleUInt64Message &&other) noexcept;
     SimpleUInt64Message &operator =(SimpleUInt64Message &&other) noexcept
     {
         swap(other);
@@ -486,9 +486,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::uint64 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::uint64 &testFieldInt);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::uint64 testFieldInt() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldInt(const QtProtobuf::uint64 &testFieldInt);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleUInt64Message &lhs, const SimpleUInt64Message &rhs) noexcept;
@@ -513,18 +513,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleUInt64Message_QtProtobufNested
 
 class SimpleStringMessage_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleStringMessage : public QProtobufMessage
+class SimpleStringMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QString testFieldString READ testFieldString WRITE setTestFieldString SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleStringMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleStringMessage();
-    ~SimpleStringMessage();
-    SimpleStringMessage(const SimpleStringMessage &other);
-    SimpleStringMessage &operator =(const SimpleStringMessage &other);
-    SimpleStringMessage(SimpleStringMessage &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleStringMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleStringMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleStringMessage(const SimpleStringMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleStringMessage &operator =(const SimpleStringMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleStringMessage(SimpleStringMessage &&other) noexcept;
     SimpleStringMessage &operator =(SimpleStringMessage &&other) noexcept
     {
         swap(other);
@@ -536,9 +536,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QString testFieldString() const;
-    void setTestFieldString(const QString &testFieldString);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QString testFieldString() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldString(const QString &testFieldString);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept;
@@ -563,18 +563,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleStringMessage_QtProtobufNested
 
 class SimpleFloatMessage_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFloatMessage : public QProtobufMessage
+class SimpleFloatMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(float testFieldFloat READ testFieldFloat WRITE setTestFieldFloat SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleFloatMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleFloatMessage();
-    ~SimpleFloatMessage();
-    SimpleFloatMessage(const SimpleFloatMessage &other);
-    SimpleFloatMessage &operator =(const SimpleFloatMessage &other);
-    SimpleFloatMessage(SimpleFloatMessage &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFloatMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleFloatMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFloatMessage(const SimpleFloatMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFloatMessage &operator =(const SimpleFloatMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFloatMessage(SimpleFloatMessage &&other) noexcept;
     SimpleFloatMessage &operator =(SimpleFloatMessage &&other) noexcept
     {
         swap(other);
@@ -586,9 +586,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    float testFieldFloat() const;
-    void setTestFieldFloat(const float &testFieldFloat);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT float testFieldFloat() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldFloat(const float &testFieldFloat);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleFloatMessage &lhs, const SimpleFloatMessage &rhs) noexcept;
@@ -613,18 +613,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleFloatMessage_QtProtobufNested
 
 class SimpleDoubleMessage_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleDoubleMessage : public QProtobufMessage
+class SimpleDoubleMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(double testFieldDouble READ testFieldDouble WRITE setTestFieldDouble SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleDoubleMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleDoubleMessage();
-    ~SimpleDoubleMessage();
-    SimpleDoubleMessage(const SimpleDoubleMessage &other);
-    SimpleDoubleMessage &operator =(const SimpleDoubleMessage &other);
-    SimpleDoubleMessage(SimpleDoubleMessage &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleDoubleMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleDoubleMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleDoubleMessage(const SimpleDoubleMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleDoubleMessage &operator =(const SimpleDoubleMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleDoubleMessage(SimpleDoubleMessage &&other) noexcept;
     SimpleDoubleMessage &operator =(SimpleDoubleMessage &&other) noexcept
     {
         swap(other);
@@ -636,9 +636,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    double testFieldDouble() const;
-    void setTestFieldDouble(const double &testFieldDouble);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT double testFieldDouble() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldDouble(const double &testFieldDouble);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleDoubleMessage &lhs, const SimpleDoubleMessage &rhs) noexcept;
@@ -663,18 +663,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleDoubleMessage_QtProtobufNested
 
 class SimpleBytesMessage_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleBytesMessage : public QProtobufMessage
+class SimpleBytesMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QByteArray testFieldBytes READ testFieldBytes WRITE setTestFieldBytes SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleBytesMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleBytesMessage();
-    ~SimpleBytesMessage();
-    SimpleBytesMessage(const SimpleBytesMessage &other);
-    SimpleBytesMessage &operator =(const SimpleBytesMessage &other);
-    SimpleBytesMessage(SimpleBytesMessage &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleBytesMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleBytesMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleBytesMessage(const SimpleBytesMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleBytesMessage &operator =(const SimpleBytesMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleBytesMessage(SimpleBytesMessage &&other) noexcept;
     SimpleBytesMessage &operator =(SimpleBytesMessage &&other) noexcept
     {
         swap(other);
@@ -686,9 +686,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QByteArray testFieldBytes() const;
-    void setTestFieldBytes(const QByteArray &testFieldBytes);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QByteArray testFieldBytes() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldBytes(const QByteArray &testFieldBytes);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleBytesMessage &lhs, const SimpleBytesMessage &rhs) noexcept;
@@ -713,18 +713,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleBytesMessage_QtProtobufNested
 
 class SimpleFixedInt32Message_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFixedInt32Message : public QProtobufMessage
+class SimpleFixedInt32Message : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::fixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleFixedInt32Message_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleFixedInt32Message();
-    ~SimpleFixedInt32Message();
-    SimpleFixedInt32Message(const SimpleFixedInt32Message &other);
-    SimpleFixedInt32Message &operator =(const SimpleFixedInt32Message &other);
-    SimpleFixedInt32Message(SimpleFixedInt32Message &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFixedInt32Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleFixedInt32Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFixedInt32Message(const SimpleFixedInt32Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFixedInt32Message &operator =(const SimpleFixedInt32Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFixedInt32Message(SimpleFixedInt32Message &&other) noexcept;
     SimpleFixedInt32Message &operator =(SimpleFixedInt32Message &&other) noexcept
     {
         swap(other);
@@ -736,9 +736,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::fixed32 testFieldFixedInt32() const;
-    void setTestFieldFixedInt32(const QtProtobuf::fixed32 &testFieldFixedInt32);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::fixed32 testFieldFixedInt32() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldFixedInt32(const QtProtobuf::fixed32 &testFieldFixedInt32);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleFixedInt32Message &lhs, const SimpleFixedInt32Message &rhs) noexcept;
@@ -763,18 +763,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleFixedInt32Message_QtProtobufNested
 
 class SimpleFixedInt64Message_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFixedInt64Message : public QProtobufMessage
+class SimpleFixedInt64Message : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::fixed64 testFieldFixedInt64 READ testFieldFixedInt64 WRITE setTestFieldFixedInt64 SCRIPTABLE false)
 
 public:
     using QtProtobufFieldEnum = SimpleFixedInt64Message_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleFixedInt64Message();
-    ~SimpleFixedInt64Message();
-    SimpleFixedInt64Message(const SimpleFixedInt64Message &other);
-    SimpleFixedInt64Message &operator =(const SimpleFixedInt64Message &other);
-    SimpleFixedInt64Message(SimpleFixedInt64Message &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFixedInt64Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleFixedInt64Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFixedInt64Message(const SimpleFixedInt64Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFixedInt64Message &operator =(const SimpleFixedInt64Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleFixedInt64Message(SimpleFixedInt64Message &&other) noexcept;
     SimpleFixedInt64Message &operator =(SimpleFixedInt64Message &&other) noexcept
     {
         swap(other);
@@ -786,9 +786,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::fixed64 testFieldFixedInt64() const;
-    void setTestFieldFixedInt64(const QtProtobuf::fixed64 &testFieldFixedInt64);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::fixed64 testFieldFixedInt64() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldFixedInt64(const QtProtobuf::fixed64 &testFieldFixedInt64);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleFixedInt64Message &lhs, const SimpleFixedInt64Message &rhs) noexcept;
@@ -813,18 +813,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleFixedInt64Message_QtProtobufNested
 
 class SimpleSFixedInt32Message_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSFixedInt32Message : public QProtobufMessage
+class SimpleSFixedInt32Message : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::sfixed32 testFieldFixedInt32 READ testFieldFixedInt32 WRITE setTestFieldFixedInt32 SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleSFixedInt32Message_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleSFixedInt32Message();
-    ~SimpleSFixedInt32Message();
-    SimpleSFixedInt32Message(const SimpleSFixedInt32Message &other);
-    SimpleSFixedInt32Message &operator =(const SimpleSFixedInt32Message &other);
-    SimpleSFixedInt32Message(SimpleSFixedInt32Message &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSFixedInt32Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleSFixedInt32Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSFixedInt32Message(const SimpleSFixedInt32Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSFixedInt32Message &operator =(const SimpleSFixedInt32Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSFixedInt32Message(SimpleSFixedInt32Message &&other) noexcept;
     SimpleSFixedInt32Message &operator =(SimpleSFixedInt32Message &&other) noexcept
     {
         swap(other);
@@ -836,9 +836,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::sfixed32 testFieldFixedInt32() const;
-    void setTestFieldFixedInt32(const QtProtobuf::sfixed32 &testFieldFixedInt32);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::sfixed32 testFieldFixedInt32() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldFixedInt32(const QtProtobuf::sfixed32 &testFieldFixedInt32);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleSFixedInt32Message &lhs, const SimpleSFixedInt32Message &rhs) noexcept;
@@ -863,18 +863,18 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleSFixedInt32Message_QtProtobufNested
 
 class SimpleSFixedInt64Message_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSFixedInt64Message : public QProtobufMessage
+class SimpleSFixedInt64Message : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::sfixed64 testFieldFixedInt64 READ testFieldFixedInt64 WRITE setTestFieldFixedInt64 SCRIPTABLE false)
 
 public:
     using QtProtobufFieldEnum = SimpleSFixedInt64Message_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleSFixedInt64Message();
-    ~SimpleSFixedInt64Message();
-    SimpleSFixedInt64Message(const SimpleSFixedInt64Message &other);
-    SimpleSFixedInt64Message &operator =(const SimpleSFixedInt64Message &other);
-    SimpleSFixedInt64Message(SimpleSFixedInt64Message &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSFixedInt64Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~SimpleSFixedInt64Message();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSFixedInt64Message(const SimpleSFixedInt64Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSFixedInt64Message &operator =(const SimpleSFixedInt64Message &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleSFixedInt64Message(SimpleSFixedInt64Message &&other) noexcept;
     SimpleSFixedInt64Message &operator =(SimpleSFixedInt64Message &&other) noexcept
     {
         swap(other);
@@ -886,9 +886,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::sfixed64 testFieldFixedInt64() const;
-    void setTestFieldFixedInt64(const QtProtobuf::sfixed64 &testFieldFixedInt64);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::sfixed64 testFieldFixedInt64() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldFixedInt64(const QtProtobuf::sfixed64 &testFieldFixedInt64);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const SimpleSFixedInt64Message &lhs, const SimpleSFixedInt64Message &rhs) noexcept;
@@ -913,20 +913,20 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleSFixedInt64Message_QtProtobufNested
 
 class ComplexMessage_QtProtobufData;
-class QPB_CUSTOM_EXPORT_NAME_EXPORT ComplexMessage : public QProtobufMessage
+class ComplexMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_CUSTOM_EXPORT_NAME_EXPORT)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
     Q_PROPERTY(qtprotobufnamespace::tests::SimpleStringMessage *testComplexField_p READ testComplexField_p WRITE setTestComplexField_p SCRIPTABLE false)
     Q_PROPERTY(bool hasTestComplexField READ hasTestComplexField)
 
 public:
     using QtProtobufFieldEnum = ComplexMessage_QtProtobufNested::QtProtobufFieldEnum;
-    ComplexMessage();
-    ~ComplexMessage();
-    ComplexMessage(const ComplexMessage &other);
-    ComplexMessage &operator =(const ComplexMessage &other);
-    ComplexMessage(ComplexMessage &&other) noexcept;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ComplexMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ~ComplexMessage();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ComplexMessage(const ComplexMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ComplexMessage &operator =(const ComplexMessage &other);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT ComplexMessage(ComplexMessage &&other) noexcept;
     ComplexMessage &operator =(ComplexMessage &&other) noexcept
     {
         swap(other);
@@ -938,15 +938,15 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::int32 testFieldInt() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::int32 testFieldInt() const;
 
-    bool hasTestComplexField() const;
-    SimpleStringMessage &testComplexField();
-    const SimpleStringMessage &testComplexField() const;
-    void clearTestComplexField();
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
-    void setTestComplexField(const SimpleStringMessage &testComplexField);
-    static void registerTypes();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT bool hasTestComplexField() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleStringMessage &testComplexField();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT const SimpleStringMessage &testComplexField() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void clearTestComplexField();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestComplexField(const SimpleStringMessage &testComplexField);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
 
 private:
     friend QPB_CUSTOM_EXPORT_NAME_EXPORT bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept;
@@ -958,8 +958,8 @@ private:
     {
         return !comparesEqual(lhs, rhs);
     }
-    SimpleStringMessage *testComplexField_p();
-    void setTestComplexField_p(SimpleStringMessage *testComplexField);
+    QPB_CUSTOM_EXPORT_NAME_EXPORT SimpleStringMessage *testComplexField_p();
+    QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestComplexField_p(SimpleStringMessage *testComplexField);
     QExplicitlySharedDataPointer<ComplexMessage_QtProtobufData> dptr;
 };
 namespace ComplexMessage_QtProtobufNested {
