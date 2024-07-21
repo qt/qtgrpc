@@ -144,7 +144,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedStringMessage &lhs, const RepeatedStringMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedStringMessage &lhs, const RepeatedStringMessage &rhs) noexcept;
     friend bool operator==(const RepeatedStringMessage &lhs, const RepeatedStringMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -194,7 +194,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedDoubleMessage &lhs, const RepeatedDoubleMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedDoubleMessage &lhs, const RepeatedDoubleMessage &rhs) noexcept;
     friend bool operator==(const RepeatedDoubleMessage &lhs, const RepeatedDoubleMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -244,7 +244,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedBytesMessage &lhs, const RepeatedBytesMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedBytesMessage &lhs, const RepeatedBytesMessage &rhs) noexcept;
     friend bool operator==(const RepeatedBytesMessage &lhs, const RepeatedBytesMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -294,7 +294,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedFloatMessage &lhs, const RepeatedFloatMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedFloatMessage &lhs, const RepeatedFloatMessage &rhs) noexcept;
     friend bool operator==(const RepeatedFloatMessage &lhs, const RepeatedFloatMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -344,7 +344,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedComplexMessage &lhs, const RepeatedComplexMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedComplexMessage &lhs, const RepeatedComplexMessage &rhs) noexcept;
     friend bool operator==(const RepeatedComplexMessage &lhs, const RepeatedComplexMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -394,7 +394,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedSIntMessage &lhs, const RepeatedSIntMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedSIntMessage &lhs, const RepeatedSIntMessage &rhs) noexcept;
     friend bool operator==(const RepeatedSIntMessage &lhs, const RepeatedSIntMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -444,7 +444,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedIntMessage &lhs, const RepeatedIntMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedIntMessage &lhs, const RepeatedIntMessage &rhs) noexcept;
     friend bool operator==(const RepeatedIntMessage &lhs, const RepeatedIntMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -494,7 +494,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedUIntMessage &lhs, const RepeatedUIntMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedUIntMessage &lhs, const RepeatedUIntMessage &rhs) noexcept;
     friend bool operator==(const RepeatedUIntMessage &lhs, const RepeatedUIntMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -544,7 +544,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedSInt64Message &lhs, const RepeatedSInt64Message &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedSInt64Message &lhs, const RepeatedSInt64Message &rhs) noexcept;
     friend bool operator==(const RepeatedSInt64Message &lhs, const RepeatedSInt64Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -594,7 +594,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedInt64Message &lhs, const RepeatedInt64Message &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedInt64Message &lhs, const RepeatedInt64Message &rhs) noexcept;
     friend bool operator==(const RepeatedInt64Message &lhs, const RepeatedInt64Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -644,7 +644,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedUInt64Message &lhs, const RepeatedUInt64Message &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedUInt64Message &lhs, const RepeatedUInt64Message &rhs) noexcept;
     friend bool operator==(const RepeatedUInt64Message &lhs, const RepeatedUInt64Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -694,7 +694,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedFixedIntMessage &lhs, const RepeatedFixedIntMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedFixedIntMessage &lhs, const RepeatedFixedIntMessage &rhs) noexcept;
     friend bool operator==(const RepeatedFixedIntMessage &lhs, const RepeatedFixedIntMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -744,7 +744,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedSFixedIntMessage &lhs, const RepeatedSFixedIntMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedSFixedIntMessage &lhs, const RepeatedSFixedIntMessage &rhs) noexcept;
     friend bool operator==(const RepeatedSFixedIntMessage &lhs, const RepeatedSFixedIntMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -794,7 +794,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedFixedInt64Message &lhs, const RepeatedFixedInt64Message &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedFixedInt64Message &lhs, const RepeatedFixedInt64Message &rhs) noexcept;
     friend bool operator==(const RepeatedFixedInt64Message &lhs, const RepeatedFixedInt64Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -844,7 +844,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedSFixedInt64Message &lhs, const RepeatedSFixedInt64Message &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedSFixedInt64Message &lhs, const RepeatedSFixedInt64Message &rhs) noexcept;
     friend bool operator==(const RepeatedSFixedInt64Message &lhs, const RepeatedSFixedInt64Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -894,7 +894,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedBoolMessage &lhs, const RepeatedBoolMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedBoolMessage &lhs, const RepeatedBoolMessage &rhs) noexcept;
     friend bool operator==(const RepeatedBoolMessage &lhs, const RepeatedBoolMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);

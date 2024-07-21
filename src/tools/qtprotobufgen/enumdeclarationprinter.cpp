@@ -23,8 +23,10 @@ void EnumDeclarationPrinter::startEnum()
 {
     m_printer->Print(m_typeMap, CommonTemplates::EnumGadgetDeclarationTemplate());
 
-    if (!m_typeMap["export_macro"].empty())
-        m_printer->Print(m_typeMap, CommonTemplates::QNamespaceDeclarationTemplate());
+    static const std::string exportMacro = common::buildExportMacro(false);
+    if (!exportMacro.empty())
+        m_printer->Print({{ "export_macro", exportMacro }},
+                         CommonTemplates::QNamespaceDeclarationTemplate());
     else
         m_printer->Print(m_typeMap, CommonTemplates::QNamespaceDeclarationNoExportTemplate());
 

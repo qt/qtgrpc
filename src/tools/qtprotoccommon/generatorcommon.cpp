@@ -76,6 +76,18 @@ std::string common::getFullNamespace(std::string_view fullDescriptorName,
     return output;
 }
 
+std::string common::buildExportMacro(bool addTrailingSpace)
+{
+    static const std::string &macroOption = Options::instance().exportMacro();
+    if (macroOption.empty())
+        return macroOption;
+
+    static std::string macro = "QPB_" + macroOption + "_EXPORT";
+    std::string resultingMacro = macro;
+    if (addTrailingSpace)
+        resultingMacro += ' ';
+    return resultingMacro;
+}
 /*
     Constructs a C++ namespace for wrapping nested message types.
     E.g. for the message descriptor with name "test.protobuf.MessageType.NestedMessageType" the
@@ -214,8 +226,7 @@ TypeMap common::produceMessageTypeMap(const Descriptor *type, const Descriptor *
     std::string scopeListName =
             scopeNamespaces.empty() ? listName : (scopeNamespaces + "::" + listName);
 
-    std::string exportMacro = Options::instance().exportMacro();
-    exportMacro = common::buildExportMacro(exportMacro);
+    std::string exportMacro = common::buildExportMacro();
 
     const std::string initializer = "nullptr";
     return { { "classname", name },
@@ -268,8 +279,7 @@ TypeMap common::produceEnumTypeMap(const EnumDescriptor *type, const Descriptor 
     // Note: For local enum classes it's impossible to use class name space in Q_PROPERTY
     // declaration. So please avoid addition of namespaces in line bellow
     std::string propertyType = visibility == LOCAL_ENUM ? name : fullName;
-    std::string exportMacro = Options::instance().exportMacro();
-    exportMacro = common::buildExportMacro(exportMacro);
+    std::string exportMacro =  common::buildExportMacro();
 
     std::string initializer = scopeName + "::" + common::qualifiedCppName(type->value(0)->name());
     return { { "classname", name },
@@ -360,7 +370,7 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
         streamType = "Client";
     }
 
-    const std::string exportMacro = common::buildExportMacro(Options::instance().exportMacro());
+    static const std::string exportMacro = common::buildExportMacro();
 
     return {
         {"classname",           scope                              },
@@ -383,7 +393,7 @@ TypeMap common::produceServiceTypeMap(const ServiceDescriptor *service, const De
     const std::string name = "Service";
     const std::string fullName = "Service";
     const std::string scopeName = service->name();
-    const std::string exportMacro = common::buildExportMacro(Options::instance().exportMacro());
+    static const std::string exportMacro = common::buildExportMacro();
 
     const std::string namespaces = getFullNamespace(service, "::");
     const std::string scopeNamespaces = getScopeNamespace(namespaces,
@@ -403,7 +413,7 @@ TypeMap common::produceClientTypeMap(const ServiceDescriptor *service, const Des
     const std::string name = "Client";
     const std::string fullName = "Client";
     const std::string scopeName = service->name();
-    const std::string exportMacro = common::buildExportMacro(Options::instance().exportMacro());
+    static const std::string exportMacro = common::buildExportMacro();
 
     const std::string namespaces = getFullNamespace(service, "::");
     const std::string scopeNamespaces = getScopeNamespace(namespaces,
@@ -423,7 +433,7 @@ TypeMap common::produceQmlClientTypeMap(const ServiceDescriptor *service, const 
     const std::string name = "QmlClient";
     const std::string fullName = "QmlClient";
     const std::string serviceName = service->name();
-    const std::string exportMacro = common::buildExportMacro(Options::instance().exportMacro());
+    static const std::string exportMacro = common::buildExportMacro();
 
     const std::string namespaces = getFullNamespace(service, "::");
     const std::string scopeNamespaces = getScopeNamespace(namespaces,
@@ -525,6 +535,7 @@ PropertyMap common::producePropertyMap(const OneofDescriptor *oneof, const Descr
     propertyMap["classname"] = scope != nullptr ? scopeTypeMap["classname"] : "";
     propertyMap["dataclassname"] = propertyMap["classname"] + CommonTemplates::DataClassName();
     propertyMap["type"] = propertyMap["optional_property_name_cap"] + "Fields";
+    propertyMap["export_macro"] = common::buildExportMacro();
 
     return propertyMap;
 }
@@ -551,6 +562,7 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
     propertyMap["property_name"] = propertyName;
     propertyMap["property_name_cap"] = propertyNameCap;
     propertyMap["scriptable"] = scriptable;
+    propertyMap["export_macro"] = common::buildExportMacro();
 
     auto scopeTypeMap = produceMessageTypeMap(scope, nullptr);
     propertyMap["key_type"] = "";

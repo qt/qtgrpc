@@ -116,7 +116,7 @@ const char *CommonTemplates::ExternalIncludeTemplate()
 
 const char *CommonTemplates::EnumRegistrationDeclaration()
 {
-    return "$export_macro$ void registerTypes();\n";
+    return "$export_macro$void registerTypes();\n";
 }
 
 const char *CommonTemplates::EnumRegistrationDeclarationNoExport()
@@ -126,7 +126,7 @@ const char *CommonTemplates::EnumRegistrationDeclarationNoExport()
 
 const char *CommonTemplates::MetaTypeRegistrationDeclaration()
 {
-    return "static void registerTypes();\n";
+    return "$export_macro$static void registerTypes();\n";
 }
 const char *CommonTemplates::MetaTypeRegistrationMessageDefinition()
 {
@@ -209,17 +209,18 @@ const char *CommonTemplates::ClassMessageQmlBeginDeclarationTemplate()
 const char *CommonTemplates::ClassMessageBeginDeclarationTemplate()
 {
     return "\nclass $dataclassname$;\n"
-           "class $export_macro$ $classname$ : public QProtobufMessage\n"
-           "{\n"
-           "    Q_PROTOBUF_OBJECT\n";
+           "class $classname$ : public QProtobufMessage\n"
+           "{\n";
 }
 
-const char *CommonTemplates::ClassMessageBeginDeclarationTemplateEmptyMacros()
+const char *CommonTemplates::Q_PROTOBUF_OBJECTMacro()
 {
-    return "\nclass $dataclassname$;\n"
-           "class $classname$ : public QProtobufMessage\n"
-           "{\n"
-           "    Q_PROTOBUF_OBJECT\n";
+    return "Q_PROTOBUF_OBJECT\n";
+}
+
+const char *CommonTemplates::Q_PROTOBUF_OBJECT_EXPORTMacro()
+{
+    return "Q_PROTOBUF_OBJECT_EXPORT($export_macro$)\n";
 }
 
 const char *CommonTemplates::ClassMessageDataBeginDeclarationTemplate()
@@ -284,12 +285,12 @@ const char *CommonTemplates::PropertyHasFieldTemplate()
 
 const char *CommonTemplates::ConstructorMessageDeclarationTemplate()
 {
-    return "$classname$();\n";
+    return "$export_macro$$classname$();\n";
 }
 
 const char *CommonTemplates::DestructorMessageDeclarationTemplate()
 {
-    return "~$classname$();\n";
+    return "$export_macro$~$classname$();\n";
 }
 
 const char *CommonTemplates::MemberSharedDataPointerTemplate()
@@ -351,18 +352,13 @@ const char *CommonTemplates::UseNamespace()
     return "using namespace $namespace$;\n";
 }
 
-const char *CommonTemplates::QObjectConstructorMessageDeclarationTemplate()
-{
-    return "explicit $classname$(QObject *parent = nullptr);\n";
-}
-
 const char *CommonTemplates::CopyConstructorDeclarationTemplate()
 {
-    return "$classname$(const $classname$ &other);\n";
+    return "$export_macro$$classname$(const $classname$ &other);\n";
 }
 const char *CommonTemplates::MoveConstructorDeclarationTemplate()
 {
-    return "$classname$($classname$ &&other) noexcept;\n";
+    return "$export_macro$$classname$($classname$ &&other) noexcept;\n";
 }
 const char *CommonTemplates::CopyConstructorDefinitionTemplate()
 {
@@ -381,7 +377,7 @@ const char *CommonTemplates::MoveConstructorDefinitionTemplate()
 
 const char *CommonTemplates::AssignmentOperatorDeclarationTemplate()
 {
-    return "$classname$ &operator =(const $classname$ &other);\n";
+    return "$export_macro$$classname$ &operator =(const $classname$ &other);\n";
 }
 const char *CommonTemplates::AssignmentOperatorDefinitionTemplate()
 {
@@ -413,7 +409,7 @@ const char *CommonTemplates::SwapDeclarationTemplate()
 
 const char *CommonTemplates::EqualityDeclarationTemplate()
 {
-    return "friend $export_macro$ bool comparesEqual(const $classname$ &lhs, "
+    return "friend $export_macro$bool comparesEqual(const $classname$ &lhs, "
            "const $classname$ &rhs) noexcept;\n"
            "friend bool operator==(const $classname$ &lhs, const $classname$ &rhs) noexcept\n"
            "{\n"
@@ -452,7 +448,7 @@ const char *CommonTemplates::EqualOperatorMemberOneofTemplate()
 
 const char *CommonTemplates::PrivateGetterMessageDeclarationTemplate()
 {
-    return "$getter_type$ *$property_name$_p();\n";
+    return "$export_macro$$getter_type$ *$property_name$_p();\n";
 }
 const char *CommonTemplates::PrivateGetterMessageDefinitionTemplate()
 {
@@ -465,12 +461,12 @@ const char *CommonTemplates::PrivateGetterMessageDefinitionTemplate()
 
 const char *CommonTemplates::ClearMessageDeclarationTemplate()
 {
-    return "void clear$property_name_cap$();\n";
+    return "$export_macro$void clear$property_name_cap$();\n";
 }
 
 const char *CommonTemplates::ClearQmlMessageDeclarationTemplate()
 {
-    return "Q_INVOKABLE void clear$property_name_cap$();\n";
+    return "Q_INVOKABLE $export_macro$void clear$property_name_cap$();\n";
 }
 
 const char *CommonTemplates::ClearMessageDefinitionTemplate()
@@ -485,9 +481,9 @@ const char *CommonTemplates::ClearMessageDefinitionTemplate()
 
 const char *CommonTemplates::GetterMessageDeclarationTemplate()
 {
-    return "bool has$property_name_cap$() const;\n"
-           "$getter_type$ &$property_name$();\n"
-           "const $getter_type$ &$property_name$() const;\n";
+    return "$export_macro$bool has$property_name_cap$() const;\n"
+           "$export_macro$$getter_type$ &$property_name$();\n"
+           "$export_macro$const $getter_type$ &$property_name$() const;\n";
 }
 const char *CommonTemplates::GetterMessageDefinitionTemplate()
 {
@@ -507,7 +503,7 @@ const char *CommonTemplates::GetterMessageDefinitionTemplate()
 
 const char *CommonTemplates::PrivateGetterOneofDeclarationTemplate()
 {
-    return "$getter_type$ $property_name$_p() const;\n";
+    return "$export_macro$$getter_type$ $property_name$_p() const;\n";
 }
 const char *CommonTemplates::PrivateGetterOneofDefinitionTemplate()
 {
@@ -528,7 +524,7 @@ const char *CommonTemplates::PrivateGetterOptionalDefinitionTemplate()
 
 const char *CommonTemplates::PrivateGetterOneofMessageDeclarationTemplate()
 {
-    return "$getter_type$ *$property_name$_p();\n";
+    return "$export_macro$$getter_type$ *$property_name$_p();\n";
 }
 const char *CommonTemplates::PrivateGetterOneofMessageDefinitionTemplate()
 {
@@ -541,7 +537,7 @@ const char *CommonTemplates::PrivateGetterOneofMessageDefinitionTemplate()
 
 const char *CommonTemplates::GetterOneofFieldNumberDeclarationTemplate()
 {
-    return "$type$ $optional_property_name$Field() const;\n";
+    return "$export_macro$$type$ $optional_property_name$Field() const;\n";
 }
 const char *CommonTemplates::GetterOneofFieldNumberDefinitionTemplate()
 {
@@ -553,8 +549,8 @@ const char *CommonTemplates::GetterOneofFieldNumberDefinitionTemplate()
 
 const char *CommonTemplates::GetterOneofDeclarationTemplate()
 {
-    return "bool has$property_name_cap$() const;\n"
-           "$getter_type$ $property_name$() const;\n";
+    return "$export_macro$bool has$property_name_cap$() const;\n"
+           "$export_macro$$getter_type$ $property_name$() const;\n";
 }
 const char *CommonTemplates::GetterOneofDefinitionTemplate()
 {
@@ -579,8 +575,8 @@ const char *CommonTemplates::GetterOptionalDefinitionTemplate()
 
 const char *CommonTemplates::GetterOneofMessageDeclarationTemplate()
 {
-    return "bool has$property_name_cap$() const;\n"
-           "$getter_type$ &$property_name$() const;\n";
+    return "$export_macro$bool has$property_name_cap$() const;\n"
+           "$export_macro$$getter_type$ &$property_name$() const;\n";
 }
 const char *CommonTemplates::GetterOneofMessageDefinitionTemplate()
 {
@@ -595,7 +591,7 @@ const char *CommonTemplates::GetterOneofMessageDefinitionTemplate()
 
 const char *CommonTemplates::GetterDeclarationTemplate()
 {
-    return "$getter_type$ $property_name$() const;\n";
+    return "$export_macro$$getter_type$ $property_name$() const;\n";
 }
 
 const char *CommonTemplates::GetterDefinitionTemplate()
@@ -607,7 +603,7 @@ const char *CommonTemplates::GetterDefinitionTemplate()
 
 const char *CommonTemplates::PrivateSetterMessageDeclarationTemplate()
 {
-    return "void set$property_name_cap$_p($setter_type$ *$property_name$);\n";
+    return "$export_macro$void set$property_name_cap$_p($setter_type$ *$property_name$);\n";
 }
 const char *CommonTemplates::PrivateSetterMessageDefinitionTemplate()
 {
@@ -621,7 +617,7 @@ const char *CommonTemplates::PrivateSetterMessageDefinitionTemplate()
 
 const char *CommonTemplates::SetterMessageDeclarationTemplate()
 {
-    return "void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
+    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
 }
 const char *CommonTemplates::SetterMessageDefinitionTemplate()
 {
@@ -635,7 +631,7 @@ const char *CommonTemplates::SetterMessageDefinitionTemplate()
 
 const char *CommonTemplates::SetterComplexDeclarationTemplate()
 {
-    return "void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
+    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
 }
 const char *CommonTemplates::SetterComplexDefinitionTemplate()
 {
@@ -649,7 +645,7 @@ const char *CommonTemplates::SetterComplexDefinitionTemplate()
 
 const char *CommonTemplates::PrivateSetterOneofMessageDeclarationTemplate()
 {
-    return "void set$property_name_cap$_p($setter_type$ *$property_name$);\n";
+    return "$export_macro$void set$property_name_cap$_p($setter_type$ *$property_name$);\n";
 }
 const char *CommonTemplates::PrivateSetterOneofMessageDefinitionTemplate()
 {
@@ -664,7 +660,7 @@ const char *CommonTemplates::PrivateSetterOneofMessageDefinitionTemplate()
 
 const char *CommonTemplates::PrivateSetterOneofDeclarationTemplate()
 {
-    return "void set$property_name_cap$_p($setter_type$ $property_name$);\n";
+    return "$export_macro$void set$property_name_cap$_p($setter_type$ $property_name$);\n";
 }
 const char *CommonTemplates::PrivateSetterOneofDefinitionTemplate()
 {
@@ -689,11 +685,11 @@ const char *CommonTemplates::PrivateSetterOptionalDefinitionTemplate()
 
 const char *CommonTemplates::ClearOneofDeclarationTemplate()
 {
-    return "void clear$optional_property_name_cap$();\n";
+    return "$export_macro$void clear$optional_property_name_cap$();\n";
 }
 const char *CommonTemplates::ClearQmlOneofDeclarationTemplate()
 {
-    return "Q_INVOKABLE void clear$optional_property_name_cap$();\n";
+    return "Q_INVOKABLE $export_macro$void clear$optional_property_name_cap$();\n";
 }
 const char *CommonTemplates::ClearOneofDefinitionTemplate()
 {
@@ -717,7 +713,7 @@ const char *CommonTemplates::ClearOptionalDefinitionTemplate()
 
 const char *CommonTemplates::SetterOneofDeclarationTemplate()
 {
-    return "void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
+    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
 }
 const char *CommonTemplates::SetterOneofDefinitionTemplate()
 {
@@ -740,7 +736,7 @@ const char *CommonTemplates::SetterOptionalDefinitionTemplate()
 }
 const char *CommonTemplates::SetterDeclarationTemplate()
 {
-    return "void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
+    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
 }
 
 const char *CommonTemplates::SetterDefinitionTemplate()
@@ -847,7 +843,8 @@ const char *CommonTemplates::EmptyBracesTemplate()
     return "\n{\n}\n\n";
 }
 
-const char *CommonTemplates::DeclareMetaTypeTemplate()
+const char *CommonTemplates::DeclareMetaTypeTemplate
+    ()
 {
     return "Q_DECLARE_METATYPE($full_type$)\n";
 }
@@ -910,6 +907,12 @@ const char *CommonTemplates::QmlRegisterMessageTypeTemplate()
            "        uri, 1, 0, \"$type$\", "
            "\"You can only use the nested enums of $type$, "
            "but not create its instances in QML scope.\");\n";
+}
+
+const char *CommonTemplates::QDateTimeExtrasTemplate()
+{
+    return "$export_macro$static Timestamp fromDateTime(const QDateTime &dateTime);\n"
+           "$export_macro$QDateTime toDateTime() const;\n";
 }
 
 const char *CommonTemplates::RepeatedSuffix()

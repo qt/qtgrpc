@@ -19,7 +19,7 @@
 namespace qtgrpc::tests {
 namespace TestService {
 
-class  Client : public QGrpcClientBase
+class Client : public QGrpcClientBase
 {
     Q_OBJECT
 

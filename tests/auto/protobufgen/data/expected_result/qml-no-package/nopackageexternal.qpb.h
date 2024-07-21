@@ -28,19 +28,19 @@ enum class QtProtobufFieldEnum;
 
 
 class SimpleIntMessageExt_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt : public QProtobufMessage
+class SimpleIntMessageExt : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
     QML_VALUE_TYPE(simpleIntMessageExt)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleIntMessageExt_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleIntMessageExt();
-    ~SimpleIntMessageExt();
-    SimpleIntMessageExt(const SimpleIntMessageExt &other);
-    SimpleIntMessageExt &operator =(const SimpleIntMessageExt &other);
-    SimpleIntMessageExt(SimpleIntMessageExt &&other) noexcept;
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT ~SimpleIntMessageExt();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt(const SimpleIntMessageExt &other);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt &operator =(const SimpleIntMessageExt &other);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt(SimpleIntMessageExt &&other) noexcept;
     SimpleIntMessageExt &operator =(SimpleIntMessageExt &&other) noexcept
     {
         swap(other);
@@ -52,9 +52,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::int32 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
-    static void registerTypes();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT QtProtobuf::int32 testFieldInt() const;
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool comparesEqual(const SimpleIntMessageExt &lhs, const SimpleIntMessageExt &rhs) noexcept;

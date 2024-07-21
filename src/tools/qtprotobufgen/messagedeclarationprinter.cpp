@@ -82,10 +82,13 @@ void MessageDeclarationPrinter::printClassDeclarationPrivate()
         auto scopeNamespaces = common::getNestedScopeNamespace(m_typeMap["classname"]);
         m_printer->Print(scopeNamespaces, CommonTemplates::NamespaceTemplate());
 
-        if (!m_typeMap["export_macro"].empty())
-            m_printer->Print(m_typeMap, CommonTemplates::QNamespaceDeclarationTemplate());
-        else
+        static const std::string exportMacro = common::buildExportMacro(false);
+        if (!exportMacro.empty()) {
+            m_printer->Print({{ "export_macro", exportMacro }},
+                             CommonTemplates::QNamespaceDeclarationTemplate());
+        } else {
             m_printer->Print(m_typeMap, CommonTemplates::QNamespaceDeclarationNoExportTemplate());
+        }
 
         if (Options::instance().hasQml())
             m_printer->Print(m_typeMap, CommonTemplates::QmlNamedElement());
@@ -176,13 +179,18 @@ void MessageDeclarationPrinter::printNested()
 
 void MessageDeclarationPrinter::printClassDeclarationBegin()
 {
-    const std::string exportMacro = Options::instance().exportMacro();
+    m_printer->Print(m_typeMap, CommonTemplates::ClassMessageBeginDeclarationTemplate());
+
+    Indent();
+    static const std::string exportMacro = common::buildExportMacro(false);
     if (exportMacro.empty()) {
-        m_printer->Print(m_typeMap,
-                         CommonTemplates::ClassMessageBeginDeclarationTemplateEmptyMacros());
+        m_printer->Print({{ "export_macro", exportMacro }},
+                         CommonTemplates::Q_PROTOBUF_OBJECTMacro());
     } else {
-        m_printer->Print(m_typeMap, CommonTemplates::ClassMessageBeginDeclarationTemplate());
+        m_printer->Print({{ "export_macro", exportMacro }},
+                         CommonTemplates::Q_PROTOBUF_OBJECT_EXPORTMacro());
     }
+    Outdent();
 
     if (Options::instance().hasQml()) {
         m_printer->Print(m_typeMap, CommonTemplates::ClassMessageQmlBeginDeclarationTemplate());
@@ -438,8 +446,9 @@ void MessageDeclarationPrinter::printOneofEnums()
 void MessageDeclarationPrinter::printPublicExtras()
 {
     if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
-        m_printer->Print("static Timestamp fromDateTime(const QDateTime &dateTime);\n"
-                         "QDateTime toDateTime() const;\n");
+        static const std::string exportMacro = common::buildExportMacro();
+        m_printer->Print({ { "export_macro", exportMacro } },
+                         CommonTemplates::QDateTimeExtrasTemplate());
     }
 }
 

@@ -78,7 +78,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const AnyMessage &lhs, const AnyMessage &rhs) noexcept;
+    friend bool comparesEqual(const AnyMessage &lhs, const AnyMessage &rhs) noexcept;
     friend bool operator==(const AnyMessage &lhs, const AnyMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -128,7 +128,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const RepeatedAnyMessage &lhs, const RepeatedAnyMessage &rhs) noexcept;
+    friend bool comparesEqual(const RepeatedAnyMessage &lhs, const RepeatedAnyMessage &rhs) noexcept;
     friend bool operator==(const RepeatedAnyMessage &lhs, const RepeatedAnyMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -182,7 +182,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const TwoAnyMessage &lhs, const TwoAnyMessage &rhs) noexcept;
+    friend bool comparesEqual(const TwoAnyMessage &lhs, const TwoAnyMessage &rhs) noexcept;
     friend bool operator==(const TwoAnyMessage &lhs, const TwoAnyMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -249,7 +249,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const Example &lhs, const Example &rhs) noexcept;
+    friend bool comparesEqual(const Example &lhs, const Example &rhs) noexcept;
     friend bool operator==(const Example &lhs, const Example &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -303,7 +303,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleMessage &lhs, const SimpleMessage &rhs) noexcept;
+    friend bool comparesEqual(const SimpleMessage &lhs, const SimpleMessage &rhs) noexcept;
     friend bool operator==(const SimpleMessage &lhs, const SimpleMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);

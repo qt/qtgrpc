@@ -49,7 +49,7 @@ void ClientDeclarationPrinter::printClientClass()
 void ClientDeclarationPrinter::printConstructor()
 {
     Indent();
-    m_printer->Print(m_typeMap, CommonTemplates::QObjectConstructorMessageDeclarationTemplate());
+    m_printer->Print(m_typeMap, GrpcTemplates::ClientConstructorDeclarationTemplate());
     Outdent();
 }
 

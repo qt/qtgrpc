@@ -145,7 +145,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept;
+    friend bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept;
     friend bool operator==(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -190,7 +190,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleBoolMessage &lhs, const SimpleBoolMessage &rhs) noexcept;
+    friend bool comparesEqual(const SimpleBoolMessage &lhs, const SimpleBoolMessage &rhs) noexcept;
     friend bool operator==(const SimpleBoolMessage &lhs, const SimpleBoolMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -240,7 +240,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept;
+    friend bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept;
     friend bool operator==(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -290,7 +290,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleSIntMessage &lhs, const SimpleSIntMessage &rhs) noexcept;
+    friend bool comparesEqual(const SimpleSIntMessage &lhs, const SimpleSIntMessage &rhs) noexcept;
     friend bool operator==(const SimpleSIntMessage &lhs, const SimpleSIntMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -340,7 +340,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleUIntMessage &lhs, const SimpleUIntMessage &rhs) noexcept;
+    friend bool comparesEqual(const SimpleUIntMessage &lhs, const SimpleUIntMessage &rhs) noexcept;
     friend bool operator==(const SimpleUIntMessage &lhs, const SimpleUIntMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -390,7 +390,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleInt64Message &lhs, const SimpleInt64Message &rhs) noexcept;
+    friend bool comparesEqual(const SimpleInt64Message &lhs, const SimpleInt64Message &rhs) noexcept;
     friend bool operator==(const SimpleInt64Message &lhs, const SimpleInt64Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -440,7 +440,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleSInt64Message &lhs, const SimpleSInt64Message &rhs) noexcept;
+    friend bool comparesEqual(const SimpleSInt64Message &lhs, const SimpleSInt64Message &rhs) noexcept;
     friend bool operator==(const SimpleSInt64Message &lhs, const SimpleSInt64Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -490,7 +490,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleUInt64Message &lhs, const SimpleUInt64Message &rhs) noexcept;
+    friend bool comparesEqual(const SimpleUInt64Message &lhs, const SimpleUInt64Message &rhs) noexcept;
     friend bool operator==(const SimpleUInt64Message &lhs, const SimpleUInt64Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -540,7 +540,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept;
+    friend bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept;
     friend bool operator==(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -590,7 +590,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleFloatMessage &lhs, const SimpleFloatMessage &rhs) noexcept;
+    friend bool comparesEqual(const SimpleFloatMessage &lhs, const SimpleFloatMessage &rhs) noexcept;
     friend bool operator==(const SimpleFloatMessage &lhs, const SimpleFloatMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -640,7 +640,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleDoubleMessage &lhs, const SimpleDoubleMessage &rhs) noexcept;
+    friend bool comparesEqual(const SimpleDoubleMessage &lhs, const SimpleDoubleMessage &rhs) noexcept;
     friend bool operator==(const SimpleDoubleMessage &lhs, const SimpleDoubleMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -690,7 +690,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleBytesMessage &lhs, const SimpleBytesMessage &rhs) noexcept;
+    friend bool comparesEqual(const SimpleBytesMessage &lhs, const SimpleBytesMessage &rhs) noexcept;
     friend bool operator==(const SimpleBytesMessage &lhs, const SimpleBytesMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -740,7 +740,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleFixedInt32Message &lhs, const SimpleFixedInt32Message &rhs) noexcept;
+    friend bool comparesEqual(const SimpleFixedInt32Message &lhs, const SimpleFixedInt32Message &rhs) noexcept;
     friend bool operator==(const SimpleFixedInt32Message &lhs, const SimpleFixedInt32Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -790,7 +790,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleFixedInt64Message &lhs, const SimpleFixedInt64Message &rhs) noexcept;
+    friend bool comparesEqual(const SimpleFixedInt64Message &lhs, const SimpleFixedInt64Message &rhs) noexcept;
     friend bool operator==(const SimpleFixedInt64Message &lhs, const SimpleFixedInt64Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -840,7 +840,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleSFixedInt32Message &lhs, const SimpleSFixedInt32Message &rhs) noexcept;
+    friend bool comparesEqual(const SimpleSFixedInt32Message &lhs, const SimpleSFixedInt32Message &rhs) noexcept;
     friend bool operator==(const SimpleSFixedInt32Message &lhs, const SimpleSFixedInt32Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -890,7 +890,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleSFixedInt64Message &lhs, const SimpleSFixedInt64Message &rhs) noexcept;
+    friend bool comparesEqual(const SimpleSFixedInt64Message &lhs, const SimpleSFixedInt64Message &rhs) noexcept;
     friend bool operator==(const SimpleSFixedInt64Message &lhs, const SimpleSFixedInt64Message &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -948,7 +948,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept;
+    friend bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept;
     friend bool operator==(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);

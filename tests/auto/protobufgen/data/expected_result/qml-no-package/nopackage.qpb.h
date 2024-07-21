@@ -63,18 +63,18 @@ enum class QtProtobufFieldEnum;
 
 
 class EmptyMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT EmptyMessage : public QProtobufMessage
+class EmptyMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
     QML_VALUE_TYPE(emptyMessage)
 
 public:
     using QtProtobufFieldEnum = EmptyMessage_QtProtobufNested::QtProtobufFieldEnum;
-    EmptyMessage();
-    ~EmptyMessage();
-    EmptyMessage(const EmptyMessage &other);
-    EmptyMessage &operator =(const EmptyMessage &other);
-    EmptyMessage(EmptyMessage &&other) noexcept;
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT EmptyMessage();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT ~EmptyMessage();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT EmptyMessage(const EmptyMessage &other);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT EmptyMessage &operator =(const EmptyMessage &other);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT EmptyMessage(EmptyMessage &&other) noexcept;
     EmptyMessage &operator =(EmptyMessage &&other) noexcept
     {
         swap(other);
@@ -85,7 +85,7 @@ public:
         QProtobufMessage::swap(other);
         dptr.swap(other.dptr);
     }
-    static void registerTypes();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept;
@@ -106,19 +106,19 @@ QML_NAMED_ELEMENT(EmptyMessage)
 } // namespace EmptyMessage_QtProtobufNested
 
 class SimpleIntMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage : public QProtobufMessage
+class SimpleIntMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
     QML_VALUE_TYPE(simpleIntMessage)
     Q_PROPERTY(QtProtobuf::int32 testFieldInt READ testFieldInt WRITE setTestFieldInt SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = SimpleIntMessage_QtProtobufNested::QtProtobufFieldEnum;
-    SimpleIntMessage();
-    ~SimpleIntMessage();
-    SimpleIntMessage(const SimpleIntMessage &other);
-    SimpleIntMessage &operator =(const SimpleIntMessage &other);
-    SimpleIntMessage(SimpleIntMessage &&other) noexcept;
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT ~SimpleIntMessage();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage(const SimpleIntMessage &other);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage &operator =(const SimpleIntMessage &other);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage(SimpleIntMessage &&other) noexcept;
     SimpleIntMessage &operator =(SimpleIntMessage &&other) noexcept
     {
         swap(other);
@@ -130,9 +130,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::int32 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
-    static void registerTypes();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT QtProtobuf::int32 testFieldInt() const;
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept;
@@ -158,9 +158,9 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace SimpleIntMessage_QtProtobufNested
 
 class NoPackageExternalMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage : public QProtobufMessage
+class NoPackageExternalMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
     QML_VALUE_TYPE(noPackageExternalMessage)
     Q_PROPERTY(SimpleIntMessageExt *testField_p READ testField_p WRITE setTestField_p SCRIPTABLE false)
     Q_PROPERTY(bool hasTestField READ hasTestField)
@@ -168,11 +168,11 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage : 
 
 public:
     using QtProtobufFieldEnum = NoPackageExternalMessage_QtProtobufNested::QtProtobufFieldEnum;
-    NoPackageExternalMessage();
-    ~NoPackageExternalMessage();
-    NoPackageExternalMessage(const NoPackageExternalMessage &other);
-    NoPackageExternalMessage &operator =(const NoPackageExternalMessage &other);
-    NoPackageExternalMessage(NoPackageExternalMessage &&other) noexcept;
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT ~NoPackageExternalMessage();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage(const NoPackageExternalMessage &other);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage &operator =(const NoPackageExternalMessage &other);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageExternalMessage(NoPackageExternalMessage &&other) noexcept;
     NoPackageExternalMessage &operator =(NoPackageExternalMessage &&other) noexcept
     {
         swap(other);
@@ -184,12 +184,12 @@ public:
         dptr.swap(other.dptr);
     }
 
-    bool hasTestField() const;
-    SimpleIntMessageExt &testField();
-    const SimpleIntMessageExt &testField() const;
-    Q_INVOKABLE void clearTestField();
-    void setTestField(const SimpleIntMessageExt &testField);
-    static void registerTypes();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool hasTestField() const;
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt &testField();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT const SimpleIntMessageExt &testField() const;
+    Q_INVOKABLE QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void clearTestField();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestField(const SimpleIntMessageExt &testField);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool comparesEqual(const NoPackageExternalMessage &lhs, const NoPackageExternalMessage &rhs) noexcept;
@@ -201,8 +201,8 @@ private:
     {
         return !comparesEqual(lhs, rhs);
     }
-    SimpleIntMessageExt *testField_p();
-    void setTestField_p(SimpleIntMessageExt *testField);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt *testField_p();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestField_p(SimpleIntMessageExt *testField);
     QExplicitlySharedDataPointer<NoPackageExternalMessage_QtProtobufData> dptr;
 };
 namespace NoPackageExternalMessage_QtProtobufNested {
@@ -217,9 +217,9 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace NoPackageExternalMessage_QtProtobufNested
 
 class NoPackageMessage_QtProtobufData;
-class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage : public QProtobufMessage
+class NoPackageMessage : public QProtobufMessage
 {
-    Q_PROTOBUF_OBJECT
+    Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
     QML_VALUE_TYPE(noPackageMessage)
     Q_PROPERTY(SimpleIntMessage *testField_p READ testField_p WRITE setTestField_p SCRIPTABLE false)
     Q_PROPERTY(bool hasTestField READ hasTestField)
@@ -227,11 +227,11 @@ class QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage : public Q
 
 public:
     using QtProtobufFieldEnum = NoPackageMessage_QtProtobufNested::QtProtobufFieldEnum;
-    NoPackageMessage();
-    ~NoPackageMessage();
-    NoPackageMessage(const NoPackageMessage &other);
-    NoPackageMessage &operator =(const NoPackageMessage &other);
-    NoPackageMessage(NoPackageMessage &&other) noexcept;
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT ~NoPackageMessage();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage(const NoPackageMessage &other);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage &operator =(const NoPackageMessage &other);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT NoPackageMessage(NoPackageMessage &&other) noexcept;
     NoPackageMessage &operator =(NoPackageMessage &&other) noexcept
     {
         swap(other);
@@ -243,12 +243,12 @@ public:
         dptr.swap(other.dptr);
     }
 
-    bool hasTestField() const;
-    SimpleIntMessage &testField();
-    const SimpleIntMessage &testField() const;
-    Q_INVOKABLE void clearTestField();
-    void setTestField(const SimpleIntMessage &testField);
-    static void registerTypes();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool hasTestField() const;
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage &testField();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT const SimpleIntMessage &testField() const;
+    Q_INVOKABLE QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void clearTestField();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestField(const SimpleIntMessage &testField);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT static void registerTypes();
 
 private:
     friend QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool comparesEqual(const NoPackageMessage &lhs, const NoPackageMessage &rhs) noexcept;
@@ -260,8 +260,8 @@ private:
     {
         return !comparesEqual(lhs, rhs);
     }
-    SimpleIntMessage *testField_p();
-    void setTestField_p(SimpleIntMessage *testField);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage *testField_p();
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestField_p(SimpleIntMessage *testField);
     QExplicitlySharedDataPointer<NoPackageMessage_QtProtobufData> dptr;
 };
 namespace NoPackageMessage_QtProtobufNested {

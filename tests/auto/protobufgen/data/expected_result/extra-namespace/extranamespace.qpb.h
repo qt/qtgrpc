@@ -61,7 +61,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept;
+    friend bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept;
     friend bool operator==(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -106,7 +106,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept;
+    friend bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept;
     friend bool operator==(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);
@@ -164,7 +164,7 @@ public:
     static void registerTypes();
 
 private:
-    friend  bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept;
+    friend bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept;
     friend bool operator==(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept
     {
         return comparesEqual(lhs, rhs);

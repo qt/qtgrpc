@@ -13,7 +13,7 @@ const char *GrpcTemplates::DefaultSystemIncludesTemplate()
 
 const char *GrpcTemplates::ChildClassDeclarationTemplate()
 {
-    return "\nclass $export_macro$ $classname$ : public $parent_class$\n"
+    return "\nclass $export_macro$$classname$ : public $parent_class$\n"
            "{\n"
            "    Q_OBJECT\n";
 }
@@ -41,6 +41,11 @@ const char *GrpcTemplates::ServerMethodDeclarationTemplate()
 {
     return "Q_INVOKABLE virtual $return_type$ $method_name$(const $param_type$ &$param_name$) = "
            "0;\n";
+}
+
+const char *GrpcTemplates::ClientConstructorDeclarationTemplate()
+{
+    return "explicit $classname$(QObject *parent = nullptr);\n";
 }
 
 const char *GrpcTemplates::ClientConstructorDefinitionTemplate()
@@ -109,7 +114,7 @@ const char *GrpcTemplates::StreamSenderDeclarationQmlTemplate()
     // We use the Q_MOC_RUN trick here to fool qmltyperegistrar. The template base class doesn't
     // have any meta-type extras, and it cannot have them. So from the meta-type information
     // perspective it behaves in exactly the same way as QObject.
-    return "class $export_macro$ $sender_class_name$ : public QQmlGrpc$stream_type$StreamSender\n"
+    return "class $export_macro$$sender_class_name$ : public QQmlGrpc$stream_type$StreamSender\n"
            "{\n"
            "    Q_OBJECT\n"
            "    QML_NAMED_ELEMENT($sender_qml_name$)\n"
