@@ -306,11 +306,18 @@ void QtProtobufTypesDeserializationTest::complexTypeDeserializeTest()
     QFETCH(const int32_t, intField);
     QFETCH(const QString, stringField);
 
+    SimpleStringMessage msg;
+    msg.setTestFieldString("Pre-set message value");
     ComplexMessage test;
+    test.setTestComplexField(msg);
+    ComplexMessage test2 = test;
 
     test.deserialize(serializer.get(), QByteArray::fromHex(hexData));
     QCOMPARE(test.testFieldInt(), intField);
     QCOMPARE(test.testComplexField().testFieldString(), stringField);
+
+    QCOMPARE_NE(test, test2);
+    QCOMPARE(test2.testComplexField(), msg);
 }
 
 void QtProtobufTypesDeserializationTest::sIntMessageDeserializeTest_data()
