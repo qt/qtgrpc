@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 
 #include "enumdeclarationprinter.h"
-#include "utils.h"
 #include "generatorcommon.h"
 
 using namespace ::QtProtobuf;

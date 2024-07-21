@@ -9,9 +9,6 @@
 #include <google/protobuf/io/zero_copy_stream.h>
 #include <google/protobuf/stubs/common.h>
 
-#include <string>
-#include <unordered_set>
-
 #include "generatorcommon.h"
 #include "commontemplates.h"
 #include "grpctemplates.h"
