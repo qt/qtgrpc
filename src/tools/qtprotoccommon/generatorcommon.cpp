@@ -14,7 +14,6 @@
 #endif
 
 #include <cassert>
-#include <algorithm>
 #include <string_view>
 
 using namespace ::google::protobuf;

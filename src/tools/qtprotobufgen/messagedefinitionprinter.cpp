@@ -6,7 +6,6 @@
 
 #include <google/protobuf/descriptor.h>
 #include "utils.h"
-#include "options.h"
 #include "commontemplates.h"
 #include "generatorcommon.h"
 

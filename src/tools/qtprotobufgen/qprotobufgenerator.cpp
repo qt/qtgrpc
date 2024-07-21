@@ -12,11 +12,7 @@
 #include "utils.h"
 #include "options.h"
 
-#include "qtprotocdefs.h"
-
-#include <array>
 #include <cassert>
-#include <numeric>
 #include <unordered_set>
 
 #include <google/protobuf/stubs/common.h>
