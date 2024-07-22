@@ -18,6 +18,12 @@ QT_BEGIN_NAMESPACE
 
 namespace QtGrpcQuickFunctional {
 
+Q_ALWAYS_INLINE void validateEngineAndOperation(QJSEngine *jsEngine, QGrpcOperation *operation)
+{
+    Q_ASSERT(jsEngine != nullptr);
+    Q_ASSERT(operation != nullptr);
+}
+
 Q_GRPCQUICK_EXPORT
 void connectMultipleReceiveOperationFinished(QJSEngine *jsEngine,
                                             const std::shared_ptr<QGrpcOperation> &operation,
@@ -28,6 +34,8 @@ template <typename Ret>
 void readReturnValue(QJSEngine *jsEngine, QGrpcOperation *operation,
                      const QJSValue &successCallback, const QJSValue &errorCallback)
 {
+    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operation);
+
     if (successCallback.isCallable()) {
         std::optional<Ret> result = operation->read<Ret>();
         if (result) {
@@ -50,6 +58,8 @@ template <typename Ret>
 void makeCallConnections(QJSEngine *jsEngine, const std::shared_ptr<QGrpcCallReply> &reply,
                          const QJSValue &finishCallback, const QJSValue &errorCallback)
 {
+    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, reply.get());
+
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(reply.get(), &QGrpcCallReply::finished, jsEngine,
                                          [jsEngine, finishCallback, errorCallback, finishConnection,
@@ -88,6 +98,7 @@ void makeClientStreamConnections(QJSEngine *jsEngine,
                                     const std::shared_ptr<QGrpcClientStream> &stream,
                                     const QJSValue &finishCallback, const QJSValue &errorCallback)
 {
+    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, stream.get());
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(stream.get(), &QGrpcClientStream::finished, jsEngine,
                                          [stream, finishCallback, jsEngine, finishConnection,

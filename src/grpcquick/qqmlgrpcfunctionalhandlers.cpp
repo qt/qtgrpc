@@ -12,8 +12,7 @@ void connectMultipleReceiveOperationFinished(QJSEngine *jsEngine,
                                              const QJSValue &successCallback,
                                              const QJSValue &errorCallback)
 {
-    Q_ASSERT(jsEngine != nullptr);
-    Q_ASSERT(operation);
+    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operation.get());
 
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
     *finishConnection = QObject::connect(operation.get(), &QGrpcOperation::finished, jsEngine,
