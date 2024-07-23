@@ -4,13 +4,13 @@
 #ifndef QGRPCHANNELOPTIONS_H
 #define QGRPCHANNELOPTIONS_H
 
-#include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 #if QT_CONFIG(ssl)
 #  include <QtNetwork/qsslconfiguration.h>
 #endif
 
+#include <QtCore/qhash.h>
 #include <QtCore/qshareddata.h>
 #include <QtCore/qstringfwd.h>
 #include <QtCore/qtclasshelpermacros.h>
@@ -45,14 +45,14 @@ public:
     void swap(QGrpcChannelOptions &other) noexcept { d_ptr.swap(other.d_ptr); }
 
     Q_GRPC_EXPORT QGrpcChannelOptions &setDeadline(std::chrono::milliseconds deadline);
-    Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(const QGrpcMetadata &metadata);
-    Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(QGrpcMetadata &&metadata);
+    Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(const QHash<QByteArray, QByteArray> &metadata);
+    Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(QHash<QByteArray, QByteArray> &&metadata);
     Q_GRPC_EXPORT QGrpcChannelOptions &
     setSerializationFormat(const QGrpcSerializationFormat &format);
 
     [[nodiscard]] Q_GRPC_EXPORT std::optional<std::chrono::milliseconds> deadline() const noexcept;
-    [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const & noexcept;
-    [[nodiscard]] Q_GRPC_EXPORT QGrpcMetadata metadata() &&;
+    [[nodiscard]] Q_GRPC_EXPORT const QHash<QByteArray, QByteArray> &metadata() const & noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT QHash<QByteArray, QByteArray> metadata() &&;
     [[nodiscard]] Q_GRPC_EXPORT QGrpcSerializationFormat serializationFormat() const;
 
 #if QT_CONFIG(ssl)

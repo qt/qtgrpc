@@ -5,13 +5,14 @@
 #ifndef QGRPCOPERATION_H
 #define QGRPCOPERATION_H
 
-#include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
+#include <QtCore/qhash.h>
 #include <QtCore/qobject.h>
+#include <QtCore/qstringfwd.h>
 
 #include <optional>
 
@@ -44,7 +45,7 @@ public:
     [[nodiscard]] QAbstractProtobufSerializer::DeserializationError deserializationError() const;
     [[nodiscard]] QString deserializationErrorString() const;
 
-    [[nodiscard]] const QGrpcMetadata &metadata() const & noexcept;
+    [[nodiscard]] const QHash<QByteArray, QByteArray> &metadata() const & noexcept;
     void metadata() const && = delete;
 
     [[nodiscard]] QLatin1StringView method() const noexcept;

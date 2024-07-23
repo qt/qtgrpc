@@ -3,6 +3,7 @@
 
 #include <QtGrpc/qgrpccalloptions.h>
 
+#include <QtCore/qbytearray.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qvariant.h>
 
@@ -24,7 +25,7 @@ class QGrpcCallOptionsPrivate : public QSharedData
 {
 public:
     std::optional<std::chrono::milliseconds> deadline;
-    QGrpcMetadata metadata;
+    QHash<QByteArray, QByteArray> metadata;
 };
 
 QT_DEFINE_QESDP_SPECIALIZATION_DTOR(QGrpcCallOptionsPrivate)
@@ -105,7 +106,7 @@ QGrpcCallOptions &QGrpcCallOptions::setDeadline(std::chrono::milliseconds deadli
     For HTTP2-based channels, \a metadata is converted into HTTP/2 headers, that
     added to the corresponding HTTP/2 request.
 */
-QGrpcCallOptions &QGrpcCallOptions::setMetadata(const QGrpcMetadata &metadata)
+QGrpcCallOptions &QGrpcCallOptions::setMetadata(const QHash<QByteArray, QByteArray> &metadata)
 {
     if (d_ptr->metadata == metadata)
         return *this;
@@ -120,7 +121,7 @@ QGrpcCallOptions &QGrpcCallOptions::setMetadata(const QGrpcMetadata &metadata)
 
     \sa setMetadata()
 */
-QGrpcCallOptions &QGrpcCallOptions::setMetadata(QGrpcMetadata &&metadata)
+QGrpcCallOptions &QGrpcCallOptions::setMetadata(QHash<QByteArray, QByteArray> &&metadata)
 {
     if (d_ptr->metadata == metadata)
         return *this;
@@ -146,20 +147,20 @@ std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadline() const noex
 }
 
 /*!
-    \fn const QGrpcMetadata &QGrpcCallOptions::metadata() const & noexcept
-    \fn QGrpcMetadata QGrpcCallOptions::metadata() && noexcept
+    \fn const QHash<QByteArray, QByteArray> &QGrpcCallOptions::metadata() const & noexcept
+    \fn QHash<QByteArray, QByteArray> QGrpcCallOptions::metadata() && noexcept
 
     Returns metadata used for a call.
 
-    If value was not set returns empty QGrpcMetadata.
+    If the value was not set returns an empty QHash<QByteArray, QByteArray>.
 */
-const QGrpcMetadata &QGrpcCallOptions::metadata() const & noexcept
+const QHash<QByteArray, QByteArray> &QGrpcCallOptions::metadata() const & noexcept
 {
     Q_D(const QGrpcCallOptions);
     return d->metadata;
 }
 
-QGrpcMetadata QGrpcCallOptions::metadata() &&
+QHash<QByteArray, QByteArray> QGrpcCallOptions::metadata() &&
 {
     Q_D(QGrpcCallOptions);
     if (d->ref.loadRelaxed() != 1) // return copy if shared

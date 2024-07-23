@@ -82,7 +82,7 @@ void QGrpcChannelOptionsTest::hasMemberSwap() const
 
 void QGrpcChannelOptionsTest::propertyMetadata() const
 {
-    QGrpcMetadata md = {
+    QHash<QByteArray, QByteArray> md = {
         { "keyA", "valA" },
         { "keyB", "valB" },
     };

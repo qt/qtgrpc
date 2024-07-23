@@ -17,11 +17,13 @@
 
 #include <QtGrpcQuick/qtgrpcquickexports.h>
 
+#include <QtQml/qqmlregistration.h>
+
+#include <QtCore/qbytearray.h>
+#include <QtCore/qhash.h>
 #include <QtCore/qmap.h>
 #include <QtCore/qobject.h>
 #include <QtCore/qvariant.h>
-#include <QtGrpc/qgrpcdefs.h>
-#include <QtQml/qqmlregistration.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -36,7 +38,7 @@ public:
     QQmlGrpcMetadata(QObject *parent = nullptr);
     ~QQmlGrpcMetadata() override;
 
-    const QGrpcMetadata &metadata() const { return m_metadata; }
+    const QHash<QByteArray, QByteArray> &metadata() const { return m_metadata; }
     const QVariantMap &data() const { return m_variantdata; }
     void setData(const QVariantMap &data);
 
@@ -45,7 +47,7 @@ Q_SIGNALS:
 
 private:
     QVariantMap m_variantdata;
-    QGrpcMetadata m_metadata;
+    QHash<QByteArray, QByteArray> m_metadata;
 };
 
 QT_END_NAMESPACE

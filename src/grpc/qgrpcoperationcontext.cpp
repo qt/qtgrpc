@@ -106,7 +106,7 @@ public:
     QByteArray argument;
     QGrpcCallOptions options;
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
-    QGrpcMetadata serverMetadata;
+    QHash<QByteArray, QByteArray> serverMetadata;
 };
 
 QGrpcOperationContext::QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
@@ -172,7 +172,7 @@ QGrpcOperationContext::serializer() const noexcept
 
     The method is used implicitly by \l QGrpcOperation counterpart.
 */
-const QGrpcMetadata &QGrpcOperationContext::serverMetadata() const & noexcept
+const QHash<QByteArray, QByteArray> &QGrpcOperationContext::serverMetadata() const & noexcept
 {
     Q_D(const QGrpcOperationContext);
     return d->serverMetadata;
@@ -203,7 +203,7 @@ void QGrpcOperationContext::setCallOptions(const QGrpcCallOptions &options)
 
     The \a metadata then can be processed on the client side.
 */
-void QGrpcOperationContext::setServerMetadata(const QGrpcMetadata &metadata)
+void QGrpcOperationContext::setServerMetadata(const QHash<QByteArray, QByteArray> &metadata)
 {
     Q_D(QGrpcOperationContext);
     d->serverMetadata = metadata;
@@ -214,7 +214,7 @@ void QGrpcOperationContext::setServerMetadata(const QGrpcMetadata &metadata)
 
     The \a metadata then can be processed on the client side.
 */
-void QGrpcOperationContext::setServerMetadata(QGrpcMetadata &&metadata)
+void QGrpcOperationContext::setServerMetadata(QHash<QByteArray, QByteArray> &&metadata)
 {
     Q_D(QGrpcOperationContext);
     d->serverMetadata = std::move(metadata);

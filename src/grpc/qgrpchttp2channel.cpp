@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QtGrpc/private/qtgrpcglobal_p.h>
-#include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qgrpchttp2channel.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
 #include <QtGrpc/qgrpcserializationformat.h>
@@ -24,6 +23,7 @@
 #include <QtCore/private/qnoncontiguousbytedevice_p.h>
 #include <QtCore/qbytearrayview.h>
 #include <QtCore/qendian.h>
+#include <QtCore/qhash.h>
 #include <QtCore/qiodevice.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qmetaobject.h>
@@ -33,9 +33,7 @@
 
 #include <functional>
 #include <memory>
-#include <unordered_map>
 #include <utility>
-#include <vector>
 
 QT_BEGIN_NAMESPACE
 
@@ -319,11 +317,11 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
     QObject::connect(m_stream.get(), &QHttp2Stream::headersReceived, channelOpPtr,
                      [channelOpPtr, parentChannel, this](const HPack::HttpHeader &headers,
                                                          bool endStream) {
-                         QGrpcMetadata md = channelOpPtr->serverMetadata();
+                         auto md = channelOpPtr->serverMetadata();
                          QtGrpc::StatusCode statusCode = StatusCode::Ok;
                          QString statusMessage;
                          for (const auto &header : headers) {
-                             md.insert({ header.name, header.value });
+                             md.insert(header.name, header.value);
                              if (header.name == GrpcStatusHeader) {
                                  statusCode = static_cast<
                                      StatusCode>(QString::fromLatin1(header.value).toShort());
@@ -445,13 +443,13 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::prepareInitialRequest(QGrpcOperatio
     };
 
     auto iterateMetadata = [this](const auto &metadata) {
-        for (const auto &[key, value] : std::as_const(metadata)) {
-            auto lowerKey = key.toLower();
+        for (const auto &[key, value] : metadata.asKeyValueRange()) {
+            const auto lowerKey = key.toLower();
             if (lowerKey == AuthorityHeader || lowerKey == MethodHeader || lowerKey == PathHeader
                 || lowerKey == SchemeHeader || lowerKey == ContentTypeHeader) {
                 continue;
             }
-            m_initialHeaders.push_back({ lowerKey, value });
+            m_initialHeaders.emplace_back(lowerKey, value);
         }
     };
 
@@ -596,19 +594,19 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri,
         : defaultContentType;
     bool warnAboutFormatConflict = !formatSuffix.isEmpty();
 
-    auto it = channelOptions.metadata().find(ContentTypeHeader.data());
-    if (it != channelOptions.metadata().end()) {
-        if (formatSuffix.isEmpty() && it->second != DefaultContentType) {
-            if (it->second == "application/grpc+json") {
+    const auto it = channelOptions.metadata().constFind(ContentTypeHeader.data());
+    if (it != channelOptions.metadata().cend()) {
+        if (formatSuffix.isEmpty() && it.value() != DefaultContentType) {
+            if (it.value() == "application/grpc+json") {
                 channelOptions.setSerializationFormat(SerializationFormat::Json);
-            } else if (it->second == "application/grpc+proto" || it->second == DefaultContentType) {
+            } else if (it.value() == "application/grpc+proto" || it.value() == DefaultContentType) {
                 channelOptions.setSerializationFormat(SerializationFormat::Protobuf);
             } else {
                 qGrpcWarning() << "Cannot choose the serializer for " << ContentTypeHeader
-                               << it->second << ". Using protobuf format as the default one.";
+                               << it.value() << ". Using protobuf format as the default one.";
                 channelOptions.setSerializationFormat(SerializationFormat::Default);
             }
-        } else if (it->second != contentTypeFromOptions) {
+        } else if (it.value() != contentTypeFromOptions) {
             warnAboutFormatConflict = true;
         } else {
             warnAboutFormatConflict = false;
@@ -630,7 +628,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri,
             << "Manually specified serialization format '%1' doesn't match the %2 header value "
                "'%3'"_L1.arg(QString::fromLatin1(contentTypeFromOptions),
                              QString::fromLatin1(ContentTypeHeader),
-                             QString::fromLatin1(it->second));
+                             QString::fromLatin1(it.value()));
     }
 
     if (hostUri.scheme() == "unix"_L1) {

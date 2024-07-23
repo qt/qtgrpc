@@ -5,6 +5,7 @@
 #include <QtGrpc/qgrpcserializationformat.h>
 #include <QtGrpc/qtgrpcnamespace.h>
 
+#include <QtCore/qbytearray.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qvariant.h>
 
@@ -27,7 +28,7 @@ class QGrpcChannelOptionsPrivate : public QSharedData
 {
 public:
     std::optional<std::chrono::milliseconds> deadline;
-    QGrpcMetadata metadata;
+    QHash<QByteArray, QByteArray> metadata;
     QGrpcSerializationFormat serializationFormat;
 #if QT_CONFIG(ssl)
     std::optional<QSslConfiguration> sslConfiguration;
@@ -107,15 +108,15 @@ QGrpcChannelOptions &QGrpcChannelOptions::setDeadline(std::chrono::milliseconds 
 }
 
 /*!
-    \fn QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QGrpcMetadata &metadata)
-    \fn QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(QGrpcMetadata &&metadata)
+    \fn QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QHash<QByteArray, QByteArray> &metadata)
+    \fn QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(QHash<QByteArray, QByteArray> &&metadata)
 
     Sets \a metadata for all calls and returns updated QGrpcChannelOptions object.
 
     For HTTP2-based channels, \a metadata is converted into HTTP/2 headers, that
     added to each HTTP/2 request.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QGrpcMetadata &metadata)
+QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QHash<QByteArray, QByteArray> &metadata)
 {
     if (d_ptr->metadata == metadata)
         return *this;
@@ -125,7 +126,7 @@ QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QGrpcMetadata &metad
     return *this;
 }
 
-QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(QGrpcMetadata &&metadata)
+QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(QHash<QByteArray, QByteArray> &&metadata)
 {
     if (d_ptr->metadata == metadata)
         return *this;
@@ -169,20 +170,20 @@ std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const n
 }
 
 /*!
-    \fn const QGrpcMetadata &QGrpcChannelOptions::metadata() const & noexcept
-    \fn QGrpcMetadata QGrpcChannelOptions::metadata() && noexcept
+    \fn const QHash<QByteArray, QByteArray> &QGrpcChannelOptions::metadata() const & noexcept
+    \fn QHash<QByteArray, QByteArray> QGrpcChannelOptions::metadata() && noexcept
 
     Returns metadata used for every call on the channel.
 
-    If value was not set returns empty QGrpcMetadata.
+    If value was not set returns empty QHash<QByteArray, QByteArray>.
 */
-const QGrpcMetadata &QGrpcChannelOptions::metadata() const & noexcept
+const QHash<QByteArray, QByteArray> &QGrpcChannelOptions::metadata() const & noexcept
 {
     Q_D(const QGrpcChannelOptions);
     return d->metadata;
 }
 
-QGrpcMetadata QGrpcChannelOptions::metadata() &&
+QHash<QByteArray, QByteArray> QGrpcChannelOptions::metadata() &&
 {
     Q_D(QGrpcChannelOptions);
     if (d->ref.loadRelaxed() != 1) // return copy if shared

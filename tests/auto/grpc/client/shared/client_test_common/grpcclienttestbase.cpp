@@ -31,7 +31,9 @@ void GrpcClientTestBase::initTestCase_data()
 
 #ifdef TEST_GRPC_SERVER_SUPPORTS_JSON
     if (m_channels.testFlag(Channel::Json)) {
-        QGrpcMetadata md{ { "content-type"_ba, "application/grpc+json" } };
+        QHash<QByteArray, QByteArray> md{
+            {"content-type"_ba, "application/grpc+json"}
+        };
         QTest::newRow("Http2ClientJson")
             << QFlags{ Channel::Qt }
             << std::shared_ptr<

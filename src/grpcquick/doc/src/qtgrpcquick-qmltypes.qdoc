@@ -53,7 +53,7 @@
 /*!
     \qmlproperty QQmlGrpcMetadata QQmlGrpcCallOptions::metadata
     Sets a pointer to the metadata used for a call.
-    \sa QQmlGrpcMetadata, QGrpcMetadata
+    \sa QQmlGrpcMetadata
 */
 
 /*!
@@ -96,7 +96,7 @@
     \qmlproperty QQmlGrpcMetadata QQmlGrpcChannelOptions::metadata
     Sets a pointer to the metadata object used for a channel.
 
-    \sa QQmlGrpcMetadata, QGrpcMetadata
+    \sa QQmlGrpcMetadata
 */
 
 /*!
@@ -112,7 +112,6 @@
     The class provides the possibility to store data in an unordered container.
     Also, it is possible to store several values by the same key.
     \note Use the comma symbol to set several values by the same key.
-    \sa QGrpcMetadata
 */
 
 /*!

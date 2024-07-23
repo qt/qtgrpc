@@ -4,9 +4,9 @@
 #ifndef QGRPCALLOPTIONS_H
 #define QGRPCALLOPTIONS_H
 
-#include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
+#include <QtCore/qhash.h>
 #include <QtCore/qshareddata.h>
 #include <QtCore/qstringfwd.h>
 #include <QtCore/qtclasshelpermacros.h>
@@ -39,12 +39,12 @@ public:
     void swap(QGrpcCallOptions &other) noexcept { d_ptr.swap(other.d_ptr); }
 
     Q_GRPC_EXPORT QGrpcCallOptions &setDeadline(std::chrono::milliseconds deadline);
-    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(const QGrpcMetadata &metadata);
-    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(QGrpcMetadata &&metadata);
+    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(const QHash<QByteArray, QByteArray> &metadata);
+    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(QHash<QByteArray, QByteArray> &&metadata);
 
     [[nodiscard]] Q_GRPC_EXPORT std::optional<std::chrono::milliseconds> deadline() const noexcept;
-    [[nodiscard]] Q_GRPC_EXPORT const QGrpcMetadata &metadata() const & noexcept;
-    [[nodiscard]] Q_GRPC_EXPORT QGrpcMetadata metadata() &&;
+    [[nodiscard]] Q_GRPC_EXPORT const QHash<QByteArray, QByteArray> &metadata() const & noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT QHash<QByteArray, QByteArray> metadata() &&;
 
 private:
     QExplicitlySharedDataPointer<QGrpcCallOptionsPrivate> d_ptr;

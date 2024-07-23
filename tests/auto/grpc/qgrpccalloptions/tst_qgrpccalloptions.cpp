@@ -79,7 +79,7 @@ void QGrpcCallOptionsTest::hasMemberSwap() const
 
 void QGrpcCallOptionsTest::propertyMetadata() const
 {
-    QGrpcMetadata md = {
+    QHash<QByteArray, QByteArray> md = {
         { "keyA", "valA" },
         { "keyB", "valB" },
     };
