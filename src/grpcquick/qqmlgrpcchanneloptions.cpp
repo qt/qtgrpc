@@ -68,7 +68,7 @@ void QQmlGrpcChannelOptions::setMetadata(QQmlGrpcMetadata *value)
         if (d->m_metadata)
             d->m_options.setMetadata(d->m_metadata->metadata());
         else
-            d->m_options.setMetadata(QGrpcMetadata());
+            d->m_options.setMetadata({});
         emit metadataChanged();
     }
 }

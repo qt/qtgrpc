@@ -21,9 +21,9 @@ void QQmlGrpcMetadata::setData(const QVariantMap &data)
     m_metadata.clear();
     m_variantdata = data;
     for (const auto&[key, val]: m_variantdata.asKeyValueRange()) {
-        // Transform the variant map into a std::multimap
+        // Transform the variant map into a QHash
         for (const auto &it : QStringTokenizer(get<QString>(val), u','))
-            m_metadata.insert(std::make_pair(key.toUtf8(), it.toUtf8()));
+            m_metadata.insert(key.toUtf8(), it.toUtf8());
     }
     emit dataChanged();
 }

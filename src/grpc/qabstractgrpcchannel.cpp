@@ -6,7 +6,6 @@
 #include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
-#include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qgrpcstream.h>
 
 #include <QtCore/qtimer.h>

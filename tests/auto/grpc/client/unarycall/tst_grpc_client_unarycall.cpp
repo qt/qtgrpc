@@ -6,9 +6,10 @@
 
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qhash.h>
 
 #include <QtGrpc/QGrpcCallOptions>
-#include <QtGrpc/QGrpcMetadata>
 
 #include <QtTest/QSignalSpy>
 #include <QtTest/QTest>
@@ -206,7 +207,7 @@ void QtGrpcClientUnaryCallTest::metadata()
     });
     auto reply = client()->testMetadata({}, opt);
 
-    QGrpcMetadata metadata;
+    QHash<QByteArray, QByteArray> metadata;
     QEventLoop waiter;
     reply->subscribe(reply.get(),
                      [replyPtr = reply.get(), &metadata, &waiter](const QGrpcStatus &) {
@@ -218,11 +219,11 @@ void QtGrpcClientUnaryCallTest::metadata()
 
     int serverHeaderCount = 0;
     QByteArray clientReturnHeader;
-    for (const auto &header : reply->metadata()) {
-        if (header.first == "server_header") {
-            QCOMPARE_EQ(QString::fromLatin1(header.second), QString::number(++serverHeaderCount));
-        } else if (header.first == "client_return_header") {
-            clientReturnHeader = header.second;
+    for (const auto &[key, value] : reply->metadata().asKeyValueRange()) {
+        if (key == "server_header") {
+            QCOMPARE_EQ(QString::fromLatin1(value), QString::number(++serverHeaderCount));
+        } else if (key == "client_return_header") {
+            clientReturnHeader = value;
         }
     }
 

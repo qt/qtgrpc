@@ -47,7 +47,7 @@ void QQmlGrpcCallOptions::setMetadata(QQmlGrpcMetadata *value)
         if (m_metadata)
             m_options.setMetadata(m_metadata->metadata());
         else
-            m_options.setMetadata(QGrpcMetadata());
+            m_options.setMetadata({});
         emit metadataChanged();
     }
 }

@@ -46,7 +46,7 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
 
     // ![0]
     QGrpcChannelOptions channelOptions;
-    QGrpcMetadata metadata = {
+    QHash<QByteArray, QByteArray> metadata = {
         { "user-name", { name.toUtf8() } },
         { "user-password", { password.toUtf8() } },
     };

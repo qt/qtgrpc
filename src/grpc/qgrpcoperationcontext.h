@@ -4,11 +4,11 @@
 #ifndef QGRPCOPERATIONCONTEXT_H
 #define QGRPCOPERATIONCONTEXT_H
 
-#include <QtGrpc/qgrpcdefs.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
+#include <QtCore/qhash.h>
 #include <QtCore/qobject.h>
 #include <QtCore/qstringfwd.h>
 
@@ -38,7 +38,7 @@ public:
     [[nodiscard]] const QGrpcCallOptions &callOptions() const & noexcept;
     [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const noexcept;
 
-    [[nodiscard]] const QGrpcMetadata &serverMetadata() const & noexcept;
+    [[nodiscard]] const QHash<QByteArray, QByteArray> &serverMetadata() const & noexcept;
 
     // Should never happen. Type is not movable.
     void serverMetadata() && = delete;
@@ -47,8 +47,8 @@ public:
     void setArgument(QByteArrayView arg);
     void setCallOptions(const QGrpcCallOptions &options);
 
-    void setServerMetadata(const QGrpcMetadata &metadata);
-    void setServerMetadata(QGrpcMetadata &&metadata);
+    void setServerMetadata(const QHash<QByteArray, QByteArray> &metadata);
+    void setServerMetadata(QHash<QByteArray, QByteArray> &&metadata);
 
 Q_SIGNALS:
     // Outgoing signals of the channel.

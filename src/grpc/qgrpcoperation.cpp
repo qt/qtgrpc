@@ -8,6 +8,7 @@
 
 #include <QtCore/private/qobject_p.h>
 #include <QtCore/qatomic.h>
+#include <QtCore/qbytearray.h>
 #include <QtCore/qeventloop.h>
 #include <QtCore/qpointer.h>
 
@@ -162,7 +163,7 @@ QString QGrpcOperation::deserializationErrorString() const
     Getter of the metadata received from the channel. For the HTTP2 channels it
     usually contains the HTTP headers received from the server.
 */
-const QGrpcMetadata &QGrpcOperation::metadata() const & noexcept
+const QHash<QByteArray, QByteArray> &QGrpcOperation::metadata() const & noexcept
 {
     Q_D(const QGrpcOperation);
     return d->operationContext->serverMetadata();
