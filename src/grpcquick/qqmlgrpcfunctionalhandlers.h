@@ -31,8 +31,8 @@ void connectMultipleReceiveOperationFinished(QJSEngine *jsEngine,
                                             const QJSValue &errorCallback);
 
 template <typename Ret>
-void readReturnValue(QJSEngine *jsEngine, QGrpcOperation *operation,
-                     const QJSValue &successCallback, const QJSValue &errorCallback)
+void handleReceivedMessage(QJSEngine *jsEngine, QGrpcOperation *operation,
+                           const QJSValue &successCallback, const QJSValue &errorCallback)
 {
     QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operation);
 
@@ -67,9 +67,9 @@ void makeCallConnections(QJSEngine *jsEngine, const std::shared_ptr<QGrpcCallRep
                                              // We take 'reply' by copy so that its lifetime
                                              // is extended until this lambda is destroyed.
                                              if (status.code() == QtGrpc::StatusCode::Ok) {
-                                                 readReturnValue<Ret>(jsEngine, reply.get(),
-                                                                      finishCallback,
-                                                                      errorCallback);
+                                                 QtGrpcQuickFunctional::handleReceivedMessage<
+                                                     Ret>(jsEngine, reply.get(),
+                                                          finishCallback, errorCallback);
                                              } else {
                                                  if (errorCallback.isCallable())
                                                      errorCallback.call(QJSValueList{
@@ -89,7 +89,9 @@ void makeServerStreamConnections(QJSEngine *jsEngine,
                                             finishCallback, errorCallback);
     QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, jsEngine,
                      [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback]() {
-                         readReturnValue<Ret>(jsEngine, streamPtr, messageCallback, errorCallback);
+                         QtGrpcQuickFunctional::handleReceivedMessage<Ret>(jsEngine, streamPtr,
+                                                                           messageCallback,
+                                                                           errorCallback);
                      });
 }
 
@@ -106,9 +108,9 @@ void makeClientStreamConnections(QJSEngine *jsEngine,
                                              // We take 'stream' by copy so that its lifetime
                                              // is extended until this lambda is destroyed.
                                              if (status.code() == QtGrpc::StatusCode::Ok) {
-                                                 readReturnValue<Ret>(jsEngine, stream.get(),
-                                                                      finishCallback,
-                                                                      errorCallback);
+                                                 QtGrpcQuickFunctional::handleReceivedMessage<
+                                                     Ret>(jsEngine, stream.get(), finishCallback,
+                                                          errorCallback);
                                              } else {
                                                  if (errorCallback.isCallable())
                                                      errorCallback.call(QJSValueList{
@@ -129,7 +131,9 @@ void makeBidirStreamConnections(QJSEngine *jsEngine,
 
     QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, jsEngine,
                      [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback] {
-                         readReturnValue<Ret>(jsEngine, streamPtr, messageCallback, errorCallback);
+                         QtGrpcQuickFunctional::handleReceivedMessage<Ret>(jsEngine, streamPtr,
+                                                                           messageCallback,
+                                                                           errorCallback);
                      });
 }
 
