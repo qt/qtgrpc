@@ -25,58 +25,75 @@ Q_ALWAYS_INLINE void validateEngineAndOperation(QJSEngine *jsEngine, QGrpcOperat
 }
 
 Q_GRPCQUICK_EXPORT
-void connectMultipleReceiveOperationFinished(QJSEngine *jsEngine,
-                                            const std::shared_ptr<QGrpcOperation> &operation,
-                                            const QJSValue &successCallback,
-                                            const QJSValue &errorCallback);
+void handleDeserializationError(QJSEngine *jsEngine, QGrpcOperation *operation,
+                                const QJSValue &errorCallback);
+
+template <typename Ret>
+std::optional<QJSValue> readMessageToJSValue(QJSEngine *jsEngine, QGrpcOperation *operation)
+{
+    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operation);
+
+    if (std::optional<Ret> result = operation->read<Ret>())
+        return std::make_optional(jsEngine->toScriptValue(*result));
+    return std::nullopt;
+}
+
+Q_GRPCQUICK_EXPORT
+void handleReceivedMessageImpl(QJSEngine *jsEngine, QGrpcOperation *operation,
+                               std::optional<QJSValue> message, const QJSValue &successCallback,
+                               const QJSValue &errorCallback);
 
 template <typename Ret>
 void handleReceivedMessage(QJSEngine *jsEngine, QGrpcOperation *operation,
                            const QJSValue &successCallback, const QJSValue &errorCallback)
 {
-    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operation);
+    auto message = QtGrpcQuickFunctional::readMessageToJSValue<Ret>(jsEngine, operation);
+    QtGrpcQuickFunctional::handleReceivedMessageImpl(jsEngine, operation, std::move(message),
+                                                     successCallback, errorCallback);
+}
 
-    if (successCallback.isCallable()) {
-        std::optional<Ret> result = operation->read<Ret>();
-        if (result) {
-            successCallback.call(QJSValueList{ jsEngine->toScriptValue(*result) });
-        } else if (errorCallback.isCallable()) {
-            using StatusCode = QtGrpc::StatusCode;
-            auto status = QGrpcStatus{
-                operation->deserializationError()
-                        == QAbstractProtobufSerializer::UnexpectedEndOfStreamError
-                    ? StatusCode::OutOfRange
-                    : StatusCode::InvalidArgument,
-                operation->deserializationErrorString()
-            };
-            errorCallback.call(QJSValueList{ jsEngine->toScriptValue(status) });
-        }
-    }
+Q_GRPCQUICK_EXPORT
+bool checkReceivedStatus(QJSEngine *jsEngine, const QGrpcStatus &status,
+                         const QJSValue &errorCallback);
+
+Q_GRPCQUICK_EXPORT
+void connectMultipleReceiveOperationFinished(QJSEngine *jsEngine,
+                                             const std::shared_ptr<QGrpcOperation> &operation,
+                                             const QJSValue &successCallback,
+                                             const QJSValue &errorCallback);
+
+template <typename Ret>
+void connectSingleReceiveOperationFinished(QJSEngine *jsEngine,
+                                           const std::shared_ptr<QGrpcOperation> &operation,
+                                           const QJSValue &successCallback,
+                                           const QJSValue &errorCallback)
+{
+    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operation.get());
+
+    auto finishConnection = std::make_shared<QMetaObject::Connection>();
+    *finishConnection = QObject::
+        connect(operation.get(), &QGrpcCallReply::finished, jsEngine,
+                [jsEngine, successCallback, errorCallback, finishConnection,
+                 operation](const QGrpcStatus &status) {
+                    // We take 'operation' by copy so that its lifetime
+                    // is extended until this lambda is destroyed.
+                    if (QtGrpcQuickFunctional::checkReceivedStatus(jsEngine, status,
+                                                                   errorCallback)) {
+                        QtGrpcQuickFunctional::handleReceivedMessage<Ret>(jsEngine, operation.get(),
+                                                                          successCallback,
+                                                                          errorCallback);
+                    }
+                    QObject::disconnect(*finishConnection);
+                });
 }
 
 template <typename Ret>
 void makeCallConnections(QJSEngine *jsEngine, const std::shared_ptr<QGrpcCallReply> &reply,
                          const QJSValue &finishCallback, const QJSValue &errorCallback)
 {
-    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, reply.get());
-
-    auto finishConnection = std::make_shared<QMetaObject::Connection>();
-    *finishConnection = QObject::connect(reply.get(), &QGrpcCallReply::finished, jsEngine,
-                                         [jsEngine, finishCallback, errorCallback, finishConnection,
-                                          reply](const QGrpcStatus &status) {
-                                             // We take 'reply' by copy so that its lifetime
-                                             // is extended until this lambda is destroyed.
-                                             if (status.code() == QtGrpc::StatusCode::Ok) {
-                                                 QtGrpcQuickFunctional::handleReceivedMessage<
-                                                     Ret>(jsEngine, reply.get(),
-                                                          finishCallback, errorCallback);
-                                             } else {
-                                                 if (errorCallback.isCallable())
-                                                     errorCallback.call(QJSValueList{
-                                                         jsEngine->toScriptValue(status) });
-                                             }
-                                             QObject::disconnect(*finishConnection);
-                                         });
+    QtGrpcQuickFunctional::connectSingleReceiveOperationFinished<Ret>(jsEngine, reply,
+                                                                      finishCallback,
+                                                                      errorCallback);
 }
 
 template <typename Ret>
@@ -100,24 +117,9 @@ void makeClientStreamConnections(QJSEngine *jsEngine,
                                     const std::shared_ptr<QGrpcClientStream> &stream,
                                     const QJSValue &finishCallback, const QJSValue &errorCallback)
 {
-    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, stream.get());
-    auto finishConnection = std::make_shared<QMetaObject::Connection>();
-    *finishConnection = QObject::connect(stream.get(), &QGrpcClientStream::finished, jsEngine,
-                                         [stream, finishCallback, jsEngine, finishConnection,
-                                          errorCallback](const QGrpcStatus &status) {
-                                             // We take 'stream' by copy so that its lifetime
-                                             // is extended until this lambda is destroyed.
-                                             if (status.code() == QtGrpc::StatusCode::Ok) {
-                                                 QtGrpcQuickFunctional::handleReceivedMessage<
-                                                     Ret>(jsEngine, stream.get(), finishCallback,
-                                                          errorCallback);
-                                             } else {
-                                                 if (errorCallback.isCallable())
-                                                     errorCallback.call(QJSValueList{
-                                                         jsEngine->toScriptValue(status) });
-                                             }
-                                             QObject::disconnect(*finishConnection);
-                                         });
+    QtGrpcQuickFunctional::connectSingleReceiveOperationFinished<Ret>(jsEngine, stream,
+                                                                      finishCallback,
+                                                                      errorCallback);
 }
 
 template <typename Ret>
