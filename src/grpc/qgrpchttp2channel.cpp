@@ -153,7 +153,7 @@ constexpr StatusCode http2ErrorToStatusCode(const quint32 http2Error)
 
 class QGrpcSocketHandler;
 
-struct QGrpcHttp2ChannelPrivate : public QObject
+class QGrpcHttp2ChannelPrivate : public QObject
 {
     Q_OBJECT
 public:
