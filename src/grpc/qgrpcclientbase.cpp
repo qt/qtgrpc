@@ -4,16 +4,19 @@
 
 #include <QtGrpc/private/qabstractgrpcchannel_p.h>
 #include <QtGrpc/private/qtgrpcglobal_p.h>
-#include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcclientbase.h>
-#include <QtGrpc/qgrpcstream.h>
+#include <QtGrpc/qgrpcoperation.h>
 
+#include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufserializer.h>
 
 #include <QtCore/private/qminimalflatset_p.h>
 #include <QtCore/private/qobject_p.h>
-#include <QtCore/qthread.h>
-#include <QtCore/qtimer.h>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qlatin1stringview.h>
+#include <QtCore/qstring.h>
+
+#include <utility>
 
 QT_BEGIN_NAMESPACE
 

@@ -6,13 +6,15 @@
 #define QGRPCLIENTBASE_H
 
 #include <QtGrpc/qabstractgrpcchannel.h>
+#include <QtGrpc/qgrpccalloptions.h>
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcstatus.h>
+#include <QtGrpc/qgrpcstream.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
-#include <QtCore/qbytearray.h>
 #include <QtCore/qobject.h>
-#include <QtCore/qsharedpointer.h>
+#include <QtCore/qstringfwd.h>
+#include <QtCore/qtclasshelpermacros.h>
 
 #include <memory>
 #include <optional>
@@ -27,10 +29,9 @@ template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcClientStream> = true;
 template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcBidirStream> = true;
 }
 
-class QGrpcOperation;
-class QAbstractGrpcChannel;
-class QGrpcClientBasePrivate;
+class QProtobufMessage;
 
+class QGrpcClientBasePrivate;
 class Q_GRPC_EXPORT QGrpcClientBase : public QObject
 {
     Q_OBJECT
