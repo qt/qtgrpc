@@ -4,6 +4,7 @@
 
 #include <QtGrpc/QGrpcHttp2Channel>
 #include <QtGrpc/QGrpcSerializationFormat>
+#include <QtGrpc/QGrpcChannelOptions>
 
 #include <QCoreApplication>
 #include <QSignalSpy>

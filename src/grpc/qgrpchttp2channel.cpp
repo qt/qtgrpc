@@ -3,10 +3,12 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QtGrpc/private/qtgrpcglobal_p.h>
+#include <QtGrpc/qgrpccalloptions.h>
+#include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qgrpchttp2channel.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
 #include <QtGrpc/qgrpcserializationformat.h>
-#include <QtGrpc/qtgrpcnamespace.h>
+#include <QtGrpc/qgrpcstatus.h>
 
 #include <QtProtobuf/qprotobufjsonserializer.h>
 #include <QtProtobuf/qprotobufserializer.h>
@@ -21,18 +23,18 @@
 #endif
 
 #include <QtCore/private/qnoncontiguousbytedevice_p.h>
-#include <QtCore/qbytearrayview.h>
+#include <QtCore/qalgorithms.h>
+#include <QtCore/qbytearray.h>
 #include <QtCore/qendian.h>
-#include <QtCore/qhash.h>
 #include <QtCore/qiodevice.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qmetaobject.h>
+#include <QtCore/qpointer.h>
 #include <QtCore/qqueue.h>
 #include <QtCore/qtimer.h>
-#include <QtCore/qurl.h>
 
 #include <functional>
-#include <memory>
+#include <optional>
 #include <utility>
 
 QT_BEGIN_NAMESPACE

@@ -6,12 +6,17 @@
 #define QGRPCHTTP2CHANNEL_H
 
 #include <QtGrpc/qabstractgrpcchannel.h>
-#include <QtGrpc/qgrpcchanneloptions.h>
+
+#include <QtCore/qtclasshelpermacros.h>
+#include <QtCore/qurl.h>
 
 #include <memory>
 
 QT_BEGIN_NAMESPACE
 
+class QAbstractProtobufSerializer;
+class QGrpcChannelOptions;
+class QGrpcOperationContext;
 
 class QGrpcHttp2ChannelPrivate;
 class Q_GRPC_EXPORT QGrpcHttp2Channel final : public QAbstractGrpcChannel

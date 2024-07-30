@@ -5,6 +5,7 @@
 #include "simplechatengine.h"
 
 #include <QGrpcHttp2Channel>
+#include <QGrpcChannelOptions>
 
 #include <qprotobufregistration.h>
 
