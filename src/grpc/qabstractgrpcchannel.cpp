@@ -4,11 +4,13 @@
 
 #include <QtGrpc/private/qabstractgrpcchannel_p.h>
 #include <QtGrpc/qabstractgrpcchannel.h>
+#include <QtGrpc/qgrpccalloptions.h>
 #include <QtGrpc/qgrpccallreply.h>
-#include <QtGrpc/qgrpcchanneloptions.h>
+#include <QtGrpc/qgrpcoperationcontext.h>
 #include <QtGrpc/qgrpcstream.h>
 
-#include <QtCore/qtimer.h>
+#include <QtCore/qbytearrayview.h>
+#include <QtCore/qlatin1stringview.h>
 
 QT_BEGIN_NAMESPACE
 

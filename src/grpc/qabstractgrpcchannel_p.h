@@ -18,6 +18,7 @@
 #include <QtGrpc/private/qtgrpcglobal_p.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
 
+#include <QtCore/qnamespace.h>
 #include <QtCore/qthread.h>
 
 QT_BEGIN_NAMESPACE
