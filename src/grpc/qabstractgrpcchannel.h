@@ -5,13 +5,11 @@
 #ifndef QABSTRACTGRPCCHANNEL_H
 #define QABSTRACTGRPCCHANNEL_H
 
-#include <QtGrpc/qgrpccalloptions.h>
-#include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
-#include <QtCore/qbytearray.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qthread.h>
+#include <QtCore/qmetatype.h>
+#include <QtCore/qstringfwd.h>
+#include <QtCore/qtclasshelpermacros.h>
 
 #include <memory>
 
@@ -22,6 +20,7 @@ class QGrpcBidirStream;
 class QGrpcCallReply;
 class QGrpcOperationContext;
 class QGrpcChannelOptions;
+class QGrpcCallOptions;
 class QGrpcClientBase;
 class QGrpcClientStream;
 class QGrpcServerStream;
