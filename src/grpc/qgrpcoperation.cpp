@@ -190,12 +190,15 @@ bool QGrpcOperation::isFinished() const noexcept
 
 /*!
     \internal
-    Returns a pointer to the assigned channel-side QGrpcOperationContext.
+    \fn const QGrpcOperationContext &QGrpcOperation::context() const &
+    \fn QGrpcOperationContext &QGrpcOperation::context() &
+
+    Returns a reference to the internal operation context.
 */
-QGrpcOperationContext *QGrpcOperation::operationContext() const noexcept
+const QGrpcOperationContext &QGrpcOperation::context() const & noexcept
 {
     Q_D(const QGrpcOperation);
-    return d->operationContext.get();
+    return *d->operationContext;
 }
 
 bool QGrpcOperation::event(QEvent *event)
