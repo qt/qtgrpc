@@ -28,8 +28,8 @@ QGrpcServerStream::QGrpcServerStream(std::shared_ptr<QGrpcOperationContext> oper
                                      QObject *parent)
     : QGrpcOperation(std::move(operationContext), parent)
 {
-    QObject::connect(QGrpcOperation::operationContext(), &QGrpcOperationContext::messageReceived,
-                     this, &QGrpcServerStream::messageReceived);
+    QObject::connect(&QGrpcOperation::context(), &QGrpcOperationContext::messageReceived, this,
+                     &QGrpcServerStream::messageReceived);
 }
 
 /*!
@@ -67,8 +67,8 @@ QGrpcClientStream::~QGrpcClientStream() = default;
 */
 void QGrpcClientStream::writeMessage(const QProtobufMessage &message)
 {
-    QByteArray data = QGrpcOperation::operationContext()->serializer()->serialize(&message);
-    emit QGrpcOperation::operationContext()->writeMessageRequested(data);
+    QByteArray data = QGrpcOperation::context().serializer()->serialize(&message);
+    emit QGrpcOperation::context().writeMessageRequested(data);
 }
 
 /*!
@@ -78,7 +78,7 @@ void QGrpcClientStream::writeMessage(const QProtobufMessage &message)
 */
 void QGrpcClientStream::writesDone()
 {
-    emit QGrpcOperation::operationContext()->writesDoneRequested();
+    emit QGrpcOperation::context().writesDoneRequested();
 }
 
 bool QGrpcClientStream::event(QEvent *event)
@@ -105,8 +105,8 @@ QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcOperationContext> operat
                                    QObject *parent)
     : QGrpcOperation(std::move(operationContext), parent)
 {
-    QObject::connect(QGrpcOperation::operationContext(), &QGrpcOperationContext::messageReceived,
-                     this, &QGrpcBidirStream::messageReceived);
+    QObject::connect(&QGrpcOperation::context(), &QGrpcOperationContext::messageReceived, this,
+                     &QGrpcBidirStream::messageReceived);
 }
 
 /*!
@@ -119,8 +119,8 @@ QGrpcBidirStream::~QGrpcBidirStream() = default;
 */
 void QGrpcBidirStream::writeMessage(const QProtobufMessage &message)
 {
-    QByteArray data = QGrpcOperation::operationContext()->serializer()->serialize(&message);
-    emit QGrpcOperation::operationContext()->writeMessageRequested(data);
+    QByteArray data = QGrpcOperation::context().serializer()->serialize(&message);
+    emit QGrpcOperation::context().writeMessageRequested(data);
 }
 
 /*!
@@ -130,7 +130,7 @@ void QGrpcBidirStream::writeMessage(const QProtobufMessage &message)
 */
 void QGrpcBidirStream::writesDone()
 {
-    emit QGrpcOperation::operationContext()->writesDoneRequested();
+    emit QGrpcOperation::context().writesDoneRequested();
 }
 
 bool QGrpcBidirStream::event(QEvent *event)

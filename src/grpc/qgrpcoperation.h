@@ -62,7 +62,12 @@ protected:
     explicit QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationContext,
                             QObject *parent = nullptr);
 
-    [[nodiscard]] QGrpcOperationContext *operationContext() const noexcept;
+    [[nodiscard]] const QGrpcOperationContext &context() const & noexcept;
+    [[nodiscard]] QGrpcOperationContext &context() & noexcept
+    {
+        return const_cast<QGrpcOperationContext &>(std::as_const(*this).context());
+    }
+    void context() && = delete;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
