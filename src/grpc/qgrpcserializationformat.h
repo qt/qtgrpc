@@ -26,8 +26,9 @@ class QGrpcSerializationFormat final
 {
 public:
     Q_GRPC_EXPORT Q_IMPLICIT QGrpcSerializationFormat(QtGrpc::SerializationFormat format = {});
-    Q_GRPC_EXPORT QGrpcSerializationFormat(QByteArrayView suffix,
-                                           std::shared_ptr<QAbstractProtobufSerializer> serializer);
+    Q_GRPC_EXPORT explicit QGrpcSerializationFormat(QByteArrayView suffix,
+                                                    std::shared_ptr<QAbstractProtobufSerializer>
+                                                        serializer);
     Q_GRPC_EXPORT ~QGrpcSerializationFormat();
 
     Q_GRPC_EXPORT QGrpcSerializationFormat(const QGrpcSerializationFormat &);
