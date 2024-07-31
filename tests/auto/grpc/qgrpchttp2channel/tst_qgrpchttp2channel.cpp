@@ -115,7 +115,7 @@ void QGrpcHttp2ChannelTest::serializationFormat()
     channel = std::make_shared<
         QGrpcHttp2Channel>(QUrl("http://localhost:50051", QUrl::StrictMode),
                            QGrpcChannelOptions{}
-                               .setSerializationFormat({ "dummy",
+                               .setSerializationFormat(QGrpcSerializationFormat{ "dummy",
                                                          std::make_shared<DummySerializer>() }));
     QVERIFY(dynamic_cast<DummySerializer *>(channel->serializer().get()) != nullptr);
 }
@@ -183,7 +183,7 @@ void QGrpcHttp2ChannelTest::serializationFormatWithHeaders()
                            QGrpcChannelOptions{
     }
                                .setMetadata({ { "content-type"_ba, "application/grpc"_ba } })
-                               .setSerializationFormat({ "dummy",
+                               .setSerializationFormat(QGrpcSerializationFormat{ "dummy",
                                                          std::make_shared<DummySerializer>() }));
     QVERIFY(dynamic_cast<DummySerializer *>(channel->serializer().get()) != nullptr);
 
@@ -209,7 +209,7 @@ void QGrpcHttp2ChannelTest::serializationFormatWithHeaders()
                            QGrpcChannelOptions{
     }
                                .setMetadata({ { "content-type"_ba, "application/grpc+json"_ba } })
-                               .setSerializationFormat({ "dummy",
+                               .setSerializationFormat(QGrpcSerializationFormat{ "dummy",
                                                          std::make_shared<DummySerializer>() }));
     QVERIFY(dynamic_cast<DummySerializer *>(channel->serializer().get()) != nullptr);
 
@@ -243,7 +243,7 @@ void QGrpcHttp2ChannelTest::serializationFormatWithHeaders()
                            QGrpcChannelOptions{
     }
                                .setMetadata({ { "content-type"_ba, "application/grpc+dummy"_ba } })
-                               .setSerializationFormat({ "dummy",
+                               .setSerializationFormat(QGrpcSerializationFormat{ "dummy",
                                                          std::make_shared<DummySerializer>() }));
     QVERIFY(dynamic_cast<DummySerializer *>(channel->serializer().get()) != nullptr);
 }
