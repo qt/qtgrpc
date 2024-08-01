@@ -1,7 +1,7 @@
 # Copyright (C) 2023 The Qt Company Ltd.
 # SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
-if(TARGET Qt6::Quick
+if(TARGET Qt6::ProtobufQuick
         AND TARGET Qt6::QuickControls2
         AND TARGET Qt6::qtprotobufgen
         AND TARGET Qt6::qtgrpcgen)
