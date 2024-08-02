@@ -12,6 +12,10 @@
 
 QT_BEGIN_NAMESPACE
 
+#if 0 // Avoid generating any CaMeL-case header aliases.
+#  pragma qt_sync_suspend_processing
+#endif
+
 namespace QtQmlGrpcStreamSender {
 bool isValidStream(const QGrpcOperation *stream);
 }
@@ -51,6 +55,10 @@ private:
     Q_DECLARE_PRIVATE(QQmlGrpcBidirStreamSender)
     Q_DISABLE_COPY_MOVE(QQmlGrpcBidirStreamSender)
 };
+
+#if 0
+#  pragma qt_sync_resume_processing
+#endif
 
 QT_END_NAMESPACE
 
