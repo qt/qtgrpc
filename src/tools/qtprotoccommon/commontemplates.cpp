@@ -843,12 +843,6 @@ const char *CommonTemplates::EmptyBracesTemplate()
     return "\n{\n}\n\n";
 }
 
-const char *CommonTemplates::DeclareMetaTypeTemplate
-    ()
-{
-    return "Q_DECLARE_METATYPE($full_type$)\n";
-}
-
 const char *CommonTemplates::MetaTypeRegistrationLocalEnumTemplate()
 {
     return "qRegisterProtobufEnumType<$scope_type$>();\n"

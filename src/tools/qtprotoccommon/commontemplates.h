@@ -150,7 +150,6 @@ public:
     static const char *CopyInitializerMemberMessageTemplate();
     static const char *CopyInitializerMemberOneofTemplate();
     static const char *EmptyBracesTemplate();
-    static const char *DeclareMetaTypeTemplate();
     static const char *MetaTypeRegistrationLocalEnumTemplate();
     static const char *MetaTypeRegistrationMapTemplate();
     static const char *QEnumNSTemplate();
