@@ -28,29 +28,29 @@ private Q_SLOTS:
 void QGrpcChannelOptionsTest::hasSpecialMemberFunctions() const
 {
     QGrpcChannelOptions o1;
-    QVERIFY(!o1.deadline());
+    QVERIFY(!o1.deadlineTimeout());
     QVERIFY(o1.metadata().empty());
     QVERIFY(!o1.sslConfiguration());
 
-    o1.setDeadline(100ms);
+    o1.setDeadlineTimeout(100ms);
 
     QGrpcChannelOptions o2(o1);
-    QCOMPARE_EQ(o1.deadline(), o2.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), o2.deadlineTimeout());
 
     QGrpcChannelOptions o3 = o1;
-    QCOMPARE_EQ(o1.deadline(), o3.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), o3.deadlineTimeout());
 
     QGrpcChannelOptions o4(std::move(o1));
-    QCOMPARE_EQ(o4.deadline(), o2.deadline());
+    QCOMPARE_EQ(o4.deadlineTimeout(), o2.deadlineTimeout());
 
     o1 = std::move(o4);
-    QCOMPARE_EQ(o1.deadline(), o2.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), o2.deadlineTimeout());
 }
 
 void QGrpcChannelOptionsTest::hasImplicitQVariant() const
 {
     QGrpcChannelOptions o1;
-    o1.setDeadline(250ms);
+    o1.setDeadlineTimeout(250ms);
     o1.setMetadata({
         { "keyA", "valA" },
         { "keyB", "valB" },
@@ -60,7 +60,7 @@ void QGrpcChannelOptionsTest::hasImplicitQVariant() const
     QCOMPARE_EQ(v.metaType(), QMetaType::fromType<QGrpcChannelOptions>());
     const auto o2 = v.value<QGrpcChannelOptions>();
     QCOMPARE_EQ(o1.metadata(), o2.metadata());
-    QCOMPARE_EQ(o1.deadline(), o2.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), o2.deadlineTimeout());
 }
 
 void QGrpcChannelOptionsTest::hasMemberSwap() const
@@ -68,16 +68,16 @@ void QGrpcChannelOptionsTest::hasMemberSwap() const
     constexpr std::chrono::milliseconds Dur = 50ms;
 
     QGrpcChannelOptions o1;
-    o1.setDeadline(Dur);
+    o1.setDeadlineTimeout(Dur);
     QGrpcChannelOptions o2;
 
-    QCOMPARE_EQ(o1.deadline(), Dur);
-    QVERIFY(!o2.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), Dur);
+    QVERIFY(!o2.deadlineTimeout());
     o2.swap(o1);
-    QCOMPARE_EQ(o2.deadline(), Dur);
+    QCOMPARE_EQ(o2.deadlineTimeout(), Dur);
     swap(o2, o1);
-    QCOMPARE_EQ(o1.deadline(), Dur);
-    QVERIFY(!o2.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), Dur);
+    QVERIFY(!o2.deadlineTimeout());
 }
 
 void QGrpcChannelOptionsTest::propertyMetadata() const
@@ -108,9 +108,9 @@ void QGrpcChannelOptionsTest::propertyDeadline() const
 
     QGrpcChannelOptions o1;
     auto o1Detach = o1;
-    o1.setDeadline(Dur);
-    QCOMPARE_EQ(o1.deadline(), Dur);
-    QCOMPARE_NE(o1.deadline(), o1Detach.deadline());
+    o1.setDeadlineTimeout(Dur);
+    QCOMPARE_EQ(o1.deadlineTimeout(), Dur);
+    QCOMPARE_NE(o1.deadlineTimeout(), o1Detach.deadlineTimeout());
 }
 
 void QGrpcChannelOptionsTest::propertySerializationFormat() const

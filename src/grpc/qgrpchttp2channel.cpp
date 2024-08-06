@@ -392,10 +392,10 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
                      &Http2Handler::processQueue);
 
     std::optional<std::chrono::milliseconds> deadline;
-    if (channelOpPtr->callOptions().deadline())
-        deadline = channelOpPtr->callOptions().deadline();
-    else if (parentChannel->channelOptions.deadline())
-        deadline = parentChannel->channelOptions.deadline();
+    if (channelOpPtr->callOptions().deadlineTimeout())
+        deadline = channelOpPtr->callOptions().deadlineTimeout();
+    else if (parentChannel->channelOptions.deadlineTimeout())
+        deadline = parentChannel->channelOptions.deadlineTimeout();
     if (deadline) {
         // We have an active stream and a deadline. It's time to start the timer.
         QObject::connect(&m_deadlineTimer, &QTimer::timeout, this,

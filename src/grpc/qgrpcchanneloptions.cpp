@@ -27,7 +27,7 @@ using namespace QtGrpc;
 class QGrpcChannelOptionsPrivate : public QSharedData
 {
 public:
-    std::optional<std::chrono::milliseconds> deadline;
+    std::optional<std::chrono::milliseconds> timeout;
     QHash<QByteArray, QByteArray> metadata;
     QGrpcSerializationFormat serializationFormat;
 #if QT_CONFIG(ssl)
@@ -95,15 +95,15 @@ QGrpcChannelOptions::operator QVariant() const
 }
 
 /*!
-    Sets deadline value with \a deadline and returns updated QGrpcChannelOptions object.
+    Sets deadline value with \a timeout and returns updated QGrpcChannelOptions object.
 */
-QGrpcChannelOptions &QGrpcChannelOptions::setDeadline(std::chrono::milliseconds deadline)
+QGrpcChannelOptions &QGrpcChannelOptions::setDeadlineTimeout(std::chrono::milliseconds timeout)
 {
-    if (d_ptr->deadline == deadline)
+    if (d_ptr->timeout == timeout)
         return *this;
     d_ptr.detach();
     Q_D(QGrpcChannelOptions);
-    d->deadline = deadline;
+    d->timeout = timeout;
     return *this;
 }
 
@@ -163,10 +163,10 @@ QGrpcChannelOptions::setSerializationFormat(const QGrpcSerializationFormat &form
 
     If value was not set returns empty std::optional.
 */
-std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadline() const noexcept
+std::optional<std::chrono::milliseconds> QGrpcChannelOptions::deadlineTimeout() const noexcept
 {
     Q_D(const QGrpcChannelOptions);
-    return d->deadline;
+    return d->timeout;
 }
 
 /*!
@@ -238,7 +238,7 @@ QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
 {
     const QDebugStateSaver save(debug);
     debug.nospace().noquote();
-    debug << "QGrpcChannelOptions(deadline: " << chOpts.deadline()
+    debug << "QGrpcChannelOptions(deadline: " << chOpts.deadlineTimeout()
           << ", metadata: " << chOpts.metadata()
           << ", serializationFormat: " << chOpts.serializationFormat().suffix()
           << ", sslConfiguration: ";

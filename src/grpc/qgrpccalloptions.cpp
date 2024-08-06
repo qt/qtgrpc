@@ -24,7 +24,7 @@ using namespace Qt::StringLiterals;
 class QGrpcCallOptionsPrivate : public QSharedData
 {
 public:
-    std::optional<std::chrono::milliseconds> deadline;
+    std::optional<std::chrono::milliseconds> timeout;
     QHash<QByteArray, QByteArray> metadata;
 };
 
@@ -88,15 +88,15 @@ QGrpcCallOptions::operator QVariant() const
 */
 
 /*!
-    Sets deadline value with \a deadline and returns updated QGrpcCallOptions object.
+    Sets deadline value with \a timeout and returns updated QGrpcCallOptions object.
 */
-QGrpcCallOptions &QGrpcCallOptions::setDeadline(std::chrono::milliseconds deadline)
+QGrpcCallOptions &QGrpcCallOptions::setDeadlineTimeout(std::chrono::milliseconds timeout)
 {
-    if (d_ptr->deadline == deadline)
+    if (d_ptr->timeout == timeout)
         return *this;
     d_ptr.detach();
     Q_D(QGrpcCallOptions);
-    d->deadline = deadline;
+    d->timeout = timeout;
     return *this;
 }
 
@@ -140,10 +140,10 @@ QGrpcCallOptions &QGrpcCallOptions::setMetadata(QHash<QByteArray, QByteArray> &&
 
     If value was not set returns empty std::optional.
 */
-std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadline() const noexcept
+std::optional<std::chrono::milliseconds> QGrpcCallOptions::deadlineTimeout() const noexcept
 {
     Q_D(const QGrpcCallOptions);
-    return d->deadline;
+    return d->timeout;
 }
 
 /*!
@@ -178,7 +178,7 @@ QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts)
 {
     const QDebugStateSaver save(debug);
     debug.nospace().noquote();
-    debug << "QGrpcCallOptions(deadline: " << callOpts.deadline()
+    debug << "QGrpcCallOptions(deadline: " << callOpts.deadlineTimeout()
           << ", metadata: " << callOpts.metadata() << ')';
     return debug;
 }

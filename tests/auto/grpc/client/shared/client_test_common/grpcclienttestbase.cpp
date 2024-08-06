@@ -93,7 +93,7 @@ void GrpcClientTestBase::initTestCase_data()
                    QAbstractGrpcChannel>(new QGrpcHttp2Channel(QUrl("http://localhost:50051",
                                                                     QUrl::StrictMode),
                                                                QGrpcChannelOptions{}
-                                                                   .setDeadline(channelTimeout)));
+                                                                   .setDeadlineTimeout(channelTimeout)));
     }
 }
 
