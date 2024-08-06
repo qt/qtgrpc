@@ -104,7 +104,7 @@ void QtGrpcClientDeadlineTest::callDeadlineClientStreamExceeds()
     SleepMessage request;
     request.setSleepTimeMs(50);
     QGrpcCallOptions opts;
-    opts.setDeadline({ std::chrono::milliseconds(50) });
+    opts.setDeadlineTimeout({ std::chrono::milliseconds(50) });
 
     auto stream = client()->testMethodClientStreamSleep(request, opts);
     QSignalSpy finSpy(stream.get(), &QGrpcOperation::finished);
@@ -124,7 +124,7 @@ void QtGrpcClientDeadlineTest::callDeadlineClientStreamExceeds()
 void QtGrpcClientDeadlineTest::callDeadlineClientStreamFinishes()
 {
     QGrpcCallOptions opts;
-    opts.setDeadline({ std::chrono::milliseconds(3 * MessageLatency) });
+    opts.setDeadlineTimeout({ std::chrono::milliseconds(3 * MessageLatency) });
     SleepMessage request;
 
     auto stream = client()->testMethodClientStreamSleep(request, opts);
@@ -142,7 +142,7 @@ void QtGrpcClientDeadlineTest::callDeadlineBiStreamExceeds()
     SleepMessage request;
     request.setSleepTimeMs(30);
     QGrpcCallOptions opts;
-    opts.setDeadline({ std::chrono::milliseconds(200) });
+    opts.setDeadlineTimeout({ std::chrono::milliseconds(200) });
 
     auto stream = client()->testMethodBiStreamSleep(request, opts);
     QSignalSpy finSpy(stream.get(), &QGrpcOperation::finished);
@@ -166,7 +166,7 @@ void QtGrpcClientDeadlineTest::callDeadlineBiStreamExceeds()
 void QtGrpcClientDeadlineTest::callDeadlineBiStreamFinishes()
 {
     QGrpcCallOptions opts;
-    opts.setDeadline({ std::chrono::milliseconds(400) });
+    opts.setDeadlineTimeout({ std::chrono::milliseconds(400) });
     SleepMessage request;
 
     auto stream = client()->testMethodBiStreamSleep(request, opts);
@@ -189,7 +189,7 @@ void QtGrpcClientDeadlineTest::callDeadlineBiStreamFinishes()
 void QtGrpcClientDeadlineTest::clientCancelBeforeTimeout()
 {
     QGrpcCallOptions opts;
-    opts.setDeadline({ std::chrono::milliseconds(2000) });
+    opts.setDeadlineTimeout({ std::chrono::milliseconds(2000) });
     SleepMessage request;
     request.setSleepTimeMs(1500);
 

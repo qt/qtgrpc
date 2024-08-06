@@ -12,7 +12,7 @@ TestCase {
 
     GrpcChannelOptions {
         id: optionsVar
-        deadline: { 1000 }
+        deadlineTimeout: { 1000 }
         metadata:  GrpcMetadata {
             id: grpcData
             data: ({ "user-name": "localhost",
@@ -24,7 +24,7 @@ TestCase {
         id: channelId
         hostUri: "http://localhost:50051"
         options: GrpcChannelOptions {
-            deadline: { 1000 }
+            deadlineTimeout: { 1000 }
             metadata: grpcData
         }
     }
@@ -56,12 +56,12 @@ TestCase {
         return [
                     { tag: "channelId Host",
                         field: channelId.hostUri, answer: "http://localhost:50051" },
-                    { tag: "channelId deadline",
-                        field: channelId.options.deadline, answer: 1000 },
+                    { tag: "channelId deadlineTimeout",
+                        field: channelId.options.deadlineTimeout, answer: 1000 },
                     { tag: "channelId metadata",
                         field: channelId.options.metadata, answer: grpcData },
-                    { tag: "secondChannelId deadline",
-                        field: secondChannelId.options.deadline, answer: 1000 },
+                    { tag: "secondChannelId deadlineTimeout",
+                        field: secondChannelId.options.deadlineTimeout, answer: 1000 },
                     { tag: "secondChannelId Host",
                         field: secondChannelId.hostUri, answer: "http://localhost:50051" },
                     { tag: "secondChannelId metadata",

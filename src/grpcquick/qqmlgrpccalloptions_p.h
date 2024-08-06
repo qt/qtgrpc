@@ -31,7 +31,7 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcCallOptions : public QObject
     QML_NAMED_ELEMENT(GrpcCallOptions)
     QML_ADDED_IN_VERSION(6, 7)
 
-    Q_PROPERTY(qint64 deadline READ deadline WRITE setDeadline NOTIFY deadlineChanged)
+    Q_PROPERTY(qint64 deadlineTimeout READ deadlineTimeout WRITE setDeadlineTimeout NOTIFY deadlineTimeoutChanged)
     Q_PROPERTY(QQmlGrpcMetadata *metadata READ metadata WRITE setMetadata NOTIFY metadataChanged)
 
 public:
@@ -39,13 +39,13 @@ public:
     ~QQmlGrpcCallOptions();
 
     const QGrpcCallOptions &options() const;
-    qint64 deadline() const;
-    void setDeadline(qint64 value);
+    qint64 deadlineTimeout() const;
+    void setDeadlineTimeout(qint64 value);
     QQmlGrpcMetadata *metadata() const;
     void setMetadata(QQmlGrpcMetadata *value);
 
 Q_SIGNALS:
-    void deadlineChanged();
+    void deadlineTimeoutChanged();
     void metadataChanged();
 
 private:

@@ -17,17 +17,17 @@ QQmlGrpcCallOptions::QQmlGrpcCallOptions(QObject *parent)
 
 QQmlGrpcCallOptions::~QQmlGrpcCallOptions() = default;
 
-qint64 QQmlGrpcCallOptions::deadline() const
+qint64 QQmlGrpcCallOptions::deadlineTimeout() const
 {
-    std::chrono::milliseconds ms = m_options.deadline().value_or(0ms);
+    std::chrono::milliseconds ms = m_options.deadlineTimeout().value_or(0ms);
     return ms.count();
 }
 
-void QQmlGrpcCallOptions::setDeadline(qint64 value)
+void QQmlGrpcCallOptions::setDeadlineTimeout(qint64 value)
 {
     std::chrono::milliseconds ms(value);
-    m_options.setDeadline(ms);
-    emit deadlineChanged();
+    m_options.setDeadlineTimeout(ms);
+    emit deadlineTimeoutChanged();
 }
 
 const QGrpcCallOptions &QQmlGrpcCallOptions::options() const

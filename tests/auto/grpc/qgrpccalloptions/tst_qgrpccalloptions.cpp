@@ -25,28 +25,28 @@ private Q_SLOTS:
 void QGrpcCallOptionsTest::hasSpecialMemberFunctions() const
 {
     QGrpcCallOptions o1;
-    QVERIFY(!o1.deadline());
+    QVERIFY(!o1.deadlineTimeout());
     QVERIFY(o1.metadata().empty());
 
-    o1.setDeadline(100ms);
+    o1.setDeadlineTimeout(100ms);
 
     QGrpcCallOptions o2(o1);
-    QCOMPARE_EQ(o1.deadline(), o2.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), o2.deadlineTimeout());
 
     QGrpcCallOptions o3 = o1;
-    QCOMPARE_EQ(o1.deadline(), o3.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), o3.deadlineTimeout());
 
     QGrpcCallOptions o4(std::move(o1));
-    QCOMPARE_EQ(o4.deadline(), o2.deadline());
+    QCOMPARE_EQ(o4.deadlineTimeout(), o2.deadlineTimeout());
 
     o1 = std::move(o4);
-    QCOMPARE_EQ(o1.deadline(), o2.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), o2.deadlineTimeout());
 }
 
 void QGrpcCallOptionsTest::hasImplicitQVariant() const
 {
     QGrpcCallOptions o1;
-    o1.setDeadline(250ms);
+    o1.setDeadlineTimeout(250ms);
     o1.setMetadata({
         { "keyA", "valA" },
         { "keyB", "valB" },
@@ -56,7 +56,7 @@ void QGrpcCallOptionsTest::hasImplicitQVariant() const
     QCOMPARE_EQ(v.metaType(), QMetaType::fromType<QGrpcCallOptions>());
     const auto o2 = v.value<QGrpcCallOptions>();
     QCOMPARE_EQ(o1.metadata(), o2.metadata());
-    QCOMPARE_EQ(o1.deadline(), o2.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), o2.deadlineTimeout());
 }
 
 void QGrpcCallOptionsTest::hasMemberSwap() const
@@ -64,17 +64,17 @@ void QGrpcCallOptionsTest::hasMemberSwap() const
     constexpr std::chrono::milliseconds Dur = 50ms;
 
     QGrpcCallOptions o1;
-    o1.setDeadline(Dur);
+    o1.setDeadlineTimeout(Dur);
     QGrpcCallOptions o2;
 
-    QCOMPARE_EQ(o1.deadline(), Dur);
-    QVERIFY(!o2.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), Dur);
+    QVERIFY(!o2.deadlineTimeout());
     o2.swap(o1);
-    QCOMPARE_EQ(o2.deadline(), Dur);
-    QVERIFY(!o1.deadline());
+    QCOMPARE_EQ(o2.deadlineTimeout(), Dur);
+    QVERIFY(!o1.deadlineTimeout());
     swap(o2, o1);
-    QCOMPARE_EQ(o1.deadline(), Dur);
-    QVERIFY(!o2.deadline());
+    QCOMPARE_EQ(o1.deadlineTimeout(), Dur);
+    QVERIFY(!o2.deadlineTimeout());
 }
 
 void QGrpcCallOptionsTest::propertyMetadata() const
@@ -105,9 +105,9 @@ void QGrpcCallOptionsTest::propertyDeadline() const
 
     QGrpcCallOptions o1;
     auto o1Detach = o1;
-    o1.setDeadline(Dur);
-    QCOMPARE_EQ(o1.deadline(), Dur);
-    QCOMPARE_NE(o1.deadline(), o1Detach.deadline());
+    o1.setDeadlineTimeout(Dur);
+    QCOMPARE_EQ(o1.deadlineTimeout(), Dur);
+    QCOMPARE_NE(o1.deadlineTimeout(), o1Detach.deadlineTimeout());
 }
 
 void QGrpcCallOptionsTest::streamsToDebug() const

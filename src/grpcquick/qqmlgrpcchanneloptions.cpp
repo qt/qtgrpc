@@ -36,18 +36,18 @@ QQmlGrpcChannelOptions::QQmlGrpcChannelOptions(QObject *parent)
 {
 }
 
-qint64 QQmlGrpcChannelOptions::deadline() const
+qint64 QQmlGrpcChannelOptions::deadlineTimeout() const
 {
-    std::chrono::milliseconds ms = d_func()->m_options.deadline().value_or(0ms);
+    std::chrono::milliseconds ms = d_func()->m_options.deadlineTimeout().value_or(0ms);
     return ms.count();
 }
 
-void QQmlGrpcChannelOptions::setDeadline(qint64 value)
+void QQmlGrpcChannelOptions::setDeadlineTimeout(qint64 value)
 {
     Q_D(QQmlGrpcChannelOptions);
     std::chrono::milliseconds ms(value);
-    d->m_options.setDeadline(ms);
-    emit deadlineChanged();
+    d->m_options.setDeadlineTimeout(ms);
+    emit deadlineTimeoutChanged();
 }
 
 const QGrpcChannelOptions &QQmlGrpcChannelOptions::options() const

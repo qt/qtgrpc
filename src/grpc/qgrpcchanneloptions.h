@@ -44,13 +44,13 @@ public:
 
     void swap(QGrpcChannelOptions &other) noexcept { d_ptr.swap(other.d_ptr); }
 
-    Q_GRPC_EXPORT QGrpcChannelOptions &setDeadline(std::chrono::milliseconds deadline);
+    Q_GRPC_EXPORT QGrpcChannelOptions &setDeadlineTimeout(std::chrono::milliseconds timeout);
     Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(const QHash<QByteArray, QByteArray> &metadata);
     Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(QHash<QByteArray, QByteArray> &&metadata);
     Q_GRPC_EXPORT QGrpcChannelOptions &
     setSerializationFormat(const QGrpcSerializationFormat &format);
 
-    [[nodiscard]] Q_GRPC_EXPORT std::optional<std::chrono::milliseconds> deadline() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<std::chrono::milliseconds> deadlineTimeout() const noexcept;
     [[nodiscard]] Q_GRPC_EXPORT const QHash<QByteArray, QByteArray> &metadata() const & noexcept;
     [[nodiscard]] Q_GRPC_EXPORT QHash<QByteArray, QByteArray> metadata() &&;
     [[nodiscard]] Q_GRPC_EXPORT QGrpcSerializationFormat serializationFormat() const;

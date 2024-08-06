@@ -25,14 +25,14 @@ Item {
             options.sslConfiguration = sslDynamicItem.defaultConfig
         }
         optionsWithChangedProperties.metadata = null
-        optionsWithChangedProperties.deadline = 3000
+        optionsWithChangedProperties.deadlineTimeout = 3000
         options.serializationFormat = QtGrpc.SerializationFormat.Json
 
     }
 
     GrpcChannelOptions {
         id: options
-        deadline: { 1000 }
+        deadlineTimeout: { 1000 }
         metadata: GrpcMetadata {
             id: grpcData
             data: ({ "user-name": "localhost",
@@ -47,7 +47,7 @@ Item {
             data: ({ "user-name": "localhost",
                        "user-password": "qwerty"})
         }
-        deadline: { 1000 }
+        deadlineTimeout: { 1000 }
         serializationFormat: {QtGrpc.SerializationFormat.Json}
     }
 
@@ -115,12 +115,12 @@ Item {
                             field: options.metadata.data["user-name"], answer: "localhost" },
                         { tag: "options.metadata.data[user-password] == qwerty",
                             field: options.metadata.data["user-password"], answer: "qwerty" },
-                        { tag: "metadata deadline = 1000",
-                            field: options.deadline, answer: 1000 },
+                        { tag: "metadata deadlineTimeout = 1000",
+                            field: options.deadlineTimeout, answer: 1000 },
                         { tag: "optionsWithChangedProperties.metadata == null",
                             field: optionsWithChangedProperties.metadata, answer: null },
-                        { tag: "optionsWithChangedProperties.deadline == 3000",
-                            field: optionsWithChangedProperties.deadline, answer: 3000 }
+                        { tag: "optionsWithChangedProperties.deadlineTimeout == 3000",
+                            field: optionsWithChangedProperties.deadlineTimeout, answer: 3000 }
                     ]
         }
 
@@ -138,8 +138,8 @@ Item {
                             answer: QtGrpc.SerializationFormat.Json },
                         { tag: "optionsWithChangedProperties.metadata == null",
                             field: optionsWithChangedProperties.metadata, answer: null },
-                        { tag: "optionsWithChangedProperties.deadline == 3000",
-                            field: optionsWithChangedProperties.deadline, answer: 3000 }
+                        { tag: "optionsWithChangedProperties.deadlineTimeout == 3000",
+                            field: optionsWithChangedProperties.deadlineTimeout, answer: 3000 }
                     ]
         }
 
