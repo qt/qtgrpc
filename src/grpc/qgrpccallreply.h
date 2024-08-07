@@ -28,12 +28,13 @@ public:
 #ifdef Q_QDOC
     template <typename FinishCallback>
     void subscribe(const QObject *receiver, FinishCallback &&finishCallback,
-                   Qt::ConnectionType type = Qt::AutoConnection);
+                   Qt::ConnectionType type = Qt::SingleShotConnection);
 #else
     template <typename FinishCallback>
     void subscribe(const typename QtPrivate::ContextTypeForFunctor<FinishCallback>::ContextType
                        *receiver,
-                   FinishCallback &&finishCallback, Qt::ConnectionType type = Qt::AutoConnection)
+                   FinishCallback &&finishCallback,
+                   Qt::ConnectionType type = Qt::SingleShotConnection)
     {
         connect(this, &QGrpcCallReply::finished, receiver,
                 std::forward<FinishCallback>(finishCallback), type);
