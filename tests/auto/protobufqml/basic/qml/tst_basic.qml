@@ -8,8 +8,10 @@ import QmlTestUri
 
 pragma ValueTypeBehavior: Addressable
 
-                          Item {
+Item {
     id: root
+
+    property var usLocale: Qt.locale("en_US")
 
     TestCase {
         name: "qtprotobufBasicTest"
@@ -213,31 +215,31 @@ pragma ValueTypeBehavior: Addressable
         }
 
         function test_int32LocaleStringConversion() {
-            var field = int32Msg.testFieldInt.toLocaleString(Qt.locale())
-            var answer = Number(int32Msg.testFieldInt).toLocaleString(Qt.locale())
+            var field = int32Msg.testFieldInt.toLocaleString(root.usLocale)
+            var answer = Number(int32Msg.testFieldInt).toLocaleString(root.usLocale)
             expectFail("", "int32Msg number is not match" + field + " not equal " + answer)
             compare(field, answer)
         }
 
         function test_fixed32LocaleStringConversion(data) {
-            var field = fixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale())
-            var answer = Number(fixed32Msg.testFieldFixedInt32).toLocaleString(Qt.locale())
+            var field = fixed32Msg.testFieldFixedInt32.toLocaleString(root.usLocale)
+            var answer = Number(fixed32Msg.testFieldFixedInt32).toLocaleString(root.usLocale)
             expectFail("", "fixed32LocaleString number is not match"
                        + field + " not equal "  + answer)
             compare(field, answer)
         }
 
         function test_sint32LocaleStringConversion() {
-            compare(sint32Msg.testFieldInt.toLocaleString(Qt.locale()),
-                    Number(sint32Msg.testFieldInt).toLocaleString(Qt.locale()),
+            compare(sint32Msg.testFieldInt.toLocaleString(root.usLocale),
+                    Number(sint32Msg.testFieldInt).toLocaleString(root.usLocale),
                     "Locale number string is not match "
-                    + sint32Msg.testFieldInt.toLocaleString(Qt.locale())
-                    + " != " + Number(sint32Msg.testFieldInt).toLocaleString(Qt.locale()))
+                    + sint32Msg.testFieldInt.toLocaleString(root.usLocale)
+                    + " != " + Number(sint32Msg.testFieldInt).toLocaleString(root.usLocale))
         }
 
         function test_sfixed32LocaleStringConversion(data) {
-            var field = sfixed32Msg.testFieldFixedInt32.toLocaleString(Qt.locale())
-            var answer = Number(sfixed32Msg.testFieldFixedInt32).toLocaleString(Qt.locale())
+            var field = sfixed32Msg.testFieldFixedInt32.toLocaleString(root.usLocale)
+            var answer = Number(sfixed32Msg.testFieldFixedInt32).toLocaleString(root.usLocale)
 
             expectFail("", "sfixed32LocaleString number is not match" +
                        field + " not equal " + answer)
