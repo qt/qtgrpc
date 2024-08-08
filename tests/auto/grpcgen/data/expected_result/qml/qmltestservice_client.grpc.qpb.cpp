@@ -101,8 +101,8 @@ TestMethodBiStreamSender *QmlClient::testMethodBiStream(const qtgrpc::tests::Sim
         return nullptr;
     }
 
-    auto stream = startStream<QGrpcBidirStream>("testMethodBiStream"_L1, arg, options);
-    QtGrpcQuickFunctional::makeBidirStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
+    auto stream = startStream<QGrpcBidiStream>("testMethodBiStream"_L1, arg, options);
+    QtGrpcQuickFunctional::makeBidiStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
                         stream, messageCallback, finishCallback, errorCallback);
     auto *sender = new TestMethodBiStreamSender(std::move(stream));
     QJSEngine::setObjectOwnership(sender, QJSEngine::JavaScriptOwnership);

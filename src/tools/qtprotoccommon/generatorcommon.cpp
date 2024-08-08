@@ -363,7 +363,7 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
 
     std::string streamType;
     if (method->client_streaming() && method->server_streaming()) {
-        streamType = "Bidir";
+        streamType = "Bidi";
     } else if (method->server_streaming()) {
         streamType = "Server";
     } else if (method->client_streaming()) {

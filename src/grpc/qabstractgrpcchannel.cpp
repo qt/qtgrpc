@@ -79,13 +79,13 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual void QAbstractGrpcChannel::startBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
+    \fn virtual void QAbstractGrpcChannel::startBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
     \since 6.7
 
     This pure virtual function that the starts of the bidirectional stream. The
     \a operationContext is the pointer to a channel side
     \l QGrpcOperationContext primitive that is connected with
-    \l QGrpcBidirStream primitive, that is used in \l QGrpcClientBase.
+    \l QGrpcBidiStream primitive, that is used in \l QGrpcClientBase.
 
     The function should implement the channel-side logic of bidirectional
     stream. The implementation must be asynchronous and must not block the
@@ -200,23 +200,23 @@ QAbstractGrpcChannel::startClientStream(QLatin1StringView method, QLatin1StringV
 
 /*!
     \internal
-    Function constructs \l QGrpcBidirStream and \l QGrpcOperationContext
+    Function constructs \l QGrpcBidiStream and \l QGrpcOperationContext
     primitives and makes the required for bidirectional gRPC stream connections
     between them.
 
     The function should not be called directly, but only by
     \l QGrpcClientBase.
 */
-std::shared_ptr<QGrpcBidirStream>
-QAbstractGrpcChannel::startBidirStream(QLatin1StringView method, QLatin1StringView service,
-                                       QByteArrayView arg, const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcBidiStream>
+QAbstractGrpcChannel::startBidiStream(QLatin1StringView method, QLatin1StringView service,
+                                      QByteArrayView arg, const QGrpcCallOptions &options)
 {
     auto operationContext = std::make_shared<
         QGrpcOperationContext>(method, service, arg, options, serializer(),
                                QGrpcOperationContext::PrivateConstructor());
 
-    auto stream = std::make_shared<QGrpcBidirStream>(operationContext);
-    startBidirStream(operationContext);
+    auto stream = std::make_shared<QGrpcBidiStream>(operationContext);
+    startBidiStream(operationContext);
 
     return stream;
 }

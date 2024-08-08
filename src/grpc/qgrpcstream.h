@@ -50,14 +50,14 @@ public:
     bool event(QEvent *event) override;
 };
 
-class Q_GRPC_EXPORT QGrpcBidirStream final : public QGrpcOperation
+class Q_GRPC_EXPORT QGrpcBidiStream final : public QGrpcOperation
 {
     Q_OBJECT
 
 public:
-    explicit QGrpcBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext,
-                              QObject *parent = nullptr);
-    ~QGrpcBidirStream() override;
+    explicit QGrpcBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext,
+                             QObject *parent = nullptr);
+    ~QGrpcBidiStream() override;
 
     void writeMessage(const QProtobufMessage &message);
     void writesDone();
@@ -66,7 +66,7 @@ Q_SIGNALS:
     void messageReceived();
 
 private:
-    Q_DISABLE_COPY_MOVE(QGrpcBidirStream)
+    Q_DISABLE_COPY_MOVE(QGrpcBidiStream)
 
 public:
     bool event(QEvent *event) override;

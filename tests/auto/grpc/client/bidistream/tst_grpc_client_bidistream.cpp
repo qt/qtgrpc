@@ -3,22 +3,20 @@
 #include <grpcclienttestbase.h>
 
 #include <QtCore/QTimer>
-#include <QtTest/QTest>
 #include <QtTest/QSignalSpy>
+#include <QtTest/QTest>
 
-#include <testservice_client.grpc.qpb.h>
 #include <message_latency_defs.h>
+#include <testservice_client.grpc.qpb.h>
 
 using namespace Qt::Literals::StringLiterals;
 using namespace qtgrpc::tests;
 
-class QtGrpcClientBidirStreamTest : public GrpcClientTestBase
+class QtGrpcClientBidiStreamTest : public GrpcClientTestBase
 {
     Q_OBJECT
 public:
-    QtGrpcClientBidirStreamTest()
-        : GrpcClientTestBase(
-                Channels{ GrpcClientTestBase::Channel::Qt })
+    QtGrpcClientBidiStreamTest() : GrpcClientTestBase(Channels{ GrpcClientTestBase::Channel::Qt })
     {
     }
 
@@ -28,7 +26,7 @@ private Q_SLOTS:
     void multipleImmediateSendsWithDone();
 };
 
-void QtGrpcClientBidirStreamTest::valid()
+void QtGrpcClientBidiStreamTest::valid()
 {
     const int ExpectedMessageCount = 4;
 
@@ -39,7 +37,7 @@ void QtGrpcClientBidirStreamTest::valid()
 
     QString fullResponse;
     int i = 0;
-    QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, this,
+    QObject::connect(stream.get(), &QGrpcBidiStream::messageReceived, this,
                      [stream, &request, &fullResponse, &i]() {
                          if (const auto rsp = stream->read<SimpleStringMessage>()) {
                              fullResponse += rsp->testFieldString() + QString::number(++i);
@@ -60,7 +58,7 @@ void QtGrpcClientBidirStreamTest::valid()
     QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33Stream44");
 }
 
-void QtGrpcClientBidirStreamTest::sequentialSendWithDone()
+void QtGrpcClientBidiStreamTest::sequentialSendWithDone()
 {
     const int ExpectedMessageCount = 4;
 
@@ -71,7 +69,7 @@ void QtGrpcClientBidirStreamTest::sequentialSendWithDone()
 
     QString fullResponse;
     int i = 0;
-    QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, this,
+    QObject::connect(stream.get(), &QGrpcBidiStream::messageReceived, this,
                      [stream, &request, &fullResponse, &i, ExpectedMessageCount]() {
                          Q_UNUSED(ExpectedMessageCount)
                          if (const auto rsp = stream->read<SimpleStringMessage>()) {
@@ -97,7 +95,7 @@ void QtGrpcClientBidirStreamTest::sequentialSendWithDone()
     QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33");
 }
 
-void QtGrpcClientBidirStreamTest::multipleImmediateSendsWithDone()
+void QtGrpcClientBidiStreamTest::multipleImmediateSendsWithDone()
 {
     const int ExpectedMessageCount = 4;
 
@@ -114,7 +112,7 @@ void QtGrpcClientBidirStreamTest::multipleImmediateSendsWithDone()
     }
 
     int i = 1;
-    QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, this,
+    QObject::connect(stream.get(), &QGrpcBidiStream::messageReceived, this,
                      [stream, &fullResponse, &i, ExpectedMessageCount]() {
                          Q_UNUSED(ExpectedMessageCount)
                          if (const auto rsp = stream->read<SimpleStringMessage>()) {
@@ -138,6 +136,6 @@ void QtGrpcClientBidirStreamTest::multipleImmediateSendsWithDone()
     QCOMPARE_EQ(fullResponse, "Stream11Stream22Stream33Stream44");
 }
 
-QTEST_MAIN(QtGrpcClientBidirStreamTest)
+QTEST_MAIN(QtGrpcClientBidiStreamTest)
 
-#include "tst_grpc_client_bidirstream.moc"
+#include "tst_grpc_client_bidistream.moc"

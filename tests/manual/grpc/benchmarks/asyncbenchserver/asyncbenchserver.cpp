@@ -44,7 +44,7 @@ public:
         new UnaryCall(mCompletionQueue.get(), &mService);
         new ServerStreaming(mCompletionQueue.get(), &mService);
         new ClientStreaming(mCompletionQueue.get(), &mService);
-        new BiDirStreaming(mCompletionQueue.get(), &mService);
+        new BiDiStreaming(mCompletionQueue.get(), &mService);
 
         AsyncServer::processRPCs(mCompletionQueue.get());
     }

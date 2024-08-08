@@ -882,7 +882,7 @@ void QGrpcHttp2Channel::startClientStream(std::shared_ptr<QGrpcOperationContext>
     \internal
     Implementation of bidirectional gRPC stream based on \l QNetworkAccessManager.
 */
-void QGrpcHttp2Channel::startBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext)
+void QGrpcHttp2Channel::startBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext)
 {
     d_ptr->processOperation(operationContext);
 }

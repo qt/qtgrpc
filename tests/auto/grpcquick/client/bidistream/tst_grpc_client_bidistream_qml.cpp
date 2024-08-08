@@ -8,7 +8,7 @@
 #include <message_latency_defs.h>
 #include <server_proc_runner.h>
 
-class GrpcClientBidirStreamQml : public QObject
+class GrpcClientBidiStreamQml : public QObject
 {
     Q_OBJECT
 
@@ -30,6 +30,6 @@ private:
     ServerProcRunner m_serverProccess{ TEST_GRPC_SERVER_PATH };
 };
 
-QUICK_TEST_MAIN_WITH_SETUP(tst_grpc_client_bidirstream_qml, GrpcClientBidirStreamQml)
+QUICK_TEST_MAIN_WITH_SETUP(tst_grpc_client_bidistream_qml, GrpcClientBidiStreamQml)
 
-#include "tst_grpc_client_bidirstream_qml.moc"
+#include "tst_grpc_client_bidistream_qml.moc"

@@ -69,7 +69,7 @@ void QmlClientDeclarationPrinter::printClientMethodsDeclaration()
         MethodMap parameters = common::produceMethodMap(method, m_typeMap["classname"]);
         if (method->server_streaming() && method->client_streaming()) {
             m_printer->Print(parameters,
-                             GrpcTemplates::ClientMethodBidirStreamDeclarationQmlTemplate());
+                             GrpcTemplates::ClientMethodBidiStreamDeclarationQmlTemplate());
         } else if (method->server_streaming()) {
             m_printer->Print(parameters,
                              GrpcTemplates::ClientMethodServerStreamDeclarationQmlTemplate());

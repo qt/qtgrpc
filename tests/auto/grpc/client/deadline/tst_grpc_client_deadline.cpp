@@ -146,7 +146,7 @@ void QtGrpcClientDeadlineTest::callDeadlineBiStreamExceeds()
 
     auto stream = client()->testMethodBiStreamSleep(request, opts);
     QSignalSpy finSpy(stream.get(), &QGrpcOperation::finished);
-    QSignalSpy msgSpy(stream.get(), &QGrpcBidirStream::messageReceived);
+    QSignalSpy msgSpy(stream.get(), &QGrpcBidiStream::messageReceived);
     QVERIFY(finSpy.isValid());
     QVERIFY(msgSpy.isValid());
     QCOMPARE_EQ(finSpy.count(), 0);
@@ -171,7 +171,7 @@ void QtGrpcClientDeadlineTest::callDeadlineBiStreamFinishes()
 
     auto stream = client()->testMethodBiStreamSleep(request, opts);
     QSignalSpy finSpy(stream.get(), &QGrpcOperation::finished);
-    QSignalSpy msgSpy(stream.get(), &QGrpcBidirStream::messageReceived);
+    QSignalSpy msgSpy(stream.get(), &QGrpcBidiStream::messageReceived);
     QVERIFY(finSpy.isValid());
     QVERIFY(msgSpy.isValid());
     QCOMPARE_EQ(finSpy.count(), 0);

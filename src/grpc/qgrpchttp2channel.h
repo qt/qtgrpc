@@ -32,7 +32,7 @@ private:
     void call(std::shared_ptr<QGrpcOperationContext> operationContext) override;
     void startServerStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
     void startClientStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
-    void startBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
+    void startBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
 
     [[nodiscard]] std::shared_ptr<QAbstractProtobufSerializer> serializer() const noexcept override;
 

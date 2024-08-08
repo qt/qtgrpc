@@ -31,13 +31,13 @@ public:
     friend class TestService::QmlClient;
 };
 
-class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodBiStreamSender : public QQmlGrpcBidirStreamSender
+class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodBiStreamSender : public QQmlGrpcBidiStreamSender
 {
     Q_OBJECT
     QML_NAMED_ELEMENT(TestServiceTestMethodBiStreamSender)
     QML_UNCREATABLE("TestServiceTestMethodBiStreamSender can only be created by gRPC client instance")
 
-    TestMethodBiStreamSender(std::shared_ptr<QGrpcBidirStream> stream) : QQmlGrpcBidirStreamSender(std::move(stream)) {}
+    TestMethodBiStreamSender(std::shared_ptr<QGrpcBidiStream> stream) : QQmlGrpcBidiStreamSender(std::move(stream)) {}
 
 public:
     Q_INVOKABLE void writeMessage(const qtgrpc::tests::SimpleStringMessage &arg)

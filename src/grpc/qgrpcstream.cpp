@@ -87,37 +87,37 @@ bool QGrpcClientStream::event(QEvent *event)
 }
 
 /*!
-    \class QGrpcBidirStream
+    \class QGrpcBidiStream
     \inmodule QtGrpc
     \since 6.7
 
-    \brief The QGrpcBidirStream class provides the interface to access the
+    \brief The QGrpcBidiStream class provides the interface to access the
     bidirectional gRPC stream functionality from gRPC client side.
 */
 
 /*!
-    \fn void QGrpcBidirStream::messageReceived()
+    \fn void QGrpcBidiStream::messageReceived()
 
     The signal is emitted when the stream receives an updated value from server.
 */
 
-QGrpcBidirStream::QGrpcBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext,
-                                   QObject *parent)
+QGrpcBidiStream::QGrpcBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext,
+                                 QObject *parent)
     : QGrpcOperation(std::move(operationContext), parent)
 {
     QObject::connect(&QGrpcOperation::context(), &QGrpcOperationContext::messageReceived, this,
-                     &QGrpcBidirStream::messageReceived);
+                     &QGrpcBidiStream::messageReceived);
 }
 
 /*!
-    Destroys the QGrpcBidirStream object.
+    Destroys the QGrpcBidiStream object.
 */
-QGrpcBidirStream::~QGrpcBidirStream() = default;
+QGrpcBidiStream::~QGrpcBidiStream() = default;
 
 /*!
     Serializes \a message and sends it to the server.
 */
-void QGrpcBidirStream::writeMessage(const QProtobufMessage &message)
+void QGrpcBidiStream::writeMessage(const QProtobufMessage &message)
 {
     QByteArray data = QGrpcOperation::context().serializer()->serialize(&message);
     emit QGrpcOperation::context().writeMessageRequested(data);
@@ -128,12 +128,12 @@ void QGrpcBidirStream::writeMessage(const QProtobufMessage &message)
     Ends the stream from the client side (half-closing). The server is still allowed to send
     responses after this call.
 */
-void QGrpcBidirStream::writesDone()
+void QGrpcBidiStream::writesDone()
 {
     emit QGrpcOperation::context().writesDoneRequested();
 }
 
-bool QGrpcBidirStream::event(QEvent *event)
+bool QGrpcBidiStream::event(QEvent *event)
 {
     return QGrpcOperation::event(event);
 }

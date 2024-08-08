@@ -123,15 +123,14 @@ void makeClientStreamConnections(QJSEngine *jsEngine,
 }
 
 template <typename Ret>
-void makeBidirStreamConnections(QJSEngine *jsEngine,
-                                   const std::shared_ptr<QGrpcBidirStream> &stream,
-                                   const QJSValue &messageCallback, const QJSValue &finishCallback,
-                                   const QJSValue &errorCallback)
+void makeBidiStreamConnections(QJSEngine *jsEngine, const std::shared_ptr<QGrpcBidiStream> &stream,
+                               const QJSValue &messageCallback, const QJSValue &finishCallback,
+                               const QJSValue &errorCallback)
 {
-    QtGrpcQuickFunctional::connectMultipleReceiveOperationFinished(jsEngine, stream,
-                                            finishCallback, errorCallback);
+    QtGrpcQuickFunctional::connectMultipleReceiveOperationFinished(jsEngine, stream, finishCallback,
+                                                                   errorCallback);
 
-    QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, jsEngine,
+    QObject::connect(stream.get(), &QGrpcBidiStream::messageReceived, jsEngine,
                      [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback] {
                          QtGrpcQuickFunctional::handleReceivedMessage<Ret>(jsEngine, streamPtr,
                                                                            messageCallback,

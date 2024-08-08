@@ -42,8 +42,8 @@ public:
     static const char *ClientMethodClientStreamDeclarationQmlTemplate();
     static const char *ClientMethodClientStreamDefinitionQmlTemplate();
 
-    static const char *ClientMethodBidirStreamDeclarationQmlTemplate();
-    static const char *ClientMethodBidirStreamDefinitionQmlTemplate();
+    static const char *ClientMethodBidiStreamDeclarationQmlTemplate();
+    static const char *ClientMethodBidiStreamDefinitionQmlTemplate();
 };
 
 } // namespace QtGrpc

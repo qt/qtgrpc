@@ -256,11 +256,11 @@ with \c Pong, which contains the slowest \c Ping time.
 \section1 Using the bidirectional streams in Qt GRPC
 
 Bidirectional streams combine the functionality of server and client streams.
-The generated method returns the pointer to \l QGrpcBidirStream, which provides
+The generated method returns the pointer to \l QGrpcBidiStream, which provides
 the API from both server and client streams:
 \code
-    std::shared_ptr<QGrpcBidirStream> severalPingSeveralPong(const ping::pong::Ping &arg,
-                                                                   const QGrpcCallOptions &options = {});
+    std::shared_ptr<QGrpcBidiStream> severalPingSeveralPong(const ping::pong::Ping &arg,
+                                                            const QGrpcCallOptions &options = {});
 \endcode
 
 Use the bidirectional streams to organize the two-sided communication without
@@ -278,19 +278,19 @@ breaking the connection session:
                          streamPtr->writeMessage(request);
                      });
 
-    QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, stream.get(),
+    QObject::connect(stream.get(), &QGrpcBidiStream::messageReceived, stream.get(),
                      [streamPtr = stream.get(), &timer, &maxPingPongTime, &requestTime]{
                          if (const auto response = streamPtr->read<ping::pong::Pong>())
                             maxPingPongTime = std::max(maxPingPongTime, response->time() - requestTime);
                      });
 
-    QObject::connect(stream.get(), &QGrpcBidirStream::finished, stream.get(),
+    QObject::connect(stream.get(), &QGrpcBidiStream::finished, stream.get(),
                      [streamPtr = stream.get(), &timer, &maxPingPongTime]{
                          qDebug() << "Maximum Ping-Pong time: " << maxPingPongTime;
                          timer.stop();
                      });
 
-    QObject::connect(stream.get(), &QGrpcBidirStream::errorOccurred, stream.get(),
+    QObject::connect(stream.get(), &QGrpcBidiStream::errorOccurred, stream.get(),
                      [&timer](const QGrpcStatus &status){
                          qDebug() << "Error occurred: " << status.code() << status.message();
                          timer.stop();
@@ -303,7 +303,7 @@ Every time the client sends the \c Ping requests, the server responds with the
 \c Pong message. The maximum Ping-Pong time is evaluated until the server ends
 the communication by sending a status code to the client.
 
-\note \l QGrpcBidirStream overrides the internal buffer when receiving a new
-message from the server. After server \l{QGrpcBidirStream::finished}{finished}
+\note \l QGrpcBidiStream overrides the internal buffer when receiving a new
+message from the server. After server \l{QGrpcBidiStream::finished}{finished}
 the communication,  you can read only the last message received from the server.
 */
