@@ -360,18 +360,17 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                      });
 
     Q_ASSERT(parentChannel != nullptr);
-    auto errorConnection = std::make_shared<QMetaObject::Connection>();
-    *errorConnection = QObject::connect(
+    QObject::connect(
         m_stream.get(), &QHttp2Stream::errorOccurred, parentChannel,
-        [parentChannel, errorConnection, this](quint32 http2ErrorCode, const QString &errorString) {
+        [parentChannel, this](quint32 http2ErrorCode, const QString &errorString) {
             if (!m_operation.expired()) {
                 auto channelOp = m_operation.lock();
                 emit channelOp->finished(QGrpcStatus{ http2ErrorToStatusCode(http2ErrorCode),
                                                       errorString });
             }
             parentChannel->deleteHandler(this);
-            QObject::disconnect(*errorConnection);
-        });
+        },
+        Qt::SingleShotConnection);
 
     QObject::connect(m_stream.get(), &QHttp2Stream::dataReceived, channelOpPtr,
                      [channelOpPtr, parentChannel, this](const QByteArray &data, bool endStream) {

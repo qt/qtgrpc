@@ -144,13 +144,13 @@ void QGrpcClientBasePrivate::addStream(QGrpcOperation *grpcStream)
         activeStreams.remove(grpcStream);
     });
 
-    auto finishedConnection = std::make_shared<QMetaObject::Connection>();
-    *finishedConnection = QObject::connect(grpcStream, &QGrpcOperation::finished, q,
-                                           [this, grpcStream, finishedConnection] {
-                                               Q_ASSERT(activeStreams.contains(grpcStream));
-                                               activeStreams.remove(grpcStream);
-                                               QObject::disconnect(*finishedConnection);
-                                           });
+    QObject::connect(
+        grpcStream, &QGrpcOperation::finished, q,
+        [this, grpcStream] {
+            Q_ASSERT(activeStreams.contains(grpcStream));
+            activeStreams.remove(grpcStream);
+        },
+        Qt::SingleShotConnection);
     const auto it = activeStreams.insert(grpcStream);
     Q_ASSERT(it.second);
 }

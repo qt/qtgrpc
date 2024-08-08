@@ -38,22 +38,18 @@ void connectMultipleReceiveOperationFinished(QJSEngine *jsEngine,
     auto *operationPtr = operation.get();
     QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operationPtr);
 
-    auto finishConnection = std::make_shared<QMetaObject::Connection>();
-    *finishConnection = QObject::connect(operationPtr, &QGrpcOperation::finished, jsEngine,
-                                         [successCallback, errorCallback, jsEngine,
-                                          finishConnection,
-                                          operation = std::move(operation)](const QGrpcStatus
-                                                                                &status) {
-                                             // We take 'operation' by copy so that its lifetime
-                                             // is extended until this lambda is destroyed.
-                                             if (QtGrpcQuickFunctional::
-                                                     checkReceivedStatus(jsEngine, status,
-                                                                         errorCallback)
-                                                 && successCallback.isCallable()) {
-                                                 successCallback.call();
-                                             }
-                                             QObject::disconnect(*finishConnection);
-                                         });
+    QObject::connect(
+        operationPtr, &QGrpcOperation::finished, jsEngine,
+        [successCallback, errorCallback, jsEngine,
+         operation = std::move(operation)](const QGrpcStatus &status) {
+            // We take 'operation' by copy so that its lifetime
+            // is extended until this lambda is destroyed.
+            if (QtGrpcQuickFunctional::checkReceivedStatus(jsEngine, status, errorCallback)
+                && successCallback.isCallable()) {
+                successCallback.call();
+            }
+        },
+        Qt::SingleShotConnection);
 }
 
 void handleReceivedMessageImpl(QJSEngine *jsEngine, std::optional<QJSValue> message,
@@ -77,19 +73,16 @@ void Private::connectSingleReceiveOperationFinishedImpl(QJSEngine *jsEngine,
     auto *operationPtr = operation.get();
     QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operationPtr);
 
-    auto finishConnection = std::make_shared<QMetaObject::Connection>();
-    *finishConnection = QObject::
-            connect(operationPtr, &QGrpcCallReply::finished, jsEngine,
-                    [jsEngine, successCallback, errorCallback, finishConnection, impl,
-                    operation = std::move(operation)](const QGrpcStatus &status) {
-        // We take 'operation' by copy so that its lifetime
-        // is extended until this lambda is destroyed.
-        if (QtGrpcQuickFunctional::checkReceivedStatus(jsEngine, status,
-                                                       errorCallback))
-            impl(jsEngine, operation.get(), successCallback, errorCallback);
-
-        QObject::disconnect(*finishConnection);
-    });
+    QObject::connect(
+        operationPtr, &QGrpcCallReply::finished, jsEngine,
+        [jsEngine, successCallback, errorCallback, impl,
+         operation = std::move(operation)](const QGrpcStatus &status) {
+            // We take 'operation' by copy so that its lifetime
+            // is extended until this lambda is destroyed.
+            if (QtGrpcQuickFunctional::checkReceivedStatus(jsEngine, status, errorCallback))
+                impl(jsEngine, operation.get(), successCallback, errorCallback);
+        },
+        Qt::SingleShotConnection);
 }
 
 void Private::makeServerStreamConnectionsImpl(QJSEngine *jsEngine,

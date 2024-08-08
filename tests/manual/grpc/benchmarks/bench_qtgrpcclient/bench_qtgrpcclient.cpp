@@ -66,27 +66,24 @@ void QtGrpcClientBenchmark::unaryCallHelper(qt::bench::UnaryCallRequest &request
     auto reply = mClient.UnaryCall(request);
     auto *replyPtr = reply.get();
 
-    auto connection = std::make_shared<QMetaObject::Connection>();
-    *connection = QObject::connect(replyPtr, &QGrpcCallReply::finished, &mClient,
-                                   [connection, reply = std::move(reply), this, &request,
-                                    &writes](const QGrpcStatus &status) {
-                                       if (writes == 0)
-                                           mTimer.start();
-                                       if (status.isOk()) {
-                                           if (++writes < mCalls) {
-                                               unaryCallHelper(request, writes);
-                                           } else {
-                                               Client::printRpcResult("UnaryCall",
-                                                                      mTimer.nsecsElapsed(),
-                                                                      writes);
-                                               mLoop.quit();
-                                           }
-                                       } else {
-                                           qDebug() << "FAILED: " << status;
-                                           mLoop.quit();
-                                       }
-                                       QObject::disconnect(*connection);
-                                   });
+    QObject::connect(
+        replyPtr, &QGrpcCallReply::finished, &mClient,
+        [reply = std::move(reply), this, &request, &writes](const QGrpcStatus &status) {
+            if (writes == 0)
+                mTimer.start();
+            if (status.isOk()) {
+                if (++writes < mCalls) {
+                    unaryCallHelper(request, writes);
+                } else {
+                    Client::printRpcResult("UnaryCall", mTimer.nsecsElapsed(), writes);
+                    mLoop.quit();
+                }
+            } else {
+                qDebug() << "FAILED: " << status;
+                mLoop.quit();
+            }
+        },
+        Qt::SingleShotConnection);
 }
 
 void QtGrpcClientBenchmark::serverStreaming()

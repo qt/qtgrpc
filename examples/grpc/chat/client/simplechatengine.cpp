@@ -63,25 +63,22 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
     // ![1]
     auto stream = m_client->messageList(qtgrpc::examples::chat::None());
     auto streamPtr = stream.get();
-    auto finishedConnection = std::make_shared<QMetaObject::Connection>();
-    *finishedConnection = QObject::connect(streamPtr, &QGrpcServerStream::finished, this,
-                                           [this, finishedConnection,
-                                            stream = std::move(stream)](const QGrpcStatus &status) {
-                                               if (!status.isOk()) {
-                                                   qCritical() << "Stream error(" << status.code()
-                                                               << "):" << status.message();
-                                               }
-                                               if (status.code()
-                                                   == QtGrpc::StatusCode::Unauthenticated) {
-                                                   emit authFailed();
-                                               } else if (status.code() != QtGrpc::StatusCode::Ok) {
-                                                   emit networkError(status.message());
-                                                   setState(Disconnected);
-                                               } else {
-                                                   setState(Disconnected);
-                                               }
-                                               disconnect(*finishedConnection);
-                                           });
+    QObject::connect(
+        streamPtr, &QGrpcServerStream::finished, this,
+        [this, stream = std::move(stream)](const QGrpcStatus &status) {
+            if (!status.isOk()) {
+                qCritical() << "Stream error(" << status.code() << "):" << status.message();
+            }
+            if (status.code() == QtGrpc::StatusCode::Unauthenticated) {
+                emit authFailed();
+            } else if (status.code() != QtGrpc::StatusCode::Ok) {
+                emit networkError(status.message());
+                setState(Disconnected);
+            } else {
+                setState(Disconnected);
+            }
+        },
+        Qt::SingleShotConnection);
 
     QObject::connect(streamPtr, &QGrpcServerStream::messageReceived, this,
                      [this, name, password, stream = streamPtr]() {
