@@ -44,14 +44,14 @@ std::shared_ptr<QGrpcClientStream> Client::testMethodClientStream(const qtgrpc::
     return startStream<QGrpcClientStream>("testMethodClientStream"_L1, arg, options);
 }
 
-std::shared_ptr<QGrpcBidirStream> Client::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg)
+std::shared_ptr<QGrpcBidiStream> Client::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg)
 {
-    return startStream<QGrpcBidirStream>("testMethodBiStream"_L1, arg, {});
+    return startStream<QGrpcBidiStream>("testMethodBiStream"_L1, arg, {});
 }
 
-std::shared_ptr<QGrpcBidirStream> Client::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcBidiStream> Client::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
-    return startStream<QGrpcBidirStream>("testMethodBiStream"_L1, arg, options);
+    return startStream<QGrpcBidiStream>("testMethodBiStream"_L1, arg, options);
 }
 
 } // namespace TestService

@@ -180,7 +180,7 @@ const char *GrpcTemplates::ClientMethodClientStreamDeclarationQmlTemplate()
            "                const QGrpcCallOptions &options);\n";
 }
 
-const char *GrpcTemplates::ClientMethodBidirStreamDeclarationQmlTemplate()
+const char *GrpcTemplates::ClientMethodBidiStreamDeclarationQmlTemplate()
 {
     return "Q_INVOKABLE $sender_class_name$ *$method_name$("
            "const $param_type$ &$param_name$,\n"
@@ -253,7 +253,7 @@ const char *GrpcTemplates::ClientMethodClientStreamDefinitionQmlTemplate()
            "}\n\n";
 }
 
-const char *GrpcTemplates::ClientMethodBidirStreamDefinitionQmlTemplate()
+const char *GrpcTemplates::ClientMethodBidiStreamDefinitionQmlTemplate()
 {
     return "\n$sender_class_name$ *$classname$::$method_name$(const $param_type$ &$param_name$,\n"
            "            const QJSValue &messageCallback,\n"
@@ -276,9 +276,9 @@ const char *GrpcTemplates::ClientMethodBidirStreamDefinitionQmlTemplate()
            "from JS engine context\";\n"
            "        return nullptr;\n"
            "    }\n\n"
-           "    auto stream = startStream<QGrpcBidirStream>(\"$method_name$\"_L1,"
+           "    auto stream = startStream<QGrpcBidiStream>(\"$method_name$\"_L1,"
            " $param_name$, options);\n"
-           "    QtGrpcQuickFunctional::makeBidirStreamConnections<$return_type$>(jsEngine,\n"
+           "    QtGrpcQuickFunctional::makeBidiStreamConnections<$return_type$>(jsEngine,\n"
            "                        stream, messageCallback, finishCallback, errorCallback);\n"
            "    auto *sender = new $sender_class_name$(std::move(stream));\n"
            "    QJSEngine::setObjectOwnership(sender, QJSEngine::JavaScriptOwnership);\n"

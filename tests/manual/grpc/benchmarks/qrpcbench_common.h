@@ -25,7 +25,7 @@ concept ClientConcept = requires(T t) {
     { t.unaryCall() } -> std::same_as<void>;
     { t.serverStreaming() } -> std::same_as<void>;
     { t.clientStreaming() } -> std::same_as<void>;
-    { t.bidirStreaming() } -> std::same_as<void>;
+    { t.bidiStreaming() } -> std::same_as<void>;
 };
 
 template <ClientConcept C>
@@ -46,7 +46,7 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
     QCommandLineOption enableUnary("U", "Enable UnaryCalls");
     QCommandLineOption enableSStream("S", "Enable ServerStream");
     QCommandLineOption enableCStream("C", "Enable ClientStream");
-    QCommandLineOption enableBStream("B", "Enable BiDirStream");
+    QCommandLineOption enableBStream("B", "Enable BiDiStream");
 
     parser.addOption(calls);
     parser.addOption(payload);
@@ -95,7 +95,7 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
         {
             C client(amountCalls, payloadSize);
             if (defaultRun || parser.isSet(enableBStream))
-                client.bidirStreaming();
+                client.bidiStreaming();
         }
     } else {
         C client(amountCalls, payloadSize);
@@ -106,7 +106,7 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
         if (defaultRun || parser.isSet(enableCStream))
             client.clientStreaming();
         if (defaultRun || parser.isSet(enableBStream))
-            client.bidirStreaming();
+            client.bidiStreaming();
     }
 
     std::cout << std::format("\n#### End of {} benchmark ####\n", name);

@@ -4,4 +4,4 @@
 add_subdirectory(unarycall)
 add_subdirectory(serverstream)
 add_subdirectory(clientstream)
-add_subdirectory(bidirstream)
+add_subdirectory(bidistream)

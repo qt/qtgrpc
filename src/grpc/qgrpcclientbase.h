@@ -26,7 +26,7 @@ namespace QtGrpcPrivate {
 template <typename T> inline constexpr bool is_qtgrpc_stream_v = false;
 template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcServerStream> = true;
 template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcClientStream> = true;
-template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcBidirStream> = true;
+template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcBidiStream> = true;
 }
 
 class QProtobufMessage;
@@ -65,8 +65,8 @@ protected:
             return startServerStream(method, arg, options);
         } else if constexpr (std::is_same_v<StreamType, QGrpcClientStream>) {
             return startClientStream(method, arg, options);
-        } else if constexpr (std::is_same_v<StreamType, QGrpcBidirStream>) {
-            return startBidirStream(method, arg, options);
+        } else if constexpr (std::is_same_v<StreamType, QGrpcBidiStream>) {
+            return startBidiStream(method, arg, options);
         } else {
             static_assert(QtPrivate::type_dependent_false<StreamType>::value,
                           "Invalid stream type received");
@@ -83,9 +83,9 @@ private:
                                                          const QProtobufMessage &arg,
                                                          const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcBidirStream> startBidirStream(QLatin1StringView method,
-                                                       const QProtobufMessage &arg,
-                                                       const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcBidiStream> startBidiStream(QLatin1StringView method,
+                                                     const QProtobufMessage &arg,
+                                                     const QGrpcCallOptions &options);
 
     std::optional<QByteArray> trySerialize(const QProtobufMessage &arg);
 

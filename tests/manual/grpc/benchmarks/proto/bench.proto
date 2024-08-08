@@ -9,7 +9,7 @@ service BenchmarkService {
     rpc UnaryCall(UnaryCallRequest) returns (UnaryCallResponse);
     rpc ServerStreaming(ServerStreamingRequest) returns (stream ServerStreamingResponse);
     rpc ClientStreaming(stream ClientStreamingRequest) returns (ClientStreamingResponse);
-    rpc BiDirStreaming(stream BiDirStreamingRequest) returns (stream BiDirStreamingResponse);
+    rpc BiDiStreaming(stream BiDiStreamingRequest) returns (stream BiDiStreamingResponse);
 }
 
 message UnaryCallRequest {
@@ -40,12 +40,12 @@ message ClientStreamingResponse {
     optional bytes payload = 2;
 }
 
-message BiDirStreamingRequest {
+message BiDiStreamingRequest {
     uint64 ping = 1;
     optional bytes payload = 2;
 }
 
-message BiDirStreamingResponse {
+message BiDiStreamingResponse {
     uint64 pong = 1;
     optional bytes payload = 2;
 }

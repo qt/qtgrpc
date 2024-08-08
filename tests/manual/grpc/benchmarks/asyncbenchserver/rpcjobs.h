@@ -225,20 +225,19 @@ private:
     uint64_t mPingCount = 0;
 };
 
-class BiDirStreaming final : public RpcJob
+class BiDiStreaming final : public RpcJob
 {
-    using Request = qt::bench::BiDirStreamingRequest;
-    using Response = qt::bench::BiDirStreamingResponse;
+    using Request = qt::bench::BiDiStreamingRequest;
+    using Response = qt::bench::BiDiStreamingResponse;
 
-    // A simple Ping - Pong BiDir streaming implementation.
+    // A simple Ping - Pong BiDi streaming implementation.
     // gRPC would however also allow to have Read and Write
     // operation running simultaniously.
 public:
-    explicit BiDirStreaming(grpc::ServerCompletionQueue *cq,
-                            BenchmarkService::AsyncService *service)
+    explicit BiDiStreaming(grpc::ServerCompletionQueue *cq, BenchmarkService::AsyncService *service)
         : mCQ(cq), mService(service), mStream(&mContext)
     {
-        mService->RequestBiDirStreaming(&mContext, &mStream, mCQ, mCQ, this);
+        mService->RequestBiDiStreaming(&mContext, &mStream, mCQ, mCQ, this);
         mContext.AsyncNotifyWhenDone(new NotifyWhenDone(this));
     }
 
@@ -249,7 +248,7 @@ public:
 
         switch (mState) {
         case State::Created: {
-            new BiDirStreaming(mCQ, mService);
+            new BiDiStreaming(mCQ, mService);
             if (!ok)
                 return onDone();
             mStream.Read(&mRequest, this);
@@ -284,7 +283,7 @@ public:
 
     void onDone() override
     {
-        std::cout << std::format("bidirstream done, {} pings, {} pongs\n", mPingCount, mPongCount);
+        std::cout << std::format("bidistream done, {} pings, {} pongs\n", mPingCount, mPongCount);
         delete this;
     }
 

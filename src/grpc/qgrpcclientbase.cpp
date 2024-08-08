@@ -57,7 +57,7 @@ QString threadSafetyWarning(const char *methodName)
     communication.
 
     The implementation is only available for \e StreamType:
-    QGrpcServerStream, QGrpcClientStream, and QGrpcBidirStream.
+    QGrpcServerStream, QGrpcClientStream, and QGrpcBidiStream.
 */
 
 /*!
@@ -272,13 +272,13 @@ QGrpcClientBase::startClientStream(QLatin1StringView method, const QProtobufMess
     return grpcStream;
 }
 
-std::shared_ptr<QGrpcBidirStream> QGrpcClientBase::startBidirStream(QLatin1StringView method,
-                                                                    const QProtobufMessage &arg,
-                                                                    const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcBidiStream> QGrpcClientBase::startBidiStream(QLatin1StringView method,
+                                                                  const QProtobufMessage &arg,
+                                                                  const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
 
-    if (!d->checkThread("startStream<QGrpcBidirStream>"))
+    if (!d->checkThread("startStream<QGrpcBidiStream>"))
         return {};
 
     if (!d->checkChannel())
@@ -288,7 +288,7 @@ std::shared_ptr<QGrpcBidirStream> QGrpcClientBase::startBidirStream(QLatin1Strin
     if (!argData)
         return {};
 
-    auto grpcStream = d->channel->startBidirStream(method, d->service, *argData, options);
+    auto grpcStream = d->channel->startBidiStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }

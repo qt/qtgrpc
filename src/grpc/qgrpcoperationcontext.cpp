@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 
     For client streams and unary calls, this means that the response
     is received from the server, and communication will be successfully
-    finished. For server and bidir streams this signal should be called by
+    finished. For server and bidi streams this signal should be called by
     channel to signalize that receiving of new message is completed and user
     business logic now can process it at the client side.
 
@@ -75,7 +75,7 @@ QT_BEGIN_NAMESPACE
     The signal is emitted when the client tries to send a new message to the
     channel.
 
-    This signal can only be emitted by client or bidir streams. Implementations
+    This signal can only be emitted by client or bidi streams. Implementations
     of \l QAbstractGrpcChannel should connect the sending logic to this signal.
     The \a data should be wrapped with the channel-related headers and sent
     to the wire.

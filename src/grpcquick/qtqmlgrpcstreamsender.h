@@ -38,22 +38,22 @@ private:
     Q_DISABLE_COPY_MOVE(QQmlGrpcClientStreamSender)
 };
 
-class QQmlGrpcBidirStreamSenderPrivate;
-class Q_GRPCQUICK_EXPORT QQmlGrpcBidirStreamSender : public QObject
+class QQmlGrpcBidiStreamSenderPrivate;
+class Q_GRPCQUICK_EXPORT QQmlGrpcBidiStreamSender : public QObject
 {
     Q_OBJECT
 public:
-    ~QQmlGrpcBidirStreamSender() override;
+    ~QQmlGrpcBidiStreamSender() override;
 
 protected:
-    explicit QQmlGrpcBidirStreamSender(std::shared_ptr<QGrpcBidirStream> stream,
+    explicit QQmlGrpcBidiStreamSender(std::shared_ptr<QGrpcBidiStream> stream,
                                        QObject *parent = nullptr);
 
     void writeMessageImpl(const QProtobufMessage &message) const;
 
 private:
-    Q_DECLARE_PRIVATE(QQmlGrpcBidirStreamSender)
-    Q_DISABLE_COPY_MOVE(QQmlGrpcBidirStreamSender)
+    Q_DECLARE_PRIVATE(QQmlGrpcBidiStreamSender)
+    Q_DISABLE_COPY_MOVE(QQmlGrpcBidiStreamSender)
 };
 
 #if 0

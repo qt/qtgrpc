@@ -37,7 +37,7 @@ public:
     void unaryCall();
     void serverStreaming();
     void clientStreaming();
-    void bidirStreaming();
+    void bidiStreaming();
 
 private:
     void unaryCallHelper(qt::bench::UnaryCallRequest &request, quint64 &writes);
@@ -160,26 +160,26 @@ void QtGrpcClientBenchmark::clientStreaming()
     mLoop.exec();
 }
 
-void QtGrpcClientBenchmark::bidirStreaming()
+void QtGrpcClientBenchmark::bidiStreaming()
 {
     quint64 counter = 0;
     quint64 recvBytes = 0;
     quint64 sendBytes = 0;
 
-    qt::bench::BiDirStreamingRequest request;
+    qt::bench::BiDiStreamingRequest request;
     if (!sData.isEmpty())
         request.setPayload(sData);
-    qt::bench::BiDirStreamingResponse response;
-    const auto stream = mClient.BiDirStreaming(request);
+    qt::bench::BiDiStreamingResponse response;
+    const auto stream = mClient.BiDiStreaming(request);
 
-    QObject::connect(stream.get(), &QGrpcBidirStream::messageReceived, this,
+    QObject::connect(stream.get(), &QGrpcBidiStream::messageReceived, this,
                      [this, stream, &counter, &response, &request, &recvBytes, &sendBytes]() {
                          if (counter == 0)
                              mTimer.start();
                          if (stream->read(&response)) {
                              if (counter < mCalls) {
                                  if (response.hasPayload())
-                                    recvBytes += static_cast<quint64>(response.payload().size());
+                                     recvBytes += static_cast<quint64>(response.payload().size());
                                  request.setPing(counter);
                                  stream->writeMessage(request);
                                  if (request.hasPayload())
@@ -197,8 +197,8 @@ void QtGrpcClientBenchmark::bidirStreaming()
     QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
                      [this, &counter, &recvBytes, &sendBytes](const QGrpcStatus &status) {
                          if (status.isOk()) {
-                             Client::printRpcResult("BidirStreaming", mTimer.nsecsElapsed(),
-                                                    counter, recvBytes, sendBytes);
+                             Client::printRpcResult("BidiStreaming", mTimer.nsecsElapsed(), counter,
+                                                    recvBytes, sendBytes);
                          } else {
                              qDebug() << "FAILED: " << status;
                          }

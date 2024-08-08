@@ -16,7 +16,7 @@
 QT_BEGIN_NAMESPACE
 
 class QAbstractProtobufSerializer;
-class QGrpcBidirStream;
+class QGrpcBidiStream;
 class QGrpcCallReply;
 class QGrpcOperationContext;
 class QGrpcChannelOptions;
@@ -41,7 +41,7 @@ protected:
     virtual void call(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
     virtual void startServerStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
     virtual void startClientStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
-    virtual void startBidirStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
+    virtual void startBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
 
     [[nodiscard]] const QGrpcChannelOptions &channelOptions() const & noexcept;
     void channelOptions() && = delete;
@@ -56,9 +56,9 @@ private:
     std::shared_ptr<QGrpcClientStream>
     startClientStream(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
                       const QGrpcCallOptions &options);
-    std::shared_ptr<QGrpcBidirStream>
-    startBidirStream(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
-                     const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcBidiStream> startBidiStream(QLatin1StringView method,
+                                                     QLatin1StringView service, QByteArrayView arg,
+                                                     const QGrpcCallOptions &options);
 
     friend class QGrpcClientBase;
     Q_DISABLE_COPY_MOVE(QAbstractGrpcChannel)

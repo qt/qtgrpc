@@ -61,9 +61,9 @@ Item {
     }
 
     TestCase {
-        name: "startBidirStream"
+        name: "startBidiStream"
 
-        function test_testBidirStream() {
+        function test_testBidiStream() {
             root.messageArg.testFieldString = "streamQml" + root.times
             root.streamSender = clientQml.testMethodBiStream(root.messageArg,
                                                              root.readMessage,
@@ -75,10 +75,10 @@ Item {
 
     TestCase {
         id: testCase
-        name: "checkBidirStreamResult"
+        name: "checkBidiStreamResult"
         when: false
 
-        function test_testBidirStreamCheck() {
+        function test_testBidiStreamCheck() {
             compare(root.result, "streamQml11streamQml22streamQml33streamQml44")
             compare(root.times, root.expectedNumberOfMessages)
             verify(!root.errorCallbackCalled)

@@ -51,32 +51,32 @@ void QQmlGrpcClientStreamSender::writeMessageImpl(const QProtobufMessage &messag
 }
 
 /*!
-    \class QQmlGrpcBidirStreamSender
+    \class QQmlGrpcBidiStreamSender
     \internal
 */
 
-class QQmlGrpcBidirStreamSenderPrivate : public QObjectPrivate
+class QQmlGrpcBidiStreamSenderPrivate : public QObjectPrivate
 {
 public:
-    explicit QQmlGrpcBidirStreamSenderPrivate(std::shared_ptr<QGrpcBidirStream> stream)
+    explicit QQmlGrpcBidiStreamSenderPrivate(std::shared_ptr<QGrpcBidiStream> stream)
         : m_stream(std::move(stream))
     {
     }
-    std::shared_ptr<QGrpcBidirStream> m_stream = nullptr;
+    std::shared_ptr<QGrpcBidiStream> m_stream = nullptr;
 };
 
-QQmlGrpcBidirStreamSender::QQmlGrpcBidirStreamSender(std::shared_ptr<QGrpcBidirStream> stream,
+QQmlGrpcBidiStreamSender::QQmlGrpcBidiStreamSender(std::shared_ptr<QGrpcBidiStream> stream,
                                                      QObject *parent)
-    : QObject(*new QQmlGrpcBidirStreamSenderPrivate(std::move(stream)), parent)
+    : QObject(*new QQmlGrpcBidiStreamSenderPrivate(std::move(stream)), parent)
 {
 }
 
-QQmlGrpcBidirStreamSender::~QQmlGrpcBidirStreamSender()
+QQmlGrpcBidiStreamSender::~QQmlGrpcBidiStreamSender()
     = default;
 
-void QQmlGrpcBidirStreamSender::writeMessageImpl(const QProtobufMessage &message) const
+void QQmlGrpcBidiStreamSender::writeMessageImpl(const QProtobufMessage &message) const
 {
-    Q_D(const QQmlGrpcBidirStreamSender);
+    Q_D(const QQmlGrpcBidiStreamSender);
     if (!QtQmlGrpcStreamSender::isValidStream(d->m_stream.get()))
         return;
     d->m_stream->writeMessage(message);
