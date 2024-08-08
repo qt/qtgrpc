@@ -17,12 +17,12 @@ package. It works as an extension to Google's \c protoc tool.
 \section1 Usage
 
 Qt provides CMake functions that ease the use of the \c qtgrpcgen tool.
-When using CMake as a build tool you should prefer using the
+When using CMake as a build tool, it's better to utilize the
 \l{CMake Commands in Qt6 GRPC}{Qt CMake API}.
-For build systems other than CMake, adapt the commands described in
+For build systems other than CMake, you can adjust the commands outlined in the
 \l{Running qtgrpcgen manually}.
 
-\note there is no explicit support for building gRPC and Protobuf
+\note There is no explicit support for building gRPC and Protobuf
 applications using the Qt GRPC module with \e qmake.
 
 \section2 CMake
@@ -47,8 +47,8 @@ Usually \c qtgrpcgen would be invoked through CMake using the
 \endcode
 
 The \c{options} argument is a semicolon-separated list of \l{Options}.
-It can be passed by prepending the \c options to the \c output_dir argument,
-delimited by a colon, or through a separate argument, \c{--qtgrpc_opt}.
+It can be passed by adding \c options to the \c{--qtgrpc_out} argument,
+separated by a colon, or through a separate argument, \c{--qtgrpc_opt}.
 You also can pass the corresponding keys as the \c{QT_GRPC_OPTIONS}
 environment variable. Keys must be presented as a semicolon-separated list:
 \badcode

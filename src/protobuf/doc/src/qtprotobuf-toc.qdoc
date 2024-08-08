@@ -5,8 +5,7 @@
     \page qtprotobuf-toc.html
     \title Qt Protobuf module topics
 
-    The following list has links to all the individual topics (HTML files)
-    in the Qt Protobuf module.
+    List of topics (HTML files) in the Qt Protobuf module.
 
     \list
     \li \l {Example of installation for Windows using vcpkg}{Installation for Windows using vcpkg}
