@@ -28,8 +28,8 @@ qhp.QtProtobuf.subprojects.qmltypes.selectors = qmlclass
 qhp.QtProtobuf.subprojects.qmltypes.sortPages = true
 
 qhp.QtProtobuf.subprojects.examples.title = Examples
-qhp.QtProtobuf.subprojects.examples.indexTitle = Qt Protobuf Examples and Tutorials
-qhp.QtProtobuf.subprojects.examples.selectors = doc:example
+qhp.QtProtobuf.subprojects.examples.indexTitle = Qt Protobuf Examples
+qhp.QtProtobuf.subprojects.examples.selectors = example
 
 qhp.QtProtobuf.subprojects.classes.title      = C++ Classes
 qhp.QtProtobuf.subprojects.classes.indexTitle = Qt Protobuf C++ Classes
@@ -55,7 +55,7 @@ qhp.QtProtobuf.subprojects.manual.title = Qt Protobuf
 qhp.QtProtobuf.subprojects.manual.indexTitle = Qt Protobuf module topics
 qhp.QtProtobuf.subprojects.manual.type = manual
 
-depends += qtdoc qtcore qtgui qtcmake qtgrpc qtwidgets qtqml
+depends += qtdoc qtcore qtgui qtcmake qtgrpc qtwidgets qtqml qtquickcontrols
 
 {headerdirs,sourcedirs} += .. \
                            ../../protobufqttypes \
