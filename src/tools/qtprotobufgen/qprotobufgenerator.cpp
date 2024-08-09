@@ -47,24 +47,24 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
     assert(file != nullptr);
     assert(generatorContext != nullptr);
 
-    std::string filename = utils::extractFileBasename(file->name());
-    std::string basename = generateBaseName(file, filename);
+    std::string basename = utils::extractFileBasename(file->name());
+    std::string relativePath = common::generateRelativeFilePath(file, basename);
     std::unique_ptr<io::ZeroCopyOutputStream> sourceStream(
-                generatorContext->Open(basename + CommonTemplates::ProtoFileSuffix() + ".cpp"));
+                generatorContext->Open(relativePath + CommonTemplates::ProtoFileSuffix() + ".cpp"));
     std::unique_ptr<io::ZeroCopyOutputStream> registrationStream(
-                generatorContext->Open(basename + "_protobuftyperegistrations.cpp"));
+                generatorContext->Open(relativePath + "_protobuftyperegistrations.cpp"));
 
     std::shared_ptr<Printer> sourcePrinter(new Printer(sourceStream.get(), '$'));
     std::shared_ptr<Printer> registrationPrinter(new Printer(registrationStream.get(), '$'));
 
     printDisclaimer(sourcePrinter.get());
-    sourcePrinter->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
+    sourcePrinter->Print({{"include", relativePath + CommonTemplates::ProtoFileSuffix()}},
                          CommonTemplates::InternalIncludeTemplate());
 
     registrationPrinter->Print({{"include", "QtProtobuf/qprotobufregistration.h"}},
                                CommonTemplates::ExternalIncludeTemplate());
 
-    registrationPrinter->Print({{"include", basename + CommonTemplates::ProtoFileSuffix()}},
+    registrationPrinter->Print({{"include", relativePath + CommonTemplates::ProtoFileSuffix()}},
                                CommonTemplates::InternalIncludeTemplate());
 
     bool generateWellknownTimestamp = false;
@@ -101,7 +101,7 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
         messageDef.printClassRegistration(registrationPrinter.get());
     });
 
-    registrationPrinter->Print({{"proto_name", utils::capitalizeAsciiName(filename)}},
+    registrationPrinter->Print({{"proto_name", utils::capitalizeAsciiName(basename)}},
                                CommonTemplates::ProtobufTypeRegistrarTemplate());
 
     CloseFileNamespaces(file, registrationPrinter.get());
@@ -109,7 +109,7 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
 
     // Include the moc file:
     sourcePrinter->Print({{"source_file",
-                           "moc_" + filename + CommonTemplates::ProtoFileSuffix() + ".cpp"}},
+                           "moc_" + basename + CommonTemplates::ProtoFileSuffix() + ".cpp"}},
                          CommonTemplates::MocIncludeTemplate());
 
 }
@@ -120,23 +120,20 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     assert(file != nullptr);
     assert(generatorContext != nullptr);
 
-    std::string filename = utils::extractFileBasename(file->name());
-    std::string basename = generateBaseName(file, filename);
+    const std::string basename = utils::extractFileBasename(file->name()) +
+        CommonTemplates::ProtoFileSuffix();
+    std::string relativePath = common::generateRelativeFilePath(file, basename);
     std::set<std::string> internalIncludes;
     std::set<std::string> externalIncludes;
 
-    std::unique_ptr<io::ZeroCopyOutputStream> headerStream(
-                generatorContext->Open(basename
-                                       + CommonTemplates::ProtoFileSuffix() + ".h"));
+    std::unique_ptr<io::ZeroCopyOutputStream> headerStream(generatorContext->Open(relativePath
+                                                                                  + ".h"));
     std::shared_ptr<Printer> headerPrinter(new Printer(headerStream.get(), '$'));
 
     printDisclaimer(headerPrinter.get());
 
-    std::string fileNameToUpper = filename;
-    std::transform(fileNameToUpper.begin(), fileNameToUpper.end(),
-                   fileNameToUpper.begin(), utils::toAsciiUpper);
-
-    headerPrinter->Print({{"filename", fileNameToUpper}}, CommonTemplates::PreambleTemplate());
+    const std::string headerGuard = common::headerGuardFromFilename(basename + ".h");
+    headerPrinter->Print({{"header_guard", headerGuard}}, CommonTemplates::PreambleTemplate());
     if (!Options::instance().exportMacroFilename().empty()) {
         std::string exportMacroFilename = Options::instance().exportMacroFilename();
         internalIncludes.insert(utils::removeFileSuffix(exportMacroFilename));
@@ -241,7 +238,7 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
         MessageDeclarationPrinter messageDef(message, headerPrinter);
     });
 
-    headerPrinter->Print({{"filename", fileNameToUpper}}, CommonTemplates::FooterTemplate());
+    headerPrinter->Print({{"header_guard", headerGuard}}, CommonTemplates::FooterTemplate());
 }
 
 bool QProtobufGenerator::GenerateMessages(const FileDescriptor *file,

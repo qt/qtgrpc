@@ -25,6 +25,7 @@ namespace utils {
 std::vector<std::string> split(std::string_view s, std::string_view c, bool keepEmpty = false);
 std::string replace(std::string_view where, std::string_view from, std::string_view to);
 void asciiToLower(std::string &str);
+void asciiToUpper(std::string &str);
 std::string removeFileSuffix(std::string fileName);
 std::string extractFileBasename(std::string fileName);
 std::string capitalizeAsciiName(std::string name);
