@@ -150,7 +150,8 @@ void QtGrpcClientUnaryCallTest::asyncClientStatusMessage()
     QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
     QVERIFY(clientErrorSpy.isValid());
 
-    client()->testMethodStatusMessage(request);
+    auto reply = client()->testMethodStatusMessage(request);
+    Q_UNUSED(reply)
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
 

@@ -65,7 +65,8 @@ void QGrpcHttp2ChannelTest::checkMethodsGeneration()
     QGrpcChannelOptions channelOptions;
     client.attachChannel(std::make_shared<QGrpcHttp2Channel>(QUrl(), channelOptions));
     SimpleStringMessage request;
-    client.testMethod(request);
+    auto reply = client.testMethod(request);
+    Q_UNUSED(reply)
 }
 
 void QGrpcHttp2ChannelTest::attachChannelThreadTest()

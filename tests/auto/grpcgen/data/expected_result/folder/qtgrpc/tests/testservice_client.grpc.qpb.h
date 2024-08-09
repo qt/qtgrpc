@@ -25,16 +25,24 @@ class Client : public QGrpcClientBase
 
 public:
     explicit Client(QObject *parent = nullptr);
+    [[nodiscard]]
     std::shared_ptr<QGrpcCallReply> testMethod(const qtgrpc::tests::SimpleStringMessage &arg);
+    [[nodiscard]]
     std::shared_ptr<QGrpcCallReply> testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
 
+    [[nodiscard]]
     std::shared_ptr<QGrpcServerStream> testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg);
+    [[nodiscard]]
     std::shared_ptr<QGrpcServerStream> testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
 
+    [[nodiscard]]
     std::shared_ptr<QGrpcClientStream> testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg);
+    [[nodiscard]]
     std::shared_ptr<QGrpcClientStream> testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
 
+    [[nodiscard]]
     std::shared_ptr<QGrpcBidirStream> testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg);
+    [[nodiscard]]
     std::shared_ptr<QGrpcBidirStream> testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
 
 

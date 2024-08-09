@@ -33,7 +33,8 @@ void QtGrpcSslClientTest::incorrectSecureCredentialsTest()
     req.setTestFieldString("Hello Qt!");
 
     QSignalSpy errorSpy(client().get(), &TestService::Client::errorOccurred);
-    client()->testMethod(req);
+    auto reply = client()->testMethod(req);
+    Q_UNUSED(reply)
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(errorSpy.count(), 1, MessageLatencyWithThreshold);
 }
