@@ -12,6 +12,12 @@ Client::Client(QObject *parent)
 }
 
 
+std::shared_ptr<QGrpcCallReply> Client::testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg)
+{
+    return call("testMethod"_L1, arg, {});
+}
+
+
 std::shared_ptr<QGrpcCallReply> Client::testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
     return call("testMethod"_L1, arg, options);

@@ -26,13 +26,17 @@ class QPB_TST_QTGRPCGEN_CLIENT_GRPC_ONLY_EXPORT Client : public QGrpcClientBase
 
 public:
     explicit Client(QObject *parent = nullptr);
-    std::shared_ptr<QGrpcCallReply> testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options = {});
+    std::shared_ptr<QGrpcCallReply> testMethod(const qtgrpc::tests::SimpleStringMessage &arg);
+    std::shared_ptr<QGrpcCallReply> testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcServerStream> testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options = {});
+    std::shared_ptr<QGrpcServerStream> testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg);
+    std::shared_ptr<QGrpcServerStream> testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcClientStream> testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options = {});
+    std::shared_ptr<QGrpcClientStream> testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg);
+    std::shared_ptr<QGrpcClientStream> testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcBidirStream> testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options = {});
+    std::shared_ptr<QGrpcBidirStream> testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg);
+    std::shared_ptr<QGrpcBidirStream> testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
 
 
 };
