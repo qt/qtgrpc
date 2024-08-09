@@ -1,5 +1,7 @@
-#include <QtProtobuf/qprotobufregistration.h>
+
 #include "mapmessages.qpb.h"
+
+#include <QtProtobuf/qprotobufregistration.h>
 
 namespace qtprotobufnamespace::tests {
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleSInt32StringMapMessage(qRegisterProtobufType<SimpleSInt32StringMapMessage>);

@@ -18,8 +18,6 @@ public:
     static const std::vector<std::string> &ListOfQmlExceptions();
     static const std::set<std::string_view> &ListOfCppExceptions();
     static const char *ProtoSuffix();
-    static const char *DefaultProtobufIncludesTemplate();
-    static const char *DefaultQtIncludesTemplate();
     static const char *QmlProtobufIncludesTemplate();
     static const char *PreambleTemplate();
     static const char *FooterTemplate();

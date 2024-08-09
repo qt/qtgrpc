@@ -58,14 +58,11 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
     std::shared_ptr<Printer> registrationPrinter(new Printer(registrationStream.get(), '$'));
 
     printDisclaimer(sourcePrinter.get());
-    sourcePrinter->Print({{"include", relativePath + CommonTemplates::ProtoFileSuffix()}},
-                         CommonTemplates::InternalIncludeTemplate());
 
-    registrationPrinter->Print({{"include", "QtProtobuf/qprotobufregistration.h"}},
-                               CommonTemplates::ExternalIncludeTemplate());
+    utils::ExternalIncludesOrderedSet externalIncludes{ "QtProtobuf/qprotobufregistration.h" };
+    std::set<std::string> internalIncludes{ relativePath + CommonTemplates::ProtoFileSuffix() };
 
-    registrationPrinter->Print({{"include", relativePath + CommonTemplates::ProtoFileSuffix()}},
-                               CommonTemplates::InternalIncludeTemplate());
+    printIncludes(registrationPrinter.get(), internalIncludes, externalIncludes, {});
 
     bool generateWellknownTimestamp = false;
     common::iterateMessages(file, [&](const Descriptor *message) {
@@ -74,16 +71,9 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
             return;
         }
     });
-    if (generateWellknownTimestamp) {
-        sourcePrinter->Print({ { "include", "QtCore/QTimeZone" } },
-                             CommonTemplates::ExternalIncludeTemplate());
-    }
-
-    sourcePrinter->Print({{"include", "QtProtobuf/qprotobufregistration.h"}},
-                         CommonTemplates::ExternalIncludeTemplate());
-
-    sourcePrinter->Print({{"include", "cmath"}},
-                         CommonTemplates::ExternalIncludeTemplate());
+    if (generateWellknownTimestamp)
+        externalIncludes.insert("QtCore/QTimeZone");
+    printIncludes(sourcePrinter.get(), internalIncludes, externalIncludes, { "cmath" });
 
     OpenFileNamespaces(file, sourcePrinter.get());
     OpenFileNamespaces(file, registrationPrinter.get());
@@ -123,14 +113,16 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     const std::string basename = utils::extractFileBasename(file->name()) +
         CommonTemplates::ProtoFileSuffix();
     std::string relativePath = common::generateRelativeFilePath(file, basename);
-    std::set<std::string> internalIncludes;
-    std::set<std::string> externalIncludes;
 
     std::unique_ptr<io::ZeroCopyOutputStream> headerStream(generatorContext->Open(relativePath
                                                                                   + ".h"));
     std::shared_ptr<Printer> headerPrinter(new Printer(headerStream.get(), '$'));
 
     printDisclaimer(headerPrinter.get());
+
+    std::set<std::string> internalIncludes;
+    utils::ExternalIncludesOrderedSet externalIncludes;
+    std::set<std::string> systemIncludes;
 
     const std::string headerGuard = common::headerGuardFromFilename(basename + ".h");
     headerPrinter->Print({{"header_guard", headerGuard}}, CommonTemplates::PreambleTemplate());
@@ -139,9 +131,20 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
         internalIncludes.insert(utils::removeFileSuffix(exportMacroFilename));
     }
 
-    headerPrinter->Print(CommonTemplates::DefaultProtobufIncludesTemplate());
+    externalIncludes.insert("QtCore/qbytearray.h");
+    externalIncludes.insert("QtCore/qlist.h");
+    externalIncludes.insert("QtCore/qmetatype.h");
+    externalIncludes.insert("QtCore/qshareddata.h");
+    externalIncludes.insert("QtCore/qstring.h");
+
+    externalIncludes.insert("QtProtobuf/qprotobuflazymessagepointer.h");
+    externalIncludes.insert("QtProtobuf/qprotobufmessage.h");
+    externalIncludes.insert("QtProtobuf/qprotobufobject.h");
+    externalIncludes.insert("QtProtobuf/qtprotobuftypes.h");
+
     if (Options::instance().hasQml()) {
-        headerPrinter->Print(CommonTemplates::QmlProtobufIncludesTemplate());
+        externalIncludes.insert("QtQml/qqmlregistration.h");
+        externalIncludes.insert("QtQml/qqmllist.h");
     }
 
     bool hasOneofFields = false;
@@ -176,7 +179,7 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
         externalIncludes.insert("QtProtobuf/qprotobufoneof.h");
 
     if (hasOptionalFields)
-        externalIncludes.insert("optional");
+        systemIncludes.insert("optional");
 
     for (const auto &qtTypeInclude: qtTypesSet) {
         std::string qtTypeLower = qtTypeInclude;
@@ -200,19 +203,8 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
                                 + CommonTemplates::ProtoFileSuffix());
     }
 
-    externalIncludes.insert("QtCore/qbytearray.h");
-    externalIncludes.insert("QtCore/qstring.h");
+    printIncludes(headerPrinter.get(), internalIncludes, externalIncludes, systemIncludes);
 
-    for (const auto &include : externalIncludes) {
-        headerPrinter->Print({{"include", include}}, CommonTemplates::ExternalIncludeTemplate());
-    }
-
-    for (const auto &include : internalIncludes) {
-        headerPrinter->Print({{"include", include}}, CommonTemplates::InternalIncludeTemplate());
-    }
-
-    headerPrinter->Print(CommonTemplates::DefaultQtIncludesTemplate());
-    headerPrinter->PrintRaw("\n");
     OpenFileNamespaces(file, headerPrinter.get());
 
     for (int i = 0; i < file->enum_type_count(); ++i) {

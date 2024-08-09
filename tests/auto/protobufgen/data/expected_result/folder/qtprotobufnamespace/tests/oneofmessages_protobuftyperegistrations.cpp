@@ -1,5 +1,7 @@
-#include <QtProtobuf/qprotobufregistration.h>
+
 #include "qtprotobufnamespace/tests/oneofmessages.qpb.h"
+
+#include <QtProtobuf/qprotobufregistration.h>
 
 namespace qtprotobufnamespace::tests {
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarOneofSimpleMessage(qRegisterProtobufType<OneofSimpleMessage>);

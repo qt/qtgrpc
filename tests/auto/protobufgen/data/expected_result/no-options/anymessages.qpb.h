@@ -3,19 +3,18 @@
 #ifndef ANYMESSAGES_QPB_H
 #define ANYMESSAGES_QPB_H
 
+#include <QtProtobuf/qprotobuflazymessagepointer.h>
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufobject.h>
-#include <QtProtobuf/qprotobuflazymessagepointer.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
-#include <QtCore/qbytearray.h>
-#include <QtCore/qstring.h>
 #include <QtProtobufWellKnownTypes/qprotobufanysupport.h>
 
-#include <QtCore/qmetatype.h>
+#include <QtCore/qbytearray.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qmetatype.h>
 #include <QtCore/qshareddata.h>
-
+#include <QtCore/qstring.h>
 
 namespace qtproto::tests {
 class AnyMessage;

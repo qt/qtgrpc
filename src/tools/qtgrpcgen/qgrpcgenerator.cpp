@@ -24,14 +24,37 @@ using namespace ::google::protobuf;
 using namespace ::google::protobuf::io;
 using namespace ::google::protobuf::compiler;
 
-static const std::set<std::string> externalQmlIncludes = {
-    "QtQml/qqmlengine.h", "QtQml/qjsengine.h", "QtQml/qjsvalue.h",
-    "QtGrpcQuick/qqmlgrpcfunctionalhandlers.h", "QtGrpcQuick/qtqmlgrpcstreamsender.h"
-};
+namespace {
 
-static const std::set<std::string> externalIncludes = {"QtGrpc/qgrpcclientbase.h",
-                                                       "QtGrpc/qgrpccallreply.h",
-                                                       "QtGrpc/qgrpcstream.h"};
+const utils::ExternalIncludesOrderedSet &externalQmlIncludes()
+{
+    static const utils::ExternalIncludesOrderedSet externalQmlIncludes{
+        "QtQml/qqmlengine.h", "QtQml/qjsengine.h", "QtQml/qjsvalue.h",
+        "QtGrpcQuick/qqmlgrpcfunctionalhandlers.h", "QtGrpcQuick/qtqmlgrpcstreamsender.h"
+    };
+
+    return externalQmlIncludes;
+}
+
+const utils::ExternalIncludesOrderedSet &externalIncludes()
+{
+    static const utils::ExternalIncludesOrderedSet externalIncludes{
+        "QtGrpc/qgrpcclientbase.h",
+        "QtGrpc/qgrpccallreply.h",
+        "QtGrpc/qgrpcstream.h",
+    };
+    return externalIncludes;
+}
+
+const std::set<std::string> &systemIncludes()
+{
+    static const std::set<std::string> systemIncludes{
+        "memory",
+    };
+    return systemIncludes;
+}
+
+} // namespace
 
 QGrpcGenerator::QGrpcGenerator() : GeneratorBase()
 {}
@@ -120,13 +143,9 @@ void QGrpcGenerator::GenerateQmlClientServices(
     std::string headerGuard = common::headerGuardFromFilename(qmlBasename + ".h");
     qmlHeaderPrinter->Print({ { "header_guard", headerGuard } },
                             CommonTemplates::PreambleTemplate());
-    qmlHeaderPrinter->Print({ { "include", realtivePath } },
-                            CommonTemplates::InternalIncludeTemplate());
 
-    for (const auto &include : externalQmlIncludes) {
-        qmlHeaderPrinter->Print({ { "include", include } },
-                                CommonTemplates::ExternalIncludeTemplate());
-    }
+    printIncludes(qmlHeaderPrinter.get(), { realtivePath }, externalQmlIncludes(), {});
+
     qmlSourcePrinter->Print({ { "include", qmlRealtivePath } },
                             CommonTemplates::InternalIncludeTemplate());
 
@@ -166,17 +185,8 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
     const std::string headerGuard = common::headerGuardFromFilename(basename + ".h");
     clientHeaderPrinter->Print({ { "header_guard", headerGuard } },
                                CommonTemplates::PreambleTemplate());
-    clientHeaderPrinter->Print(CommonTemplates::DefaultProtobufIncludesTemplate());
     clientSourcePrinter->Print({ { "include", realtivePath } },
                                CommonTemplates::InternalIncludeTemplate());
-
-    for (const auto &include : externalIncludes) {
-        clientHeaderPrinter->Print({ { "include", include } },
-                                   CommonTemplates::ExternalIncludeTemplate());
-    }
-
-    clientHeaderPrinter->Print(GrpcTemplates::DefaultSystemIncludesTemplate());
-    clientHeaderPrinter->Print("\n");
 
     std::set<std::string> internalIncludes = QGrpcGenerator::GetInternalIncludes(file);
     if (!Options::instance().exportMacroFilename().empty()) {
@@ -184,10 +194,9 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
         internalIncludes.insert(utils::removeFileSuffix(exportMacroFilename));
     }
 
-    for (const auto &include : internalIncludes) {
-        clientHeaderPrinter->Print({ { "include", include } },
-                                   CommonTemplates::InternalIncludeTemplate());
-    }
+    printIncludes(clientHeaderPrinter.get(), internalIncludes, externalIncludes(),
+                  systemIncludes());
+
     QGrpcGenerator::RunPrinter<ClientDeclarationPrinter>(file, clientHeaderPrinter);
     QGrpcGenerator::RunPrinter<ClientDefinitionPrinter>(file, clientSourcePrinter);
     clientHeaderPrinter->Print({ { "header_guard", headerGuard } },
@@ -214,11 +223,8 @@ bool QGrpcGenerator::GenerateServerServices(const FileDescriptor *file,
     serverHeaderPrinter->Print({ { "filename", filename + "_service" } },
                                CommonTemplates::PreambleTemplate());
 
-    serverHeaderPrinter->Print(CommonTemplates::DefaultProtobufIncludesTemplate());
     if (Options::instance().hasQml())
         serverHeaderPrinter->Print(CommonTemplates::QmlProtobufIncludesTemplate());
-
-    serverHeaderPrinter->Print(GrpcTemplates::DefaultSystemIncludesTemplate());
 
     std::set<std::string> externalIncludes;
     for (const auto &include : externalIncludes) {

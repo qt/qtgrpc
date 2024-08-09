@@ -3,20 +3,19 @@
 #ifndef OPTIONAL_QPB_H
 #define OPTIONAL_QPB_H
 
+#include <QtProtobuf/qprotobuflazymessagepointer.h>
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufobject.h>
-#include <QtProtobuf/qprotobuflazymessagepointer.h>
+#include <QtProtobuf/qprotobufoneof.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qbytearray.h>
-#include <QtCore/qstring.h>
-#include <QtProtobuf/qprotobufoneof.h>
-#include <optional>
-
-#include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qmetatype.h>
 #include <QtCore/qshareddata.h>
+#include <QtCore/qstring.h>
 
+#include <optional>
 
 namespace qtprotobufnamespace::optional::tests {
 class TestStringMessage;

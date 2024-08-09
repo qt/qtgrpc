@@ -1,5 +1,7 @@
-#include <QtProtobuf/qprotobufregistration.h>
+
 #include "nopackage.qpb.h"
+
+#include <QtProtobuf/qprotobufregistration.h>
 
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarEmptyMessage(qRegisterProtobufType<EmptyMessage>);
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleIntMessage(qRegisterProtobufType<SimpleIntMessage>);

@@ -66,22 +66,6 @@ const std::set<std::string_view> &CommonTemplates::ListOfCppExceptions()
     return cppExceptions;
 }
 
-const char *CommonTemplates::DefaultProtobufIncludesTemplate()
-{
-    return "#include <QtProtobuf/qprotobufobject.h>\n"
-           "#include <QtProtobuf/qprotobuflazymessagepointer.h>\n"
-           "#include <QtProtobuf/qtprotobuftypes.h>\n"
-            "\n";
-}
-
-const char *CommonTemplates::DefaultQtIncludesTemplate()
-{
-    return "\n"
-           "#include <QtCore/qmetatype.h>\n"
-           "#include <QtCore/qlist.h>\n"
-           "#include <QtCore/qshareddata.h>\n";
-}
-
 const char *CommonTemplates::QmlProtobufIncludesTemplate()
 {
     return "#include <QtQml/qqmlregistration.h>\n"
@@ -96,8 +80,7 @@ const char *CommonTemplates::DisclaimerTemplate()
 const char *CommonTemplates::PreambleTemplate()
 {
     return "#ifndef $header_guard$\n"
-           "#define $header_guard$\n\n"
-           "#include <QtProtobuf/qprotobufmessage.h>\n";
+           "#define $header_guard$\n";
 }
 
 const char *CommonTemplates::FooterTemplate()

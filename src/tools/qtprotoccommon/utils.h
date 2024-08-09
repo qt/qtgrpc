@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <set>
 
 #ifdef QT_PROTOBUF_DEBUG_GENERATOR
 #    include <iostream>
@@ -87,6 +88,12 @@ constexpr char toAsciiUpper(char ch) noexcept
 {
     return isAsciiLower(ch) ? ch - 'a' + 'A' : ch;
 }
+
+struct HeaderComparator
+{
+    bool operator ()(const std::string &lhs, const std::string &rhs) const;
+};
+using ExternalIncludesOrderedSet = std::set<std::string, HeaderComparator>;
 
 } // namespace utils
 } // namespace qtprotoccommon
