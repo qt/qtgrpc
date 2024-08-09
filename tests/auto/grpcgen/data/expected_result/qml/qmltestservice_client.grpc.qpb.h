@@ -58,17 +58,28 @@ public:
     Q_INVOKABLE void testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg,
                     const QJSValue &messageCallback,
                     const QJSValue &finishCallback,
+                    const QJSValue &errorCallback);
+    Q_INVOKABLE void testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg,
+                    const QJSValue &messageCallback,
+                    const QJSValue &finishCallback,
                     const QJSValue &errorCallback,
-                    const QGrpcCallOptions &options = {});
+                    const QGrpcCallOptions &options);
+    Q_INVOKABLE TestMethodClientStreamSender *testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg,
+                    const QJSValue &finishCallback,
+                    const QJSValue &errorCallback);
     Q_INVOKABLE TestMethodClientStreamSender *testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg,
                     const QJSValue &finishCallback,
                     const QJSValue &errorCallback,
-                    const QGrpcCallOptions &options = {});
+                    const QGrpcCallOptions &options);
+    Q_INVOKABLE TestMethodBiStreamSender *testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg,
+                    const QJSValue &messageCallback,
+                    const QJSValue &finishCallback,
+                    const QJSValue &errorCallback);
     Q_INVOKABLE TestMethodBiStreamSender *testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg,
                     const QJSValue &messageCallback,
                     const QJSValue &finishCallback,
                     const QJSValue &errorCallback,
-                    const QGrpcCallOptions &options = {});
+                    const QGrpcCallOptions &options);
 };
 } // namespace TestService
 } // namespace qtgrpc::tests

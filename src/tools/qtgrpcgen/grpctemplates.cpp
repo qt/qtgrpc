@@ -25,8 +25,9 @@ const char *GrpcTemplates::ClientQmlDeclarationTemplate()
 
 const char *GrpcTemplates::ClientMethodDeclarationAsyncTemplate()
 {
-    return "std::shared_ptr<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$, const "
-           "QGrpcCallOptions &options = {});\n";
+    return "std::shared_ptr<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$);\n"
+           "std::shared_ptr<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$, const "
+           "QGrpcCallOptions &options);\n";
 }
 
 const char *GrpcTemplates::ClientMethodDeclarationQmlTemplate()
@@ -68,6 +69,11 @@ const char *GrpcTemplates::ClientQmlConstructorDefinitionTemplate()
 const char *GrpcTemplates::ClientMethodDefinitionAsyncTemplate()
 {
     return "\nstd::shared_ptr<QGrpcCallReply> $classname$::$method_name$(const $param_type$ "
+           "&$param_name$)\n"
+           "{\n"
+           "    return call(\"$method_name$\"_L1, $param_name$, {});\n"
+           "}\n\n"
+           "\nstd::shared_ptr<QGrpcCallReply> $classname$::$method_name$(const $param_type$ "
            "&$param_name$, const QGrpcCallOptions &options)\n"
            "{\n"
            "    return call(\"$method_name$\"_L1, $param_name$, options);\n"
@@ -96,12 +102,20 @@ const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
 const char *GrpcTemplates::ClientMethodStreamDeclarationTemplate()
 {
     return "std::shared_ptr<QGrpc$stream_type$Stream> $method_name$(const $param_type$ "
-           "&$param_name$, const QGrpcCallOptions &options = {});\n";
+           "&$param_name$);\n"
+           "std::shared_ptr<QGrpc$stream_type$Stream> $method_name$(const $param_type$ "
+           "&$param_name$, const QGrpcCallOptions &options);\n";
 }
 
 const char *GrpcTemplates::ClientMethodStreamDefinitionTemplate()
 {
     return "std::shared_ptr<QGrpc$stream_type$Stream> $classname$::$method_name$("
+           "const $param_type$ &$param_name$)\n"
+           "{\n"
+           "    return startStream<QGrpc$stream_type$Stream>(\"$method_name$\"_L1, "
+           "$param_name$, {});\n"
+           "}\n\n"
+           "std::shared_ptr<QGrpc$stream_type$Stream> $classname$::$method_name$("
            "const $param_type$ &$param_name$, const QGrpcCallOptions &options)\n"
            "{\n"
            "    return startStream<QGrpc$stream_type$Stream>(\"$method_name$\"_L1, "
@@ -137,8 +151,12 @@ const char *GrpcTemplates::ClientMethodServerStreamDeclarationQmlTemplate()
     return "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$,\n"
            "                const QJSValue &messageCallback,\n"
            "                const QJSValue &finishCallback,\n"
+           "                const QJSValue &errorCallback);\n"
+           "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$,\n"
+           "                const QJSValue &messageCallback,\n"
+           "                const QJSValue &finishCallback,\n"
            "                const QJSValue &errorCallback,\n"
-           "                const QGrpcCallOptions &options = {});\n";
+           "                const QGrpcCallOptions &options);\n";
 }
 
 const char *GrpcTemplates::ClientMethodClientStreamDeclarationQmlTemplate()
@@ -146,8 +164,12 @@ const char *GrpcTemplates::ClientMethodClientStreamDeclarationQmlTemplate()
     return "Q_INVOKABLE $sender_class_name$ *$method_name$("
            "const $param_type$ &$param_name$,\n"
            "                const QJSValue &finishCallback,\n"
+           "                const QJSValue &errorCallback);\n"
+           "Q_INVOKABLE $sender_class_name$ *$method_name$("
+           "const $param_type$ &$param_name$,\n"
+           "                const QJSValue &finishCallback,\n"
            "                const QJSValue &errorCallback,\n"
-           "                const QGrpcCallOptions &options = {});\n";
+           "                const QGrpcCallOptions &options);\n";
 }
 
 const char *GrpcTemplates::ClientMethodBidirStreamDeclarationQmlTemplate()
@@ -156,13 +178,25 @@ const char *GrpcTemplates::ClientMethodBidirStreamDeclarationQmlTemplate()
            "const $param_type$ &$param_name$,\n"
            "                const QJSValue &messageCallback,\n"
            "                const QJSValue &finishCallback,\n"
+           "                const QJSValue &errorCallback);\n"
+           "Q_INVOKABLE $sender_class_name$ *$method_name$("
+           "const $param_type$ &$param_name$,\n"
+           "                const QJSValue &messageCallback,\n"
+           "                const QJSValue &finishCallback,\n"
            "                const QJSValue &errorCallback,\n"
-           "                const QGrpcCallOptions &options = {});\n";
+           "                const QGrpcCallOptions &options);\n";
 }
 
 const char *GrpcTemplates::ClientMethodServerStreamDefinitionQmlTemplate()
 {
     return "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$,\n"
+           "            const QJSValue &messageCallback,\n"
+           "            const QJSValue &finishCallback,\n"
+           "            const QJSValue &errorCallback)\n"
+           "{\n"
+           "    $method_name$($param_name$, messageCallback, finishCallback, errorCallback, {});\n"
+           "}\n"
+           "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$,\n"
            "            const QJSValue &messageCallback,\n"
            "            const QJSValue &finishCallback,\n"
            "            const QJSValue &errorCallback,\n"
@@ -183,7 +217,13 @@ const char *GrpcTemplates::ClientMethodServerStreamDefinitionQmlTemplate()
 
 const char *GrpcTemplates::ClientMethodClientStreamDefinitionQmlTemplate()
 {
-    return "\n$sender_class_name$ *$classname$::$method_name$("
+    return "\n$sender_class_name$ *$classname$::$method_name$(const $param_type$ &$param_name$,\n"
+           "            const QJSValue &finishCallback,\n"
+           "            const QJSValue &errorCallback)\n"
+           "{\n"
+           "    return $method_name$($param_name$, finishCallback, errorCallback, {});\n"
+           "}\n"
+           "\n$sender_class_name$ *$classname$::$method_name$("
            "const $param_type$ &$param_name$,\n"
            "        const QJSValue &finishCallback,\n"
            "        const QJSValue &errorCallback,\n"
@@ -207,7 +247,15 @@ const char *GrpcTemplates::ClientMethodClientStreamDefinitionQmlTemplate()
 
 const char *GrpcTemplates::ClientMethodBidirStreamDefinitionQmlTemplate()
 {
-    return "\n$sender_class_name$ *$classname$::$method_name$("
+    return "\n$sender_class_name$ *$classname$::$method_name$(const $param_type$ &$param_name$,\n"
+           "            const QJSValue &messageCallback,\n"
+           "            const QJSValue &finishCallback,\n"
+           "            const QJSValue &errorCallback)\n"
+           "{\n"
+           "    return $method_name$($param_name$, messageCallback, finishCallback, errorCallback, "
+           "{});\n"
+           "}\n"
+           "\n$sender_class_name$ *$classname$::$method_name$("
            "const $param_type$ &$param_name$,\n"
            "    const QJSValue &messageCallback,\n"
            "    const QJSValue &finishCallback,\n"

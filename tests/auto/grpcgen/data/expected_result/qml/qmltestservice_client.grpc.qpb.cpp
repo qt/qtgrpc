@@ -31,6 +31,14 @@ void QmlClient::testMethod(const qtgrpc::tests::SimpleStringMessage &arg,
 void QmlClient::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg,
             const QJSValue &messageCallback,
             const QJSValue &finishCallback,
+            const QJSValue &errorCallback)
+{
+    testMethodServerStream(arg, messageCallback, finishCallback, errorCallback, {});
+}
+
+void QmlClient::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg,
+            const QJSValue &messageCallback,
+            const QJSValue &finishCallback,
             const QJSValue &errorCallback,
             const QGrpcCallOptions &options)
 {
@@ -45,6 +53,13 @@ void QmlClient::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage 
                         messageCallback, finishCallback, errorCallback);
 }
 
+
+TestMethodClientStreamSender *QmlClient::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg,
+            const QJSValue &finishCallback,
+            const QJSValue &errorCallback)
+{
+    return testMethodClientStream(arg, finishCallback, errorCallback, {});
+}
 
 TestMethodClientStreamSender *QmlClient::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg,
         const QJSValue &finishCallback,
@@ -65,6 +80,14 @@ TestMethodClientStreamSender *QmlClient::testMethodClientStream(const qtgrpc::te
     return sender;
 }
 
+
+TestMethodBiStreamSender *QmlClient::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg,
+            const QJSValue &messageCallback,
+            const QJSValue &finishCallback,
+            const QJSValue &errorCallback)
+{
+    return testMethodBiStream(arg, messageCallback, finishCallback, errorCallback, {});
+}
 
 TestMethodBiStreamSender *QmlClient::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg,
     const QJSValue &messageCallback,

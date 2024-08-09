@@ -25,7 +25,8 @@ class Client : public QGrpcClientBase
 
 public:
     explicit Client(QObject *parent = nullptr);
-    std::shared_ptr<QGrpcCallReply> testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options = {});
+    std::shared_ptr<QGrpcCallReply> testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg);
+    std::shared_ptr<QGrpcCallReply> testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
 
 
 };
