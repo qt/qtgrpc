@@ -25,7 +25,9 @@ const char *GrpcTemplates::ClientQmlDeclarationTemplate()
 
 const char *GrpcTemplates::ClientMethodDeclarationAsyncTemplate()
 {
-    return "std::shared_ptr<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$);\n"
+    return "[[nodiscard]]\n"
+           "std::shared_ptr<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$);\n"
+           "[[nodiscard]]\n"
            "std::shared_ptr<QGrpcCallReply> $method_name$(const $param_type$ &$param_name$, const "
            "QGrpcCallOptions &options);\n";
 }
@@ -101,8 +103,10 @@ const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
 
 const char *GrpcTemplates::ClientMethodStreamDeclarationTemplate()
 {
-    return "std::shared_ptr<QGrpc$stream_type$Stream> $method_name$(const $param_type$ "
+    return "[[nodiscard]]\n"
+           "std::shared_ptr<QGrpc$stream_type$Stream> $method_name$(const $param_type$ "
            "&$param_name$);\n"
+           "[[nodiscard]]\n"
            "std::shared_ptr<QGrpc$stream_type$Stream> $method_name$(const $param_type$ "
            "&$param_name$, const QGrpcCallOptions &options);\n";
 }
