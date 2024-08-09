@@ -419,12 +419,14 @@ TypeMap common::produceClientTypeMap(const ServiceDescriptor *service, const Des
     const std::string scopeNamespaces = getScopeNamespace(namespaces,
                                                           getFullNamespace(scope, "::"));
 
+    const std::string serviceName =  service->full_name();
     return { { "classname", name },
              { "classname_low_case", utils::deCapitalizeAsciiName(name) },
              { "full_type", fullName },
              { "scope_type", scopeName },
              { "scope_namespaces", scopeNamespaces },
              { "parent_class", "QGrpcClientBase" },
+             { "service_name", serviceName },
              { "export_macro", exportMacro } };
 }
 
