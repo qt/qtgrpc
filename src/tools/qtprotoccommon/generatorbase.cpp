@@ -55,21 +55,6 @@ bool GeneratorBase::GenerateAll(const std::vector<const FileDescriptor *> &files
     return CodeGenerator::GenerateAll(files, parameter, generatorContext, error);
 }
 
-std::string GeneratorBase::generateBaseName(const FileDescriptor *file, const std::string &name)
-{
-    std::string outFileBasename;
-    if (Options::instance().isFolder()) {
-        outFileBasename = file->package();
-        if (!outFileBasename.empty()) {
-            outFileBasename = utils::replace(outFileBasename, ".", "/");
-            outFileBasename += '/';
-        }
-    }
-    outFileBasename += name;
-
-    return outFileBasename;
-}
-
 void GeneratorBase::printDisclaimer(Printer *printer)
 {
     printer->Print(CommonTemplates::DisclaimerTemplate());

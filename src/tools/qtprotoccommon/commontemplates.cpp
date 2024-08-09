@@ -95,14 +95,14 @@ const char *CommonTemplates::DisclaimerTemplate()
 
 const char *CommonTemplates::PreambleTemplate()
 {
-    return "#ifndef QPROTOBUF_$filename$_H\n"
-           "#define QPROTOBUF_$filename$_H\n\n"
+    return "#ifndef $header_guard$\n"
+           "#define $header_guard$\n\n"
            "#include <QtProtobuf/qprotobufmessage.h>\n";
 }
 
 const char *CommonTemplates::FooterTemplate()
 {
-    return "#endif // QPROTOBUF_$filename$_H\n";
+    return "#endif // $header_guard$\n";
 }
 
 const char *CommonTemplates::InternalIncludeTemplate()

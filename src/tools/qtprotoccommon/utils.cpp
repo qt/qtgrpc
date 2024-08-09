@@ -68,6 +68,11 @@ void asciiToLower(std::string &str)
     std::transform(std::begin(str), std::end(str), std::begin(str), toLower);
 }
 
+void asciiToUpper(std::string &str)
+{
+    std::transform(std::begin(str), std::end(str), std::begin(str), utils::toAsciiUpper);
+}
+
 std::string removeFileSuffix(std::string fileName)
 {
     size_t dot = fileName.rfind('.'), slash = fileName.rfind('/');

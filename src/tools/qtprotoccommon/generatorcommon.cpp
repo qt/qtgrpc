@@ -802,3 +802,25 @@ void common::setExtraNamespacedFiles(const std::set<std::string> &files)
     if (!files.empty() && files != m_extraNamespacedFiles)
         m_extraNamespacedFiles = files;
 }
+
+std::string common::headerGuardFromFilename(std::string fileName)
+{
+    utils::asciiToUpper(fileName);
+    return utils::replace(fileName, ".", "_");
+}
+
+std::string common::generateRelativeFilePath(const FileDescriptor *file, const std::string &name)
+{
+    std::string outFileBasename;
+    if (Options::instance().isFolder()) {
+        outFileBasename = file->package();
+        if (!outFileBasename.empty()) {
+            outFileBasename = utils::replace(outFileBasename, ".", "/");
+            outFileBasename += '/';
+        }
+    }
+    outFileBasename += name;
+
+    return outFileBasename;
+}
+

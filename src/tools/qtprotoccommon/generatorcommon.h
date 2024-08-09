@@ -157,6 +157,10 @@ struct common {
     static bool isExtraNamespacedFile(const std::string &file);
     static void setExtraNamespacedFiles(const std::set<std::string> &files);
 
+    static std::string headerGuardFromFilename(std::string fileName);
+
+    static std::string generateRelativeFilePath(const ::google::protobuf::FileDescriptor *file,
+                                                const std::string &name);
 private:
     static std::set<std::string> m_extraNamespacedFiles;
 };

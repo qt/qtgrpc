@@ -55,10 +55,6 @@ public:
                             google::protobuf::io::Printer *printer) const;
     void CloseFileNamespaces(const ::google::protobuf::FileDescriptor *file,
                              google::protobuf::io::Printer *printer) const;
-
-protected:
-    static std::string generateBaseName(const ::google::protobuf::FileDescriptor *file,
-                                        const std::string &name);
 };
 } // namespace qtprotoccommon
 
