@@ -205,48 +205,6 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
     return true;
 }
 
-bool QGrpcGenerator::GenerateServerServices(const FileDescriptor *file,
-                                            GeneratorContext *generatorContext) const
-{
-    assert(file != nullptr && generatorContext != nullptr);
-    if (file->service_count() <= 0)
-        return true;
-
-    const std::string filename = utils::extractFileBasename(file->name());
-    const std::string basename = common::generateRelativeFilePath(file, filename);
-    std::unique_ptr<ZeroCopyOutputStream> serviceHeaderStream(
-            generatorContext->Open(basename + GrpcTemplates::GrpcServiceFileSuffix()
-                                   + CommonTemplates::ProtoFileSuffix() + ".h"));
-    std::shared_ptr<Printer> serverHeaderPrinter(new Printer(serviceHeaderStream.get(), '$'));
-
-    printDisclaimer(serverHeaderPrinter.get());
-    serverHeaderPrinter->Print({ { "filename", filename + "_service" } },
-                               CommonTemplates::PreambleTemplate());
-
-    if (Options::instance().hasQml())
-        serverHeaderPrinter->Print(CommonTemplates::QmlProtobufIncludesTemplate());
-
-    std::set<std::string> externalIncludes;
-    for (const auto &include : externalIncludes) {
-        serverHeaderPrinter->Print({ { "include", include } },
-                                   CommonTemplates::ExternalIncludeTemplate());
-    }
-
-    const std::string serviceIncludes("QAbstractGrpcService");
-    serverHeaderPrinter->Print({ { "include", serviceIncludes } },
-                               CommonTemplates::ExternalIncludeTemplate());
-
-    std::set<std::string> internalIncludes = QGrpcGenerator::GetInternalIncludes(file);
-    for (const auto &include : internalIncludes) {
-        serverHeaderPrinter->Print({ { "include", include } },
-                                   CommonTemplates::InternalIncludeTemplate());
-    }
-    QGrpcGenerator::RunPrinter<ServerDeclarationPrinter>(file, serverHeaderPrinter);
-    serverHeaderPrinter->Print({ { "filename", filename + "_service" } },
-                               CommonTemplates::FooterTemplate());
-    return true;
-}
-
 bool QGrpcGenerator::GenerateAll(const std::vector<const FileDescriptor *> &files,
                                  const std::string &parameter, GeneratorContext *generatorContext,
                                  std::string *error) const
