@@ -1,5 +1,7 @@
-#include <QtProtobuf/qprotobufregistration.h>
+
 #include "extranamespace.qpb.h"
+
+#include <QtProtobuf/qprotobufregistration.h>
 
 namespace MyTopLevelNamespace::qtprotobufnamespace::tests {
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarEmptyMessage(qRegisterProtobufType<EmptyMessage>);

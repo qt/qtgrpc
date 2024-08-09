@@ -3,19 +3,18 @@
 #ifndef MAPMESSAGES_QPB_H
 #define MAPMESSAGES_QPB_H
 
+#include "basicmessages.qpb.h"
+
+#include <QtProtobuf/qprotobuflazymessagepointer.h>
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufobject.h>
-#include <QtProtobuf/qprotobuflazymessagepointer.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qbytearray.h>
-#include <QtCore/qstring.h>
-#include "basicmessages.qpb.h"
-
-#include <QtCore/qmetatype.h>
 #include <QtCore/qlist.h>
+#include <QtCore/qmetatype.h>
 #include <QtCore/qshareddata.h>
-
+#include <QtCore/qstring.h>
 
 namespace qtprotobufnamespace::tests {
 class SimpleSInt32StringMapMessage;

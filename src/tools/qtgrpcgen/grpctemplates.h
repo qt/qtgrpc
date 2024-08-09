@@ -10,8 +10,6 @@ class GrpcTemplates
 {
 public:
     // gRPC
-    static const char *DefaultSystemIncludesTemplate();
-
     static const char *ChildClassDeclarationTemplate();
 
     static const char *ClientQmlDeclarationTemplate();

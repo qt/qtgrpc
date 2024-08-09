@@ -1,5 +1,7 @@
-#include <QtProtobuf/qprotobufregistration.h>
+
 #include "repeatedmessages.qpb.h"
+
+#include <QtProtobuf/qprotobufregistration.h>
 
 namespace qtprotobufnamespace::tests {
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarRepeatedStringMessage(qRegisterProtobufType<RepeatedStringMessage>);

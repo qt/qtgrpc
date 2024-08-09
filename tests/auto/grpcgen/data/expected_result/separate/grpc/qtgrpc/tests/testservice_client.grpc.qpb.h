@@ -3,19 +3,14 @@
 #ifndef TESTSERVICE_CLIENT_GRPC_QPB_H
 #define TESTSERVICE_CLIENT_GRPC_QPB_H
 
-#include <QtProtobuf/qprotobufmessage.h>
-#include <QtProtobuf/qprotobufobject.h>
-#include <QtProtobuf/qprotobuflazymessagepointer.h>
-#include <QtProtobuf/qtprotobuftypes.h>
+#include "qtgrpc/tests/testservice.qpb.h"
+#include "tst_qtgrpcgen_client_grpc_only_exports.qpb.h"
 
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcclientbase.h>
 #include <QtGrpc/qgrpcstream.h>
 
 #include <memory>
-
-#include "qtgrpc/tests/testservice.qpb.h"
-#include "tst_qtgrpcgen_client_grpc_only_exports.qpb.h"
 
 namespace qtgrpc::tests {
 namespace TestService {

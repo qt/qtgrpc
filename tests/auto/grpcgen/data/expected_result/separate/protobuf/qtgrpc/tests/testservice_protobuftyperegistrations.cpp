@@ -1,5 +1,7 @@
-#include <QtProtobuf/qprotobufregistration.h>
+
 #include "qtgrpc/tests/testservice.qpb.h"
+
+#include <QtProtobuf/qprotobufregistration.h>
 
 namespace qtgrpc::tests {
 static QtProtobuf::ProtoTypeRegistrar ProtoTypeRegistrarSimpleStringMessage(qRegisterProtobufType<SimpleStringMessage>);

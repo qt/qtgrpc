@@ -5,12 +5,6 @@
 
 using namespace ::QtGrpc;
 
-const char *GrpcTemplates::DefaultSystemIncludesTemplate()
-{
-    return "\n"
-           "#include <memory>\n";
-}
-
 const char *GrpcTemplates::ChildClassDeclarationTemplate()
 {
     return "\nclass $export_macro$$classname$ : public $parent_class$\n"

@@ -3,23 +3,22 @@
 #ifndef NOPACKAGE_QPB_H
 #define NOPACKAGE_QPB_H
 
-#include <QtProtobuf/qprotobufmessage.h>
-#include <QtProtobuf/qprotobufobject.h>
-#include <QtProtobuf/qprotobuflazymessagepointer.h>
-#include <QtProtobuf/qtprotobuftypes.h>
-
-#include <QtQml/qqmlregistration.h>
-#include <QtQml/qqmllist.h>
-
-#include <QtCore/qbytearray.h>
-#include <QtCore/qstring.h>
 #include "nopackageexternal.qpb.h"
 #include "tst_qtprotobufgen_nopackage_qml_gen_exports.qpb.h"
 
-#include <QtCore/qmetatype.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qshareddata.h>
+#include <QtProtobuf/qprotobuflazymessagepointer.h>
+#include <QtProtobuf/qprotobufmessage.h>
+#include <QtProtobuf/qprotobufobject.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 
+#include <QtQml/qqmllist.h>
+#include <QtQml/qqmlregistration.h>
+
+#include <QtCore/qbytearray.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qmetatype.h>
+#include <QtCore/qshareddata.h>
+#include <QtCore/qstring.h>
 
 
 namespace TestEnumGadget {

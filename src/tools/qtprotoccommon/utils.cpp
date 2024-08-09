@@ -140,6 +140,21 @@ std::string &trim(std::string &s)
     return s;
 }
 
+bool HeaderComparator::operator()(const std::string &lhs, const std::string &rhs) const
+{
+    static constexpr std::string_view qtCorePrefix = "QtCore/";
+
+    bool lhsStartsWithQtCore = utils::startsWith(lhs, qtCorePrefix);
+    bool rhsStartsWithQtCore = utils::startsWith(rhs, qtCorePrefix);
+    if (lhsStartsWithQtCore && !rhsStartsWithQtCore)
+        return false;
+    if (!lhsStartsWithQtCore && rhsStartsWithQtCore)
+        return true;
+
+    return lhs < rhs;
+}
+
+
 // TODO C++20: use the std::string(_view) methods directly
 template<typename T>
 bool containsImpl(std::string_view s, T c)

@@ -3,10 +3,11 @@
 #ifndef QMLTESTSERVICE_CLIENT_GRPC_QPB_H
 #define QMLTESTSERVICE_CLIENT_GRPC_QPB_H
 
-#include <QtProtobuf/qprotobufmessage.h>
 #include "testservice_client.grpc.qpb.h"
+
 #include <QtGrpcQuick/qqmlgrpcfunctionalhandlers.h>
 #include <QtGrpcQuick/qtqmlgrpcstreamsender.h>
+
 #include <QtQml/qjsengine.h>
 #include <QtQml/qjsvalue.h>
 #include <QtQml/qqmlengine.h>
