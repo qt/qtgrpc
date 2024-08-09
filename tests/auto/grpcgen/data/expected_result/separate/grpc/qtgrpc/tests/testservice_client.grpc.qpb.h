@@ -26,6 +26,8 @@ class QPB_TST_QTGRPCGEN_CLIENT_GRPC_ONLY_EXPORT Client : public QGrpcClientBase
 
 public:
     explicit Client(QObject *parent = nullptr);
+    ~Client() override;
+
     [[nodiscard]]
     std::shared_ptr<QGrpcCallReply> testMethod(const qtgrpc::tests::SimpleStringMessage &arg);
     [[nodiscard]]

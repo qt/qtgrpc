@@ -21,6 +21,8 @@ public:
 
     static const char *ClientConstructorDeclarationTemplate();
     static const char *ClientConstructorDefinitionTemplate();
+    static const char *ClientDestructorDeclarationTemplate();
+    static const char *ClientDestructorDefinitionTemplate();
     static const char *ClientQmlConstructorDefinitionTemplate();
 
     static const char *ClientMethodDeclarationAsyncTemplate();

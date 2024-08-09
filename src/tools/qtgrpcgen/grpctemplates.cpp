@@ -60,6 +60,16 @@ const char *GrpcTemplates::ClientConstructorDefinitionTemplate()
            "}\n\n";
 }
 
+const char *GrpcTemplates::ClientDestructorDeclarationTemplate()
+{
+    return "~$classname$() override;\n\n";
+}
+
+const char *GrpcTemplates::ClientDestructorDefinitionTemplate()
+{
+    return "$classname$::~$classname$() = default;\n";
+}
+
 const char *GrpcTemplates::ClientQmlConstructorDefinitionTemplate()
 {
     return "\n$classname$::$classname$(QObject *parent)\n"

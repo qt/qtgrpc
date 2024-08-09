@@ -11,6 +11,7 @@ Client::Client(QObject *parent)
 {
 }
 
+Client::~Client() = default;
 
 std::shared_ptr<QGrpcCallReply> Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg)
 {

@@ -56,12 +56,10 @@ void ClientDefinitionPrinter::printMethod(const MethodDescriptor *method)
     }
 }
 
-void ClientDefinitionPrinter::printConstructor()
+void ClientDefinitionPrinter::printConstructorDestructor()
 {
-    m_printer->Print({ { "classname", m_typeMap["classname"] },
-                       { "parent_class", m_typeMap["parent_class"] },
-                       { "service_name", m_descriptor->full_name() } },
-                     GrpcTemplates::ClientConstructorDefinitionTemplate());
+    m_printer->Print(m_typeMap, GrpcTemplates::ClientConstructorDefinitionTemplate());
+    m_printer->Print(m_typeMap, GrpcTemplates::ClientDestructorDefinitionTemplate());
 }
 
 void ClientDefinitionPrinter::printCloseNamespace()

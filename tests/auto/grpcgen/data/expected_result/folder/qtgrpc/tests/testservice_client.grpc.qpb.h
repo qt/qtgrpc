@@ -25,6 +25,8 @@ class Client : public QGrpcClientBase
 
 public:
     explicit Client(QObject *parent = nullptr);
+    ~Client() override;
+
     [[nodiscard]]
     std::shared_ptr<QGrpcCallReply> testMethod(const qtgrpc::tests::SimpleStringMessage &arg);
     [[nodiscard]]

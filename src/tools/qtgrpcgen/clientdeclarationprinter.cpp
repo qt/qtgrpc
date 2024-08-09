@@ -46,10 +46,11 @@ void ClientDeclarationPrinter::printClientClass()
     m_printer->Print(m_typeMap, GrpcTemplates::ChildClassDeclarationTemplate());
 }
 
-void ClientDeclarationPrinter::printConstructor()
+void ClientDeclarationPrinter::printConstructorDestructor()
 {
     Indent();
     m_printer->Print(m_typeMap, GrpcTemplates::ClientConstructorDeclarationTemplate());
+    m_printer->Print(m_typeMap, GrpcTemplates::ClientDestructorDeclarationTemplate());
     Outdent();
 }
 
