@@ -32,6 +32,9 @@ qt_internal_add_docs(Protobuf
     doc/qtprotobuf.qdocconf
 )
 
+# Suppress 'No relevant classes found. No output generated.' warning
+set_source_files_properties(qprotobufobject.h PROPERTIES SKIP_AUTOMOC ON)
+
 if(CMAKE_VERSION GREATER_EQUAL 3.27)
     set_target_properties(Protobuf PROPERTIES INTERFACE_AUTOMOC_MACRO_NAMES "Q_PROTOBUF_OBJECT")
 endif()
