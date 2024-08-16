@@ -10,7 +10,7 @@ endif()
 
 set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/grpc/chat")
 
-find_package(Qt6 REQUIRED COMPONENTS Core Protobuf Grpc Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core Protobuf ProtobufTools Grpc GrpcTools Quick)
 
 qt_standard_project_setup()
 
