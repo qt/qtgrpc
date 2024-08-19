@@ -98,10 +98,7 @@ SimpleEnumMessage::SimpleEnumMessage()
 }
 
 SimpleEnumMessage::SimpleEnumMessage(const SimpleEnumMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 SimpleEnumMessage &SimpleEnumMessage::operator =(const SimpleEnumMessage &other)
 {
     SimpleEnumMessage temp(other);
@@ -109,10 +106,7 @@ SimpleEnumMessage &SimpleEnumMessage::operator =(const SimpleEnumMessage &other)
     return *this;
 }
 SimpleEnumMessage::SimpleEnumMessage(SimpleEnumMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const SimpleEnumMessage &lhs, const SimpleEnumMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -206,10 +200,7 @@ RepeatedEnumMessage::RepeatedEnumMessage()
 }
 
 RepeatedEnumMessage::RepeatedEnumMessage(const RepeatedEnumMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedEnumMessage &RepeatedEnumMessage::operator =(const RepeatedEnumMessage &other)
 {
     RepeatedEnumMessage temp(other);
@@ -217,10 +208,7 @@ RepeatedEnumMessage &RepeatedEnumMessage::operator =(const RepeatedEnumMessage &
     return *this;
 }
 RepeatedEnumMessage::RepeatedEnumMessage(RepeatedEnumMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedEnumMessage &lhs, const RepeatedEnumMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -309,10 +297,7 @@ NestedEnumHolder::NestedEnumHolder()
 }
 
 NestedEnumHolder::NestedEnumHolder(const NestedEnumHolder &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 NestedEnumHolder &NestedEnumHolder::operator =(const NestedEnumHolder &other)
 {
     NestedEnumHolder temp(other);
@@ -320,10 +305,7 @@ NestedEnumHolder &NestedEnumHolder::operator =(const NestedEnumHolder &other)
     return *this;
 }
 NestedEnumHolder::NestedEnumHolder(NestedEnumHolder &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const NestedEnumHolder &lhs, const NestedEnumHolder &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -398,10 +380,7 @@ NestedEnumHolderLevel2::NestedEnumHolderLevel2()
 }
 
 NestedEnumHolderLevel2::NestedEnumHolderLevel2(const NestedEnumHolderLevel2 &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 NestedEnumHolderLevel2 &NestedEnumHolderLevel2::operator =(const NestedEnumHolderLevel2 &other)
 {
     NestedEnumHolderLevel2 temp(other);
@@ -409,10 +388,7 @@ NestedEnumHolderLevel2 &NestedEnumHolderLevel2::operator =(const NestedEnumHolde
     return *this;
 }
 NestedEnumHolderLevel2::NestedEnumHolderLevel2(NestedEnumHolderLevel2 &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const NestedEnumHolderLevel2 &lhs, const NestedEnumHolderLevel2 &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -487,10 +463,7 @@ NestedEnumHolderLevel1::NestedEnumHolderLevel1()
 }
 
 NestedEnumHolderLevel1::NestedEnumHolderLevel1(const NestedEnumHolderLevel1 &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 NestedEnumHolderLevel1 &NestedEnumHolderLevel1::operator =(const NestedEnumHolderLevel1 &other)
 {
     NestedEnumHolderLevel1 temp(other);
@@ -498,10 +471,7 @@ NestedEnumHolderLevel1 &NestedEnumHolderLevel1::operator =(const NestedEnumHolde
     return *this;
 }
 NestedEnumHolderLevel1::NestedEnumHolderLevel1(NestedEnumHolderLevel1 &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const NestedEnumHolderLevel1 &lhs, const NestedEnumHolderLevel1 &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -607,10 +577,7 @@ NestedEnumMessage::NestedEnumMessage()
 }
 
 NestedEnumMessage::NestedEnumMessage(const NestedEnumMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 NestedEnumMessage &NestedEnumMessage::operator =(const NestedEnumMessage &other)
 {
     NestedEnumMessage temp(other);
@@ -618,10 +585,7 @@ NestedEnumMessage &NestedEnumMessage::operator =(const NestedEnumMessage &other)
     return *this;
 }
 NestedEnumMessage::NestedEnumMessage(NestedEnumMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const NestedEnumMessage &lhs, const NestedEnumMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -793,10 +757,7 @@ MixedEnumUsageMessage::MixedEnumUsageMessage()
 }
 
 MixedEnumUsageMessage::MixedEnumUsageMessage(const MixedEnumUsageMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 MixedEnumUsageMessage &MixedEnumUsageMessage::operator =(const MixedEnumUsageMessage &other)
 {
     MixedEnumUsageMessage temp(other);
@@ -804,10 +765,7 @@ MixedEnumUsageMessage &MixedEnumUsageMessage::operator =(const MixedEnumUsageMes
     return *this;
 }
 MixedEnumUsageMessage::MixedEnumUsageMessage(MixedEnumUsageMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const MixedEnumUsageMessage &lhs, const MixedEnumUsageMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -947,10 +905,7 @@ SimpleFileEnumMessage::SimpleFileEnumMessage()
 }
 
 SimpleFileEnumMessage::SimpleFileEnumMessage(const SimpleFileEnumMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 SimpleFileEnumMessage &SimpleFileEnumMessage::operator =(const SimpleFileEnumMessage &other)
 {
     SimpleFileEnumMessage temp(other);
@@ -958,10 +913,7 @@ SimpleFileEnumMessage &SimpleFileEnumMessage::operator =(const SimpleFileEnumMes
     return *this;
 }
 SimpleFileEnumMessage::SimpleFileEnumMessage(SimpleFileEnumMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const SimpleFileEnumMessage &lhs, const SimpleFileEnumMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -1073,10 +1025,7 @@ StepChildEnumMessage::StepChildEnumMessage()
 }
 
 StepChildEnumMessage::StepChildEnumMessage(const StepChildEnumMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 StepChildEnumMessage &StepChildEnumMessage::operator =(const StepChildEnumMessage &other)
 {
     StepChildEnumMessage temp(other);
@@ -1084,10 +1033,7 @@ StepChildEnumMessage &StepChildEnumMessage::operator =(const StepChildEnumMessag
     return *this;
 }
 StepChildEnumMessage::StepChildEnumMessage(StepChildEnumMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const StepChildEnumMessage &lhs, const StepChildEnumMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -1196,10 +1142,7 @@ A::A()
 }
 
 A::A(const A &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 A &A::operator =(const A &other)
 {
     A temp(other);
@@ -1207,10 +1150,7 @@ A &A::operator =(const A &other)
     return *this;
 }
 A::A(A &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const A &lhs, const A &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -1305,10 +1245,7 @@ B::B()
 }
 
 B::B(const B &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 B &B::operator =(const B &other)
 {
     B temp(other);
@@ -1316,10 +1253,7 @@ B &B::operator =(const B &other)
     return *this;
 }
 B::B(B &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const B &lhs, const B &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),

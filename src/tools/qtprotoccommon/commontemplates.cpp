@@ -346,16 +346,13 @@ const char *CommonTemplates::MoveConstructorDeclarationTemplate()
 const char *CommonTemplates::CopyConstructorDefinitionTemplate()
 {
     return "$classname$::$classname$(const $classname$ &other)\n"
-           "    : QProtobufMessage(other),\n"
-           "      dptr(other.dptr)\n"
-           "{\n}\n";
+           "    = default;\n";
 }
+
 const char *CommonTemplates::MoveConstructorDefinitionTemplate()
 {
     return "$classname$::$classname$($classname$ &&other) noexcept\n"
-           "    : QProtobufMessage(std::move(other)),\n"
-           "      dptr(std::move(other.dptr))\n"
-           "{\n}\n";
+           "    = default;\n";
 }
 
 const char *CommonTemplates::AssignmentOperatorDeclarationTemplate()

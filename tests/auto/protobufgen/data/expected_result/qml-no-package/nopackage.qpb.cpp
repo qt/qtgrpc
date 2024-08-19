@@ -79,10 +79,7 @@ EmptyMessage::EmptyMessage()
 }
 
 EmptyMessage::EmptyMessage(const EmptyMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 EmptyMessage &EmptyMessage::operator =(const EmptyMessage &other)
 {
     EmptyMessage temp(other);
@@ -90,10 +87,7 @@ EmptyMessage &EmptyMessage::operator =(const EmptyMessage &other)
     return *this;
 }
 EmptyMessage::EmptyMessage(EmptyMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -171,10 +165,7 @@ SimpleIntMessage::SimpleIntMessage()
 }
 
 SimpleIntMessage::SimpleIntMessage(const SimpleIntMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 SimpleIntMessage &SimpleIntMessage::operator =(const SimpleIntMessage &other)
 {
     SimpleIntMessage temp(other);
@@ -182,10 +173,7 @@ SimpleIntMessage &SimpleIntMessage::operator =(const SimpleIntMessage &other)
     return *this;
 }
 SimpleIntMessage::SimpleIntMessage(SimpleIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -279,10 +267,7 @@ NoPackageExternalMessage::NoPackageExternalMessage()
 }
 
 NoPackageExternalMessage::NoPackageExternalMessage(const NoPackageExternalMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 NoPackageExternalMessage &NoPackageExternalMessage::operator =(const NoPackageExternalMessage &other)
 {
     NoPackageExternalMessage temp(other);
@@ -290,10 +275,7 @@ NoPackageExternalMessage &NoPackageExternalMessage::operator =(const NoPackageEx
     return *this;
 }
 NoPackageExternalMessage::NoPackageExternalMessage(NoPackageExternalMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const NoPackageExternalMessage &lhs, const NoPackageExternalMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -421,10 +403,7 @@ NoPackageMessage::NoPackageMessage()
 }
 
 NoPackageMessage::NoPackageMessage(const NoPackageMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 NoPackageMessage &NoPackageMessage::operator =(const NoPackageMessage &other)
 {
     NoPackageMessage temp(other);
@@ -432,10 +411,7 @@ NoPackageMessage &NoPackageMessage::operator =(const NoPackageMessage &other)
     return *this;
 }
 NoPackageMessage::NoPackageMessage(NoPackageMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const NoPackageMessage &lhs, const NoPackageMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),

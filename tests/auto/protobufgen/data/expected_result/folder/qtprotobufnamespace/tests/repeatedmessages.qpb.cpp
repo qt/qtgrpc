@@ -78,10 +78,7 @@ RepeatedStringMessage::RepeatedStringMessage()
 }
 
 RepeatedStringMessage::RepeatedStringMessage(const RepeatedStringMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedStringMessage &RepeatedStringMessage::operator =(const RepeatedStringMessage &other)
 {
     RepeatedStringMessage temp(other);
@@ -89,10 +86,7 @@ RepeatedStringMessage &RepeatedStringMessage::operator =(const RepeatedStringMes
     return *this;
 }
 RepeatedStringMessage::RepeatedStringMessage(RepeatedStringMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedStringMessage &lhs, const RepeatedStringMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -183,10 +177,7 @@ RepeatedDoubleMessage::RepeatedDoubleMessage()
 }
 
 RepeatedDoubleMessage::RepeatedDoubleMessage(const RepeatedDoubleMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedDoubleMessage &RepeatedDoubleMessage::operator =(const RepeatedDoubleMessage &other)
 {
     RepeatedDoubleMessage temp(other);
@@ -194,10 +185,7 @@ RepeatedDoubleMessage &RepeatedDoubleMessage::operator =(const RepeatedDoubleMes
     return *this;
 }
 RepeatedDoubleMessage::RepeatedDoubleMessage(RepeatedDoubleMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedDoubleMessage &lhs, const RepeatedDoubleMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -288,10 +276,7 @@ RepeatedBytesMessage::RepeatedBytesMessage()
 }
 
 RepeatedBytesMessage::RepeatedBytesMessage(const RepeatedBytesMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedBytesMessage &RepeatedBytesMessage::operator =(const RepeatedBytesMessage &other)
 {
     RepeatedBytesMessage temp(other);
@@ -299,10 +284,7 @@ RepeatedBytesMessage &RepeatedBytesMessage::operator =(const RepeatedBytesMessag
     return *this;
 }
 RepeatedBytesMessage::RepeatedBytesMessage(RepeatedBytesMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedBytesMessage &lhs, const RepeatedBytesMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -393,10 +375,7 @@ RepeatedFloatMessage::RepeatedFloatMessage()
 }
 
 RepeatedFloatMessage::RepeatedFloatMessage(const RepeatedFloatMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedFloatMessage &RepeatedFloatMessage::operator =(const RepeatedFloatMessage &other)
 {
     RepeatedFloatMessage temp(other);
@@ -404,10 +383,7 @@ RepeatedFloatMessage &RepeatedFloatMessage::operator =(const RepeatedFloatMessag
     return *this;
 }
 RepeatedFloatMessage::RepeatedFloatMessage(RepeatedFloatMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedFloatMessage &lhs, const RepeatedFloatMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -498,10 +474,7 @@ RepeatedComplexMessage::RepeatedComplexMessage()
 }
 
 RepeatedComplexMessage::RepeatedComplexMessage(const RepeatedComplexMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedComplexMessage &RepeatedComplexMessage::operator =(const RepeatedComplexMessage &other)
 {
     RepeatedComplexMessage temp(other);
@@ -509,10 +482,7 @@ RepeatedComplexMessage &RepeatedComplexMessage::operator =(const RepeatedComplex
     return *this;
 }
 RepeatedComplexMessage::RepeatedComplexMessage(RepeatedComplexMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedComplexMessage &lhs, const RepeatedComplexMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -603,10 +573,7 @@ RepeatedSIntMessage::RepeatedSIntMessage()
 }
 
 RepeatedSIntMessage::RepeatedSIntMessage(const RepeatedSIntMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedSIntMessage &RepeatedSIntMessage::operator =(const RepeatedSIntMessage &other)
 {
     RepeatedSIntMessage temp(other);
@@ -614,10 +581,7 @@ RepeatedSIntMessage &RepeatedSIntMessage::operator =(const RepeatedSIntMessage &
     return *this;
 }
 RepeatedSIntMessage::RepeatedSIntMessage(RepeatedSIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedSIntMessage &lhs, const RepeatedSIntMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -708,10 +672,7 @@ RepeatedIntMessage::RepeatedIntMessage()
 }
 
 RepeatedIntMessage::RepeatedIntMessage(const RepeatedIntMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedIntMessage &RepeatedIntMessage::operator =(const RepeatedIntMessage &other)
 {
     RepeatedIntMessage temp(other);
@@ -719,10 +680,7 @@ RepeatedIntMessage &RepeatedIntMessage::operator =(const RepeatedIntMessage &oth
     return *this;
 }
 RepeatedIntMessage::RepeatedIntMessage(RepeatedIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedIntMessage &lhs, const RepeatedIntMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -813,10 +771,7 @@ RepeatedUIntMessage::RepeatedUIntMessage()
 }
 
 RepeatedUIntMessage::RepeatedUIntMessage(const RepeatedUIntMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedUIntMessage &RepeatedUIntMessage::operator =(const RepeatedUIntMessage &other)
 {
     RepeatedUIntMessage temp(other);
@@ -824,10 +779,7 @@ RepeatedUIntMessage &RepeatedUIntMessage::operator =(const RepeatedUIntMessage &
     return *this;
 }
 RepeatedUIntMessage::RepeatedUIntMessage(RepeatedUIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedUIntMessage &lhs, const RepeatedUIntMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -918,10 +870,7 @@ RepeatedSInt64Message::RepeatedSInt64Message()
 }
 
 RepeatedSInt64Message::RepeatedSInt64Message(const RepeatedSInt64Message &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedSInt64Message &RepeatedSInt64Message::operator =(const RepeatedSInt64Message &other)
 {
     RepeatedSInt64Message temp(other);
@@ -929,10 +878,7 @@ RepeatedSInt64Message &RepeatedSInt64Message::operator =(const RepeatedSInt64Mes
     return *this;
 }
 RepeatedSInt64Message::RepeatedSInt64Message(RepeatedSInt64Message &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedSInt64Message &lhs, const RepeatedSInt64Message &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -1023,10 +969,7 @@ RepeatedInt64Message::RepeatedInt64Message()
 }
 
 RepeatedInt64Message::RepeatedInt64Message(const RepeatedInt64Message &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedInt64Message &RepeatedInt64Message::operator =(const RepeatedInt64Message &other)
 {
     RepeatedInt64Message temp(other);
@@ -1034,10 +977,7 @@ RepeatedInt64Message &RepeatedInt64Message::operator =(const RepeatedInt64Messag
     return *this;
 }
 RepeatedInt64Message::RepeatedInt64Message(RepeatedInt64Message &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedInt64Message &lhs, const RepeatedInt64Message &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -1128,10 +1068,7 @@ RepeatedUInt64Message::RepeatedUInt64Message()
 }
 
 RepeatedUInt64Message::RepeatedUInt64Message(const RepeatedUInt64Message &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedUInt64Message &RepeatedUInt64Message::operator =(const RepeatedUInt64Message &other)
 {
     RepeatedUInt64Message temp(other);
@@ -1139,10 +1076,7 @@ RepeatedUInt64Message &RepeatedUInt64Message::operator =(const RepeatedUInt64Mes
     return *this;
 }
 RepeatedUInt64Message::RepeatedUInt64Message(RepeatedUInt64Message &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedUInt64Message &lhs, const RepeatedUInt64Message &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -1233,10 +1167,7 @@ RepeatedFixedIntMessage::RepeatedFixedIntMessage()
 }
 
 RepeatedFixedIntMessage::RepeatedFixedIntMessage(const RepeatedFixedIntMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedFixedIntMessage &RepeatedFixedIntMessage::operator =(const RepeatedFixedIntMessage &other)
 {
     RepeatedFixedIntMessage temp(other);
@@ -1244,10 +1175,7 @@ RepeatedFixedIntMessage &RepeatedFixedIntMessage::operator =(const RepeatedFixed
     return *this;
 }
 RepeatedFixedIntMessage::RepeatedFixedIntMessage(RepeatedFixedIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedFixedIntMessage &lhs, const RepeatedFixedIntMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -1338,10 +1266,7 @@ RepeatedSFixedIntMessage::RepeatedSFixedIntMessage()
 }
 
 RepeatedSFixedIntMessage::RepeatedSFixedIntMessage(const RepeatedSFixedIntMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedSFixedIntMessage &RepeatedSFixedIntMessage::operator =(const RepeatedSFixedIntMessage &other)
 {
     RepeatedSFixedIntMessage temp(other);
@@ -1349,10 +1274,7 @@ RepeatedSFixedIntMessage &RepeatedSFixedIntMessage::operator =(const RepeatedSFi
     return *this;
 }
 RepeatedSFixedIntMessage::RepeatedSFixedIntMessage(RepeatedSFixedIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedSFixedIntMessage &lhs, const RepeatedSFixedIntMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -1443,10 +1365,7 @@ RepeatedFixedInt64Message::RepeatedFixedInt64Message()
 }
 
 RepeatedFixedInt64Message::RepeatedFixedInt64Message(const RepeatedFixedInt64Message &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedFixedInt64Message &RepeatedFixedInt64Message::operator =(const RepeatedFixedInt64Message &other)
 {
     RepeatedFixedInt64Message temp(other);
@@ -1454,10 +1373,7 @@ RepeatedFixedInt64Message &RepeatedFixedInt64Message::operator =(const RepeatedF
     return *this;
 }
 RepeatedFixedInt64Message::RepeatedFixedInt64Message(RepeatedFixedInt64Message &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedFixedInt64Message &lhs, const RepeatedFixedInt64Message &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -1548,10 +1464,7 @@ RepeatedSFixedInt64Message::RepeatedSFixedInt64Message()
 }
 
 RepeatedSFixedInt64Message::RepeatedSFixedInt64Message(const RepeatedSFixedInt64Message &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedSFixedInt64Message &RepeatedSFixedInt64Message::operator =(const RepeatedSFixedInt64Message &other)
 {
     RepeatedSFixedInt64Message temp(other);
@@ -1559,10 +1472,7 @@ RepeatedSFixedInt64Message &RepeatedSFixedInt64Message::operator =(const Repeate
     return *this;
 }
 RepeatedSFixedInt64Message::RepeatedSFixedInt64Message(RepeatedSFixedInt64Message &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedSFixedInt64Message &lhs, const RepeatedSFixedInt64Message &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -1653,10 +1563,7 @@ RepeatedBoolMessage::RepeatedBoolMessage()
 }
 
 RepeatedBoolMessage::RepeatedBoolMessage(const RepeatedBoolMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedBoolMessage &RepeatedBoolMessage::operator =(const RepeatedBoolMessage &other)
 {
     RepeatedBoolMessage temp(other);
@@ -1664,10 +1571,7 @@ RepeatedBoolMessage &RepeatedBoolMessage::operator =(const RepeatedBoolMessage &
     return *this;
 }
 RepeatedBoolMessage::RepeatedBoolMessage(RepeatedBoolMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedBoolMessage &lhs, const RepeatedBoolMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),

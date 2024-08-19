@@ -72,10 +72,7 @@ EmptyMessage::EmptyMessage()
 }
 
 EmptyMessage::EmptyMessage(const EmptyMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 EmptyMessage &EmptyMessage::operator =(const EmptyMessage &other)
 {
     EmptyMessage temp(other);
@@ -83,10 +80,7 @@ EmptyMessage &EmptyMessage::operator =(const EmptyMessage &other)
     return *this;
 }
 EmptyMessage::EmptyMessage(EmptyMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const EmptyMessage &lhs, const EmptyMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -163,10 +157,7 @@ SimpleStringMessage::SimpleStringMessage()
 }
 
 SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &other)
 {
     SimpleStringMessage temp(other);
@@ -174,10 +165,7 @@ SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &
     return *this;
 }
 SimpleStringMessage::SimpleStringMessage(SimpleStringMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -278,10 +266,7 @@ ComplexMessage::ComplexMessage()
 }
 
 ComplexMessage::ComplexMessage(const ComplexMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 ComplexMessage &ComplexMessage::operator =(const ComplexMessage &other)
 {
     ComplexMessage temp(other);
@@ -289,10 +274,7 @@ ComplexMessage &ComplexMessage::operator =(const ComplexMessage &other)
     return *this;
 }
 ComplexMessage::ComplexMessage(ComplexMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const ComplexMessage &lhs, const ComplexMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),

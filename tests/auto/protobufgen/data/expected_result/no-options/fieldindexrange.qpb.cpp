@@ -79,10 +79,7 @@ FieldIndexTest1Message::FieldIndexTest1Message()
 }
 
 FieldIndexTest1Message::FieldIndexTest1Message(const FieldIndexTest1Message &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 FieldIndexTest1Message &FieldIndexTest1Message::operator =(const FieldIndexTest1Message &other)
 {
     FieldIndexTest1Message temp(other);
@@ -90,10 +87,7 @@ FieldIndexTest1Message &FieldIndexTest1Message::operator =(const FieldIndexTest1
     return *this;
 }
 FieldIndexTest1Message::FieldIndexTest1Message(FieldIndexTest1Message &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const FieldIndexTest1Message &lhs, const FieldIndexTest1Message &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -185,10 +179,7 @@ FieldIndexTest2Message::FieldIndexTest2Message()
 }
 
 FieldIndexTest2Message::FieldIndexTest2Message(const FieldIndexTest2Message &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 FieldIndexTest2Message &FieldIndexTest2Message::operator =(const FieldIndexTest2Message &other)
 {
     FieldIndexTest2Message temp(other);
@@ -196,10 +187,7 @@ FieldIndexTest2Message &FieldIndexTest2Message::operator =(const FieldIndexTest2
     return *this;
 }
 FieldIndexTest2Message::FieldIndexTest2Message(FieldIndexTest2Message &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const FieldIndexTest2Message &lhs, const FieldIndexTest2Message &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -291,10 +279,7 @@ FieldIndexTest3Message::FieldIndexTest3Message()
 }
 
 FieldIndexTest3Message::FieldIndexTest3Message(const FieldIndexTest3Message &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 FieldIndexTest3Message &FieldIndexTest3Message::operator =(const FieldIndexTest3Message &other)
 {
     FieldIndexTest3Message temp(other);
@@ -302,10 +287,7 @@ FieldIndexTest3Message &FieldIndexTest3Message::operator =(const FieldIndexTest3
     return *this;
 }
 FieldIndexTest3Message::FieldIndexTest3Message(FieldIndexTest3Message &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const FieldIndexTest3Message &lhs, const FieldIndexTest3Message &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -397,10 +379,7 @@ FieldIndexTest4Message::FieldIndexTest4Message()
 }
 
 FieldIndexTest4Message::FieldIndexTest4Message(const FieldIndexTest4Message &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 FieldIndexTest4Message &FieldIndexTest4Message::operator =(const FieldIndexTest4Message &other)
 {
     FieldIndexTest4Message temp(other);
@@ -408,10 +387,7 @@ FieldIndexTest4Message &FieldIndexTest4Message::operator =(const FieldIndexTest4
     return *this;
 }
 FieldIndexTest4Message::FieldIndexTest4Message(FieldIndexTest4Message &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const FieldIndexTest4Message &lhs, const FieldIndexTest4Message &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),

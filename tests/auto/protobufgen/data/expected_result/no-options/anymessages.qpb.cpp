@@ -78,10 +78,7 @@ AnyMessage::AnyMessage()
 }
 
 AnyMessage::AnyMessage(const AnyMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 AnyMessage &AnyMessage::operator =(const AnyMessage &other)
 {
     AnyMessage temp(other);
@@ -89,10 +86,7 @@ AnyMessage &AnyMessage::operator =(const AnyMessage &other)
     return *this;
 }
 AnyMessage::AnyMessage(AnyMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const AnyMessage &lhs, const AnyMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -183,10 +177,7 @@ RepeatedAnyMessage::RepeatedAnyMessage()
 }
 
 RepeatedAnyMessage::RepeatedAnyMessage(const RepeatedAnyMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 RepeatedAnyMessage &RepeatedAnyMessage::operator =(const RepeatedAnyMessage &other)
 {
     RepeatedAnyMessage temp(other);
@@ -194,10 +185,7 @@ RepeatedAnyMessage &RepeatedAnyMessage::operator =(const RepeatedAnyMessage &oth
     return *this;
 }
 RepeatedAnyMessage::RepeatedAnyMessage(RepeatedAnyMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const RepeatedAnyMessage &lhs, const RepeatedAnyMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -294,10 +282,7 @@ TwoAnyMessage::TwoAnyMessage()
 }
 
 TwoAnyMessage::TwoAnyMessage(const TwoAnyMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 TwoAnyMessage &TwoAnyMessage::operator =(const TwoAnyMessage &other)
 {
     TwoAnyMessage temp(other);
@@ -305,10 +290,7 @@ TwoAnyMessage &TwoAnyMessage::operator =(const TwoAnyMessage &other)
     return *this;
 }
 TwoAnyMessage::TwoAnyMessage(TwoAnyMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const TwoAnyMessage &lhs, const TwoAnyMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -440,10 +422,7 @@ Example::Example()
 }
 
 Example::Example(const Example &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 Example &Example::operator =(const Example &other)
 {
     Example temp(other);
@@ -451,10 +430,7 @@ Example &Example::operator =(const Example &other)
     return *this;
 }
 Example::Example(Example &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const Example &lhs, const Example &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -602,10 +578,7 @@ SimpleMessage::SimpleMessage()
 }
 
 SimpleMessage::SimpleMessage(const SimpleMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 SimpleMessage &SimpleMessage::operator =(const SimpleMessage &other)
 {
     SimpleMessage temp(other);
@@ -613,10 +586,7 @@ SimpleMessage &SimpleMessage::operator =(const SimpleMessage &other)
     return *this;
 }
 SimpleMessage::SimpleMessage(SimpleMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const SimpleMessage &lhs, const SimpleMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),

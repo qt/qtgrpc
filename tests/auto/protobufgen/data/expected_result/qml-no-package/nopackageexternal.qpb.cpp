@@ -78,10 +78,7 @@ SimpleIntMessageExt::SimpleIntMessageExt()
 }
 
 SimpleIntMessageExt::SimpleIntMessageExt(const SimpleIntMessageExt &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 SimpleIntMessageExt &SimpleIntMessageExt::operator =(const SimpleIntMessageExt &other)
 {
     SimpleIntMessageExt temp(other);
@@ -89,10 +86,7 @@ SimpleIntMessageExt &SimpleIntMessageExt::operator =(const SimpleIntMessageExt &
     return *this;
 }
 SimpleIntMessageExt::SimpleIntMessageExt(SimpleIntMessageExt &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const SimpleIntMessageExt &lhs, const SimpleIntMessageExt &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),

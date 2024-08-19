@@ -82,10 +82,7 @@ OneofSimpleMessage::OneofSimpleMessage()
 }
 
 OneofSimpleMessage::OneofSimpleMessage(const OneofSimpleMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 OneofSimpleMessage &OneofSimpleMessage::operator =(const OneofSimpleMessage &other)
 {
     OneofSimpleMessage temp(other);
@@ -93,10 +90,7 @@ OneofSimpleMessage &OneofSimpleMessage::operator =(const OneofSimpleMessage &oth
     return *this;
 }
 OneofSimpleMessage::OneofSimpleMessage(OneofSimpleMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const OneofSimpleMessage &lhs, const OneofSimpleMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -283,10 +277,7 @@ OneofComplexMessage::OneofComplexMessage()
 }
 
 OneofComplexMessage::OneofComplexMessage(const OneofComplexMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 OneofComplexMessage &OneofComplexMessage::operator =(const OneofComplexMessage &other)
 {
     OneofComplexMessage temp(other);
@@ -294,10 +285,7 @@ OneofComplexMessage &OneofComplexMessage::operator =(const OneofComplexMessage &
     return *this;
 }
 OneofComplexMessage::OneofComplexMessage(OneofComplexMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const OneofComplexMessage &lhs, const OneofComplexMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
