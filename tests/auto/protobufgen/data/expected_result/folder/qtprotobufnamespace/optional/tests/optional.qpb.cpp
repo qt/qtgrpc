@@ -78,10 +78,7 @@ TestStringMessage::TestStringMessage()
 }
 
 TestStringMessage::TestStringMessage(const TestStringMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 TestStringMessage &TestStringMessage::operator =(const TestStringMessage &other)
 {
     TestStringMessage temp(other);
@@ -89,10 +86,7 @@ TestStringMessage &TestStringMessage::operator =(const TestStringMessage &other)
     return *this;
 }
 TestStringMessage::TestStringMessage(TestStringMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const TestStringMessage &lhs, const TestStringMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -246,10 +240,7 @@ OptionalMessage::OptionalMessage()
 }
 
 OptionalMessage::OptionalMessage(const OptionalMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 OptionalMessage &OptionalMessage::operator =(const OptionalMessage &other)
 {
     OptionalMessage temp(other);
@@ -257,10 +248,7 @@ OptionalMessage &OptionalMessage::operator =(const OptionalMessage &other)
     return *this;
 }
 OptionalMessage::OptionalMessage(OptionalMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const OptionalMessage &lhs, const OptionalMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),

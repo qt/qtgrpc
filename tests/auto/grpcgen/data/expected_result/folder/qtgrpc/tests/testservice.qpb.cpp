@@ -78,10 +78,7 @@ SimpleStringMessage::SimpleStringMessage()
 }
 
 SimpleStringMessage::SimpleStringMessage(const SimpleStringMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &other)
 {
     SimpleStringMessage temp(other);
@@ -89,10 +86,7 @@ SimpleStringMessage &SimpleStringMessage::operator =(const SimpleStringMessage &
     return *this;
 }
 SimpleStringMessage::SimpleStringMessage(SimpleStringMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -184,10 +178,7 @@ SimpleIntMessage::SimpleIntMessage()
 }
 
 SimpleIntMessage::SimpleIntMessage(const SimpleIntMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 SimpleIntMessage &SimpleIntMessage::operator =(const SimpleIntMessage &other)
 {
     SimpleIntMessage temp(other);
@@ -195,10 +186,7 @@ SimpleIntMessage &SimpleIntMessage::operator =(const SimpleIntMessage &other)
     return *this;
 }
 SimpleIntMessage::SimpleIntMessage(SimpleIntMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const SimpleIntMessage &lhs, const SimpleIntMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
@@ -289,10 +277,7 @@ BlobMessage::BlobMessage()
 }
 
 BlobMessage::BlobMessage(const BlobMessage &other)
-    : QProtobufMessage(other),
-      dptr(other.dptr)
-{
-}
+    = default;
 BlobMessage &BlobMessage::operator =(const BlobMessage &other)
 {
     BlobMessage temp(other);
@@ -300,10 +285,7 @@ BlobMessage &BlobMessage::operator =(const BlobMessage &other)
     return *this;
 }
 BlobMessage::BlobMessage(BlobMessage &&other) noexcept
-    : QProtobufMessage(std::move(other)),
-      dptr(std::move(other.dptr))
-{
-}
+    = default;
 bool comparesEqual(const BlobMessage &lhs, const BlobMessage &rhs) noexcept
 {
     return operator ==(static_cast<const QProtobufMessage&>(lhs),
