@@ -25,22 +25,6 @@ public:
     explicit QGrpcCallReply(std::shared_ptr<QGrpcOperationContext> operationContext);
     ~QGrpcCallReply() override;
 
-#ifdef Q_QDOC
-    template <typename FinishCallback>
-    void subscribe(const QObject *receiver, FinishCallback &&finishCallback,
-                   Qt::ConnectionType type = Qt::SingleShotConnection);
-#else
-    template <typename FinishCallback>
-    void subscribe(const typename QtPrivate::ContextTypeForFunctor<FinishCallback>::ContextType
-                       *receiver,
-                   FinishCallback &&finishCallback,
-                   Qt::ConnectionType type = Qt::SingleShotConnection)
-    {
-        connect(this, &QGrpcCallReply::finished, receiver,
-                std::forward<FinishCallback>(finishCallback), type);
-    }
-#endif // Q_QDOC
-
 private:
     Q_DISABLE_COPY_MOVE(QGrpcCallReply)
 
