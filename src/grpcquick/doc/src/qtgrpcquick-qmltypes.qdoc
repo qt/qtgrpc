@@ -35,7 +35,7 @@
 /*!
     \qmltype QQmlGrpcCallOptions
     \inqmlmodule QtGrpc
-    \instantiates QGrpcCallOptions
+    \nativetype QGrpcCallOptions
     \brief The QQmlGrpcCallOptions is a storage class used to set
            additional call options.
 
@@ -59,7 +59,7 @@
 /*!
     \qmltype QQmlGrpcChannelOptions
     \inqmlmodule QtGrpc
-    \instantiates QGrpcChannelOptions
+    \nativetype QGrpcChannelOptions
     \brief  The QQmlGrpcChannelOptions is an storage class used to set
             additional channel options.
 
@@ -158,7 +158,7 @@
 /*!
     \qmltype QQmlGrpcHttp2Channel
     \inqmlmodule QtGrpc
-    \instantiates QGrpcHttp2Channel
+    \nativetype QGrpcHttp2Channel
     \brief Implements QQmlAbstractGrpcChannel class in QML.
 
     Implements QQmlAbstractGrpcChannel interface for HTTP2 channel type.
