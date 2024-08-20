@@ -39,24 +39,16 @@ public:
     }
 
 private Q_SLOTS:
-    void asyncWithSubscribe();
-    void asyncWithSubscribeMember();
+    void callIsValid();
     void immediateCancel();
     void deferredCancel();
     void asyncClientStatusMessage();
     void asyncStatusMessage();
     void nonMainThreadIsInvalid();
     void metadata();
-
-private:
-    void subscribeCallback(const QGrpcStatus &status) {
-        if (status.isOk())
-            mTestBool = true;
-    };
-    bool mTestBool = false;
 };
 
-void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
+void QtGrpcClientUnaryCallTest::callIsValid()
 {
     SimpleStringMessage request;
     request.setTestFieldString("Hello Qt!");
@@ -64,38 +56,20 @@ void QtGrpcClientUnaryCallTest::asyncWithSubscribe()
     std::shared_ptr<SimpleStringMessage> result = std::make_shared<SimpleStringMessage>();
     bool waitForReply = false;
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
-    reply->subscribe(reply.get(),
-                     [replyPtr = reply.get(), resultWeak = std::weak_ptr(result),
-                      &waitForReply](const QGrpcStatus &status) {
-                         QCOMPARE_EQ(status.code(), QtGrpc::StatusCode::Ok);
-                         auto resultOpt = replyPtr->read<SimpleStringMessage>();
-                         QVERIFY(resultOpt.has_value());
-                         if (auto resultVal = resultWeak.lock(); resultVal)
-                             *resultVal = resultOpt.value();
-                         waitForReply = true;
-                     });
+    connect(
+        reply.get(), &QGrpcOperation::finished, this,
+        [&reply, resultWeak = std::weak_ptr(result), &waitForReply](const QGrpcStatus &status) {
+            QCOMPARE_EQ(status.code(), QtGrpc::StatusCode::Ok);
+            auto resultOpt = reply->read<SimpleStringMessage>();
+            QVERIFY(resultOpt.has_value());
+            if (auto resultVal = resultWeak.lock(); resultVal)
+                *resultVal = resultOpt.value();
+            waitForReply = true;
+        },
+        Qt::SingleShotConnection);
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(waitForReply, true, MessageLatency);
     QCOMPARE_EQ(result->testFieldString(), "Hello Qt!");
-}
-
-void QtGrpcClientUnaryCallTest::asyncWithSubscribeMember()
-{
-    SimpleStringMessage request;
-    std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
-    reply->subscribe(this, &QtGrpcClientUnaryCallTest::subscribeCallback);
-
-    QSignalSpy finSpy(reply.get(), &QGrpcOperation::finished);
-    QVERIFY(finSpy.isValid());
-
-    QCOMPARE_EQ(finSpy.count(), 0);
-    QVERIFY(finSpy.wait(2 * MessageLatency));
-    QCOMPARE_EQ(finSpy.count(), 1);
-
-    QVERIFY(mTestBool);
-    mTestBool = false;
-    const auto code = qvariant_cast<QGrpcStatus>(finSpy.at(0).first());
-    QCOMPARE_EQ(code.code(), QtGrpc::StatusCode::Ok);
 }
 
 void QtGrpcClientUnaryCallTest::immediateCancel()
@@ -210,11 +184,14 @@ void QtGrpcClientUnaryCallTest::metadata()
 
     QHash<QByteArray, QByteArray> metadata;
     QEventLoop waiter;
-    reply->subscribe(reply.get(),
-                     [replyPtr = reply.get(), &metadata, &waiter](const QGrpcStatus &) {
-                         metadata = replyPtr->metadata();
-                         waiter.quit();
-                     });
+
+    connect(
+        reply.get(), &QGrpcOperation::finished, this,
+        [&reply, &metadata, &waiter](const QGrpcStatus &) {
+            metadata = reply->metadata();
+            waiter.quit();
+        },
+        Qt::SingleShotConnection);
 
     waiter.exec();
 

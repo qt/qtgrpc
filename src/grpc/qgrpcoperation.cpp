@@ -30,6 +30,12 @@ using namespace Qt::StringLiterals;
 
     If this signal is emitted the respective operation when it's finished with
     the respective \a status.
+
+    \note This signal is emitted only once, and in most cases, you will want to
+    disconnect right after receiving it to avoid issues, such as lambda
+    captures not being destroyed after receiving the signal. An easy way to
+    achieve this is by using the Qt::SingleShotConnection \l {Qt::}
+    {ConnectionType}.
 */
 
 class QGrpcOperationPrivate : public QObjectPrivate
