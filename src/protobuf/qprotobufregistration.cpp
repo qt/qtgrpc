@@ -4,6 +4,8 @@
 #include "qprotobufregistration.h"
 #include "qtprotobuftypes.h"
 
+#include <QtProtobuf/private/qprotobufregistration_p.h>
+
 #include <QtCore/qmutex.h>
 #include <QtCore/qmetatype.h>
 #include <QtCore/qreadwritelock.h>

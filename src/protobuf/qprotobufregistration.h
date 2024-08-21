@@ -45,7 +45,6 @@ struct SerializationHandler
     Deserializer deserializer = nullptr; /*!< deserializer assigned to class */
 };
 
-extern Q_PROTOBUF_EXPORT SerializationHandler findHandler(QMetaType type);
 extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, Serializer serializer,
                                               Deserializer deserializer);
 

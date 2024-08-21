@@ -12,7 +12,7 @@ qt_internal_add_module(Protobuf
         qprotobufoneof.cpp qprotobufoneof.h
         qprotobufpropertyordering.cpp qprotobufpropertyordering.h
         qprotobufpropertyorderingbuilder_p.h
-        qprotobufregistration.cpp qprotobufregistration.h
+        qprotobufregistration.cpp qprotobufregistration.h qprotobufregistration_p.h
         qprotobufselfcheckiterator_p.h
         qprotobufserializer.cpp qprotobufserializer.h qprotobufserializer_p.h
         qtprotobufdefs_p.h
