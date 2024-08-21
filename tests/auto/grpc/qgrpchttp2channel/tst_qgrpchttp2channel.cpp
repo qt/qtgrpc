@@ -39,12 +39,6 @@ protected:
     {
         return true;
     }
-
-    void serializeObject(const QProtobufMessage *,
-                         const QtProtobufPrivate::QProtobufFieldInfo &) const override
-    {
-    }
-    bool deserializeObject(QProtobufMessage *) const override { return true; }
 };
 } // namespace
 

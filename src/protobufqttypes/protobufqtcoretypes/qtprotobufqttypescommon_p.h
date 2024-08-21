@@ -40,46 +40,44 @@ constexpr inline bool is_optional_v<std::optional<T>> = true;
 template<typename QType, typename PType>
 void registerQtTypeHandler()
 {
-    registerHandler(QMetaType::fromType<QType>(),
-                    [](const QAbstractProtobufSerializer *serializer, const void *valuePtr,
-                         const QProtobufFieldInfo &info) {
-                         QtProtobufPrivate::ensureSerializer(serializer);
-                         QtProtobufPrivate::ensureValue(valuePtr);
+    registerHandler(
+        QMetaType::fromType<QType>(),
+        [](QtProtobufPrivate::MessageFieldSerializer serializer, const void *valuePtr,
+           const QProtobufFieldInfo &info) {
+            QtProtobufPrivate::ensureValue(valuePtr);
 
-                         auto do_convert = [](const QType *qtype) {
-                             auto res = convert(*qtype);
-                             if constexpr (is_optional_v<decltype(res)>) {
-                                 return res;
-                             } else {
-                                 return std::optional<PType>(std::move(res));
-                             }
-                         };
+            auto do_convert = [](const QType *qtype) {
+                auto res = convert(*qtype);
+                if constexpr (is_optional_v<decltype(res)>) {
+                    return res;
+                } else {
+                    return std::optional<PType>(std::move(res));
+                }
+            };
 
-                         std::optional<PType> object =
-                             do_convert(static_cast<const QType *>(valuePtr));
-                         if (object) {
-                             serializer->serializeObject(&(object.value()), info);
-                         } else {
-                             warnTypeConversionError();
-                         }
-                     },
-                      [](const QAbstractProtobufSerializer *serializer, void *valuePtr) {
-                          QtProtobufPrivate::ensureSerializer(serializer);
-                          QtProtobufPrivate::ensureValue(valuePtr);
+            std::optional<PType> object = do_convert(static_cast<const QType *>(valuePtr));
+            if (object) {
+                serializer(&(object.value()), info);
+            } else {
+                warnTypeConversionError();
+            }
+        },
+        [](QtProtobufPrivate::MessageFieldDeserializer deserializer, void *valuePtr) {
+            QtProtobufPrivate::ensureValue(valuePtr);
 
-                          PType object;
-                          serializer->deserializeObject(&object);
-                          auto res = convert(object);
-                          auto *qtypePtr = static_cast<QType *>(valuePtr);
-                          if constexpr (is_optional_v<decltype(res)>) {
-                              if (!res)
-                                  warnTypeConversionError();
-                              else
-                                  *qtypePtr = std::move(*res);
-                          } else {
-                              *qtypePtr = std::move(res);
-                          }
-                      });
+            PType object;
+            deserializer(&object);
+            auto res = convert(object);
+            auto *qtypePtr = static_cast<QType *>(valuePtr);
+            if constexpr (is_optional_v<decltype(res)>) {
+                if (!res)
+                    warnTypeConversionError();
+                else
+                    *qtypePtr = std::move(*res);
+            } else {
+                *qtypePtr = std::move(res);
+            }
+        });
 }
 } // namespace QtProtobufPrivate
 

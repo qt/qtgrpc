@@ -37,11 +37,6 @@ public:
     virtual DeserializationError deserializationError() const = 0;
     virtual QString deserializationErrorString() const = 0;
 
-    virtual void
-    serializeObject(const QProtobufMessage *message,
-                    const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const = 0;
-    virtual bool deserializeObject(QProtobufMessage *message) const = 0;
-
 protected:
     virtual QByteArray serializeMessage(const QProtobufMessage *message) const = 0;
     virtual bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const = 0;

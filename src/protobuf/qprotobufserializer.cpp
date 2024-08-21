@@ -185,7 +185,7 @@ findIntegratedTypeHandler(QMetaType metaType, bool nonPacked)
 /*!
     Constructs a new serializer instance.
 */
-QProtobufSerializer::QProtobufSerializer() : d_ptr(new QProtobufSerializerPrivate(this))
+QProtobufSerializer::QProtobufSerializer() : d_ptr(new QProtobufSerializerPrivate)
 {
 }
 
@@ -316,17 +316,6 @@ bool QProtobufSerializerPrivate::deserializeObject(QProtobufMessage *message)
     return it.isValid();
 }
 
-void QProtobufSerializer::serializeObject(const QProtobufMessage *message,
-                                          const QProtobufFieldInfo &fieldInfo) const
-{
-    d_ptr->serializeObject(message, fieldInfo);
-}
-
-bool QProtobufSerializer::deserializeObject(QProtobufMessage *message) const
-{
-    return d_ptr->deserializeObject(message);
-}
-
 void QProtobufSerializerPrivate::serializeEnumList(const QList<QtProtobuf::int64> &value,
                                                    const QProtobufFieldInfo &fieldInfo)
 {
@@ -354,10 +343,6 @@ bool QProtobufSerializerPrivate::deserializeEnumList(QList<QtProtobuf::int64> &v
     }
     value = variantValue.value<QList<QtProtobuf::int64>>();
     return true;
-}
-
-QProtobufSerializerPrivate::QProtobufSerializerPrivate(QProtobufSerializer *q) : q_ptr(q)
-{
 }
 
 /*!
@@ -519,7 +504,11 @@ void QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue
         qProtoWarning() << "No serializer for type" << propertyValue.typeName();
         return;
     }
-    handler.serializer(q_ptr, propertyValue.constData(), fieldInfo);
+
+    handler.serializer([this](const QProtobufMessage *message,
+                              const QProtobufFieldInfo
+                                  &fieldInfo) { this->serializeObject(message, fieldInfo); },
+                       propertyValue.constData(), fieldInfo);
 }
 
 bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
@@ -644,7 +633,9 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
                 QCoreApplication::translate("QtProtobuf", error.toUtf8().data()));
             return false;
         }
-        handler.deserializer(q_ptr, cachedPropertyValue.data());
+        handler.deserializer([this](QProtobufMessage
+                                        *message) { return this->deserializeObject(message); },
+                             cachedPropertyValue.data());
     }
 
     return true;

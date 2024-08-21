@@ -11,14 +11,14 @@
 
 #include <QtProtobuf/qtprotobufglobal.h>
 
-#include <QtProtobuf/qabstractprotobufserializer.h>
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufpropertyordering.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
-#include <QtCore/qmetatype.h>
-#include <QtCore/qmetaobject.h>
 #include <QtCore/qhash.h>
+#include <QtCore/qmetaobject.h>
+#include <QtCore/qmetatype.h>
+#include <QtCore/qxpfunctional.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -35,9 +35,12 @@ struct ProtoTypeRegistrar
 namespace QtProtobufPrivate {
 extern Q_PROTOBUF_EXPORT void registerOrdering(QMetaType type, QProtobufPropertyOrdering ordering);
 
-using Serializer = void (*)(const QAbstractProtobufSerializer *, const void *,
-                            const QProtobufFieldInfo &);
-using Deserializer = void (*)(const QAbstractProtobufSerializer *, void *);
+using MessageFieldSerializer = qxp::function_ref<void(const QProtobufMessage *,
+                                                      const QProtobufFieldInfo &)>;
+using MessageFieldDeserializer = qxp::function_ref<bool(QProtobufMessage *)>;
+
+using Serializer = void (*)(MessageFieldSerializer, const void *, const QProtobufFieldInfo &);
+using Deserializer = void (*)(MessageFieldDeserializer, void *);
 
 struct SerializationHandler
 {
@@ -48,11 +51,6 @@ struct SerializationHandler
 extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, Serializer serializer,
                                               Deserializer deserializer);
 
-inline void ensureSerializer(const QAbstractProtobufSerializer *serializer)
-{
-    Q_ASSERT_X(serializer != nullptr, "QAbstractProtobufSerializer", "Serializer is null");
-}
-
 inline void ensureValue(const void *valuePtr)
 {
     Q_ASSERT_X(valuePtr != nullptr, "QAbstractProtobufSerializer", "Value is nullptr");
@@ -60,21 +58,19 @@ inline void ensureValue(const void *valuePtr)
 
 template <typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void serializeList(const QAbstractProtobufSerializer *serializer, const void *valuePtr,
+void serializeList(MessageFieldSerializer serializer, const void *valuePtr,
                    const QProtobufFieldInfo &fieldInfo)
 {
-    ensureSerializer(serializer);
     ensureValue(valuePtr);
 
     for (const auto &value : *static_cast<const QList<V> *>(valuePtr))
-        serializer->serializeObject(&value, fieldInfo);
+        serializer(&value, fieldInfo);
 }
 
 template <typename K, typename V>
-void serializeMap(const QAbstractProtobufSerializer *serializer, const void *valuePtr,
+void serializeMap(MessageFieldSerializer serializer, const void *valuePtr,
                   const QProtobufFieldInfo &fieldInfo)
 {
-    ensureSerializer(serializer);
     ensureValue(valuePtr);
 
     using QProtobufMapEntry = QProtobufMapEntry<K, const V>;
@@ -90,32 +86,29 @@ void serializeMap(const QAbstractProtobufSerializer *serializer, const void *val
         else
             el.setValue(v);
 
-        serializer->serializeObject(&el, fieldInfo);
+        serializer(&el, fieldInfo);
     }
 }
 
 template <typename V,
           typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void deserializeList(const QAbstractProtobufSerializer *serializer, void *valuePtr)
+void deserializeList(MessageFieldDeserializer deserializer, void *valuePtr)
 {
-    ensureSerializer(serializer);
     ensureValue(valuePtr);
 
     auto *listPtr = static_cast<QList<V> *>(valuePtr);
-    if (V item; serializer->deserializeObject(&item))
+    if (V item; deserializer(&item))
         listPtr->append(std::move(item));
 }
 
 template <typename K, typename V>
-void deserializeMap(const QAbstractProtobufSerializer *serializer, void *valuePtr)
+void deserializeMap(MessageFieldDeserializer deserializer, void *valuePtr)
 {
-    ensureSerializer(serializer);
-
     using QProtobufMapEntry = QProtobufMapEntry<K, V>;
     static_assert(!std::is_pointer_v<typename QProtobufMapEntry::KeyType>,
                   "Map key must not be message");
     auto *mapPtr = static_cast<QHash<K, V> *>(valuePtr);
-    if (QProtobufMapEntry el; serializer->deserializeObject(&el)) {
+    if (QProtobufMapEntry el; deserializer(&el)) {
         auto it = mapPtr->emplace(std::move(el).key());
 
         if constexpr (std::is_pointer_v<typename QProtobufMapEntry::ValueType>)

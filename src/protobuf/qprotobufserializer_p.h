@@ -154,7 +154,7 @@ public:
         return !value.value<V>().isEmpty();
     }
 
-    explicit QProtobufSerializerPrivate(QProtobufSerializer *q);
+    QProtobufSerializerPrivate() = default;
     ~QProtobufSerializerPrivate() = default;
     // ###########################################################################
     //                                Serializers
@@ -538,7 +538,6 @@ public:
 
 private:
     Q_DISABLE_COPY_MOVE(QProtobufSerializerPrivate)
-    QProtobufSerializer *q_ptr;
 };
 
 inline bool
