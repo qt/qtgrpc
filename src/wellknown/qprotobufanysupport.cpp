@@ -35,11 +35,9 @@ AnyPrivate::AnyPrivate(const QMetaObject *metaObject,
 {
 }
 
-static void serializerProxy(const QAbstractProtobufSerializer *serializer, const void *object,
-                            const QProtobufFieldInfo &fieldInfo)
+static void serializerProxy(QtProtobufPrivate::MessageFieldSerializer serializer,
+                            const void *object, const QProtobufFieldInfo &fieldInfo)
 {
-    QtProtobufPrivate::ensureSerializer(serializer);
-
     if (object == nullptr)
         return;
 
@@ -50,14 +48,12 @@ static void serializerProxy(const QAbstractProtobufSerializer *serializer, const
     google::protobuf::Any realAny;
     realAny.setValue(any.value());
     realAny.setTypeUrl(any.typeUrl());
-    serializer->serializeObject(&realAny, fieldInfo);
+    serializer(&realAny, fieldInfo);
 }
 
-static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, const void *object,
-                                const QProtobufFieldInfo &fieldInfo)
+static void listSerializerProxy(QtProtobufPrivate::MessageFieldSerializer serializer,
+                                const void *object, const QProtobufFieldInfo &fieldInfo)
 {
-    QtProtobufPrivate::ensureSerializer(serializer);
-
     if (object == nullptr)
         return;
 
@@ -66,20 +62,19 @@ static void listSerializerProxy(const QAbstractProtobufSerializer *serializer, c
         google::protobuf::Any realAny;
         realAny.setValue(any.value());
         realAny.setTypeUrl(any.typeUrl());
-        serializer->serializeObject(&realAny, fieldInfo);
+        serializer(&realAny, fieldInfo);
     }
 }
 
-static void listDeserializerProxy(const QAbstractProtobufSerializer *deserializer, void *object)
+static void listDeserializerProxy(QtProtobufPrivate::MessageFieldDeserializer deserializer,
+                                  void *object)
 {
-    QtProtobufPrivate::ensureSerializer(deserializer);
-
     if (object == nullptr)
         return;
 
     auto &anyList = *static_cast<QList<Any> *>(object);
     google::protobuf::Any realAny;
-    if (deserializer->deserializeObject(&realAny)) {
+    if (deserializer(&realAny)) {
         Any any;
         any.setTypeUrl(realAny.typeUrl());
         any.setValue(realAny.value());
@@ -89,15 +84,14 @@ static void listDeserializerProxy(const QAbstractProtobufSerializer *deserialize
     }
 }
 
-static void deserializerProxy(const QAbstractProtobufSerializer *deserializer, void *object)
+static void deserializerProxy(QtProtobufPrivate::MessageFieldDeserializer deserializer,
+                              void *object)
 {
-    QtProtobufPrivate::ensureSerializer(deserializer);
-
     if (object == nullptr)
         return;
 
     google::protobuf::Any realAny;
-    if (deserializer->deserializeObject(&realAny)) {
+    if (deserializer(&realAny)) {
         auto &any = *static_cast<Any *>(object);
         any.setTypeUrl(realAny.typeUrl());
         any.setValue(realAny.value());

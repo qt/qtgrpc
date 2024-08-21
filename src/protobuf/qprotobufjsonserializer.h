@@ -25,14 +25,9 @@ public:
     DeserializationError deserializationError() const override;
     QString deserializationErrorString() const override;
 
-private:
+protected:
     QByteArray serializeMessage(const QProtobufMessage *message) const override;
     bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const override;
-
-    void serializeObject(const QProtobufMessage *message,
-                         const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
-        const override;
-    bool deserializeObject(QProtobufMessage *message) const override;
 
 private:
     std::unique_ptr<QProtobufJsonSerializerPrivate> d_ptr;

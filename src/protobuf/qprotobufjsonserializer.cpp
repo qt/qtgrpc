@@ -187,8 +187,7 @@ public:
         return QJsonValue(arr);
     }
 
-    QProtobufJsonSerializerPrivate(QProtobufJsonSerializer *q)
-        : qPtr(q)
+    QProtobufJsonSerializerPrivate()
     {
         [[maybe_unused]] static bool initialized = []() -> bool {
             handlers[qMetaTypeId<QtProtobuf::int32>()] = createCommonHandler<QtProtobuf::int32>();
@@ -275,7 +274,7 @@ public:
             auto store = activeValue.toObject();
             activeValue = QJsonObject();
             auto *messageProperty = propertyValue.value<QProtobufMessage *>();
-            serializeObject(messageProperty);
+            serializeObjectImpl(messageProperty);
             store.insert(fieldInfo.jsonName().toString(), activeValue);
             activeValue = store;
             return;
@@ -302,6 +301,11 @@ public:
             return;
         }
 
+        auto serializerFunction = [this](const QProtobufMessage *message,
+                                         const QProtobufFieldInfo &fieldInfo) {
+            this->serializeObject(message, fieldInfo);
+        };
+
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (handler.serializer) {
             if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated
@@ -309,12 +313,12 @@ public:
                 const auto fieldName = fieldInfo.jsonName().toString();
                 QJsonObject activeObject = activeValue.toObject();
                 activeValue = activeObject.value(fieldName).toArray();
-                handler.serializer(qPtr, propertyValue.constData(), fieldInfo);
+                handler.serializer(serializerFunction, propertyValue.constData(), fieldInfo);
                 if (!activeValue.toArray().empty())
                     activeObject.insert(fieldName, activeValue);
                 activeValue = activeObject;
             } else {
-                handler.serializer(qPtr, propertyValue.constData(), fieldInfo);
+                handler.serializer(serializerFunction, propertyValue.constData(), fieldInfo);
             }
         } else {
             QJsonObject activeObject = activeValue.toObject();
@@ -333,24 +337,8 @@ public:
         }
     }
 
-    void serializeObject(const QProtobufMessage *message)
-    {
-        // if a message is not initialized, just return empty { }
-        if (message) {
-            auto ordering = message->propertyOrdering();
-            Q_ASSERT(ordering != nullptr);
-            for (int index = 0; index < ordering->fieldCount(); ++index) {
-                int fieldIndex = ordering->fieldNumber(index);
-                Q_ASSERT_X(fieldIndex <= ProtobufFieldNumMax && fieldIndex >= ProtobufFieldNumMin,
-                           "",
-                           "fieldIndex is out of range");
-                QProtobufFieldInfo fieldInfo(*ordering, index);
-                QVariant propertyValue = QtProtobufSerializerHelpers::messageProperty(message,
-                                                                                      fieldInfo);
-                serializeProperty(propertyValue, fieldInfo);
-            }
-        }
-    }
+    void serializeObject(const QProtobufMessage *message, const QProtobufFieldInfo &fieldInfo);
+    void serializeObjectImpl(const QProtobufMessage *message);
 
     template <typename T>
     static QVariant deserializeCommon(const QJsonValue &value, bool &ok)
@@ -533,6 +521,9 @@ public:
 
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (handler.deserializer) {
+            auto deserializerFunction = [this](QProtobufMessage *message) {
+                return this->deserializeObject(message);
+            };
             if (activeValue.isArray()) {
                 QJsonArray array = activeValue.toArray();
                 if (array.isEmpty()) {
@@ -540,15 +531,14 @@ public:
                     activeValue = {};
                     return propertyData;
                 }
-
                 if (!array.at(0).isObject()) { // Enum array
-                    handler.deserializer(qPtr, propertyData.data());
+                    handler.deserializer(deserializerFunction, propertyData.data());
                     ok = propertyData.isValid();
                 } else {
                     while (!array.isEmpty() &&
                            deserializationError == QAbstractProtobufSerializer::NoError) {
                         activeValue = array.takeAt(0);
-                        handler.deserializer(qPtr, propertyData.data());
+                        handler.deserializer(deserializerFunction, propertyData.data());
                     }
                     ok = propertyData.isValid();
                 }
@@ -557,7 +547,7 @@ public:
                 // This is required to deserialize the map fields.
                 while (!activeValue.isNull()
                        && deserializationError == QAbstractProtobufSerializer::NoError) {
-                    handler.deserializer(qPtr, propertyData.data());
+                    handler.deserializer(deserializerFunction, propertyData.data());
                 }
                 ok = propertyData.isValid();
             }
@@ -715,9 +705,6 @@ public:
 
     QVariant cachedPropertyValue;
     int cachedIndex = -1;
-
-private:
-    QProtobufJsonSerializer *qPtr;
 };
 
 bool QProtobufJsonSerializerPrivate::storeCachedValue(QProtobufMessage *message)
@@ -736,14 +723,31 @@ bool QProtobufJsonSerializerPrivate::storeCachedValue(QProtobufMessage *message)
 
 QProtobufJsonSerializerPrivate::SerializerRegistry QProtobufJsonSerializerPrivate::handlers = {};
 
+void QProtobufJsonSerializerPrivate::serializeObjectImpl(const QProtobufMessage *message)
+{
+    // if a message is not initialized, just return empty { }
+    if (message) {
+        auto ordering = message->propertyOrdering();
+        Q_ASSERT(ordering != nullptr);
+        for (int index = 0; index < ordering->fieldCount(); ++index) {
+            int fieldIndex = ordering->fieldNumber(index);
+            Q_ASSERT_X(fieldIndex <= ProtobufFieldNumMax && fieldIndex >= ProtobufFieldNumMin, "",
+                       "fieldIndex is out of range");
+            QProtobufFieldInfo fieldInfo(*ordering, index);
+            QVariant propertyValue = QtProtobufSerializerHelpers::messageProperty(message,
+                                                                                  fieldInfo);
+            serializeProperty(propertyValue, fieldInfo);
+        }
+    }
+}
+
 void QProtobufJsonSerializerPrivate::clearError()
 {
     deserializationError = QAbstractProtobufSerializer::NoError;
     deserializationErrorString.clear();
 }
 
-QProtobufJsonSerializer::QProtobufJsonSerializer() :
-    d_ptr(new QProtobufJsonSerializerPrivate(this))
+QProtobufJsonSerializer::QProtobufJsonSerializer() : d_ptr(new QProtobufJsonSerializerPrivate)
 {
 }
 
@@ -772,7 +776,7 @@ QByteArray QProtobufJsonSerializer::serializeMessage(const QProtobufMessage *mes
 {
     d_ptr->clearError();
     d_ptr->activeValue = QJsonObject();
-    d_ptr->serializeObject(message);
+    d_ptr->serializeObjectImpl(message);
     QJsonDocument doc;
     doc.setObject(d_ptr->activeValue.toObject());
     d_ptr->activeValue = QJsonObject();
@@ -801,36 +805,31 @@ bool QProtobufJsonSerializer::deserializeMessage(QProtobufMessage *message,
     return d_ptr->deserializeObject(message);
 }
 
-void QProtobufJsonSerializer::serializeObject(const QProtobufMessage *message,
-                                              const QProtobufFieldInfo &fieldInfo) const
+void QProtobufJsonSerializerPrivate::serializeObject(const QProtobufMessage *message,
+                                                     const QProtobufFieldInfo &fieldInfo)
 {
-    if (d_ptr->activeValue.isArray()) {
-        auto store = d_ptr->activeValue.toArray();
-        d_ptr->activeValue = QJsonObject();
-        d_ptr->serializeObject(message);
-        store.append(d_ptr->activeValue);
-        d_ptr->activeValue = store;
+    if (activeValue.isArray()) {
+        auto store = activeValue.toArray();
+        activeValue = QJsonObject();
+        serializeObjectImpl(message);
+        store.append(activeValue);
+        activeValue = store;
     } else {
-        auto store = d_ptr->activeValue.toObject();
+        auto store = activeValue.toObject();
         const QString fieldName = fieldInfo.jsonName().toString();
-        d_ptr->activeValue = QJsonObject();
+        activeValue = QJsonObject();
         if (fieldInfo.fieldFlags() & QtProtobufPrivate::FieldFlag::Map) {
             QJsonObject mapObject = store.value(fieldName).toObject();
-            d_ptr->serializeObject(message);
+            serializeObjectImpl(message);
             mapObject.insert(message->property("key").toString(),
-                             d_ptr->activeValue.toObject().value("value"_L1));
+                             activeValue.toObject().value("value"_L1));
             store.insert(fieldName, mapObject);
         } else {
-            d_ptr->serializeObject(message);
-            store.insert(fieldName, d_ptr->activeValue);
+            serializeObjectImpl(message);
+            store.insert(fieldName, activeValue);
         }
-        d_ptr->activeValue = store;
+        activeValue = store;
     }
-}
-
-bool QProtobufJsonSerializer::deserializeObject(QProtobufMessage *message) const
-{
-    return d_ptr->deserializeObject(message);
 }
 
 QT_END_NAMESPACE
