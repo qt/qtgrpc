@@ -57,13 +57,6 @@ protected:
     QProtobufMessage(QProtobufMessage &&other) noexcept = default;
     QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QProtobufMessage)
 
-    QVariant property(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
-                      bool allowInitialize = false) const;
-    bool setProperty(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
-                     const QVariant &value);
-    bool setProperty(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
-                     QVariant &&value);
-
     void swap(QProtobufMessage &other) noexcept
     {
         d_ptr.swap(other.d_ptr);
@@ -73,12 +66,6 @@ private:
                                                 const QProtobufMessage &rhs) noexcept;
     Q_DECLARE_EQUALITY_COMPARABLE(QProtobufMessage);
 
-    const QMetaObject *metaObject() const;
-
-    friend class QProtobufSerializer;
-    friend class QAbstractProtobufSerializer;
-    friend class QProtobufSerializerPrivate;
-    friend class QProtobufJsonSerializerPrivate;
     friend struct QProtobufMessageDeleter;
 
     Q_DECLARE_PRIVATE(QProtobufMessage)

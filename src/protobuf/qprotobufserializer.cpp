@@ -8,6 +8,8 @@
 #include "qtprotobufdefs_p.h"
 #include "qtprotobuftypes.h"
 
+#include <QtProtobuf/private/qtprotobufserializerhelpers_p.h>
+
 #include <QtCore/qmetatype.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qmetaobject.h>
@@ -212,7 +214,7 @@ void QProtobufSerializerPrivate::serializeMessage(const QProtobufMessage *messag
         Q_ASSERT_X(fieldIndex <= ProtobufFieldNumMax && fieldIndex >= ProtobufFieldNumMin, "",
                    "fieldIndex is out of range");
         QProtobufFieldInfo fieldInfo(*ordering, index);
-        QVariant propertyValue = message->property(fieldInfo);
+        QVariant propertyValue = QtProtobufSerializerHelpers::messageProperty(message, fieldInfo);
         serializeProperty(propertyValue, fieldInfo);
     }
 
@@ -567,7 +569,8 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
         if (!storeCachedValue(message))
             return false;
 
-        cachedPropertyValue = message->property(fieldInfo, true);
+        cachedPropertyValue = QtProtobufSerializerHelpers::messageProperty(message, fieldInfo,
+                                                                           true);
         cachedIndex = index;
     }
     QMetaType metaType = cachedPropertyValue.metaType();
@@ -653,7 +656,8 @@ bool QProtobufSerializerPrivate::storeCachedValue(QProtobufMessage *message)
     if (cachedIndex >= 0 && !cachedPropertyValue.isNull()) {
         const auto *ordering = message->propertyOrdering();
         QProtobufFieldInfo fieldInfo(*ordering, cachedIndex);
-        ok = message->setProperty(fieldInfo, cachedPropertyValue);
+        ok = QtProtobufSerializerHelpers::setMessageProperty(message, fieldInfo,
+                                                             cachedPropertyValue);
         cachedPropertyValue.clear();
         cachedIndex = -1;
     }
