@@ -7,6 +7,8 @@
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufpropertyordering.h>
 
+#include <QtProtobuf/private/qtprotobufserializerhelpers_p.h>
+
 QT_BEGIN_NAMESPACE
 
 /*!
@@ -128,7 +130,7 @@ bool QAbstractProtobufSerializer::deserialize(QProtobufMessage *message, QByteAr
     Q_ASSERT(message != nullptr && message->propertyOrdering() != nullptr
              && message->propertyOrdering()->data != nullptr);
     // Wipe the message by reconstructing it in place.
-    const auto mtype = message->metaObject()->metaType();
+    const auto mtype = QtProtobufSerializerHelpers::messageMetaObject(message)->metaType();
     mtype.destruct(message);
     mtype.construct(message);
     return deserializeMessage(message, data);

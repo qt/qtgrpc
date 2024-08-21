@@ -54,16 +54,6 @@ QProtobufMessage::QProtobufMessage(QProtobufMessagePrivate &dd) : d_ptr(&dd)
 {
 }
 
-/*!
-    \internal
-    The QMetaObject which was passed to the QProtobufMessage constructor.
-*/
-const QMetaObject *QProtobufMessage::metaObject() const
-{
-    Q_D(const QProtobufMessage);
-    return d->metaObject;
-}
-
 QT_DEFINE_QESDP_SPECIALIZATION_DTOR(QProtobufMessagePrivate)
 
 QProtobufMessagePrivate::QProtobufMessagePrivate(const QMetaObject *metaObject,
@@ -259,54 +249,9 @@ void QProtobufMessageDeleter::operator()(QProtobufMessage *ptr) const noexcept
 {
     if (!ptr)
         return;
-    const QMetaObject *mobj = ptr->metaObject();
+    const QMetaObject *mobj = ptr->d_ptr->metaObject;
     QMetaType type = mobj->metaType();
     type.destroy(ptr);
-}
-
-QVariant
-QProtobufMessage::property(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo,
-                           bool allowInitialize) const
-{
-    int propertyIndex = fieldInfo.propertyIndex() + metaObject()->propertyOffset();
-    QMetaProperty metaProperty = metaObject()->property(propertyIndex);
-
-    if (!metaProperty.isValid())
-        return {};
-
-    if (fieldInfo.fieldFlags() & QtProtobufPrivate::FieldFlag::ExplicitPresence && !allowInitialize) {
-        int hasPropertyIndex = propertyIndex + 1;
-        QMetaProperty hasProperty = metaObject()->property(hasPropertyIndex);
-        Q_ASSERT_X(hasProperty.isValid() && hasProperty.metaType().id() == QMetaType::Bool,
-                   "QProtobufMessage",
-                   "The field with the explicit presence requirement doesn't have the follow 'has' "
-                   "property.");
-        if (!hasProperty.readOnGadget(this).toBool())
-            return QVariant(metaProperty.metaType());
-    }
-
-    QVariant propertyValue = metaProperty.readOnGadget(this);
-    return propertyValue;
-}
-
-bool QProtobufMessage::setProperty(
-        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo, const QVariant &value)
-{
-    Q_D(QProtobufMessage);
-    const auto mp = d->metaProperty(fieldInfo);
-    if (!mp)
-        return false;
-    return mp->writeOnGadget(this, value);
-}
-
-bool QProtobufMessage::setProperty(const QtProtobufPrivate::QProtobufFieldInfo &info,
-                                   QVariant &&value)
-{
-    Q_D(QProtobufMessage);
-    const auto mp = d->metaProperty(info);
-    if (!mp)
-        return false;
-    return mp->writeOnGadget(this, std::move(value));
 }
 
 /*!

@@ -6,6 +6,8 @@
 #include "qprotobufserializer_p.h"
 #include "qtprotobufdefs_p.h"
 
+#include <QtProtobuf/private/qtprotobufserializerhelpers_p.h>
+
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qjsonarray.h>
 #include <QtCore/qjsondocument.h>
@@ -343,7 +345,8 @@ public:
                            "",
                            "fieldIndex is out of range");
                 QProtobufFieldInfo fieldInfo(*ordering, index);
-                QVariant propertyValue = message->property(fieldInfo);
+                QVariant propertyValue = QtProtobufSerializerHelpers::messageProperty(message,
+                                                                                      fieldInfo);
                 serializeProperty(propertyValue, fieldInfo);
             }
         }
@@ -626,7 +629,9 @@ public:
                     index != cachedIndex) {
                     if (!storeCachedValue(message))
                         return false;
-                    cachedPropertyValue = message->property(iter->second, true);
+                    cachedPropertyValue = QtProtobufSerializerHelpers::messageProperty(message,
+                                                                                       iter->second,
+                                                                                       true);
                     cachedIndex = index;
                 }
 
@@ -721,7 +726,8 @@ bool QProtobufJsonSerializerPrivate::storeCachedValue(QProtobufMessage *message)
     if (cachedIndex >= 0 && !cachedPropertyValue.isNull()) {
         const auto *ordering = message->propertyOrdering();
         QProtobufFieldInfo fieldInfo(*ordering, cachedIndex);
-        ok = message->setProperty(fieldInfo, cachedPropertyValue);
+        ok = QtProtobufSerializerHelpers::setMessageProperty(message, fieldInfo,
+                                                             cachedPropertyValue);
         cachedPropertyValue.clear();
         cachedIndex = -1;
     }
