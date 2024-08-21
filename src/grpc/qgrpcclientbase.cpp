@@ -88,15 +88,6 @@ public:
     bool checkChannel();
     void addStream(QGrpcOperation *stream);
 
-    void sendErrorOccurredForNonMainThread(const char *methodName)
-    {
-        Q_Q(QGrpcClientBase);
-        QGrpcStatus s{ QtGrpc::StatusCode::Internal, threadSafetyWarning(methodName) };
-        auto method = QMetaMethod::fromSignal(&QGrpcClientBase::errorOccurred);
-        Q_ASSERT(method.isValid());
-        method.invoke(q, Qt::AutoConnection, std::move(s));
-    }
-
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const {
         if (const auto &c = channel)
             return c->serializer();
@@ -112,7 +103,7 @@ bool QGrpcClientBasePrivate::checkThread(const char *methodName)
 {
     Q_Q(QGrpcClientBase);
     if (q->thread() != QThread::currentThread()) {
-        sendErrorOccurredForNonMainThread(methodName);
+        qGrpcWarning() << threadSafetyWarning(methodName);
         return false;
     }
     return true;
@@ -123,8 +114,7 @@ bool QGrpcClientBasePrivate::checkChannel()
     Q_Q(QGrpcClientBase);
 
     if (!channel) {
-        emit q->errorOccurred(QGrpcStatus{ QtGrpc::StatusCode::Unknown,
-                                           q->tr("No channel(s) attached.") });
+        qGrpcWarning("No channel(s) attached");
         return false;
     }
     return true;
@@ -136,20 +126,15 @@ void QGrpcClientBasePrivate::addStream(QGrpcOperation *grpcStream)
 
     Q_Q(QGrpcClientBase);
     // Remove the operation pointer upon QObject destruction if it hasn't
-    // already been gracefully removed by receiving the signals from below.
+    // already been gracefully removed by receiving finished()
     QObject::connect(grpcStream, &QObject::destroyed, q, [this, grpcStream](QObject *obj) {
         Q_ASSERT(obj == grpcStream);
         activeStreams.remove(grpcStream);
     });
 
-    // Transmit the signal from QGrpcOperation. If it emits, the transmission
-    // gets disconnected.
     auto finishedConnection = std::make_shared<QMetaObject::Connection>();
     *finishedConnection = QObject::connect(grpcStream, &QGrpcOperation::finished, q,
-                                           [this, grpcStream, q,
-                                            finishedConnection](const auto &status) mutable {
-                                               if (status != QtGrpc::StatusCode::Ok)
-                                                   Q_EMIT q->errorOccurred(status);
+                                           [this, grpcStream, finishedConnection] {
                                                Q_ASSERT(activeStreams.contains(grpcStream));
                                                activeStreams.remove(grpcStream);
                                                QObject::disconnect(*finishedConnection);
@@ -175,14 +160,15 @@ QGrpcClientBase::~QGrpcClientBase() = default;
     You have to invoke the channel-related functions on the same thread as
     QGrpcClientBase.
 */
-void QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channel)
+bool QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channel)
 {
     Q_D(QGrpcClientBase);
     // channel is not a QObject so we compare against the threadId set on construction.
     if (channel->dPtr->threadId != QThread::currentThreadId()) {
-        d->sendErrorOccurredForNonMainThread("attachChannel");
-        return;
+        qGrpcWarning() << threadSafetyWarning("attachChannel");
+        return false;
     }
+
     for (auto &stream : d->activeStreams) {
         assert(stream != nullptr);
         stream->cancel();
@@ -190,6 +176,7 @@ void QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channe
 
     d->channel = std::move(channel);
     emit channelChanged();
+    return true;
 }
 
 /*!
@@ -219,14 +206,6 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
         return {};
 
     auto reply = d->channel->call(method, d->service, *argData, options);
-
-    auto errorConnection = std::make_shared<QMetaObject::Connection>();
-    *errorConnection = connect(reply.get(), &QGrpcCallReply::finished, this,
-                               [this, reply, errorConnection](const QGrpcStatus &status) {
-                                   if (status != QtGrpc::StatusCode::Ok)
-                                       emit errorOccurred(status);
-                                   QObject::disconnect(*errorConnection);
-                               });
     return reply;
 }
 
@@ -298,8 +277,7 @@ std::optional<QByteArray> QGrpcClientBase::trySerialize(const QProtobufMessage &
     Q_D(const QGrpcClientBase);
     auto serializer = d->serializer();
     if (serializer == nullptr) {
-        emit errorOccurred(QGrpcStatus{ QtGrpc::StatusCode::Unknown,
-                                        tr("Serializing failed. Serializer is not ready.") });
+        qGrpcWarning("Serializing failed. Serializer is not ready");
         return std::nullopt;
     }
 

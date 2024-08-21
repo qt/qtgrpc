@@ -36,7 +36,6 @@ private Q_SLOTS:
     void hugeBlob();
     void multipleStreams();
     void multipleStreamsCancel();
-    void inThread();
     void cancelWhileErrorTimeout();
 };
 
@@ -257,44 +256,6 @@ void QtGrpcClientServerStreamTest::multipleStreamsCancel()
     args = otherStreamNextFinishedSpy.first();
     QCOMPARE(args.count(), 1);
     QCOMPARE_EQ(args.first().value<QGrpcStatus>().code(), QtGrpc::StatusCode::Ok);
-}
-
-void QtGrpcClientServerStreamTest::inThread()
-{
-    SimpleStringMessage result;
-    SimpleStringMessage request;
-    request.setTestFieldString("Stream");
-
-    QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
-    QVERIFY(clientErrorSpy.isValid());
-
-    int i = 0;
-    const std::unique_ptr<QThread> thread(QThread::create([&] {
-        QEventLoop waiter;
-        auto stream = client()->testMethodServerStream(request);
-        QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, &waiter,
-                         [&result, &i, &waiter, stream] {
-                             const auto ret = stream->read<SimpleStringMessage>();
-                             QVERIFY(ret.has_value());
-                             result.setTestFieldString(result.testFieldString()
-                                                       + ret->testFieldString());
-                             if (++i == 4)
-                                 waiter.quit();
-                         });
-
-        waiter.exec();
-    }));
-
-    thread->start();
-
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
-    QTRY_VERIFY(result.testFieldString().isEmpty());
-    QTRY_VERIFY(
-            qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
-                    .message()
-                    .startsWith(
-                            "QGrpcClientBase::startStream<QGrpcServerStream> is called from a "
-                            "different thread."));
 }
 
 void QtGrpcClientServerStreamTest::cancelWhileErrorTimeout()

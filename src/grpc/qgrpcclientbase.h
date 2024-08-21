@@ -44,11 +44,10 @@ class Q_GRPC_EXPORT QGrpcClientBase : public QObject
 public:
     ~QGrpcClientBase() override;
 
-    void attachChannel(std::shared_ptr<QAbstractGrpcChannel> channel);
+    bool attachChannel(std::shared_ptr<QAbstractGrpcChannel> channel);
     [[nodiscard]] std::shared_ptr<QAbstractGrpcChannel> channel() const noexcept;
 
 Q_SIGNALS:
-    void errorOccurred(const QGrpcStatus &status);
     void channelChanged();
 
 protected:
