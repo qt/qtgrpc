@@ -54,6 +54,7 @@ class QGrpcHttp2ChannelTest : public QObject
 private Q_SLOTS:
     void checkMethodsGeneration();
     void attachChannelThreadTest();
+    void rpcThreadTest();
     void serializationFormat();
     void serializationFormatWithHeaders();
 };
@@ -71,28 +72,37 @@ void QGrpcHttp2ChannelTest::checkMethodsGeneration()
 
 void QGrpcHttp2ChannelTest::attachChannelThreadTest()
 {
-    std::shared_ptr<QGrpcHttp2Channel> channel;
+    std::shared_ptr<QGrpcHttp2Channel> threadChannel;
 
-    std::shared_ptr<QThread> thread(QThread::create([&] {
-        channel = std::make_shared<QGrpcHttp2Channel>(QUrl("http://localhost:50051",
-                                                           QUrl::StrictMode));
+    std::unique_ptr<QThread> thread(QThread::create([&] {
+        threadChannel = std::make_shared<QGrpcHttp2Channel>(QUrl());
     }));
     thread->start();
     thread->wait();
 
     TestService::Client client;
+    QVERIFY(!client.attachChannel(threadChannel));
+    QVERIFY(client.attachChannel(std::make_shared<QGrpcHttp2Channel>(QUrl())));
+}
 
-    QSignalSpy clientErrorSpy(&client, &TestService::Client::errorOccurred);
-    QVERIFY(clientErrorSpy.isValid());
+void QGrpcHttp2ChannelTest::rpcThreadTest()
+{
+    TestService::Client client;
+    client.attachChannel(std::make_shared<QGrpcHttp2Channel>(QUrl()));
 
-    client.attachChannel(channel);
+    std::unique_ptr<QThread> thread(QThread::create([&] {
+        QVERIFY(!client.testMethod(qtgrpc::tests::SimpleStringMessage()));
+        QVERIFY(!client.testMethodServerStream(qtgrpc::tests::SimpleStringMessage()));
+        QVERIFY(!client.testMethodClientStream(qtgrpc::tests::SimpleStringMessage()));
+        QVERIFY(!client.testMethodBiStream(qtgrpc::tests::SimpleStringMessage()));
+    }));
+    thread->start();
+    thread->wait();
 
-    QTRY_COMPARE_EQ(clientErrorSpy.count(), 1);
-    QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(), StatusCode::Internal);
-    QVERIFY(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
-                .message()
-                .startsWith("QGrpcClientBase::attachChannel is called from a different "
-                            "thread."));
+    QVERIFY(client.testMethod(qtgrpc::tests::SimpleStringMessage()));
+    QVERIFY(client.testMethodServerStream(qtgrpc::tests::SimpleStringMessage()));
+    QVERIFY(client.testMethodClientStream(qtgrpc::tests::SimpleStringMessage()));
+    QVERIFY(client.testMethodBiStream(qtgrpc::tests::SimpleStringMessage()));
 }
 
 void QGrpcHttp2ChannelTest::serializationFormat()

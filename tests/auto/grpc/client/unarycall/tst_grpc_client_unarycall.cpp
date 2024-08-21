@@ -45,7 +45,6 @@ private Q_SLOTS:
     void deferredCancel();
     void asyncClientStatusMessage();
     void asyncStatusMessage();
-    void nonMainThreadIsInvalid();
     void metadata();
 
 private:
@@ -106,22 +105,14 @@ void QtGrpcClientUnaryCallTest::immediateCancel()
     std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
 
     QSignalSpy replyFinishedSpy(reply.get(), &QGrpcCallReply::finished);
-    QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
-
     QVERIFY(replyFinishedSpy.isValid());
-    QVERIFY(clientErrorSpy.isValid());
 
     reply->cancel();
 
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
     QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 1, FailTimeout);
 
-    QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).code(),
+    QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(replyFinishedSpy.at(0).first()).code(),
                 QtGrpc::StatusCode::Cancelled);
-
-    auto args = replyFinishedSpy.first();
-    QCOMPARE(args.count(), 1);
-    QVERIFY(args.first().value<QGrpcStatus>() == QtGrpc::StatusCode::Cancelled);
 }
 
 void QtGrpcClientUnaryCallTest::deferredCancel()
@@ -147,15 +138,14 @@ void QtGrpcClientUnaryCallTest::asyncClientStatusMessage()
     SimpleStringMessage request;
     request.setTestFieldString("Some status message");
 
-    QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
-    QVERIFY(clientErrorSpy.isValid());
-
     auto reply = client()->testMethodStatusMessage(request);
-    Q_UNUSED(reply)
 
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
+    QSignalSpy replyFinishedSpy(reply.get(), &QGrpcCallReply::finished);
+    QVERIFY(replyFinishedSpy.isValid());
 
-    QCOMPARE(qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first()).message(),
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(replyFinishedSpy.count(), 1, FailTimeout);
+
+    QCOMPARE(qvariant_cast<QGrpcStatus>(replyFinishedSpy.at(0).first()).message(),
              request.testFieldString());
 }
 
@@ -175,32 +165,8 @@ void QtGrpcClientUnaryCallTest::asyncStatusMessage()
     QCOMPARE(args.first().value<QGrpcStatus>().message(), request.testFieldString());
 }
 
-void QtGrpcClientUnaryCallTest::nonMainThreadIsInvalid()
-{
-    SimpleStringMessage request;
-    request.setTestFieldString("Hello Qt from thread!");
-
-    QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
-    QVERIFY(clientErrorSpy.isValid());
-
-    const std::unique_ptr<QThread> thread(QThread::create([&] {
-        std::shared_ptr<QGrpcCallReply> reply = client()->testMethod(request);
-        QVERIFY(!reply);
-    }));
-
-    thread->start();
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(clientErrorSpy.count(), 1, FailTimeout);
-    QTRY_VERIFY(
-            qvariant_cast<QGrpcStatus>(clientErrorSpy.at(0).first())
-                    .message()
-                    .startsWith("QGrpcClientBase::call is called from a different thread."));
-}
-
 void QtGrpcClientUnaryCallTest::metadata()
 {
-    QSignalSpy clientErrorSpy(client().get(), &TestService::Client::errorOccurred);
-    QVERIFY(clientErrorSpy.isValid());
-
     QGrpcCallOptions opt;
     opt.setMetadata({
         { "client_header",        "1"           },
@@ -228,7 +194,6 @@ void QtGrpcClientUnaryCallTest::metadata()
         }
     }
 
-    QCOMPARE_EQ(clientErrorSpy.count(), 0);
     QCOMPARE_EQ(serverHeaderCount, 1);
     QCOMPARE_EQ(clientReturnHeader, "valid_value"_ba);
 }
