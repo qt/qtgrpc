@@ -17,7 +17,6 @@
 #include <QtCore/qtclasshelpermacros.h>
 
 #include <memory>
-#include <optional>
 #include <type_traits>
 
 QT_BEGIN_NAMESPACE
@@ -85,8 +84,6 @@ private:
     std::shared_ptr<QGrpcBidirStream> startBidirStream(QLatin1StringView method,
                                                        const QProtobufMessage &arg,
                                                        const QGrpcCallOptions &options);
-
-    std::optional<QByteArray> trySerialize(const QProtobufMessage &arg);
 
     Q_DISABLE_COPY_MOVE(QGrpcClientBase)
     Q_DECLARE_PRIVATE(QGrpcClientBase)

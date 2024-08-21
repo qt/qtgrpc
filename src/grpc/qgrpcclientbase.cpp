@@ -14,9 +14,8 @@
 #include <QtCore/private/qobject_p.h>
 #include <QtCore/qbytearray.h>
 #include <QtCore/qlatin1stringview.h>
-#include <QtCore/qstring.h>
 
-#include <utility>
+#include <optional>
 
 QT_BEGIN_NAMESPACE
 
@@ -82,18 +81,17 @@ class QGrpcClientBasePrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGrpcClientBase)
 public:
-    QGrpcClientBasePrivate(QLatin1StringView service) : service(service)
+    explicit QGrpcClientBasePrivate(QLatin1StringView service) : service(service)
     {
     }
 
     bool checkThread(const char *methodName);
     bool checkChannel();
     void addStream(QGrpcOperation *stream);
+    std::optional<QByteArray> trySerialize(const QProtobufMessage &arg) const;
 
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const {
-        if (const auto &c = channel)
-            return c->serializer();
-        return nullptr;
+        return channel ? channel->serializer() : nullptr;
     }
 
     std::shared_ptr<QAbstractGrpcChannel> channel;
@@ -113,8 +111,6 @@ bool QGrpcClientBasePrivate::checkThread(const char *methodName)
 
 bool QGrpcClientBasePrivate::checkChannel()
 {
-    Q_Q(QGrpcClientBase);
-
     if (!channel) {
         qGrpcWarning("No channel(s) attached");
         return false;
@@ -145,6 +141,15 @@ void QGrpcClientBasePrivate::addStream(QGrpcOperation *grpcStream)
     Q_ASSERT(it.second);
 }
 
+std::optional<QByteArray> QGrpcClientBasePrivate::trySerialize(const QProtobufMessage &arg) const
+{
+    if (auto s = serializer())
+        return s->serialize(&arg);
+
+    qGrpcWarning("Serializing failed. Serializer is not ready");
+    return std::nullopt;
+}
+
 QGrpcClientBase::QGrpcClientBase(QLatin1StringView service, QObject *parent)
     : QObject(*new QGrpcClientBasePrivate(service), parent)
 {
@@ -171,7 +176,7 @@ bool QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channe
         return false;
     }
 
-    for (auto &stream : d->activeStreams) {
+    for (const auto &stream : d->activeStreams) {
         assert(stream != nullptr);
         stream->cancel();
     }
@@ -203,12 +208,11 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
     if (!d->checkChannel())
         return {};
 
-    std::optional<QByteArray> argData = trySerialize(arg);
+    std::optional<QByteArray> argData = d->trySerialize(arg);
     if (!argData)
         return {};
 
-    auto reply = d->channel->call(method, d->service, *argData, options);
-    return reply;
+    return d->channel->call(method, d->service, *argData, options);
 }
 
 std::shared_ptr<QGrpcServerStream>
@@ -223,7 +227,7 @@ QGrpcClientBase::startServerStream(QLatin1StringView method, const QProtobufMess
     if (!d->checkChannel())
         return {};
 
-    std::optional<QByteArray> argData = trySerialize(arg);
+    std::optional<QByteArray> argData = d->trySerialize(arg);
     if (!argData)
         return {};
 
@@ -244,7 +248,7 @@ QGrpcClientBase::startClientStream(QLatin1StringView method, const QProtobufMess
     if (!d->checkChannel())
         return {};
 
-    std::optional<QByteArray> argData = trySerialize(arg);
+    std::optional<QByteArray> argData = d->trySerialize(arg);
     if (!argData)
         return {};
 
@@ -265,25 +269,13 @@ std::shared_ptr<QGrpcBidirStream> QGrpcClientBase::startBidirStream(QLatin1Strin
     if (!d->checkChannel())
         return {};
 
-    std::optional<QByteArray> argData = trySerialize(arg);
+    std::optional<QByteArray> argData = d->trySerialize(arg);
     if (!argData)
         return {};
 
     auto grpcStream = d->channel->startBidirStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
-}
-
-std::optional<QByteArray> QGrpcClientBase::trySerialize(const QProtobufMessage &arg)
-{
-    Q_D(const QGrpcClientBase);
-    auto serializer = d->serializer();
-    if (serializer == nullptr) {
-        qGrpcWarning("Serializing failed. Serializer is not ready");
-        return std::nullopt;
-    }
-
-    return serializer->serialize(&arg);
 }
 
 bool QGrpcClientBase::event(QEvent *event)
