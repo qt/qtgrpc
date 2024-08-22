@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \relates QtProtobuf
-    \fn template<typename T> inline void qRegisterProtobufEnumType();
+    \fn template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true> inline void qRegisterProtobufEnumType();
 
     Registers serializers for enumeration type \c T in QtProtobuf global
     serializers registry.
