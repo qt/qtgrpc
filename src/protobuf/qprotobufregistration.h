@@ -194,10 +194,6 @@ inline void qRegisterProtobufMapType()
                                        QtProtobufPrivate::deserializeMap<K, V>);
 }
 
-#ifdef Q_QDOC
-template<typename T>
-inline void qRegisterProtobufEnumType();
-#else // !Q_QDOC
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
 inline void qRegisterProtobufEnumType()
 {
@@ -208,7 +204,6 @@ inline void qRegisterProtobufEnumType()
     QMetaType::registerConverter<QList<T>, QStringList>(QtProtobufPrivate::enumToStringList<T>);
     QMetaType::registerConverter<QStringList, QList<T>>(QtProtobufPrivate::stringToEnumList<T>);
 }
-#endif // Q_QDOC
 
 QT_END_NAMESPACE
 
