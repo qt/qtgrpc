@@ -19,19 +19,6 @@
 
 QT_BEGIN_NAMESPACE
 
-using namespace Qt::StringLiterals;
-
-namespace {
-QString threadSafetyWarning(const char *methodName)
-{
-    return QGrpcClientBase::tr("QGrpcClientBase::%1 is called from a different thread.\n"
-                               "Qt GRPC doesn't guarantee thread safety on the channel level.\n"
-                               "You have to be confident that channel routines are working in "
-                               "the same thread as QGrpcClientBase.")
-        .arg(QLatin1StringView(methodName));
-}
-} // namespace
-
 /*!
     \class QGrpcClientBase
     \inmodule QtGrpc
@@ -79,16 +66,14 @@ class QGrpcClientBasePrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGrpcClientBase)
 public:
-    explicit QGrpcClientBasePrivate(QLatin1StringView service) : service(service)
-    {
-    }
+    explicit QGrpcClientBasePrivate(QLatin1StringView service) : service(service) { }
 
-    bool checkThread(const char *methodName);
-    bool checkChannel();
     void addStream(QGrpcOperation *stream);
     std::optional<QByteArray> trySerialize(const QProtobufMessage &arg) const;
+    bool isReady() const;
 
-    std::shared_ptr<QAbstractProtobufSerializer> serializer() const {
+    std::shared_ptr<QAbstractProtobufSerializer> serializer() const
+    {
         return channel ? channel->serializer() : nullptr;
     }
 
@@ -96,25 +81,6 @@ public:
     const QLatin1StringView service;
     QMinimalFlatSet<QGrpcOperation *> activeStreams;
 };
-
-bool QGrpcClientBasePrivate::checkThread(const char *methodName)
-{
-    Q_Q(QGrpcClientBase);
-    if (q->thread() != QThread::currentThread()) {
-        qGrpcWarning() << threadSafetyWarning(methodName);
-        return false;
-    }
-    return true;
-}
-
-bool QGrpcClientBasePrivate::checkChannel()
-{
-    if (!channel) {
-        qGrpcWarning("No channel(s) attached");
-        return false;
-    }
-    return true;
-}
 
 void QGrpcClientBasePrivate::addStream(QGrpcOperation *grpcStream)
 {
@@ -148,6 +114,21 @@ std::optional<QByteArray> QGrpcClientBasePrivate::trySerialize(const QProtobufMe
     return std::nullopt;
 }
 
+bool QGrpcClientBasePrivate::isReady() const
+{
+    Q_Q(const QGrpcClientBase);
+    if (q->thread() != QThread::currentThread()) {
+        qGrpcWarning("QtGrpc doesn't support invocation from a different thread");
+        return false;
+    }
+
+    if (!channel) {
+        qGrpcWarning("No channel(s) attached");
+        return false;
+    }
+    return true;
+}
+
 QGrpcClientBase::QGrpcClientBase(QLatin1StringView service, QObject *parent)
     : QObject(*new QGrpcClientBasePrivate(service), parent)
 {
@@ -170,7 +151,7 @@ bool QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channe
     Q_D(QGrpcClientBase);
     // channel is not a QObject so we compare against the threadId set on construction.
     if (channel->dPtr->threadId != QThread::currentThreadId()) {
-        qGrpcWarning() << threadSafetyWarning("attachChannel");
+        qGrpcWarning("QtGrpc doesn't allow attaching the channel from a different thread");
         return false;
     }
 
@@ -199,14 +180,10 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
                                                       const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
-
-    if (!d->checkThread("call"))
+    if (!d->isReady())
         return {};
 
-    if (!d->checkChannel())
-        return {};
-
-    std::optional<QByteArray> argData = d->trySerialize(arg);
+    const auto argData = d->trySerialize(arg);
     if (!argData)
         return {};
 
@@ -218,18 +195,14 @@ QGrpcClientBase::startServerStream(QLatin1StringView method, const QProtobufMess
                                    const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
-
-    if (!d->checkThread("startStream<QGrpcServerStream>"))
+    if (!d->isReady())
         return {};
 
-    if (!d->checkChannel())
-        return {};
-
-    std::optional<QByteArray> argData = d->trySerialize(arg);
+    const auto argData = d->trySerialize(arg);
     if (!argData)
         return {};
 
-    auto grpcStream = d->channel->startServerStream(method, d->service, *argData, options);
+    const auto grpcStream = d->channel->startServerStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }
@@ -239,18 +212,14 @@ QGrpcClientBase::startClientStream(QLatin1StringView method, const QProtobufMess
                                    const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
-
-    if (!d->checkThread("startStream<QGrpcClientStream>"))
+    if (!d->isReady())
         return {};
 
-    if (!d->checkChannel())
-        return {};
-
-    std::optional<QByteArray> argData = d->trySerialize(arg);
+    const auto argData = d->trySerialize(arg);
     if (!argData)
         return {};
 
-    auto grpcStream = d->channel->startClientStream(method, d->service, *argData, options);
+    const auto grpcStream = d->channel->startClientStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }
@@ -260,18 +229,14 @@ std::shared_ptr<QGrpcBidiStream> QGrpcClientBase::startBidiStream(QLatin1StringV
                                                                   const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
-
-    if (!d->checkThread("startStream<QGrpcBidiStream>"))
+    if (!d->isReady())
         return {};
 
-    if (!d->checkChannel())
-        return {};
-
-    std::optional<QByteArray> argData = d->trySerialize(arg);
+    const auto argData = d->trySerialize(arg);
     if (!argData)
         return {};
 
-    auto grpcStream = d->channel->startBidiStream(method, d->service, *argData, options);
+    const auto grpcStream = d->channel->startBidiStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }
