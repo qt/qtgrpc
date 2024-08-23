@@ -20,6 +20,12 @@ if(NOT TARGET WrapgRPC::WrapgRPCPlugin OR NOT TARGET WrapProtoc::WrapProtoc
     return()
 endif()
 
+if(MINGW)
+    message(WARNING "${PROJECT_NAME} uses reference grpc++ library that doesn't officially support"
+        " MinGW. Please use the MSVC compiler to build this example. The correct work is not"
+        " guaranteed otherwise.")
+endif()
+
 set(proto_files "${CMAKE_CURRENT_LIST_DIR}/../proto/simplechat.proto")
 set(out_dir "${CMAKE_CURRENT_BINARY_DIR}")
 
