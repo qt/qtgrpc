@@ -18,9 +18,33 @@
 #include <QtProtobuf/qprotobufregistration.h>
 #include <QtProtobuf/qtprotobufexports.h>
 
+#include <QtCore/qxpfunctional.h>
+
 QT_BEGIN_NAMESPACE
 
 namespace QtProtobufPrivate {
+
+inline void ensureValue(const void *valuePtr)
+{
+    Q_ASSERT_X(valuePtr != nullptr, "QAbstractProtobufSerializer", "Value is nullptr");
+}
+
+using MessageFieldSerializer = qxp::function_ref<void(const QProtobufMessage *,
+                                                      const QProtobufFieldInfo &)>;
+using MessageFieldDeserializer = qxp::function_ref<bool(QProtobufMessage *)>;
+
+using Serializer = void (*)(MessageFieldSerializer, const void *, const QProtobufFieldInfo &);
+using Deserializer = void (*)(MessageFieldDeserializer, void *);
+
+struct SerializationHandler
+{
+    Serializer serializer = nullptr; /*!< serializer assigned to class */
+    Deserializer deserializer = nullptr; /*!< deserializer assigned to class */
+};
+
+extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, Serializer serializer,
+                                              Deserializer deserializer);
+
 extern Q_PROTOBUF_EXPORT SerializationHandler findHandler(QMetaType type);
 }
 

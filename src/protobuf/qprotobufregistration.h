@@ -13,12 +13,12 @@
 
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufpropertyordering.h>
+#include <QtProtobuf/qprotobufrepeatediterator.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qhash.h>
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qmetatype.h>
-#include <QtCore/qxpfunctional.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -31,92 +31,8 @@ struct ProtoTypeRegistrar
 };
 }
 
-
 namespace QtProtobufPrivate {
 extern Q_PROTOBUF_EXPORT void registerOrdering(QMetaType type, QProtobufPropertyOrdering ordering);
-
-using MessageFieldSerializer = qxp::function_ref<void(const QProtobufMessage *,
-                                                      const QProtobufFieldInfo &)>;
-using MessageFieldDeserializer = qxp::function_ref<bool(QProtobufMessage *)>;
-
-using Serializer = void (*)(MessageFieldSerializer, const void *, const QProtobufFieldInfo &);
-using Deserializer = void (*)(MessageFieldDeserializer, void *);
-
-struct SerializationHandler
-{
-    Serializer serializer = nullptr; /*!< serializer assigned to class */
-    Deserializer deserializer = nullptr; /*!< deserializer assigned to class */
-};
-
-extern Q_PROTOBUF_EXPORT void registerHandler(QMetaType type, Serializer serializer,
-                                              Deserializer deserializer);
-
-inline void ensureValue(const void *valuePtr)
-{
-    Q_ASSERT_X(valuePtr != nullptr, "QAbstractProtobufSerializer", "Value is nullptr");
-}
-
-template <typename V,
-          typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void serializeList(MessageFieldSerializer serializer, const void *valuePtr,
-                   const QProtobufFieldInfo &fieldInfo)
-{
-    ensureValue(valuePtr);
-
-    for (const auto &value : *static_cast<const QList<V> *>(valuePtr))
-        serializer(&value, fieldInfo);
-}
-
-template <typename K, typename V>
-void serializeMap(MessageFieldSerializer serializer, const void *valuePtr,
-                  const QProtobufFieldInfo &fieldInfo)
-{
-    ensureValue(valuePtr);
-
-    using QProtobufMapEntry = QProtobufMapEntry<K, const V>;
-    static_assert(!std::is_pointer_v<typename QProtobufMapEntry::KeyType>,
-                  "Map key must not be message");
-    QProtobufMapEntry el;
-    const auto *mapPtr = static_cast<const QHash<K, V> *>(valuePtr);
-    for (const auto &[k, v] : mapPtr->asKeyValueRange()) {
-        el.setKey(k);
-
-        if constexpr (std::is_pointer_v<typename QProtobufMapEntry::ValueType>)
-            el.setValue(&v);
-        else
-            el.setValue(v);
-
-        serializer(&el, fieldInfo);
-    }
-}
-
-template <typename V,
-          typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0>
-void deserializeList(MessageFieldDeserializer deserializer, void *valuePtr)
-{
-    ensureValue(valuePtr);
-
-    auto *listPtr = static_cast<QList<V> *>(valuePtr);
-    if (V item; deserializer(&item))
-        listPtr->append(std::move(item));
-}
-
-template <typename K, typename V>
-void deserializeMap(MessageFieldDeserializer deserializer, void *valuePtr)
-{
-    using QProtobufMapEntry = QProtobufMapEntry<K, V>;
-    static_assert(!std::is_pointer_v<typename QProtobufMapEntry::KeyType>,
-                  "Map key must not be message");
-    auto *mapPtr = static_cast<QHash<K, V> *>(valuePtr);
-    if (QProtobufMapEntry el; deserializer(&el)) {
-        auto it = mapPtr->emplace(std::move(el).key());
-
-        if constexpr (std::is_pointer_v<typename QProtobufMapEntry::ValueType>)
-            *it = std::move(*el.value());
-        else
-            *it = std::move(el).value();
-    }
-}
 
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
 static std::optional<QList<T>> intToEnumList(QList<QtProtobuf::int64> v)
@@ -165,6 +81,100 @@ static QStringList enumToStringList(QList<T> v)
 
     return stringList;
 }
+
+class Q_PROTOBUF_EXPORT AbstractRepeatedIterator
+{
+public:
+    virtual ~AbstractRepeatedIterator() noexcept;
+
+    virtual bool hasNext() const noexcept = 0;
+    virtual QProtobufMessage &next() const noexcept = 0;
+
+    virtual QProtobufMessage &addNext() noexcept = 0;
+    virtual void push() noexcept = 0;
+};
+
+template <typename T>
+class ListIterator : public AbstractRepeatedIterator
+{
+public:
+    ~ListIterator() noexcept override = default;
+
+    bool hasNext() const noexcept override { return m_it != m_list->end(); }
+    QProtobufMessage &next() const noexcept override
+    {
+        Q_ASSERT(m_it != m_list->end());
+        return *m_it++;
+    }
+
+    QProtobufMessage &addNext() noexcept override { return m_list->emplace_back(T()); }
+    /* protobuf allows having elements in the repeated fields that are failed to deserialize */
+    void push() noexcept override { }
+
+    static QProtobufRepeatedIterator fromList(QList<T> &list) noexcept
+    {
+        return QProtobufRepeatedIterator(new ListIterator<T>(list));
+    }
+
+private:
+    Q_DISABLE_COPY_MOVE(ListIterator)
+
+    explicit ListIterator(QList<T> &list) : m_list(&list), m_it(m_list->begin()) { }
+    QList<T> *m_list = nullptr;
+    mutable typename QList<T>::Iterator m_it;
+};
+
+template <typename K, typename V>
+class MapIterator : public AbstractRepeatedIterator
+{
+    using MapEntry = QProtobufMapEntry<K, V>;
+    static_assert(!std::is_pointer_v<typename MapEntry::KeyType>, "Map key must not be message");
+
+public:
+    ~MapIterator() noexcept override = default;
+
+    bool hasNext() const noexcept override { return m_it != m_hash->end(); }
+    QProtobufMessage &next() const noexcept override
+    {
+        Q_ASSERT(m_it != m_hash->end());
+        m_mapEntry.setKey(m_it.key());
+        if constexpr (std::is_pointer_v<typename MapEntry::ValueType>)
+            m_mapEntry.setValue(&m_it.value());
+        else
+            m_mapEntry.setValue(m_it.value());
+        m_it++;
+        return m_mapEntry;
+    }
+
+    QProtobufMessage &addNext() noexcept override
+    {
+        m_mapEntry.setKey({});
+        m_mapEntry.setValue({});
+        return m_mapEntry;
+    }
+    void push() noexcept override
+    {
+        auto it = m_hash->emplace(m_mapEntry.key());
+        if constexpr (std::is_pointer_v<typename MapEntry::ValueType>)
+            *it = std::move(*m_mapEntry.value());
+        else
+            *it = std::move(m_mapEntry).value();
+    }
+
+    static QProtobufRepeatedIterator fromHash(QHash<K, V> &hash) noexcept
+    {
+        return QProtobufRepeatedIterator(new MapIterator<K, V>(hash));
+    }
+
+private:
+    Q_DISABLE_COPY_MOVE(MapIterator)
+
+    explicit MapIterator(QHash<K, V> &hash) : m_hash(&hash), m_it(m_hash->begin()) { }
+    QHash<K, V> *m_hash = nullptr;
+    mutable typename QHash<K, V>::Iterator m_it;
+    mutable MapEntry m_mapEntry;
+};
+
 } // namespace QtProtobufPrivate
 
 Q_PROTOBUF_EXPORT void qRegisterProtobufTypes();
@@ -173,18 +183,16 @@ template<typename T>
 inline void qRegisterProtobufType()
 {
     T::registerTypes();
+    QMetaType::registerMutableView<
+        QList<T>, QProtobufRepeatedIterator>(&QtProtobufPrivate::ListIterator<T>::fromList);
     QtProtobufPrivate::registerOrdering(QMetaType::fromType<T>(), T::staticPropertyOrdering);
-    QtProtobufPrivate::registerHandler(QMetaType::fromType<QList<T>>(),
-                                       QtProtobufPrivate::serializeList<T>,
-                                       QtProtobufPrivate::deserializeList<T>);
 }
 
 template <typename K, typename V>
 inline void qRegisterProtobufMapType()
 {
-    QtProtobufPrivate::registerHandler(QMetaType::fromType<QHash<K, V>>(),
-                                       QtProtobufPrivate::serializeMap<K, V>,
-                                       QtProtobufPrivate::deserializeMap<K, V>);
+    QMetaType::registerMutableView<
+        QHash<K, V>, QProtobufRepeatedIterator>(&QtProtobufPrivate::MapIterator<K, V>::fromHash);
 }
 
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>

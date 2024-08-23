@@ -18,6 +18,7 @@
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
 #include <QtProtobuf/qprotobufserializer.h>
+#include <QtProtobuf/qprotobufrepeatediterator.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtProtobuf/private/qprotobufselfcheckiterator_p.h>
@@ -511,7 +512,7 @@ public:
 
     void serializeMessage(const QProtobufMessage *message);
 
-    void serializeProperty(const QVariant &propertyValue,
+    void serializeProperty(QVariant propertyValue,
                            const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo);
     [[nodiscard]] bool deserializeProperty(QProtobufMessage *message);
 
@@ -521,6 +522,7 @@ public:
     void setUnexpectedEndOfStreamError();
 
     [[nodiscard]] bool storeCachedValue(QProtobufMessage *message);
+    void clearCachedValue();
 
     QAbstractProtobufSerializer::DeserializationError deserializationError =
             QAbstractProtobufSerializer::NoDeserializerError;
@@ -534,6 +536,7 @@ public:
     static const QtProtobufPrivate::QProtobufFieldInfo mapValueOrdering;
 
     QVariant cachedPropertyValue;
+    QProtobufRepeatedIterator cachedRepeatedIterator;
     int cachedIndex = -1;
 
 private:

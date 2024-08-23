@@ -261,8 +261,7 @@ public:
         return {};
     }
 
-    void serializeProperty(const QVariant &propertyValue,
-                           const QProtobufFieldInfo &fieldInfo)
+    void serializeProperty(QVariant propertyValue, const QProtobufFieldInfo &fieldInfo)
     {
         QMetaType metaType = propertyValue.metaType();
         auto userType = propertyValue.userType();
@@ -281,6 +280,26 @@ public:
         }
 
         const auto fieldFlags = fieldInfo.fieldFlags();
+
+        if (propertyValue.canView(QMetaType::fromType<QProtobufRepeatedIterator>())) {
+            QProtobufRepeatedIterator propertyIt = propertyValue.view<QProtobufRepeatedIterator>();
+            if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated
+                && !(fieldFlags & QtProtobufPrivate::FieldFlag::Enum)) {
+                const auto fieldName = fieldInfo.jsonName().toString();
+                QJsonObject activeObject = activeValue.toObject();
+                activeValue = activeObject.value(fieldName).toArray();
+                while (propertyIt.hasNext())
+                    serializeObject(&propertyIt.next(), fieldInfo);
+                if (!activeValue.toArray().empty())
+                    activeObject.insert(fieldName, activeValue);
+                activeValue = activeObject;
+            } else {
+                while (propertyIt.hasNext())
+                    serializeObject(&propertyIt.next(), fieldInfo);
+            }
+            return;
+        }
+
         if (fieldFlags & QtProtobufPrivate::FieldFlag::Enum) {
             QJsonObject activeObject = activeValue.toObject();
             if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated) {
@@ -301,25 +320,12 @@ public:
             return;
         }
 
-        auto serializerFunction = [this](const QProtobufMessage *message,
-                                         const QProtobufFieldInfo &fieldInfo) {
-            this->serializeObject(message, fieldInfo);
-        };
-
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (handler.serializer) {
-            if (fieldFlags & QtProtobufPrivate::FieldFlag::Repeated
-                && !(fieldFlags & QtProtobufPrivate::FieldFlag::Enum)) {
-                const auto fieldName = fieldInfo.jsonName().toString();
-                QJsonObject activeObject = activeValue.toObject();
-                activeValue = activeObject.value(fieldName).toArray();
-                handler.serializer(serializerFunction, propertyValue.constData(), fieldInfo);
-                if (!activeValue.toArray().empty())
-                    activeObject.insert(fieldName, activeValue);
-                activeValue = activeObject;
-            } else {
-                handler.serializer(serializerFunction, propertyValue.constData(), fieldInfo);
-            }
+            handler.serializer([this](const QProtobufMessage *message,
+                                      const QProtobufFieldInfo &
+                                          fieldInfo) { this->serializeObject(message, fieldInfo); },
+                               propertyValue.constData(), fieldInfo);
         } else {
             QJsonObject activeObject = activeValue.toObject();
             auto iter = handlers.constFind(userType);
@@ -519,11 +525,8 @@ public:
             return propertyData;
         }
 
-        auto handler = QtProtobufPrivate::findHandler(metaType);
-        if (handler.deserializer) {
-            auto deserializerFunction = [this](QProtobufMessage *message) {
-                return this->deserializeObject(message);
-            };
+        if (propertyData.canView(QMetaType::fromType<QProtobufRepeatedIterator>())) {
+            QProtobufRepeatedIterator propertyIt = propertyData.view<QProtobufRepeatedIterator>();
             if (activeValue.isArray()) {
                 QJsonArray array = activeValue.toArray();
                 if (array.isEmpty()) {
@@ -531,26 +534,35 @@ public:
                     activeValue = {};
                     return propertyData;
                 }
-                if (!array.at(0).isObject()) { // Enum array
-                    handler.deserializer(deserializerFunction, propertyData.data());
-                    ok = propertyData.isValid();
-                } else {
-                    while (!array.isEmpty() &&
-                           deserializationError == QAbstractProtobufSerializer::NoError) {
-                        activeValue = array.takeAt(0);
-                        handler.deserializer(deserializerFunction, propertyData.data());
-                    }
-                    ok = propertyData.isValid();
-                }
-            } else {
-                // We should attempt deserializing property while the active value !isNull.
-                // This is required to deserialize the map fields.
-                while (!activeValue.isNull()
+
+                while (!array.isEmpty()
                        && deserializationError == QAbstractProtobufSerializer::NoError) {
-                    handler.deserializer(deserializerFunction, propertyData.data());
+                    activeValue = array.takeAt(0);
+                    if (deserializeObject(&propertyIt.addNext()))
+                        propertyIt.push();
                 }
                 ok = propertyData.isValid();
+            } else {
+                while (!activeValue.isNull()
+                       && deserializationError == QAbstractProtobufSerializer::NoError) {
+                    if (deserializeObject(&propertyIt.addNext()))
+                        propertyIt.push();
+                }
             }
+            ok = deserializationError == QAbstractProtobufSerializer::NoError;
+            return propertyData;
+        }
+
+        auto handler = QtProtobufPrivate::findHandler(metaType);
+        if (handler.deserializer) {
+            while (!activeValue.isNull()
+                   && deserializationError == QAbstractProtobufSerializer::NoError) {
+                handler
+                    .deserializer([this](QProtobufMessage
+                                             *message) { return this->deserializeObject(message); },
+                                  propertyData.data());
+            }
+            ok = propertyData.isValid();
         } else {
             int userType = propertyData.userType();
             auto handler = handlers.constFind(userType);

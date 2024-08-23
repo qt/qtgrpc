@@ -190,59 +190,29 @@ void qRegisterProtobufTypes()
 }
 
 /*!
+    \class QtProtobufPrivate::AbstractRepeatedIterator
+    \internal
+*/
+
+/*!
+    \class template <typename T> class QtProtobufPrivate::ListIterator
+    \internal
+*/
+
+/*!
+    \class template <typename K, typename V> class QtProtobufPrivate::MapIterator
+    \internal
+*/
+
+namespace QtProtobufPrivate {
+AbstractRepeatedIterator::~AbstractRepeatedIterator() = default;
+}
+
+/*!
     \struct QtProtobufPrivate::SerializationHandler
     \internal
     \brief SerializationHandlers contains set of objects that are required for
         class serialization/deserialization.
-*/
-
-/*!
-    \fn template <typename V, typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0> void QtProtobufPrivate::serializeList(
-        const QAbstractProtobufSerializer *serializer, const QVariant &listValue,
-        const QProtobufFieldInfo &fieldInfo)
-    \internal
-    \brief Default serializer template for list of type T objects that inherits
-        from QProtobufMessage.
-*/
-
-/*!
-    \fn template <typename K, typename V, typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0> void QtProtobufPrivate::serializeMap(
-        const QAbstractProtobufSerializer *serializer, const QVariant &value,
-                  const QProtobufFieldInfo &fieldInfo)
-    \internal
-    \brief Default serializer template for map of key K, value V.
-*/
-
-/*!
-    \fn template <typename K, typename V, typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0> void QtProtobufPrivate::serializeMap(
-        const QAbstractProtobufSerializer *serializer, const QVariant &value,
-        const QProtobufFieldInfo &fieldInfo)
-    \internal
-    \brief Default serializer template for map of type key K, value V.
-        Specialization for V that inherits from QProtobufMessage.
-*/
-
-/*!
-    \fn template <typename V, typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0> void QtProtobufPrivate::deserializeList(
-        const QAbstractProtobufSerializer *serializer, QVariant &previous)
-    \internal
-    \brief Default deserializer template for list of type T objects that
-        inherits from QProtobufMessage.
-*/
-
-/*!
-    \fn template <typename K, typename V, typename std::enable_if_t<!std::is_base_of<QProtobufMessage, V>::value, int> = 0> void QtProtobufPrivate::deserializeMap(
-        const QAbstractProtobufSerializer *serializer, QVariant &previous)
-    \internal
-    \brief Default deserializer template for map of key K, value V.
-*/
-
-/*!
-    \fn template <typename K, typename V, typename std::enable_if_t<std::is_base_of<QProtobufMessage, V>::value, int> = 0> void QtProtobufPrivate::deserializeMap(
-        const QAbstractProtobufSerializer *serializer, QVariant &previous)
-    \internal
-    \brief Default deserializer template for map of type key K, value V.
-        Specialization for V that inherits from QProtobufMessage.
 */
 
 QT_END_NAMESPACE
