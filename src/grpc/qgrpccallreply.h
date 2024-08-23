@@ -13,7 +13,6 @@
 #include <QtCore/qobject.h>
 
 #include <memory>
-#include <utility>
 
 QT_BEGIN_NAMESPACE
 

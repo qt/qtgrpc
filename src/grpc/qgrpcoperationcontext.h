@@ -23,7 +23,10 @@ class QGrpcStatus;
 class Q_GRPC_EXPORT QGrpcOperationContext final : public QObject
 {
     Q_OBJECT
-    struct PrivateConstructor { explicit PrivateConstructor() = default; };
+    struct PrivateConstructor
+    {
+        explicit PrivateConstructor() = default;
+    };
 
 public:
     explicit QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
@@ -34,21 +37,20 @@ public:
 
     [[nodiscard]] QLatin1StringView method() const noexcept;
     [[nodiscard]] QLatin1StringView service() const noexcept;
+
     [[nodiscard]] QByteArrayView argument() const noexcept;
-    [[nodiscard]] const QGrpcCallOptions &callOptions() const & noexcept;
-    [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const noexcept;
-
-    [[nodiscard]] const QHash<QByteArray, QByteArray> &serverMetadata() const & noexcept;
-
-    // Should never happen. Type is not movable.
-    void serverMetadata() && = delete;
-    void callOptions() && = delete;
-
     void setArgument(QByteArrayView arg);
+
+    void callOptions() && = delete;
+    [[nodiscard]] const QGrpcCallOptions &callOptions() const & noexcept;
     void setCallOptions(const QGrpcCallOptions &options);
 
+    void serverMetadata() && = delete;
+    [[nodiscard]] const QHash<QByteArray, QByteArray> &serverMetadata() const & noexcept;
     void setServerMetadata(const QHash<QByteArray, QByteArray> &metadata);
     void setServerMetadata(QHash<QByteArray, QByteArray> &&metadata);
+
+    [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const noexcept;
 
 Q_SIGNALS:
     // Outgoing signals of the channel.

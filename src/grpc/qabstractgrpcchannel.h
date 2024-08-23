@@ -48,14 +48,15 @@ protected:
 
 private:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
-                                         QByteArrayView arg,
-                                         const QGrpcCallOptions &options);
-    std::shared_ptr<QGrpcServerStream>
-    startServerStream(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
-                      const QGrpcCallOptions &options);
-    std::shared_ptr<QGrpcClientStream>
-    startClientStream(QLatin1StringView method, QLatin1StringView service, QByteArrayView arg,
-                      const QGrpcCallOptions &options);
+                                         QByteArrayView arg, const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcServerStream> startServerStream(QLatin1StringView method,
+                                                         QLatin1StringView service,
+                                                         QByteArrayView arg,
+                                                         const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcClientStream> startClientStream(QLatin1StringView method,
+                                                         QLatin1StringView service,
+                                                         QByteArrayView arg,
+                                                         const QGrpcCallOptions &options);
     std::shared_ptr<QGrpcBidiStream> startBidiStream(QLatin1StringView method,
                                                      QLatin1StringView service, QByteArrayView arg,
                                                      const QGrpcCallOptions &options);
