@@ -81,7 +81,7 @@ QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationC
 QGrpcOperation::~QGrpcOperation() = default;
 
 /*!
-    \fn template <typename T, QGrpcOperation::if_proto_message<T> = true> std::optional<T> QGrpcOperation::read() const
+    \fn template <typename T, QtProtobuf::if_protobuf_message<T> = true> std::optional<T> QGrpcOperation::read() const
 
     Reads a message from a raw byte array stored within this QGrpcOperation
     instance.

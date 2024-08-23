@@ -8,6 +8,7 @@
 #include <QtProtobuf/qtprotobufglobal.h>
 
 #include <QtProtobuf/qprotobufmessage.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 
 QT_BEGIN_NAMESPACE
 namespace QtProtobufPrivate {
@@ -38,7 +39,7 @@ protected:
     explicit operator bool() const noexcept { return message() != nullptr; }
 };
 
-template <typename T, std::enable_if_t<std::is_base_of_v<QProtobufMessage, T>, bool> = true>
+template <typename T, QtProtobuf::if_protobuf_message<T> = true>
 class QProtobufLazyMessagePointer : private QProtobufLazyMessagePointerBase
 {
     T *messageAsT() const { return static_cast<T *>(message()); }

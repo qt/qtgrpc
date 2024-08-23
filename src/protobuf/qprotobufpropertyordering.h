@@ -84,15 +84,6 @@ private:
     const int index;
 };
 
-template<typename T>
-using HasProtobufStaticPropertyOrdering = decltype(T::staticPropertyOrdering);
-
-template <typename T>
-using has_q_protobuf_object_macro = qxp::is_detected<HasProtobufStaticPropertyOrdering, T>;
-
-template <typename T>
-constexpr bool has_q_protobuf_object_macro_v = has_q_protobuf_object_macro<T>::value;
-
 } // namespace QtProtobufPrivate
 
 QT_END_NAMESPACE

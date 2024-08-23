@@ -94,7 +94,7 @@ public:
     virtual void push() noexcept = 0;
 };
 
-template <typename T>
+template <typename T, QtProtobuf::if_protobuf_message<T> = true>
 class ListIterator : public AbstractRepeatedIterator
 {
 public:
@@ -124,7 +124,7 @@ private:
     mutable typename QList<T>::Iterator m_it;
 };
 
-template <typename K, typename V>
+template <typename K, typename V, QtProtobuf::if_protobuf_map<K, V> = true>
 class MapIterator : public AbstractRepeatedIterator
 {
     using MapEntry = QProtobufMapEntry<K, V>;
@@ -179,7 +179,7 @@ private:
 
 Q_PROTOBUF_EXPORT void qRegisterProtobufTypes();
 
-template<typename T>
+template<typename T, QtProtobuf::if_protobuf_message<T> = true>
 inline void qRegisterProtobufType()
 {
     T::registerTypes();
@@ -188,7 +188,7 @@ inline void qRegisterProtobufType()
     QtProtobufPrivate::registerOrdering(QMetaType::fromType<T>(), T::staticPropertyOrdering);
 }
 
-template <typename K, typename V>
+template <typename K, typename V, QtProtobuf::if_protobuf_map<K, V> = true>
 inline void qRegisterProtobufMapType()
 {
     QMetaType::registerMutableView<

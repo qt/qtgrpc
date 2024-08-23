@@ -90,6 +90,15 @@ using floatList = QList<float>;
 using doubleList = QList<double>;
 using boolList = QList<bool>;
 
+template<typename T>
+using HasProtobufStaticPropertyOrdering = decltype(T::staticPropertyOrdering);
+
+template <typename T>
+using has_q_protobuf_object_macro = qxp::is_detected<HasProtobufStaticPropertyOrdering, T>;
+
+template <typename T>
+constexpr bool has_q_protobuf_object_macro_v = has_q_protobuf_object_macro<T>::value;
+
 template <typename T>
 inline constexpr bool IsProtobufScalarValueType = false;
 template <>
@@ -125,6 +134,64 @@ constexpr inline bool IsProtobufScalarValueType<QByteArray> = true;
 
 template <typename T>
 using is_protobuf_scalar_value_type = std::bool_constant<IsProtobufScalarValueType<T>>;
+
+template <typename T>
+using is_protobuf_message = std::conjunction<std::negation<std::is_pointer<T>>,
+                                             std::is_base_of<QProtobufMessage, T>,
+                                             has_q_protobuf_object_macro<T>>;
+
+template <typename T>
+using if_protobuf_message = std::enable_if_t<is_protobuf_message<T>::value, bool>;
+
+template <typename T>
+using is_protobuf_non_message = std::disjunction<std::is_enum<T>,
+                                                 QtProtobuf::is_protobuf_scalar_value_type<T>>;
+
+template <typename T>
+using if_protobuf_non_message = std::enable_if_t<is_protobuf_non_message<T>::value, bool>;
+
+template <typename T>
+using is_protobuf_type = std::disjunction<is_protobuf_message<T>, is_protobuf_non_message<T>>;
+
+template <typename T>
+using if_protobuf_type = std::enable_if_t<is_protobuf_type<T>::value, bool>;
+
+template <typename T>
+inline constexpr bool IsProtobufMapKeyType = false;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::int32> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::int64> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::sint32> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::sint64> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::uint32> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::uint64> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::fixed32> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::fixed64> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::sfixed32> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::sfixed64> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QtProtobuf::boolean> = true;
+template <>
+constexpr inline bool IsProtobufMapKeyType<QString> = true;
+
+template <typename T>
+using is_protobuf_map_key = std::bool_constant<IsProtobufMapKeyType<T>>;
+
+template <typename T>
+using if_protobuf_map_key = std::enable_if_t<is_protobuf_map_key<T>::value, bool>;
+
+template <typename K, typename V>
+using if_protobuf_map = std::enable_if_t<std::conjunction_v<QtProtobuf::is_protobuf_map_key<K>,
+                                                            QtProtobuf::is_protobuf_type<V>>, bool>;
 
 } // namespace QtProtobuf
 

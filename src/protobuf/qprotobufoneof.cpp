@@ -8,7 +8,7 @@ QT_BEGIN_NAMESPACE
 namespace QtProtobufPrivate {
 /*!
     \internal
-    \fn template<typename T> void QProtobufOneof::setValue(const T &value, int fieldNumber)
+    \fn template<typename T, QtProtobuf::if_protobuf_type<T> = true> void QProtobufOneof::setValue(const T &value, int fieldNumber)
 
     Stores the \a value into QProtobufOneof with corresponding \a
     fieldNumber.
@@ -16,7 +16,7 @@ namespace QtProtobufPrivate {
 
 /*!
     \internal
-    \fn template <typename T, if_non_message_protobuf_type<T> = true> T QProtobufOneof::value() const
+    \fn template <typename T, QtProtobuf::if_protobuf_non_message<T> = true> T QProtobufOneof::value() const
 
     Returns the value of non-message protobuf type stored in the
     QProtobufOneof object.
@@ -24,7 +24,7 @@ namespace QtProtobufPrivate {
 
 /*!
     \internal
-    \fn template <typename T, if_protobuf_message<T> = true> const T *value() const
+    \fn template <typename T, QtProtobuf::if_protobuf_message<T> = true> const T *value() const
 
     Returns the pointer to a protobuf message that is stored inside the
     QProtobufOneof object.
@@ -32,7 +32,7 @@ namespace QtProtobufPrivate {
 
 /*!
     \internal
-    \fn template <typename T, if_protobuf_message<T> = true> T *value()
+    \fn template <typename T, QtProtobuf::if_protobuf_message<T> = true> T *value()
 
     Returns the pointer to a protobuf message that is stored inside the
     QProtobufOneof object. Mutable overload.
@@ -40,14 +40,14 @@ namespace QtProtobufPrivate {
 
 /*!
     \internal
-    \fn template <typename T, if_non_message_protobuf_type<T> = true> bool isEqual(const T &otherValue, int fieldNumber) const
+    \fn template <typename T, QtProtobuf::if_protobuf_non_message<T> = true> bool isEqual(const T &otherValue, int fieldNumber) const
     Compares the data stored in QProtobufOneof with the value/fieldNumber
     pair.
 */
 
 /*!
     \internal
-    \fn template <typename T, if_protobuf_message<T> = true> bool isEqual(const T &otherValue, int fieldNumber) const
+    \fn template <typename T, QtProtobuf::if_protobuf_message<T> = true> bool isEqual(const T &otherValue, int fieldNumber) const
     Compares the data stored in QProtobufOneof with the value/fieldNumber
     pair.
 */

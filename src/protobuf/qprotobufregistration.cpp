@@ -16,7 +16,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \relates QtProtobuf
-    \fn template<typename T> inline void qRegisterProtobufType()
+    \fn template<typename T, QtProtobuf::if_protobuf_message<T> = true> inline void qRegisterProtobufType()
 
     Registers a Protobuf type \e T.
     This function is normally called by generated code.
@@ -24,7 +24,7 @@ QT_BEGIN_NAMESPACE
 
 /*!
     \relates QtProtobuf
-    \fn template<typename K, typename V> inline void qRegisterProtobufMapType();
+    \fn template<typename K, typename V, QtProtobuf::if_protobuf_map<K, V> = true> inline void qRegisterProtobufMapType();
 
     Registers a Protobuf map type \c K and \c V.
     \c V must be a QProtobufMessage.
@@ -195,12 +195,12 @@ void qRegisterProtobufTypes()
 */
 
 /*!
-    \class template <typename T> class QtProtobufPrivate::ListIterator
+    \class template <typename T, QtProtobuf::if_protobuf_message<T> = true> class QtProtobufPrivate::ListIterator
     \internal
 */
 
 /*!
-    \class template <typename K, typename V> class QtProtobufPrivate::MapIterator
+    \class template <typename K, typename V, QtProtobuf::if_protobuf_map<K, V> = true> class QtProtobufPrivate::MapIterator
     \internal
 */
 
