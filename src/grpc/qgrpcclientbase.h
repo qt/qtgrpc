@@ -34,8 +34,8 @@ class QGrpcClientBasePrivate;
 class Q_GRPC_EXPORT QGrpcClientBase : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(std::shared_ptr<QAbstractGrpcChannel> channel READ channel
-                       WRITE attachChannel NOTIFY channelChanged)
+    Q_PROPERTY(std::shared_ptr<QAbstractGrpcChannel> channel READ channel WRITE attachChannel NOTIFY
+                   channelChanged)
 
     template <typename StreamType>
     using if_qtgrpc_stream = std::enable_if_t<QtGrpcPrivate::is_qtgrpc_stream_v<StreamType>, bool>;

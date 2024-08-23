@@ -42,6 +42,7 @@ public:
     void swap(QGrpcSerializationFormat &other) noexcept { d_ptr.swap(other.d_ptr); }
 
     [[nodiscard]] Q_GRPC_EXPORT QByteArrayView suffix() const noexcept;
+
     [[nodiscard]] Q_GRPC_EXPORT std::shared_ptr<QAbstractProtobufSerializer>
     serializer() const noexcept;
 

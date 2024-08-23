@@ -38,14 +38,14 @@ public:
 
     void swap(QGrpcCallOptions &other) noexcept { d_ptr.swap(other.d_ptr); }
 
-    Q_GRPC_EXPORT QGrpcCallOptions &setDeadlineTimeout(std::chrono::milliseconds timeout);
-    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(const QHash<QByteArray, QByteArray> &metadata);
-    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(QHash<QByteArray, QByteArray> &&metadata);
-
     [[nodiscard]] Q_GRPC_EXPORT std::optional<std::chrono::milliseconds>
     deadlineTimeout() const noexcept;
+    Q_GRPC_EXPORT QGrpcCallOptions &setDeadlineTimeout(std::chrono::milliseconds timeout);
+
     [[nodiscard]] Q_GRPC_EXPORT const QHash<QByteArray, QByteArray> &metadata() const & noexcept;
     [[nodiscard]] Q_GRPC_EXPORT QHash<QByteArray, QByteArray> metadata() &&;
+    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(const QHash<QByteArray, QByteArray> &metadata);
+    Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(QHash<QByteArray, QByteArray> &&metadata);
 
 private:
     QExplicitlySharedDataPointer<QGrpcCallOptionsPrivate> d_ptr;
