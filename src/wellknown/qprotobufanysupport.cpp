@@ -4,6 +4,7 @@
 #include <QtProtobufWellKnownTypes/qtprotobufwellknowntypesglobal.h>
 
 #include <QtProtobuf/private/qprotobufmessage_p.h>
+#include <QtProtobuf/private/qprotobufregistration_p.h>
 #include <QtProtobuf/private/qprotobufserializer_p.h>
 #include <QtProtobuf/qabstractprotobufserializer.h>
 

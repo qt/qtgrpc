@@ -17,9 +17,10 @@
 
 #include <QtProtobufQtCoreTypes/qtprotobufqtcoretypesexports.h>
 
-#include <QtProtobuf/qtprotobuftypes.h>
-#include <QtProtobuf/qprotobufregistration.h>
+#include <QtProtobuf/private/qprotobufregistration_p.h>
 #include <QtProtobuf/qabstractprotobufserializer.h>
+#include <QtProtobuf/qprotobufregistration.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qvariant.h>
 #include <QtCore/private/qglobal_p.h>

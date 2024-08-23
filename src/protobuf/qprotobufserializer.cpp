@@ -240,8 +240,7 @@ void QProtobufSerializerPrivate::clearError()
 
 bool QProtobufSerializer::deserializeMessage(QProtobufMessage *message, QByteArrayView data) const
 {
-    d_ptr->cachedPropertyValue = QVariant();
-    d_ptr->cachedIndex = -1;
+    d_ptr->clearCachedValue();
     d_ptr->clearError();
     d_ptr->it = QProtobufSelfcheckIterator::fromView(data);
 
@@ -287,15 +286,16 @@ bool QProtobufSerializerPrivate::deserializeObject(QProtobufMessage *message)
         return false;
     }
 
+    auto prevCachedRepeatedIterator = std::move(cachedRepeatedIterator);
     auto restoreOnReturn = qScopeGuard([prevIt = it, prevCachedPropertyValue = cachedPropertyValue,
-                                        prevCachedIndex = cachedIndex, this]() {
+                                        prevCachedIndex = cachedIndex, &prevCachedRepeatedIterator,
+                                        this]() {
         it = prevIt;
         cachedPropertyValue = prevCachedPropertyValue;
         cachedIndex = prevCachedIndex;
+        cachedRepeatedIterator = std::move(prevCachedRepeatedIterator);
     });
-
-    cachedPropertyValue.clear();
-    cachedIndex = -1;
+    clearCachedValue();
 
     QByteArrayView data = *array;
     clearError();
@@ -440,7 +440,7 @@ qsizetype QProtobufSerializerPrivate::skipSerializedFieldBytes(QProtobufSelfchec
     return std::distance(initialIt, QByteArray::const_iterator(it));
 }
 
-void QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue,
+void QProtobufSerializerPrivate::serializeProperty(QVariant propertyValue,
                                                    const QProtobufFieldInfo &fieldInfo)
 {
     QMetaType metaType = propertyValue.metaType();
@@ -481,6 +481,13 @@ void QProtobufSerializerPrivate::serializeProperty(const QVariant &propertyValue
             result.append(QProtobufSerializerPrivate::serializeBasic<
                           QtProtobuf::int64>(propertyValue.value<int64_t>()));
         }
+        return;
+    }
+
+    if (propertyValue.canView(QMetaType::fromType<QProtobufRepeatedIterator>())) {
+        QProtobufRepeatedIterator propertyIt = propertyValue.view<QProtobufRepeatedIterator>();
+        while (propertyIt.hasNext())
+            serializeObject(&propertyIt.next(), fieldInfo);
         return;
     }
 
@@ -621,22 +628,32 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
             setUnexpectedEndOfStreamError();
             return false;
         }
-    } else {
-        auto handler = QtProtobufPrivate::findHandler(metaType);
-        if (!handler.deserializer) {
-            qProtoWarning() << "No deserializer for type" << metaType.name();
-            QString error
-                = QString::fromUtf8("No deserializer is registered for type %1")
-                                .arg(QString::fromUtf8(metaType.name()));
-            setDeserializationError(
-                    QAbstractProtobufSerializer::NoDeserializerError,
-                QCoreApplication::translate("QtProtobuf", error.toUtf8().data()));
-            return false;
-        }
-        handler.deserializer([this](QProtobufMessage
-                                        *message) { return this->deserializeObject(message); },
-                             cachedPropertyValue.data());
+        return true;
     }
+
+    if (cachedPropertyValue.canView(QMetaType::fromType<QProtobufRepeatedIterator>())) {
+        if (!cachedRepeatedIterator.isValid()) {
+            cachedRepeatedIterator = cachedPropertyValue.view<QProtobufRepeatedIterator>();
+        }
+        if (deserializeObject(&cachedRepeatedIterator.addNext())) {
+            cachedRepeatedIterator.push();
+            return true;
+        }
+        return false;
+    }
+
+    auto handler = QtProtobufPrivate::findHandler(metaType);
+    if (!handler.deserializer) {
+        qProtoWarning() << "No deserializer for type" << metaType.name();
+        QString error = QString::fromUtf8("No deserializer is registered for type %1")
+                            .arg(QString::fromUtf8(metaType.name()));
+        setDeserializationError(QAbstractProtobufSerializer::NoDeserializerError,
+                                QCoreApplication::translate("QtProtobuf", error.toUtf8().data()));
+        return false;
+    }
+    handler.deserializer([this](QProtobufMessage
+                                    *message) { return this->deserializeObject(message); },
+                         cachedPropertyValue.data());
 
     return true;
 }
@@ -649,10 +666,17 @@ bool QProtobufSerializerPrivate::storeCachedValue(QProtobufMessage *message)
         QProtobufFieldInfo fieldInfo(*ordering, cachedIndex);
         ok = QtProtobufSerializerHelpers::setMessageProperty(message, fieldInfo,
                                                              cachedPropertyValue);
-        cachedPropertyValue.clear();
-        cachedIndex = -1;
+
+        clearCachedValue();
     }
     return ok;
+}
+
+void QProtobufSerializerPrivate::clearCachedValue()
+{
+    cachedPropertyValue.clear();
+    cachedIndex = -1;
+    cachedRepeatedIterator = QProtobufRepeatedIterator();
 }
 
 /*!
