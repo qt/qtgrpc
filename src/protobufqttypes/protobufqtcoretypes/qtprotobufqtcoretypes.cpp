@@ -2,9 +2,10 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
-#include "qtprotobufqtcoretypes.h"
-#include "qtprotobufqttypescommon_p.h"
-#include "private/QtCore.qpb.h"
+#include <QtProtobufQtCoreTypes/qtprotobufqtcoretypes.h>
+
+#include <QtProtobufQtCoreTypes/private/QtCore.qpb.h>
+#include <QtProtobufQtCoreTypes/private/qtprotobufqttypescommon_p.h>
 
 #include <QtCore/qurl.h>
 #include <QtCore/qchar.h>
