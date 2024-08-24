@@ -24,8 +24,8 @@ public:
     QProtobufSerializer();
     ~QProtobufSerializer() override;
 
-    DeserializationError deserializationError() const override;
-    QString deserializationErrorString() const override;
+    Error lastError() const override;
+    QString lastErrorString() const override;
 
     void shouldPreserveUnknownFields(bool preserveUnknownFields);
 

@@ -95,7 +95,7 @@ void tst_protobuf_any::anyMessage()
 
     AnyMessage message;
     message.deserialize(&serializer, input);
-    QCOMPARE_EQ(serializer.deserializationError(), QAbstractProtobufSerializer::NoError);
+    QCOMPARE_EQ(serializer.lastError(), QAbstractProtobufSerializer::NoError);
 
     std::optional<Example> opt = message.field().unpack<Example>(&serializer);
     QVERIFY(opt.has_value());
@@ -140,8 +140,8 @@ void tst_protobuf_any::repeatedAnyMessage()
     // let's try to deserialize it again
     RepeatedAnyMessage message2;
     message2.deserialize(&serializer, input);
-    if (serializer.deserializationError() != QAbstractProtobufSerializer::NoError)
-        QFAIL(qPrintable(serializer.deserializationErrorString()));
+    if (serializer.lastError() != QAbstractProtobufSerializer::NoError)
+        QFAIL(qPrintable(serializer.lastErrorString()));
     QCOMPARE_EQ(message2.anys().size(), message.anys().size());
 
     const auto anys = message.anys();

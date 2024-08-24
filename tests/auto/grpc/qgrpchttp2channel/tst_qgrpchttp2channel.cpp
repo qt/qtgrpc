@@ -25,12 +25,12 @@ using namespace Qt::StringLiterals;
 class DummySerializer : public QAbstractProtobufSerializer
 {
 public:
-    virtual QAbstractProtobufSerializer::DeserializationError deserializationError() const override
+    virtual QAbstractProtobufSerializer::Error lastError() const override
     {
-        return QAbstractProtobufSerializer::NoDeserializerError;
+        return QAbstractProtobufSerializer::NoError;
     }
 
-    virtual QString deserializationErrorString() const override { return {}; }
+    virtual QString lastErrorString() const override { return {}; }
 
 protected:
     virtual QByteArray serializeMessage(const QProtobufMessage *) const override { return {}; }

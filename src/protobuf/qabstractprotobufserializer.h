@@ -19,10 +19,10 @@ class QProtobufMessage;
 class Q_PROTOBUF_EXPORT QAbstractProtobufSerializer
 {
 public:
-    enum DeserializationError : uint8_t {
+    enum Error : uint8_t {
         NoError,
         InvalidHeaderError,
-        NoDeserializerError,
+        UnknownTypeError,
         UnexpectedEndOfStreamError,
         InvalidFormatError,
     };
@@ -32,8 +32,8 @@ public:
 
     virtual ~QAbstractProtobufSerializer();
 
-    virtual DeserializationError deserializationError() const = 0;
-    virtual QString deserializationErrorString() const = 0;
+    virtual Error lastError() const = 0;
+    virtual QString lastErrorString() const = 0;
 
 protected:
     virtual QByteArray serializeMessage(const QProtobufMessage *message) const = 0;

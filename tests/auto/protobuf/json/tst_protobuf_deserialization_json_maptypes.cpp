@@ -178,7 +178,7 @@ void QtProtobufJsonMapTypesDeserializationTest::simpleFixed32ComplexMapDeseriali
         "\"testFieldInt\":16},\"42\":{\"testComplexField\":{\"testFieldString\":"
         "\"fourty two ten sixteen\"},\"testFieldInt\":10},\"65555\":{\"testComplexField\":"
         "{\"testFieldString\":\"WUT?\"},\"testFieldInt\":10}}}"_ba);
-    QCOMPARE(QAbstractProtobufSerializer::NoError, serializer->deserializationError());
+    QCOMPARE(QAbstractProtobufSerializer::NoError, serializer->lastError());
 
     qtprotobufnamespace::tests::SimpleStringMessage stringMsg;
 
@@ -209,7 +209,7 @@ void QtProtobufJsonMapTypesDeserializationTest::boolBoolMapDeserializeTest()
 {
     BoolBoolMessageMapMessage test;
     test.deserialize(serializer.get(), "{\"mapField\":{\"true\":\"false\",\"false\":\"true\"}}");
-    QCOMPARE(QAbstractProtobufSerializer::NoError, serializer->deserializationError());
+    QCOMPARE(QAbstractProtobufSerializer::NoError, serializer->lastError());
 
     QCOMPARE(test.mapField().value(true), false);
     QCOMPARE(test.mapField().value(false), true);
@@ -223,7 +223,7 @@ void QtProtobufJsonMapTypesDeserializationTest::malformedJsonTest()
                      "{\"mapField\":{\"10\":\"ten\",\"15\":\"fifteen\",\"42\":\"fourty two\"}"_ba);
 
     QVERIFY(test.mapField().empty());
-    QCOMPARE(serializer->deserializationError(),
+    QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
 
     // skipped ':'
@@ -233,7 +233,7 @@ void QtProtobufJsonMapTypesDeserializationTest::malformedJsonTest()
                      "\"what is the answer?\":\"fourty two\"}}"_ba);
 
     QVERIFY(test2.mapField().empty());
-    QCOMPARE(serializer->deserializationError(),
+    QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
 
     SimpleFixed32StringMapMessage test3;
@@ -242,7 +242,7 @@ void QtProtobufJsonMapTypesDeserializationTest::malformedJsonTest()
                      "{\"mapField\":{\"10\":\"ten\"\"15\":\"fifteen\",\"42\":\"fourty two\"}}"_ba);
 
     QVERIFY(test3.mapField().empty());
-    QCOMPARE(serializer->deserializationError(),
+    QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
 }
 
@@ -254,7 +254,7 @@ void QtProtobufJsonMapTypesDeserializationTest::invalidTypeTest()
         serializer.get(),
         "{\"mapField\":{\"-10\":\"minus ten\",\"15\":\"fifteen\",\"42.3\":\"fourty two\"}}"_ba);
 
-    QCOMPARE(serializer->deserializationError(),
+    QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::InvalidFormatError);
 
     // -10 for uint32 is used
@@ -263,7 +263,7 @@ void QtProtobufJsonMapTypesDeserializationTest::invalidTypeTest()
                      "{\"mapField\":{\"-10\":\"ten\",\"15\":\"fifteen\",\"42\":\"fourty"
                       " two\"}}"_ba);
 
-    QCOMPARE(serializer->deserializationError(),
+    QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::InvalidFormatError);
 
     // expected int, but bool is used
@@ -271,7 +271,7 @@ void QtProtobufJsonMapTypesDeserializationTest::invalidTypeTest()
         serializer.get(),
         "{\"mapField\":{\"-10\":\"minus ten\",\"15\":\"fifteen\",\"false\":\"fourty two\"}}"_ba);
 
-    QCOMPARE(serializer->deserializationError(),
+    QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::InvalidFormatError);
 }
 

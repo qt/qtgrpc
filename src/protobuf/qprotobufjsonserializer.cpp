@@ -536,7 +536,7 @@ public:
                 }
 
                 while (!array.isEmpty()
-                       && deserializationError == QAbstractProtobufSerializer::NoError) {
+                       && lastError == QAbstractProtobufSerializer::NoError) {
                     activeValue = array.takeAt(0);
                     if (deserializeObject(&propertyIt.addNext()))
                         propertyIt.push();
@@ -544,19 +544,19 @@ public:
                 ok = propertyData.isValid();
             } else {
                 while (!activeValue.isNull()
-                       && deserializationError == QAbstractProtobufSerializer::NoError) {
+                       && lastError == QAbstractProtobufSerializer::NoError) {
                     if (deserializeObject(&propertyIt.addNext()))
                         propertyIt.push();
                 }
             }
-            ok = deserializationError == QAbstractProtobufSerializer::NoError;
+            ok = lastError == QAbstractProtobufSerializer::NoError;
             return propertyData;
         }
 
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (handler.deserializer) {
             while (!activeValue.isNull()
-                   && deserializationError == QAbstractProtobufSerializer::NoError) {
+                   && lastError == QAbstractProtobufSerializer::NoError) {
                 handler
                     .deserializer([this](QProtobufMessage
                                              *message) { return this->deserializeObject(message); },
@@ -571,7 +571,7 @@ public:
                 if (!ok)
                     setInvalidFormatError();
             } else {
-                setDeserializationError(QAbstractProtobufSerializer::NoDeserializerError,
+                setDeserializationError(QAbstractProtobufSerializer::UnknownTypeError,
                                         QCoreApplication::
                                             translate("QtProtobuf",
                                                       "No deserializer is registered for type %1")
@@ -682,11 +682,11 @@ public:
         return storeCachedValue(message);
     }
 
-    void setDeserializationError(QAbstractProtobufSerializer::DeserializationError error,
+    void setDeserializationError(QAbstractProtobufSerializer::Error error,
                                  const QString &errorString)
     {
-        deserializationError = error;
-        deserializationErrorString = errorString;
+        lastError = error;
+        lastErrorString = errorString;
     }
 
     void setUnexpectedEndOfStreamError()
@@ -706,9 +706,8 @@ public:
 
     void clearError();
 
-    QAbstractProtobufSerializer::DeserializationError deserializationError =
-            QAbstractProtobufSerializer::NoDeserializerError;
-    QString deserializationErrorString;
+    QAbstractProtobufSerializer::Error lastError = QAbstractProtobufSerializer::NoError;
+    QString lastErrorString;
     QJsonValue activeValue;
 
     static SerializerRegistry handlers;
@@ -755,8 +754,8 @@ void QProtobufJsonSerializerPrivate::serializeObjectImpl(const QProtobufMessage 
 
 void QProtobufJsonSerializerPrivate::clearError()
 {
-    deserializationError = QAbstractProtobufSerializer::NoError;
-    deserializationErrorString.clear();
+    lastError = QAbstractProtobufSerializer::NoError;
+    lastErrorString.clear();
 }
 
 QProtobufJsonSerializer::QProtobufJsonSerializer() : d_ptr(new QProtobufJsonSerializerPrivate)
@@ -767,21 +766,20 @@ QProtobufJsonSerializer::~QProtobufJsonSerializer() = default;
 
 /*!
    Returns the last deserialization error for the serializer instance.
-   \sa deserializationErrorString()
+   \sa lastErrorString()
 */
-QAbstractProtobufSerializer::DeserializationError
-QProtobufJsonSerializer::deserializationError() const
+QAbstractProtobufSerializer::Error QProtobufJsonSerializer::lastError() const
 {
-    return d_ptr->deserializationError;
+    return d_ptr->lastError;
 }
 
 /*!
    Returns the last deserialization error string for the serializer instance.
-   \sa deserializationError()
+   \sa lastError()
 */
-QString QProtobufJsonSerializer::deserializationErrorString() const
+QString QProtobufJsonSerializer::lastErrorString() const
 {
-    return d_ptr->deserializationErrorString;
+    return d_ptr->lastErrorString;
 }
 
 QByteArray QProtobufJsonSerializer::serializeMessage(const QProtobufMessage *message) const
