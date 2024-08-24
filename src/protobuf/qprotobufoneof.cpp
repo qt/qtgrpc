@@ -9,6 +9,7 @@ namespace QtProtobufPrivate {
 /*!
     \internal
     \fn template<typename T, QtProtobuf::if_protobuf_type<T> = true> void QProtobufOneof::setValue(const T &value, int fieldNumber)
+    \fn template<typename T, QtProtobuf::if_protobuf_message<T> = true> void setValue(T &&value, int fieldNumber)
 
     Stores the \a value into QProtobufOneof with corresponding \a
     fieldNumber.

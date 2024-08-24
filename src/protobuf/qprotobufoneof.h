@@ -39,6 +39,12 @@ public:
         setValue(QVariant::fromValue<T>(value), fieldNumber);
     }
 
+    template<typename T, QtProtobuf::if_protobuf_message<T> = true>
+    void setValue(T &&value, int fieldNumber)
+    {
+        setValue(QVariant::fromValue<T>(std::move(value)), fieldNumber);
+    }
+
     template <typename T, QtProtobuf::if_protobuf_non_message<T> = true>
     T value() const
     {
