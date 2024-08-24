@@ -7,18 +7,13 @@ QT_BEGIN_NAMESPACE
 
 namespace QtGrpcQuickFunctional {
 
-void handleDeserializationError(QJSEngine *jsEngine, QGrpcOperation *operation,
-                                const QJSValue &errorCallback)
+void handleDeserializationError(QJSEngine *jsEngine, const QJSValue &errorCallback)
 {
     if (!errorCallback.isCallable())
         return;
     using StatusCode = QtGrpc::StatusCode;
-    const auto status = QGrpcStatus{
-        operation->deserializationError() == QAbstractProtobufSerializer::UnexpectedEndOfStreamError
-            ? StatusCode::OutOfRange
-            : StatusCode::InvalidArgument,
-        operation->deserializationErrorString()
-    };
+    const auto status = QGrpcStatus{ StatusCode::InvalidArgument,
+                                     "Unable to deserialize return value" };
     errorCallback.call(QJSValueList{ jsEngine->toScriptValue(status) });
 }
 
@@ -59,9 +54,8 @@ void connectMultipleReceiveOperationFinished(QJSEngine *jsEngine,
                                          });
 }
 
-void handleReceivedMessageImpl(QJSEngine *jsEngine, QGrpcOperation *operation,
-                               std::optional<QJSValue> message, const QJSValue &successCallback,
-                               const QJSValue &errorCallback)
+void handleReceivedMessageImpl(QJSEngine *jsEngine, std::optional<QJSValue> message,
+                               const QJSValue &successCallback, const QJSValue &errorCallback)
 {
     if (!successCallback.isCallable())
         return;
@@ -69,7 +63,7 @@ void handleReceivedMessageImpl(QJSEngine *jsEngine, QGrpcOperation *operation,
     if (message)
         successCallback.call(QJSValueList{ *message });
     else
-        QtGrpcQuickFunctional::handleDeserializationError(jsEngine, operation, errorCallback);
+        QtGrpcQuickFunctional::handleDeserializationError(jsEngine, errorCallback);
 }
 
 } // namespace QtGrpcQuickFunctional

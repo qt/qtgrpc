@@ -35,17 +35,16 @@ std::optional<QJSValue> readMessageToJSValue(QJSEngine *jsEngine, QGrpcOperation
 }
 
 Q_GRPCQUICK_EXPORT
-void handleReceivedMessageImpl(QJSEngine *jsEngine, QGrpcOperation *operation,
-                               std::optional<QJSValue> message, const QJSValue &successCallback,
-                               const QJSValue &errorCallback);
+void handleReceivedMessageImpl(QJSEngine *jsEngine, std::optional<QJSValue> message,
+                               const QJSValue &successCallback, const QJSValue &errorCallback);
 
 template <typename Ret>
 void handleReceivedMessage(QJSEngine *jsEngine, QGrpcOperation *operation,
                            const QJSValue &successCallback, const QJSValue &errorCallback)
 {
     auto message = QtGrpcQuickFunctional::readMessageToJSValue<Ret>(jsEngine, operation);
-    QtGrpcQuickFunctional::handleReceivedMessageImpl(jsEngine, operation, std::move(message),
-                                                     successCallback, errorCallback);
+    QtGrpcQuickFunctional::handleReceivedMessageImpl(jsEngine, std::move(message), successCallback,
+                                                     errorCallback);
 }
 
 Q_GRPCQUICK_EXPORT
