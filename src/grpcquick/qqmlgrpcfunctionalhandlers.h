@@ -24,10 +24,6 @@ Q_ALWAYS_INLINE void validateEngineAndOperation(QJSEngine *jsEngine, QGrpcOperat
     Q_ASSERT(operation != nullptr);
 }
 
-Q_GRPCQUICK_EXPORT
-void handleDeserializationError(QJSEngine *jsEngine, QGrpcOperation *operation,
-                                const QJSValue &errorCallback);
-
 template <typename Ret>
 std::optional<QJSValue> readMessageToJSValue(QJSEngine *jsEngine, QGrpcOperation *operation)
 {
