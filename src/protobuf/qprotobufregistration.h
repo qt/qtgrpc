@@ -9,18 +9,20 @@
 #  pragma qt_sync_stop_processing
 #endif
 
-#include <QtProtobuf/qtprotobufglobal.h>
+#include <QtProtobuf/qtprotobufexports.h>
 
-#include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufpropertyordering.h>
 #include <QtProtobuf/qprotobufrepeatediterator.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qhash.h>
+#include <QtCore/qlist.h>
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qmetatype.h>
 
 QT_BEGIN_NAMESPACE
+
+class QProtobufMessage;
 
 namespace QtProtobuf {
 using RegisterFunction = void (*)();

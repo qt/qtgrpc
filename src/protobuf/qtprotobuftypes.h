@@ -5,13 +5,14 @@
 #ifndef QTPROTOBUFTYPES_H
 #define QTPROTOBUFTYPES_H
 
-#include <QtProtobuf/qtprotobufglobal.h>
-
 #include <QtProtobuf/qprotobufmessage.h>
+#include <QtProtobuf/qtprotobufexports.h>
 
-#include <QtCore/qhash.h>
-#include <QtCore/qmetatype.h>
 #include <QtCore/qendian.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qmetatype.h>
+#include <QtCore/qstring.h>
 
 #include <type_traits>
 

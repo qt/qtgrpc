@@ -15,18 +15,18 @@
 // We mean it.
 //
 
-#include <QtProtobuf/qtprotobufglobal.h>
-
 #include <QtProtobuf/qprotobufmessage.h>
+#include <QtProtobuf/qprotobufpropertyordering.h>
+#include <QtProtobuf/qtprotobufexports.h>
 
-#include <QtCore/qtconfigmacros.h>
 #include <QtCore/qhash.h>
-#include <QtCore/private/qglobal_p.h>
+#include <QtCore/qshareddata.h>
 
 #include <optional>
 
 QT_BEGIN_NAMESPACE
 
+struct QMetaObject;
 class QMetaProperty;
 
 class Q_PROTOBUF_EXPORT QProtobufMessagePrivate : public QSharedData

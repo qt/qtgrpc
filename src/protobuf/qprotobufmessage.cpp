@@ -1,14 +1,12 @@
 // Copyright (C) 2022 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
-#include "qprotobufmessage.h"
-#include "qprotobufmessage_p.h"
+#include <QtProtobuf/qprotobufmessage.h>
 
-#include "qabstractprotobufserializer.h"
-#include "qprotobufregistration.h"
-#include "qprotobufpropertyorderingbuilder_p.h"
-#include "qtprotobuftypes.h"
-
+#include <QtProtobuf/private/qprotobufmessage_p.h>
+#include <QtProtobuf/private/qprotobufpropertyorderingbuilder_p.h>
+#include <QtProtobuf/qabstractprotobufserializer.h>
+#include <QtProtobuf/qprotobufpropertyordering.h>
 
 #include <QtCore/qassert.h>
 #include <QtCore/qmetaobject.h>

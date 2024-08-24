@@ -4,16 +4,21 @@
 #ifndef QPROTOBUFMESSAGE_H
 #define QPROTOBUFMESSAGE_H
 
-#include <QtProtobuf/qtprotobufglobal.h>
+#include <QtProtobuf/qtprotobufexports.h>
 
-#include <QtProtobuf/qprotobufpropertyordering.h>
-
-#include <QtCore/qtconfigmacros.h>
-#include <QtCore/qtmetamacros.h>
+#include <QtCore/qanystringview.h>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qbytearrayview.h>
+#include <QtCore/qlist.h>
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qshareddata.h>
+#include <QtCore/qtmetamacros.h>
 
 QT_BEGIN_NAMESPACE
+
+class QAbstractProtobufSerializer;
+struct QMetaObject;
+class QVariant;
 
 class QProtobufMessage;
 struct QProtobufMessageDeleter {
@@ -21,7 +26,10 @@ struct QProtobufMessageDeleter {
 };
 using QProtobufMessagePointer = std::unique_ptr<QProtobufMessage, QProtobufMessageDeleter>;
 
-class QAbstractProtobufSerializer;
+namespace QtProtobufPrivate {
+struct QProtobufPropertyOrdering;
+}
+
 class QProtobufMessagePrivate;
 QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QProtobufMessagePrivate, Q_PROTOBUF_EXPORT)
 
