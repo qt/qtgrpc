@@ -22,9 +22,6 @@
 #include <QtProtobuf/qprotobufregistration.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
-#include <QtCore/qvariant.h>
-#include <QtCore/private/qglobal_p.h>
-
 #include <optional>
 
 QT_BEGIN_NAMESPACE
