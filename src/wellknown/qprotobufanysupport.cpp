@@ -1,17 +1,14 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
-#include <QtProtobufWellKnownTypes/qtprotobufwellknowntypesglobal.h>
+#include <QtProtobufWellKnownTypes/qprotobufanysupport.h>
+
+#include <QtProtobufWellKnownTypes/google/protobuf/any.qpb.h>
 
 #include <QtProtobuf/private/qprotobufmessage_p.h>
 #include <QtProtobuf/private/qprotobufregistration_p.h>
-#include <QtProtobuf/private/qprotobufserializer_p.h>
 #include <QtProtobuf/qabstractprotobufserializer.h>
-
-#include "qprotobufanysupport.h"
-#include "qprotobufregistration.h"
-
-#include <google/protobuf/any.qpb.h>
+#include <QtProtobuf/qprotobufpropertyordering.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -4,12 +4,14 @@
 #ifndef Q_PROTOBUF_ANYSUPPORT_H
 #define Q_PROTOBUF_ANYSUPPORT_H
 
-#include <QtProtobufWellKnownTypes/qtprotobufwellknowntypesglobal.h>
+#include <QtProtobufWellKnownTypes/qtprotobufwellknowntypesexports.h>
 
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qanystringview.h>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qstring.h>
 
 #include <utility>
 #include <optional>
