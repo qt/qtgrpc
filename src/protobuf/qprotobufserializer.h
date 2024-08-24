@@ -5,10 +5,11 @@
 #ifndef QPROTOBUFSERIALIZER_H
 #define QPROTOBUFSERIALIZER_H
 
-#include <QtProtobuf/qtprotobufglobal.h>
-
 #include <QtProtobuf/qabstractprotobufserializer.h>
-#include <QtProtobuf/qtprotobuftypes.h>
+#include <QtProtobuf/qtprotobufexports.h>
+
+#include <QtCore/qbytearrayview.h>
+#include <QtCore/qstring.h>
 
 #include <memory>
 

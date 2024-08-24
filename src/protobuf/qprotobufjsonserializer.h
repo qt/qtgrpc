@@ -7,7 +7,6 @@
 #include <QtProtobuf/qtprotobufglobal.h>
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
-#include <QtProtobuf/qtprotobuftypes.h>
 
 #include <memory>
 

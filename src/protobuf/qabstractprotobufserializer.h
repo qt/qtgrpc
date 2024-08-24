@@ -5,18 +5,16 @@
 #ifndef QABSTRACTPROTOBUFSERIALIZER_H
 #define QABSTRACTPROTOBUFSERIALIZER_H
 
-#include <QtProtobuf/qtprotobufglobal.h>
-
+#include <QtProtobuf/qtprotobufexports.h>
 #include <QtProtobuf/qtprotobuftypes.h>
-#include <QtProtobuf/qprotobufmessage.h>
 
 #include <QtCore/qbytearray.h>
 #include <QtCore/qbytearrayview.h>
 #include <QtCore/qstring.h>
-#include <QtCore/qmetaobject.h>
-#include <QtCore/qvariant.h>
 
 QT_BEGIN_NAMESPACE
+
+class QProtobufMessage;
 
 class Q_PROTOBUF_EXPORT QAbstractProtobufSerializer
 {

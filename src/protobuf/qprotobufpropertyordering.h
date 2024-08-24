@@ -9,11 +9,11 @@
 #  pragma qt_sync_stop_processing
 #endif
 
-#include <QtProtobuf/qtprotobufglobal.h>
+#include <QtProtobuf/qtprotobufexports.h>
 
+#include <QtCore/qflags.h>
 #include <QtCore/qtclasshelpermacros.h>
 #include <QtCore/qutf8stringview.h>
-
 #include <QtCore/qxptype_traits.h>
 
 QT_BEGIN_NAMESPACE

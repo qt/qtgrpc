@@ -1,12 +1,12 @@
 // Copyright (C) 2024 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
-#include "qprotobufpropertyordering.h"
-#include "qprotobufpropertyorderingbuilder_p.h"
-#include "qtprotobuflogging_p.h"
-#include "qtprotobufdefs_p.h"
-#include "qprotobufregistration.h"
+#include <QtProtobuf/qprotobufpropertyordering.h>
 
+#include <QtProtobuf/private/qprotobufpropertyorderingbuilder_p.h>
+#include <QtProtobuf/private/qtprotobufdefs_p.h>
+#include <QtProtobuf/private/qtprotobuflogging_p.h>
+#include <QtProtobuf/qprotobufregistration.h>
 
 #include <QtCore/qhash.h>
 #include <QtCore/qmetatype.h>

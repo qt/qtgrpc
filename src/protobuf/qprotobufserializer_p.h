@@ -17,6 +17,7 @@
 //
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
+#include <QtProtobuf/qprotobufpropertyordering.h>
 #include <QtProtobuf/qprotobufserializer.h>
 #include <QtProtobuf/qprotobufrepeatediterator.h>
 #include <QtProtobuf/qtprotobuftypes.h>

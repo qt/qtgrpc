@@ -5,7 +5,7 @@
 #ifndef QPROTOBUFLAZYMESSAGEPOINTER_H
 #define QPROTOBUFLAZYMESSAGEPOINTER_H
 
-#include <QtProtobuf/qtprotobufglobal.h>
+#include <QtProtobuf/qtprotobufexports.h>
 
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qtprotobuftypes.h>

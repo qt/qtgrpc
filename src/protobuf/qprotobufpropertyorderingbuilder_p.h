@@ -4,12 +4,6 @@
 #ifndef QPROTOBUFPROPERTYORDERINGBUILDER_P_H
 #define QPROTOBUFPROPERTYORDERINGBUILDER_P_H
 
-#include <QtProtobuf/qtprotobufglobal.h>
-
-#include <QtProtobuf/qprotobufpropertyordering.h>
-
-#include <QtCore/qbytearray.h>
-
 // Source is in qprotobufpropertyordering.cpp
 // The intent is to share some of the code
 
@@ -23,6 +17,12 @@
 //
 // We mean it.
 //
+
+#include <QtProtobuf/qprotobufpropertyordering.h>
+#include <QtProtobuf/qtprotobufexports.h>
+
+#include <QtCore/qbytearray.h>
+#include <QtCore/qtclasshelpermacros.h>
 
 QT_BEGIN_NAMESPACE
 

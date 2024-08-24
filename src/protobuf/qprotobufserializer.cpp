@@ -2,24 +2,21 @@
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>, Viktor Kopp <vifactor@gmail.com>
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
-#include "qprotobufserializer.h"
-#include "qprotobufregistration_p.h"
-#include "qprotobufserializer_p.h"
-#include "qtprotobufdefs_p.h"
-#include "qtprotobuftypes.h"
+#include <QtProtobuf/qprotobufserializer.h>
 
+#include <QtProtobuf/private/qprotobufmessage_p.h>
+#include <QtProtobuf/private/qprotobufserializer_p.h>
+#include <QtProtobuf/private/qprotobufregistration_p.h>
+#include <QtProtobuf/private/qtprotobufdefs_p.h>
 #include <QtProtobuf/private/qtprotobufserializerhelpers_p.h>
+#include <QtProtobuf/qprotobufmessage.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qmetatype.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qvariant.h>
 #include <QtCore/qreadwritelock.h>
-
-#include <QtProtobuf/qprotobufmessage.h>
-#include <QtProtobuf/private/qprotobufserializer_p.h>
-#include <QtProtobuf/private/qprotobufmessage_p.h>
-
 
 QT_BEGIN_NAMESPACE
 
