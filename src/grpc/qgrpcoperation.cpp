@@ -116,7 +116,8 @@ bool QGrpcOperation::read(QProtobufMessage *message) const
                "Can't read to nullptr QProtobufMessage");
     Q_D(const QGrpcOperation);
     const auto ser = d->operationContext->serializer();
-    return ser && ser->deserialize(message, d->data);
+    Q_ASSERT_X(ser, "QGrpcOperation", "The serializer is null");
+    return ser->deserialize(message, d->data);
 }
 
 /*!
@@ -144,8 +145,7 @@ QAbstractProtobufSerializer::DeserializationError QGrpcOperation::deserializatio
 {
     Q_D(const QGrpcOperation);
     const auto ser = d->operationContext->serializer();
-    if (!ser)
-        return QAbstractProtobufSerializer::NoDeserializerError;
+    Q_ASSERT_X(ser, "QGrpcOperation", "The serializer is null");
     return ser->deserializationError();
 }
 
@@ -160,8 +160,7 @@ QString QGrpcOperation::deserializationErrorString() const
 {
     Q_D(const QGrpcOperation);
     const auto ser = d->operationContext->serializer();
-    if (!ser)
-        return QStringLiteral("serializer not available");
+    Q_ASSERT_X(ser, "QGrpcOperation", "The serializer is null");
     return ser->deserializationErrorString();
 }
 
