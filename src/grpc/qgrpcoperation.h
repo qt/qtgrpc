@@ -8,7 +8,7 @@
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
-#include <QtProtobuf/qabstractprotobufserializer.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qhash.h>
 #include <QtCore/qobject.h>
@@ -36,9 +36,6 @@ public:
         return r;
     }
     bool read(QProtobufMessage *message) const;
-
-    [[nodiscard]] QAbstractProtobufSerializer::DeserializationError deserializationError() const;
-    [[nodiscard]] QString deserializationErrorString() const;
 
     [[nodiscard]] const QHash<QByteArray, QByteArray> &metadata() const & noexcept;
     void metadata() const && = delete;

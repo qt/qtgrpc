@@ -89,12 +89,10 @@ QGrpcOperation::~QGrpcOperation() = default;
     Returns an optional deserialized message. On failure, \c {std::nullopt} is
     returned.
 
-    The error can be retrieved using \l deserializationError.
-
     \note This function only participates in overload resolution if \c T is a
     subclass of QProtobufMessage.
 
-    \sa read, deserializationError, deserializationErrorString
+    \sa read
 */
 
 /*!
@@ -105,10 +103,9 @@ QGrpcOperation::~QGrpcOperation() = default;
     The function writes the deserialized value to the \a message pointer.
 
     If the deserialization is successful, this function returns \c true.
-    Otherwise, it returns \c false, and the error can be retrieved with \l
-    deserializationError.
+    Otherwise, it returns \c false.
 
-    \sa read, deserializationError, deserializationErrorString
+    \sa read
 */
 bool QGrpcOperation::read(QProtobufMessage *message) const
 {
@@ -132,36 +129,6 @@ void QGrpcOperation::cancel()
         Q_EMIT finished(QGrpcStatus{ QtGrpc::StatusCode::Cancelled,
                                      tr("Operation is cancelled by client") });
     }
-}
-
-/*!
-   \since 6.8
-
-   Returns the last deserialization error.
-
-   \sa QAbstractProtobufSerializer::deserializationError
-*/
-QAbstractProtobufSerializer::DeserializationError QGrpcOperation::deserializationError() const
-{
-    Q_D(const QGrpcOperation);
-    const auto ser = d->operationContext->serializer();
-    Q_ASSERT_X(ser, "QGrpcOperation", "The serializer is null");
-    return ser->deserializationError();
-}
-
-/*!
-   \since 6.8
-
-   Returns the last deserialization error string.
-
-   \sa QAbstractProtobufSerializer::deserializationErrorString
-*/
-QString QGrpcOperation::deserializationErrorString() const
-{
-    Q_D(const QGrpcOperation);
-    const auto ser = d->operationContext->serializer();
-    Q_ASSERT_X(ser, "QGrpcOperation", "The serializer is null");
-    return ser->deserializationErrorString();
 }
 
 /*!
