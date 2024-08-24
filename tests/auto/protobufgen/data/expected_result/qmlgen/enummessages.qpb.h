@@ -25,7 +25,7 @@ namespace TestEnumGadget {
 Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT)
 QML_NAMED_ELEMENT(TestEnum)
 
-enum TestEnum : int32_t {
+enum class TestEnum : int32_t {
     TEST_ENUM_VALUE0 = 0,
     TEST_ENUM_VALUE1 = 1,
     TEST_ENUM_VALUE2 = 2,
@@ -42,7 +42,7 @@ namespace TestEnumSecondInFileGadget {
 Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT)
 QML_NAMED_ELEMENT(TestEnumSecondInFile)
 
-enum TestEnumSecondInFile : int32_t {
+enum class TestEnumSecondInFile : int32_t {
     TEST_ENUM_SIF_VALUE0 = 0,
     TEST_ENUM_SIF_VALUE1 = 1,
     TEST_ENUM_SIF_VALUE2 = 2,
@@ -56,7 +56,7 @@ class SimpleEnumMessage;
 using SimpleEnumMessageRepeated = QList<SimpleEnumMessage>;
 namespace SimpleEnumMessage_QtProtobufNested {
 enum class QtProtobufFieldEnum;
-enum LocalEnum : int32_t;
+enum class LocalEnum : int32_t;
 using LocalEnumRepeated = QList<LocalEnum>;
 } // namespace SimpleEnumMessage_QtProtobufNested
 
@@ -64,7 +64,7 @@ class RepeatedEnumMessage;
 using RepeatedEnumMessageRepeated = QList<RepeatedEnumMessage>;
 namespace RepeatedEnumMessage_QtProtobufNested {
 enum class QtProtobufFieldEnum;
-enum LocalEnum : int32_t;
+enum class LocalEnum : int32_t;
 using LocalEnumRepeated = QList<LocalEnum>;
 } // namespace RepeatedEnumMessage_QtProtobufNested
 
@@ -72,13 +72,13 @@ class MixedEnumUsageMessage;
 using MixedEnumUsageMessageRepeated = QList<MixedEnumUsageMessage>;
 namespace MixedEnumUsageMessage_QtProtobufNested {
 enum class QtProtobufFieldEnum;
-enum LocalEnum : int32_t;
+enum class LocalEnum : int32_t;
 using LocalEnumRepeated = QList<LocalEnum>;
 class NestedEnumHolder;
 using NestedEnumHolderRepeated = QList<NestedEnumHolder>;
 namespace NestedEnumHolder_QtProtobufNested {
 enum class QtProtobufFieldEnum;
-enum LocalEnum : int32_t;
+enum class LocalEnum : int32_t;
 using LocalEnumRepeated = QList<LocalEnum>;
 } // namespace NestedEnumHolder_QtProtobufNested
 
@@ -86,13 +86,13 @@ class NestedEnumHolderLevel1;
 using NestedEnumHolderLevel1Repeated = QList<NestedEnumHolderLevel1>;
 namespace NestedEnumHolderLevel1_QtProtobufNested {
 enum class QtProtobufFieldEnum;
-enum LocalEnum : int32_t;
+enum class LocalEnum : int32_t;
 using LocalEnumRepeated = QList<LocalEnum>;
 class NestedEnumHolderLevel2;
 using NestedEnumHolderLevel2Repeated = QList<NestedEnumHolderLevel2>;
 namespace NestedEnumHolderLevel2_QtProtobufNested {
 enum class QtProtobufFieldEnum;
-enum LocalEnum : int32_t;
+enum class LocalEnum : int32_t;
 using LocalEnumRepeated = QList<LocalEnum>;
 } // namespace NestedEnumHolderLevel2_QtProtobufNested
 
@@ -122,7 +122,7 @@ class A;
 using ARepeated = QList<A>;
 namespace A_QtProtobufNested {
 enum class QtProtobufFieldEnum;
-enum AEnum : int32_t;
+enum class AEnum : int32_t;
 using AEnumRepeated = QList<AEnum>;
 } // namespace A_QtProtobufNested
 
@@ -130,7 +130,7 @@ class B;
 using BRepeated = QList<B>;
 namespace B_QtProtobufNested {
 enum class QtProtobufFieldEnum;
-enum BEnum : int32_t;
+enum class BEnum : int32_t;
 using BEnumRepeated = QList<BEnum>;
 } // namespace B_QtProtobufNested
 
@@ -187,7 +187,7 @@ enum class QtProtobufFieldEnum {
 };
 Q_ENUM_NS(QtProtobufFieldEnum)
 
-enum LocalEnum : int32_t {
+enum class LocalEnum : int32_t {
     LOCAL_ENUM_VALUE0 = 0,
     LOCAL_ENUM_VALUE1 = 1,
     LOCAL_ENUM_VALUE2 = 2,
@@ -250,7 +250,7 @@ enum class QtProtobufFieldEnum {
 };
 Q_ENUM_NS(QtProtobufFieldEnum)
 
-enum LocalEnum : int32_t {
+enum class LocalEnum : int32_t {
     LOCAL_ENUM_VALUE0 = 0,
     LOCAL_ENUM_VALUE1 = 1,
     LOCAL_ENUM_VALUE2 = 2,
@@ -335,7 +335,7 @@ enum class QtProtobufFieldEnum {
 };
 Q_ENUM_NS(QtProtobufFieldEnum)
 
-enum LocalEnum : int32_t {
+enum class LocalEnum : int32_t {
     LOCAL_ENUM_VALUE0 = 0,
     LOCAL_ENUM_VALUE1 = 1,
     LOCAL_ENUM_VALUE2 = 2,
@@ -388,7 +388,7 @@ namespace NestedEnumHolder_QtProtobufNested {
 Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT)
 QML_NAMED_ELEMENT(NestedEnumHolder)
 
-enum LocalEnum : int32_t {
+enum class LocalEnum : int32_t {
     NESTED_LOCAL_ENUM_VALUE0 = 0,
     NESTED_LOCAL_ENUM_VALUE1 = 1,
     NESTED_LOCAL_ENUM_VALUE2 = 2,
@@ -444,7 +444,7 @@ namespace NestedEnumHolderLevel1_QtProtobufNested {
 Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT)
 QML_NAMED_ELEMENT(NestedEnumHolderLevel1)
 
-enum LocalEnum : int32_t {
+enum class LocalEnum : int32_t {
     NESTED_LEVEL1_LOCAL_ENUM_VALUE0 = 0,
     NESTED_LEVEL1_LOCAL_ENUM_VALUE1 = 1,
 };
@@ -495,7 +495,7 @@ namespace NestedEnumHolderLevel2_QtProtobufNested {
 Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT)
 QML_NAMED_ELEMENT(NestedEnumHolderLevel2)
 
-enum LocalEnum : int32_t {
+enum class LocalEnum : int32_t {
     NESTED_LEVEL2_LOCAL_ENUM_VALUE0 = 0,
     NESTED_LEVEL2_LOCAL_ENUM_VALUE1 = 1,
 };
@@ -744,7 +744,7 @@ enum class QtProtobufFieldEnum {
 };
 Q_ENUM_NS(QtProtobufFieldEnum)
 
-enum AEnum : int32_t {
+enum class AEnum : int32_t {
     AVal0 = 0,
     AVal1 = 1,
 };
@@ -805,7 +805,7 @@ enum class QtProtobufFieldEnum {
 };
 Q_ENUM_NS(QtProtobufFieldEnum)
 
-enum BEnum : int32_t {
+enum class BEnum : int32_t {
     BVal0 = 0,
     BVal1 = 1,
 };

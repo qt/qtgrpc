@@ -5,6 +5,7 @@
 #define CLUSTERDATAMANAGER_H
 
 #include <QtCore/QObject>
+#include <QtCore/QtTypeTraits>
 #include <QtQml/QQmlEngine>
 #include <naviservice_client.grpc.qpb.h>
 
@@ -22,10 +23,10 @@ class ClusterDataManager : public QObject
                    showRestartClient FINAL)
 public:
     enum NaviDirection {
-        RIGHT = qtgrpc::examples::DirectionEnumGadget::DirectionEnum::RIGHT,
-        LEFT = qtgrpc::examples::DirectionEnumGadget::DirectionEnum::LEFT,
-        STRAIGHT = qtgrpc::examples::DirectionEnumGadget::DirectionEnum::STRAIGHT,
-        BACKWARD = qtgrpc::examples::DirectionEnumGadget::DirectionEnum::BACKWARD
+        RIGHT = qToUnderlying(qtgrpc::examples::DirectionEnumGadget::DirectionEnum::RIGHT),
+        LEFT = qToUnderlying(qtgrpc::examples::DirectionEnumGadget::DirectionEnum::LEFT),
+        STRAIGHT = qToUnderlying(qtgrpc::examples::DirectionEnumGadget::DirectionEnum::STRAIGHT),
+        BACKWARD = qToUnderlying(qtgrpc::examples::DirectionEnumGadget::DirectionEnum::BACKWARD)
     };
 
     Q_ENUM(NaviDirection);

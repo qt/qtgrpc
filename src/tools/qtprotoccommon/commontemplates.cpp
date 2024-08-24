@@ -175,7 +175,7 @@ const char *CommonTemplates::ClassMessageForwardDeclarationTemplate()
 
 const char *CommonTemplates::EnumForwardDeclarationTemplate()
 {
-    return "enum $type$ : int32_t;\n"
+    return "enum class $type$ : int32_t;\n"
            "using $list_type$ = QList<$type$>;\n";
 }
 
@@ -309,13 +309,9 @@ const char *CommonTemplates::PrivateBlockTemplate()
 {
     return "\nprivate:\n";
 }
-const char *CommonTemplates::EnumDefinitionTemplate()
-{
-    return "enum $type$ : int32_t {\n";
-}
 const char *CommonTemplates::EnumClassDefinitionTemplate()
 {
-    return "enum class $type$ {\n";
+    return "enum class $type$ : int32_t {\n";
 }
 const char *CommonTemplates::EnumFieldTemplate()
 {

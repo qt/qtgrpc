@@ -9,6 +9,8 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QSocketNotifier>
+#include <QtCore/QtTypeTraits>
+
 #include <QtProtobuf/QProtobufJsonSerializer>
 #include <QtProtobuf/QProtobufSerializer>
 
@@ -78,10 +80,10 @@ QByteArray ConformaceServer::runTest(const QByteArray &reqData)
 
     conformance::ConformanceResponse response;
 
-    if (request.requestedOutputFormat() != conformance::WireFormatGadget::PROTOBUF
-        && request.requestedOutputFormat() != conformance::WireFormatGadget::JSON) {
-        response.setSkipped(
-                QString("Unsupported response format %1").arg(request.requestedOutputFormat()));
+    if (request.requestedOutputFormat() != conformance::WireFormatGadget::WireFormat::PROTOBUF
+        && request.requestedOutputFormat() != conformance::WireFormatGadget::WireFormat::JSON) {
+        response.setSkipped(QString("Unsupported response format %1")
+                                .arg(qToUnderlying(request.requestedOutputFormat())));
         return response.serialize(&m_protoSerializer);
     }
 
@@ -93,7 +95,8 @@ QByteArray ConformaceServer::runTest(const QByteArray &reqData)
 
     bool isProtoInput = conformance::ConformanceRequest::PayloadFields::ProtobufPayload
         == request.payloadField();
-    bool isProtoOutput = request.requestedOutputFormat() == conformance::WireFormatGadget::PROTOBUF;
+    bool isProtoOutput = request.requestedOutputFormat()
+        == conformance::WireFormatGadget::WireFormat::PROTOBUF;
 
     QAbstractProtobufSerializer *activeSerializer = isProtoOutput
         ? static_cast<QAbstractProtobufSerializer *>(&m_protoSerializer)

@@ -7,6 +7,7 @@
 
 #include <QObject>
 #include <QQmlEngine>
+#include <QtTypeTraits>
 
 #include "simplechat.qpb.h"
 #include "simplechat_client.grpc.qpb.h"
@@ -28,9 +29,9 @@ class SimpleChatEngine : public QObject
     Q_PROPERTY(SimpleChatEngine::State state READ state NOTIFY stateChanged)
 public:
     enum ContentType {
-        Unknown = qtgrpc::examples::chat::ChatMessage::ContentType::Unknown,
-        Text = qtgrpc::examples::chat::ChatMessage::ContentType::Text,
-        Image = qtgrpc::examples::chat::ChatMessage::ContentType::Image,
+        Unknown = qToUnderlying(qtgrpc::examples::chat::ChatMessage::ContentType::Unknown),
+        Text = qToUnderlying(qtgrpc::examples::chat::ChatMessage::ContentType::Text),
+        Image = qToUnderlying(qtgrpc::examples::chat::ChatMessage::ContentType::Image),
     };
     Q_ENUM(ContentType)
 

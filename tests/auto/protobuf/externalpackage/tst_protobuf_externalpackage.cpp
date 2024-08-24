@@ -54,20 +54,19 @@ void QtProtobufExternalPackageGenerationTest::externalEnumMessageTest()
             propertyName);
 
     SimpleExternalEnumMessage test;
-    QVERIFY(test.setProperty(
-            propertyName,
-            QVariant::fromValue<
-                    qtprotobufnamespace1::externaltests::ExternalTestEnumGadget::ExternalTestEnum>(
-                    qtprotobufnamespace1::externaltests::ExternalTestEnumGadget::
-                            EXTERNAL_TEST_ENUM_VALUE4)));
-    QCOMPARE(
-            test.property(propertyName)
-                    .value<qtprotobufnamespace1::externaltests::ExternalTestEnumGadget::
-                                   ExternalTestEnum>(),
-            qtprotobufnamespace1::externaltests::ExternalTestEnumGadget::EXTERNAL_TEST_ENUM_VALUE4);
-    QCOMPARE(
-            test.externalEnum(),
-            qtprotobufnamespace1::externaltests::ExternalTestEnumGadget::EXTERNAL_TEST_ENUM_VALUE4);
+    QVERIFY(test.setProperty(propertyName,
+                             QVariant::fromValue<qtprotobufnamespace1::externaltests::
+                                                     ExternalTestEnumGadget::ExternalTestEnum>(
+                                 qtprotobufnamespace1::externaltests::ExternalTestEnumGadget::
+                                     ExternalTestEnum::EXTERNAL_TEST_ENUM_VALUE4)));
+    QCOMPARE(test.property(propertyName)
+                 .value<qtprotobufnamespace1::externaltests::ExternalTestEnumGadget::
+                            ExternalTestEnum>(),
+             qtprotobufnamespace1::externaltests::ExternalTestEnumGadget::ExternalTestEnum::
+                 EXTERNAL_TEST_ENUM_VALUE4);
+    QCOMPARE(test.externalEnum(),
+             qtprotobufnamespace1::externaltests::ExternalTestEnumGadget::ExternalTestEnum::
+                 EXTERNAL_TEST_ENUM_VALUE4);
 }
 
 void QtProtobufExternalPackageGenerationTest::externalComplexMessageTest()

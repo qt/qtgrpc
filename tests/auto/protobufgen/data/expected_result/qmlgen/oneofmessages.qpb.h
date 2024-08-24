@@ -104,7 +104,7 @@ enum class QtProtobufFieldEnum {
 };
 Q_ENUM_NS(QtProtobufFieldEnum)
 
-enum class TestOneofFields {
+enum class TestOneofFields : int32_t {
     UninitializedField = QtProtobuf::InvalidFieldNumber,
     TestOneofFieldInt = 1,
     TestOneofFieldSecondInt = 2,
@@ -236,7 +236,7 @@ enum class QtProtobufFieldEnum {
 };
 Q_ENUM_NS(QtProtobufFieldEnum)
 
-enum class TestOneofFields {
+enum class TestOneofFields : int32_t {
     UninitializedField = QtProtobuf::InvalidFieldNumber,
     TestOneofFieldInt = 42,
     TestOneofComplexField = 3,
@@ -244,7 +244,7 @@ enum class TestOneofFields {
 };
 Q_ENUM_NS(TestOneofFields)
 
-enum class SecondOneofFields {
+enum class SecondOneofFields : int32_t {
     UninitializedField = QtProtobuf::InvalidFieldNumber,
     SecondFieldInt = 43,
     SecondComplexField = 5,

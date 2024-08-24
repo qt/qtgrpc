@@ -25,7 +25,7 @@ namespace TestEnumGadget {
 Q_NAMESPACE_EXPORT(QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT)
 QML_NAMED_ELEMENT(TestEnum)
 
-enum TestEnum : int32_t {
+enum class TestEnum : int32_t {
     LOCAL_ENUM_VALUE0 = 0,
     LOCAL_ENUM_VALUE1 = 1,
     LOCAL_ENUM_VALUE2 = 2,
