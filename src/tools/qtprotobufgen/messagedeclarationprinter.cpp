@@ -405,7 +405,7 @@ void MessageDeclarationPrinter::printQEnums()
     for (int i = 0; i < m_descriptor->enum_type_count(); ++i) {
         const auto *enumDescr = m_descriptor->enum_type(i);
         auto typeMap = common::produceEnumTypeMap(enumDescr, m_descriptor);
-        m_printer->Print(typeMap, CommonTemplates::EnumDefinitionTemplate());
+        m_printer->Print(typeMap, CommonTemplates::EnumClassDefinitionTemplate());
 
         Indent();
         for (int j = 0; j < enumDescr->value_count(); ++j) {

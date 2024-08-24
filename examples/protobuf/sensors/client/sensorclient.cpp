@@ -33,7 +33,7 @@ void SensorClient::receive()
 //! [0]
 
         switch (msg.type()) {
-        case qt::examples::sensors::tlv::MessageTypeGadget::Coordinates: {
+        case qt::examples::sensors::tlv::MessageTypeGadget::MessageType::Coordinates: {
 //! [1]
             qt::examples::sensors::Coordinates coord;
             coord.deserialize(&m_serializer, msg.value());
@@ -41,13 +41,13 @@ void SensorClient::receive()
             break;
 //! [1]
         }
-        case qt::examples::sensors::tlv::MessageTypeGadget::Temperature: {
+        case qt::examples::sensors::tlv::MessageTypeGadget::MessageType::Temperature: {
             qt::examples::sensors::Temperature temp;
             temp.deserialize(&m_serializer, msg.value());
             emit temperatureUpdated(temp);
             break;
         }
-        case qt::examples::sensors::tlv::MessageTypeGadget::WarningNotification: {
+        case qt::examples::sensors::tlv::MessageTypeGadget::MessageType::WarningNotification: {
             qt::examples::sensors::WarningNotification warn;
             warn.deserialize(&m_serializer, msg.value());
             emit warning(warn);

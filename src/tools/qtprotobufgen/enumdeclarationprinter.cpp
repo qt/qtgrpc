@@ -38,7 +38,7 @@ void EnumDeclarationPrinter::startEnum()
 
 void EnumDeclarationPrinter::printEnum()
 {
-    m_printer->Print(m_typeMap, CommonTemplates::EnumDefinitionTemplate());
+    m_printer->Print(m_typeMap, CommonTemplates::EnumClassDefinitionTemplate());
 
     Indent();
     int numValues = m_descriptor->value_count();

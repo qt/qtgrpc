@@ -51,7 +51,7 @@ static QList<QtProtobuf::int64> enumToIntList(QList<T> v)
 {
     QList<QtProtobuf::int64> intList;
     for (const auto enumValue : v)
-        intList.append(QtProtobuf::int64(enumValue));
+        intList.append(QtProtobuf::int64(qToUnderlying(enumValue)));
 
     return intList;
 }
@@ -79,7 +79,7 @@ static QStringList enumToStringList(QList<T> v)
     static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
     QStringList stringList;
     for (const auto enumValue : v)
-        stringList.append(QString::fromUtf8(metaEnum.valueToKey(enumValue)));
+        stringList.append(QString::fromUtf8(metaEnum.valueToKey(qToUnderlying(enumValue))));
 
     return stringList;
 }

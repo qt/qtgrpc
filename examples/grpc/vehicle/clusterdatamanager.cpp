@@ -31,8 +31,12 @@ void ClusterDataManager::startNaviClient()
             &ClusterDataManager::totalDistanceChanged, Qt::QueuedConnection);
     connect(m_naviThread.get(), &NaviThread::remainingDistanceChanged, this,
             &ClusterDataManager::remainingDistanceChanged, Qt::QueuedConnection);
-    connect(m_naviThread.get(), &NaviThread::directionChanged, this,
-            &ClusterDataManager::directionChanged, Qt::QueuedConnection);
+    connect(
+        m_naviThread.get(), &NaviThread::directionChanged, this,
+        [this](qtgrpc::examples::DirectionEnumGadget::DirectionEnum direction) {
+            ClusterDataManager::directionChanged(qToUnderlying(direction));
+        },
+        Qt::QueuedConnection);
 
     m_naviThread->start();
 }

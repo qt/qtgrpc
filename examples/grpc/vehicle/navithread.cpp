@@ -44,7 +44,7 @@ void NaviThread::run()
 
         emit totalDistanceChanged(0);
         emit remainingDistanceChanged(0);
-        emit directionChanged(DirectionEnumGadget::BACKWARD);
+        emit directionChanged(DirectionEnumGadget::DirectionEnum::BACKWARD);
     });
 
     QThread::run();
