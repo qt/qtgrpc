@@ -33,18 +33,19 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \enum QAbstractProtobufSerializer::DeserializationError
+    \enum QAbstractProtobufSerializer::Error
+    \since 6.8
 
     This enum contains possible errors that can occur during deserialization.
-    When an error occurs, call deserializationErrorString() to get a
+    When an error occurs, call lastErrorString() to get a
     human-readable error message.
 
     \value NoError                      No error occurred.
     \value InvalidHeaderError           Something went wrong while attempting to
                                         decode a header in the message.
-    \value NoDeserializerError          While deserializing a message, no
-                                        deserializer was found for a type in the
-                                        message.
+    \value UnknownTypeError             While serializing or deserializing a
+                                        message, no deserializer was found
+                                        for a message field.
     \value UnexpectedEndOfStreamError   While deserializing a message, the
                                         stream ended unexpectedly.
     \value InvalidFormatError           The data has invalid format. For example
@@ -77,15 +78,21 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-   \fn QAbstractProtobufSerializer::DeserializationError QAbstractProtobufSerializer::deserializationError() const
-   Returns the last deserialization error for the serializer instance.
-   \sa deserializationErrorString()
+   \fn QAbstractProtobufSerializer::Error QAbstractProtobufSerializer::lastError() const
+   \since 6.8
+
+   Returns the last error for the serializer instance.
+
+   \sa lastErrorString()
 */
 
 /*!
-   \fn QString QAbstractProtobufSerializer::deserializationErrorString() const
-   Returns the last deserialization error string for the serializer instance.
-   \sa deserializationError()
+   \fn QString QAbstractProtobufSerializer::lastErrorString() const
+   \since 6.8
+
+   Returns the last error string for the serializer instance.
+
+   \sa lastError()
 */
 
 /*!

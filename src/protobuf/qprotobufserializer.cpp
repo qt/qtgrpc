@@ -231,8 +231,8 @@ void QProtobufSerializerPrivate::setUnexpectedEndOfStreamError()
 
 void QProtobufSerializerPrivate::clearError()
 {
-    deserializationError = QAbstractProtobufSerializer::NoError;
-    deserializationErrorString.clear();
+    lastError = QAbstractProtobufSerializer::NoError;
+    lastErrorString.clear();
 }
 
 bool QProtobufSerializer::deserializeMessage(QProtobufMessage *message, QByteArrayView data) const
@@ -644,7 +644,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
         qProtoWarning() << "No deserializer for type" << metaType.name();
         QString error = QString::fromUtf8("No deserializer is registered for type %1")
                             .arg(QString::fromUtf8(metaType.name()));
-        setDeserializationError(QAbstractProtobufSerializer::NoDeserializerError,
+        setDeserializationError(QAbstractProtobufSerializer::UnknownTypeError,
                                 QCoreApplication::translate("QtProtobuf", error.toUtf8().data()));
         return false;
     }
@@ -678,27 +678,27 @@ void QProtobufSerializerPrivate::clearCachedValue()
 
 /*!
    Returns the last deserialization error for the serializer instance.
-   \sa deserializationErrorString()
+   \sa lastErrorString()
 */
-QAbstractProtobufSerializer::DeserializationError QProtobufSerializer::deserializationError() const
+QAbstractProtobufSerializer::Error QProtobufSerializer::lastError() const
 {
-    return d_ptr->deserializationError;
+    return d_ptr->lastError;
 }
 
 /*!
    Returns the last deserialization error string for the serializer instance.
-   \sa deserializationError()
+   \sa lastError()
 */
-QString QProtobufSerializer::deserializationErrorString() const
+QString QProtobufSerializer::lastErrorString() const
 {
-    return d_ptr->deserializationErrorString;
+    return d_ptr->lastErrorString;
 }
 
 void QProtobufSerializerPrivate::setDeserializationError(
-        QAbstractProtobufSerializer::DeserializationError error, const QString &errorString)
+        QAbstractProtobufSerializer::Error error, const QString &errorString)
 {
-    deserializationError = error;
-    deserializationErrorString = errorString;
+    lastError = error;
+    lastErrorString = errorString;
 }
 
 /*!

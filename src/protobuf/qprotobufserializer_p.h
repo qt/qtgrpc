@@ -517,7 +517,7 @@ public:
                            const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo);
     [[nodiscard]] bool deserializeProperty(QProtobufMessage *message);
 
-    void setDeserializationError(QAbstractProtobufSerializer::DeserializationError error,
+    void setDeserializationError(QAbstractProtobufSerializer::Error error,
                                  const QString &errorString);
     void clearError();
     void setUnexpectedEndOfStreamError();
@@ -525,9 +525,9 @@ public:
     [[nodiscard]] bool storeCachedValue(QProtobufMessage *message);
     void clearCachedValue();
 
-    QAbstractProtobufSerializer::DeserializationError deserializationError =
-            QAbstractProtobufSerializer::NoDeserializerError;
-    QString deserializationErrorString;
+    QAbstractProtobufSerializer::Error lastError =
+            QAbstractProtobufSerializer::UnknownTypeError;
+    QString lastErrorString;
 
     QProtobufSelfcheckIterator it;
     QByteArray result;

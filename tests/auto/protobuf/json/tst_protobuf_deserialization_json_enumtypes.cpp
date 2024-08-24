@@ -56,7 +56,7 @@ void QtProtobufEnumTypesDeserializationTest::malformedJsonTest()
     // more braces
     test.deserialize(m_serializer.get(), "{\"localEnum\":\"LOCAL_ENUM_VALUE2\"}}");
 
-    QCOMPARE(m_serializer->deserializationError(),
+    QCOMPARE(m_serializer->lastError(),
              QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
 
     RepeatedEnumMessage msg;
@@ -67,7 +67,7 @@ void QtProtobufEnumTypesDeserializationTest::malformedJsonTest()
                     "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
                     "\"LOCAL_ENUM_VALUE3\"}");
 
-    QCOMPARE(m_serializer->deserializationError(),
+    QCOMPARE(m_serializer->lastError(),
              QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
 }
 
@@ -76,7 +76,7 @@ void QtProtobufEnumTypesDeserializationTest::invalidTypeTest()
     // no LOCAL_ENUM_VALUE240
     SimpleEnumMessage invalidTest;
     invalidTest.deserialize(m_serializer.get(), "{\"localEnum\":\"LOCAL_ENUM_VALUE240\"}");
-    QCOMPARE(m_serializer->deserializationError(),
+    QCOMPARE(m_serializer->lastError(),
              QAbstractProtobufSerializer::InvalidFormatError);
 
     RepeatedEnumMessage msg, msg2;
@@ -86,7 +86,7 @@ void QtProtobufEnumTypesDeserializationTest::invalidTypeTest()
                     "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
                     "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
                     "\"LOCAL_ENUM_VALUE3\"]}");
-    QCOMPARE(m_serializer->deserializationError(),
+    QCOMPARE(m_serializer->lastError(),
              QAbstractProtobufSerializer::InvalidFormatError);
 
     // no LOCAL_ENUM_VALUE_100
@@ -95,7 +95,7 @@ void QtProtobufEnumTypesDeserializationTest::invalidTypeTest()
                      "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
                      "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
                      "\"LOCAL_ENUM_VALUE3\"]}");
-    QCOMPARE(m_serializer->deserializationError(),
+    QCOMPARE(m_serializer->lastError(),
              QAbstractProtobufSerializer::InvalidFormatError);
 }
 

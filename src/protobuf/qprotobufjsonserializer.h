@@ -21,8 +21,8 @@ public:
     QProtobufJsonSerializer();
     ~QProtobufJsonSerializer() override;
 
-    DeserializationError deserializationError() const override;
-    QString deserializationErrorString() const override;
+    Error lastError() const override;
+    QString lastErrorString() const override;
 
 protected:
     QByteArray serializeMessage(const QProtobufMessage *message) const override;

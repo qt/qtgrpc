@@ -527,7 +527,7 @@ void QtProtobufTypesJsonDeserializationTest::malformedJsonTest()
 
     QCOMPARE(msg.testFieldInt(), 0);
     QCOMPARE(msg.testComplexField(), SimpleStringMessage());
-    QCOMPARE(serializer->deserializationError(),
+    QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
 
     msg.deserialize(serializer.get(),
@@ -535,7 +535,7 @@ void QtProtobufTypesJsonDeserializationTest::malformedJsonTest()
                     "\"testComplexField\":{\"testFieldString\":\"qwerty\"}}]"_ba);
     QCOMPARE(msg.testFieldInt(), 0);
     QCOMPARE(msg.testComplexField(), SimpleStringMessage());
-    QCOMPARE(serializer->deserializationError(),
+    QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::InvalidFormatError);
 }
 
@@ -549,7 +549,7 @@ void QtProtobufTypesJsonDeserializationTest::invalidTypeTest()
 
     QCOMPARE(msg.testFieldInt(), -45);
     QCOMPARE(msg.testComplexField(), SimpleStringMessage());
-    QCOMPARE(serializer->deserializationError(),
+    QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::InvalidFormatError);
 
     // Expected integer but the value is an array
@@ -559,21 +559,21 @@ void QtProtobufTypesJsonDeserializationTest::invalidTypeTest()
 
     QCOMPARE(msg.testFieldInt(), 0);
     QCOMPARE(msg.testComplexField().testFieldString(), "qwerty"_L1);
-    QCOMPARE(serializer->deserializationError(),
+    QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::InvalidFormatError);
 
     SimpleIntMessage intMsg;
     intMsg.deserialize(serializer.get(), "{\"testFieldInt\": 0.5}");
-    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::InvalidFormatError);
+    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::InvalidFormatError);
     QCOMPARE(intMsg.testFieldInt(), 0);
 
     intMsg.deserialize(serializer.get(), "{\"testFieldInt\":4294967296}");
-    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::InvalidFormatError);
+    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::InvalidFormatError);
     QCOMPARE(intMsg.testFieldInt(), 0);
 
     SimpleUIntMessage uintMsg;
     uintMsg.deserialize(serializer.get(), "{\"testFieldInt\":4294967296}");
-    QCOMPARE(serializer->deserializationError(), QAbstractProtobufSerializer::InvalidFormatError);
+    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::InvalidFormatError);
     QCOMPARE(uintMsg.testFieldInt(), 0u);
 }
 
