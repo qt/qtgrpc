@@ -38,7 +38,10 @@ Item {
         return Qt.createQmlObject("import QtQuick; import QtGrpc; GrpcHttp2Channel { \
                                    hostUri: \"http://localhost:50051\"; \
                                    options: GrpcChannelOptions { \
-                                   deadlineTimeout: { 2000 } } }", root)
+                                   deadlineTimeout: { 2000 } \
+                                   metadata: GrpcMetadata {
+                                        data: ({ \"common-meta-data\": \"test-channel-metadata\" }) \
+                                   }}}", root)
     }
 
     function createGrpcChannelWithDeadlineItem() {
@@ -149,13 +152,16 @@ Item {
             var missingHeaders = Array()
             missingHeaders.push("user-name")
             missingHeaders.push("user-password")
+            missingHeaders.push("common-meta-data")
 
             for (var i = 0; i < unaryCallWithOptions.result.valuesData.length; i++) {
                 var md = unaryCallWithOptions.result.valuesData[i]
-                if (md.key == "user-name" && md.value == "localhost")
+                if (md.key === "user-name" && md.value === "localhost")
                     removeElementFromArray(missingHeaders, "user-name")
-                if (md.key == "user-password" && md.value == "qwerty")
+                if (md.key === "user-password" && md.value === "qwerty")
                     removeElementFromArray(missingHeaders, "user-password")
+                if (md.key === "common-meta-data" && md.value === "test-channel-metadata")
+                    removeElementFromArray(missingHeaders, "common-meta-data")
             }
 
             verify(missingHeaders.length === 0,

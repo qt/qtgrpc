@@ -159,14 +159,14 @@ class QGrpcHttp2ChannelPrivate : public QObject
 {
     Q_OBJECT
 public:
-    explicit QGrpcHttp2ChannelPrivate(const QUrl &uri, const QGrpcChannelOptions &options);
+    explicit QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Channel *q);
     ~QGrpcHttp2ChannelPrivate() override;
 
     void processOperation(const std::shared_ptr<QGrpcOperationContext> &operationContext,
                           bool endStream = false);
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
     QUrl hostUri;
-    QGrpcChannelOptions channelOptions;
+    QGrpcHttp2Channel *q_ptr = nullptr;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcHttp2ChannelPrivate)
@@ -394,8 +394,8 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::attachStream(QHttp2Stream *stream_)
     std::optional<std::chrono::milliseconds> deadline;
     if (channelOpPtr->callOptions().deadlineTimeout())
         deadline = channelOpPtr->callOptions().deadlineTimeout();
-    else if (parentChannel->channelOptions.deadlineTimeout())
-        deadline = parentChannel->channelOptions.deadlineTimeout();
+    else if (parentChannel->q_ptr->channelOptions().deadlineTimeout())
+        deadline = parentChannel->q_ptr->channelOptions().deadlineTimeout();
     if (deadline) {
         // We have an active stream and a deadline. It's time to start the timer.
         QObject::connect(&m_deadlineTimer, &QTimer::timeout, this,
@@ -428,7 +428,7 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::prepareInitialRequest(QGrpcOperatio
                                                                    QGrpcHttp2ChannelPrivate
                                                                        *channel)
 {
-    auto &channelOptions = channel->channelOptions;
+    const auto &channelOptions = channel->q_ptr->channelOptions();
     QByteArray service{ operationContext->service().data(), operationContext->service().size() };
     QByteArray method{ operationContext->method().data(), operationContext->method().size() };
     m_initialHeaders = HPack::HttpHeader{
@@ -585,10 +585,10 @@ void QGrpcHttp2ChannelPrivate::Http2Handler::onDeadlineTimeout()
     }
 }
 
-QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri,
-                                                   const QGrpcChannelOptions &options)
-    : hostUri(uri), channelOptions(options)
+QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Channel *q)
+    : hostUri(uri), q_ptr(q)
 {
+    auto channelOptions = q_ptr->channelOptions();
     auto formatSuffix = channelOptions.serializationFormat().suffix();
     const QByteArray defaultContentType = DefaultContentType.toByteArray();
     const QByteArray contentTypeFromOptions = !formatSuffix.isEmpty()
@@ -608,6 +608,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri,
                                << it.value() << ". Using protobuf format as the default one.";
                 channelOptions.setSerializationFormat(SerializationFormat::Default);
             }
+            q_ptr->setChannelOptions(channelOptions);
         } else if (it.value() != contentTypeFromOptions) {
             warnAboutFormatConflict = true;
         } else {
@@ -652,13 +653,13 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri,
         };
     } else
 #if QT_CONFIG(ssl)
-        if (hostUri.scheme() == "https"_L1 || options.sslConfiguration()) {
+        if (hostUri.scheme() == "https"_L1 || channelOptions.sslConfiguration()) {
         auto *sslSocket = initSocket<QSslSocket>();
         if (hostUri.port() < 0) {
             hostUri.setPort(443);
         }
 
-        if (const auto userSslConfig = options.sslConfiguration(); userSslConfig) {
+        if (const auto userSslConfig = channelOptions.sslConfiguration(); userSslConfig) {
             sslSocket->setSslConfiguration(*userSslConfig);
         } else {
             static const QByteArray h2NexProtocol = "h2"_ba;
@@ -824,8 +825,7 @@ void QGrpcHttp2ChannelPrivate::deleteHandler(Http2Handler *handler)
     Constructs QGrpcHttp2Channel with \a hostUri.
 */
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri)
-    : QAbstractGrpcChannel(),
-      d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, QGrpcChannelOptions{}))
+    : QAbstractGrpcChannel(), d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, this))
 {
 }
 
@@ -834,7 +834,7 @@ QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri)
 */
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri, const QGrpcChannelOptions &options)
     : QAbstractGrpcChannel(options),
-      d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, options))
+      d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, this))
 {
 }
 
@@ -892,7 +892,7 @@ void QGrpcHttp2Channel::bidiStream(std::shared_ptr<QGrpcOperationContext> operat
 */
 std::shared_ptr<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const noexcept
 {
-    return d_ptr->channelOptions.serializationFormat().serializer();
+    return channelOptions().serializationFormat().serializer();
 }
 
 QT_END_NAMESPACE

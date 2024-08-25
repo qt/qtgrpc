@@ -34,6 +34,9 @@ public:
     [[nodiscard]] virtual std::shared_ptr<QAbstractProtobufSerializer>
     serializer() const noexcept = 0;
 
+    [[nodiscard]] const QGrpcChannelOptions &channelOptions() const & noexcept;
+    void channelOptions() && = delete;
+
     void setChannelOptions(const QGrpcChannelOptions &options) noexcept;
     void setChannelOptions(QGrpcChannelOptions &&options) noexcept;
 
@@ -46,9 +49,6 @@ protected:
     virtual void serverStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
     virtual void clientStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
     virtual void bidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
-
-    [[nodiscard]] const QGrpcChannelOptions &channelOptions() const & noexcept;
-    void channelOptions() && = delete;
 
 private:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
