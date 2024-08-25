@@ -51,7 +51,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual void QAbstractGrpcChannel::startServerStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
+    \fn virtual void QAbstractGrpcChannel::serverStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
     \since 6.7
 
     This pure virtual function that the starts of the server-side stream. The
@@ -65,7 +65,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual void QAbstractGrpcChannel::startClientStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
+    \fn virtual void QAbstractGrpcChannel::clientStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
     \since 6.7
 
     This pure virtual function that the starts of the client-side stream. The
@@ -79,7 +79,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual void QAbstractGrpcChannel::startBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
+    \fn virtual void QAbstractGrpcChannel::bidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
     \since 6.7
 
     This pure virtual function that the starts of the bidirectional stream. The
@@ -164,8 +164,8 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
     \l QGrpcClientBase implementations.
 */
 std::shared_ptr<QGrpcServerStream>
-QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringView service,
-                                        QByteArrayView arg, const QGrpcCallOptions &options)
+QAbstractGrpcChannel::serverStream(QLatin1StringView method, QLatin1StringView service,
+                                   QByteArrayView arg, const QGrpcCallOptions &options)
 {
     auto operationContext = std::make_shared<
         QGrpcOperationContext>(method, service, arg, options, serializer(),
@@ -173,14 +173,14 @@ QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringV
 
     QObject::connect(operationContext.get(), &QGrpcOperationContext::writeMessageRequested,
                      operationContext.get(), []() {
-                         Q_ASSERT_X(false, "QAbstractGrpcChannel::startServerStream",
-                                    "QAbstractGrpcChannel::startServerStream disallows "
+                         Q_ASSERT_X(false, "QAbstractGrpcChannel::serverStream",
+                                    "QAbstractGrpcChannel::serverStream disallows "
                                     "the 'writeMessageRequested' signal from "
                                     "QGrpcOperationContext");
                      });
 
     auto stream = std::make_shared<QGrpcServerStream>(operationContext);
-    startServerStream(operationContext);
+    serverStream(operationContext);
 
     return stream;
 }
@@ -195,15 +195,15 @@ QAbstractGrpcChannel::startServerStream(QLatin1StringView method, QLatin1StringV
     \l QGrpcClientBase.
 */
 std::shared_ptr<QGrpcClientStream>
-QAbstractGrpcChannel::startClientStream(QLatin1StringView method, QLatin1StringView service,
-                                        QByteArrayView arg, const QGrpcCallOptions &options)
+QAbstractGrpcChannel::clientStream(QLatin1StringView method, QLatin1StringView service,
+                                   QByteArrayView arg, const QGrpcCallOptions &options)
 {
     auto operationContext = std::make_shared<
         QGrpcOperationContext>(method, service, arg, options, serializer(),
                                QGrpcOperationContext::PrivateConstructor());
 
     auto stream = std::make_shared<QGrpcClientStream>(operationContext);
-    startClientStream(operationContext);
+    clientStream(operationContext);
 
     return stream;
 }
@@ -217,16 +217,17 @@ QAbstractGrpcChannel::startClientStream(QLatin1StringView method, QLatin1StringV
     The function should not be called directly, but only by
     \l QGrpcClientBase.
 */
-std::shared_ptr<QGrpcBidiStream>
-QAbstractGrpcChannel::startBidiStream(QLatin1StringView method, QLatin1StringView service,
-                                      QByteArrayView arg, const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcBidiStream> QAbstractGrpcChannel::bidiStream(QLatin1StringView method,
+                                                                  QLatin1StringView service,
+                                                                  QByteArrayView arg,
+                                                                  const QGrpcCallOptions &options)
 {
     auto operationContext = std::make_shared<
         QGrpcOperationContext>(method, service, arg, options, serializer(),
                                QGrpcOperationContext::PrivateConstructor());
 
     auto stream = std::make_shared<QGrpcBidiStream>(operationContext);
-    startBidiStream(operationContext);
+    bidiStream(operationContext);
 
     return stream;
 }

@@ -864,7 +864,7 @@ void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcOperationContext> operationCon
     \internal
     Implementation of server-side gRPC stream based on \l QNetworkAccessManager.
 */
-void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcOperationContext> operationContext)
+void QGrpcHttp2Channel::serverStream(std::shared_ptr<QGrpcOperationContext> operationContext)
 {
     d_ptr->processOperation(operationContext, true);
 }
@@ -873,7 +873,7 @@ void QGrpcHttp2Channel::startServerStream(std::shared_ptr<QGrpcOperationContext>
     \internal
     Implementation of client-side gRPC stream based on \l QNetworkAccessManager.
 */
-void QGrpcHttp2Channel::startClientStream(std::shared_ptr<QGrpcOperationContext> operationContext)
+void QGrpcHttp2Channel::clientStream(std::shared_ptr<QGrpcOperationContext> operationContext)
 {
     d_ptr->processOperation(operationContext);
 }
@@ -882,7 +882,7 @@ void QGrpcHttp2Channel::startClientStream(std::shared_ptr<QGrpcOperationContext>
     \internal
     Implementation of bidirectional gRPC stream based on \l QNetworkAccessManager.
 */
-void QGrpcHttp2Channel::startBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext)
+void QGrpcHttp2Channel::bidiStream(std::shared_ptr<QGrpcOperationContext> operationContext)
 {
     d_ptr->processOperation(operationContext);
 }
