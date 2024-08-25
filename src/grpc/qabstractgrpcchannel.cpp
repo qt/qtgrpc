@@ -123,6 +123,30 @@ const QGrpcChannelOptions &QAbstractGrpcChannel::channelOptions() const & noexce
 }
 
 /*!
+    \fn void QAbstractGrpcChannel::setChannelOptions(const QGrpcChannelOptions &options) noexcept
+    \fn void QAbstractGrpcChannel::setChannelOptions(QGrpcChannelOptions &&options) noexcept
+    \since 6.8
+
+    Sets the channel \a options.
+
+    \note The updated channel options do not affect currently active calls or streams.
+    The revised options will apply only to new RPCs made through this channel.
+
+    \sa channelOptions
+*/
+void QAbstractGrpcChannel::setChannelOptions(const QGrpcChannelOptions &options) noexcept
+{
+    Q_D(QAbstractGrpcChannel);
+    d->channelOptions = options;
+}
+
+void QAbstractGrpcChannel::setChannelOptions(QGrpcChannelOptions &&options) noexcept
+{
+    Q_D(QAbstractGrpcChannel);
+    d->channelOptions = std::move(options);
+}
+
+/*!
     \internal
     Function constructs \l QGrpcCallReply and \l QGrpcOperationContext
     primitives and makes the required for unary gRPC call connections
