@@ -192,9 +192,9 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
     return d->channel->call(method, d->service, *argData, options);
 }
 
-std::shared_ptr<QGrpcServerStream>
-QGrpcClientBase::startServerStream(QLatin1StringView method, const QProtobufMessage &arg,
-                                   const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcServerStream> QGrpcClientBase::serverStream(QLatin1StringView method,
+                                                                 const QProtobufMessage &arg,
+                                                                 const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
     if (!d->isReady())
@@ -204,14 +204,14 @@ QGrpcClientBase::startServerStream(QLatin1StringView method, const QProtobufMess
     if (!argData)
         return {};
 
-    const auto grpcStream = d->channel->startServerStream(method, d->service, *argData, options);
+    const auto grpcStream = d->channel->serverStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }
 
-std::shared_ptr<QGrpcClientStream>
-QGrpcClientBase::startClientStream(QLatin1StringView method, const QProtobufMessage &arg,
-                                   const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcClientStream> QGrpcClientBase::clientStream(QLatin1StringView method,
+                                                                 const QProtobufMessage &arg,
+                                                                 const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
     if (!d->isReady())
@@ -221,14 +221,14 @@ QGrpcClientBase::startClientStream(QLatin1StringView method, const QProtobufMess
     if (!argData)
         return {};
 
-    const auto grpcStream = d->channel->startClientStream(method, d->service, *argData, options);
+    const auto grpcStream = d->channel->clientStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }
 
-std::shared_ptr<QGrpcBidiStream> QGrpcClientBase::startBidiStream(QLatin1StringView method,
-                                                                  const QProtobufMessage &arg,
-                                                                  const QGrpcCallOptions &options)
+std::shared_ptr<QGrpcBidiStream> QGrpcClientBase::bidiStream(QLatin1StringView method,
+                                                             const QProtobufMessage &arg,
+                                                             const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
     if (!d->isReady())
@@ -238,7 +238,7 @@ std::shared_ptr<QGrpcBidiStream> QGrpcClientBase::startBidiStream(QLatin1StringV
     if (!argData)
         return {};
 
-    const auto grpcStream = d->channel->startBidiStream(method, d->service, *argData, options);
+    const auto grpcStream = d->channel->bidiStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }

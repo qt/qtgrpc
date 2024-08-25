@@ -60,11 +60,11 @@ protected:
                                             const QGrpcCallOptions &options)
     {
         if constexpr (std::is_same_v<StreamType, QGrpcServerStream>) {
-            return startServerStream(method, arg, options);
+            return serverStream(method, arg, options);
         } else if constexpr (std::is_same_v<StreamType, QGrpcClientStream>) {
-            return startClientStream(method, arg, options);
+            return clientStream(method, arg, options);
         } else if constexpr (std::is_same_v<StreamType, QGrpcBidiStream>) {
-            return startBidiStream(method, arg, options);
+            return bidiStream(method, arg, options);
         } else {
             static_assert(QtPrivate::type_dependent_false<StreamType>::value,
                           "Invalid stream type received");
@@ -73,17 +73,17 @@ protected:
     }
 
 private:
-    std::shared_ptr<QGrpcServerStream> startServerStream(QLatin1StringView method,
-                                                         const QProtobufMessage &arg,
-                                                         const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcServerStream> serverStream(QLatin1StringView method,
+                                                    const QProtobufMessage &arg,
+                                                    const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcClientStream> startClientStream(QLatin1StringView method,
-                                                         const QProtobufMessage &arg,
-                                                         const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcClientStream> clientStream(QLatin1StringView method,
+                                                    const QProtobufMessage &arg,
+                                                    const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcBidiStream> startBidiStream(QLatin1StringView method,
-                                                     const QProtobufMessage &arg,
-                                                     const QGrpcCallOptions &options);
+    std::shared_ptr<QGrpcBidiStream> bidiStream(QLatin1StringView method,
+                                                const QProtobufMessage &arg,
+                                                const QGrpcCallOptions &options);
 
     Q_DISABLE_COPY_MOVE(QGrpcClientBase)
     Q_DECLARE_PRIVATE(QGrpcClientBase)
