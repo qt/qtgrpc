@@ -36,6 +36,7 @@ public:
 
 protected:
     QAbstractGrpcChannel();
+    explicit QAbstractGrpcChannel(QAbstractGrpcChannelPrivate &dd);
     explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
 
     virtual void call(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
@@ -63,7 +64,9 @@ private:
 
     friend class QGrpcClientBase;
     Q_DISABLE_COPY_MOVE(QAbstractGrpcChannel)
-    std::unique_ptr<QAbstractGrpcChannelPrivate> dPtr;
+
+    Q_DECLARE_PRIVATE(QAbstractGrpcChannel)
+    std::unique_ptr<QAbstractGrpcChannelPrivate> d_ptr;
 };
 
 QT_END_NAMESPACE

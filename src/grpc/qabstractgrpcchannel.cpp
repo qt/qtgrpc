@@ -93,12 +93,21 @@ QT_BEGIN_NAMESPACE
 */
 
 QAbstractGrpcChannel::QAbstractGrpcChannel()
-    : dPtr(std::make_unique<QAbstractGrpcChannelPrivate>(QGrpcChannelOptions{}))
+    : d_ptr(std::make_unique<QAbstractGrpcChannelPrivate>(QGrpcChannelOptions{}))
+{
+}
+
+/*!
+    \since 6.8
+    Constructs QAbstractGrpcChannel using the private message implementation
+    from the derived class.
+*/
+QAbstractGrpcChannel::QAbstractGrpcChannel(QAbstractGrpcChannelPrivate &dd) : d_ptr(&dd)
 {
 }
 
 QAbstractGrpcChannel::QAbstractGrpcChannel(const QGrpcChannelOptions &options)
-    : dPtr(std::make_unique<QAbstractGrpcChannelPrivate>(options))
+    : d_ptr(std::make_unique<QAbstractGrpcChannelPrivate>(options))
 {
 }
 QAbstractGrpcChannel::~QAbstractGrpcChannel() = default;
@@ -109,7 +118,8 @@ QAbstractGrpcChannel::~QAbstractGrpcChannel() = default;
 */
 const QGrpcChannelOptions &QAbstractGrpcChannel::channelOptions() const & noexcept
 {
-    return dPtr->channelOptions;
+    Q_D(const QAbstractGrpcChannel);
+    return d->channelOptions;
 }
 
 /*!
