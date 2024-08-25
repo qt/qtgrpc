@@ -5,6 +5,7 @@
 
 #include "testservice_client.grpc.qpb.h"
 
+#include <QtGrpcQuick/qqmlgrpccalloptions.h>
 #include <QtGrpcQuick/qqmlgrpcfunctionalhandlers.h>
 #include <QtGrpcQuick/qtqmlgrpcstreamsender.h>
 
@@ -55,32 +56,21 @@ class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT QmlClient : public Client
 
 public:
     explicit QmlClient(QObject *parent = nullptr);
-    Q_INVOKABLE void testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QJSValue &callback, const QJSValue &errorCallback, const QGrpcCallOptions &options = {});
-    Q_INVOKABLE void testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg,
-                    const QJSValue &messageCallback,
-                    const QJSValue &finishCallback,
-                    const QJSValue &errorCallback);
+    Q_INVOKABLE void testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QJSValue &callback, const QJSValue &errorCallback, const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options = nullptr);
     Q_INVOKABLE void testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg,
                     const QJSValue &messageCallback,
                     const QJSValue &finishCallback,
                     const QJSValue &errorCallback,
-                    const QGrpcCallOptions &options);
-    Q_INVOKABLE TestMethodClientStreamSender *testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg,
-                    const QJSValue &finishCallback,
-                    const QJSValue &errorCallback);
+                    const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options = nullptr);
     Q_INVOKABLE TestMethodClientStreamSender *testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg,
                     const QJSValue &finishCallback,
                     const QJSValue &errorCallback,
-                    const QGrpcCallOptions &options);
-    Q_INVOKABLE TestMethodBiStreamSender *testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg,
-                    const QJSValue &messageCallback,
-                    const QJSValue &finishCallback,
-                    const QJSValue &errorCallback);
+                    const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options = nullptr);
     Q_INVOKABLE TestMethodBiStreamSender *testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg,
                     const QJSValue &messageCallback,
                     const QJSValue &finishCallback,
                     const QJSValue &errorCallback,
-                    const QGrpcCallOptions &options);
+                    const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options = nullptr);
 };
 } // namespace TestService
 } // namespace qtgrpc::tests
