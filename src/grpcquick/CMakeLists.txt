@@ -7,7 +7,7 @@ qt_internal_add_qml_module(GrpcQuick
     PLUGIN_TARGET grpcquickplugin
     CLASS_NAME GrpcQuickPlugin
     SOURCES
-        qqmlabstractgrpcchannel.h
+        qqmlabstractgrpcchannel.h qqmlabstractgrpcchannel_p.h qqmlabstractgrpcchannel.cpp
         qqmlgrpcnamespace_p.h
         qqmlgrpchttp2channel_p.h qqmlgrpchttp2channel.cpp
         qqmlgrpcchanneloptions_p.h qqmlgrpcchanneloptions.cpp

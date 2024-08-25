@@ -14,6 +14,7 @@
 
 QT_BEGIN_NAMESPACE
 
+class QQmlAbstractGrpcChannelPrivate;
 class Q_GRPCQUICK_EXPORT QQmlAbstractGrpcChannel : public QObject
 {
     Q_OBJECT
@@ -22,6 +23,12 @@ public:
     ~QQmlAbstractGrpcChannel() override = default;
 
     virtual std::shared_ptr<QAbstractGrpcChannel> channel() = 0;
+
+protected:
+    explicit QQmlAbstractGrpcChannel(QQmlAbstractGrpcChannelPrivate &dd, QObject *parent = nullptr);
+
+private:
+    Q_DECLARE_PRIVATE(QQmlAbstractGrpcChannel)
 };
 
 QT_END_NAMESPACE
