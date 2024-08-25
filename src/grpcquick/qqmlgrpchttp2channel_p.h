@@ -53,7 +53,7 @@ Q_SIGNALS:
 private:
     void updateChannel();
 
-    QQmlGrpcChannelOptions *m_options;
+    QQmlGrpcChannelOptions *m_options = nullptr;
     QUrl m_hostUri;
     std::shared_ptr<QAbstractGrpcChannel> m_channel;
 };

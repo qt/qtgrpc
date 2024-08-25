@@ -54,7 +54,7 @@ Q_SIGNALS:
 
 private:
     QGrpcCallOptions m_options;
-    QQmlGrpcMetadata *m_metadata;
+    QQmlGrpcMetadata *m_metadata = nullptr;
 };
 
 QT_END_NAMESPACE
