@@ -13,8 +13,7 @@ using namespace std::chrono_literals;
 QT_BEGIN_NAMESPACE
 
 QQmlGrpcCallOptions::QQmlGrpcCallOptions(QObject *parent)
-    : QObject(parent),
-      m_metadata(nullptr)
+    : QObject(parent)
 {
 }
 

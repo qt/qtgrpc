@@ -11,8 +11,7 @@
 QT_BEGIN_NAMESPACE
 
 QQmlGrpcHttp2Channel::QQmlGrpcHttp2Channel(QObject *parent)
-    : QQmlAbstractGrpcChannel(parent),
-      m_options(nullptr)
+    : QQmlAbstractGrpcChannel(parent)
 {
     connect(this, &QQmlGrpcHttp2Channel::optionsChanged,
             this, &QQmlGrpcHttp2Channel::updateChannel);
