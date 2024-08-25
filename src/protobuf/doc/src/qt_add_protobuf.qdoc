@@ -19,7 +19,6 @@ Usually \c qtprotobufgen would be invoked through CMake using the
         PROTO_FILES <file> ...
         [COPY_COMMENTS]
         [GENERATE_PACKAGE_SUBFOLDERS]
-        [EXTRA_NAMESPACE <namespace>]
         [EXPORT_MACRO <infix>]
         [QML [QML_URI <uri>]]
         [PROTO_INCLUDES <path> ...]

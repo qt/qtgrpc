@@ -19,7 +19,6 @@ Usually \c qtgrpcgen is invoked through the \c qt_add_grpc CMake macro.
         [COPY_COMMENTS]
         [GENERATE_PACKAGE_SUBFOLDERS]
         [QML]
-        [EXTRA_NAMESPACE <namespace>]
         [EXPORT_MACRO <infix>]
         [PROTO_INCLUDES <path> ...]
         [OUTPUT_DIRECTORY <dir>]
