@@ -19,11 +19,11 @@ class QQmlGrpcChannelOptionsPrivate : public QObjectPrivate
 public:
     QQmlGrpcChannelOptionsPrivate();
 
-    QGrpcChannelOptions m_options;
-    QtGrpc::SerializationFormat m_format = QtGrpc::SerializationFormat::Default;
-    QQmlGrpcMetadata *m_metadata = nullptr;
+    QGrpcChannelOptions options;
+    QtGrpc::SerializationFormat format = QtGrpc::SerializationFormat::Default;
+    QQmlGrpcMetadata *metadata = nullptr;
 #if QT_CONFIG(ssl)
-    QQmlSslConfiguration m_configuration;
+    QQmlSslConfiguration configuration;
 #endif // QT_CONFIG(ssl)
 };
 
@@ -38,7 +38,7 @@ QQmlGrpcChannelOptions::QQmlGrpcChannelOptions(QObject *parent)
 
 qint64 QQmlGrpcChannelOptions::deadlineTimeout() const
 {
-    std::chrono::milliseconds ms = d_func()->m_options.deadlineTimeout().value_or(0ms);
+    std::chrono::milliseconds ms = d_func()->options.deadlineTimeout().value_or(0ms);
     return ms.count();
 }
 
@@ -46,44 +46,44 @@ void QQmlGrpcChannelOptions::setDeadlineTimeout(qint64 value)
 {
     Q_D(QQmlGrpcChannelOptions);
     std::chrono::milliseconds ms(value);
-    d->m_options.setDeadlineTimeout(ms);
+    d->options.setDeadlineTimeout(ms);
     emit deadlineTimeoutChanged();
 }
 
 const QGrpcChannelOptions &QQmlGrpcChannelOptions::options() const
 {
-    return d_func()->m_options;
+    return d_func()->options;
 }
 
 QQmlGrpcMetadata *QQmlGrpcChannelOptions::metadata() const
 {
-    return d_func()->m_metadata;
+    return d_func()->metadata;
 }
 
 void QQmlGrpcChannelOptions::setMetadata(QQmlGrpcMetadata *value)
 {
     Q_D(QQmlGrpcChannelOptions);
-    if (d->m_metadata != value) {
-        d->m_metadata = value;
-        if (d->m_metadata)
-            d->m_options.setMetadata(d->m_metadata->metadata());
+    if (d->metadata != value) {
+        d->metadata = value;
+        if (d->metadata)
+            d->options.setMetadata(d->metadata->metadata());
         else
-            d->m_options.setMetadata({});
+            d->options.setMetadata({});
         emit metadataChanged();
     }
 }
 
 QtGrpc::SerializationFormat QQmlGrpcChannelOptions::serializationFormat() const
 {
-    return d_func()->m_format;
+    return d_func()->format;
 }
 
 void QQmlGrpcChannelOptions::setSerializationFormat(QtGrpc::SerializationFormat format)
 {
     Q_D(QQmlGrpcChannelOptions);
-    if (d->m_format != format) {
-        d->m_format = format;
-        d->m_options.setSerializationFormat(format);
+    if (d->format != format) {
+        d->format = format;
+        d->options.setSerializationFormat(format);
         emit serializationFormatChanged();
     }
 }
@@ -91,15 +91,15 @@ void QQmlGrpcChannelOptions::setSerializationFormat(QtGrpc::SerializationFormat 
 #if QT_CONFIG(ssl)
 QQmlSslConfiguration QQmlGrpcChannelOptions::sslConfiguration() const
 {
-    return d_func()->m_configuration;
+    return d_func()->configuration;
 }
 
 void QQmlGrpcChannelOptions::setSslConfiguration(const QQmlSslConfiguration &config)
 {
     Q_D(QQmlGrpcChannelOptions);
-    if (d->m_configuration != config) {
-        d->m_configuration = config;
-        d->m_options.setSslConfiguration(d->m_configuration.configuration());
+    if (d->configuration != config) {
+        d->configuration = config;
+        d->options.setSslConfiguration(d->configuration.configuration());
         emit sslConfigurationChanged();
     }
 }
