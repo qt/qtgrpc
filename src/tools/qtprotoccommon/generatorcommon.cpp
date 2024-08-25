@@ -370,6 +370,8 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
         streamType = "Client";
     }
 
+    std::string streamTypeLower = utils::deCapitalizeAsciiName(streamType);
+
     static const std::string exportMacro = common::buildExportMacro();
 
     return {
@@ -382,6 +384,7 @@ MethodMap common::produceMethodMap(const MethodDescriptor *method, const std::st
         { "param_type",         inputTypeName                      },
         { "param_name",         "arg"                              },
         { "stream_type",        streamType                         },
+        { "stream_type_lower",  streamTypeLower                    },
         { "return_name",        "ret"                              },
         { "export_macro",       exportMacro                        },
         { "service_name",       serviceName                        },

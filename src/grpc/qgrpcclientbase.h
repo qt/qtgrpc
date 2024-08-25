@@ -55,24 +55,6 @@ protected:
     std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg,
                                          const QGrpcCallOptions &options);
 
-    template <typename StreamType, if_qtgrpc_stream<StreamType> = true>
-    std::shared_ptr<StreamType> startStream(QLatin1StringView method, const QProtobufMessage &arg,
-                                            const QGrpcCallOptions &options)
-    {
-        if constexpr (std::is_same_v<StreamType, QGrpcServerStream>) {
-            return serverStream(method, arg, options);
-        } else if constexpr (std::is_same_v<StreamType, QGrpcClientStream>) {
-            return clientStream(method, arg, options);
-        } else if constexpr (std::is_same_v<StreamType, QGrpcBidiStream>) {
-            return bidiStream(method, arg, options);
-        } else {
-            static_assert(QtPrivate::type_dependent_false<StreamType>::value,
-                          "Invalid stream type received");
-            Q_UNREACHABLE_RETURN({});
-        }
-    }
-
-private:
     std::shared_ptr<QGrpcServerStream> serverStream(QLatin1StringView method,
                                                     const QProtobufMessage &arg,
                                                     const QGrpcCallOptions &options);
