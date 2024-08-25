@@ -28,6 +28,14 @@ message ServerStreamSleepMessage {
     SleepMessage sleepMessage = 2;
 }
 
+message MetadataMessage {
+    message MetadataPair {
+        string key = 1;
+        string value = 2;
+    }
+    repeated MetadataPair values = 1;
+}
+
 service TestService {
     rpc testMethod(SimpleStringMessage) returns (SimpleStringMessage) {}
     rpc testMethodServerStream(SimpleStringMessage) returns (stream SimpleStringMessage) {}
@@ -43,4 +51,5 @@ service TestService {
     rpc testMethodServerStreamSleep(ServerStreamSleepMessage) returns (stream Empty) {}
     rpc testMethodClientStreamSleep(stream SleepMessage) returns (Empty) {}
     rpc testMethodBiStreamSleep(stream SleepMessage) returns (stream Empty) {}
+    rpc replyWithMetadata(Empty) returns (MetadataMessage) {}
 }

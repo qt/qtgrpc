@@ -15,7 +15,7 @@ QmlClient::QmlClient(QObject *parent)
 void QmlClient::testMethod(const qtgrpc::tests::SimpleStringMessage &arg,
                 const QJSValue &finishCallback,
                 const QJSValue &errorCallback,
-                const QGrpcCallOptions &options)
+                const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options)
 {
     QJSEngine *jsEngine = qjsEngine(this);
     if (jsEngine == nullptr) {
@@ -24,23 +24,15 @@ void QmlClient::testMethod(const qtgrpc::tests::SimpleStringMessage &arg,
     }
 
     QtGrpcQuickFunctional::makeCallConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
-                        call("testMethod"_L1, arg, options),                        finishCallback, errorCallback);
+                        call("testMethod"_L1, arg, options ? options->options() : QGrpcCallOptions{}), finishCallback, errorCallback);
 }
 
-
-void QmlClient::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg,
-            const QJSValue &messageCallback,
-            const QJSValue &finishCallback,
-            const QJSValue &errorCallback)
-{
-    testMethodServerStream(arg, messageCallback, finishCallback, errorCallback, {});
-}
 
 void QmlClient::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg,
             const QJSValue &messageCallback,
             const QJSValue &finishCallback,
             const QJSValue &errorCallback,
-            const QGrpcCallOptions &options)
+            const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options)
 {
     QJSEngine *jsEngine = qjsEngine(this);
     if (jsEngine == nullptr) {
@@ -49,22 +41,15 @@ void QmlClient::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage 
     }
 
     QtGrpcQuickFunctional::makeServerStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
-                        serverStream("testMethodServerStream"_L1, arg, options),
+                        serverStream("testMethodServerStream"_L1, arg, options ? options->options() : QGrpcCallOptions{}),
                         messageCallback, finishCallback, errorCallback);
 }
 
 
 TestMethodClientStreamSender *QmlClient::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg,
-            const QJSValue &finishCallback,
-            const QJSValue &errorCallback)
-{
-    return testMethodClientStream(arg, finishCallback, errorCallback, {});
-}
-
-TestMethodClientStreamSender *QmlClient::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg,
         const QJSValue &finishCallback,
         const QJSValue &errorCallback,
-        const QGrpcCallOptions &options)
+        const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options)
 {
     QJSEngine *jsEngine = qjsEngine(this);
     if (jsEngine == nullptr) {
@@ -72,7 +57,7 @@ TestMethodClientStreamSender *QmlClient::testMethodClientStream(const qtgrpc::te
         return nullptr;
     }
 
-    auto stream = clientStream("testMethodClientStream"_L1, arg, options);
+    auto stream = clientStream("testMethodClientStream"_L1, arg, options ? options->options() : QGrpcCallOptions{});
     QtGrpcQuickFunctional::makeClientStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
                         stream, finishCallback, errorCallback);
     auto *sender = new TestMethodClientStreamSender(std::move(stream));
@@ -82,18 +67,10 @@ TestMethodClientStreamSender *QmlClient::testMethodClientStream(const qtgrpc::te
 
 
 TestMethodBiStreamSender *QmlClient::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg,
-            const QJSValue &messageCallback,
-            const QJSValue &finishCallback,
-            const QJSValue &errorCallback)
-{
-    return testMethodBiStream(arg, messageCallback, finishCallback, errorCallback, {});
-}
-
-TestMethodBiStreamSender *QmlClient::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg,
     const QJSValue &messageCallback,
     const QJSValue &finishCallback,
     const QJSValue &errorCallback,
-    const QGrpcCallOptions &options)
+    const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options)
 {
     QJSEngine *jsEngine = qjsEngine(this);
     if (jsEngine == nullptr) {
@@ -101,7 +78,7 @@ TestMethodBiStreamSender *QmlClient::testMethodBiStream(const qtgrpc::tests::Sim
         return nullptr;
     }
 
-    auto stream = bidiStream("testMethodBiStream"_L1, arg, options);
+    auto stream = bidiStream("testMethodBiStream"_L1, arg, options ? options->options() : QGrpcCallOptions {});
     QtGrpcQuickFunctional::makeBidiStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
                         stream, messageCallback, finishCallback, errorCallback);
     auto *sender = new TestMethodBiStreamSender(std::move(stream));

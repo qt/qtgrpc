@@ -135,6 +135,19 @@ private:
         return grpc::Status::OK;
     }
 
+    ::grpc::Status replyWithMetadata(::grpc::ServerContext *ctx, const ::qtgrpc::tests::Empty *,
+                                     ::qtgrpc::tests::MetadataMessage *response) override
+    {
+        qInfo() << "replyWithMetadata called";
+        for (const auto &header : ctx->client_metadata()) {
+            auto *headerValue = response->mutable_values()->Add();
+            headerValue->set_key(std::string(header.first.data(), header.first.size()));
+            headerValue->set_value(std::string(header.second.data(), header.second.size()));
+        }
+
+        return Status();
+    }
+
     qint64 m_latency;
 };
 }

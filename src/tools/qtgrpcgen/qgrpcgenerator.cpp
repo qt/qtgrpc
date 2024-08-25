@@ -29,8 +29,12 @@ namespace {
 const utils::ExternalIncludesOrderedSet &externalQmlIncludes()
 {
     static const utils::ExternalIncludesOrderedSet externalQmlIncludes{
-        "QtQml/qqmlengine.h", "QtQml/qjsengine.h", "QtQml/qjsvalue.h",
-        "QtGrpcQuick/qqmlgrpcfunctionalhandlers.h", "QtGrpcQuick/qtqmlgrpcstreamsender.h"
+        "QtQml/qqmlengine.h",
+        "QtQml/qjsengine.h",
+        "QtQml/qjsvalue.h",
+        "QtGrpcQuick/qqmlgrpcfunctionalhandlers.h",
+        "QtGrpcQuick/qtqmlgrpcstreamsender.h",
+        "QtGrpcQuick/qqmlgrpccalloptions.h"
     };
 
     return externalQmlIncludes;

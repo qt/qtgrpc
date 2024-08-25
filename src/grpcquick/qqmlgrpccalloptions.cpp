@@ -1,8 +1,9 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
+#include <QtGrpcQuick/qqmlgrpccalloptions.h>
+
 #include <QtGrpcQuick/private/qqmlgrpcmetadata_p.h>
-#include <QtGrpcQuick/private/qqmlgrpccalloptions_p.h>
 
 #include <QtCore/private/qobject_p.h>
 
@@ -12,8 +13,23 @@ using namespace std::chrono_literals;
 
 QT_BEGIN_NAMESPACE
 
+namespace QtGrpcQuickPrivate {
+
+class QQmlGrpcCallOptionsPrivate : public QObjectPrivate
+{
+public:
+    QGrpcCallOptions options;
+    QQmlGrpcMetadata *metadata = nullptr;
+    QMetaObject::Connection metadataUpdateConnection;
+};
+
+/*!
+    \class QQmlGrpcCallOptions
+    \internal
+*/
+
 QQmlGrpcCallOptions::QQmlGrpcCallOptions(QObject *parent)
-    : QObject(parent)
+    : QObject(*(new QQmlGrpcCallOptionsPrivate), parent)
 {
 }
 
@@ -21,39 +37,56 @@ QQmlGrpcCallOptions::~QQmlGrpcCallOptions() = default;
 
 qint64 QQmlGrpcCallOptions::deadlineTimeout() const
 {
-    std::chrono::milliseconds ms = m_options.deadlineTimeout().value_or(0ms);
+    Q_D(const QQmlGrpcCallOptions);
+    std::chrono::milliseconds ms = d->options.deadlineTimeout().value_or(0ms);
     return ms.count();
 }
 
 void QQmlGrpcCallOptions::setDeadlineTimeout(qint64 value)
 {
     std::chrono::milliseconds ms(value);
-    m_options.setDeadlineTimeout(ms);
+    Q_D(QQmlGrpcCallOptions);
+    d->options.setDeadlineTimeout(ms);
     emit deadlineTimeoutChanged();
 }
 
 const QGrpcCallOptions &QQmlGrpcCallOptions::options() const & noexcept
 {
-    return m_options;
+    Q_D(const QQmlGrpcCallOptions);
+    return d->options;
 }
 
 QQmlGrpcMetadata *QQmlGrpcCallOptions::metadata() const
 {
-    return m_metadata;
+    Q_D(const QQmlGrpcCallOptions);
+    return d->metadata;
 }
 
 void QQmlGrpcCallOptions::setMetadata(QQmlGrpcMetadata *value)
 {
-    if (m_metadata != value) {
-        m_metadata = value;
-        if (m_metadata)
-            m_options.setMetadata(m_metadata->metadata());
-        else
-            m_options.setMetadata({});
-        emit metadataChanged();
+    Q_D(QQmlGrpcCallOptions);
+    if (d->metadata != value) {
+        if (d->metadataUpdateConnection) {
+            disconnect(d->metadataUpdateConnection);
+            d->metadataUpdateConnection = {};
+        }
+
+        d->metadata = value;
+        if (d->metadata) {
+            const auto updateMetadata = [this]() {
+                Q_D(QQmlGrpcCallOptions);
+                d->options.setMetadata(d->metadata->metadata());
+                emit metadataChanged();
+            };
+            d->metadataUpdateConnection = connect(d->metadata, &QQmlGrpcMetadata::dataChanged, this,
+                                                  updateMetadata);
+            updateMetadata();
+        }
     }
+}
+
 }
 
 QT_END_NAMESPACE
 
-#include "moc_qqmlgrpccalloptions_p.cpp"
+#include "moc_qqmlgrpccalloptions.cpp"

@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 import QtQuick
+import QtGrpc;
+import QtProtobuf;
 import QtTest
 import QmlTestUri
 import qtgrpc.tests
@@ -92,6 +94,75 @@ Item {
             verify(!root.calbackCalled)
         }
     }
+
+    TestCase {
+        id: unaryCallWithOptions
+        name: "unaryCallWithOptions"
+        property empty arg;
+        property metadataMessage result;
+        property bool errorOccurred: false;
+        GrpcCallOptions {
+            id: options
+            metadata: GrpcMetadata {
+                data: ({ "user-name": "localhost",
+                         "user-password": "qwerty"})
+            }
+        }
+
+        Timer {
+            id: unaryCallWithOptionsTimeout
+            running: false
+            repeat: false
+            interval: 10000
+            onTriggered: unaryCallWithOptionsCheck.when = true;
+        }
+        function test_unaryCallWithOptions() {
+            clientQml.replyWithMetadata(unaryCallWithOptions.arg,
+                                        function(value) {
+                                            unaryCallWithOptions.result = value;
+                                            unaryCallWithOptionsCheck.when = true;
+                                        },
+                                        function() {
+                                            unaryCallWithOptions.errorOccurred = true;
+                                            unaryCallWithOptionsCheck.when = true;
+                                        },
+                                        options)
+            unaryCallWithOptionsTimeout.start()
+        }
+    }
+
+    TestCase {
+        id: unaryCallWithOptionsCheck
+        name: "unaryCallWithOptionsCheck"
+        when: false
+
+        function removeElementFromArray(array, element) {
+            var index = array.indexOf(element)
+            verify(index !== -1)
+
+            array.splice(index, 1)
+        }
+
+        function test_unaryCallWithOptionsCheck() {
+            verify(!unaryCallWithOptions.errorOccurred, "unaryCallWithOptions ended with error")
+
+            var missingHeaders = Array()
+            missingHeaders.push("user-name")
+            missingHeaders.push("user-password")
+
+            for (var i = 0; i < unaryCallWithOptions.result.valuesData.length; i++) {
+                var md = unaryCallWithOptions.result.valuesData[i]
+                if (md.key == "user-name" && md.value == "localhost")
+                    removeElementFromArray(missingHeaders, "user-name")
+                if (md.key == "user-password" && md.value == "qwerty")
+                    removeElementFromArray(missingHeaders, "user-password")
+            }
+
+            verify(missingHeaders.length === 0,
+                   "Missing headers from server: " + missingHeaders)
+        }
+    }
+
 
     Component.onCompleted: {
         clientQml = root.createClientItem()

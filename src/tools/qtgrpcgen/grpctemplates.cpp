@@ -31,7 +31,7 @@ const char *GrpcTemplates::ClientMethodDeclarationQmlTemplate()
     return "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$, "
            "const QJSValue &callback, "
            "const QJSValue &errorCallback, "
-           "const QGrpcCallOptions &options = {});\n";
+           "const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options = nullptr);\n";
 }
 
 const char *GrpcTemplates::ServerMethodDeclarationTemplate()
@@ -91,7 +91,7 @@ const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
     return "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$,\n"
            "                const QJSValue &finishCallback,\n"
            "                const QJSValue &errorCallback,\n"
-           "                const QGrpcCallOptions &options)\n"
+           "                const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options)\n"
            "{\n"
            "    QJSEngine *jsEngine = qjsEngine(this);\n"
            "    if (jsEngine == nullptr) {\n"
@@ -100,8 +100,8 @@ const char *GrpcTemplates::ClientMethodDefinitionQmlTemplate()
            "        return;\n"
            "    }\n\n"
            "    QtGrpcQuickFunctional::makeCallConnections<$return_type$>(jsEngine,\n"
-           "                        call(\"$method_name$\"_L1, $param_name$, options),"
-           "                        finishCallback, errorCallback);\n"
+           "                        call(\"$method_name$\"_L1, $param_name$,"
+           " options ? options->options() : QGrpcCallOptions{}), finishCallback, errorCallback);\n"
            "}\n\n";
 }
 
@@ -159,12 +159,8 @@ const char *GrpcTemplates::ClientMethodServerStreamDeclarationQmlTemplate()
     return "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$,\n"
            "                const QJSValue &messageCallback,\n"
            "                const QJSValue &finishCallback,\n"
-           "                const QJSValue &errorCallback);\n"
-           "Q_INVOKABLE void $method_name$(const $param_type$ &$param_name$,\n"
-           "                const QJSValue &messageCallback,\n"
-           "                const QJSValue &finishCallback,\n"
            "                const QJSValue &errorCallback,\n"
-           "                const QGrpcCallOptions &options);\n";
+           "                const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options = nullptr);\n";
 }
 
 const char *GrpcTemplates::ClientMethodClientStreamDeclarationQmlTemplate()
@@ -172,12 +168,8 @@ const char *GrpcTemplates::ClientMethodClientStreamDeclarationQmlTemplate()
     return "Q_INVOKABLE $sender_class_name$ *$method_name$("
            "const $param_type$ &$param_name$,\n"
            "                const QJSValue &finishCallback,\n"
-           "                const QJSValue &errorCallback);\n"
-           "Q_INVOKABLE $sender_class_name$ *$method_name$("
-           "const $param_type$ &$param_name$,\n"
-           "                const QJSValue &finishCallback,\n"
            "                const QJSValue &errorCallback,\n"
-           "                const QGrpcCallOptions &options);\n";
+           "                const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options = nullptr);\n";
 }
 
 const char *GrpcTemplates::ClientMethodBidiStreamDeclarationQmlTemplate()
@@ -186,13 +178,8 @@ const char *GrpcTemplates::ClientMethodBidiStreamDeclarationQmlTemplate()
            "const $param_type$ &$param_name$,\n"
            "                const QJSValue &messageCallback,\n"
            "                const QJSValue &finishCallback,\n"
-           "                const QJSValue &errorCallback);\n"
-           "Q_INVOKABLE $sender_class_name$ *$method_name$("
-           "const $param_type$ &$param_name$,\n"
-           "                const QJSValue &messageCallback,\n"
-           "                const QJSValue &finishCallback,\n"
            "                const QJSValue &errorCallback,\n"
-           "                const QGrpcCallOptions &options);\n";
+           "                const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options = nullptr);\n";
 }
 
 const char *GrpcTemplates::ClientMethodServerStreamDefinitionQmlTemplate()
@@ -200,15 +187,8 @@ const char *GrpcTemplates::ClientMethodServerStreamDefinitionQmlTemplate()
     return "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$,\n"
            "            const QJSValue &messageCallback,\n"
            "            const QJSValue &finishCallback,\n"
-           "            const QJSValue &errorCallback)\n"
-           "{\n"
-           "    $method_name$($param_name$, messageCallback, finishCallback, errorCallback, {});\n"
-           "}\n"
-           "\nvoid $classname$::$method_name$(const $param_type$ &$param_name$,\n"
-           "            const QJSValue &messageCallback,\n"
-           "            const QJSValue &finishCallback,\n"
            "            const QJSValue &errorCallback,\n"
-           "            const QGrpcCallOptions &options)\n"
+           "            const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options)\n"
            "{\n"
            "    QJSEngine *jsEngine = qjsEngine(this);\n"
            "    if (jsEngine == nullptr) {\n"
@@ -218,24 +198,18 @@ const char *GrpcTemplates::ClientMethodServerStreamDefinitionQmlTemplate()
            "    }\n\n"
            "    QtGrpcQuickFunctional::makeServerStreamConnections<$return_type$>(jsEngine,\n"
            "                        serverStream(\"$method_name$\"_L1,"
-           " $param_name$, options),\n"
+           " $param_name$, options ? options->options() : QGrpcCallOptions{}),\n"
            "                        messageCallback, finishCallback, errorCallback);\n"
            "}\n\n";
 }
 
 const char *GrpcTemplates::ClientMethodClientStreamDefinitionQmlTemplate()
 {
-    return "\n$sender_class_name$ *$classname$::$method_name$(const $param_type$ &$param_name$,\n"
-           "            const QJSValue &finishCallback,\n"
-           "            const QJSValue &errorCallback)\n"
-           "{\n"
-           "    return $method_name$($param_name$, finishCallback, errorCallback, {});\n"
-           "}\n"
-           "\n$sender_class_name$ *$classname$::$method_name$("
+    return "\n$sender_class_name$ *$classname$::$method_name$("
            "const $param_type$ &$param_name$,\n"
            "        const QJSValue &finishCallback,\n"
            "        const QJSValue &errorCallback,\n"
-           "        const QGrpcCallOptions &options)\n"
+           "        const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options)\n"
            "{\n"
            "    QJSEngine *jsEngine = qjsEngine(this);\n"
            "    if (jsEngine == nullptr) {\n"
@@ -244,7 +218,7 @@ const char *GrpcTemplates::ClientMethodClientStreamDefinitionQmlTemplate()
            "        return nullptr;\n"
            "    }\n\n"
            "    auto stream = clientStream(\"$method_name$\"_L1,"
-           " $param_name$, options);\n"
+           " $param_name$, options ? options->options() : QGrpcCallOptions{});\n"
            "    QtGrpcQuickFunctional::makeClientStreamConnections<$return_type$>(jsEngine,\n"
            "                        stream, finishCallback, errorCallback);\n"
            "    auto *sender = new $sender_class_name$(std::move(stream));\n"
@@ -255,20 +229,12 @@ const char *GrpcTemplates::ClientMethodClientStreamDefinitionQmlTemplate()
 
 const char *GrpcTemplates::ClientMethodBidiStreamDefinitionQmlTemplate()
 {
-    return "\n$sender_class_name$ *$classname$::$method_name$(const $param_type$ &$param_name$,\n"
-           "            const QJSValue &messageCallback,\n"
-           "            const QJSValue &finishCallback,\n"
-           "            const QJSValue &errorCallback)\n"
-           "{\n"
-           "    return $method_name$($param_name$, messageCallback, finishCallback, errorCallback, "
-           "{});\n"
-           "}\n"
-           "\n$sender_class_name$ *$classname$::$method_name$("
+    return "\n$sender_class_name$ *$classname$::$method_name$("
            "const $param_type$ &$param_name$,\n"
            "    const QJSValue &messageCallback,\n"
            "    const QJSValue &finishCallback,\n"
            "    const QJSValue &errorCallback,\n"
-           "    const QGrpcCallOptions &options)\n"
+           "    const QtGrpcQuickPrivate::QQmlGrpcCallOptions *options)\n"
            "{\n"
            "    QJSEngine *jsEngine = qjsEngine(this);\n"
            "    if (jsEngine == nullptr) {\n"
@@ -277,7 +243,7 @@ const char *GrpcTemplates::ClientMethodBidiStreamDefinitionQmlTemplate()
            "        return nullptr;\n"
            "    }\n\n"
            "    auto stream = bidiStream(\"$method_name$\"_L1,"
-           " $param_name$, options);\n"
+           " $param_name$, options ? options->options() : QGrpcCallOptions {});\n"
            "    QtGrpcQuickFunctional::makeBidiStreamConnections<$return_type$>(jsEngine,\n"
            "                        stream, messageCallback, finishCallback, errorCallback);\n"
            "    auto *sender = new $sender_class_name$(std::move(stream));\n"
