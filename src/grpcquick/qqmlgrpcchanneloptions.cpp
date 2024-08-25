@@ -27,6 +27,7 @@ public:
 #if QT_CONFIG(ssl)
     QQmlSslConfiguration configuration;
 #endif // QT_CONFIG(ssl)
+    QMetaObject::Connection metadataUpdateConnection;
 };
 
 QQmlGrpcChannelOptionsPrivate::QQmlGrpcChannelOptionsPrivate() : QObjectPrivate()
@@ -68,12 +69,22 @@ void QQmlGrpcChannelOptions::setMetadata(QQmlGrpcMetadata *value)
 {
     Q_D(QQmlGrpcChannelOptions);
     if (d->metadata != value) {
+        if (d->metadataUpdateConnection) {
+            disconnect(d->metadataUpdateConnection);
+            d->metadataUpdateConnection = {};
+        }
+
         d->metadata = value;
-        if (d->metadata)
-            d->options.setMetadata(d->metadata->metadata());
-        else
-            d->options.setMetadata({});
-        emit metadataChanged();
+        if (d->metadata) {
+            const auto updateMetadata = [this]() {
+                Q_D(QQmlGrpcChannelOptions);
+                d->options.setMetadata(d->metadata->metadata());
+                emit metadataChanged();
+            };
+            d->metadataUpdateConnection = connect(d->metadata, &QQmlGrpcMetadata::dataChanged, this,
+                                                  updateMetadata);
+            updateMetadata();
+        }
     }
 }
 
