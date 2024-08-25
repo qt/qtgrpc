@@ -52,7 +52,7 @@ delimited by a colon, or through a separate argument, \c{--qtgrpc_opt}.
 You also can pass the corresponding keys as the \c{QT_GRPC_OPTIONS}
 environment variable. Keys must be presented as a semicolon-separated list:
 \badcode
-    export QT_GRPC_OPTIONS="COPY_COMMENTS;GENERATE_PACKAGE_SUBFOLDERS;EXTRA_NAMESPACE=MyTopLevelNamespace"
+    export QT_GRPC_OPTIONS="COPY_COMMENTS;GENERATE_PACKAGE_SUBFOLDERS"
 \endcode
 
 \section2 Options
