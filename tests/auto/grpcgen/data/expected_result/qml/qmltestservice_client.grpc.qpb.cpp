@@ -49,7 +49,7 @@ void QmlClient::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage 
     }
 
     QtGrpcQuickFunctional::makeServerStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
-                        startStream<QGrpcServerStream>("testMethodServerStream"_L1, arg, options),
+                        serverStream("testMethodServerStream"_L1, arg, options),
                         messageCallback, finishCallback, errorCallback);
 }
 
@@ -72,7 +72,7 @@ TestMethodClientStreamSender *QmlClient::testMethodClientStream(const qtgrpc::te
         return nullptr;
     }
 
-    auto stream = startStream<QGrpcClientStream>("testMethodClientStream"_L1, arg, options);
+    auto stream = clientStream("testMethodClientStream"_L1, arg, options);
     QtGrpcQuickFunctional::makeClientStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
                         stream, finishCallback, errorCallback);
     auto *sender = new TestMethodClientStreamSender(std::move(stream));
@@ -101,7 +101,7 @@ TestMethodBiStreamSender *QmlClient::testMethodBiStream(const qtgrpc::tests::Sim
         return nullptr;
     }
 
-    auto stream = startStream<QGrpcBidiStream>("testMethodBiStream"_L1, arg, options);
+    auto stream = bidiStream("testMethodBiStream"_L1, arg, options);
     QtGrpcQuickFunctional::makeBidiStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
                         stream, messageCallback, finishCallback, errorCallback);
     auto *sender = new TestMethodBiStreamSender(std::move(stream));
