@@ -20,7 +20,7 @@ public:
     QQmlAbstractGrpcChannel(QObject *parent = nullptr) : QObject(parent) {}
     ~QQmlAbstractGrpcChannel() = default;
 
-    virtual std::shared_ptr<QAbstractGrpcChannel> getChannel() = 0;
+    virtual std::shared_ptr<QAbstractGrpcChannel> channel() = 0;
 };
 
 QT_END_NAMESPACE
