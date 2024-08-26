@@ -942,7 +942,7 @@ public:
     QPB_CUSTOM_EXPORT_NAME_EXPORT QtProtobuf::int32 testFieldInt() const;
 
     QPB_CUSTOM_EXPORT_NAME_EXPORT bool hasTestComplexField() const;
-    QPB_CUSTOM_EXPORT_NAME_EXPORT const SimpleStringMessage &testComplexField() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT const SimpleStringMessage &testComplexField() const &;
     QPB_CUSTOM_EXPORT_NAME_EXPORT void clearTestComplexField();
     QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldInt(QtProtobuf::int32 testFieldInt);
     QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestComplexField(const SimpleStringMessage &testComplexField);

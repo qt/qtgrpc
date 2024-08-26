@@ -142,11 +142,11 @@ public:
     QString testFieldStringOpt() const;
 
     bool hasTestFieldMessage() const;
-    const TestStringMessage &testFieldMessage() const;
+    const TestStringMessage &testFieldMessage() const &;
     void clearTestFieldMessage();
 
     bool hasTestFieldMessageOpt() const;
-    const TestStringMessage &testFieldMessageOpt() const;
+    const TestStringMessage &testFieldMessageOpt() const &;
     void clearTestFieldMessageOpt();
     void setTestField(QtProtobuf::sint32 testField);
     void setTestFieldOpt(QtProtobuf::sint32 testFieldOpt);

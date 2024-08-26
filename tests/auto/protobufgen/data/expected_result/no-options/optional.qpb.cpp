@@ -371,7 +371,7 @@ bool OptionalMessage::hasTestFieldMessage() const
     return dptr->m_testFieldMessage.operator bool();
 }
 
-const TestStringMessage &OptionalMessage::testFieldMessage() const
+const TestStringMessage &OptionalMessage::testFieldMessage() const &
 {
     return *dptr->m_testFieldMessage;
 }
@@ -396,7 +396,7 @@ bool OptionalMessage::hasTestFieldMessageOpt() const
     return dptr->m_testFieldMessageOpt.operator bool();
 }
 
-const TestStringMessage &OptionalMessage::testFieldMessageOpt() const
+const TestStringMessage &OptionalMessage::testFieldMessageOpt() const &
 {
     return *dptr->m_testFieldMessageOpt;
 }

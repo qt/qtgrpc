@@ -1716,7 +1716,7 @@ bool ComplexMessage::hasTestComplexField() const
     return dptr->m_testComplexField.operator bool();
 }
 
-const SimpleStringMessage &ComplexMessage::testComplexField() const
+const SimpleStringMessage &ComplexMessage::testComplexField() const &
 {
     return *dptr->m_testComplexField;
 }

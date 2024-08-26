@@ -296,7 +296,7 @@ bool NoPackageExternalMessage::hasTestField() const
     return dptr->m_testField.operator bool();
 }
 
-const SimpleIntMessageExt &NoPackageExternalMessage::testField() const
+const SimpleIntMessageExt &NoPackageExternalMessage::testField() const &
 {
     return *dptr->m_testField;
 }
@@ -435,7 +435,7 @@ bool NoPackageMessage::hasTestField() const
     return dptr->m_testField.operator bool();
 }
 
-const SimpleIntMessage &NoPackageMessage::testField() const
+const SimpleIntMessage &NoPackageMessage::testField() const &
 {
     return *dptr->m_testField;
 }
