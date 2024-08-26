@@ -182,10 +182,16 @@ public:
     }
     void setValue(const ValueType &value)
     {
+        if (m_value == value)
+            return;
+        cleanupValue();
         m_value = value;
     }
     void setValue(ValueType &&value)
     {
+        if (m_value == value)
+            return;
+        cleanupValue();
         m_value = std::move(value);
     }
 
@@ -196,6 +202,17 @@ private:
             if (!m_value) {
                 m_value = new Value;
                 m_ownsValue = true;
+            }
+        }
+    }
+
+    void cleanupValue() const
+    {
+        if constexpr (std::is_pointer_v<ValueType>) {
+            if (m_ownsValue) {
+                delete m_value;
+                m_value = nullptr;
+                m_ownsValue = false;
             }
         }
     }
