@@ -47,7 +47,8 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcChannelOptions : public QObject
 #endif // QT_CONFIG(ssl)
 
 public:
-    QQmlGrpcChannelOptions(QObject *parent = nullptr);
+    explicit QQmlGrpcChannelOptions(QObject *parent = nullptr);
+    ~QQmlGrpcChannelOptions() override;
 
     const QGrpcChannelOptions &options() const;
     qint64 deadlineTimeout() const;
@@ -71,6 +72,7 @@ Q_SIGNALS:
 
 private:
     Q_DECLARE_PRIVATE(QQmlGrpcChannelOptions)
+    Q_DISABLE_COPY_MOVE(QQmlGrpcChannelOptions)
 };
 
 QT_END_NAMESPACE

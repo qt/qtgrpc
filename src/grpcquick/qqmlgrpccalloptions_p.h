@@ -35,8 +35,8 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcCallOptions : public QObject
     Q_PROPERTY(QQmlGrpcMetadata *metadata READ metadata WRITE setMetadata NOTIFY metadataChanged)
 
 public:
-    QQmlGrpcCallOptions(QObject *parent = nullptr);
-    ~QQmlGrpcCallOptions();
+    explicit QQmlGrpcCallOptions(QObject *parent = nullptr);
+    ~QQmlGrpcCallOptions() override;
 
     const QGrpcCallOptions &options() const;
     qint64 deadlineTimeout() const;

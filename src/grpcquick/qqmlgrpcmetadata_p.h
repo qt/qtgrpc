@@ -35,7 +35,7 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcMetadata : public QObject
 
     Q_PROPERTY(QVariantMap data READ data WRITE setData NOTIFY dataChanged REQUIRED)
 public:
-    QQmlGrpcMetadata(QObject *parent = nullptr);
+    explicit QQmlGrpcMetadata(QObject *parent = nullptr);
     ~QQmlGrpcMetadata() override;
 
     const QHash<QByteArray, QByteArray> &metadata() const { return m_metadata; }
@@ -48,6 +48,8 @@ Q_SIGNALS:
 private:
     QVariantMap m_variantdata;
     QHash<QByteArray, QByteArray> m_metadata;
+
+    Q_DISABLE_COPY_MOVE(QQmlGrpcMetadata)
 };
 
 QT_END_NAMESPACE
