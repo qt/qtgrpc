@@ -143,12 +143,10 @@ public:
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QString testFieldStringOpt() const;
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldMessage() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage &testFieldMessage();
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const TestStringMessage &testFieldMessage() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldMessage();
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldMessageOpt() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestStringMessage &testFieldMessageOpt();
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const TestStringMessage &testFieldMessageOpt() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldMessageOpt();
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestField(const QtProtobuf::sint32 &testField);

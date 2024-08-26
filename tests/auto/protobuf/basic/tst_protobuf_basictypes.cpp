@@ -41,7 +41,6 @@ private Q_SLOTS:
 
     void assignmentOperatorTest();
     void moveOperatorTest();
-    void accessMessageFieldsFromGetter();
 
     void invalidMessageConstructorTest();
 };
@@ -445,25 +444,6 @@ void QtProtobufTypesGenerationTest::moveOperatorTest()
     test3.setTestFieldInt(35);
     qtprotobufnamespace::tests::SimpleIntMessage test4(std::move(test3));
     QCOMPARE(test4.testFieldInt(), 35);
-}
-
-void QtProtobufTypesGenerationTest::accessMessageFieldsFromGetter()
-{
-    SimpleStringMessage stringMsg;
-    stringMsg.setTestFieldString({ "AccessMessageFieldsFromGetter" });
-    ComplexMessage expected;
-    expected.setTestFieldInt(0);
-    expected.setTestComplexField(stringMsg);
-
-    ComplexMessage actual;
-    actual.testComplexField().setTestFieldString("AccessMessageFieldsFromGetter");
-
-    QCOMPARE(actual, expected);
-
-    ComplexMessage actualCopy = actual;
-    actual.testComplexField().setTestFieldString("Ensure detach");
-
-    QCOMPARE_NE(actual, actualCopy);
 }
 
 void QtProtobufTypesGenerationTest::invalidMessageConstructorTest()
