@@ -67,7 +67,9 @@ void QtGrpcClientDeadlineTest::channelDeadlineServerStreamExceeds()
 {
     ServerStreamSleepMessage request;
     request.setAmountResponses(5);
-    request.sleepMessage().setSleepTimeMs(MessageLatency / 4);
+    auto sleepMsg = request.sleepMessage();
+    sleepMsg.setSleepTimeMs(MessageLatency / 4);
+    request.setSleepMessage(sleepMsg);
 
     auto stream = client()->testMethodServerStreamSleep(request);
     QSignalSpy finSpy(stream.get(), &QGrpcOperation::finished);

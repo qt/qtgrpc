@@ -184,7 +184,6 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool hasTestField() const;
-    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessageExt &testField();
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT const SimpleIntMessageExt &testField() const;
     Q_INVOKABLE QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void clearTestField();
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestField(const SimpleIntMessageExt &testField);
@@ -243,7 +242,6 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT bool hasTestField() const;
-    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT SimpleIntMessage &testField();
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT const SimpleIntMessage &testField() const;
     Q_INVOKABLE QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void clearTestField();
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestField(const SimpleIntMessage &testField);
