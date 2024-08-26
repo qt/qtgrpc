@@ -186,7 +186,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool testFieldBool() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBool(const bool &testFieldBool);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBool(bool testFieldBool);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -236,7 +236,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testFieldInt() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(QtProtobuf::int32 testFieldInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -286,7 +286,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sint32 testFieldInt() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(const QtProtobuf::sint32 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(QtProtobuf::sint32 testFieldInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -336,7 +336,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::uint32 testFieldInt() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(const QtProtobuf::uint32 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(QtProtobuf::uint32 testFieldInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -386,7 +386,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int64 testFieldInt() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(const QtProtobuf::int64 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(QtProtobuf::int64 testFieldInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -436,7 +436,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sint64 testFieldInt() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(const QtProtobuf::sint64 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(QtProtobuf::sint64 testFieldInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -486,7 +486,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::uint64 testFieldInt() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(const QtProtobuf::uint64 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(QtProtobuf::uint64 testFieldInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -537,6 +537,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QString testFieldString() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldString(const QString &testFieldString);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldString(QString &&testFieldString);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -586,7 +587,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT float testFieldFloat() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldFloat(const float &testFieldFloat);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldFloat(float testFieldFloat);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -636,7 +637,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT double testFieldDouble() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldDouble(const double &testFieldDouble);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldDouble(double testFieldDouble);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -687,6 +688,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QByteArray testFieldBytes() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBytes(const QByteArray &testFieldBytes);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBytes(QByteArray &&testFieldBytes);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -736,7 +738,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::fixed32 testFieldFixedInt32() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldFixedInt32(const QtProtobuf::fixed32 &testFieldFixedInt32);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldFixedInt32(QtProtobuf::fixed32 testFieldFixedInt32);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -786,7 +788,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::fixed64 testFieldFixedInt64() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldFixedInt64(const QtProtobuf::fixed64 &testFieldFixedInt64);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldFixedInt64(QtProtobuf::fixed64 testFieldFixedInt64);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -836,7 +838,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sfixed32 testFieldFixedInt32() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldFixedInt32(const QtProtobuf::sfixed32 &testFieldFixedInt32);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldFixedInt32(QtProtobuf::sfixed32 testFieldFixedInt32);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -886,7 +888,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sfixed64 testFieldFixedInt64() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldFixedInt64(const QtProtobuf::sfixed64 &testFieldFixedInt64);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldFixedInt64(QtProtobuf::sfixed64 testFieldFixedInt64);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -942,8 +944,9 @@ public:
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestComplexField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const SimpleStringMessage &testComplexField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestComplexField();
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(QtProtobuf::int32 testFieldInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestComplexField(const SimpleStringMessage &testComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestComplexField(SimpleStringMessage &&testComplexField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:

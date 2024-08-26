@@ -186,7 +186,7 @@ QtProtobuf::int32 SimpleIntMessage::testFieldInt() const
     return dptr->m_testFieldInt;
 }
 
-void SimpleIntMessage::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
+void SimpleIntMessage::setTestFieldInt(QtProtobuf::int32 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();
@@ -325,6 +325,14 @@ void NoPackageExternalMessage::setTestField(const SimpleIntMessageExt &testField
     }
 }
 
+void NoPackageExternalMessage::setTestField(SimpleIntMessageExt &&testField)
+{
+    if (*dptr->m_testField != testField) {
+        dptr.detach();
+        *dptr->m_testField = std::move(testField);
+    }
+}
+
 
 class NoPackageMessage_QtProtobufData : public QSharedData
 {
@@ -453,6 +461,14 @@ void NoPackageMessage::setTestField(const SimpleIntMessage &testField)
     if (*dptr->m_testField != testField) {
         dptr.detach();
         *dptr->m_testField = testField;
+    }
+}
+
+void NoPackageMessage::setTestField(SimpleIntMessage &&testField)
+{
+    if (*dptr->m_testField != testField) {
+        dptr.detach();
+        *dptr->m_testField = std::move(testField);
     }
 }
 

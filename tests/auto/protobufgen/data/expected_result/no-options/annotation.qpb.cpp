@@ -100,7 +100,7 @@ QtProtobuf::sint32 AnnotatedMessage1::testField() const
     return dptr->m_testField;
 }
 
-void AnnotatedMessage1::setTestField(const QtProtobuf::sint32 &testField)
+void AnnotatedMessage1::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -200,7 +200,7 @@ QtProtobuf::sint32 AnnotatedMessage2::testField() const
     return dptr->m_testField;
 }
 
-void AnnotatedMessage2::setTestField(const QtProtobuf::sint32 &testField)
+void AnnotatedMessage2::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -300,7 +300,7 @@ QtProtobuf::sint32 AnnotatedMessage3::testField() const
     return dptr->m_testField;
 }
 
-void AnnotatedMessage3::setTestField(const QtProtobuf::sint32 &testField)
+void AnnotatedMessage3::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -400,7 +400,7 @@ QtProtobuf::sint32 AnnotatedMessage4::testField() const
     return dptr->m_testField;
 }
 
-void AnnotatedMessage4::setTestField(const QtProtobuf::sint32 &testField)
+void AnnotatedMessage4::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -500,7 +500,7 @@ QtProtobuf::sint32 AnnotatedMessage5::testField() const
     return dptr->m_testField;
 }
 
-void AnnotatedMessage5::setTestField(const QtProtobuf::sint32 &testField)
+void AnnotatedMessage5::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -600,7 +600,7 @@ QtProtobuf::sint32 AnnotatedMessage6::testField() const
     return dptr->m_testField;
 }
 
-void AnnotatedMessage6::setTestField(const QtProtobuf::sint32 &testField)
+void AnnotatedMessage6::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -700,7 +700,7 @@ QtProtobuf::sint32 AnnotatedMessage7::testField() const
     return dptr->m_testField;
 }
 
-void AnnotatedMessage7::setTestField(const QtProtobuf::sint32 &testField)
+void AnnotatedMessage7::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -800,7 +800,7 @@ QtProtobuf::sint32 AnnotatedMessage8::testField() const
     return dptr->m_testField;
 }
 
-void AnnotatedMessage8::setTestField(const QtProtobuf::sint32 &testField)
+void AnnotatedMessage8::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -900,7 +900,7 @@ QtProtobuf::sint32 AnnotatedMessage9::testField() const
     return dptr->m_testField;
 }
 
-void AnnotatedMessage9::setTestField(const QtProtobuf::sint32 &testField)
+void AnnotatedMessage9::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();

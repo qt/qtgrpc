@@ -60,6 +60,7 @@ public:
 
     QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
+    void setTestFieldString(QString &&testFieldString);
     static void registerTypes();
 
 private:
@@ -109,7 +110,7 @@ public:
     }
 
     QtProtobuf::sint32 testField() const;
-    void setTestField(const QtProtobuf::sint32 &testField);
+    void setTestField(QtProtobuf::sint32 testField);
     static void registerTypes();
 
 private:
@@ -160,6 +161,7 @@ public:
 
     QByteArray testBytes() const;
     void setTestBytes(const QByteArray &testBytes);
+    void setTestBytes(QByteArray &&testBytes);
     static void registerTypes();
 
 private:

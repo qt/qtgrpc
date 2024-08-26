@@ -184,7 +184,7 @@ public:
     }
 
     bool testFieldBool() const;
-    void setTestFieldBool(const bool &testFieldBool);
+    void setTestFieldBool(bool testFieldBool);
     static void registerTypes();
 
 private:
@@ -234,7 +234,7 @@ public:
     }
 
     QtProtobuf::int32 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    void setTestFieldInt(QtProtobuf::int32 testFieldInt);
     static void registerTypes();
 
 private:
@@ -284,7 +284,7 @@ public:
     }
 
     QtProtobuf::sint32 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::sint32 &testFieldInt);
+    void setTestFieldInt(QtProtobuf::sint32 testFieldInt);
     static void registerTypes();
 
 private:
@@ -334,7 +334,7 @@ public:
     }
 
     QtProtobuf::uint32 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::uint32 &testFieldInt);
+    void setTestFieldInt(QtProtobuf::uint32 testFieldInt);
     static void registerTypes();
 
 private:
@@ -384,7 +384,7 @@ public:
     }
 
     QtProtobuf::int64 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::int64 &testFieldInt);
+    void setTestFieldInt(QtProtobuf::int64 testFieldInt);
     static void registerTypes();
 
 private:
@@ -434,7 +434,7 @@ public:
     }
 
     QtProtobuf::sint64 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::sint64 &testFieldInt);
+    void setTestFieldInt(QtProtobuf::sint64 testFieldInt);
     static void registerTypes();
 
 private:
@@ -484,7 +484,7 @@ public:
     }
 
     QtProtobuf::uint64 testFieldInt() const;
-    void setTestFieldInt(const QtProtobuf::uint64 &testFieldInt);
+    void setTestFieldInt(QtProtobuf::uint64 testFieldInt);
     static void registerTypes();
 
 private:
@@ -535,6 +535,7 @@ public:
 
     QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
+    void setTestFieldString(QString &&testFieldString);
     static void registerTypes();
 
 private:
@@ -584,7 +585,7 @@ public:
     }
 
     float testFieldFloat() const;
-    void setTestFieldFloat(const float &testFieldFloat);
+    void setTestFieldFloat(float testFieldFloat);
     static void registerTypes();
 
 private:
@@ -634,7 +635,7 @@ public:
     }
 
     double testFieldDouble() const;
-    void setTestFieldDouble(const double &testFieldDouble);
+    void setTestFieldDouble(double testFieldDouble);
     static void registerTypes();
 
 private:
@@ -685,6 +686,7 @@ public:
 
     QByteArray testFieldBytes() const;
     void setTestFieldBytes(const QByteArray &testFieldBytes);
+    void setTestFieldBytes(QByteArray &&testFieldBytes);
     static void registerTypes();
 
 private:
@@ -734,7 +736,7 @@ public:
     }
 
     QtProtobuf::fixed32 testFieldFixedInt32() const;
-    void setTestFieldFixedInt32(const QtProtobuf::fixed32 &testFieldFixedInt32);
+    void setTestFieldFixedInt32(QtProtobuf::fixed32 testFieldFixedInt32);
     static void registerTypes();
 
 private:
@@ -784,7 +786,7 @@ public:
     }
 
     QtProtobuf::fixed64 testFieldFixedInt64() const;
-    void setTestFieldFixedInt64(const QtProtobuf::fixed64 &testFieldFixedInt64);
+    void setTestFieldFixedInt64(QtProtobuf::fixed64 testFieldFixedInt64);
     static void registerTypes();
 
 private:
@@ -834,7 +836,7 @@ public:
     }
 
     QtProtobuf::sfixed32 testFieldFixedInt32() const;
-    void setTestFieldFixedInt32(const QtProtobuf::sfixed32 &testFieldFixedInt32);
+    void setTestFieldFixedInt32(QtProtobuf::sfixed32 testFieldFixedInt32);
     static void registerTypes();
 
 private:
@@ -884,7 +886,7 @@ public:
     }
 
     QtProtobuf::sfixed64 testFieldFixedInt64() const;
-    void setTestFieldFixedInt64(const QtProtobuf::sfixed64 &testFieldFixedInt64);
+    void setTestFieldFixedInt64(QtProtobuf::sfixed64 testFieldFixedInt64);
     static void registerTypes();
 
 private:
@@ -940,8 +942,9 @@ public:
     bool hasTestComplexField() const;
     const SimpleStringMessage &testComplexField() const;
     void clearTestComplexField();
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    void setTestFieldInt(QtProtobuf::int32 testFieldInt);
     void setTestComplexField(const SimpleStringMessage &testComplexField);
+    void setTestComplexField(SimpleStringMessage &&testComplexField);
     static void registerTypes();
 
 private:

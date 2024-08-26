@@ -52,7 +52,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT QtProtobuf::int32 testFieldInt() const;
-    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestFieldInt(QtProtobuf::int32 testFieldInt);
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT static void registerTypes();
 
 private:

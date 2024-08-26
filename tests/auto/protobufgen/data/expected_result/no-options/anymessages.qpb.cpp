@@ -107,6 +107,14 @@ void AnyMessage::setField(const QtProtobuf::Any &field)
     }
 }
 
+void AnyMessage::setField(QtProtobuf::Any &&field)
+{
+    if (dptr->m_field != field) {
+        dptr.detach();
+        dptr->m_field = std::move(field);
+    }
+}
+
 
 class RepeatedAnyMessage_QtProtobufData : public QSharedData
 {
@@ -203,6 +211,14 @@ void RepeatedAnyMessage::setAnys(const QList<QtProtobuf::Any> &anys)
     if (dptr->m_anys != anys) {
         dptr.detach();
         dptr->m_anys = anys;
+    }
+}
+
+void RepeatedAnyMessage::setAnys(QList<QtProtobuf::Any> &&anys)
+{
+    if (dptr->m_anys != anys) {
+        dptr.detach();
+        dptr->m_anys = std::move(anys);
     }
 }
 
@@ -317,11 +333,27 @@ void TwoAnyMessage::setOne(const QtProtobuf::Any &one)
     }
 }
 
+void TwoAnyMessage::setOne(QtProtobuf::Any &&one)
+{
+    if (dptr->m_one != one) {
+        dptr.detach();
+        dptr->m_one = std::move(one);
+    }
+}
+
 void TwoAnyMessage::setTwo(const QtProtobuf::Any &two)
 {
     if (dptr->m_two != two) {
         dptr.detach();
         dptr->m_two = two;
+    }
+}
+
+void TwoAnyMessage::setTwo(QtProtobuf::Any &&two)
+{
+    if (dptr->m_two != two) {
+        dptr.detach();
+        dptr->m_two = std::move(two);
     }
 }
 
@@ -475,7 +507,15 @@ void Example::setStr(const QString &str)
     }
 }
 
-void Example::setI(const QtProtobuf::sint32 &i)
+void Example::setStr(QString &&str)
+{
+    if (dptr->m_str != str) {
+        dptr.detach();
+        dptr->m_str = std::move(str);
+    }
+}
+
+void Example::setI(QtProtobuf::sint32 i)
 {
     if (dptr->m_i != i) {
         dptr.detach();
@@ -483,7 +523,7 @@ void Example::setI(const QtProtobuf::sint32 &i)
     }
 }
 
-void Example::setJ(const QtProtobuf::sint32 &j)
+void Example::setJ(QtProtobuf::sint32 j)
 {
     if (dptr->m_j != j) {
         dptr.detach();
@@ -491,7 +531,7 @@ void Example::setJ(const QtProtobuf::sint32 &j)
     }
 }
 
-void Example::setH(const QtProtobuf::sint32 &h)
+void Example::setH(QtProtobuf::sint32 h)
 {
     if (dptr->m_h != h) {
         dptr.detach();
@@ -504,6 +544,14 @@ void Example::setStr2(const QString &str2)
     if (dptr->m_str2 != str2) {
         dptr.detach();
         dptr->m_str2 = str2;
+    }
+}
+
+void Example::setStr2(QString &&str2)
+{
+    if (dptr->m_str2 != str2) {
+        dptr.detach();
+        dptr->m_str2 = std::move(str2);
     }
 }
 
@@ -599,7 +647,7 @@ QtProtobuf::int32 SimpleMessage::i() const
     return dptr->m_i;
 }
 
-void SimpleMessage::setI(const QtProtobuf::int32 &i)
+void SimpleMessage::setI(QtProtobuf::int32 i)
 {
     if (dptr->m_i != i) {
         dptr.detach();

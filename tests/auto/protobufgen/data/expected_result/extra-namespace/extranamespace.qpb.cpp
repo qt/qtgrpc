@@ -186,6 +186,14 @@ void SimpleStringMessage::setTestFieldString(const QString &testFieldString)
     }
 }
 
+void SimpleStringMessage::setTestFieldString(QString &&testFieldString)
+{
+    if (dptr->m_testFieldString != testFieldString) {
+        dptr.detach();
+        dptr->m_testFieldString = std::move(testFieldString);
+    }
+}
+
 
 class ComplexMessage_QtProtobufData : public QSharedData
 {
@@ -314,7 +322,7 @@ void ComplexMessage::clearTestComplexField()
     }
 }
 
-void ComplexMessage::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
+void ComplexMessage::setTestFieldInt(QtProtobuf::int32 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();
@@ -335,6 +343,14 @@ void ComplexMessage::setTestComplexField(const SimpleStringMessage &testComplexF
     if (*dptr->m_testComplexField != testComplexField) {
         dptr.detach();
         *dptr->m_testComplexField = testComplexField;
+    }
+}
+
+void ComplexMessage::setTestComplexField(SimpleStringMessage &&testComplexField)
+{
+    if (*dptr->m_testComplexField != testComplexField) {
+        dptr.detach();
+        *dptr->m_testComplexField = std::move(testComplexField);
     }
 }
 

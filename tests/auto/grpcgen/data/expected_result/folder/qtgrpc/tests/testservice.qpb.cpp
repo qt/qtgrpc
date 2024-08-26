@@ -107,6 +107,14 @@ void SimpleStringMessage::setTestFieldString(const QString &testFieldString)
     }
 }
 
+void SimpleStringMessage::setTestFieldString(QString &&testFieldString)
+{
+    if (dptr->m_testFieldString != testFieldString) {
+        dptr.detach();
+        dptr->m_testFieldString = std::move(testFieldString);
+    }
+}
+
 
 class SimpleIntMessage_QtProtobufData : public QSharedData
 {
@@ -199,7 +207,7 @@ QtProtobuf::sint32 SimpleIntMessage::testField() const
     return dptr->m_testField;
 }
 
-void SimpleIntMessage::setTestField(const QtProtobuf::sint32 &testField)
+void SimpleIntMessage::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -303,6 +311,14 @@ void BlobMessage::setTestBytes(const QByteArray &testBytes)
     if (dptr->m_testBytes != testBytes) {
         dptr.detach();
         dptr->m_testBytes = testBytes;
+    }
+}
+
+void BlobMessage::setTestBytes(QByteArray &&testBytes)
+{
+    if (dptr->m_testBytes != testBytes) {
+        dptr.detach();
+        dptr->m_testBytes = std::move(testBytes);
     }
 }
 

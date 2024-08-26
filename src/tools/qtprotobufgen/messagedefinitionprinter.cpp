@@ -419,8 +419,12 @@ void MessageDefinitionPrinter::printGetters()
 
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, PropertyMap &propertyMap) {
+            bool isTriviallyCopyable = common::isTriviallyCopyable(field);
                 if (common::isOneofField(field)) {
-                    m_printer->Print(propertyMap, CommonTemplates::SetterOneofDefinitionTemplate());
+                    m_printer->Print(propertyMap,
+                                     isTriviallyCopyable
+                                         ? CommonTemplates::SetterOneofDefinitionTemplate()
+                                         : CommonTemplates::SetterComplexOneofDefinitionTemplate());
                     m_printer->Print(
                             propertyMap,
                             common::isPureMessage(field)
@@ -430,8 +434,11 @@ void MessageDefinitionPrinter::printGetters()
                 }
 
                 if (common::isOptionalField(field)) {
+
                     m_printer->Print(propertyMap,
-                                     CommonTemplates::SetterOptionalDefinitionTemplate());
+                                     isTriviallyCopyable ?
+                                         CommonTemplates::SetterOptionalDefinitionTemplate() :
+                                         CommonTemplates::SetterComplexOptionalDefinitionTemplate());
                     m_printer->Print(propertyMap,
                                      CommonTemplates::PrivateSetterOptionalDefinitionTemplate());
                     m_printer->Print(propertyMap,
@@ -465,7 +472,10 @@ void MessageDefinitionPrinter::printGetters()
                     }
                     // fall through
                 default:
-                    m_printer->Print(propertyMap, CommonTemplates::SetterDefinitionTemplate());
+                    m_printer->Print(propertyMap,
+                                     field->is_repeated()
+                                         ? CommonTemplates::SetterComplexDefinitionTemplate()
+                                         : CommonTemplates::SetterDefinitionTemplate());
                     break;
                 }
             });

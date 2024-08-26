@@ -62,6 +62,7 @@ public:
 
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT QString testFieldString() const;
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestFieldString(const QString &testFieldString);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestFieldString(QString &&testFieldString);
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT static void registerTypes();
 
 private:
@@ -111,7 +112,7 @@ public:
     }
 
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT QtProtobuf::sint32 testField() const;
-    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestField(const QtProtobuf::sint32 &testField);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestField(QtProtobuf::sint32 testField);
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT static void registerTypes();
 
 private:
@@ -162,6 +163,7 @@ public:
 
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT QByteArray testBytes() const;
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestBytes(const QByteArray &testBytes);
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestBytes(QByteArray &&testBytes);
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT static void registerTypes();
 
 private:

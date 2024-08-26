@@ -59,6 +59,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QString stringField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setStringField(const QString &stringField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setStringField(QString &&stringField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -149,20 +150,26 @@ public:
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldMessageOpt() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const TestStringMessage &testFieldMessageOpt() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldMessageOpt();
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestField(const QtProtobuf::sint32 &testField);
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldOpt(const QtProtobuf::sint32 &testFieldOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestField(QtProtobuf::sint32 testField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldOpt(QtProtobuf::sint32 testFieldOpt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldOpt();
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBool(const bool &testFieldBool);
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBoolOpt(const bool &testFieldBoolOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBool(bool testFieldBool);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBoolOpt(bool testFieldBoolOpt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldBoolOpt();
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBytes(const QByteArray &testFieldBytes);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBytes(QByteArray &&testFieldBytes);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBytesOpt(const QByteArray &testFieldBytesOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldBytesOpt(QByteArray &&testFieldBytesOpt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldBytesOpt();
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldString(const QString &testFieldString);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldString(QString &&testFieldString);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldStringOpt(const QString &testFieldStringOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldStringOpt(QString &&testFieldStringOpt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestFieldStringOpt();
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldMessage(const TestStringMessage &testFieldMessage);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldMessage(TestStringMessage &&testFieldMessage);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldMessageOpt(const TestStringMessage &testFieldMessageOpt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldMessageOpt(TestStringMessage &&testFieldMessageOpt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
