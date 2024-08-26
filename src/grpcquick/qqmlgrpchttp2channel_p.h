@@ -34,8 +34,8 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcHttp2Channel : public QQmlAbstractGrpcChannel
     Q_PROPERTY(std::shared_ptr<QAbstractGrpcChannel> channel READ channel NOTIFY channelUpdated)
 
 public:
-    QQmlGrpcHttp2Channel(QObject *parent = nullptr);
-    ~QQmlGrpcHttp2Channel();
+    explicit QQmlGrpcHttp2Channel(QObject *parent = nullptr);
+    ~QQmlGrpcHttp2Channel() override;
     std::shared_ptr<QAbstractGrpcChannel> channel() final;
     QQmlGrpcChannelOptions *options() const { return m_options; }
     void setOptions(QQmlGrpcChannelOptions *options);

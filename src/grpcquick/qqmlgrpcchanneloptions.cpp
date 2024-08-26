@@ -36,6 +36,8 @@ QQmlGrpcChannelOptions::QQmlGrpcChannelOptions(QObject *parent)
 {
 }
 
+QQmlGrpcChannelOptions::~QQmlGrpcChannelOptions() = default;
+
 qint64 QQmlGrpcChannelOptions::deadlineTimeout() const
 {
     std::chrono::milliseconds ms = d_func()->options.deadlineTimeout().value_or(0ms);
