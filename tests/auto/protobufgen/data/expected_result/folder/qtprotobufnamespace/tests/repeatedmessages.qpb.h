@@ -139,7 +139,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QStringList testRepeatedString() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QStringList &testRepeatedString() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedString(const QStringList &testRepeatedString);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedString(QStringList &&testRepeatedString);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -190,7 +190,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::doubleList testRepeatedDouble() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::doubleList &testRepeatedDouble() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedDouble(const QtProtobuf::doubleList &testRepeatedDouble);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedDouble(QtProtobuf::doubleList &&testRepeatedDouble);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -241,7 +241,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QByteArrayList testRepeatedBytes() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QByteArrayList &testRepeatedBytes() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedBytes(const QByteArrayList &testRepeatedBytes);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedBytes(QByteArrayList &&testRepeatedBytes);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -292,7 +292,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::floatList testRepeatedFloat() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::floatList &testRepeatedFloat() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedFloat(const QtProtobuf::floatList &testRepeatedFloat);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedFloat(QtProtobuf::floatList &&testRepeatedFloat);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -343,7 +343,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT ComplexMessageRepeated testRepeatedComplex() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const ComplexMessageRepeated &testRepeatedComplex() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedComplex(const ComplexMessageRepeated &testRepeatedComplex);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedComplex(ComplexMessageRepeated &&testRepeatedComplex);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -394,7 +394,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sint32List testRepeatedInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::sint32List &testRepeatedInt() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(const QtProtobuf::sint32List &testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(QtProtobuf::sint32List &&testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -445,7 +445,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32List testRepeatedInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::int32List &testRepeatedInt() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(const QtProtobuf::int32List &testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(QtProtobuf::int32List &&testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -496,7 +496,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::uint32List testRepeatedInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::uint32List &testRepeatedInt() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(const QtProtobuf::uint32List &testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(QtProtobuf::uint32List &&testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -547,7 +547,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sint64List testRepeatedInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::sint64List &testRepeatedInt() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(const QtProtobuf::sint64List &testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(QtProtobuf::sint64List &&testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -598,7 +598,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int64List testRepeatedInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::int64List &testRepeatedInt() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(const QtProtobuf::int64List &testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(QtProtobuf::int64List &&testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -649,7 +649,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::uint64List testRepeatedInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::uint64List &testRepeatedInt() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(const QtProtobuf::uint64List &testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(QtProtobuf::uint64List &&testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -700,7 +700,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::fixed32List testRepeatedInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::fixed32List &testRepeatedInt() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(const QtProtobuf::fixed32List &testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(QtProtobuf::fixed32List &&testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -751,7 +751,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sfixed32List testRepeatedInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::sfixed32List &testRepeatedInt() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(const QtProtobuf::sfixed32List &testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(QtProtobuf::sfixed32List &&testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -802,7 +802,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::fixed64List testRepeatedInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::fixed64List &testRepeatedInt() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(const QtProtobuf::fixed64List &testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(QtProtobuf::fixed64List &&testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -853,7 +853,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::sfixed64List testRepeatedInt() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::sfixed64List &testRepeatedInt() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(const QtProtobuf::sfixed64List &testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedInt(QtProtobuf::sfixed64List &&testRepeatedInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -904,7 +904,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::boolList testRepeatedBool() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QtProtobuf::boolList &testRepeatedBool() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedBool(const QtProtobuf::boolList &testRepeatedBool);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestRepeatedBool(QtProtobuf::boolList &&testRepeatedBool);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();

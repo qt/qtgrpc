@@ -471,6 +471,18 @@ const char *CommonTemplates::GetterMessageDefinitionTemplate()
            "}\n\n";
 }
 
+const char *CommonTemplates::GetterComplexDeclarationTemplate()
+{
+    return "$export_macro$const $getter_type$ &$property_name$() const &;\n";
+}
+
+const char *CommonTemplates::GetterComplexDefinitionTemplate()
+{
+    return "const $getter_type$ &$classname$::$property_name$() const &\n"
+           "{\n"
+           "    return dptr->m_$property_name$;\n"
+           "}\n\n";
+}
 const char *CommonTemplates::PrivateGetterOneofDeclarationTemplate()
 {
     return "$export_macro$$getter_type$ $property_name$_p() const;\n";

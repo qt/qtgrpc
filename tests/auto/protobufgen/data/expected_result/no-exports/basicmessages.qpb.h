@@ -533,7 +533,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QString testFieldString() const;
+    const QString &testFieldString() const &;
     void setTestFieldString(const QString &testFieldString);
     void setTestFieldString(QString &&testFieldString);
     static void registerTypes();
@@ -684,7 +684,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QByteArray testFieldBytes() const;
+    const QByteArray &testFieldBytes() const &;
     void setTestFieldBytes(const QByteArray &testFieldBytes);
     void setTestFieldBytes(QByteArray &&testFieldBytes);
     static void registerTypes();

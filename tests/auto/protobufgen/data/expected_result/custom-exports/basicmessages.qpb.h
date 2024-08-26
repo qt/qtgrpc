@@ -535,7 +535,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_CUSTOM_EXPORT_NAME_EXPORT QString testFieldString() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT const QString &testFieldString() const &;
     QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldString(const QString &testFieldString);
     QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldString(QString &&testFieldString);
     QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();
@@ -686,7 +686,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_CUSTOM_EXPORT_NAME_EXPORT QByteArray testFieldBytes() const;
+    QPB_CUSTOM_EXPORT_NAME_EXPORT const QByteArray &testFieldBytes() const &;
     QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldBytes(const QByteArray &testFieldBytes);
     QPB_CUSTOM_EXPORT_NAME_EXPORT void setTestFieldBytes(QByteArray &&testFieldBytes);
     QPB_CUSTOM_EXPORT_NAME_EXPORT static void registerTypes();

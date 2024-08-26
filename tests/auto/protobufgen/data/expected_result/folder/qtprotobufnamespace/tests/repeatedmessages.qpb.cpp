@@ -94,7 +94,7 @@ bool comparesEqual(const RepeatedStringMessage &lhs, const RepeatedStringMessage
         && lhs.dptr->m_testRepeatedString == rhs.dptr->m_testRepeatedString;
 }
 
-QStringList RepeatedStringMessage::testRepeatedString() const
+const QStringList &RepeatedStringMessage::testRepeatedString() const &
 {
     return dptr->m_testRepeatedString;
 }
@@ -201,7 +201,7 @@ bool comparesEqual(const RepeatedDoubleMessage &lhs, const RepeatedDoubleMessage
         && lhs.dptr->m_testRepeatedDouble == rhs.dptr->m_testRepeatedDouble;
 }
 
-QtProtobuf::doubleList RepeatedDoubleMessage::testRepeatedDouble() const
+const QtProtobuf::doubleList &RepeatedDoubleMessage::testRepeatedDouble() const &
 {
     return dptr->m_testRepeatedDouble;
 }
@@ -308,7 +308,7 @@ bool comparesEqual(const RepeatedBytesMessage &lhs, const RepeatedBytesMessage &
         && lhs.dptr->m_testRepeatedBytes == rhs.dptr->m_testRepeatedBytes;
 }
 
-QByteArrayList RepeatedBytesMessage::testRepeatedBytes() const
+const QByteArrayList &RepeatedBytesMessage::testRepeatedBytes() const &
 {
     return dptr->m_testRepeatedBytes;
 }
@@ -415,7 +415,7 @@ bool comparesEqual(const RepeatedFloatMessage &lhs, const RepeatedFloatMessage &
         && lhs.dptr->m_testRepeatedFloat == rhs.dptr->m_testRepeatedFloat;
 }
 
-QtProtobuf::floatList RepeatedFloatMessage::testRepeatedFloat() const
+const QtProtobuf::floatList &RepeatedFloatMessage::testRepeatedFloat() const &
 {
     return dptr->m_testRepeatedFloat;
 }
@@ -522,7 +522,7 @@ bool comparesEqual(const RepeatedComplexMessage &lhs, const RepeatedComplexMessa
         && lhs.dptr->m_testRepeatedComplex == rhs.dptr->m_testRepeatedComplex;
 }
 
-ComplexMessageRepeated RepeatedComplexMessage::testRepeatedComplex() const
+const ComplexMessageRepeated &RepeatedComplexMessage::testRepeatedComplex() const &
 {
     return dptr->m_testRepeatedComplex;
 }
@@ -629,7 +629,7 @@ bool comparesEqual(const RepeatedSIntMessage &lhs, const RepeatedSIntMessage &rh
         && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::sint32List RepeatedSIntMessage::testRepeatedInt() const
+const QtProtobuf::sint32List &RepeatedSIntMessage::testRepeatedInt() const &
 {
     return dptr->m_testRepeatedInt;
 }
@@ -736,7 +736,7 @@ bool comparesEqual(const RepeatedIntMessage &lhs, const RepeatedIntMessage &rhs)
         && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::int32List RepeatedIntMessage::testRepeatedInt() const
+const QtProtobuf::int32List &RepeatedIntMessage::testRepeatedInt() const &
 {
     return dptr->m_testRepeatedInt;
 }
@@ -843,7 +843,7 @@ bool comparesEqual(const RepeatedUIntMessage &lhs, const RepeatedUIntMessage &rh
         && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::uint32List RepeatedUIntMessage::testRepeatedInt() const
+const QtProtobuf::uint32List &RepeatedUIntMessage::testRepeatedInt() const &
 {
     return dptr->m_testRepeatedInt;
 }
@@ -950,7 +950,7 @@ bool comparesEqual(const RepeatedSInt64Message &lhs, const RepeatedSInt64Message
         && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::sint64List RepeatedSInt64Message::testRepeatedInt() const
+const QtProtobuf::sint64List &RepeatedSInt64Message::testRepeatedInt() const &
 {
     return dptr->m_testRepeatedInt;
 }
@@ -1057,7 +1057,7 @@ bool comparesEqual(const RepeatedInt64Message &lhs, const RepeatedInt64Message &
         && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::int64List RepeatedInt64Message::testRepeatedInt() const
+const QtProtobuf::int64List &RepeatedInt64Message::testRepeatedInt() const &
 {
     return dptr->m_testRepeatedInt;
 }
@@ -1164,7 +1164,7 @@ bool comparesEqual(const RepeatedUInt64Message &lhs, const RepeatedUInt64Message
         && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::uint64List RepeatedUInt64Message::testRepeatedInt() const
+const QtProtobuf::uint64List &RepeatedUInt64Message::testRepeatedInt() const &
 {
     return dptr->m_testRepeatedInt;
 }
@@ -1271,7 +1271,7 @@ bool comparesEqual(const RepeatedFixedIntMessage &lhs, const RepeatedFixedIntMes
         && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::fixed32List RepeatedFixedIntMessage::testRepeatedInt() const
+const QtProtobuf::fixed32List &RepeatedFixedIntMessage::testRepeatedInt() const &
 {
     return dptr->m_testRepeatedInt;
 }
@@ -1378,7 +1378,7 @@ bool comparesEqual(const RepeatedSFixedIntMessage &lhs, const RepeatedSFixedIntM
         && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::sfixed32List RepeatedSFixedIntMessage::testRepeatedInt() const
+const QtProtobuf::sfixed32List &RepeatedSFixedIntMessage::testRepeatedInt() const &
 {
     return dptr->m_testRepeatedInt;
 }
@@ -1485,7 +1485,7 @@ bool comparesEqual(const RepeatedFixedInt64Message &lhs, const RepeatedFixedInt6
         && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::fixed64List RepeatedFixedInt64Message::testRepeatedInt() const
+const QtProtobuf::fixed64List &RepeatedFixedInt64Message::testRepeatedInt() const &
 {
     return dptr->m_testRepeatedInt;
 }
@@ -1592,7 +1592,7 @@ bool comparesEqual(const RepeatedSFixedInt64Message &lhs, const RepeatedSFixedIn
         && lhs.dptr->m_testRepeatedInt == rhs.dptr->m_testRepeatedInt;
 }
 
-QtProtobuf::sfixed64List RepeatedSFixedInt64Message::testRepeatedInt() const
+const QtProtobuf::sfixed64List &RepeatedSFixedInt64Message::testRepeatedInt() const &
 {
     return dptr->m_testRepeatedInt;
 }
@@ -1699,7 +1699,7 @@ bool comparesEqual(const RepeatedBoolMessage &lhs, const RepeatedBoolMessage &rh
         && lhs.dptr->m_testRepeatedBool == rhs.dptr->m_testRepeatedBool;
 }
 
-QtProtobuf::boolList RepeatedBoolMessage::testRepeatedBool() const
+const QtProtobuf::boolList &RepeatedBoolMessage::testRepeatedBool() const &
 {
     return dptr->m_testRepeatedBool;
 }

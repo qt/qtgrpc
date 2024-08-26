@@ -173,7 +173,7 @@ bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rh
         && lhs.dptr->m_testFieldString == rhs.dptr->m_testFieldString;
 }
 
-QString SimpleStringMessage::testFieldString() const
+const QString &SimpleStringMessage::testFieldString() const &
 {
     return dptr->m_testFieldString;
 }

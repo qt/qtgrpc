@@ -96,7 +96,7 @@ bool comparesEqual(const SimpleSInt32StringMapMessage &lhs, const SimpleSInt32St
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt32StringMapMessage::MapFieldEntry SimpleSInt32StringMapMessage::mapField() const
+const SimpleSInt32StringMapMessage::MapFieldEntry &SimpleSInt32StringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -205,7 +205,7 @@ bool comparesEqual(const SimpleSInt64StringMapMessage &lhs, const SimpleSInt64St
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt64StringMapMessage::MapFieldEntry SimpleSInt64StringMapMessage::mapField() const
+const SimpleSInt64StringMapMessage::MapFieldEntry &SimpleSInt64StringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -314,7 +314,7 @@ bool comparesEqual(const SimpleInt32StringMapMessage &lhs, const SimpleInt32Stri
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt32StringMapMessage::MapFieldEntry SimpleInt32StringMapMessage::mapField() const
+const SimpleInt32StringMapMessage::MapFieldEntry &SimpleInt32StringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -423,7 +423,7 @@ bool comparesEqual(const SimpleInt64StringMapMessage &lhs, const SimpleInt64Stri
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt64StringMapMessage::MapFieldEntry SimpleInt64StringMapMessage::mapField() const
+const SimpleInt64StringMapMessage::MapFieldEntry &SimpleInt64StringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -532,7 +532,7 @@ bool comparesEqual(const SimpleUInt32StringMapMessage &lhs, const SimpleUInt32St
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt32StringMapMessage::MapFieldEntry SimpleUInt32StringMapMessage::mapField() const
+const SimpleUInt32StringMapMessage::MapFieldEntry &SimpleUInt32StringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -641,7 +641,7 @@ bool comparesEqual(const SimpleUInt64StringMapMessage &lhs, const SimpleUInt64St
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt64StringMapMessage::MapFieldEntry SimpleUInt64StringMapMessage::mapField() const
+const SimpleUInt64StringMapMessage::MapFieldEntry &SimpleUInt64StringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -750,7 +750,7 @@ bool comparesEqual(const SimpleFixed32StringMapMessage &lhs, const SimpleFixed32
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed32StringMapMessage::MapFieldEntry SimpleFixed32StringMapMessage::mapField() const
+const SimpleFixed32StringMapMessage::MapFieldEntry &SimpleFixed32StringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -859,7 +859,7 @@ bool comparesEqual(const SimpleFixed64StringMapMessage &lhs, const SimpleFixed64
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed64StringMapMessage::MapFieldEntry SimpleFixed64StringMapMessage::mapField() const
+const SimpleFixed64StringMapMessage::MapFieldEntry &SimpleFixed64StringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -968,7 +968,7 @@ bool comparesEqual(const SimpleSFixed32StringMapMessage &lhs, const SimpleSFixed
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed32StringMapMessage::MapFieldEntry SimpleSFixed32StringMapMessage::mapField() const
+const SimpleSFixed32StringMapMessage::MapFieldEntry &SimpleSFixed32StringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -1077,7 +1077,7 @@ bool comparesEqual(const SimpleSFixed64StringMapMessage &lhs, const SimpleSFixed
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed64StringMapMessage::MapFieldEntry SimpleSFixed64StringMapMessage::mapField() const
+const SimpleSFixed64StringMapMessage::MapFieldEntry &SimpleSFixed64StringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -1186,7 +1186,7 @@ bool comparesEqual(const SimpleStringStringMapMessage &lhs, const SimpleStringSt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleStringStringMapMessage::MapFieldEntry SimpleStringStringMapMessage::mapField() const
+const SimpleStringStringMapMessage::MapFieldEntry &SimpleStringStringMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -1295,7 +1295,7 @@ bool comparesEqual(const SimpleSInt32SInt32MapMessage &lhs, const SimpleSInt32SI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt32SInt32MapMessage::MapFieldEntry SimpleSInt32SInt32MapMessage::mapField() const
+const SimpleSInt32SInt32MapMessage::MapFieldEntry &SimpleSInt32SInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -1404,7 +1404,7 @@ bool comparesEqual(const SimpleSInt64SInt32MapMessage &lhs, const SimpleSInt64SI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt64SInt32MapMessage::MapFieldEntry SimpleSInt64SInt32MapMessage::mapField() const
+const SimpleSInt64SInt32MapMessage::MapFieldEntry &SimpleSInt64SInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -1513,7 +1513,7 @@ bool comparesEqual(const SimpleInt32SInt32MapMessage &lhs, const SimpleInt32SInt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt32SInt32MapMessage::MapFieldEntry SimpleInt32SInt32MapMessage::mapField() const
+const SimpleInt32SInt32MapMessage::MapFieldEntry &SimpleInt32SInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -1622,7 +1622,7 @@ bool comparesEqual(const SimpleInt64SInt32MapMessage &lhs, const SimpleInt64SInt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt64SInt32MapMessage::MapFieldEntry SimpleInt64SInt32MapMessage::mapField() const
+const SimpleInt64SInt32MapMessage::MapFieldEntry &SimpleInt64SInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -1731,7 +1731,7 @@ bool comparesEqual(const SimpleUInt32SInt32MapMessage &lhs, const SimpleUInt32SI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt32SInt32MapMessage::MapFieldEntry SimpleUInt32SInt32MapMessage::mapField() const
+const SimpleUInt32SInt32MapMessage::MapFieldEntry &SimpleUInt32SInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -1840,7 +1840,7 @@ bool comparesEqual(const SimpleUInt64SInt32MapMessage &lhs, const SimpleUInt64SI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt64SInt32MapMessage::MapFieldEntry SimpleUInt64SInt32MapMessage::mapField() const
+const SimpleUInt64SInt32MapMessage::MapFieldEntry &SimpleUInt64SInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -1949,7 +1949,7 @@ bool comparesEqual(const SimpleFixed32SInt32MapMessage &lhs, const SimpleFixed32
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed32SInt32MapMessage::MapFieldEntry SimpleFixed32SInt32MapMessage::mapField() const
+const SimpleFixed32SInt32MapMessage::MapFieldEntry &SimpleFixed32SInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -2058,7 +2058,7 @@ bool comparesEqual(const SimpleFixed64SInt32MapMessage &lhs, const SimpleFixed64
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed64SInt32MapMessage::MapFieldEntry SimpleFixed64SInt32MapMessage::mapField() const
+const SimpleFixed64SInt32MapMessage::MapFieldEntry &SimpleFixed64SInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -2167,7 +2167,7 @@ bool comparesEqual(const SimpleSFixed32SInt32MapMessage &lhs, const SimpleSFixed
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed32SInt32MapMessage::MapFieldEntry SimpleSFixed32SInt32MapMessage::mapField() const
+const SimpleSFixed32SInt32MapMessage::MapFieldEntry &SimpleSFixed32SInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -2276,7 +2276,7 @@ bool comparesEqual(const SimpleSFixed64SInt32MapMessage &lhs, const SimpleSFixed
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed64SInt32MapMessage::MapFieldEntry SimpleSFixed64SInt32MapMessage::mapField() const
+const SimpleSFixed64SInt32MapMessage::MapFieldEntry &SimpleSFixed64SInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -2385,7 +2385,7 @@ bool comparesEqual(const SimpleStringSInt32MapMessage &lhs, const SimpleStringSI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleStringSInt32MapMessage::MapFieldEntry SimpleStringSInt32MapMessage::mapField() const
+const SimpleStringSInt32MapMessage::MapFieldEntry &SimpleStringSInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -2494,7 +2494,7 @@ bool comparesEqual(const SimpleSInt32SInt64MapMessage &lhs, const SimpleSInt32SI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt32SInt64MapMessage::MapFieldEntry SimpleSInt32SInt64MapMessage::mapField() const
+const SimpleSInt32SInt64MapMessage::MapFieldEntry &SimpleSInt32SInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -2603,7 +2603,7 @@ bool comparesEqual(const SimpleSInt64SInt64MapMessage &lhs, const SimpleSInt64SI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt64SInt64MapMessage::MapFieldEntry SimpleSInt64SInt64MapMessage::mapField() const
+const SimpleSInt64SInt64MapMessage::MapFieldEntry &SimpleSInt64SInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -2712,7 +2712,7 @@ bool comparesEqual(const SimpleInt32SInt64MapMessage &lhs, const SimpleInt32SInt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt32SInt64MapMessage::MapFieldEntry SimpleInt32SInt64MapMessage::mapField() const
+const SimpleInt32SInt64MapMessage::MapFieldEntry &SimpleInt32SInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -2821,7 +2821,7 @@ bool comparesEqual(const SimpleInt64SInt64MapMessage &lhs, const SimpleInt64SInt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt64SInt64MapMessage::MapFieldEntry SimpleInt64SInt64MapMessage::mapField() const
+const SimpleInt64SInt64MapMessage::MapFieldEntry &SimpleInt64SInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -2930,7 +2930,7 @@ bool comparesEqual(const SimpleUInt32SInt64MapMessage &lhs, const SimpleUInt32SI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt32SInt64MapMessage::MapFieldEntry SimpleUInt32SInt64MapMessage::mapField() const
+const SimpleUInt32SInt64MapMessage::MapFieldEntry &SimpleUInt32SInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -3039,7 +3039,7 @@ bool comparesEqual(const SimpleUInt64SInt64MapMessage &lhs, const SimpleUInt64SI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt64SInt64MapMessage::MapFieldEntry SimpleUInt64SInt64MapMessage::mapField() const
+const SimpleUInt64SInt64MapMessage::MapFieldEntry &SimpleUInt64SInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -3148,7 +3148,7 @@ bool comparesEqual(const SimpleFixed32SInt64MapMessage &lhs, const SimpleFixed32
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed32SInt64MapMessage::MapFieldEntry SimpleFixed32SInt64MapMessage::mapField() const
+const SimpleFixed32SInt64MapMessage::MapFieldEntry &SimpleFixed32SInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -3257,7 +3257,7 @@ bool comparesEqual(const SimpleFixed64SInt64MapMessage &lhs, const SimpleFixed64
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed64SInt64MapMessage::MapFieldEntry SimpleFixed64SInt64MapMessage::mapField() const
+const SimpleFixed64SInt64MapMessage::MapFieldEntry &SimpleFixed64SInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -3366,7 +3366,7 @@ bool comparesEqual(const SimpleSFixed32SInt64MapMessage &lhs, const SimpleSFixed
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed32SInt64MapMessage::MapFieldEntry SimpleSFixed32SInt64MapMessage::mapField() const
+const SimpleSFixed32SInt64MapMessage::MapFieldEntry &SimpleSFixed32SInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -3475,7 +3475,7 @@ bool comparesEqual(const SimpleSFixed64SInt64MapMessage &lhs, const SimpleSFixed
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed64SInt64MapMessage::MapFieldEntry SimpleSFixed64SInt64MapMessage::mapField() const
+const SimpleSFixed64SInt64MapMessage::MapFieldEntry &SimpleSFixed64SInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -3584,7 +3584,7 @@ bool comparesEqual(const SimpleStringSInt64MapMessage &lhs, const SimpleStringSI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleStringSInt64MapMessage::MapFieldEntry SimpleStringSInt64MapMessage::mapField() const
+const SimpleStringSInt64MapMessage::MapFieldEntry &SimpleStringSInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -3693,7 +3693,7 @@ bool comparesEqual(const SimpleSInt32UInt32MapMessage &lhs, const SimpleSInt32UI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt32UInt32MapMessage::MapFieldEntry SimpleSInt32UInt32MapMessage::mapField() const
+const SimpleSInt32UInt32MapMessage::MapFieldEntry &SimpleSInt32UInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -3802,7 +3802,7 @@ bool comparesEqual(const SimpleSInt64UInt32MapMessage &lhs, const SimpleSInt64UI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt64UInt32MapMessage::MapFieldEntry SimpleSInt64UInt32MapMessage::mapField() const
+const SimpleSInt64UInt32MapMessage::MapFieldEntry &SimpleSInt64UInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -3911,7 +3911,7 @@ bool comparesEqual(const SimpleInt32UInt32MapMessage &lhs, const SimpleInt32UInt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt32UInt32MapMessage::MapFieldEntry SimpleInt32UInt32MapMessage::mapField() const
+const SimpleInt32UInt32MapMessage::MapFieldEntry &SimpleInt32UInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -4020,7 +4020,7 @@ bool comparesEqual(const SimpleInt64UInt32MapMessage &lhs, const SimpleInt64UInt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt64UInt32MapMessage::MapFieldEntry SimpleInt64UInt32MapMessage::mapField() const
+const SimpleInt64UInt32MapMessage::MapFieldEntry &SimpleInt64UInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -4129,7 +4129,7 @@ bool comparesEqual(const SimpleUInt32UInt32MapMessage &lhs, const SimpleUInt32UI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt32UInt32MapMessage::MapFieldEntry SimpleUInt32UInt32MapMessage::mapField() const
+const SimpleUInt32UInt32MapMessage::MapFieldEntry &SimpleUInt32UInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -4238,7 +4238,7 @@ bool comparesEqual(const SimpleUInt64UInt32MapMessage &lhs, const SimpleUInt64UI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt64UInt32MapMessage::MapFieldEntry SimpleUInt64UInt32MapMessage::mapField() const
+const SimpleUInt64UInt32MapMessage::MapFieldEntry &SimpleUInt64UInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -4347,7 +4347,7 @@ bool comparesEqual(const SimpleFixed32UInt32MapMessage &lhs, const SimpleFixed32
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed32UInt32MapMessage::MapFieldEntry SimpleFixed32UInt32MapMessage::mapField() const
+const SimpleFixed32UInt32MapMessage::MapFieldEntry &SimpleFixed32UInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -4456,7 +4456,7 @@ bool comparesEqual(const SimpleFixed64UInt32MapMessage &lhs, const SimpleFixed64
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed64UInt32MapMessage::MapFieldEntry SimpleFixed64UInt32MapMessage::mapField() const
+const SimpleFixed64UInt32MapMessage::MapFieldEntry &SimpleFixed64UInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -4565,7 +4565,7 @@ bool comparesEqual(const SimpleSFixed32UInt32MapMessage &lhs, const SimpleSFixed
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed32UInt32MapMessage::MapFieldEntry SimpleSFixed32UInt32MapMessage::mapField() const
+const SimpleSFixed32UInt32MapMessage::MapFieldEntry &SimpleSFixed32UInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -4674,7 +4674,7 @@ bool comparesEqual(const SimpleSFixed64UInt32MapMessage &lhs, const SimpleSFixed
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed64UInt32MapMessage::MapFieldEntry SimpleSFixed64UInt32MapMessage::mapField() const
+const SimpleSFixed64UInt32MapMessage::MapFieldEntry &SimpleSFixed64UInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -4783,7 +4783,7 @@ bool comparesEqual(const SimpleStringUInt32MapMessage &lhs, const SimpleStringUI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleStringUInt32MapMessage::MapFieldEntry SimpleStringUInt32MapMessage::mapField() const
+const SimpleStringUInt32MapMessage::MapFieldEntry &SimpleStringUInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -4892,7 +4892,7 @@ bool comparesEqual(const SimpleSInt32UInt64MapMessage &lhs, const SimpleSInt32UI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt32UInt64MapMessage::MapFieldEntry SimpleSInt32UInt64MapMessage::mapField() const
+const SimpleSInt32UInt64MapMessage::MapFieldEntry &SimpleSInt32UInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -5001,7 +5001,7 @@ bool comparesEqual(const SimpleSInt64UInt64MapMessage &lhs, const SimpleSInt64UI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt64UInt64MapMessage::MapFieldEntry SimpleSInt64UInt64MapMessage::mapField() const
+const SimpleSInt64UInt64MapMessage::MapFieldEntry &SimpleSInt64UInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -5110,7 +5110,7 @@ bool comparesEqual(const SimpleInt32UInt64MapMessage &lhs, const SimpleInt32UInt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt32UInt64MapMessage::MapFieldEntry SimpleInt32UInt64MapMessage::mapField() const
+const SimpleInt32UInt64MapMessage::MapFieldEntry &SimpleInt32UInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -5219,7 +5219,7 @@ bool comparesEqual(const SimpleInt64UInt64MapMessage &lhs, const SimpleInt64UInt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt64UInt64MapMessage::MapFieldEntry SimpleInt64UInt64MapMessage::mapField() const
+const SimpleInt64UInt64MapMessage::MapFieldEntry &SimpleInt64UInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -5328,7 +5328,7 @@ bool comparesEqual(const SimpleUInt32UInt64MapMessage &lhs, const SimpleUInt32UI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt32UInt64MapMessage::MapFieldEntry SimpleUInt32UInt64MapMessage::mapField() const
+const SimpleUInt32UInt64MapMessage::MapFieldEntry &SimpleUInt32UInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -5437,7 +5437,7 @@ bool comparesEqual(const SimpleUInt64UInt64MapMessage &lhs, const SimpleUInt64UI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt64UInt64MapMessage::MapFieldEntry SimpleUInt64UInt64MapMessage::mapField() const
+const SimpleUInt64UInt64MapMessage::MapFieldEntry &SimpleUInt64UInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -5546,7 +5546,7 @@ bool comparesEqual(const SimpleFixed32UInt64MapMessage &lhs, const SimpleFixed32
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed32UInt64MapMessage::MapFieldEntry SimpleFixed32UInt64MapMessage::mapField() const
+const SimpleFixed32UInt64MapMessage::MapFieldEntry &SimpleFixed32UInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -5655,7 +5655,7 @@ bool comparesEqual(const SimpleFixed64UInt64MapMessage &lhs, const SimpleFixed64
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed64UInt64MapMessage::MapFieldEntry SimpleFixed64UInt64MapMessage::mapField() const
+const SimpleFixed64UInt64MapMessage::MapFieldEntry &SimpleFixed64UInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -5764,7 +5764,7 @@ bool comparesEqual(const SimpleSFixed32UInt64MapMessage &lhs, const SimpleSFixed
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed32UInt64MapMessage::MapFieldEntry SimpleSFixed32UInt64MapMessage::mapField() const
+const SimpleSFixed32UInt64MapMessage::MapFieldEntry &SimpleSFixed32UInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -5873,7 +5873,7 @@ bool comparesEqual(const SimpleSFixed64UInt64MapMessage &lhs, const SimpleSFixed
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed64UInt64MapMessage::MapFieldEntry SimpleSFixed64UInt64MapMessage::mapField() const
+const SimpleSFixed64UInt64MapMessage::MapFieldEntry &SimpleSFixed64UInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -5982,7 +5982,7 @@ bool comparesEqual(const SimpleStringUInt64MapMessage &lhs, const SimpleStringUI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleStringUInt64MapMessage::MapFieldEntry SimpleStringUInt64MapMessage::mapField() const
+const SimpleStringUInt64MapMessage::MapFieldEntry &SimpleStringUInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -6091,7 +6091,7 @@ bool comparesEqual(const SimpleSInt32Int32MapMessage &lhs, const SimpleSInt32Int
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt32Int32MapMessage::MapFieldEntry SimpleSInt32Int32MapMessage::mapField() const
+const SimpleSInt32Int32MapMessage::MapFieldEntry &SimpleSInt32Int32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -6200,7 +6200,7 @@ bool comparesEqual(const SimpleSInt64Int32MapMessage &lhs, const SimpleSInt64Int
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt64Int32MapMessage::MapFieldEntry SimpleSInt64Int32MapMessage::mapField() const
+const SimpleSInt64Int32MapMessage::MapFieldEntry &SimpleSInt64Int32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -6309,7 +6309,7 @@ bool comparesEqual(const SimpleInt32Int32MapMessage &lhs, const SimpleInt32Int32
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt32Int32MapMessage::MapFieldEntry SimpleInt32Int32MapMessage::mapField() const
+const SimpleInt32Int32MapMessage::MapFieldEntry &SimpleInt32Int32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -6418,7 +6418,7 @@ bool comparesEqual(const SimpleInt64Int32MapMessage &lhs, const SimpleInt64Int32
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt64Int32MapMessage::MapFieldEntry SimpleInt64Int32MapMessage::mapField() const
+const SimpleInt64Int32MapMessage::MapFieldEntry &SimpleInt64Int32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -6527,7 +6527,7 @@ bool comparesEqual(const SimpleUInt32Int32MapMessage &lhs, const SimpleUInt32Int
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt32Int32MapMessage::MapFieldEntry SimpleUInt32Int32MapMessage::mapField() const
+const SimpleUInt32Int32MapMessage::MapFieldEntry &SimpleUInt32Int32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -6636,7 +6636,7 @@ bool comparesEqual(const SimpleUInt64Int32MapMessage &lhs, const SimpleUInt64Int
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt64Int32MapMessage::MapFieldEntry SimpleUInt64Int32MapMessage::mapField() const
+const SimpleUInt64Int32MapMessage::MapFieldEntry &SimpleUInt64Int32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -6745,7 +6745,7 @@ bool comparesEqual(const SimpleFixed32Int32MapMessage &lhs, const SimpleFixed32I
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed32Int32MapMessage::MapFieldEntry SimpleFixed32Int32MapMessage::mapField() const
+const SimpleFixed32Int32MapMessage::MapFieldEntry &SimpleFixed32Int32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -6854,7 +6854,7 @@ bool comparesEqual(const SimpleFixed64Int32MapMessage &lhs, const SimpleFixed64I
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed64Int32MapMessage::MapFieldEntry SimpleFixed64Int32MapMessage::mapField() const
+const SimpleFixed64Int32MapMessage::MapFieldEntry &SimpleFixed64Int32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -6963,7 +6963,7 @@ bool comparesEqual(const SimpleSFixed32Int32MapMessage &lhs, const SimpleSFixed3
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed32Int32MapMessage::MapFieldEntry SimpleSFixed32Int32MapMessage::mapField() const
+const SimpleSFixed32Int32MapMessage::MapFieldEntry &SimpleSFixed32Int32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -7072,7 +7072,7 @@ bool comparesEqual(const SimpleSFixed64Int32MapMessage &lhs, const SimpleSFixed6
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed64Int32MapMessage::MapFieldEntry SimpleSFixed64Int32MapMessage::mapField() const
+const SimpleSFixed64Int32MapMessage::MapFieldEntry &SimpleSFixed64Int32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -7181,7 +7181,7 @@ bool comparesEqual(const SimpleStringInt32MapMessage &lhs, const SimpleStringInt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleStringInt32MapMessage::MapFieldEntry SimpleStringInt32MapMessage::mapField() const
+const SimpleStringInt32MapMessage::MapFieldEntry &SimpleStringInt32MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -7290,7 +7290,7 @@ bool comparesEqual(const SimpleSInt32Int64MapMessage &lhs, const SimpleSInt32Int
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt32Int64MapMessage::MapFieldEntry SimpleSInt32Int64MapMessage::mapField() const
+const SimpleSInt32Int64MapMessage::MapFieldEntry &SimpleSInt32Int64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -7399,7 +7399,7 @@ bool comparesEqual(const SimpleSInt64Int64MapMessage &lhs, const SimpleSInt64Int
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt64Int64MapMessage::MapFieldEntry SimpleSInt64Int64MapMessage::mapField() const
+const SimpleSInt64Int64MapMessage::MapFieldEntry &SimpleSInt64Int64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -7508,7 +7508,7 @@ bool comparesEqual(const SimpleInt32Int64MapMessage &lhs, const SimpleInt32Int64
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt32Int64MapMessage::MapFieldEntry SimpleInt32Int64MapMessage::mapField() const
+const SimpleInt32Int64MapMessage::MapFieldEntry &SimpleInt32Int64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -7617,7 +7617,7 @@ bool comparesEqual(const SimpleInt64Int64MapMessage &lhs, const SimpleInt64Int64
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt64Int64MapMessage::MapFieldEntry SimpleInt64Int64MapMessage::mapField() const
+const SimpleInt64Int64MapMessage::MapFieldEntry &SimpleInt64Int64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -7726,7 +7726,7 @@ bool comparesEqual(const SimpleUInt32Int64MapMessage &lhs, const SimpleUInt32Int
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt32Int64MapMessage::MapFieldEntry SimpleUInt32Int64MapMessage::mapField() const
+const SimpleUInt32Int64MapMessage::MapFieldEntry &SimpleUInt32Int64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -7835,7 +7835,7 @@ bool comparesEqual(const SimpleUInt64Int64MapMessage &lhs, const SimpleUInt64Int
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt64Int64MapMessage::MapFieldEntry SimpleUInt64Int64MapMessage::mapField() const
+const SimpleUInt64Int64MapMessage::MapFieldEntry &SimpleUInt64Int64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -7944,7 +7944,7 @@ bool comparesEqual(const SimpleFixed32Int64MapMessage &lhs, const SimpleFixed32I
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed32Int64MapMessage::MapFieldEntry SimpleFixed32Int64MapMessage::mapField() const
+const SimpleFixed32Int64MapMessage::MapFieldEntry &SimpleFixed32Int64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -8053,7 +8053,7 @@ bool comparesEqual(const SimpleFixed64Int64MapMessage &lhs, const SimpleFixed64I
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed64Int64MapMessage::MapFieldEntry SimpleFixed64Int64MapMessage::mapField() const
+const SimpleFixed64Int64MapMessage::MapFieldEntry &SimpleFixed64Int64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -8162,7 +8162,7 @@ bool comparesEqual(const SimpleSFixed32Int64MapMessage &lhs, const SimpleSFixed3
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed32Int64MapMessage::MapFieldEntry SimpleSFixed32Int64MapMessage::mapField() const
+const SimpleSFixed32Int64MapMessage::MapFieldEntry &SimpleSFixed32Int64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -8271,7 +8271,7 @@ bool comparesEqual(const SimpleSFixed64Int64MapMessage &lhs, const SimpleSFixed6
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed64Int64MapMessage::MapFieldEntry SimpleSFixed64Int64MapMessage::mapField() const
+const SimpleSFixed64Int64MapMessage::MapFieldEntry &SimpleSFixed64Int64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -8380,7 +8380,7 @@ bool comparesEqual(const SimpleStringInt64MapMessage &lhs, const SimpleStringInt
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleStringInt64MapMessage::MapFieldEntry SimpleStringInt64MapMessage::mapField() const
+const SimpleStringInt64MapMessage::MapFieldEntry &SimpleStringInt64MapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -8489,7 +8489,7 @@ bool comparesEqual(const SimpleSInt32ComplexMessageMapMessage &lhs, const Simple
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt32ComplexMessageMapMessage::MapFieldEntry SimpleSInt32ComplexMessageMapMessage::mapField() const
+const SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &SimpleSInt32ComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -8598,7 +8598,7 @@ bool comparesEqual(const SimpleSInt64ComplexMessageMapMessage &lhs, const Simple
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSInt64ComplexMessageMapMessage::MapFieldEntry SimpleSInt64ComplexMessageMapMessage::mapField() const
+const SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &SimpleSInt64ComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -8707,7 +8707,7 @@ bool comparesEqual(const SimpleInt32ComplexMessageMapMessage &lhs, const SimpleI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt32ComplexMessageMapMessage::MapFieldEntry SimpleInt32ComplexMessageMapMessage::mapField() const
+const SimpleInt32ComplexMessageMapMessage::MapFieldEntry &SimpleInt32ComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -8816,7 +8816,7 @@ bool comparesEqual(const SimpleInt64ComplexMessageMapMessage &lhs, const SimpleI
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleInt64ComplexMessageMapMessage::MapFieldEntry SimpleInt64ComplexMessageMapMessage::mapField() const
+const SimpleInt64ComplexMessageMapMessage::MapFieldEntry &SimpleInt64ComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -8925,7 +8925,7 @@ bool comparesEqual(const SimpleUInt32ComplexMessageMapMessage &lhs, const Simple
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt32ComplexMessageMapMessage::MapFieldEntry SimpleUInt32ComplexMessageMapMessage::mapField() const
+const SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &SimpleUInt32ComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -9034,7 +9034,7 @@ bool comparesEqual(const SimpleUInt64ComplexMessageMapMessage &lhs, const Simple
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleUInt64ComplexMessageMapMessage::MapFieldEntry SimpleUInt64ComplexMessageMapMessage::mapField() const
+const SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &SimpleUInt64ComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -9143,7 +9143,7 @@ bool comparesEqual(const SimpleFixed32ComplexMessageMapMessage &lhs, const Simpl
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed32ComplexMessageMapMessage::MapFieldEntry SimpleFixed32ComplexMessageMapMessage::mapField() const
+const SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &SimpleFixed32ComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -9252,7 +9252,7 @@ bool comparesEqual(const SimpleFixed64ComplexMessageMapMessage &lhs, const Simpl
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleFixed64ComplexMessageMapMessage::MapFieldEntry SimpleFixed64ComplexMessageMapMessage::mapField() const
+const SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &SimpleFixed64ComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -9361,7 +9361,7 @@ bool comparesEqual(const SimpleSFixed32ComplexMessageMapMessage &lhs, const Simp
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry SimpleSFixed32ComplexMessageMapMessage::mapField() const
+const SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &SimpleSFixed32ComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -9470,7 +9470,7 @@ bool comparesEqual(const SimpleSFixed64ComplexMessageMapMessage &lhs, const Simp
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry SimpleSFixed64ComplexMessageMapMessage::mapField() const
+const SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &SimpleSFixed64ComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }
@@ -9579,7 +9579,7 @@ bool comparesEqual(const SimpleStringComplexMessageMapMessage &lhs, const Simple
         && lhs.dptr->m_mapField == rhs.dptr->m_mapField;
 }
 
-SimpleStringComplexMessageMapMessage::MapFieldEntry SimpleStringComplexMessageMapMessage::mapField() const
+const SimpleStringComplexMessageMapMessage::MapFieldEntry &SimpleStringComplexMessageMapMessage::mapField() const &
 {
     return dptr->m_mapField;
 }

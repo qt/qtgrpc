@@ -225,7 +225,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated localEnumList() const;
+    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT const RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated &localEnumList() const &;
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setLocalEnumList(const RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated &localEnumList);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setLocalEnumList(RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated &&localEnumList);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT static void registerTypes();
@@ -301,11 +301,11 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT MixedEnumUsageMessage_QtProtobufNested::LocalEnum localEnum() const;
 
-    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated localEnumList() const;
+    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT const MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated &localEnumList() const &;
 
-    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT MixedEnumUsageMessage::LocalEnumMapEntry localEnumMap() const;
+    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT const MixedEnumUsageMessage::LocalEnumMapEntry &localEnumMap() const &;
 
-    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated msgList() const;
+    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT const MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated &msgList() const &;
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setLocalEnum(MixedEnumUsageMessage_QtProtobufNested::LocalEnum localEnum);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setLocalEnumList(const MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated &localEnumList);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setLocalEnumList(MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated &&localEnumList);
@@ -610,7 +610,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT TestEnumGadget::TestEnum globalEnum() const;
 
-    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT TestEnumGadget::TestEnumRepeated globalEnumList() const;
+    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT const TestEnumGadget::TestEnumRepeated &globalEnumList() const &;
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setGlobalEnum(TestEnumGadget::TestEnum globalEnum);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setGlobalEnumList(const TestEnumGadget::TestEnumRepeated &globalEnumList);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setGlobalEnumList(TestEnumGadget::TestEnumRepeated &&globalEnumList);
@@ -668,7 +668,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleEnumMessage_QtProtobufNested::LocalEnum localStepChildEnum() const;
 
-    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated localStepChildList() const;
+    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT const SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated &localStepChildList() const &;
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setLocalStepChildEnum(SimpleEnumMessage_QtProtobufNested::LocalEnum localStepChildEnum);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setLocalStepChildList(const SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated &localStepChildList);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setLocalStepChildList(SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated &&localStepChildList);

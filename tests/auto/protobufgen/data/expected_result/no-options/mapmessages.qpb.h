@@ -571,7 +571,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt32StringMapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt32StringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt32StringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt32StringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -623,7 +623,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt64StringMapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt64StringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt64StringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt64StringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -675,7 +675,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt32StringMapMessage::MapFieldEntry mapField() const;
+    const SimpleInt32StringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt32StringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt32StringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -727,7 +727,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt64StringMapMessage::MapFieldEntry mapField() const;
+    const SimpleInt64StringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt64StringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt64StringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -779,7 +779,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt32StringMapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt32StringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt32StringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt32StringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -831,7 +831,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt64StringMapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt64StringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt64StringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt64StringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -883,7 +883,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed32StringMapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed32StringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed32StringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed32StringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -935,7 +935,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed64StringMapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed64StringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed64StringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed64StringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -987,7 +987,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed32StringMapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed32StringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed32StringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed32StringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1039,7 +1039,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed64StringMapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed64StringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed64StringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed64StringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1091,7 +1091,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleStringStringMapMessage::MapFieldEntry mapField() const;
+    const SimpleStringStringMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleStringStringMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleStringStringMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1143,7 +1143,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt32SInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt32SInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt32SInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt32SInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1195,7 +1195,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt64SInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt64SInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt64SInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt64SInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1247,7 +1247,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt32SInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt32SInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt32SInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt32SInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1299,7 +1299,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt64SInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt64SInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt64SInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt64SInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1351,7 +1351,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt32SInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt32SInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt32SInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt32SInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1403,7 +1403,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt64SInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt64SInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt64SInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt64SInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1455,7 +1455,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed32SInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed32SInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed32SInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed32SInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1507,7 +1507,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed64SInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed64SInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed64SInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed64SInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1559,7 +1559,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed32SInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed32SInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed32SInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed32SInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1611,7 +1611,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed64SInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed64SInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed64SInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed64SInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1663,7 +1663,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleStringSInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleStringSInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleStringSInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleStringSInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1715,7 +1715,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt32SInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt32SInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt32SInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt32SInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1767,7 +1767,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt64SInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt64SInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt64SInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt64SInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1819,7 +1819,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt32SInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt32SInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt32SInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt32SInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1871,7 +1871,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt64SInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt64SInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt64SInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt64SInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1923,7 +1923,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt32SInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt32SInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt32SInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt32SInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -1975,7 +1975,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt64SInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt64SInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt64SInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt64SInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2027,7 +2027,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed32SInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed32SInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed32SInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed32SInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2079,7 +2079,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed64SInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed64SInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed64SInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed64SInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2131,7 +2131,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed32SInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed32SInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed32SInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed32SInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2183,7 +2183,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed64SInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed64SInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed64SInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed64SInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2235,7 +2235,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleStringSInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleStringSInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleStringSInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleStringSInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2287,7 +2287,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt32UInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt32UInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt32UInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt32UInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2339,7 +2339,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt64UInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt64UInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt64UInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt64UInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2391,7 +2391,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt32UInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt32UInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt32UInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt32UInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2443,7 +2443,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt64UInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt64UInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt64UInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt64UInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2495,7 +2495,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt32UInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt32UInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt32UInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt32UInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2547,7 +2547,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt64UInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt64UInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt64UInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt64UInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2599,7 +2599,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed32UInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed32UInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed32UInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed32UInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2651,7 +2651,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed64UInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed64UInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed64UInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed64UInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2703,7 +2703,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed32UInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed32UInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed32UInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed32UInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2755,7 +2755,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed64UInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed64UInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed64UInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed64UInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2807,7 +2807,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleStringUInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleStringUInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleStringUInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleStringUInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2859,7 +2859,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt32UInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt32UInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt32UInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt32UInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2911,7 +2911,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt64UInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt64UInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt64UInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt64UInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -2963,7 +2963,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt32UInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt32UInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt32UInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt32UInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3015,7 +3015,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt64UInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt64UInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt64UInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt64UInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3067,7 +3067,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt32UInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt32UInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt32UInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt32UInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3119,7 +3119,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt64UInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt64UInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt64UInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt64UInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3171,7 +3171,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed32UInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed32UInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed32UInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed32UInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3223,7 +3223,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed64UInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed64UInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed64UInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed64UInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3275,7 +3275,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed32UInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed32UInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed32UInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed32UInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3327,7 +3327,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed64UInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed64UInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed64UInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed64UInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3379,7 +3379,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleStringUInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleStringUInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleStringUInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleStringUInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3431,7 +3431,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt32Int32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt32Int32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt32Int32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt32Int32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3483,7 +3483,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt64Int32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt64Int32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt64Int32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt64Int32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3535,7 +3535,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt32Int32MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt32Int32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt32Int32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt32Int32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3587,7 +3587,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt64Int32MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt64Int32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt64Int32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt64Int32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3639,7 +3639,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt32Int32MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt32Int32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt32Int32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt32Int32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3691,7 +3691,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt64Int32MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt64Int32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt64Int32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt64Int32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3743,7 +3743,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed32Int32MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed32Int32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed32Int32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed32Int32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3795,7 +3795,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed64Int32MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed64Int32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed64Int32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed64Int32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3847,7 +3847,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed32Int32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed32Int32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed32Int32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed32Int32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3899,7 +3899,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed64Int32MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed64Int32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed64Int32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed64Int32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -3951,7 +3951,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleStringInt32MapMessage::MapFieldEntry mapField() const;
+    const SimpleStringInt32MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleStringInt32MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleStringInt32MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4003,7 +4003,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt32Int64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt32Int64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt32Int64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt32Int64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4055,7 +4055,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt64Int64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt64Int64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt64Int64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt64Int64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4107,7 +4107,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt32Int64MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt32Int64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt32Int64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt32Int64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4159,7 +4159,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt64Int64MapMessage::MapFieldEntry mapField() const;
+    const SimpleInt64Int64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt64Int64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt64Int64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4211,7 +4211,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt32Int64MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt32Int64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt32Int64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt32Int64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4263,7 +4263,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt64Int64MapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt64Int64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt64Int64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt64Int64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4315,7 +4315,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed32Int64MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed32Int64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed32Int64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed32Int64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4367,7 +4367,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed64Int64MapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed64Int64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed64Int64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed64Int64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4419,7 +4419,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed32Int64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed32Int64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed32Int64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed32Int64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4471,7 +4471,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed64Int64MapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed64Int64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed64Int64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed64Int64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4523,7 +4523,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleStringInt64MapMessage::MapFieldEntry mapField() const;
+    const SimpleStringInt64MapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleStringInt64MapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleStringInt64MapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4575,7 +4575,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4627,7 +4627,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4679,7 +4679,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleInt32ComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt32ComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt32ComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4731,7 +4731,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleInt64ComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleInt64ComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleInt64ComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4783,7 +4783,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4835,7 +4835,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleUInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4887,7 +4887,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4939,7 +4939,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -4991,7 +4991,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -5043,7 +5043,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();
@@ -5095,7 +5095,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    SimpleStringComplexMessageMapMessage::MapFieldEntry mapField() const;
+    const SimpleStringComplexMessageMapMessage::MapFieldEntry &mapField() const &;
     void setMapField(const SimpleStringComplexMessageMapMessage::MapFieldEntry &mapField);
     void setMapField(SimpleStringComplexMessageMapMessage::MapFieldEntry &&mapField);
     static void registerTypes();

@@ -405,16 +405,35 @@ void MessageDefinitionPrinter::printGetters()
                     return;
                 }
 
-                if (common::isPureMessage(field)) {
+                switch (field->type()) {
+                case FieldDescriptor::TYPE_MESSAGE:
+                    if (common::isPureMessage(field)) {
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::PrivateGetterMessageDefinitionTemplate());
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::GetterMessageDefinitionTemplate());
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::ClearMessageDefinitionTemplate());
+                    } else {
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::GetterComplexDefinitionTemplate());
+                    }
+                    break;
+                case FieldDescriptor::FieldDescriptor::TYPE_STRING:
+                case FieldDescriptor::FieldDescriptor::TYPE_BYTES:
                     m_printer->Print(propertyMap,
-                                     CommonTemplates::PrivateGetterMessageDefinitionTemplate());
+                                     CommonTemplates::GetterComplexDefinitionTemplate());
+                    break;
+                case FieldDescriptor::TYPE_FLOAT:
+                case FieldDescriptor::TYPE_DOUBLE:
+                default:
                     m_printer->Print(propertyMap,
-                                     CommonTemplates::GetterMessageDefinitionTemplate());
-                    m_printer->Print(propertyMap,
-                                     CommonTemplates::ClearMessageDefinitionTemplate());
-                } else {
-                    m_printer->Print(propertyMap, CommonTemplates::GetterDefinitionTemplate());
+                                     field->is_repeated()
+                                         ? CommonTemplates::GetterComplexDefinitionTemplate()
+                                         : CommonTemplates::GetterDefinitionTemplate());
+                    break;
                 }
+
             });
 
     common::iterateMessageFields(

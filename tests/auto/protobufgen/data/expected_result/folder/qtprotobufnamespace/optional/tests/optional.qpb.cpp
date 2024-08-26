@@ -94,7 +94,7 @@ bool comparesEqual(const TestStringMessage &lhs, const TestStringMessage &rhs) n
         && lhs.dptr->m_stringField == rhs.dptr->m_stringField;
 }
 
-QString TestStringMessage::stringField() const
+const QString &TestStringMessage::stringField() const &
 {
     return dptr->m_stringField;
 }
@@ -317,7 +317,7 @@ bool OptionalMessage::testFieldBoolOpt() const
     return dptr->m_testFieldBoolOpt.value();
 }
 
-QByteArray OptionalMessage::testFieldBytes() const
+const QByteArray &OptionalMessage::testFieldBytes() const &
 {
     return dptr->m_testFieldBytes;
 }
@@ -338,7 +338,7 @@ QByteArray OptionalMessage::testFieldBytesOpt() const
     return dptr->m_testFieldBytesOpt.value();
 }
 
-QString OptionalMessage::testFieldString() const
+const QString &OptionalMessage::testFieldString() const &
 {
     return dptr->m_testFieldString;
 }

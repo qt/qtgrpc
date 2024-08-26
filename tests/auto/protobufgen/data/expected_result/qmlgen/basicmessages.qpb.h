@@ -555,7 +555,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT QString testFieldString() const;
+    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT const QString &testFieldString() const &;
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setTestFieldString(const QString &testFieldString);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setTestFieldString(QString &&testFieldString);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT static void registerTypes();
@@ -712,7 +712,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT QByteArray testFieldBytes() const;
+    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT const QByteArray &testFieldBytes() const &;
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setTestFieldBytes(const QByteArray &testFieldBytes);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setTestFieldBytes(QByteArray &&testFieldBytes);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT static void registerTypes();

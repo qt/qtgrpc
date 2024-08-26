@@ -72,7 +72,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::Any field() const;
+    const QtProtobuf::Any &field() const &;
     void setField(const QtProtobuf::Any &field);
     void setField(QtProtobuf::Any &&field);
     static void registerTypes();
@@ -123,7 +123,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QList<QtProtobuf::Any> anys() const;
+    const QList<QtProtobuf::Any> &anys() const &;
     void setAnys(const QList<QtProtobuf::Any> &anys);
     void setAnys(QList<QtProtobuf::Any> &&anys);
     static void registerTypes();
@@ -175,9 +175,9 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QtProtobuf::Any one() const;
+    const QtProtobuf::Any &one() const &;
 
-    QtProtobuf::Any two() const;
+    const QtProtobuf::Any &two() const &;
     void setOne(const QtProtobuf::Any &one);
     void setOne(QtProtobuf::Any &&one);
     void setTwo(const QtProtobuf::Any &two);
@@ -235,7 +235,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QString str() const;
+    const QString &str() const &;
 
     QtProtobuf::sint32 i() const;
 
@@ -243,7 +243,7 @@ public:
 
     QtProtobuf::sint32 h() const;
 
-    QString str2() const;
+    const QString &str2() const &;
     void setStr(const QString &str);
     void setStr(QString &&str);
     void setI(QtProtobuf::sint32 i);

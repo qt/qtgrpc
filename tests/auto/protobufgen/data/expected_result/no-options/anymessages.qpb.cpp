@@ -94,7 +94,7 @@ bool comparesEqual(const AnyMessage &lhs, const AnyMessage &rhs) noexcept
         && lhs.dptr->m_field == rhs.dptr->m_field;
 }
 
-QtProtobuf::Any AnyMessage::field() const
+const QtProtobuf::Any &AnyMessage::field() const &
 {
     return dptr->m_field;
 }
@@ -201,7 +201,7 @@ bool comparesEqual(const RepeatedAnyMessage &lhs, const RepeatedAnyMessage &rhs)
         && lhs.dptr->m_anys == rhs.dptr->m_anys;
 }
 
-QList<QtProtobuf::Any> RepeatedAnyMessage::anys() const
+const QList<QtProtobuf::Any> &RepeatedAnyMessage::anys() const &
 {
     return dptr->m_anys;
 }
@@ -315,12 +315,12 @@ bool comparesEqual(const TwoAnyMessage &lhs, const TwoAnyMessage &rhs) noexcept
         && lhs.dptr->m_two == rhs.dptr->m_two;
 }
 
-QtProtobuf::Any TwoAnyMessage::one() const
+const QtProtobuf::Any &TwoAnyMessage::one() const &
 {
     return dptr->m_one;
 }
 
-QtProtobuf::Any TwoAnyMessage::two() const
+const QtProtobuf::Any &TwoAnyMessage::two() const &
 {
     return dptr->m_two;
 }
@@ -474,7 +474,7 @@ bool comparesEqual(const Example &lhs, const Example &rhs) noexcept
         && lhs.dptr->m_str2 == rhs.dptr->m_str2;
 }
 
-QString Example::str() const
+const QString &Example::str() const &
 {
     return dptr->m_str;
 }
@@ -494,7 +494,7 @@ QtProtobuf::sint32 Example::h() const
     return dptr->m_h;
 }
 
-QString Example::str2() const
+const QString &Example::str2() const &
 {
     return dptr->m_str2;
 }
