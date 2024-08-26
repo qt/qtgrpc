@@ -6,7 +6,7 @@
 \ingroup cmake-commands-qtprotobuf
 
 \title qt_add_protobuf
-\target qt6_add_protobuf
+\keyword qt6_add_protobuf
 \summary {Generates Qt-based C++ source code using a protobuf schema}
 \preliminarycmakecommand
 \cmakecommandsince 6.5
