@@ -17,13 +17,12 @@
 
 #include <QtGrpcQuick/qtgrpcquickexports.h>
 
-#include <QtQml/qqmlregistration.h>
+#include <QtQmlIntegration/qqmlintegration.h>
 
 #include <QtCore/qbytearray.h>
 #include <QtCore/qhash.h>
-#include <QtCore/qmap.h>
 #include <QtCore/qobject.h>
-#include <QtCore/qvariant.h>
+#include <QtCore/qvariantmap.h>
 
 QT_BEGIN_NAMESPACE
 

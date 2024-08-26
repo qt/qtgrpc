@@ -1,9 +1,11 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include "qqmlgrpcchanneloptions_p.h"
-#include "qqmlgrpcmetadata_p.h"
+#include <QtGrpcQuick/private/qqmlgrpcchanneloptions_p.h>
+#include <QtGrpcQuick/private/qqmlgrpcmetadata_p.h>
+
 #include <QtGrpc/qgrpcserializationformat.h>
+
 #include <QtCore/private/qobject_p.h>
 
 #include <chrono>

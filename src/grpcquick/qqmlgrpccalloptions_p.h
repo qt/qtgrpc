@@ -18,10 +18,11 @@
 #include <QtGrpcQuick/qtgrpcquickexports.h>
 #include <QtGrpcQuick/private/qqmlgrpcmetadata_p.h>
 
-#include <QtCore/qobject.h>
-#include <QtCore/qglobal.h>
 #include <QtGrpc/qgrpccalloptions.h>
-#include <QtQml/qqmlregistration.h>
+
+#include <QtQmlIntegration/qqmlintegration.h>
+
+#include <QtCore/qobject.h>
 
 QT_BEGIN_NAMESPACE
 
