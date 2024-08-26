@@ -15,11 +15,11 @@
 // We mean it.
 //
 
-#include <QtGrpcQuick/qtgrpcquickexports.h>
-#include <QtGrpcQuick/qqmlabstractgrpcchannel.h>
 #include <QtGrpcQuick/private/qqmlgrpcchanneloptions_p.h>
+#include <QtGrpcQuick/qqmlabstractgrpcchannel.h>
+#include <QtGrpcQuick/qtgrpcquickexports.h>
 
-#include <QtQml/qqmlregistration.h>
+#include <QtQmlIntegration/qqmlintegration.h>
 
 QT_BEGIN_NAMESPACE
 

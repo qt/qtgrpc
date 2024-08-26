@@ -1,7 +1,9 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include "qqmlgrpchttp2channel_p.h"
+#include <QtGrpcQuick/qqmlabstractgrpcchannel.h>
+#include <QtGrpcQuick/private/qqmlgrpchttp2channel_p.h>
+
 #include <QtGrpc/qgrpchttp2channel.h>
 
 #include <QtCore/qdebug.h>

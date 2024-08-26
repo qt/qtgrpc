@@ -16,14 +16,16 @@
 //
 
 #include <QtGrpcQuick/qtgrpcquickexports.h>
-#include <QtCore/qobject.h>
+
 #include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qtgrpcnamespace.h>
-#include <QtQml/qqmlregistration.h>
 
+#include <QtQmlIntegration/qqmlintegration.h>
 #if QT_CONFIG(ssl)
-#include <QtQmlNetwork/private/qqmlsslconfiguration_p.h>
-#endif // QT_CONFIG(ssl)
+#  include <QtQmlNetwork/private/qqmlsslconfiguration_p.h>
+#endif
+
+#include <QtCore/qobject.h>
 
 QT_BEGIN_NAMESPACE
 

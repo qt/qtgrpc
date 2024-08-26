@@ -4,8 +4,9 @@
 #ifndef QQMLABSTRACTGRPCCHANNEL_H
 #define QQMLABSTRACTGRPCCHANNEL_H
 
-#include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpcQuick/qtgrpcquickexports.h>
+
+#include <QtGrpc/qabstractgrpcchannel.h>
 
 #include <QtCore/qobject.h>
 
