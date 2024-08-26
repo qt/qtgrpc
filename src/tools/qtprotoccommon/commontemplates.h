@@ -98,6 +98,8 @@ public:
     static const char *ClearMessageDefinitionTemplate();
     static const char *GetterMessageDeclarationTemplate();
     static const char *GetterMessageDefinitionTemplate();
+    static const char *GetterComplexDeclarationTemplate();
+    static const char *GetterComplexDefinitionTemplate();
     static const char *PrivateGetterOneofDeclarationTemplate();
     static const char *PrivateGetterOneofDefinitionTemplate();
     static const char *PrivateGetterOptionalDefinitionTemplate();

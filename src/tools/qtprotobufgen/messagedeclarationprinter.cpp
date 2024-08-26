@@ -275,15 +275,33 @@ void MessageDeclarationPrinter::printGetters()
                     return;
                 }
 
-                if (common::isPureMessage(field)) {
+                switch (field->type()) {
+                case FieldDescriptor::TYPE_MESSAGE:
+                    if (common::isPureMessage(field)) {
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::GetterMessageDeclarationTemplate());
+                        m_printer->Print(propertyMap,
+                                         Options::instance().hasQml()
+                                             ? CommonTemplates::ClearQmlMessageDeclarationTemplate()
+                                             : CommonTemplates::ClearMessageDeclarationTemplate());
+                    } else {
+                        m_printer->Print(propertyMap,
+                                         CommonTemplates::GetterComplexDeclarationTemplate());
+                    }
+                    break;
+                case FieldDescriptor::FieldDescriptor::TYPE_STRING:
+                case FieldDescriptor::FieldDescriptor::TYPE_BYTES:
                     m_printer->Print(propertyMap,
-                                     CommonTemplates::GetterMessageDeclarationTemplate());
+                                     CommonTemplates::GetterComplexDeclarationTemplate());
+                    break;
+                case FieldDescriptor::TYPE_FLOAT:
+                case FieldDescriptor::TYPE_DOUBLE:
+                default:
                     m_printer->Print(propertyMap,
-                                     Options::instance().hasQml()
-                                         ? CommonTemplates::ClearQmlMessageDeclarationTemplate()
-                                         : CommonTemplates::ClearMessageDeclarationTemplate());
-                } else {
-                    m_printer->Print(propertyMap, CommonTemplates::GetterDeclarationTemplate());
+                                     field->is_repeated()
+                                         ? CommonTemplates::GetterComplexDeclarationTemplate()
+                                         : CommonTemplates::GetterDeclarationTemplate());
+                    break;
                 }
             });
     common::iterateOneofFields(

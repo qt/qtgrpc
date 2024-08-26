@@ -99,7 +99,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QString testFieldString() const;
+    const QString &testFieldString() const &;
     void setTestFieldString(const QString &testFieldString);
     void setTestFieldString(QString &&testFieldString);
     static void registerTypes();

@@ -55,7 +55,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QString stringField() const;
+    const QString &stringField() const &;
     void setStringField(const QString &stringField);
     void setStringField(QString &&stringField);
     static void registerTypes();
@@ -131,12 +131,12 @@ public:
     bool hasTestFieldBoolOpt() const;
     bool testFieldBoolOpt() const;
 
-    QByteArray testFieldBytes() const;
+    const QByteArray &testFieldBytes() const &;
 
     bool hasTestFieldBytesOpt() const;
     QByteArray testFieldBytesOpt() const;
 
-    QString testFieldString() const;
+    const QString &testFieldString() const &;
 
     bool hasTestFieldStringOpt() const;
     QString testFieldStringOpt() const;

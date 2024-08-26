@@ -216,7 +216,7 @@ bool comparesEqual(const RepeatedEnumMessage &lhs, const RepeatedEnumMessage &rh
         && lhs.dptr->m_localEnumList == rhs.dptr->m_localEnumList;
 }
 
-RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated RepeatedEnumMessage::localEnumList() const
+const RepeatedEnumMessage_QtProtobufNested::LocalEnumRepeated &RepeatedEnumMessage::localEnumList() const &
 {
     return dptr->m_localEnumList;
 }
@@ -789,17 +789,17 @@ MixedEnumUsageMessage_QtProtobufNested::LocalEnum MixedEnumUsageMessage::localEn
     return dptr->m_localEnum;
 }
 
-MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated MixedEnumUsageMessage::localEnumList() const
+const MixedEnumUsageMessage_QtProtobufNested::LocalEnumRepeated &MixedEnumUsageMessage::localEnumList() const &
 {
     return dptr->m_localEnumList;
 }
 
-MixedEnumUsageMessage::LocalEnumMapEntry MixedEnumUsageMessage::localEnumMap() const
+const MixedEnumUsageMessage::LocalEnumMapEntry &MixedEnumUsageMessage::localEnumMap() const &
 {
     return dptr->m_localEnumMap;
 }
 
-MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated MixedEnumUsageMessage::msgList() const
+const MixedEnumUsageMessage_QtProtobufNested::NestedEnumMessageRepeated &MixedEnumUsageMessage::msgList() const &
 {
     return dptr->m_msgList;
 }
@@ -959,7 +959,7 @@ TestEnumGadget::TestEnum SimpleFileEnumMessage::globalEnum() const
     return dptr->m_globalEnum;
 }
 
-TestEnumGadget::TestEnumRepeated SimpleFileEnumMessage::globalEnumList() const
+const TestEnumGadget::TestEnumRepeated &SimpleFileEnumMessage::globalEnumList() const &
 {
     return dptr->m_globalEnumList;
 }
@@ -1087,7 +1087,7 @@ SimpleEnumMessage_QtProtobufNested::LocalEnum StepChildEnumMessage::localStepChi
     return dptr->m_localStepChildEnum;
 }
 
-SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated StepChildEnumMessage::localStepChildList() const
+const SimpleEnumMessage_QtProtobufNested::LocalEnumRepeated &StepChildEnumMessage::localStepChildList() const &
 {
     return dptr->m_localStepChildList;
 }

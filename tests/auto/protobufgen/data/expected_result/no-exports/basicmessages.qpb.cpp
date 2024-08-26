@@ -873,7 +873,7 @@ bool comparesEqual(const SimpleStringMessage &lhs, const SimpleStringMessage &rh
         && lhs.dptr->m_testFieldString == rhs.dptr->m_testFieldString;
 }
 
-QString SimpleStringMessage::testFieldString() const
+const QString &SimpleStringMessage::testFieldString() const &
 {
     return dptr->m_testFieldString;
 }
@@ -1182,7 +1182,7 @@ bool comparesEqual(const SimpleBytesMessage &lhs, const SimpleBytesMessage &rhs)
         && lhs.dptr->m_testFieldBytes == rhs.dptr->m_testFieldBytes;
 }
 
-QByteArray SimpleBytesMessage::testFieldBytes() const
+const QByteArray &SimpleBytesMessage::testFieldBytes() const &
 {
     return dptr->m_testFieldBytes;
 }

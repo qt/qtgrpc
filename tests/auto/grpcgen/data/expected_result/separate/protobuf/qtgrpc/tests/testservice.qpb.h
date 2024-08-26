@@ -60,7 +60,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT QString testFieldString() const;
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT const QString &testFieldString() const &;
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestFieldString(const QString &testFieldString);
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestFieldString(QString &&testFieldString);
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT static void registerTypes();
@@ -161,7 +161,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT QByteArray testBytes() const;
+    QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT const QByteArray &testBytes() const &;
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestBytes(const QByteArray &testBytes);
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT void setTestBytes(QByteArray &&testBytes);
     QPB_TST_QTGRPCGEN_PROTOBUF_ONLY_EXPORT static void registerTypes();

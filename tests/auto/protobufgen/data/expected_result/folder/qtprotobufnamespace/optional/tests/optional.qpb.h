@@ -57,7 +57,7 @@ public:
         dptr.swap(other.dptr);
     }
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QString stringField() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QString &stringField() const &;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setStringField(const QString &stringField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setStringField(QString &&stringField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
@@ -133,12 +133,12 @@ public:
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldBoolOpt() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool testFieldBoolOpt() const;
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QByteArray testFieldBytes() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QByteArray &testFieldBytes() const &;
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldBytesOpt() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QByteArray testFieldBytesOpt() const;
 
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QString testFieldString() const;
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT const QString &testFieldString() const &;
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestFieldStringOpt() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QString testFieldStringOpt() const;
