@@ -979,7 +979,7 @@ public:
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT QtProtobuf::int32 testFieldInt() const;
 
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT bool hasTestComplexField() const;
-    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT const SimpleStringMessage &testComplexField() const;
+    QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT const SimpleStringMessage &testComplexField() const &;
     Q_INVOKABLE QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void clearTestComplexField();
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setTestFieldInt(QtProtobuf::int32 testFieldInt);
     QPB_TST_QTPROTOBUFGEN_QML_GEN_EXPORT void setTestComplexField(const SimpleStringMessage &testComplexField);
