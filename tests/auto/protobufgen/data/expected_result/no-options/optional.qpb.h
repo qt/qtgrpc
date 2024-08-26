@@ -57,6 +57,7 @@ public:
 
     QString stringField() const;
     void setStringField(const QString &stringField);
+    void setStringField(QString &&stringField);
     static void registerTypes();
 
 private:
@@ -147,20 +148,26 @@ public:
     bool hasTestFieldMessageOpt() const;
     const TestStringMessage &testFieldMessageOpt() const;
     void clearTestFieldMessageOpt();
-    void setTestField(const QtProtobuf::sint32 &testField);
-    void setTestFieldOpt(const QtProtobuf::sint32 &testFieldOpt);
+    void setTestField(QtProtobuf::sint32 testField);
+    void setTestFieldOpt(QtProtobuf::sint32 testFieldOpt);
     void clearTestFieldOpt();
-    void setTestFieldBool(const bool &testFieldBool);
-    void setTestFieldBoolOpt(const bool &testFieldBoolOpt);
+    void setTestFieldBool(bool testFieldBool);
+    void setTestFieldBoolOpt(bool testFieldBoolOpt);
     void clearTestFieldBoolOpt();
     void setTestFieldBytes(const QByteArray &testFieldBytes);
+    void setTestFieldBytes(QByteArray &&testFieldBytes);
     void setTestFieldBytesOpt(const QByteArray &testFieldBytesOpt);
+    void setTestFieldBytesOpt(QByteArray &&testFieldBytesOpt);
     void clearTestFieldBytesOpt();
     void setTestFieldString(const QString &testFieldString);
+    void setTestFieldString(QString &&testFieldString);
     void setTestFieldStringOpt(const QString &testFieldStringOpt);
+    void setTestFieldStringOpt(QString &&testFieldStringOpt);
     void clearTestFieldStringOpt();
     void setTestFieldMessage(const TestStringMessage &testFieldMessage);
+    void setTestFieldMessage(TestStringMessage &&testFieldMessage);
     void setTestFieldMessageOpt(const TestStringMessage &testFieldMessageOpt);
+    void setTestFieldMessageOpt(TestStringMessage &&testFieldMessageOpt);
     static void registerTypes();
 
 private:

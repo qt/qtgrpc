@@ -41,6 +41,7 @@ private Q_SLOTS:
 
     void assignmentOperatorTest();
     void moveOperatorTest();
+    void rvalueSettersTest();
 
     void invalidMessageConstructorTest();
 };
@@ -444,6 +445,22 @@ void QtProtobufTypesGenerationTest::moveOperatorTest()
     test3.setTestFieldInt(35);
     qtprotobufnamespace::tests::SimpleIntMessage test4(std::move(test3));
     QCOMPARE(test4.testFieldInt(), 35);
+}
+
+void QtProtobufTypesGenerationTest::rvalueSettersTest()
+{
+    ComplexMessage complexField;
+    SimpleStringMessage stringField;
+    stringField.setTestFieldString("Value1");
+    complexField.setTestComplexField(std::move(stringField));
+
+    stringField = complexField.testComplexField();
+    auto stringFieldCopy = complexField.testComplexField();
+    stringFieldCopy.setTestFieldString("Value2");
+    complexField.setTestComplexField(std::move(stringFieldCopy));
+
+    QCOMPARE(stringField.testFieldString(), "Value1");
+    QCOMPARE(complexField.testComplexField().testFieldString(), "Value2");
 }
 
 void QtProtobufTypesGenerationTest::invalidMessageConstructorTest()

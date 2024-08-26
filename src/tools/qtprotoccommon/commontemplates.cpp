@@ -587,7 +587,8 @@ const char *CommonTemplates::PrivateSetterMessageDefinitionTemplate()
 
 const char *CommonTemplates::SetterMessageDeclarationTemplate()
 {
-    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
+    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n"
+           "$export_macro$void set$property_name_cap$($setter_type$ &&$property_name$);\n";
 }
 const char *CommonTemplates::SetterMessageDefinitionTemplate()
 {
@@ -596,12 +597,19 @@ const char *CommonTemplates::SetterMessageDefinitionTemplate()
            "        dptr.detach();\n"
            "        *dptr->m_$property_name$ = $property_name$;\n"
            "    }\n"
+           "}\n\n"
+           "void $classname$::set$property_name_cap$($setter_type$ &&$property_name$)\n{\n"
+           "    if (*dptr->m_$property_name$ != $property_name$) {\n"
+           "        dptr.detach();\n"
+           "        *dptr->m_$property_name$ = std::move($property_name$);\n"
+           "    }\n"
            "}\n\n";
 }
 
 const char *CommonTemplates::SetterComplexDeclarationTemplate()
 {
-    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
+    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n"
+           "$export_macro$void set$property_name_cap$($setter_type$ &&$property_name$);\n";
 }
 const char *CommonTemplates::SetterComplexDefinitionTemplate()
 {
@@ -609,6 +617,12 @@ const char *CommonTemplates::SetterComplexDefinitionTemplate()
            "    if (dptr->m_$property_name$ != $property_name$) {\n"
            "        dptr.detach();\n"
            "        dptr->m_$property_name$ = $property_name$;\n"
+           "    }\n"
+           "}\n\n"
+           "void $classname$::set$property_name_cap$($setter_type$ &&$property_name$)\n{\n"
+           "    if (dptr->m_$property_name$ != $property_name$) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$property_name$ = std::move($property_name$);\n"
            "    }\n"
            "}\n\n";
 }
@@ -683,20 +697,43 @@ const char *CommonTemplates::ClearOptionalDefinitionTemplate()
 
 const char *CommonTemplates::SetterOneofDeclarationTemplate()
 {
-    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
+    return "$export_macro$void set$property_name_cap$($setter_type$ $property_name$);\n";
 }
 const char *CommonTemplates::SetterOneofDefinitionTemplate()
 {
-    return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n{\n"
+    return "void $classname$::set$property_name_cap$($setter_type$ $property_name$)\n{\n"
            "    if (!dptr->m_$optional_property_name$.isEqual($property_name$, $number$)) {\n"
            "        dptr.detach();\n"
            "        dptr->m_$optional_property_name$.setValue($property_name$, $number$);\n"
            "    }\n"
            "}\n\n";
 }
-const char *CommonTemplates::SetterOptionalDefinitionTemplate()
+
+const char *CommonTemplates::SetterComplexOneofDeclarationTemplate()
+{
+    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n"
+           "$export_macro$void set$property_name_cap$($setter_type$ &&$property_name$);\n";
+}
+const char *CommonTemplates::SetterComplexOneofDefinitionTemplate()
 {
     return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n{\n"
+           "    if (!dptr->m_$optional_property_name$.isEqual($property_name$, $number$)) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$optional_property_name$.setValue($property_name$, $number$);\n"
+           "    }\n"
+           "}\n\n"
+           "void $classname$::set$property_name_cap$($setter_type$ &&$property_name$)\n{\n"
+           "    if (!dptr->m_$optional_property_name$.isEqual($property_name$, $number$)) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$optional_property_name$.setValue(std::move($property_name$),"
+           " $number$);\n"
+           "    }\n"
+           "}\n\n";
+}
+
+const char *CommonTemplates::SetterOptionalDefinitionTemplate()
+{
+    return "void $classname$::set$property_name_cap$($setter_type$ $property_name$)\n{\n"
            "    if (!dptr->m_$optional_property_name$ || dptr->m_$optional_property_name$.value() "
            "!= $property_name$) {\n"
            "        dptr.detach();\n"
@@ -704,14 +741,31 @@ const char *CommonTemplates::SetterOptionalDefinitionTemplate()
            "    }\n"
            "}\n\n";
 }
+const char *CommonTemplates::SetterComplexOptionalDefinitionTemplate()
+{
+    return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n{\n"
+           "    if (!dptr->m_$optional_property_name$ || dptr->m_$optional_property_name$.value() "
+           "!= $property_name$) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$optional_property_name$ = $property_name$;\n"
+           "    }\n"
+           "}\n\n"
+           "void $classname$::set$property_name_cap$($setter_type$ &&$property_name$)\n{\n"
+           "    if (!dptr->m_$optional_property_name$ || dptr->m_$optional_property_name$.value() "
+           "!= $property_name$) {\n"
+           "        dptr.detach();\n"
+           "        dptr->m_$optional_property_name$ = std::move($property_name$);\n"
+           "    }\n"
+           "}\n\n";
+}
 const char *CommonTemplates::SetterDeclarationTemplate()
 {
-    return "$export_macro$void set$property_name_cap$(const $setter_type$ &$property_name$);\n";
+    return "$export_macro$void set$property_name_cap$($setter_type$ $property_name$);\n";
 }
 
 const char *CommonTemplates::SetterDefinitionTemplate()
 {
-    return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n"
+    return "void $classname$::set$property_name_cap$($setter_type$ $property_name$)\n"
            "{\n"
            "    if (dptr->m_$property_name$ != $property_name$) {\n"
            "        dptr.detach();\n"
@@ -722,7 +776,7 @@ const char *CommonTemplates::SetterDefinitionTemplate()
 
 const char *CommonTemplates::SetterFloatingPointDefinitionTemplate()
 {
-    return "void $classname$::set$property_name_cap$(const $setter_type$ &$property_name$)\n"
+    return "void $classname$::set$property_name_cap$($setter_type$ $property_name$)\n"
            "{\n"
            "    if (dptr->m_$property_name$ != $property_name$ ||\n"
            "        std::signbit(dptr->m_$property_name$) != std::signbit($property_name$)) {\n"

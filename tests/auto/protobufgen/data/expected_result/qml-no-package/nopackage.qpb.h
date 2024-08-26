@@ -130,7 +130,7 @@ public:
     }
 
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT QtProtobuf::int32 testFieldInt() const;
-    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestFieldInt(QtProtobuf::int32 testFieldInt);
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT static void registerTypes();
 
 private:
@@ -187,6 +187,7 @@ public:
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT const SimpleIntMessageExt &testField() const;
     Q_INVOKABLE QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void clearTestField();
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestField(const SimpleIntMessageExt &testField);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestField(SimpleIntMessageExt &&testField);
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT static void registerTypes();
 
 private:
@@ -245,6 +246,7 @@ public:
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT const SimpleIntMessage &testField() const;
     Q_INVOKABLE QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void clearTestField();
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestField(const SimpleIntMessage &testField);
+    QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT void setTestField(SimpleIntMessage &&testField);
     QPB_TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN_EXPORT static void registerTypes();
 
 private:

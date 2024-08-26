@@ -65,7 +65,7 @@ public:
     }
 
     QtProtobuf::sint32 testField() const;
-    void setTestField(const QtProtobuf::sint32 &testField);
+    void setTestField(QtProtobuf::sint32 testField);
     static void registerTypes();
 
 private:
@@ -115,7 +115,7 @@ public:
     }
 
     QtProtobuf::sint32 testField() const;
-    void setTestField(const QtProtobuf::sint32 &testField);
+    void setTestField(QtProtobuf::sint32 testField);
     static void registerTypes();
 
 private:
@@ -165,7 +165,7 @@ public:
     }
 
     QtProtobuf::sint32 testField() const;
-    void setTestField(const QtProtobuf::sint32 &testField);
+    void setTestField(QtProtobuf::sint32 testField);
     static void registerTypes();
 
 private:
@@ -215,7 +215,7 @@ public:
     }
 
     QtProtobuf::sint32 testField() const;
-    void setTestField(const QtProtobuf::sint32 &testField);
+    void setTestField(QtProtobuf::sint32 testField);
     static void registerTypes();
 
 private:

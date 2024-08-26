@@ -74,6 +74,7 @@ public:
 
     QtProtobuf::Any field() const;
     void setField(const QtProtobuf::Any &field);
+    void setField(QtProtobuf::Any &&field);
     static void registerTypes();
 
 private:
@@ -124,6 +125,7 @@ public:
 
     QList<QtProtobuf::Any> anys() const;
     void setAnys(const QList<QtProtobuf::Any> &anys);
+    void setAnys(QList<QtProtobuf::Any> &&anys);
     static void registerTypes();
 
 private:
@@ -177,7 +179,9 @@ public:
 
     QtProtobuf::Any two() const;
     void setOne(const QtProtobuf::Any &one);
+    void setOne(QtProtobuf::Any &&one);
     void setTwo(const QtProtobuf::Any &two);
+    void setTwo(QtProtobuf::Any &&two);
     static void registerTypes();
 
 private:
@@ -241,10 +245,12 @@ public:
 
     QString str2() const;
     void setStr(const QString &str);
-    void setI(const QtProtobuf::sint32 &i);
-    void setJ(const QtProtobuf::sint32 &j);
-    void setH(const QtProtobuf::sint32 &h);
+    void setStr(QString &&str);
+    void setI(QtProtobuf::sint32 i);
+    void setJ(QtProtobuf::sint32 j);
+    void setH(QtProtobuf::sint32 h);
     void setStr2(const QString &str2);
+    void setStr2(QString &&str2);
     static void registerTypes();
 
 private:
@@ -298,7 +304,7 @@ public:
     }
 
     QtProtobuf::int32 i() const;
-    void setI(const QtProtobuf::int32 &i);
+    void setI(QtProtobuf::int32 i);
     static void registerTypes();
 
 private:

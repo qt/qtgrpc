@@ -101,6 +101,7 @@ public:
 
     QString testFieldString() const;
     void setTestFieldString(const QString &testFieldString);
+    void setTestFieldString(QString &&testFieldString);
     static void registerTypes();
 
 private:
@@ -156,8 +157,9 @@ public:
     bool hasTestComplexField() const;
     const SimpleStringMessage &testComplexField() const;
     void clearTestComplexField();
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
+    void setTestFieldInt(QtProtobuf::int32 testFieldInt);
     void setTestComplexField(const SimpleStringMessage &testComplexField);
+    void setTestComplexField(SimpleStringMessage &&testComplexField);
     static void registerTypes();
 
 private:

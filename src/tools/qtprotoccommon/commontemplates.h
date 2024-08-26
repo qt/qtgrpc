@@ -123,7 +123,10 @@ public:
     static const char *SetterFloatingPointDefinitionTemplate();
     static const char *SetterOneofDeclarationTemplate();
     static const char *SetterOneofDefinitionTemplate();
+    static const char *SetterComplexOneofDeclarationTemplate();
+    static const char *SetterComplexOneofDefinitionTemplate();
     static const char *SetterOptionalDefinitionTemplate();
+    static const char *SetterComplexOptionalDefinitionTemplate();
     static const char *PrivateSetterOneofDeclarationTemplate();
     static const char *PrivateSetterOneofDefinitionTemplate();
     static const char *PrivateSetterOptionalDefinitionTemplate();

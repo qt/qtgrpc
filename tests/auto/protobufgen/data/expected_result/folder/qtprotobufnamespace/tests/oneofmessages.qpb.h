@@ -69,8 +69,8 @@ public:
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT bool hasTestOneofFieldSecondInt() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testOneofFieldSecondInt() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestOneofFields testOneofField() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldSecondInt(const QtProtobuf::int32 &testOneofFieldSecondInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldInt(QtProtobuf::int32 testOneofFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldSecondInt(QtProtobuf::int32 testOneofFieldSecondInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestOneof();
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
@@ -172,14 +172,18 @@ public:
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT QtProtobuf::int32 testSnakeCaseField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT TestOneofFields testOneofField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SecondOneofFields secondOneofField() const;
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestFieldInt(QtProtobuf::int32 testFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofFieldInt(QtProtobuf::int32 testOneofFieldInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofComplexField(const ComplexMessage &testOneofComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofComplexField(ComplexMessage &&testOneofComplexField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofSecondComplexField(const ComplexMessage &testOneofSecondComplexField);
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondFieldInt(const QtProtobuf::int32 &secondFieldInt);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestOneofSecondComplexField(ComplexMessage &&testOneofSecondComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondFieldInt(QtProtobuf::int32 secondFieldInt);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondComplexField(const ComplexMessage &secondComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondComplexField(ComplexMessage &&secondComplexField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondSecondComplexField(const ComplexMessage &secondSecondComplexField);
-    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestSnakeCaseField(const QtProtobuf::int32 &testSnakeCaseField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setSecondSecondComplexField(ComplexMessage &&secondSecondComplexField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setTestSnakeCaseField(QtProtobuf::int32 testSnakeCaseField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearTestOneof();
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void clearSecondOneof();
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();

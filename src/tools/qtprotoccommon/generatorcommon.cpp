@@ -625,6 +625,14 @@ bool common::isOneofField(const FieldDescriptor *field)
 #endif
 }
 
+bool common::isTriviallyCopyable(const FieldDescriptor *field)
+{
+    return !field->is_repeated() &&
+        field->type() != FieldDescriptor::TYPE_MESSAGE &&
+        field->type() != FieldDescriptor::FieldDescriptor::TYPE_STRING &&
+        field->type() != FieldDescriptor::FieldDescriptor::TYPE_BYTES;
+}
+
 bool common::isOptionalField(const FieldDescriptor *field)
 {
 #ifdef HAVE_PROTOBUF_SYNC_PIPER

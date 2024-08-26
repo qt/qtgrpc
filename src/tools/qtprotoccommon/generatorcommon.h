@@ -127,6 +127,7 @@ struct common {
     static std::string qualifiedQmlName(const std::string &name);
     static bool isOneofField(const FieldDescriptor *field);
     static bool isOptionalField(const FieldDescriptor *field);
+    static bool isTriviallyCopyable(const FieldDescriptor *field);
     static bool isLocalEnum(const EnumDescriptor *type, const google::protobuf::Descriptor *scope);
     static EnumVisibility enumVisibility(const EnumDescriptor *type, const Descriptor *scope);
     static bool hasQmlAlias(const FieldDescriptor *field);

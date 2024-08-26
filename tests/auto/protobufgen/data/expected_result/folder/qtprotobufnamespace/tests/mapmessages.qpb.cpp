@@ -109,6 +109,14 @@ void SimpleSInt32StringMapMessage::setMapField(const SimpleSInt32StringMapMessag
     }
 }
 
+void SimpleSInt32StringMapMessage::setMapField(SimpleSInt32StringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSInt64StringMapMessage_QtProtobufData : public QSharedData
 {
@@ -207,6 +215,14 @@ void SimpleSInt64StringMapMessage::setMapField(const SimpleSInt64StringMapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSInt64StringMapMessage::setMapField(SimpleSInt64StringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -311,6 +327,14 @@ void SimpleInt32StringMapMessage::setMapField(const SimpleInt32StringMapMessage:
     }
 }
 
+void SimpleInt32StringMapMessage::setMapField(SimpleInt32StringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleInt64StringMapMessage_QtProtobufData : public QSharedData
 {
@@ -409,6 +433,14 @@ void SimpleInt64StringMapMessage::setMapField(const SimpleInt64StringMapMessage:
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleInt64StringMapMessage::setMapField(SimpleInt64StringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -513,6 +545,14 @@ void SimpleUInt32StringMapMessage::setMapField(const SimpleUInt32StringMapMessag
     }
 }
 
+void SimpleUInt32StringMapMessage::setMapField(SimpleUInt32StringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleUInt64StringMapMessage_QtProtobufData : public QSharedData
 {
@@ -611,6 +651,14 @@ void SimpleUInt64StringMapMessage::setMapField(const SimpleUInt64StringMapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleUInt64StringMapMessage::setMapField(SimpleUInt64StringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -715,6 +763,14 @@ void SimpleFixed32StringMapMessage::setMapField(const SimpleFixed32StringMapMess
     }
 }
 
+void SimpleFixed32StringMapMessage::setMapField(SimpleFixed32StringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleFixed64StringMapMessage_QtProtobufData : public QSharedData
 {
@@ -813,6 +869,14 @@ void SimpleFixed64StringMapMessage::setMapField(const SimpleFixed64StringMapMess
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleFixed64StringMapMessage::setMapField(SimpleFixed64StringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -917,6 +981,14 @@ void SimpleSFixed32StringMapMessage::setMapField(const SimpleSFixed32StringMapMe
     }
 }
 
+void SimpleSFixed32StringMapMessage::setMapField(SimpleSFixed32StringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSFixed64StringMapMessage_QtProtobufData : public QSharedData
 {
@@ -1015,6 +1087,14 @@ void SimpleSFixed64StringMapMessage::setMapField(const SimpleSFixed64StringMapMe
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSFixed64StringMapMessage::setMapField(SimpleSFixed64StringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -1119,6 +1199,14 @@ void SimpleStringStringMapMessage::setMapField(const SimpleStringStringMapMessag
     }
 }
 
+void SimpleStringStringMapMessage::setMapField(SimpleStringStringMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSInt32SInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -1217,6 +1305,14 @@ void SimpleSInt32SInt32MapMessage::setMapField(const SimpleSInt32SInt32MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSInt32SInt32MapMessage::setMapField(SimpleSInt32SInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -1321,6 +1417,14 @@ void SimpleSInt64SInt32MapMessage::setMapField(const SimpleSInt64SInt32MapMessag
     }
 }
 
+void SimpleSInt64SInt32MapMessage::setMapField(SimpleSInt64SInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleInt32SInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -1419,6 +1523,14 @@ void SimpleInt32SInt32MapMessage::setMapField(const SimpleInt32SInt32MapMessage:
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleInt32SInt32MapMessage::setMapField(SimpleInt32SInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -1523,6 +1635,14 @@ void SimpleInt64SInt32MapMessage::setMapField(const SimpleInt64SInt32MapMessage:
     }
 }
 
+void SimpleInt64SInt32MapMessage::setMapField(SimpleInt64SInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleUInt32SInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -1621,6 +1741,14 @@ void SimpleUInt32SInt32MapMessage::setMapField(const SimpleUInt32SInt32MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleUInt32SInt32MapMessage::setMapField(SimpleUInt32SInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -1725,6 +1853,14 @@ void SimpleUInt64SInt32MapMessage::setMapField(const SimpleUInt64SInt32MapMessag
     }
 }
 
+void SimpleUInt64SInt32MapMessage::setMapField(SimpleUInt64SInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleFixed32SInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -1823,6 +1959,14 @@ void SimpleFixed32SInt32MapMessage::setMapField(const SimpleFixed32SInt32MapMess
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleFixed32SInt32MapMessage::setMapField(SimpleFixed32SInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -1927,6 +2071,14 @@ void SimpleFixed64SInt32MapMessage::setMapField(const SimpleFixed64SInt32MapMess
     }
 }
 
+void SimpleFixed64SInt32MapMessage::setMapField(SimpleFixed64SInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSFixed32SInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -2025,6 +2177,14 @@ void SimpleSFixed32SInt32MapMessage::setMapField(const SimpleSFixed32SInt32MapMe
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSFixed32SInt32MapMessage::setMapField(SimpleSFixed32SInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -2129,6 +2289,14 @@ void SimpleSFixed64SInt32MapMessage::setMapField(const SimpleSFixed64SInt32MapMe
     }
 }
 
+void SimpleSFixed64SInt32MapMessage::setMapField(SimpleSFixed64SInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleStringSInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -2227,6 +2395,14 @@ void SimpleStringSInt32MapMessage::setMapField(const SimpleStringSInt32MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleStringSInt32MapMessage::setMapField(SimpleStringSInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -2331,6 +2507,14 @@ void SimpleSInt32SInt64MapMessage::setMapField(const SimpleSInt32SInt64MapMessag
     }
 }
 
+void SimpleSInt32SInt64MapMessage::setMapField(SimpleSInt32SInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSInt64SInt64MapMessage_QtProtobufData : public QSharedData
 {
@@ -2429,6 +2613,14 @@ void SimpleSInt64SInt64MapMessage::setMapField(const SimpleSInt64SInt64MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSInt64SInt64MapMessage::setMapField(SimpleSInt64SInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -2533,6 +2725,14 @@ void SimpleInt32SInt64MapMessage::setMapField(const SimpleInt32SInt64MapMessage:
     }
 }
 
+void SimpleInt32SInt64MapMessage::setMapField(SimpleInt32SInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleInt64SInt64MapMessage_QtProtobufData : public QSharedData
 {
@@ -2631,6 +2831,14 @@ void SimpleInt64SInt64MapMessage::setMapField(const SimpleInt64SInt64MapMessage:
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleInt64SInt64MapMessage::setMapField(SimpleInt64SInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -2735,6 +2943,14 @@ void SimpleUInt32SInt64MapMessage::setMapField(const SimpleUInt32SInt64MapMessag
     }
 }
 
+void SimpleUInt32SInt64MapMessage::setMapField(SimpleUInt32SInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleUInt64SInt64MapMessage_QtProtobufData : public QSharedData
 {
@@ -2833,6 +3049,14 @@ void SimpleUInt64SInt64MapMessage::setMapField(const SimpleUInt64SInt64MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleUInt64SInt64MapMessage::setMapField(SimpleUInt64SInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -2937,6 +3161,14 @@ void SimpleFixed32SInt64MapMessage::setMapField(const SimpleFixed32SInt64MapMess
     }
 }
 
+void SimpleFixed32SInt64MapMessage::setMapField(SimpleFixed32SInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleFixed64SInt64MapMessage_QtProtobufData : public QSharedData
 {
@@ -3035,6 +3267,14 @@ void SimpleFixed64SInt64MapMessage::setMapField(const SimpleFixed64SInt64MapMess
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleFixed64SInt64MapMessage::setMapField(SimpleFixed64SInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -3139,6 +3379,14 @@ void SimpleSFixed32SInt64MapMessage::setMapField(const SimpleSFixed32SInt64MapMe
     }
 }
 
+void SimpleSFixed32SInt64MapMessage::setMapField(SimpleSFixed32SInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSFixed64SInt64MapMessage_QtProtobufData : public QSharedData
 {
@@ -3237,6 +3485,14 @@ void SimpleSFixed64SInt64MapMessage::setMapField(const SimpleSFixed64SInt64MapMe
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSFixed64SInt64MapMessage::setMapField(SimpleSFixed64SInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -3341,6 +3597,14 @@ void SimpleStringSInt64MapMessage::setMapField(const SimpleStringSInt64MapMessag
     }
 }
 
+void SimpleStringSInt64MapMessage::setMapField(SimpleStringSInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSInt32UInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -3439,6 +3703,14 @@ void SimpleSInt32UInt32MapMessage::setMapField(const SimpleSInt32UInt32MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSInt32UInt32MapMessage::setMapField(SimpleSInt32UInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -3543,6 +3815,14 @@ void SimpleSInt64UInt32MapMessage::setMapField(const SimpleSInt64UInt32MapMessag
     }
 }
 
+void SimpleSInt64UInt32MapMessage::setMapField(SimpleSInt64UInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleInt32UInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -3641,6 +3921,14 @@ void SimpleInt32UInt32MapMessage::setMapField(const SimpleInt32UInt32MapMessage:
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleInt32UInt32MapMessage::setMapField(SimpleInt32UInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -3745,6 +4033,14 @@ void SimpleInt64UInt32MapMessage::setMapField(const SimpleInt64UInt32MapMessage:
     }
 }
 
+void SimpleInt64UInt32MapMessage::setMapField(SimpleInt64UInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleUInt32UInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -3843,6 +4139,14 @@ void SimpleUInt32UInt32MapMessage::setMapField(const SimpleUInt32UInt32MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleUInt32UInt32MapMessage::setMapField(SimpleUInt32UInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -3947,6 +4251,14 @@ void SimpleUInt64UInt32MapMessage::setMapField(const SimpleUInt64UInt32MapMessag
     }
 }
 
+void SimpleUInt64UInt32MapMessage::setMapField(SimpleUInt64UInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleFixed32UInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -4045,6 +4357,14 @@ void SimpleFixed32UInt32MapMessage::setMapField(const SimpleFixed32UInt32MapMess
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleFixed32UInt32MapMessage::setMapField(SimpleFixed32UInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -4149,6 +4469,14 @@ void SimpleFixed64UInt32MapMessage::setMapField(const SimpleFixed64UInt32MapMess
     }
 }
 
+void SimpleFixed64UInt32MapMessage::setMapField(SimpleFixed64UInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSFixed32UInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -4247,6 +4575,14 @@ void SimpleSFixed32UInt32MapMessage::setMapField(const SimpleSFixed32UInt32MapMe
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSFixed32UInt32MapMessage::setMapField(SimpleSFixed32UInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -4351,6 +4687,14 @@ void SimpleSFixed64UInt32MapMessage::setMapField(const SimpleSFixed64UInt32MapMe
     }
 }
 
+void SimpleSFixed64UInt32MapMessage::setMapField(SimpleSFixed64UInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleStringUInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -4449,6 +4793,14 @@ void SimpleStringUInt32MapMessage::setMapField(const SimpleStringUInt32MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleStringUInt32MapMessage::setMapField(SimpleStringUInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -4553,6 +4905,14 @@ void SimpleSInt32UInt64MapMessage::setMapField(const SimpleSInt32UInt64MapMessag
     }
 }
 
+void SimpleSInt32UInt64MapMessage::setMapField(SimpleSInt32UInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSInt64UInt64MapMessage_QtProtobufData : public QSharedData
 {
@@ -4651,6 +5011,14 @@ void SimpleSInt64UInt64MapMessage::setMapField(const SimpleSInt64UInt64MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSInt64UInt64MapMessage::setMapField(SimpleSInt64UInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -4755,6 +5123,14 @@ void SimpleInt32UInt64MapMessage::setMapField(const SimpleInt32UInt64MapMessage:
     }
 }
 
+void SimpleInt32UInt64MapMessage::setMapField(SimpleInt32UInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleInt64UInt64MapMessage_QtProtobufData : public QSharedData
 {
@@ -4853,6 +5229,14 @@ void SimpleInt64UInt64MapMessage::setMapField(const SimpleInt64UInt64MapMessage:
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleInt64UInt64MapMessage::setMapField(SimpleInt64UInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -4957,6 +5341,14 @@ void SimpleUInt32UInt64MapMessage::setMapField(const SimpleUInt32UInt64MapMessag
     }
 }
 
+void SimpleUInt32UInt64MapMessage::setMapField(SimpleUInt32UInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleUInt64UInt64MapMessage_QtProtobufData : public QSharedData
 {
@@ -5055,6 +5447,14 @@ void SimpleUInt64UInt64MapMessage::setMapField(const SimpleUInt64UInt64MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleUInt64UInt64MapMessage::setMapField(SimpleUInt64UInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -5159,6 +5559,14 @@ void SimpleFixed32UInt64MapMessage::setMapField(const SimpleFixed32UInt64MapMess
     }
 }
 
+void SimpleFixed32UInt64MapMessage::setMapField(SimpleFixed32UInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleFixed64UInt64MapMessage_QtProtobufData : public QSharedData
 {
@@ -5257,6 +5665,14 @@ void SimpleFixed64UInt64MapMessage::setMapField(const SimpleFixed64UInt64MapMess
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleFixed64UInt64MapMessage::setMapField(SimpleFixed64UInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -5361,6 +5777,14 @@ void SimpleSFixed32UInt64MapMessage::setMapField(const SimpleSFixed32UInt64MapMe
     }
 }
 
+void SimpleSFixed32UInt64MapMessage::setMapField(SimpleSFixed32UInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSFixed64UInt64MapMessage_QtProtobufData : public QSharedData
 {
@@ -5459,6 +5883,14 @@ void SimpleSFixed64UInt64MapMessage::setMapField(const SimpleSFixed64UInt64MapMe
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSFixed64UInt64MapMessage::setMapField(SimpleSFixed64UInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -5563,6 +5995,14 @@ void SimpleStringUInt64MapMessage::setMapField(const SimpleStringUInt64MapMessag
     }
 }
 
+void SimpleStringUInt64MapMessage::setMapField(SimpleStringUInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSInt32Int32MapMessage_QtProtobufData : public QSharedData
 {
@@ -5661,6 +6101,14 @@ void SimpleSInt32Int32MapMessage::setMapField(const SimpleSInt32Int32MapMessage:
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSInt32Int32MapMessage::setMapField(SimpleSInt32Int32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -5765,6 +6213,14 @@ void SimpleSInt64Int32MapMessage::setMapField(const SimpleSInt64Int32MapMessage:
     }
 }
 
+void SimpleSInt64Int32MapMessage::setMapField(SimpleSInt64Int32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleInt32Int32MapMessage_QtProtobufData : public QSharedData
 {
@@ -5863,6 +6319,14 @@ void SimpleInt32Int32MapMessage::setMapField(const SimpleInt32Int32MapMessage::M
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleInt32Int32MapMessage::setMapField(SimpleInt32Int32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -5967,6 +6431,14 @@ void SimpleInt64Int32MapMessage::setMapField(const SimpleInt64Int32MapMessage::M
     }
 }
 
+void SimpleInt64Int32MapMessage::setMapField(SimpleInt64Int32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleUInt32Int32MapMessage_QtProtobufData : public QSharedData
 {
@@ -6065,6 +6537,14 @@ void SimpleUInt32Int32MapMessage::setMapField(const SimpleUInt32Int32MapMessage:
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleUInt32Int32MapMessage::setMapField(SimpleUInt32Int32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -6169,6 +6649,14 @@ void SimpleUInt64Int32MapMessage::setMapField(const SimpleUInt64Int32MapMessage:
     }
 }
 
+void SimpleUInt64Int32MapMessage::setMapField(SimpleUInt64Int32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleFixed32Int32MapMessage_QtProtobufData : public QSharedData
 {
@@ -6267,6 +6755,14 @@ void SimpleFixed32Int32MapMessage::setMapField(const SimpleFixed32Int32MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleFixed32Int32MapMessage::setMapField(SimpleFixed32Int32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -6371,6 +6867,14 @@ void SimpleFixed64Int32MapMessage::setMapField(const SimpleFixed64Int32MapMessag
     }
 }
 
+void SimpleFixed64Int32MapMessage::setMapField(SimpleFixed64Int32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSFixed32Int32MapMessage_QtProtobufData : public QSharedData
 {
@@ -6469,6 +6973,14 @@ void SimpleSFixed32Int32MapMessage::setMapField(const SimpleSFixed32Int32MapMess
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSFixed32Int32MapMessage::setMapField(SimpleSFixed32Int32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -6573,6 +7085,14 @@ void SimpleSFixed64Int32MapMessage::setMapField(const SimpleSFixed64Int32MapMess
     }
 }
 
+void SimpleSFixed64Int32MapMessage::setMapField(SimpleSFixed64Int32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleStringInt32MapMessage_QtProtobufData : public QSharedData
 {
@@ -6671,6 +7191,14 @@ void SimpleStringInt32MapMessage::setMapField(const SimpleStringInt32MapMessage:
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleStringInt32MapMessage::setMapField(SimpleStringInt32MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -6775,6 +7303,14 @@ void SimpleSInt32Int64MapMessage::setMapField(const SimpleSInt32Int64MapMessage:
     }
 }
 
+void SimpleSInt32Int64MapMessage::setMapField(SimpleSInt32Int64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSInt64Int64MapMessage_QtProtobufData : public QSharedData
 {
@@ -6873,6 +7409,14 @@ void SimpleSInt64Int64MapMessage::setMapField(const SimpleSInt64Int64MapMessage:
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSInt64Int64MapMessage::setMapField(SimpleSInt64Int64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -6977,6 +7521,14 @@ void SimpleInt32Int64MapMessage::setMapField(const SimpleInt32Int64MapMessage::M
     }
 }
 
+void SimpleInt32Int64MapMessage::setMapField(SimpleInt32Int64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleInt64Int64MapMessage_QtProtobufData : public QSharedData
 {
@@ -7075,6 +7627,14 @@ void SimpleInt64Int64MapMessage::setMapField(const SimpleInt64Int64MapMessage::M
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleInt64Int64MapMessage::setMapField(SimpleInt64Int64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -7179,6 +7739,14 @@ void SimpleUInt32Int64MapMessage::setMapField(const SimpleUInt32Int64MapMessage:
     }
 }
 
+void SimpleUInt32Int64MapMessage::setMapField(SimpleUInt32Int64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleUInt64Int64MapMessage_QtProtobufData : public QSharedData
 {
@@ -7277,6 +7845,14 @@ void SimpleUInt64Int64MapMessage::setMapField(const SimpleUInt64Int64MapMessage:
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleUInt64Int64MapMessage::setMapField(SimpleUInt64Int64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -7381,6 +7957,14 @@ void SimpleFixed32Int64MapMessage::setMapField(const SimpleFixed32Int64MapMessag
     }
 }
 
+void SimpleFixed32Int64MapMessage::setMapField(SimpleFixed32Int64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleFixed64Int64MapMessage_QtProtobufData : public QSharedData
 {
@@ -7479,6 +8063,14 @@ void SimpleFixed64Int64MapMessage::setMapField(const SimpleFixed64Int64MapMessag
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleFixed64Int64MapMessage::setMapField(SimpleFixed64Int64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -7583,6 +8175,14 @@ void SimpleSFixed32Int64MapMessage::setMapField(const SimpleSFixed32Int64MapMess
     }
 }
 
+void SimpleSFixed32Int64MapMessage::setMapField(SimpleSFixed32Int64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSFixed64Int64MapMessage_QtProtobufData : public QSharedData
 {
@@ -7681,6 +8281,14 @@ void SimpleSFixed64Int64MapMessage::setMapField(const SimpleSFixed64Int64MapMess
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSFixed64Int64MapMessage::setMapField(SimpleSFixed64Int64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -7785,6 +8393,14 @@ void SimpleStringInt64MapMessage::setMapField(const SimpleStringInt64MapMessage:
     }
 }
 
+void SimpleStringInt64MapMessage::setMapField(SimpleStringInt64MapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSInt32ComplexMessageMapMessage_QtProtobufData : public QSharedData
 {
@@ -7883,6 +8499,14 @@ void SimpleSInt32ComplexMessageMapMessage::setMapField(const SimpleSInt32Complex
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSInt32ComplexMessageMapMessage::setMapField(SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -7987,6 +8611,14 @@ void SimpleSInt64ComplexMessageMapMessage::setMapField(const SimpleSInt64Complex
     }
 }
 
+void SimpleSInt64ComplexMessageMapMessage::setMapField(SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleInt32ComplexMessageMapMessage_QtProtobufData : public QSharedData
 {
@@ -8085,6 +8717,14 @@ void SimpleInt32ComplexMessageMapMessage::setMapField(const SimpleInt32ComplexMe
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleInt32ComplexMessageMapMessage::setMapField(SimpleInt32ComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -8189,6 +8829,14 @@ void SimpleInt64ComplexMessageMapMessage::setMapField(const SimpleInt64ComplexMe
     }
 }
 
+void SimpleInt64ComplexMessageMapMessage::setMapField(SimpleInt64ComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleUInt32ComplexMessageMapMessage_QtProtobufData : public QSharedData
 {
@@ -8287,6 +8935,14 @@ void SimpleUInt32ComplexMessageMapMessage::setMapField(const SimpleUInt32Complex
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleUInt32ComplexMessageMapMessage::setMapField(SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -8391,6 +9047,14 @@ void SimpleUInt64ComplexMessageMapMessage::setMapField(const SimpleUInt64Complex
     }
 }
 
+void SimpleUInt64ComplexMessageMapMessage::setMapField(SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleFixed32ComplexMessageMapMessage_QtProtobufData : public QSharedData
 {
@@ -8489,6 +9153,14 @@ void SimpleFixed32ComplexMessageMapMessage::setMapField(const SimpleFixed32Compl
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleFixed32ComplexMessageMapMessage::setMapField(SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -8593,6 +9265,14 @@ void SimpleFixed64ComplexMessageMapMessage::setMapField(const SimpleFixed64Compl
     }
 }
 
+void SimpleFixed64ComplexMessageMapMessage::setMapField(SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleSFixed32ComplexMessageMapMessage_QtProtobufData : public QSharedData
 {
@@ -8691,6 +9371,14 @@ void SimpleSFixed32ComplexMessageMapMessage::setMapField(const SimpleSFixed32Com
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleSFixed32ComplexMessageMapMessage::setMapField(SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 
@@ -8795,6 +9483,14 @@ void SimpleSFixed64ComplexMessageMapMessage::setMapField(const SimpleSFixed64Com
     }
 }
 
+void SimpleSFixed64ComplexMessageMapMessage::setMapField(SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
+    }
+}
+
 
 class SimpleStringComplexMessageMapMessage_QtProtobufData : public QSharedData
 {
@@ -8893,6 +9589,14 @@ void SimpleStringComplexMessageMapMessage::setMapField(const SimpleStringComplex
     if (dptr->m_mapField != mapField) {
         dptr.detach();
         dptr->m_mapField = mapField;
+    }
+}
+
+void SimpleStringComplexMessageMapMessage::setMapField(SimpleStringComplexMessageMapMessage::MapFieldEntry &&mapField)
+{
+    if (dptr->m_mapField != mapField) {
+        dptr.detach();
+        dptr->m_mapField = std::move(mapField);
     }
 }
 

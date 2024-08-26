@@ -107,6 +107,14 @@ void RepeatedStringMessage::setTestRepeatedString(const QStringList &testRepeate
     }
 }
 
+void RepeatedStringMessage::setTestRepeatedString(QStringList &&testRepeatedString)
+{
+    if (dptr->m_testRepeatedString != testRepeatedString) {
+        dptr.detach();
+        dptr->m_testRepeatedString = std::move(testRepeatedString);
+    }
+}
+
 
 class RepeatedDoubleMessage_QtProtobufData : public QSharedData
 {
@@ -203,6 +211,14 @@ void RepeatedDoubleMessage::setTestRepeatedDouble(const QtProtobuf::doubleList &
     if (dptr->m_testRepeatedDouble != testRepeatedDouble) {
         dptr.detach();
         dptr->m_testRepeatedDouble = testRepeatedDouble;
+    }
+}
+
+void RepeatedDoubleMessage::setTestRepeatedDouble(QtProtobuf::doubleList &&testRepeatedDouble)
+{
+    if (dptr->m_testRepeatedDouble != testRepeatedDouble) {
+        dptr.detach();
+        dptr->m_testRepeatedDouble = std::move(testRepeatedDouble);
     }
 }
 
@@ -305,6 +321,14 @@ void RepeatedBytesMessage::setTestRepeatedBytes(const QByteArrayList &testRepeat
     }
 }
 
+void RepeatedBytesMessage::setTestRepeatedBytes(QByteArrayList &&testRepeatedBytes)
+{
+    if (dptr->m_testRepeatedBytes != testRepeatedBytes) {
+        dptr.detach();
+        dptr->m_testRepeatedBytes = std::move(testRepeatedBytes);
+    }
+}
+
 
 class RepeatedFloatMessage_QtProtobufData : public QSharedData
 {
@@ -401,6 +425,14 @@ void RepeatedFloatMessage::setTestRepeatedFloat(const QtProtobuf::floatList &tes
     if (dptr->m_testRepeatedFloat != testRepeatedFloat) {
         dptr.detach();
         dptr->m_testRepeatedFloat = testRepeatedFloat;
+    }
+}
+
+void RepeatedFloatMessage::setTestRepeatedFloat(QtProtobuf::floatList &&testRepeatedFloat)
+{
+    if (dptr->m_testRepeatedFloat != testRepeatedFloat) {
+        dptr.detach();
+        dptr->m_testRepeatedFloat = std::move(testRepeatedFloat);
     }
 }
 
@@ -503,6 +535,14 @@ void RepeatedComplexMessage::setTestRepeatedComplex(const ComplexMessageRepeated
     }
 }
 
+void RepeatedComplexMessage::setTestRepeatedComplex(ComplexMessageRepeated &&testRepeatedComplex)
+{
+    if (dptr->m_testRepeatedComplex != testRepeatedComplex) {
+        dptr.detach();
+        dptr->m_testRepeatedComplex = std::move(testRepeatedComplex);
+    }
+}
+
 
 class RepeatedSIntMessage_QtProtobufData : public QSharedData
 {
@@ -599,6 +639,14 @@ void RepeatedSIntMessage::setTestRepeatedInt(const QtProtobuf::sint32List &testR
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
         dptr.detach();
         dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+void RepeatedSIntMessage::setTestRepeatedInt(QtProtobuf::sint32List &&testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = std::move(testRepeatedInt);
     }
 }
 
@@ -701,6 +749,14 @@ void RepeatedIntMessage::setTestRepeatedInt(const QtProtobuf::int32List &testRep
     }
 }
 
+void RepeatedIntMessage::setTestRepeatedInt(QtProtobuf::int32List &&testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = std::move(testRepeatedInt);
+    }
+}
+
 
 class RepeatedUIntMessage_QtProtobufData : public QSharedData
 {
@@ -797,6 +853,14 @@ void RepeatedUIntMessage::setTestRepeatedInt(const QtProtobuf::uint32List &testR
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
         dptr.detach();
         dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+void RepeatedUIntMessage::setTestRepeatedInt(QtProtobuf::uint32List &&testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = std::move(testRepeatedInt);
     }
 }
 
@@ -899,6 +963,14 @@ void RepeatedSInt64Message::setTestRepeatedInt(const QtProtobuf::sint64List &tes
     }
 }
 
+void RepeatedSInt64Message::setTestRepeatedInt(QtProtobuf::sint64List &&testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = std::move(testRepeatedInt);
+    }
+}
+
 
 class RepeatedInt64Message_QtProtobufData : public QSharedData
 {
@@ -995,6 +1067,14 @@ void RepeatedInt64Message::setTestRepeatedInt(const QtProtobuf::int64List &testR
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
         dptr.detach();
         dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+void RepeatedInt64Message::setTestRepeatedInt(QtProtobuf::int64List &&testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = std::move(testRepeatedInt);
     }
 }
 
@@ -1097,6 +1177,14 @@ void RepeatedUInt64Message::setTestRepeatedInt(const QtProtobuf::uint64List &tes
     }
 }
 
+void RepeatedUInt64Message::setTestRepeatedInt(QtProtobuf::uint64List &&testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = std::move(testRepeatedInt);
+    }
+}
+
 
 class RepeatedFixedIntMessage_QtProtobufData : public QSharedData
 {
@@ -1193,6 +1281,14 @@ void RepeatedFixedIntMessage::setTestRepeatedInt(const QtProtobuf::fixed32List &
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
         dptr.detach();
         dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+void RepeatedFixedIntMessage::setTestRepeatedInt(QtProtobuf::fixed32List &&testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = std::move(testRepeatedInt);
     }
 }
 
@@ -1295,6 +1391,14 @@ void RepeatedSFixedIntMessage::setTestRepeatedInt(const QtProtobuf::sfixed32List
     }
 }
 
+void RepeatedSFixedIntMessage::setTestRepeatedInt(QtProtobuf::sfixed32List &&testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = std::move(testRepeatedInt);
+    }
+}
+
 
 class RepeatedFixedInt64Message_QtProtobufData : public QSharedData
 {
@@ -1391,6 +1495,14 @@ void RepeatedFixedInt64Message::setTestRepeatedInt(const QtProtobuf::fixed64List
     if (dptr->m_testRepeatedInt != testRepeatedInt) {
         dptr.detach();
         dptr->m_testRepeatedInt = testRepeatedInt;
+    }
+}
+
+void RepeatedFixedInt64Message::setTestRepeatedInt(QtProtobuf::fixed64List &&testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = std::move(testRepeatedInt);
     }
 }
 
@@ -1493,6 +1605,14 @@ void RepeatedSFixedInt64Message::setTestRepeatedInt(const QtProtobuf::sfixed64Li
     }
 }
 
+void RepeatedSFixedInt64Message::setTestRepeatedInt(QtProtobuf::sfixed64List &&testRepeatedInt)
+{
+    if (dptr->m_testRepeatedInt != testRepeatedInt) {
+        dptr.detach();
+        dptr->m_testRepeatedInt = std::move(testRepeatedInt);
+    }
+}
+
 
 class RepeatedBoolMessage_QtProtobufData : public QSharedData
 {
@@ -1589,6 +1709,14 @@ void RepeatedBoolMessage::setTestRepeatedBool(const QtProtobuf::boolList &testRe
     if (dptr->m_testRepeatedBool != testRepeatedBool) {
         dptr.detach();
         dptr->m_testRepeatedBool = testRepeatedBool;
+    }
+}
+
+void RepeatedBoolMessage::setTestRepeatedBool(QtProtobuf::boolList &&testRepeatedBool)
+{
+    if (dptr->m_testRepeatedBool != testRepeatedBool) {
+        dptr.detach();
+        dptr->m_testRepeatedBool = std::move(testRepeatedBool);
     }
 }
 

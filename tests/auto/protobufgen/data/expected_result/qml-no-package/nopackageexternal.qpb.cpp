@@ -99,7 +99,7 @@ QtProtobuf::int32 SimpleIntMessageExt::testFieldInt() const
     return dptr->m_testFieldInt;
 }
 
-void SimpleIntMessageExt::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
+void SimpleIntMessageExt::setTestFieldInt(QtProtobuf::int32 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();

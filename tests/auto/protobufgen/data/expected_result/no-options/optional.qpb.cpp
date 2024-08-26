@@ -107,6 +107,14 @@ void TestStringMessage::setStringField(const QString &stringField)
     }
 }
 
+void TestStringMessage::setStringField(QString &&stringField)
+{
+    if (dptr->m_stringField != stringField) {
+        dptr.detach();
+        dptr->m_stringField = std::move(stringField);
+    }
+}
+
 
 class OptionalMessage_QtProtobufData : public QSharedData
 {
@@ -401,7 +409,7 @@ void OptionalMessage::clearTestFieldMessageOpt()
     }
 }
 
-void OptionalMessage::setTestField(const QtProtobuf::sint32 &testField)
+void OptionalMessage::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -409,7 +417,7 @@ void OptionalMessage::setTestField(const QtProtobuf::sint32 &testField)
     }
 }
 
-void OptionalMessage::setTestFieldOpt(const QtProtobuf::sint32 &testFieldOpt)
+void OptionalMessage::setTestFieldOpt(QtProtobuf::sint32 testFieldOpt)
 {
     if (!dptr->m_testFieldOpt || dptr->m_testFieldOpt.value() != testFieldOpt) {
         dptr.detach();
@@ -432,7 +440,7 @@ void OptionalMessage::clearTestFieldOpt()
         dptr->m_testFieldOpt.reset();
     }
 }
-void OptionalMessage::setTestFieldBool(const bool &testFieldBool)
+void OptionalMessage::setTestFieldBool(bool testFieldBool)
 {
     if (dptr->m_testFieldBool != testFieldBool) {
         dptr.detach();
@@ -440,7 +448,7 @@ void OptionalMessage::setTestFieldBool(const bool &testFieldBool)
     }
 }
 
-void OptionalMessage::setTestFieldBoolOpt(const bool &testFieldBoolOpt)
+void OptionalMessage::setTestFieldBoolOpt(bool testFieldBoolOpt)
 {
     if (!dptr->m_testFieldBoolOpt || dptr->m_testFieldBoolOpt.value() != testFieldBoolOpt) {
         dptr.detach();
@@ -471,11 +479,27 @@ void OptionalMessage::setTestFieldBytes(const QByteArray &testFieldBytes)
     }
 }
 
+void OptionalMessage::setTestFieldBytes(QByteArray &&testFieldBytes)
+{
+    if (dptr->m_testFieldBytes != testFieldBytes) {
+        dptr.detach();
+        dptr->m_testFieldBytes = std::move(testFieldBytes);
+    }
+}
+
 void OptionalMessage::setTestFieldBytesOpt(const QByteArray &testFieldBytesOpt)
 {
     if (!dptr->m_testFieldBytesOpt || dptr->m_testFieldBytesOpt.value() != testFieldBytesOpt) {
         dptr.detach();
         dptr->m_testFieldBytesOpt = testFieldBytesOpt;
+    }
+}
+
+void OptionalMessage::setTestFieldBytesOpt(QByteArray &&testFieldBytesOpt)
+{
+    if (!dptr->m_testFieldBytesOpt || dptr->m_testFieldBytesOpt.value() != testFieldBytesOpt) {
+        dptr.detach();
+        dptr->m_testFieldBytesOpt = std::move(testFieldBytesOpt);
     }
 }
 
@@ -502,11 +526,27 @@ void OptionalMessage::setTestFieldString(const QString &testFieldString)
     }
 }
 
+void OptionalMessage::setTestFieldString(QString &&testFieldString)
+{
+    if (dptr->m_testFieldString != testFieldString) {
+        dptr.detach();
+        dptr->m_testFieldString = std::move(testFieldString);
+    }
+}
+
 void OptionalMessage::setTestFieldStringOpt(const QString &testFieldStringOpt)
 {
     if (!dptr->m_testFieldStringOpt || dptr->m_testFieldStringOpt.value() != testFieldStringOpt) {
         dptr.detach();
         dptr->m_testFieldStringOpt = testFieldStringOpt;
+    }
+}
+
+void OptionalMessage::setTestFieldStringOpt(QString &&testFieldStringOpt)
+{
+    if (!dptr->m_testFieldStringOpt || dptr->m_testFieldStringOpt.value() != testFieldStringOpt) {
+        dptr.detach();
+        dptr->m_testFieldStringOpt = std::move(testFieldStringOpt);
     }
 }
 
@@ -541,6 +581,14 @@ void OptionalMessage::setTestFieldMessage(const TestStringMessage &testFieldMess
     }
 }
 
+void OptionalMessage::setTestFieldMessage(TestStringMessage &&testFieldMessage)
+{
+    if (*dptr->m_testFieldMessage != testFieldMessage) {
+        dptr.detach();
+        *dptr->m_testFieldMessage = std::move(testFieldMessage);
+    }
+}
+
 void OptionalMessage::setTestFieldMessageOpt_p(TestStringMessage *testFieldMessageOpt)
 {
     if (dptr->m_testFieldMessageOpt.get() != testFieldMessageOpt) {
@@ -554,6 +602,14 @@ void OptionalMessage::setTestFieldMessageOpt(const TestStringMessage &testFieldM
     if (*dptr->m_testFieldMessageOpt != testFieldMessageOpt) {
         dptr.detach();
         *dptr->m_testFieldMessageOpt = testFieldMessageOpt;
+    }
+}
+
+void OptionalMessage::setTestFieldMessageOpt(TestStringMessage &&testFieldMessageOpt)
+{
+    if (*dptr->m_testFieldMessageOpt != testFieldMessageOpt) {
+        dptr.detach();
+        *dptr->m_testFieldMessageOpt = std::move(testFieldMessageOpt);
     }
 }
 

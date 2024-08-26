@@ -299,14 +299,21 @@ void MessageDeclarationPrinter::printSetters()
     Indent();
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
+                bool isTriviallyCopyable = common::isTriviallyCopyable(field);
+
                 if (common::isOneofField(field)) {
-                    m_printer->Print(propertyMap,
-                                     CommonTemplates::SetterOneofDeclarationTemplate());
+                    m_printer
+                        ->Print(propertyMap,
+                                isTriviallyCopyable
+                                    ? CommonTemplates::SetterOneofDeclarationTemplate()
+                                    : CommonTemplates::SetterComplexOneofDeclarationTemplate());
                     return;
                 }
                 if (common::isOptionalField(field)) {
                     m_printer->Print(propertyMap,
-                                     CommonTemplates::SetterOneofDeclarationTemplate());
+                                     isTriviallyCopyable
+                                         ? CommonTemplates::SetterDeclarationTemplate()
+                                         : CommonTemplates::SetterComplexDeclarationTemplate());
                     m_printer->Print(propertyMap,
                                      Options::instance().hasQml()
                                          ? CommonTemplates::ClearQmlOneofDeclarationTemplate()
@@ -330,7 +337,10 @@ void MessageDeclarationPrinter::printSetters()
                                      CommonTemplates::SetterComplexDeclarationTemplate());
                     break;
                 default:
-                    m_printer->Print(propertyMap, CommonTemplates::SetterDeclarationTemplate());
+                    m_printer->Print(propertyMap,
+                                     field->is_repeated()
+                                         ? CommonTemplates::SetterComplexDeclarationTemplate()
+                                         : CommonTemplates::SetterDeclarationTemplate());
                     break;
                 }
             });

@@ -68,8 +68,8 @@ public:
     bool hasTestOneofFieldSecondInt() const;
     QtProtobuf::int32 testOneofFieldSecondInt() const;
     TestOneofFields testOneofField() const;
-    void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
-    void setTestOneofFieldSecondInt(const QtProtobuf::int32 &testOneofFieldSecondInt);
+    void setTestOneofFieldInt(QtProtobuf::int32 testOneofFieldInt);
+    void setTestOneofFieldSecondInt(QtProtobuf::int32 testOneofFieldSecondInt);
     void clearTestOneof();
     static void registerTypes();
 
@@ -171,14 +171,18 @@ public:
     QtProtobuf::int32 testSnakeCaseField() const;
     TestOneofFields testOneofField() const;
     SecondOneofFields secondOneofField() const;
-    void setTestFieldInt(const QtProtobuf::int32 &testFieldInt);
-    void setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt);
+    void setTestFieldInt(QtProtobuf::int32 testFieldInt);
+    void setTestOneofFieldInt(QtProtobuf::int32 testOneofFieldInt);
     void setTestOneofComplexField(const ComplexMessage &testOneofComplexField);
+    void setTestOneofComplexField(ComplexMessage &&testOneofComplexField);
     void setTestOneofSecondComplexField(const ComplexMessage &testOneofSecondComplexField);
-    void setSecondFieldInt(const QtProtobuf::int32 &secondFieldInt);
+    void setTestOneofSecondComplexField(ComplexMessage &&testOneofSecondComplexField);
+    void setSecondFieldInt(QtProtobuf::int32 secondFieldInt);
     void setSecondComplexField(const ComplexMessage &secondComplexField);
+    void setSecondComplexField(ComplexMessage &&secondComplexField);
     void setSecondSecondComplexField(const ComplexMessage &secondSecondComplexField);
-    void setTestSnakeCaseField(const QtProtobuf::int32 &testSnakeCaseField);
+    void setSecondSecondComplexField(ComplexMessage &&secondSecondComplexField);
+    void setTestSnakeCaseField(QtProtobuf::int32 testSnakeCaseField);
     void clearTestOneof();
     void clearSecondOneof();
     static void registerTypes();

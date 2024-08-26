@@ -33,6 +33,7 @@ private Q_SLOTS:
 
     void moveOperatorRepeatedTest();
     void repeatedComplexMessageCompareTest();
+    void rvalueSettersTest();
 };
 
 using namespace qtprotobufnamespace::tests;
@@ -294,6 +295,11 @@ void QtProtobufRepeatedTypesGenerationTest::repeatedComplexMessageCompareTest()
 
     QCOMPARE(test1, test2);
     QVERIFY(!(test3 == test2));
+}
+
+void QtProtobufRepeatedTypesGenerationTest::rvalueSettersTest()
+{
+    RepeatedIntMessage test;
 }
 
 QTEST_MAIN(QtProtobufRepeatedTypesGenerationTest)

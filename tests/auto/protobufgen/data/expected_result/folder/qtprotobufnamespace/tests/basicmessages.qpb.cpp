@@ -179,7 +179,7 @@ bool SimpleBoolMessage::testFieldBool() const
     return dptr->m_testFieldBool;
 }
 
-void SimpleBoolMessage::setTestFieldBool(const bool &testFieldBool)
+void SimpleBoolMessage::setTestFieldBool(bool testFieldBool)
 {
     if (dptr->m_testFieldBool != testFieldBool) {
         dptr.detach();
@@ -279,7 +279,7 @@ QtProtobuf::int32 SimpleIntMessage::testFieldInt() const
     return dptr->m_testFieldInt;
 }
 
-void SimpleIntMessage::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
+void SimpleIntMessage::setTestFieldInt(QtProtobuf::int32 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();
@@ -379,7 +379,7 @@ QtProtobuf::sint32 SimpleSIntMessage::testFieldInt() const
     return dptr->m_testFieldInt;
 }
 
-void SimpleSIntMessage::setTestFieldInt(const QtProtobuf::sint32 &testFieldInt)
+void SimpleSIntMessage::setTestFieldInt(QtProtobuf::sint32 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();
@@ -479,7 +479,7 @@ QtProtobuf::uint32 SimpleUIntMessage::testFieldInt() const
     return dptr->m_testFieldInt;
 }
 
-void SimpleUIntMessage::setTestFieldInt(const QtProtobuf::uint32 &testFieldInt)
+void SimpleUIntMessage::setTestFieldInt(QtProtobuf::uint32 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();
@@ -579,7 +579,7 @@ QtProtobuf::int64 SimpleInt64Message::testFieldInt() const
     return dptr->m_testFieldInt;
 }
 
-void SimpleInt64Message::setTestFieldInt(const QtProtobuf::int64 &testFieldInt)
+void SimpleInt64Message::setTestFieldInt(QtProtobuf::int64 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();
@@ -679,7 +679,7 @@ QtProtobuf::sint64 SimpleSInt64Message::testFieldInt() const
     return dptr->m_testFieldInt;
 }
 
-void SimpleSInt64Message::setTestFieldInt(const QtProtobuf::sint64 &testFieldInt)
+void SimpleSInt64Message::setTestFieldInt(QtProtobuf::sint64 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();
@@ -779,7 +779,7 @@ QtProtobuf::uint64 SimpleUInt64Message::testFieldInt() const
     return dptr->m_testFieldInt;
 }
 
-void SimpleUInt64Message::setTestFieldInt(const QtProtobuf::uint64 &testFieldInt)
+void SimpleUInt64Message::setTestFieldInt(QtProtobuf::uint64 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();
@@ -886,6 +886,14 @@ void SimpleStringMessage::setTestFieldString(const QString &testFieldString)
     }
 }
 
+void SimpleStringMessage::setTestFieldString(QString &&testFieldString)
+{
+    if (dptr->m_testFieldString != testFieldString) {
+        dptr.detach();
+        dptr->m_testFieldString = std::move(testFieldString);
+    }
+}
+
 
 class SimpleFloatMessage_QtProtobufData : public QSharedData
 {
@@ -978,7 +986,7 @@ float SimpleFloatMessage::testFieldFloat() const
     return dptr->m_testFieldFloat;
 }
 
-void SimpleFloatMessage::setTestFieldFloat(const float &testFieldFloat)
+void SimpleFloatMessage::setTestFieldFloat(float testFieldFloat)
 {
     if (dptr->m_testFieldFloat != testFieldFloat ||
         std::signbit(dptr->m_testFieldFloat) != std::signbit(testFieldFloat)) {
@@ -1079,7 +1087,7 @@ double SimpleDoubleMessage::testFieldDouble() const
     return dptr->m_testFieldDouble;
 }
 
-void SimpleDoubleMessage::setTestFieldDouble(const double &testFieldDouble)
+void SimpleDoubleMessage::setTestFieldDouble(double testFieldDouble)
 {
     if (dptr->m_testFieldDouble != testFieldDouble ||
         std::signbit(dptr->m_testFieldDouble) != std::signbit(testFieldDouble)) {
@@ -1187,6 +1195,14 @@ void SimpleBytesMessage::setTestFieldBytes(const QByteArray &testFieldBytes)
     }
 }
 
+void SimpleBytesMessage::setTestFieldBytes(QByteArray &&testFieldBytes)
+{
+    if (dptr->m_testFieldBytes != testFieldBytes) {
+        dptr.detach();
+        dptr->m_testFieldBytes = std::move(testFieldBytes);
+    }
+}
+
 
 class SimpleFixedInt32Message_QtProtobufData : public QSharedData
 {
@@ -1279,7 +1295,7 @@ QtProtobuf::fixed32 SimpleFixedInt32Message::testFieldFixedInt32() const
     return dptr->m_testFieldFixedInt32;
 }
 
-void SimpleFixedInt32Message::setTestFieldFixedInt32(const QtProtobuf::fixed32 &testFieldFixedInt32)
+void SimpleFixedInt32Message::setTestFieldFixedInt32(QtProtobuf::fixed32 testFieldFixedInt32)
 {
     if (dptr->m_testFieldFixedInt32 != testFieldFixedInt32) {
         dptr.detach();
@@ -1379,7 +1395,7 @@ QtProtobuf::fixed64 SimpleFixedInt64Message::testFieldFixedInt64() const
     return dptr->m_testFieldFixedInt64;
 }
 
-void SimpleFixedInt64Message::setTestFieldFixedInt64(const QtProtobuf::fixed64 &testFieldFixedInt64)
+void SimpleFixedInt64Message::setTestFieldFixedInt64(QtProtobuf::fixed64 testFieldFixedInt64)
 {
     if (dptr->m_testFieldFixedInt64 != testFieldFixedInt64) {
         dptr.detach();
@@ -1478,7 +1494,7 @@ QtProtobuf::sfixed32 SimpleSFixedInt32Message::testFieldFixedInt32() const
     return dptr->m_testFieldFixedInt32;
 }
 
-void SimpleSFixedInt32Message::setTestFieldFixedInt32(const QtProtobuf::sfixed32 &testFieldFixedInt32)
+void SimpleSFixedInt32Message::setTestFieldFixedInt32(QtProtobuf::sfixed32 testFieldFixedInt32)
 {
     if (dptr->m_testFieldFixedInt32 != testFieldFixedInt32) {
         dptr.detach();
@@ -1577,7 +1593,7 @@ QtProtobuf::sfixed64 SimpleSFixedInt64Message::testFieldFixedInt64() const
     return dptr->m_testFieldFixedInt64;
 }
 
-void SimpleSFixedInt64Message::setTestFieldFixedInt64(const QtProtobuf::sfixed64 &testFieldFixedInt64)
+void SimpleSFixedInt64Message::setTestFieldFixedInt64(QtProtobuf::sfixed64 testFieldFixedInt64)
 {
     if (dptr->m_testFieldFixedInt64 != testFieldFixedInt64) {
         dptr.detach();
@@ -1713,7 +1729,7 @@ void ComplexMessage::clearTestComplexField()
     }
 }
 
-void ComplexMessage::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
+void ComplexMessage::setTestFieldInt(QtProtobuf::int32 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();
@@ -1734,6 +1750,14 @@ void ComplexMessage::setTestComplexField(const SimpleStringMessage &testComplexF
     if (*dptr->m_testComplexField != testComplexField) {
         dptr.detach();
         *dptr->m_testComplexField = testComplexField;
+    }
+}
+
+void ComplexMessage::setTestComplexField(SimpleStringMessage &&testComplexField)
+{
+    if (*dptr->m_testComplexField != testComplexField) {
+        dptr.detach();
+        *dptr->m_testComplexField = std::move(testComplexField);
     }
 }
 

@@ -100,7 +100,7 @@ QtProtobuf::sint32 FieldIndexTest1Message::testField() const
     return dptr->m_testField;
 }
 
-void FieldIndexTest1Message::setTestField(const QtProtobuf::sint32 &testField)
+void FieldIndexTest1Message::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -200,7 +200,7 @@ QtProtobuf::sint32 FieldIndexTest2Message::testField() const
     return dptr->m_testField;
 }
 
-void FieldIndexTest2Message::setTestField(const QtProtobuf::sint32 &testField)
+void FieldIndexTest2Message::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -300,7 +300,7 @@ QtProtobuf::sint32 FieldIndexTest3Message::testField() const
     return dptr->m_testField;
 }
 
-void FieldIndexTest3Message::setTestField(const QtProtobuf::sint32 &testField)
+void FieldIndexTest3Message::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();
@@ -400,7 +400,7 @@ QtProtobuf::sint32 FieldIndexTest4Message::testField() const
     return dptr->m_testField;
 }
 
-void FieldIndexTest4Message::setTestField(const QtProtobuf::sint32 &testField)
+void FieldIndexTest4Message::setTestField(QtProtobuf::sint32 testField)
 {
     if (dptr->m_testField != testField) {
         dptr.detach();

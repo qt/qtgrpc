@@ -574,6 +574,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt32StringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt32StringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt32StringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -625,6 +626,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt64StringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt64StringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt64StringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -676,6 +678,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt32StringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt32StringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt32StringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -727,6 +730,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt64StringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt64StringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt64StringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -778,6 +782,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt32StringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt32StringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt32StringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -829,6 +834,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt64StringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt64StringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt64StringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -880,6 +886,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed32StringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed32StringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed32StringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -931,6 +938,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed64StringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed64StringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed64StringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -982,6 +990,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed32StringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed32StringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed32StringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1033,6 +1042,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed64StringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed64StringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed64StringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1084,6 +1094,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleStringStringMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleStringStringMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleStringStringMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1135,6 +1146,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt32SInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt32SInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt32SInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1186,6 +1198,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt64SInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt64SInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt64SInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1237,6 +1250,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt32SInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt32SInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt32SInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1288,6 +1302,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt64SInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt64SInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt64SInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1339,6 +1354,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt32SInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt32SInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt32SInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1390,6 +1406,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt64SInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt64SInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt64SInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1441,6 +1458,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed32SInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed32SInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed32SInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1492,6 +1510,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed64SInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed64SInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed64SInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1543,6 +1562,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed32SInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed32SInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed32SInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1594,6 +1614,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed64SInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed64SInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed64SInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1645,6 +1666,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleStringSInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleStringSInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleStringSInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1696,6 +1718,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt32SInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt32SInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt32SInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1747,6 +1770,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt64SInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt64SInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt64SInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1798,6 +1822,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt32SInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt32SInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt32SInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1849,6 +1874,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt64SInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt64SInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt64SInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1900,6 +1926,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt32SInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt32SInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt32SInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -1951,6 +1978,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt64SInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt64SInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt64SInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2002,6 +2030,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed32SInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed32SInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed32SInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2053,6 +2082,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed64SInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed64SInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed64SInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2104,6 +2134,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed32SInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed32SInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed32SInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2155,6 +2186,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed64SInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed64SInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed64SInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2206,6 +2238,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleStringSInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleStringSInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleStringSInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2257,6 +2290,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt32UInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt32UInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt32UInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2308,6 +2342,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt64UInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt64UInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt64UInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2359,6 +2394,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt32UInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt32UInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt32UInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2410,6 +2446,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt64UInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt64UInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt64UInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2461,6 +2498,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt32UInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt32UInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt32UInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2512,6 +2550,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt64UInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt64UInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt64UInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2563,6 +2602,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed32UInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed32UInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed32UInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2614,6 +2654,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed64UInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed64UInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed64UInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2665,6 +2706,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed32UInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed32UInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed32UInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2716,6 +2758,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed64UInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed64UInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed64UInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2767,6 +2810,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleStringUInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleStringUInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleStringUInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2818,6 +2862,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt32UInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt32UInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt32UInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2869,6 +2914,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt64UInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt64UInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt64UInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2920,6 +2966,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt32UInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt32UInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt32UInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -2971,6 +3018,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt64UInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt64UInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt64UInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3022,6 +3070,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt32UInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt32UInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt32UInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3073,6 +3122,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt64UInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt64UInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt64UInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3124,6 +3174,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed32UInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed32UInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed32UInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3175,6 +3226,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed64UInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed64UInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed64UInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3226,6 +3278,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed32UInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed32UInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed32UInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3277,6 +3330,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed64UInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed64UInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed64UInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3328,6 +3382,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleStringUInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleStringUInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleStringUInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3379,6 +3434,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt32Int32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt32Int32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt32Int32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3430,6 +3486,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt64Int32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt64Int32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt64Int32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3481,6 +3538,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt32Int32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt32Int32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt32Int32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3532,6 +3590,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt64Int32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt64Int32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt64Int32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3583,6 +3642,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt32Int32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt32Int32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt32Int32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3634,6 +3694,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt64Int32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt64Int32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt64Int32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3685,6 +3746,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed32Int32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed32Int32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed32Int32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3736,6 +3798,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed64Int32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed64Int32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed64Int32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3787,6 +3850,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed32Int32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed32Int32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed32Int32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3838,6 +3902,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed64Int32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed64Int32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed64Int32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3889,6 +3954,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleStringInt32MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleStringInt32MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleStringInt32MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3940,6 +4006,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt32Int64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt32Int64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt32Int64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -3991,6 +4058,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt64Int64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt64Int64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt64Int64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4042,6 +4110,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt32Int64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt32Int64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt32Int64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4093,6 +4162,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt64Int64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt64Int64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt64Int64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4144,6 +4214,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt32Int64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt32Int64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt32Int64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4195,6 +4266,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt64Int64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt64Int64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt64Int64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4246,6 +4318,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed32Int64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed32Int64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed32Int64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4297,6 +4370,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed64Int64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed64Int64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed64Int64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4348,6 +4422,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed32Int64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed32Int64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed32Int64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4399,6 +4474,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed64Int64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed64Int64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed64Int64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4450,6 +4526,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleStringInt64MapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleStringInt64MapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleStringInt64MapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4501,6 +4578,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt32ComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4552,6 +4630,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSInt64ComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4603,6 +4682,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt32ComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt32ComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4654,6 +4734,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleInt64ComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleInt64ComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4705,6 +4786,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt32ComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4756,6 +4838,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleUInt64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleUInt64ComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4807,6 +4890,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed32ComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4858,6 +4942,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleFixed64ComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4909,6 +4994,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed32ComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -4960,6 +5046,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleSFixed64ComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:
@@ -5011,6 +5098,7 @@ public:
 
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT SimpleStringComplexMessageMapMessage::MapFieldEntry mapField() const;
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(const SimpleStringComplexMessageMapMessage::MapFieldEntry &mapField);
+    QPB_TST_QTPROTOBUFGEN_GEN_EXPORT void setMapField(SimpleStringComplexMessageMapMessage::MapFieldEntry &&mapField);
     QPB_TST_QTPROTOBUFGEN_GEN_EXPORT static void registerTypes();
 
 private:

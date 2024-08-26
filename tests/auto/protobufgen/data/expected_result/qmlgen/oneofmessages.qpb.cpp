@@ -130,7 +130,7 @@ QtProtobuf::int32 OneofSimpleMessage::testOneofFieldSecondInt() const
     return dptr->m_testOneof.value<QtProtobuf::int32>();
 }
 
-void OneofSimpleMessage::setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt)
+void OneofSimpleMessage::setTestOneofFieldInt(QtProtobuf::int32 testOneofFieldInt)
 {
     if (!dptr->m_testOneof.isEqual(testOneofFieldInt, 1)) {
         dptr.detach();
@@ -146,7 +146,7 @@ void OneofSimpleMessage::setTestOneofFieldInt_p(QtProtobuf::int32 testOneofField
     }
 }
 
-void OneofSimpleMessage::setTestOneofFieldSecondInt(const QtProtobuf::int32 &testOneofFieldSecondInt)
+void OneofSimpleMessage::setTestOneofFieldSecondInt(QtProtobuf::int32 testOneofFieldSecondInt)
 {
     if (!dptr->m_testOneof.isEqual(testOneofFieldSecondInt, 2)) {
         dptr.detach();
@@ -416,7 +416,7 @@ QtProtobuf::int32 OneofComplexMessage::testSnakeCaseField() const
     return dptr->m_secondOneof.value<QtProtobuf::int32>();
 }
 
-void OneofComplexMessage::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
+void OneofComplexMessage::setTestFieldInt(QtProtobuf::int32 testFieldInt)
 {
     if (dptr->m_testFieldInt != testFieldInt) {
         dptr.detach();
@@ -424,7 +424,7 @@ void OneofComplexMessage::setTestFieldInt(const QtProtobuf::int32 &testFieldInt)
     }
 }
 
-void OneofComplexMessage::setTestOneofFieldInt(const QtProtobuf::int32 &testOneofFieldInt)
+void OneofComplexMessage::setTestOneofFieldInt(QtProtobuf::int32 testOneofFieldInt)
 {
     if (!dptr->m_testOneof.isEqual(testOneofFieldInt, 42)) {
         dptr.detach();
@@ -448,6 +448,14 @@ void OneofComplexMessage::setTestOneofComplexField(const ComplexMessage &testOne
     }
 }
 
+void OneofComplexMessage::setTestOneofComplexField(ComplexMessage &&testOneofComplexField)
+{
+    if (!dptr->m_testOneof.isEqual(testOneofComplexField, 3)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(std::move(testOneofComplexField), 3);
+    }
+}
+
 void OneofComplexMessage::setTestOneofComplexField_p(ComplexMessage *testOneofComplexField)
 {
     const ComplexMessage &value = *testOneofComplexField;
@@ -465,6 +473,14 @@ void OneofComplexMessage::setTestOneofSecondComplexField(const ComplexMessage &t
     }
 }
 
+void OneofComplexMessage::setTestOneofSecondComplexField(ComplexMessage &&testOneofSecondComplexField)
+{
+    if (!dptr->m_testOneof.isEqual(testOneofSecondComplexField, 4)) {
+        dptr.detach();
+        dptr->m_testOneof.setValue(std::move(testOneofSecondComplexField), 4);
+    }
+}
+
 void OneofComplexMessage::setTestOneofSecondComplexField_p(ComplexMessage *testOneofSecondComplexField)
 {
     const ComplexMessage &value = *testOneofSecondComplexField;
@@ -474,7 +490,7 @@ void OneofComplexMessage::setTestOneofSecondComplexField_p(ComplexMessage *testO
     }
 }
 
-void OneofComplexMessage::setSecondFieldInt(const QtProtobuf::int32 &secondFieldInt)
+void OneofComplexMessage::setSecondFieldInt(QtProtobuf::int32 secondFieldInt)
 {
     if (!dptr->m_secondOneof.isEqual(secondFieldInt, 43)) {
         dptr.detach();
@@ -498,6 +514,14 @@ void OneofComplexMessage::setSecondComplexField(const ComplexMessage &secondComp
     }
 }
 
+void OneofComplexMessage::setSecondComplexField(ComplexMessage &&secondComplexField)
+{
+    if (!dptr->m_secondOneof.isEqual(secondComplexField, 5)) {
+        dptr.detach();
+        dptr->m_secondOneof.setValue(std::move(secondComplexField), 5);
+    }
+}
+
 void OneofComplexMessage::setSecondComplexField_p(ComplexMessage *secondComplexField)
 {
     const ComplexMessage &value = *secondComplexField;
@@ -515,6 +539,14 @@ void OneofComplexMessage::setSecondSecondComplexField(const ComplexMessage &seco
     }
 }
 
+void OneofComplexMessage::setSecondSecondComplexField(ComplexMessage &&secondSecondComplexField)
+{
+    if (!dptr->m_secondOneof.isEqual(secondSecondComplexField, 6)) {
+        dptr.detach();
+        dptr->m_secondOneof.setValue(std::move(secondSecondComplexField), 6);
+    }
+}
+
 void OneofComplexMessage::setSecondSecondComplexField_p(ComplexMessage *secondSecondComplexField)
 {
     const ComplexMessage &value = *secondSecondComplexField;
@@ -524,7 +556,7 @@ void OneofComplexMessage::setSecondSecondComplexField_p(ComplexMessage *secondSe
     }
 }
 
-void OneofComplexMessage::setTestSnakeCaseField(const QtProtobuf::int32 &testSnakeCaseField)
+void OneofComplexMessage::setTestSnakeCaseField(QtProtobuf::int32 testSnakeCaseField)
 {
     if (!dptr->m_secondOneof.isEqual(testSnakeCaseField, 7)) {
         dptr.detach();
