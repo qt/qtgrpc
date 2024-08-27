@@ -57,10 +57,13 @@ public:
 
     qint64 deadlineTimeout() const;
     void setDeadlineTimeout(qint64 value);
+
     QQmlGrpcMetadata *metadata() const;
     void setMetadata(QQmlGrpcMetadata *value);
+
     QtGrpc::SerializationFormat serializationFormat() const;
     void setSerializationFormat(QtGrpc::SerializationFormat format);
+
 #if QT_CONFIG(ssl)
     QQmlSslConfiguration sslConfiguration() const;
     void setSslConfiguration(const QQmlSslConfiguration &config);

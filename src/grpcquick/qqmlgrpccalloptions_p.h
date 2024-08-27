@@ -44,6 +44,7 @@ public:
 
     qint64 deadlineTimeout() const;
     void setDeadlineTimeout(qint64 value);
+
     QQmlGrpcMetadata *metadata() const;
     void setMetadata(QQmlGrpcMetadata *value);
 

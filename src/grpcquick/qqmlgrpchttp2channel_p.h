@@ -36,12 +36,15 @@ class Q_GRPCQUICK_EXPORT QQmlGrpcHttp2Channel : public QQmlAbstractGrpcChannel
 public:
     explicit QQmlGrpcHttp2Channel(QObject *parent = nullptr);
     ~QQmlGrpcHttp2Channel() override;
+
     std::shared_ptr<QAbstractGrpcChannel> channel() final;
-    QQmlGrpcChannelOptions *options() const { return m_options; }
+
+    QQmlGrpcChannelOptions *options() const noexcept { return m_options; }
     void setOptions(QQmlGrpcChannelOptions *options);
 
     QUrl hostUri() const noexcept { return m_hostUri; }
     void setHostUri(const QUrl &hostUri);
+
 Q_SIGNALS:
     void optionsChanged();
     void channelUpdated();
