@@ -33,7 +33,7 @@ void QQmlGrpcCallOptions::setDeadlineTimeout(qint64 value)
     emit deadlineTimeoutChanged();
 }
 
-const QGrpcCallOptions &QQmlGrpcCallOptions::options() const
+const QGrpcCallOptions &QQmlGrpcCallOptions::options() const & noexcept
 {
     return m_options;
 }
