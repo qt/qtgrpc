@@ -54,7 +54,7 @@ void QQmlGrpcChannelOptions::setDeadlineTimeout(qint64 value)
     emit deadlineTimeoutChanged();
 }
 
-const QGrpcChannelOptions &QQmlGrpcChannelOptions::options() const
+const QGrpcChannelOptions &QQmlGrpcChannelOptions::options() const & noexcept
 {
     return d_func()->options;
 }

@@ -52,7 +52,9 @@ public:
     explicit QQmlGrpcChannelOptions(QObject *parent = nullptr);
     ~QQmlGrpcChannelOptions() override;
 
-    const QGrpcChannelOptions &options() const;
+    const QGrpcChannelOptions &options() const & noexcept;
+    void options() && = delete;
+
     qint64 deadlineTimeout() const;
     void setDeadlineTimeout(qint64 value);
     QQmlGrpcMetadata *metadata() const;

@@ -39,7 +39,9 @@ public:
     explicit QQmlGrpcCallOptions(QObject *parent = nullptr);
     ~QQmlGrpcCallOptions() override;
 
-    const QGrpcCallOptions &options() const;
+    const QGrpcCallOptions &options() const & noexcept;
+    void options() && = delete;
+
     qint64 deadlineTimeout() const;
     void setDeadlineTimeout(qint64 value);
     QQmlGrpcMetadata *metadata() const;

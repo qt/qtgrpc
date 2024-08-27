@@ -37,7 +37,9 @@ public:
     explicit QQmlGrpcMetadata(QObject *parent = nullptr);
     ~QQmlGrpcMetadata() override;
 
-    const QHash<QByteArray, QByteArray> &metadata() const { return m_metadata; }
+    const QHash<QByteArray, QByteArray> &metadata() const & noexcept { return m_metadata; }
+    void metadata() && = delete;
+
     const QVariantMap &data() const { return m_variantdata; }
     void setData(const QVariantMap &data);
 
