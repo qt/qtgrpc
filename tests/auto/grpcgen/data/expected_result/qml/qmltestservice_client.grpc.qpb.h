@@ -22,7 +22,7 @@ class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodClientStreamSender : public QQml
     QML_NAMED_ELEMENT(TestServiceTestMethodClientStreamSender)
     QML_UNCREATABLE("TestServiceTestMethodClientStreamSender can only be created by gRPC client instance")
 
-    TestMethodClientStreamSender(std::shared_ptr<QGrpcClientStream> stream) : QQmlGrpcClientStreamSender(std::move(stream)) {}
+    TestMethodClientStreamSender(QGrpcClientStream *stream) : QQmlGrpcClientStreamSender(stream) {}
 
 public:
     Q_INVOKABLE void writeMessage(const qtgrpc::tests::SimpleStringMessage &arg)
@@ -38,7 +38,7 @@ class QPB_TST_QTGRPCGEN_PLUGIN_EXPORT TestMethodBiStreamSender : public QQmlGrpc
     QML_NAMED_ELEMENT(TestServiceTestMethodBiStreamSender)
     QML_UNCREATABLE("TestServiceTestMethodBiStreamSender can only be created by gRPC client instance")
 
-    TestMethodBiStreamSender(std::shared_ptr<QGrpcBidiStream> stream) : QQmlGrpcBidiStreamSender(std::move(stream)) {}
+    TestMethodBiStreamSender(QGrpcBidiStream *stream) : QQmlGrpcBidiStreamSender(stream) {}
 
 public:
     Q_INVOKABLE void writeMessage(const qtgrpc::tests::SimpleStringMessage &arg)

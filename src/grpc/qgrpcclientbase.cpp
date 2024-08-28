@@ -177,7 +177,7 @@ std::shared_ptr<QAbstractGrpcChannel> QGrpcClientBase::channel() const noexcept
     return d->channel;
 }
 
-std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
+std::unique_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
                                                       const QProtobufMessage &arg,
                                                       const QGrpcCallOptions &options)
 {
@@ -192,7 +192,7 @@ std::shared_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
     return d->channel->call(method, d->service, *argData, options);
 }
 
-std::shared_ptr<QGrpcServerStream> QGrpcClientBase::serverStream(QLatin1StringView method,
+std::unique_ptr<QGrpcServerStream> QGrpcClientBase::serverStream(QLatin1StringView method,
                                                                  const QProtobufMessage &arg,
                                                                  const QGrpcCallOptions &options)
 {
@@ -204,12 +204,12 @@ std::shared_ptr<QGrpcServerStream> QGrpcClientBase::serverStream(QLatin1StringVi
     if (!argData)
         return {};
 
-    const auto grpcStream = d->channel->serverStream(method, d->service, *argData, options);
+    auto grpcStream = d->channel->serverStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }
 
-std::shared_ptr<QGrpcClientStream> QGrpcClientBase::clientStream(QLatin1StringView method,
+std::unique_ptr<QGrpcClientStream> QGrpcClientBase::clientStream(QLatin1StringView method,
                                                                  const QProtobufMessage &arg,
                                                                  const QGrpcCallOptions &options)
 {
@@ -221,12 +221,12 @@ std::shared_ptr<QGrpcClientStream> QGrpcClientBase::clientStream(QLatin1StringVi
     if (!argData)
         return {};
 
-    const auto grpcStream = d->channel->clientStream(method, d->service, *argData, options);
+    auto grpcStream = d->channel->clientStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }
 
-std::shared_ptr<QGrpcBidiStream> QGrpcClientBase::bidiStream(QLatin1StringView method,
+std::unique_ptr<QGrpcBidiStream> QGrpcClientBase::bidiStream(QLatin1StringView method,
                                                              const QProtobufMessage &arg,
                                                              const QGrpcCallOptions &options)
 {
@@ -238,7 +238,7 @@ std::shared_ptr<QGrpcBidiStream> QGrpcClientBase::bidiStream(QLatin1StringView m
     if (!argData)
         return {};
 
-    const auto grpcStream = d->channel->bidiStream(method, d->service, *argData, options);
+    auto grpcStream = d->channel->bidiStream(method, d->service, *argData, options);
     d->addStream(grpcStream.get());
     return grpcStream;
 }

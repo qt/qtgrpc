@@ -63,26 +63,30 @@ void QtGrpcClientBenchmark::unaryCallHelper(qt::bench::UnaryCallRequest &request
 {
     // recursively enqueue a message after the previous message finished
     request.setPing(writes);
-    const auto reply = mClient.UnaryCall(request);
+    auto reply = mClient.UnaryCall(request);
+    auto *replyPtr = reply.get();
 
     auto connection = std::make_shared<QMetaObject::Connection>();
-    *connection = QObject::connect(reply.get(), &QGrpcCallReply::finished, &mClient,
-                     [connection, reply, this, &request, &writes](const QGrpcStatus &status) {
-                         if (writes == 0)
-                             mTimer.start();
-                         if (status.isOk()) {
-                             if (++writes < mCalls) {
-                                 unaryCallHelper(request, writes);
-                             } else {
-                                 Client::printRpcResult("UnaryCall", mTimer.nsecsElapsed(), writes);
-                                 mLoop.quit();
-                             }
-                         } else {
-                             qDebug() << "FAILED: " << status;
-                             mLoop.quit();
-                         }
-                         QObject::disconnect(*connection);
-                     });
+    *connection = QObject::connect(replyPtr, &QGrpcCallReply::finished, &mClient,
+                                   [connection, reply = std::move(reply), this, &request,
+                                    &writes](const QGrpcStatus &status) {
+                                       if (writes == 0)
+                                           mTimer.start();
+                                       if (status.isOk()) {
+                                           if (++writes < mCalls) {
+                                               unaryCallHelper(request, writes);
+                                           } else {
+                                               Client::printRpcResult("UnaryCall",
+                                                                      mTimer.nsecsElapsed(),
+                                                                      writes);
+                                               mLoop.quit();
+                                           }
+                                       } else {
+                                           qDebug() << "FAILED: " << status;
+                                           mLoop.quit();
+                                       }
+                                       QObject::disconnect(*connection);
+                                   });
 }
 
 void QtGrpcClientBenchmark::serverStreaming()
@@ -94,10 +98,11 @@ void QtGrpcClientBenchmark::serverStreaming()
     if (!sData.isEmpty())
         request.setPayload(sData);
     request.setPing(mCalls);
-    const auto stream = mClient.ServerStreaming(request);
+    auto stream = mClient.ServerStreaming(request);
+    auto *streamPtr = stream.get();
 
-    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this,
-                     [this, stream, &counter, &recvBytes]() {
+    QObject::connect(streamPtr, &QGrpcServerStream::messageReceived, this,
+                     [this, stream = streamPtr, &counter, &recvBytes]() {
                          if (counter == 0)
                              mTimer.start();
                          const auto response = stream->read<qt::bench::ServerStreamingResponse>();
@@ -106,7 +111,7 @@ void QtGrpcClientBenchmark::serverStreaming()
                          ++counter;
                      });
 
-    QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
+    QObject::connect(streamPtr, &QGrpcServerStream::finished, this,
                      [this, &counter, &recvBytes](const QGrpcStatus &status) {
                          if (status.isOk()) {
                              Client::printRpcResult("ServerStreaming", mTimer.nsecsElapsed(),
@@ -170,10 +175,12 @@ void QtGrpcClientBenchmark::bidiStreaming()
     if (!sData.isEmpty())
         request.setPayload(sData);
     qt::bench::BiDiStreamingResponse response;
-    const auto stream = mClient.BiDiStreaming(request);
+    auto stream = mClient.BiDiStreaming(request);
+    auto streamPtr = stream.get();
 
-    QObject::connect(stream.get(), &QGrpcBidiStream::messageReceived, this,
-                     [this, stream, &counter, &response, &request, &recvBytes, &sendBytes]() {
+    QObject::connect(streamPtr, &QGrpcBidiStream::messageReceived, this,
+                     [this, stream = streamPtr, &counter, &response, &request, &recvBytes,
+                      &sendBytes]() {
                          if (counter == 0)
                              mTimer.start();
                          if (stream->read(&response)) {
@@ -194,7 +201,7 @@ void QtGrpcClientBenchmark::bidiStreaming()
                          }
                      });
 
-    QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
+    QObject::connect(streamPtr, &QGrpcServerStream::finished, this,
                      [this, &counter, &recvBytes, &sendBytes](const QGrpcStatus &status) {
                          if (status.isOk()) {
                              Client::printRpcResult("BidiStreaming", mTimer.nsecsElapsed(), counter,

@@ -24,8 +24,7 @@ public:
     ~QQmlGrpcClientStreamSender() override;
 
 protected:
-    explicit  QQmlGrpcClientStreamSender(std::shared_ptr<QGrpcClientStream> stream,
-                                         QObject *parent = nullptr);
+    explicit QQmlGrpcClientStreamSender(QGrpcClientStream *stream, QObject *parent = nullptr);
 
     void writeMessageImpl(const QProtobufMessage &message) const;
 
@@ -42,8 +41,7 @@ public:
     ~QQmlGrpcBidiStreamSender() override;
 
 protected:
-    explicit QQmlGrpcBidiStreamSender(std::shared_ptr<QGrpcBidiStream> stream,
-                                       QObject *parent = nullptr);
+    explicit QQmlGrpcBidiStreamSender(QGrpcBidiStream *stream, QObject *parent = nullptr);
 
     void writeMessageImpl(const QProtobufMessage &message) const;
 

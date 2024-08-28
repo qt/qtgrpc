@@ -10,9 +10,7 @@ QT_BEGIN_NAMESPACE
 namespace {
 bool isValidStream(const QGrpcOperation *stream)
 {
-    Q_ASSERT_X(stream, "writeMessageImpl", "stream is nullptr");
-
-    if (stream->isFinished()) {
+    if (!stream || stream->isFinished()) {
         qWarning("Unable to write message; stream is finished");
         return false;
     }
@@ -28,17 +26,18 @@ bool isValidStream(const QGrpcOperation *stream)
 class QQmlGrpcClientStreamSenderPrivate : public QObjectPrivate
 {
 public:
-    explicit QQmlGrpcClientStreamSenderPrivate(std::shared_ptr<QGrpcClientStream> stream)
-        : m_stream(std::move(stream))
-    {
-    }
-    std::shared_ptr<QGrpcClientStream> m_stream = nullptr;
+    Q_DECLARE_PUBLIC(QQmlGrpcClientStreamSender)
+    explicit QQmlGrpcClientStreamSenderPrivate(QGrpcClientStream *stream) : m_stream(stream) { }
+    QGrpcClientStream *m_stream = nullptr;
 };
 
-QQmlGrpcClientStreamSender::QQmlGrpcClientStreamSender(std::shared_ptr<QGrpcClientStream> stream,
-                                                       QObject *parent)
-    : QObject(*new QQmlGrpcClientStreamSenderPrivate(std::move(stream)), parent)
+QQmlGrpcClientStreamSender::QQmlGrpcClientStreamSender(QGrpcClientStream *stream, QObject *parent)
+    : QObject(*new QQmlGrpcClientStreamSenderPrivate(stream), parent)
 {
+    QObject::connect(stream, &QObject::destroyed, this, [this]() {
+        Q_D(QQmlGrpcClientStreamSender);
+        d->m_stream = nullptr;
+    });
 }
 
 QQmlGrpcClientStreamSender::~QQmlGrpcClientStreamSender()
@@ -47,7 +46,7 @@ QQmlGrpcClientStreamSender::~QQmlGrpcClientStreamSender()
 void QQmlGrpcClientStreamSender::writeMessageImpl(const QProtobufMessage &message) const
 {
     Q_D(const QQmlGrpcClientStreamSender);
-    if (!isValidStream(d->m_stream.get()))
+    if (!isValidStream(d->m_stream))
         return;
     d->m_stream->writeMessage(message);
 }
@@ -60,17 +59,17 @@ void QQmlGrpcClientStreamSender::writeMessageImpl(const QProtobufMessage &messag
 class QQmlGrpcBidiStreamSenderPrivate : public QObjectPrivate
 {
 public:
-    explicit QQmlGrpcBidiStreamSenderPrivate(std::shared_ptr<QGrpcBidiStream> stream)
-        : m_stream(std::move(stream))
-    {
-    }
-    std::shared_ptr<QGrpcBidiStream> m_stream = nullptr;
+    explicit QQmlGrpcBidiStreamSenderPrivate(QGrpcBidiStream *stream) : m_stream(stream) { }
+    QGrpcBidiStream *m_stream = nullptr;
 };
 
-QQmlGrpcBidiStreamSender::QQmlGrpcBidiStreamSender(std::shared_ptr<QGrpcBidiStream> stream,
-                                                     QObject *parent)
-    : QObject(*new QQmlGrpcBidiStreamSenderPrivate(std::move(stream)), parent)
+QQmlGrpcBidiStreamSender::QQmlGrpcBidiStreamSender(QGrpcBidiStream *stream, QObject *parent)
+    : QObject(*new QQmlGrpcBidiStreamSenderPrivate(stream), parent)
 {
+    QObject::connect(stream, &QObject::destroyed, this, [this]() {
+        Q_D(QQmlGrpcBidiStreamSender);
+        d->m_stream = nullptr;
+    });
 }
 
 QQmlGrpcBidiStreamSender::~QQmlGrpcBidiStreamSender()
@@ -79,7 +78,7 @@ QQmlGrpcBidiStreamSender::~QQmlGrpcBidiStreamSender()
 void QQmlGrpcBidiStreamSender::writeMessageImpl(const QProtobufMessage &message) const
 {
     Q_D(const QQmlGrpcBidiStreamSender);
-    if (!isValidStream(d->m_stream.get()))
+    if (!isValidStream(d->m_stream))
         return;
     d->m_stream->writeMessage(message);
 }

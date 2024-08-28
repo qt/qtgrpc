@@ -23,9 +23,9 @@ public:
     ~Client() override;
 
     [[nodiscard]]
-    std::shared_ptr<QGrpcCallReply> testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg);
+    std::unique_ptr<QGrpcCallReply> testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg);
     [[nodiscard]]
-    std::shared_ptr<QGrpcCallReply> testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
+    std::unique_ptr<QGrpcCallReply> testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options);
 
 
 };

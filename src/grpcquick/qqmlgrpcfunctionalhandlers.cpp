@@ -31,17 +31,19 @@ bool checkReceivedStatus(QJSEngine *jsEngine, const QGrpcStatus &status,
 }
 
 void connectMultipleReceiveOperationFinished(QJSEngine *jsEngine,
-                                             const std::shared_ptr<QGrpcOperation> &operation,
+                                             std::unique_ptr<QGrpcOperation> &&operation,
                                              const QJSValue &successCallback,
                                              const QJSValue &errorCallback)
 {
-    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operation.get());
+    auto *operationPtr = operation.get();
+    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operationPtr);
 
     auto finishConnection = std::make_shared<QMetaObject::Connection>();
-    *finishConnection = QObject::connect(operation.get(), &QGrpcOperation::finished, jsEngine,
+    *finishConnection = QObject::connect(operationPtr, &QGrpcOperation::finished, jsEngine,
                                          [successCallback, errorCallback, jsEngine,
                                           finishConnection,
-                                          operation](const QGrpcStatus &status) {
+                                          operation = std::move(operation)](const QGrpcStatus
+                                                                                &status) {
                                              // We take 'operation' by copy so that its lifetime
                                              // is extended until this lambda is destroyed.
                                              if (QtGrpcQuickFunctional::

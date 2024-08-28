@@ -52,18 +52,18 @@ Q_SIGNALS:
 protected:
     explicit QGrpcClientBase(QLatin1StringView service, QObject *parent = nullptr);
 
-    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg,
+    std::unique_ptr<QGrpcCallReply> call(QLatin1StringView method, const QProtobufMessage &arg,
                                          const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcServerStream> serverStream(QLatin1StringView method,
+    std::unique_ptr<QGrpcServerStream> serverStream(QLatin1StringView method,
                                                     const QProtobufMessage &arg,
                                                     const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcClientStream> clientStream(QLatin1StringView method,
+    std::unique_ptr<QGrpcClientStream> clientStream(QLatin1StringView method,
                                                     const QProtobufMessage &arg,
                                                     const QGrpcCallOptions &options);
 
-    std::shared_ptr<QGrpcBidiStream> bidiStream(QLatin1StringView method,
+    std::unique_ptr<QGrpcBidiStream> bidiStream(QLatin1StringView method,
                                                 const QProtobufMessage &arg,
                                                 const QGrpcCallOptions &options);
 
