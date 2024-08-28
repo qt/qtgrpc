@@ -20,73 +20,124 @@ QT_BEGIN_NAMESPACE
     \class QGrpcOperationContext
     \inmodule QtGrpc
     \since 6.7
-    \brief The QGrpcOperationContext class implements common logic to
-           handle the gRPC communication from the channel side.
+    \brief The QGrpcOperationContext class provides context for communication
+    between an individual gRPC operation and a channel.
+
+    QGrpcOperationContext is constructed internally when a remote procedure call
+    (RPC) is requested, mediating interaction between the client's operation
+    request and the channel's operation outcome.
+
+    RPCs requested on the client interface return specializations of
+    QGrpcOperation, such as QGrpcCallReply, QGrpcServerStream,
+    QGrpcClientStream, or QGrpcBidiStream. These classes are implicitly
+    integrated with the underlying QGrpcOperationContext counterpart.
+
+    \note Don't use this class directly unless implementing a custom channel.
+
+    The signals contained within this class are used to build the communication
+    between the client-facing QGrpcOperation and the QAbstractGrpcChannel
+    implementation. These operations are asynchronous in nature, and multiple
+    RPCs can operate on the same channel concurrently. Channels typically treat
+    all operations the same, and it is the channel's responsibility to
+    correctly support and restrict the subset of features its RPC type
+    supports.
+
+    Signals which should only be emitted by the channel's implementation are:
+    \list
+        \li finished()
+        \li messageReceived()
+    \endlist
+
+    Signals which will be emitted by QGrpcOperation and its specializations are:
+    \list
+        \li cancelRequested()
+        \li writeMessageRequested()
+        \li writesDoneRequested()
+    \endlist
+
+    Custom implementations of QAbstractGrpcChannel must handle the client's
+    signals, as no default signal handling is provided, and emit their own
+    signals accordingly.
 */
 
 /*!
     \fn void QGrpcOperationContext::finished(const QGrpcStatus &status)
 
-    The signal is emitted when the gRPC communication is finished.
+    This signal should be emitted by the channel when an RPC finishes.
 
-    It usually means that the server sent the \a status and closed the
-    connection. Implementations of \l QAbstractGrpcChannel should detect this
-    situation and emit the signal.
+    It usually means that the server sent a \a status for the requested RPC and
+    closed the connection. Implementations of QAbstractGrpcChannel should
+    detect this situation and emit the signal.
 
-    The signal is implicitly connected to the QGrpcOperation counterpart.
+    After receiving this signal, no further communication should occur through
+    this operation context. The client side may then safely delete the
+    corresponding RPC object.
+
+    \note This signal is implicitly connected to the QGrpcOperation counterpart.
+
+    \sa QGrpcOperation::finished
 */
 
 /*!
     \fn void QGrpcOperationContext::messageReceived(const QByteArray &data)
 
-    The signal should be emitted by the channel when the new chunk of \a data is
-    received.
+    This signal should be emitted by the channel when a new chunk of \a data is
+    received from the server.
 
-    For client streams and unary calls, this means that the response
-    is received from the server, and communication will be successfully
-    finished. For server and bidi streams this signal should be called by
-    channel to signalize that receiving of new message is completed and user
-    business logic now can process it at the client side.
+    For client streams and unary calls, this means that the single and final
+    response has arrived and communication is about to finish.
 
-    The signal is implicitly connected to the QGrpcOperation counterpart.
+    For server and bidirectional streams, this signal should be continuously
+    emitted by the channel upon receiving each new messages.
+
+    \note This signal is implicitly connected to the QGrpcOperation
+    counterpart.
+
+    \sa QGrpcServerStream::messageReceived
+    \sa QGrpcBidiStream::messageReceived
 */
 
 /*!
     \fn void QGrpcOperationContext::cancelRequested()
 
-    The signal is emitted when client requests to terminate the communication.
+    This signal is emitted by QGrpcOperation when requesting cancellation of the
+    communication.
 
-    The signal should only be emitted from the client counterpart.
-    Implementations of \l QAbstractGrpcChannel should attempt to close
-    connection client-server connection and return immediately. The successful
-    connection break is not guarateed. Further processing of the data received
-    from a channel is not required and is not recommended.
+    The channel is expected to connect its cancellation logic to this signal and
+    attempt to cancel the RPC and return immediately. Successful cancellation
+    cannot be guaranteed. Further processing of the data received from a
+    channel is not required and should be avoided.
 
-    The client side will be notificated by the
-    \l QGrpcOperationContext::finished signal with
-    \l QtGrpc::StatusCode::Cancelled status code.
-
-    The signal is implicitly connected to the QGrpcOperation counterpart.
+    \sa QGrpcOperation::cancel
 */
 
 /*!
     \fn void QGrpcOperationContext::writeMessageRequested(const QByteArray &data)
 
-    The signal is emitted when the client tries to send a new message to the
-    channel.
+    This signal is emitted by QGrpcClientStream or QGrpcBidiStream when it has
+    serialized \a data ready for a channel to deliver.
 
-    This signal can only be emitted by client or bidi streams. Implementations
-    of \l QAbstractGrpcChannel should connect the sending logic to this signal.
-    The \a data should be wrapped with the channel-related headers and sent
-    to the wire.
+    The channel is expected to connect its writing logic to this signal and wrap
+    the serialized data in channel-related headers before writing it to the
+    wire.
 
-    The signal is implicitly connected to the QGrpcOperation counterpart.
+    \sa QGrpcClientStream::writeMessage
+    \sa QGrpcBidiStream::writeMessage
 */
 
 /*!
     \fn void QGrpcOperationContext::writesDoneRequested()
 
-    T.B.A
+    This signal is emitted by QGrpcClientStream or QGrpcBidiStream to indicate
+    that it's done writing messages. The channel should respond to this by
+    half-closing the stream.
+
+    \note After receiving this signal no more write operations are permitted
+    for the streaming RPCs. The server can still send messages, which should be
+    forwarded with messageReceived().
+
+    \sa QGrpcClientStream::writesDone
+    \sa QGrpcBidiStream::writesDone
 */
 
 class QGrpcOperationContextPrivate : public QObjectPrivate
@@ -110,6 +161,15 @@ public:
     QMetaType responseMetaType;
 };
 
+/*!
+    \internal
+
+    Constructs an operation context with \a method and \a service name. The
+    initial serialized message \a arg is used to start a call with the \a
+    options and the selected \a serializer used for the RPC.
+
+    \note This class can only be constructed by QAbstractGrpcChannel.
+*/
 QGrpcOperationContext::QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
                                              QByteArrayView arg, const QGrpcCallOptions &options,
                                              std::shared_ptr<QAbstractProtobufSerializer>
@@ -120,10 +180,14 @@ QGrpcOperationContext::QGrpcOperationContext(QLatin1StringView method, QLatin1St
 {
 }
 
+/*!
+    Destroys the operation-context.
+*/
 QGrpcOperationContext::~QGrpcOperationContext() = default;
 
 /*!
-    Returns the method name that is assigned to this operation.
+    Returns the method name of the service associated with this
+    operation-context.
 */
 QLatin1StringView QGrpcOperationContext::method() const noexcept
 {
@@ -132,7 +196,7 @@ QLatin1StringView QGrpcOperationContext::method() const noexcept
 }
 
 /*!
-    Returns the service name that is assigned to this operation.
+    Returns the service name associated with this operation-context.
 */
 QLatin1StringView QGrpcOperationContext::service() const noexcept
 {
@@ -141,7 +205,7 @@ QLatin1StringView QGrpcOperationContext::service() const noexcept
 }
 
 /*!
-    Returns the serialized arguments that are used for this operation.
+    Returns the serialized argument that is utilized by this operation-context.
 */
 QByteArrayView QGrpcOperationContext::argument() const noexcept
 {
@@ -150,7 +214,9 @@ QByteArrayView QGrpcOperationContext::argument() const noexcept
 }
 
 /*!
-    Return the options that are assigned to this operation.
+    Returns the call options that is utilized by this operation-context.
+
+    For channel-wide options, see QGrpcChannelOptions.
 */
 const QGrpcCallOptions &QGrpcOperationContext::callOptions() const & noexcept
 {
@@ -159,7 +225,7 @@ const QGrpcCallOptions &QGrpcOperationContext::callOptions() const & noexcept
 }
 
 /*!
-    Return the serializer that is assigned to this operation.
+    Returns the serializer of this operation-context
 */
 std::shared_ptr<const QAbstractProtobufSerializer>
 QGrpcOperationContext::serializer() const
@@ -169,9 +235,9 @@ QGrpcOperationContext::serializer() const
 }
 
 /*!
-    Returns the metadata that is received from server.
+    Returns the metadata received from the server.
 
-    The method is used implicitly by \l QGrpcOperation counterpart.
+    \note This method is used implicitly by the QGrpcOperation counterpart.
 */
 const QHash<QByteArray, QByteArray> &QGrpcOperationContext::serverMetadata() const & noexcept
 {
@@ -180,9 +246,10 @@ const QHash<QByteArray, QByteArray> &QGrpcOperationContext::serverMetadata() con
 }
 
 /*!
-    Stores the recently received server metadata.
+    \fn void QGrpcOperationContext::setServerMetadata(const QHash<QByteArray, QByteArray> &metadata)
+    \fn void QGrpcOperationContext::setServerMetadata(QHash<QByteArray, QByteArray> &&metadata)
 
-    The \a metadata then can be processed on the client side.
+    Sets the server \a metadata received from the service.
 */
 void QGrpcOperationContext::setServerMetadata(const QHash<QByteArray, QByteArray> &metadata)
 {
@@ -190,11 +257,6 @@ void QGrpcOperationContext::setServerMetadata(const QHash<QByteArray, QByteArray
     d->serverMetadata = metadata;
 }
 
-/*!
-    Stores the recently received server metadata.
-
-    The \a metadata then can be processed on the client side.
-*/
 void QGrpcOperationContext::setServerMetadata(QHash<QByteArray, QByteArray> &&metadata)
 {
     Q_D(QGrpcOperationContext);
