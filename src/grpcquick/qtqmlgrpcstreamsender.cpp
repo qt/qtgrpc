@@ -7,7 +7,8 @@
 
 QT_BEGIN_NAMESPACE
 
-bool QtQmlGrpcStreamSender::isValidStream(const QGrpcOperation *stream)
+namespace {
+bool isValidStream(const QGrpcOperation *stream)
 {
     Q_ASSERT_X(stream, "writeMessageImpl", "stream is nullptr");
 
@@ -16,6 +17,7 @@ bool QtQmlGrpcStreamSender::isValidStream(const QGrpcOperation *stream)
         return false;
     }
     return true;
+}
 }
 
 /*!
@@ -45,7 +47,7 @@ QQmlGrpcClientStreamSender::~QQmlGrpcClientStreamSender()
 void QQmlGrpcClientStreamSender::writeMessageImpl(const QProtobufMessage &message) const
 {
     Q_D(const QQmlGrpcClientStreamSender);
-    if (!QtQmlGrpcStreamSender::isValidStream(d->m_stream.get()))
+    if (!isValidStream(d->m_stream.get()))
         return;
     d->m_stream->writeMessage(message);
 }
@@ -77,7 +79,7 @@ QQmlGrpcBidiStreamSender::~QQmlGrpcBidiStreamSender()
 void QQmlGrpcBidiStreamSender::writeMessageImpl(const QProtobufMessage &message) const
 {
     Q_D(const QQmlGrpcBidiStreamSender);
-    if (!QtQmlGrpcStreamSender::isValidStream(d->m_stream.get()))
+    if (!isValidStream(d->m_stream.get()))
         return;
     d->m_stream->writeMessage(message);
 }
