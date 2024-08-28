@@ -179,17 +179,6 @@ const QHash<QByteArray, QByteArray> &QGrpcOperationContext::serverMetadata() con
 }
 
 /*!
-    Updates the arg attribute that will be used for this operation.
-
-    The method expects \a arg to be serialized data.
-*/
-void QGrpcOperationContext::setArgument(QByteArrayView arg)
-{
-    Q_D(QGrpcOperationContext);
-    d->argument = arg.toByteArray();
-}
-
-/*!
     Updates the call \a options attribute.
 */
 void QGrpcOperationContext::setCallOptions(const QGrpcCallOptions &options)

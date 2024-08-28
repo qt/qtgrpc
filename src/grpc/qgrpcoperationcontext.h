@@ -37,9 +37,7 @@ public:
 
     [[nodiscard]] QLatin1StringView method() const noexcept;
     [[nodiscard]] QLatin1StringView service() const noexcept;
-
     [[nodiscard]] QByteArrayView argument() const noexcept;
-    void setArgument(QByteArrayView arg);
 
     void callOptions() && = delete;
     [[nodiscard]] const QGrpcCallOptions &callOptions() const & noexcept;
