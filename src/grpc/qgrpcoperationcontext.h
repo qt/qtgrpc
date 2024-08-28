@@ -41,7 +41,6 @@ public:
 
     void callOptions() && = delete;
     [[nodiscard]] const QGrpcCallOptions &callOptions() const & noexcept;
-    void setCallOptions(const QGrpcCallOptions &options);
 
     void serverMetadata() && = delete;
     [[nodiscard]] const QHash<QByteArray, QByteArray> &serverMetadata() const & noexcept;

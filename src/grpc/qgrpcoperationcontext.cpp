@@ -179,15 +179,6 @@ const QHash<QByteArray, QByteArray> &QGrpcOperationContext::serverMetadata() con
 }
 
 /*!
-    Updates the call \a options attribute.
-*/
-void QGrpcOperationContext::setCallOptions(const QGrpcCallOptions &options)
-{
-    Q_D(QGrpcOperationContext);
-    d->options = options;
-}
-
-/*!
     Stores the recently received server metadata.
 
     The \a metadata then can be processed on the client side.
