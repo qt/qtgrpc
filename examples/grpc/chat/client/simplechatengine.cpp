@@ -60,9 +60,9 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
 
     // ![1]
     auto stream = m_client->messageList(qtgrpc::examples::chat::None());
-
-    QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
-                     [this, stream] (const QGrpcStatus &status) {
+    auto streamPtr = stream.get();
+    QObject::connect(streamPtr, &QGrpcServerStream::finished, this,
+                     [this, stream = std::move(stream)](const QGrpcStatus &status) {
                          qCritical()
                                  << "Stream error(" << status.code() << "):" << status.message();
                          if (status.code() == QtGrpc::StatusCode::Unauthenticated) {
@@ -75,8 +75,8 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
                          }
                      });
 
-    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this,
-                     [this, name, password, stream]() {
+    QObject::connect(streamPtr, &QGrpcServerStream::messageReceived, this,
+                     [this, name, password, stream = streamPtr]() {
                          if (m_userName != name) {
                              m_userName = name;
                              m_password = password;
@@ -84,7 +84,7 @@ void SimpleChatEngine::login(const QString &name, const QString &password)
                          }
                          setState(Connected);
                          if (const auto msg = stream->read<qtgrpc::examples::chat::ChatMessages>())
-                            m_messages.append(msg->messages());
+                             m_messages.append(msg->messages());
                      });
     // ![1]
 }

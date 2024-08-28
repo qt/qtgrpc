@@ -48,18 +48,21 @@ void QtGrpcClientServerStreamTest::valid()
     request.setTestFieldString("Stream");
 
     auto stream = client()->testMethodServerStream(request);
+    auto *streamPtr = stream.get();
 
-    QSignalSpy messageReceivedSpy(stream.get(), &QGrpcServerStream::messageReceived);
+    QSignalSpy messageReceivedSpy(streamPtr, &QGrpcServerStream::messageReceived);
     QVERIFY(messageReceivedSpy.isValid());
 
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QSignalSpy streamFinishedSpy(streamPtr, &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
 
-    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream] {
-        const auto ret = stream->read<SimpleStringMessage>();
-        QVERIFY(ret.has_value());
-        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
-    });
+    QObject::connect(streamPtr, &QGrpcServerStream::messageReceived, this,
+                     [&result, stream = std::move(stream)] {
+                         const auto ret = stream->read<SimpleStringMessage>();
+                         QVERIFY(ret.has_value());
+                         result.setTestFieldString(result.testFieldString()
+                                                   + ret->testFieldString());
+                     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);
@@ -150,15 +153,17 @@ void QtGrpcClientServerStreamTest::hugeBlob()
     QByteArray dataHash = QCryptographicHash::hash(request.testBytes(), QCryptographicHash::Sha256);
 
     auto stream = client()->testMethodBlobServerStream(request);
+    auto *streamPtr = stream.get();
 
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QSignalSpy streamFinishedSpy(streamPtr, &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
 
-    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream] {
-        const auto ret = stream->read<BlobMessage>();
-        QVERIFY(ret.has_value());
-        result.setTestBytes(ret->testBytes());
-    });
+    QObject::connect(streamPtr, &QGrpcServerStream::messageReceived, this,
+                     [&result, stream = streamPtr] {
+                         const auto ret = stream->read<BlobMessage>();
+                         QVERIFY(ret.has_value());
+                         result.setTestBytes(ret->testBytes());
+                     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1, MessageLatencyWithThreshold);
     auto args = streamFinishedSpy.first();
@@ -179,20 +184,23 @@ void QtGrpcClientServerStreamTest::multipleStreams()
     request.setTestFieldString("Stream");
 
     auto stream = client()->testMethodServerStream(request);
+    auto *streamPtr = stream.get();
     // Ensure we're not reusing streams
-    QCOMPARE_NE(stream, client()->testMethodServerStream(request));
+    QCOMPARE_NE(streamPtr, client()->testMethodServerStream(request).get());
 
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QSignalSpy streamFinishedSpy(streamPtr, &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
 
-    QSignalSpy steamMessageRecievedSpy(stream.get(), &QGrpcServerStream::messageReceived);
+    QSignalSpy steamMessageRecievedSpy(streamPtr, &QGrpcServerStream::messageReceived);
     QVERIFY(steamMessageRecievedSpy.isValid());
 
-    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, this, [&result, stream] {
-        const auto ret = stream->read<SimpleStringMessage>();
-        QVERIFY(ret.has_value());
-        result.setTestFieldString(result.testFieldString() + ret->testFieldString());
-    });
+    QObject::connect(streamPtr, &QGrpcServerStream::messageReceived, this,
+                     [&result, stream = std::move(stream)] {
+                         const auto ret = stream->read<SimpleStringMessage>();
+                         QVERIFY(ret.has_value());
+                         result.setTestFieldString(result.testFieldString()
+                                                   + ret->testFieldString());
+                     });
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
                                  MessageLatencyWithThreshold * ExpectedMessageCount);

@@ -13,43 +13,43 @@ Client::Client(QObject *parent)
 
 Client::~Client() = default;
 
-std::shared_ptr<QGrpcCallReply> Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg)
+std::unique_ptr<QGrpcCallReply> Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg)
 {
     return call("testMethod"_L1, arg, {});
 }
 
 
-std::shared_ptr<QGrpcCallReply> Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+std::unique_ptr<QGrpcCallReply> Client::testMethod(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
     return call("testMethod"_L1, arg, options);
 }
 
-std::shared_ptr<QGrpcServerStream> Client::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg)
+std::unique_ptr<QGrpcServerStream> Client::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg)
 {
     return serverStream("testMethodServerStream"_L1, arg, {});
 }
 
-std::shared_ptr<QGrpcServerStream> Client::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+std::unique_ptr<QGrpcServerStream> Client::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
     return serverStream("testMethodServerStream"_L1, arg, options);
 }
 
-std::shared_ptr<QGrpcClientStream> Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg)
+std::unique_ptr<QGrpcClientStream> Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg)
 {
     return clientStream("testMethodClientStream"_L1, arg, {});
 }
 
-std::shared_ptr<QGrpcClientStream> Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+std::unique_ptr<QGrpcClientStream> Client::testMethodClientStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
     return clientStream("testMethodClientStream"_L1, arg, options);
 }
 
-std::shared_ptr<QGrpcBidiStream> Client::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg)
+std::unique_ptr<QGrpcBidiStream> Client::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg)
 {
     return bidiStream("testMethodBiStream"_L1, arg, {});
 }
 
-std::shared_ptr<QGrpcBidiStream> Client::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
+std::unique_ptr<QGrpcBidiStream> Client::testMethodBiStream(const qtgrpc::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
     return bidiStream("testMethodBiStream"_L1, arg, options);
 }

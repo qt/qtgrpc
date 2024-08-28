@@ -23,8 +23,9 @@ void QmlClient::testMethod(const qtgrpc::tests::SimpleStringMessage &arg,
         return;
     }
 
+    auto reply = call("testMethod"_L1, arg, options ? options->options() : QGrpcCallOptions{});
     QtGrpcQuickFunctional::makeCallConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
-                        call("testMethod"_L1, arg, options ? options->options() : QGrpcCallOptions{}), finishCallback, errorCallback);
+                        std::move(reply), finishCallback, errorCallback);
 }
 
 
@@ -40,8 +41,9 @@ void QmlClient::testMethodServerStream(const qtgrpc::tests::SimpleStringMessage 
         return;
     }
 
+    auto stream = serverStream("testMethodServerStream"_L1, arg, options ? options->options() : QGrpcCallOptions{});
     QtGrpcQuickFunctional::makeServerStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
-                        serverStream("testMethodServerStream"_L1, arg, options ? options->options() : QGrpcCallOptions{}),
+                        std::move(stream),
                         messageCallback, finishCallback, errorCallback);
 }
 
@@ -58,9 +60,9 @@ TestMethodClientStreamSender *QmlClient::testMethodClientStream(const qtgrpc::te
     }
 
     auto stream = clientStream("testMethodClientStream"_L1, arg, options ? options->options() : QGrpcCallOptions{});
+    auto *sender = new TestMethodClientStreamSender(stream.get());
     QtGrpcQuickFunctional::makeClientStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
-                        stream, finishCallback, errorCallback);
-    auto *sender = new TestMethodClientStreamSender(std::move(stream));
+                        std::move(stream), finishCallback, errorCallback);
     QJSEngine::setObjectOwnership(sender, QJSEngine::JavaScriptOwnership);
     return sender;
 }
@@ -79,9 +81,9 @@ TestMethodBiStreamSender *QmlClient::testMethodBiStream(const qtgrpc::tests::Sim
     }
 
     auto stream = bidiStream("testMethodBiStream"_L1, arg, options ? options->options() : QGrpcCallOptions {});
+    auto *sender = new TestMethodBiStreamSender(stream.get());
     QtGrpcQuickFunctional::makeBidiStreamConnections<qtgrpc::tests::SimpleStringMessage>(jsEngine,
-                        stream, messageCallback, finishCallback, errorCallback);
-    auto *sender = new TestMethodBiStreamSender(std::move(stream));
+                        std::move(stream), messageCallback, finishCallback, errorCallback);
     QJSEngine::setObjectOwnership(sender, QJSEngine::JavaScriptOwnership);
     return sender;
 }

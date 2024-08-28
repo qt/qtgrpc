@@ -51,16 +51,15 @@ protected:
     virtual void bidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
 
 private:
-    std::shared_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
-                                         QByteArrayView arg,
-                                         const QGrpcCallOptions &options);
-    std::shared_ptr<QGrpcServerStream> serverStream(QLatin1StringView method,
+    std::unique_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,
+                                         QByteArrayView arg, const QGrpcCallOptions &options);
+    std::unique_ptr<QGrpcServerStream> serverStream(QLatin1StringView method,
                                                     QLatin1StringView service, QByteArrayView arg,
                                                     const QGrpcCallOptions &options);
-    std::shared_ptr<QGrpcClientStream> clientStream(QLatin1StringView method,
+    std::unique_ptr<QGrpcClientStream> clientStream(QLatin1StringView method,
                                                     QLatin1StringView service, QByteArrayView arg,
                                                     const QGrpcCallOptions &options);
-    std::shared_ptr<QGrpcBidiStream> bidiStream(QLatin1StringView method, QLatin1StringView service,
+    std::unique_ptr<QGrpcBidiStream> bidiStream(QLatin1StringView method, QLatin1StringView service,
                                                 QByteArrayView arg,
                                                 const QGrpcCallOptions &options);
 

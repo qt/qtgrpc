@@ -34,18 +34,18 @@ void QtGrpcClientBidiStreamTest::valid()
     request.setTestFieldString("Stream");
 
     auto stream = client()->testMethodBiStream(request);
-
+    auto *streamPtr = stream.get();
     QString fullResponse;
     int i = 0;
-    QObject::connect(stream.get(), &QGrpcBidiStream::messageReceived, this,
-                     [stream, &request, &fullResponse, &i]() {
+    QObject::connect(streamPtr, &QGrpcBidiStream::messageReceived, this,
+                     [stream = streamPtr, &request, &fullResponse, &i]() {
                          if (const auto rsp = stream->read<SimpleStringMessage>()) {
                              fullResponse += rsp->testFieldString() + QString::number(++i);
                              stream->writeMessage(request);
                          }
                      });
 
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QSignalSpy streamFinishedSpy(streamPtr, &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
@@ -66,11 +66,12 @@ void QtGrpcClientBidiStreamTest::sequentialSendWithDone()
     request.setTestFieldString("Stream");
 
     auto stream = client()->testMethodBiStreamWithDone(request);
+    auto *streamPtr = stream.get();
 
     QString fullResponse;
     int i = 0;
-    QObject::connect(stream.get(), &QGrpcBidiStream::messageReceived, this,
-                     [stream, &request, &fullResponse, &i, ExpectedMessageCount]() {
+    QObject::connect(streamPtr, &QGrpcBidiStream::messageReceived, this,
+                     [stream = streamPtr, &request, &fullResponse, &i, ExpectedMessageCount]() {
                          Q_UNUSED(ExpectedMessageCount)
                          if (const auto rsp = stream->read<SimpleStringMessage>()) {
                              fullResponse += rsp->testFieldString() + QString::number(++i);
@@ -82,7 +83,7 @@ void QtGrpcClientBidiStreamTest::sequentialSendWithDone()
                          }
                      });
 
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QSignalSpy streamFinishedSpy(streamPtr, &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
@@ -103,7 +104,7 @@ void QtGrpcClientBidiStreamTest::multipleImmediateSendsWithDone()
     request.setTestFieldString("Stream1");
 
     auto stream = client()->testMethodBiStreamWithDone(request);
-
+    auto *streamPtr = stream.get();
     QString fullResponse;
 
     for (int i = 0; i < (ExpectedMessageCount - 1); ++i) {
@@ -112,8 +113,8 @@ void QtGrpcClientBidiStreamTest::multipleImmediateSendsWithDone()
     }
 
     int i = 1;
-    QObject::connect(stream.get(), &QGrpcBidiStream::messageReceived, this,
-                     [stream, &fullResponse, &i, ExpectedMessageCount]() {
+    QObject::connect(streamPtr, &QGrpcBidiStream::messageReceived, this,
+                     [stream = streamPtr, &fullResponse, &i, ExpectedMessageCount]() {
                          Q_UNUSED(ExpectedMessageCount)
                          if (const auto rsp = stream->read<SimpleStringMessage>()) {
                              fullResponse += rsp->testFieldString();
@@ -123,7 +124,7 @@ void QtGrpcClientBidiStreamTest::multipleImmediateSendsWithDone()
                          }
                      });
 
-    QSignalSpy streamFinishedSpy(stream.get(), &QGrpcServerStream::finished);
+    QSignalSpy streamFinishedSpy(streamPtr, &QGrpcServerStream::finished);
     QVERIFY(streamFinishedSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,

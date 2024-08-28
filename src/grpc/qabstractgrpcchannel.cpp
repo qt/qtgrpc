@@ -155,7 +155,7 @@ void QAbstractGrpcChannel::setChannelOptions(QGrpcChannelOptions &&options) noex
     The function should not be called directly, but only by
     \l QGrpcClientBase implementations.
 */
-std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView method,
+std::unique_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView method,
                                                            QLatin1StringView service,
                                                            QByteArrayView arg,
                                                            const QGrpcCallOptions &options)
@@ -172,7 +172,7 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
                                     "QGrpcOperationContext");
                      });
 
-    auto reply = std::make_shared<QGrpcCallReply>(operationContext);
+    auto reply = std::make_unique<QGrpcCallReply>(operationContext);
     call(operationContext);
 
     return reply;
@@ -187,7 +187,7 @@ std::shared_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
     The function should not be called directly, but only by
     \l QGrpcClientBase implementations.
 */
-std::shared_ptr<QGrpcServerStream>
+std::unique_ptr<QGrpcServerStream>
 QAbstractGrpcChannel::serverStream(QLatin1StringView method, QLatin1StringView service,
                                    QByteArrayView arg, const QGrpcCallOptions &options)
 {
@@ -203,7 +203,7 @@ QAbstractGrpcChannel::serverStream(QLatin1StringView method, QLatin1StringView s
                                     "QGrpcOperationContext");
                      });
 
-    auto stream = std::make_shared<QGrpcServerStream>(operationContext);
+    auto stream = std::make_unique<QGrpcServerStream>(operationContext);
     serverStream(operationContext);
 
     return stream;
@@ -218,7 +218,7 @@ QAbstractGrpcChannel::serverStream(QLatin1StringView method, QLatin1StringView s
     The function should not be called directly, but only by
     \l QGrpcClientBase.
 */
-std::shared_ptr<QGrpcClientStream>
+std::unique_ptr<QGrpcClientStream>
 QAbstractGrpcChannel::clientStream(QLatin1StringView method, QLatin1StringView service,
                                    QByteArrayView arg, const QGrpcCallOptions &options)
 {
@@ -226,7 +226,7 @@ QAbstractGrpcChannel::clientStream(QLatin1StringView method, QLatin1StringView s
         QGrpcOperationContext>(method, service, arg, options, serializer(),
                                QGrpcOperationContext::PrivateConstructor());
 
-    auto stream = std::make_shared<QGrpcClientStream>(operationContext);
+    auto stream = std::make_unique<QGrpcClientStream>(operationContext);
     clientStream(operationContext);
 
     return stream;
@@ -241,7 +241,7 @@ QAbstractGrpcChannel::clientStream(QLatin1StringView method, QLatin1StringView s
     The function should not be called directly, but only by
     \l QGrpcClientBase.
 */
-std::shared_ptr<QGrpcBidiStream> QAbstractGrpcChannel::bidiStream(QLatin1StringView method,
+std::unique_ptr<QGrpcBidiStream> QAbstractGrpcChannel::bidiStream(QLatin1StringView method,
                                                                   QLatin1StringView service,
                                                                   QByteArrayView arg,
                                                                   const QGrpcCallOptions &options)
@@ -250,7 +250,7 @@ std::shared_ptr<QGrpcBidiStream> QAbstractGrpcChannel::bidiStream(QLatin1StringV
         QGrpcOperationContext>(method, service, arg, options, serializer(),
                                QGrpcOperationContext::PrivateConstructor());
 
-    auto stream = std::make_shared<QGrpcBidiStream>(operationContext);
+    auto stream = std::make_unique<QGrpcBidiStream>(operationContext);
     bidiStream(operationContext);
 
     return stream;
