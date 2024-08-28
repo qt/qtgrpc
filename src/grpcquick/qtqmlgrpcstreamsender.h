@@ -16,10 +16,6 @@ QT_BEGIN_NAMESPACE
 #  pragma qt_sync_suspend_processing
 #endif
 
-namespace QtQmlGrpcStreamSender {
-bool isValidStream(const QGrpcOperation *stream);
-}
-
 class QQmlGrpcClientStreamSenderPrivate;
 class Q_GRPCQUICK_EXPORT QQmlGrpcClientStreamSender : public QObject
 {
