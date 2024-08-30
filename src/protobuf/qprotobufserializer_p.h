@@ -459,8 +459,10 @@ public:
         if (!opt)
             return std::nullopt;
         quint64 length = opt.value();
-        if (!it.isValid() || quint64(it.bytesLeft()) < length || length > quint64(QByteArray::max_size()))
+        if (!it.isValid() || quint64(it.bytesLeft()) < length
+            || length > quint64(QByteArray::maxSize())) {
             return std::nullopt;
+        }
         QByteArray result(it.data(), qsizetype(length));
         it += length;
         return { result };
