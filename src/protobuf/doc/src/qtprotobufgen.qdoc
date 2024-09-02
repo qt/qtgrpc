@@ -64,7 +64,7 @@ Options have direct aliases in the \l{qt_add_protobuf} function. The following
 options are supported:
 
 \list
-    \include qtprotoccommon-options.qdocinc 0
-    \include qtprotogen-options.qdocinc 0
+    \include qtprotoccommon.qdocinc 0
+    \include qtprotobufgen.qdocinc 0
 \endlist
 */

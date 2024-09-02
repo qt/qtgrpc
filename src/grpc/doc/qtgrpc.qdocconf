@@ -35,16 +35,15 @@ qhp.QtGrpc.subprojects.classes.sortPages  = true
 depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake qtqml
 
 {headerdirs,sourcedirs}  += .. \
-                            ../../tools/doc/src \
-                            ../../tools/qtgrpcgen/doc/src \
                             ../../grpcquick
 
+# Add additional documentation dirs
+sourcedirs  += ../../tools/doc
 
-exampledirs +=  ../../tools/qtgrpcgen/doc/src/snippets \
-                ../../../examples/grpc
+exampledirs += src/snippets \
+               ../../../examples/grpc
 
-imagedirs   += images \
-               ../../../examples/grpc/doc/images
+imagedirs   += ../../../examples/grpc/doc/images
 
 navigation.landingpage = "Qt GRPC"
 navigation.cppclassespage = "Qt GRPC C++ Classes"
