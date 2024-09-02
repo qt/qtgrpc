@@ -241,7 +241,8 @@ bool Any::unpackImpl(QAbstractProtobufSerializer *serializer, QProtobufMessage *
     return message->deserialize(serializer, value());
 }
 
-std::optional<Any> Any::unpackAnyImpl(QAbstractProtobufSerializer *serializer) const
+template <>
+std::optional<Any> Any::unpack<Any>(QAbstractProtobufSerializer *serializer) const
 {
     google::protobuf::Any realAny;
     if (!unpackImpl(serializer, &realAny))
