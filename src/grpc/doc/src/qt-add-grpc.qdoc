@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
 
 /*!
-\page qt_add_grpc.html
+\page qt-add-grpc.html
 \ingroup cmake-commands-qtgrpc
 
 \title qt_add_grpc
@@ -76,9 +76,9 @@ target to the protobuf one:
     \li \c TARGET_TYPE is the type of gRPC code to be generated.
         Although gRPC supports a client-server architecture, only
         CLIENT source code can be generated.
-    \include qtgrpcgen-options.qdocinc 0
-    \include qtprotoccommon-options.qdocinc 0
-    \include qtprotogen-cmake-options.qdocinc 0
+    \include qtgrpcgen.qdocinc 0
+    \include qtprotoccommon.qdocinc 0
+    \include qtprotoccommon.qdocinc 1
 \endlist
 
 \sa{The qtgrpcgen Tool}

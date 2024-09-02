@@ -60,14 +60,14 @@ depends += qtdoc qtcore qtgui qtcmake qtgrpc qtwidgets qtqml qtquickcontrols
 {headerdirs,sourcedirs} += .. \
                            ../../protobufqttypes \
                            ../../wellknown
-sourcedirs += ../../tools/doc/src \
-              ../../tools/qtprotobufgen/doc/src
 
-exampledirs +=  ../../../examples/protobuf \
-                ../../tools/qtprotobufgen/doc/src/snippets
+# Add additional documentation dirs
+sourcedirs  += ../../tools/doc
+
+exampledirs += ../../../examples/protobuf
 
 imagedirs   += images \
-    ../../../examples/protobuf/sensors/doc/images
+               ../../../examples/protobuf/sensors/doc/images
 
 navigation.landingpage = "Qt Protobuf"
 navigation.cppclassespage = "Qt Protobuf C++ Classes"
