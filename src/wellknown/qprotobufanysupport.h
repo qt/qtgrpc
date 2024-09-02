@@ -50,16 +50,13 @@ public:
     template <typename T>
     std::optional<T> unpack(QAbstractProtobufSerializer *serializer) const
     {
-        if constexpr (std::is_same_v<T, Any>) {
-            return unpackAnyImpl(serializer);
-        } else {
-            static_assert(QtProtobuf::has_q_protobuf_object_macro_v<T>,
-                          "T must have the Q_PROTOBUF_OBJECT macro");
-            T obj;
-            if (unpackImpl(serializer, &obj))
-                return { std::move(obj) };
-        }
-        return std::nullopt;
+        static_assert(QtProtobuf::has_q_protobuf_object_macro_v<T>,
+                      "T must have the Q_PROTOBUF_OBJECT macro");
+
+        std::optional<T> opt(std::in_place);
+        if (!unpackImpl(serializer, &opt.value()))
+             opt.reset();
+        return opt;
     }
 
     template <typename T>
@@ -90,9 +87,6 @@ private:
 
     Q_PROTOBUFWELLKNOWNTYPES_EXPORT bool unpackImpl(QAbstractProtobufSerializer *serializer,
                                                     QProtobufMessage *message) const;
-    Q_PROTOBUFWELLKNOWNTYPES_EXPORT std::optional<Any>
-    unpackAnyImpl(QAbstractProtobufSerializer *serializer) const;
-
     static Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any
     fromMessageImpl(QAbstractProtobufSerializer *serializer, const QProtobufMessage *message,
                     QAnyStringView typeUrlPrefix);
@@ -112,6 +106,10 @@ private:
 
     Q_DECLARE_EQUALITY_COMPARABLE(Any)
 };
+
+template <>
+Q_PROTOBUFWELLKNOWNTYPES_EXPORT std::optional<Any>
+Any::unpack<Any>(QAbstractProtobufSerializer *serializer) const;
 
 Q_DECLARE_SHARED_NS(QtProtobuf, Any)
 
