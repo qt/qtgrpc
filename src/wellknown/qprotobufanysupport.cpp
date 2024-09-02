@@ -12,6 +12,16 @@
 
 QT_BEGIN_NAMESPACE
 
+namespace {
+QAnyStringView defaultUrlPrefix()
+{
+    // The URL should describe the type of the serialized message.
+    // We don't have support for this, so users have to provide the correct URL.
+    // We won't check if it's correct.
+    return u"type.googleapis.com";
+}
+}
+
 namespace QtProtobuf {
 using namespace QtProtobufPrivate;
 
@@ -267,6 +277,11 @@ Any Any::fromMessageImpl(QAbstractProtobufSerializer *serializer, const QProtobu
     return { any };
 }
 
+Any Any::fromMessageImpl(QAbstractProtobufSerializer *serializer, const QProtobufMessage *message)
+{
+    return fromMessageImpl(serializer, message, defaultUrlPrefix());
+}
+
 // Used to handle nested Any messages.
 Any Any::fromAnyMessageImpl(QAbstractProtobufSerializer *serializer,
                             const Any *message, QAnyStringView typeUrlPrefix)
@@ -278,12 +293,11 @@ Any Any::fromAnyMessageImpl(QAbstractProtobufSerializer *serializer,
     return fromMessageImpl(serializer, &realAny, typeUrlPrefix);
 }
 
-QAnyStringView Any::defaultUrlPrefix()
+// Used to handle nested Any messages.
+Any Any::fromAnyMessageImpl(QAbstractProtobufSerializer *serializer,
+                            const Any *message)
 {
-    // The URL should describe the type of the serialized message.
-    // We don't have support for this, so users have to provide the correct URL.
-    // We won't check if it's correct.
-    return u"type.googleapis.com";
+    return fromAnyMessageImpl(serializer, message, defaultUrlPrefix());
 }
 
 /*!

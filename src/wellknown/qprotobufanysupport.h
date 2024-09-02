@@ -64,7 +64,7 @@ public:
 
     template <typename T>
     static Any fromMessage(QAbstractProtobufSerializer *serializer, const T &message,
-                           QAnyStringView typeUrlPrefix = defaultUrlPrefix())
+                           QAnyStringView typeUrlPrefix)
     {
         if constexpr (std::is_same_v<T, Any>)
             return fromAnyMessageImpl(serializer, &message, typeUrlPrefix);
@@ -72,6 +72,17 @@ public:
         static_assert(QtProtobuf::has_q_protobuf_object_macro_v<T>,
                       "T must have the Q_PROTOBUF_OBJECT macro");
         return fromMessageImpl(serializer, &message, typeUrlPrefix);
+    }
+
+    template <typename T>
+    static Any fromMessage(QAbstractProtobufSerializer *serializer, const T &message)
+    {
+        if constexpr (std::is_same_v<T, Any>)
+            return fromAnyMessageImpl(serializer, &message);
+
+        static_assert(QtProtobuf::has_q_protobuf_object_macro_v<T>,
+                      "T must have the Q_PROTOBUF_OBJECT macro");
+        return fromMessageImpl(serializer, &message);
     }
 
 private:
@@ -89,7 +100,10 @@ private:
     fromAnyMessageImpl(QAbstractProtobufSerializer *serializer, const Any *message,
                        QAnyStringView typeUrlPrefix);
 
-    static Q_PROTOBUFWELLKNOWNTYPES_EXPORT QAnyStringView defaultUrlPrefix();
+    static Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any
+    fromMessageImpl(QAbstractProtobufSerializer *serializer, const QProtobufMessage *message);
+    static Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any
+    fromAnyMessageImpl(QAbstractProtobufSerializer *serializer, const Any *message);
 
     friend bool comparesEqual(const Any &lhs, const Any &rhs) noexcept
     {
