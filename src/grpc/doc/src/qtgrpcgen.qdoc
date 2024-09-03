@@ -61,7 +61,9 @@ Options have direct aliases in the \l{qt_add_grpc} function. The following
 options are supported:
 
 \list
-    \include qtprotoccommon.qdocinc 0
-    \include qtgrpcgen.qdocinc 0
+    \include qtprotoccommon.qdocinc copy_comments-li
+    \include qtprotoccommon.qdocinc generate_package_subfolders-li
+    \include qtprotoccommon.qdocinc export_macro-cli-li
+    \include qtgrpcgen.qdocinc qml-li
 \endlist
 */
