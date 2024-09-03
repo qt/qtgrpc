@@ -105,13 +105,6 @@ std::string deCapitalizeAsciiName(std::string name)
     return name;
 }
 
-std::string escapedQmlUri(const std::string &uri)
-{
-    assert(!uri.empty());
-    static std::regex uriExceptionsRegex("[^a-zA-Z0-9]");
-    return std::regex_replace(uri, uriExceptionsRegex, "_");
-}
-
 std::string &rtrim(std::string &s)
 {
     const size_t cut = s.find_last_not_of(asciiSpacing);

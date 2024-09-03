@@ -12,7 +12,6 @@ macro(_qt_internal_get_protoc_common_options option_args single_args multi_args)
     )
     set(${single_args}
         EXTRA_NAMESPACE
-        QML_URI
     )
 
     set(${multi_args} "")
@@ -27,6 +26,7 @@ macro(_qt_internal_get_protoc_generate_arguments option_args single_args multi_a
         OUTPUT_HEADERS
         OUTPUT_TARGETS
         EXPORT_MACRO
+        QML_URI
     )
     set(${multi_args}
         PROTO_FILES
@@ -49,6 +49,10 @@ macro(_qt_internal_get_protoc_options out_var prefix option single multi)
             list(APPEND ${out_var} "${opt}=${${prefix}_${opt}}")
         endif()
     endforeach()
+
+    if(${prefix}_QML_URI)
+        list(APPEND ${out_var} "QML=true")
+    endif()
 endmacro()
 
 # Returns the generator target name according to the pre-defined pattern
@@ -457,7 +461,6 @@ function(qt6_add_protobuf target)
                 " Please, set QML_URI when using .proto without package name."
             )
         endif()
-        list(APPEND generation_options "QML_URI=${qml_uri}")
     endif()
 
     if(arg_PROTO_INCLUDES)
