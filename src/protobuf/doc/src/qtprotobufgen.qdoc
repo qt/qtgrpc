@@ -64,7 +64,8 @@ Options have direct aliases in the \l{qt_add_protobuf} function. The following
 options are supported:
 
 \list
-    \include qtprotoccommon.qdocinc 0
-    \include qtprotobufgen.qdocinc 0
+    \include qtprotoccommon.qdocinc copy_comments-li
+    \include qtprotoccommon.qdocinc generate_package_subfolders-li
+    \include qtprotoccommon.qdocinc export_macro-cli-li
 \endlist
 */
