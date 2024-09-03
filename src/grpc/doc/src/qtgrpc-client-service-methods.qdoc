@@ -158,8 +158,7 @@ an argument to the callback function that is used in the call:
 \endcode
 This variant makes a connection to the \l{QGrpcCallReply::finished} signal
 implicitly, but you cannot cancel the call using the \l{QGrpcOperation::cancel}
-function, and to get information about error occurred you need to subscribe to
-the common \l{QGrpcClientBase::errorOccurred} signal.
+function.
 
 \section1 Using the server streams in Qt GRPC
 

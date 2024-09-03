@@ -113,7 +113,6 @@ QAbstractGrpcChannel::QAbstractGrpcChannel(const QGrpcChannelOptions &options)
 QAbstractGrpcChannel::~QAbstractGrpcChannel() = default;
 
 /*!
-    \internal
     Returns QGrpcChannelOptions used by the channel.
 */
 const QGrpcChannelOptions &QAbstractGrpcChannel::channelOptions() const & noexcept
