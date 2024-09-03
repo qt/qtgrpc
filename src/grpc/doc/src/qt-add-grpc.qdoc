@@ -14,18 +14,20 @@
 Usually \c qtgrpcgen is invoked through the \c qt_add_grpc CMake macro.
 
 \badcode
-    qt_add_grpc(<target> <TARGET_TYPE>
+    qt_add_grpc(<target> <CLIENT|SERVER>
         PROTO_FILES <file> ...
-        [COPY_COMMENTS]
-        [GENERATE_PACKAGE_SUBFOLDERS]
-        [QML]
-        [EXPORT_MACRO <infix>]
         [PROTO_INCLUDES <path> ...]
+        [QML]
         [OUTPUT_DIRECTORY <dir>]
+        [GENERATE_PACKAGE_SUBFOLDERS]
+        [COPY_COMMENTS]
+        [EXPORT_MACRO <infix>]
         [OUTPUT_HEADERS <var>]
         [OUTPUT_TARGETS <var>]
     )
 \endcode
+
+\note Only \c {CLIENT} code generation is currently supported.
 
 The source files are created by \c qtgrpcgen and added to the target.
 If the target already exists, the files are \e added to the target source
@@ -73,12 +75,15 @@ target to the protobuf one:
 
 \section1 Arguments
 \list
-    \li \c TARGET_TYPE is the type of gRPC code to be generated.
-        Although gRPC supports a client-server architecture, only
-        CLIENT source code can be generated.
-    \include qtgrpcgen.qdocinc 0
-    \include qtprotoccommon.qdocinc 0
-    \include qtprotoccommon.qdocinc 1
+    \include qtprotoccommon.qdocinc proto_files-li
+    \include qtprotoccommon.qdocinc proto_includes-li
+    \include qtgrpcgen.qdocinc qml-li
+    \include qtprotoccommon.qdocinc output_directory-li
+    \include qtprotoccommon.qdocinc generate_package_subfolders-li
+    \include qtprotoccommon.qdocinc copy_comments-li
+    \include qtprotoccommon.qdocinc export_macro-cmake-li
+    \include qtprotoccommon.qdocinc output_headers-li
+    \include qtprotoccommon.qdocinc output_targets-li
 \endlist
 
 \sa{The qtgrpcgen Tool}

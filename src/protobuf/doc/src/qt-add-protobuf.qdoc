@@ -18,12 +18,12 @@ invoked through CMake using the \c qt_add_protobuf command.
 \badcode
     qt_add_protobuf(<target>
         PROTO_FILES <file> ...
-        [COPY_COMMENTS]
-        [GENERATE_PACKAGE_SUBFOLDERS]
-        [EXPORT_MACRO <infix>]
-        [QML [QML_URI <uri>]]
         [PROTO_INCLUDES <path> ...]
+        [QML [QML_URI <uri>]]
         [OUTPUT_DIRECTORY <dir>]
+        [GENERATE_PACKAGE_SUBFOLDERS]
+        [COPY_COMMENTS]
+        [EXPORT_MACRO <infix>]
         [OUTPUT_HEADERS <var>]
         [OUTPUT_TARGETS <var>]
     )
@@ -36,65 +36,78 @@ link.
 
 \section1 Arguments
 \list
-    \include qtprotoccommon.qdocinc 0
-    \li \c QML enables QProtobufMessage types in QML context by registering
-        them as a QML module.
-        Protobuf types can extend an existing QML module:
+    \include qtprotoccommon.qdocinc proto_files-li
+    \include qtprotoccommon.qdocinc proto_includes-li
+    \li \c {QML}
+        enables the generation of QML-compatible message types from protobuf
+        definitions and registers them as a QML module. If \c {qt_add_protobuf}
+        is called on a non-existent target or a target that is not a QML
+        module, a new QML module will be created implicitly.
+
         \badcode
-            qt_add_qml_module(targetname
+            qt_add_executable(target
                 ...
             )
-
-            qt_add_protobuf(targetname
+            // creates a new QML module
+            qt_add_protobuf(target
                 QML
                 ...
             )
         \endcode
 
-        If \c qt_add_protobuf is called with a non-existing target
-        or the target is not a QML module, a new QML module will be created
-        implicitly. In the case of the new QML module creation, the \l {qt_add_qml_module}
-        command is called inside the \c qt_add_protobuf command.
+        If \e {target} is an existing QML module, \c {qt_add_protobuf} will
+        attach the generated protobuf types to that module.
+
         \badcode
-            qt_add_executable(targetname
+            qt_add_qml_module(target
                 ...
             )
-
-            qt_add_protobuf(targetname
+            // adds to existing QML module
+            qt_add_protobuf(target
                 QML
                 ...
             )
         \endcode
-        Every QML module has to define a \c URI name. Other QML modules may
-        use this name in \l{qtqml-syntax-imports.html}{import statements}
-        to import the module into a user application. Use the \c QML_URI
-        option to set the \c URI name. It has to be specified in dotted
-        notation, e.g. \c {Qt.Protobuf.Package}.
-        \badcode
-            qt_add_executable(targetname
-                ...
-            )
 
-            qt_add_protobuf(targetplugin
+    \li \c {QML_URI}
+        defines the \c URI used for the QML module.
+
+        Every QML module must define a \c {URI}, which is used in \l
+        {qtqml-syntax-imports.html} {import statements} to expose its protobuf
+        types to QML.
+
+        \badcode
+            qt_add_protobuf(target
                 QML
                 QML_URI proto.uri.example
             )
         \endcode
-        If \c QML_URI is omitted, then the protobuf package name will be used
-        as the module \c URI.
-        \note If \c QML_URI is passed to \c qt_add_protobuf command
-        but \c target already exists, \c QML_URI argument will
-        be ignored.
-        \note If the \c QML_URI is skipped, all *.proto files specified
-        in the \c qt_add_protobuf command should have the same \c protobuf
-        package name, since it shall be used as a default \c URI for the
-        resulting QML module.
-        \note You should avoid creating several QML modules with the same
-        \c QML_URI or proto package name, because it leads to import error
-        in QML context.
 
-    \include qtprotobufgen.qdocinc 0
-    \include qtprotoccommon.qdocinc 1
+        If \c {QML_URI} is omitted, the protobuf package name will be used as
+        the module's \c {URI}.
+
+        \note If the \c {QML_URI} is omitted, all \e {.proto} files specified
+        in the \c {PROTO_FILES} section must share the same protobuf package
+        name, as it will be used as the default \c {URI} for the resulting QML
+        module.
+
+        \note You should avoid creating several protobuf QML modules with the
+        same \c {QML_URI} or proto package name, because it leads to import
+        error in the QML context.
+
+        \note If \c {QML_URI} is passed to the \c {qt_add_protobuf} function
+        but the target already exists, the \c {QML_URI} argument will be
+        ignored.
+
+        Read \l [QtQml] {Identified Modules} for further in-depth discussion of
+        the \c URI.
+
+    \include qtprotoccommon.qdocinc output_directory-li
+    \include qtprotoccommon.qdocinc generate_package_subfolders-li
+    \include qtprotoccommon.qdocinc copy_comments-li
+    \include qtprotoccommon.qdocinc export_macro-cmake-li
+    \include qtprotoccommon.qdocinc output_headers-li
+    \include qtprotoccommon.qdocinc output_targets-li
 \endlist
 
 \sa{The qtprotobufgen Tool}
