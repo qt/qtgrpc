@@ -603,27 +603,36 @@ function(qt6_add_protobuf target)
         string(REPLACE "." "/" qml_module_output_path "${qml_uri}")
         set(qml_module_output_full_path "${CMAKE_CURRENT_BINARY_DIR}/${qml_module_output_path}")
 
+        if(NOT is_executable)
+            set(plugin_options PLUGIN_TARGET "${target}plugin")
+        endif()
+
         qt_policy(SET QTP0001 NEW)
         qt6_add_qml_module(${target}
             URI ${qml_uri}
-            PLUGIN_TARGET "${target}plugin"
+            ${plugin_options}
             VERSION 1.0
             OUTPUT_DIRECTORY "${qml_module_output_full_path}"
             OUTPUT_TARGETS qml_output_targets
         )
-        set_target_properties(${target}plugin
-            PROPERTIES
-                AUTOMOC ON
-        )
-        target_link_libraries(${target}plugin PRIVATE
-            ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
-        )
+
+        if(TARGET ${target}plugin)
+            set_target_properties(${target}plugin
+                PROPERTIES
+                    AUTOMOC ON
+            )
+            target_link_libraries(${target}plugin PRIVATE
+                ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
+            )
+        endif()
 
         if(DEFINED arg_OUTPUT_TARGETS)
             if(qml_output_targets)
                 list(APPEND ${arg_OUTPUT_TARGETS} ${qml_output_targets})
             endif()
-            list(APPEND ${arg_OUTPUT_TARGETS} "${target}plugin")
+            if(TARGET ${target}plugin)
+                list(APPEND ${arg_OUTPUT_TARGETS} "${target}plugin")
+            endif()
         endif()
     endif()
 
