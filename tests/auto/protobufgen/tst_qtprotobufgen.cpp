@@ -417,7 +417,7 @@ void tst_qtprotobufgen::cmdLineGeneratedFile_data()
 #ifdef HAVE_QML
         QTest::addRow("nopackage%s", extension.data())
                 << "nopackage"
-                << "QML_URI=nopackage.uri.test;EXPORT_MACRO=TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN"
+                << "QML;EXPORT_MACRO=TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN"
                 << "/qml-no-package/"
                 << QString(extension)
                 << "" << "";
