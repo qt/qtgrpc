@@ -846,7 +846,7 @@ QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
 /*!
     Returns the host URI for this channel.
 */
-QUrl QGrpcHttp2Channel::hostUri() const noexcept
+QUrl QGrpcHttp2Channel::hostUri() const
 {
     return d_ptr->hostUri;
 }
@@ -890,7 +890,7 @@ void QGrpcHttp2Channel::bidiStream(std::shared_ptr<QGrpcOperationContext> operat
 /*!
     Returns the newly created QProtobufSerializer shared pointer.
 */
-std::shared_ptr<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const noexcept
+std::shared_ptr<QAbstractProtobufSerializer> QGrpcHttp2Channel::serializer() const
 {
     return channelOptions().serializationFormat().serializer();
 }

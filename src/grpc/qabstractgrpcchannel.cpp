@@ -133,13 +133,13 @@ const QGrpcChannelOptions &QAbstractGrpcChannel::channelOptions() const & noexce
 
     \sa channelOptions
 */
-void QAbstractGrpcChannel::setChannelOptions(const QGrpcChannelOptions &options) noexcept
+void QAbstractGrpcChannel::setChannelOptions(const QGrpcChannelOptions &options)
 {
     Q_D(QAbstractGrpcChannel);
     d->channelOptions = options;
 }
 
-void QAbstractGrpcChannel::setChannelOptions(QGrpcChannelOptions &&options) noexcept
+void QAbstractGrpcChannel::setChannelOptions(QGrpcChannelOptions &&options)
 {
     Q_D(QAbstractGrpcChannel);
     d->channelOptions = std::move(options);

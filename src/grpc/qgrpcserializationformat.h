@@ -43,8 +43,7 @@ public:
 
     [[nodiscard]] Q_GRPC_EXPORT QByteArrayView suffix() const noexcept;
 
-    [[nodiscard]] Q_GRPC_EXPORT std::shared_ptr<QAbstractProtobufSerializer>
-    serializer() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT std::shared_ptr<QAbstractProtobufSerializer> serializer() const;
 
 private:
     QExplicitlySharedDataPointer<QGrpcSerializationFormatPrivate> d_ptr;

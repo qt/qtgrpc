@@ -44,7 +44,7 @@ public:
     ~QGrpcClientBase() override;
 
     bool attachChannel(std::shared_ptr<QAbstractGrpcChannel> channel);
-    [[nodiscard]] std::shared_ptr<QAbstractGrpcChannel> channel() const noexcept;
+    [[nodiscard]] std::shared_ptr<QAbstractGrpcChannel> channel() const;
 
 Q_SIGNALS:
     void channelChanged();
