@@ -35,7 +35,7 @@ public:
     virtual Error lastError() const = 0;
     virtual QString lastErrorString() const = 0;
 
-protected:
+private:
     virtual QByteArray serializeMessage(const QProtobufMessage *message) const = 0;
     virtual bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const = 0;
 };

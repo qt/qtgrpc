@@ -29,11 +29,10 @@ public:
 
     void shouldPreserveUnknownFields(bool preserveUnknownFields);
 
-protected:
+private:
     QByteArray serializeMessage(const QProtobufMessage *message) const override;
     bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const override;
 
-private:
     std::unique_ptr<QProtobufSerializerPrivate> d_ptr;
 };
 
