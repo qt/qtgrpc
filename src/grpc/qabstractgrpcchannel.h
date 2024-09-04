@@ -44,6 +44,7 @@ protected:
     explicit QAbstractGrpcChannel(QAbstractGrpcChannelPrivate &dd);
     explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
 
+private:
     virtual void call(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
     virtual void serverStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
     virtual void clientStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
