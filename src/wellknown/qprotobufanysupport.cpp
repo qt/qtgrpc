@@ -310,6 +310,13 @@ Any Any::fromAnyMessageImpl(QAbstractProtobufSerializer *serializer,
     \fn bool Any::operator!=(const Any &lhs, const Any &rhs)
     Returns true if the two instances of Any, \a lhs and \a rhs, are distinct.
 */
+
+bool comparesEqual(const Any &lhs, const Any &rhs) noexcept
+{
+    return lhs.d_func()->typeUrl == rhs.d_func()->typeUrl &&
+        lhs.d_func()->value == rhs.d_func()->value;
+}
+
 }
 
 QT_END_NAMESPACE
