@@ -12,6 +12,10 @@ QQmlAbstractGrpcChannel::QQmlAbstractGrpcChannel(QQmlAbstractGrpcChannelPrivate 
 {
 }
 
+QQmlAbstractGrpcChannel::~QQmlAbstractGrpcChannel()
+    = default;
+
+
 QT_END_NAMESPACE
 
 #include "moc_qqmlabstractgrpcchannel.cpp"
