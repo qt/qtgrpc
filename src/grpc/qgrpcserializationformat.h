@@ -52,10 +52,8 @@ private:
                                             const QGrpcSerializationFormat &rhs) noexcept;
     Q_DECLARE_EQUALITY_COMPARABLE(QGrpcSerializationFormat)
 
-    friend size_t qHash(const QGrpcSerializationFormat &key, size_t seed = 0) noexcept
-    {
-        return qHashMulti(seed, key.suffix(), key.serializer().get());
-    }
+    Q_GRPC_EXPORT friend size_t qHash(const QGrpcSerializationFormat &key, size_t seed) noexcept;
+    friend size_t qHash(const QGrpcSerializationFormat &key) noexcept { return qHash(key, 0); }
 
 #ifndef QT_NO_DEBUG_STREAM
     friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcSerializationFormat &sfmt);
