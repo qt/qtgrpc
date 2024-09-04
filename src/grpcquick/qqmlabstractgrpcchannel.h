@@ -20,7 +20,7 @@ class Q_GRPCQUICK_EXPORT QQmlAbstractGrpcChannel : public QObject
     Q_OBJECT
 public:
     explicit QQmlAbstractGrpcChannel(QObject *parent = nullptr) : QObject(parent) { }
-    ~QQmlAbstractGrpcChannel() override = default;
+    ~QQmlAbstractGrpcChannel() override;
 
     virtual std::shared_ptr<QAbstractGrpcChannel> channel() = 0;
 
