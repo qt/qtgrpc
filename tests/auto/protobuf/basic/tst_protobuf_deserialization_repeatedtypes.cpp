@@ -194,7 +194,7 @@ void QtProtobufRepeatedTypesDeserializationTest::repeatedBoolMessageTest()
 {
     RepeatedBoolMessage boolMsg;
     boolMsg.deserialize(serializer.get(), QByteArray::fromHex("0a0d01010100000000000000000001"));
-    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::NoError);
+    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::None);
     QtProtobuf::boolList expected{ true,  true,  true,  false, false, false, false,
                                    false, false, false, false, false, true };
     QCOMPARE(boolMsg.testRepeatedBool(), expected);

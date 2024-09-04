@@ -225,13 +225,13 @@ void QProtobufSerializerPrivate::serializeMessage(const QProtobufMessage *messag
 
 void QProtobufSerializerPrivate::setUnexpectedEndOfStreamError()
 {
-    setDeserializationError(QAbstractProtobufSerializer::UnexpectedEndOfStreamError,
+    setDeserializationError(QAbstractProtobufSerializer::Error::UnexpectedEndOfStream,
                             QCoreApplication::translate("QtProtobuf", "Unexpected end of stream"));
 }
 
 void QProtobufSerializerPrivate::clearError()
 {
-    lastError = QAbstractProtobufSerializer::NoError;
+    lastError = QAbstractProtobufSerializer::Error::None;
     lastErrorString.clear();
 }
 
@@ -525,7 +525,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
     const QProtobufSelfcheckIterator itBeforeHeader = it; // copy this, we may need it later
     if (!QProtobufSerializerPrivate::decodeHeader(it, fieldNumber, wireType)) {
         setDeserializationError(
-                QAbstractProtobufSerializer::InvalidHeaderError,
+                QAbstractProtobufSerializer::Error::InvalidHeader,
                 QCoreApplication::translate("QtProtobuf",
                                      "Message received doesn't contain valid header byte."));
         return false;
@@ -610,7 +610,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
             basicHandler = findIntegratedTypeHandler(metaType, !isNonPacked);
             if (!basicHandler || basicHandler->wireType != wireType) {
                 setDeserializationError(
-                        QAbstractProtobufSerializer::InvalidHeaderError,
+                        QAbstractProtobufSerializer::Error::InvalidHeader,
                         QCoreApplication::translate("QtProtobuf",
                                                     "Message received has invalid wiretype for the "
                                                     "field number %1. Expected %2, received %3")
@@ -644,7 +644,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
         qProtoWarning() << "No deserializer for type" << metaType.name();
         QString error = QString::fromUtf8("No deserializer is registered for type %1")
                             .arg(QString::fromUtf8(metaType.name()));
-        setDeserializationError(QAbstractProtobufSerializer::UnknownTypeError,
+        setDeserializationError(QAbstractProtobufSerializer::Error::UnknownType,
                                 QCoreApplication::translate("QtProtobuf", error.toUtf8().data()));
         return false;
     }

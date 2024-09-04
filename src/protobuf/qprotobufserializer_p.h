@@ -528,7 +528,7 @@ public:
     void clearCachedValue();
 
     QAbstractProtobufSerializer::Error lastError =
-            QAbstractProtobufSerializer::UnknownTypeError;
+            QAbstractProtobufSerializer::Error::UnknownType;
     QString lastErrorString;
 
     QProtobufSelfcheckIterator it;

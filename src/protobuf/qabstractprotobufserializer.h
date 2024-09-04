@@ -19,12 +19,12 @@ class QProtobufMessage;
 class Q_PROTOBUF_EXPORT QAbstractProtobufSerializer
 {
 public:
-    enum Error : uint8_t {
-        NoError,
-        InvalidHeaderError,
-        UnknownTypeError,
-        UnexpectedEndOfStreamError,
-        InvalidFormatError,
+    enum class Error : uint8_t {
+        None,
+        InvalidHeader,
+        UnknownType,
+        UnexpectedEndOfStream,
+        InvalidFormat,
     };
 
     QByteArray serialize(const QProtobufMessage *message) const;

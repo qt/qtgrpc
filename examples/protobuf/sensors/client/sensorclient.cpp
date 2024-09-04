@@ -24,9 +24,9 @@ void SensorClient::receive()
         qt::examples::sensors::tlv::TlvMessage msg;
         msg.deserialize(&m_serializer, datagram.data());
         if (m_serializer.lastError()
-                != QAbstractProtobufSerializer::NoError) {
+                != QAbstractProtobufSerializer::Error::None) {
             qWarning().nospace() << "Unable to deserialize datagram ("
-                       << m_serializer.lastError() << ")"
+                       << qToUnderlying(m_serializer.lastError()) << ")"
                        << m_serializer.lastErrorString();
             continue;
         }
@@ -56,9 +56,9 @@ void SensorClient::receive()
         }
 
         if (m_serializer.lastError()
-                != QAbstractProtobufSerializer::NoError) {
+                != QAbstractProtobufSerializer::Error::None) {
             qWarning().nospace() << "Unable to deserialize message ("
-                       << m_serializer.lastError() << ")"
+                       << qToUnderlying(m_serializer.lastError()) << ")"
                        << m_serializer.lastErrorString();
             continue;
         }

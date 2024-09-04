@@ -119,7 +119,7 @@ QByteArray ConformaceServer::runTest(const QByteArray &reqData)
     QByteArray payload = isProtoInput ? request.protobufPayload() : request.jsonPayload().toUtf8();
 
     if (!activeDeserializer->deserialize(msg.get(), payload)
-        || activeDeserializer->lastError() != QAbstractProtobufSerializer::NoError) {
+        || activeDeserializer->lastError() != QAbstractProtobufSerializer::Error::None) {
         response.setParseError(activeDeserializer->lastErrorString());
         return response.serialize(&m_protoSerializer);
     }
