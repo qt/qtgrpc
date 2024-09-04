@@ -37,7 +37,7 @@ namespace QtProtobufPrivate {
 extern Q_PROTOBUF_EXPORT void registerOrdering(QMetaType type, QProtobufPropertyOrdering ordering);
 
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
-static std::optional<QList<T>> intToEnumList(QList<QtProtobuf::int64> v)
+static std::optional<QList<T>> intToEnumList(const QList<QtProtobuf::int64> &v)
 {
     QList<T> enumList;
     for (const auto &intValue : v)
@@ -47,7 +47,7 @@ static std::optional<QList<T>> intToEnumList(QList<QtProtobuf::int64> v)
 }
 
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
-static QList<QtProtobuf::int64> enumToIntList(QList<T> v)
+static QList<QtProtobuf::int64> enumToIntList(const QList<T> &v)
 {
     QList<QtProtobuf::int64> intList;
     for (const auto enumValue : v)
@@ -57,7 +57,7 @@ static QList<QtProtobuf::int64> enumToIntList(QList<T> v)
 }
 
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
-static std::optional<QList<T>> stringToEnumList(QStringList v)
+static std::optional<QList<T>> stringToEnumList(const QStringList &v)
 {
     static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
     QList<T> enumList;
@@ -74,7 +74,7 @@ static std::optional<QList<T>> stringToEnumList(QStringList v)
 }
 
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
-static QStringList enumToStringList(QList<T> v)
+static QStringList enumToStringList(const QList<T> &v)
 {
     static const QMetaEnum metaEnum = QMetaEnum::fromType<T>();
     QStringList stringList;
