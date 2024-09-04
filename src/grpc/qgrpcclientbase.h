@@ -67,6 +67,7 @@ protected:
                                                 const QProtobufMessage &arg,
                                                 const QGrpcCallOptions &options);
 
+private:
     Q_DISABLE_COPY_MOVE(QGrpcClientBase)
     Q_DECLARE_PRIVATE(QGrpcClientBase)
 

@@ -33,7 +33,6 @@ class QProtobufPropertyOrderingBuilder
 {
 public:
     Q_PROTOBUF_EXPORT explicit QProtobufPropertyOrderingBuilder(QByteArray packageName);
-    Q_DISABLE_COPY_MOVE(QProtobufPropertyOrderingBuilder)
     Q_PROTOBUF_EXPORT ~QProtobufPropertyOrderingBuilder();
 
     Q_PROTOBUF_EXPORT void addV0Field(QByteArray jsonName, uint fieldNumber, uint propertyIndex,
@@ -43,6 +42,7 @@ public:
 private:
     QProtobufPropertyOrderingBuilderPrivate *d_ptr;
     Q_DECLARE_PRIVATE(QProtobufPropertyOrderingBuilder)
+    Q_DISABLE_COPY_MOVE(QProtobufPropertyOrderingBuilder)
 };
 
 } // namespace QtProtobufPrivate
