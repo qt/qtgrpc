@@ -99,10 +99,8 @@ private:
     static Q_PROTOBUFWELLKNOWNTYPES_EXPORT Any
     fromAnyMessageImpl(QAbstractProtobufSerializer *serializer, const Any *message);
 
-    friend bool comparesEqual(const Any &lhs, const Any &rhs) noexcept
-    {
-        return lhs.typeUrl() == rhs.typeUrl() && lhs.value() == rhs.value();
-    }
+    Q_PROTOBUFWELLKNOWNTYPES_EXPORT
+    friend bool comparesEqual(const Any &lhs, const Any &rhs) noexcept;
 
     Q_DECLARE_EQUALITY_COMPARABLE(Any)
 };
