@@ -15,7 +15,7 @@ namespace QtProtobufPrivate {
 class QProtobufLazyMessagePointerBase
 {
     Q_DISABLE_COPY(QProtobufLazyMessagePointerBase)
-    mutable QProtobufMessage *m_ptr = nullptr; // @todo lost QPointer functionality
+    mutable QProtobufMessage *m_ptr = nullptr;
 
 protected:
     QProtobufLazyMessagePointerBase() noexcept = default;
