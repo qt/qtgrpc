@@ -22,7 +22,7 @@ public:
     explicit QQmlAbstractGrpcChannel(QObject *parent = nullptr) : QObject(parent) { }
     ~QQmlAbstractGrpcChannel() override;
 
-    virtual std::shared_ptr<QAbstractGrpcChannel> channel() = 0;
+    virtual std::shared_ptr<QAbstractGrpcChannel> channel() const = 0;
 
 protected:
     explicit QQmlAbstractGrpcChannel(QQmlAbstractGrpcChannelPrivate &dd, QObject *parent = nullptr);
