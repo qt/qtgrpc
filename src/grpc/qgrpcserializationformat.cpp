@@ -161,4 +161,11 @@ QDebug operator<<(QDebug debug, const QGrpcSerializationFormat &sfmt)
 }
 #endif
 
+bool comparesEqual(const QGrpcSerializationFormat &lhs,
+                   const QGrpcSerializationFormat &rhs) noexcept
+{
+    return lhs.d_func()->suffix == rhs.d_func()->suffix
+        && lhs.d_func()->serializer == rhs.d_func()->serializer;
+}
+
 QT_END_NAMESPACE

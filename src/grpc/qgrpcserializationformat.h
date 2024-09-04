@@ -48,11 +48,8 @@ public:
 private:
     QExplicitlySharedDataPointer<QGrpcSerializationFormatPrivate> d_ptr;
 
-    friend bool comparesEqual(const QGrpcSerializationFormat &lhs,
-                              const QGrpcSerializationFormat &rhs) noexcept
-    {
-        return lhs.suffix() == rhs.suffix() && lhs.serializer() == rhs.serializer();
-    }
+    Q_GRPC_EXPORT friend bool comparesEqual(const QGrpcSerializationFormat &lhs,
+                                            const QGrpcSerializationFormat &rhs) noexcept;
     Q_DECLARE_EQUALITY_COMPARABLE(QGrpcSerializationFormat)
 
     friend size_t qHash(const QGrpcSerializationFormat &key, size_t seed = 0) noexcept
