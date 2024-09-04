@@ -87,13 +87,13 @@ static QStringList enumToStringList(QList<T> v)
 class Q_PROTOBUF_EXPORT AbstractRepeatedIterator
 {
 public:
-    virtual ~AbstractRepeatedIterator() noexcept;
+    virtual ~AbstractRepeatedIterator();
 
     virtual bool hasNext() const noexcept = 0;
-    virtual QProtobufMessage &next() const noexcept = 0;
+    virtual QProtobufMessage &next() const = 0;
 
-    virtual QProtobufMessage &addNext() noexcept = 0;
-    virtual void push() noexcept = 0;
+    virtual QProtobufMessage &addNext() = 0;
+    virtual void push() = 0;
 };
 
 template <typename T, QtProtobuf::if_protobuf_message<T> = true>
@@ -103,17 +103,18 @@ public:
     ~ListIterator() noexcept override = default;
 
     bool hasNext() const noexcept override { return m_it != m_list->end(); }
-    QProtobufMessage &next() const noexcept override
+    QProtobufMessage &next() const override
     {
         Q_ASSERT(m_it != m_list->end());
         return *m_it++;
     }
 
-    QProtobufMessage &addNext() noexcept override { return m_list->emplace_back(T()); }
+    QProtobufMessage &addNext() override { return m_list->emplace_back(T()); }
+
     /* protobuf allows having elements in the repeated fields that are failed to deserialize */
     void push() noexcept override { }
 
-    static QProtobufRepeatedIterator fromList(QList<T> &list) noexcept
+    static QProtobufRepeatedIterator fromList(QList<T> &list)
     {
         return QProtobufRepeatedIterator(new ListIterator<T>(list));
     }
@@ -136,7 +137,7 @@ public:
     ~MapIterator() noexcept override = default;
 
     bool hasNext() const noexcept override { return m_it != m_hash->end(); }
-    QProtobufMessage &next() const noexcept override
+    QProtobufMessage &next() const override
     {
         Q_ASSERT(m_it != m_hash->end());
         m_mapEntry.setKey(m_it.key());
@@ -148,13 +149,13 @@ public:
         return m_mapEntry;
     }
 
-    QProtobufMessage &addNext() noexcept override
+    QProtobufMessage &addNext() override
     {
         m_mapEntry.setKey({});
         m_mapEntry.setValue({});
         return m_mapEntry;
     }
-    void push() noexcept override
+    void push() override
     {
         auto it = m_hash->emplace(m_mapEntry.key());
         if constexpr (std::is_pointer_v<typename MapEntry::ValueType>)
@@ -163,7 +164,7 @@ public:
             *it = std::move(m_mapEntry).value();
     }
 
-    static QProtobufRepeatedIterator fromHash(QHash<K, V> &hash) noexcept
+    static QProtobufRepeatedIterator fromHash(QHash<K, V> &hash)
     {
         return QProtobufRepeatedIterator(new MapIterator<K, V>(hash));
     }
