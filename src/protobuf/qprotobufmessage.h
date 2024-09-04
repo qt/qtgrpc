@@ -142,7 +142,7 @@ public:
 
     QProtobufMapEntry()
         : QProtobufMapEntryBase(QMetaType::fromType<KeyType>(), QMetaType::fromType<ValueType>(),
-                                metaCall)
+                                &QProtobufMapEntry::metaCall)
     {
     }
     ~QProtobufMapEntry() {
