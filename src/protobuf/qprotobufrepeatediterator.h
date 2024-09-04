@@ -30,7 +30,7 @@ public:
     }
     QProtobufRepeatedIterator &operator=(QProtobufRepeatedIterator &&other) noexcept
     {
-        std::swap(m_data, other.m_data);
+        qt_ptr_swap(m_data, other.m_data);
         return *this;
     };
 
