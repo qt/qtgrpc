@@ -24,11 +24,7 @@ protected:
         : m_ptr(std::exchange(other.m_ptr, nullptr))
     {
     }
-    QProtobufLazyMessagePointerBase &operator=(QProtobufLazyMessagePointerBase &&other) noexcept
-    {
-        qt_ptr_swap(m_ptr, other.m_ptr);
-        return *this;
-    }
+    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QProtobufLazyMessagePointerBase)
 
     QProtobufMessage *message() const noexcept { return m_ptr; }
     void setMessage(QProtobufMessage *msg) const noexcept{ m_ptr = msg; }
