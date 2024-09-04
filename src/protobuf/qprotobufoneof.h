@@ -56,14 +56,14 @@ public:
     T *message()
     {
         ensureRawValue(QMetaType::fromType<T>());
-        return reinterpret_cast<T *>(rawValue().data());
+        return static_cast<T *>(rawValue().data());
     }
 
     template <typename T, QtProtobuf::if_protobuf_message<T> = true>
     const T *message() const
     {
         ensureMetaType(QMetaType::fromType<T>(), rawValue().metaType());
-        return reinterpret_cast<const T *>(rawValue().data());
+        return static_cast<const T *>(rawValue().data());
     }
 
     template <typename T,  QtProtobuf::if_protobuf_non_message<T> = true>
