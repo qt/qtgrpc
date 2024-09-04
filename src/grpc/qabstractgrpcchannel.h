@@ -63,11 +63,12 @@ private:
                                                 QByteArrayView arg,
                                                 const QGrpcCallOptions &options);
 
+private:
     friend class QGrpcClientBase;
-    Q_DISABLE_COPY_MOVE(QAbstractGrpcChannel)
-
-    Q_DECLARE_PRIVATE(QAbstractGrpcChannel)
     std::unique_ptr<QAbstractGrpcChannelPrivate> d_ptr;
+
+    Q_DISABLE_COPY_MOVE(QAbstractGrpcChannel)
+    Q_DECLARE_PRIVATE(QAbstractGrpcChannel)
 };
 
 QT_END_NAMESPACE

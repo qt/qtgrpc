@@ -93,10 +93,10 @@ protected:
     Q_PROTOBUF_EXPORT explicit QProtobufMapEntryBase(QMetaType key, QMetaType value,
                                                      StaticMetaCallFn metaCall);
     Q_PROTOBUF_EXPORT ~QProtobufMapEntryBase();
-    Q_DISABLE_COPY_MOVE(QProtobufMapEntryBase)
 
 private:
     Q_DECLARE_PRIVATE(QProtobufMapEntryBase)
+    Q_DISABLE_COPY_MOVE(QProtobufMapEntryBase)
 };
 
 template <typename Key, typename Value>
@@ -151,7 +151,6 @@ public:
                 delete m_value;
         }
     }
-    Q_DISABLE_COPY_MOVE(QProtobufMapEntry)
 
     const KeyType &key() const &
     {
@@ -228,6 +227,8 @@ private:
     mutable KeyType m_key{};
     mutable ValueType m_value{};
     mutable bool m_ownsValue = false;
+
+    Q_DISABLE_COPY_MOVE(QProtobufMapEntry)
 };
 
 QT_END_NAMESPACE
