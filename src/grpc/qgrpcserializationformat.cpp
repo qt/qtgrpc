@@ -168,4 +168,9 @@ bool comparesEqual(const QGrpcSerializationFormat &lhs,
         && lhs.d_func()->serializer == rhs.d_func()->serializer;
 }
 
+size_t qHash(const QGrpcSerializationFormat &key, size_t seed) noexcept
+{
+    return qHashMulti(seed, key.d_func()->suffix, key.d_func()->serializer.get());
+}
+
 QT_END_NAMESPACE
