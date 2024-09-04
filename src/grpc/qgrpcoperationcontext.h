@@ -47,7 +47,7 @@ public:
     void setServerMetadata(const QHash<QByteArray, QByteArray> &metadata);
     void setServerMetadata(QHash<QByteArray, QByteArray> &&metadata);
 
-    [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const noexcept;
+    [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const;
 
 Q_SIGNALS:
     // Outgoing signals of the channel.

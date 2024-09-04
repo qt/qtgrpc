@@ -161,7 +161,7 @@ const QGrpcCallOptions &QGrpcOperationContext::callOptions() const & noexcept
     Return the serializer that is assigned to this operation.
 */
 std::shared_ptr<const QAbstractProtobufSerializer>
-QGrpcOperationContext::serializer() const noexcept
+QGrpcOperationContext::serializer() const
 {
     Q_D(const QGrpcOperationContext);
     return d->serializer;

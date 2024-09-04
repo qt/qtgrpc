@@ -58,7 +58,7 @@ public:
     setSerializationFormat(const QGrpcSerializationFormat &format);
 
 #if QT_CONFIG(ssl)
-    [[nodiscard]] Q_GRPC_EXPORT std::optional<QSslConfiguration> sslConfiguration() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<QSslConfiguration> sslConfiguration() const;
     Q_GRPC_EXPORT QGrpcChannelOptions &
     setSslConfiguration(const QSslConfiguration &sslConfiguration);
 #endif

@@ -169,7 +169,7 @@ bool QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channe
     \since 6.7
     Returns the channel attached to this client.
 */
-std::shared_ptr<QAbstractGrpcChannel> QGrpcClientBase::channel() const noexcept
+std::shared_ptr<QAbstractGrpcChannel> QGrpcClientBase::channel() const
 {
     Q_D(const QGrpcClientBase);
     return d->channel;

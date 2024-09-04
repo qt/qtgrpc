@@ -221,7 +221,7 @@ QGrpcChannelOptions::setSslConfiguration(const QSslConfiguration &sslConfigurati
 
     If value was not set returns empty std::optional.
 */
-std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const noexcept
+std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const
 {
     Q_D(const QGrpcChannelOptions);
     return d->sslConfiguration;

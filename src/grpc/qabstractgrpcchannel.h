@@ -31,14 +31,13 @@ class Q_GRPC_EXPORT QAbstractGrpcChannel
 public:
     virtual ~QAbstractGrpcChannel();
 
-    [[nodiscard]] virtual std::shared_ptr<QAbstractProtobufSerializer>
-    serializer() const noexcept = 0;
+    [[nodiscard]] virtual std::shared_ptr<QAbstractProtobufSerializer> serializer() const = 0;
 
     [[nodiscard]] const QGrpcChannelOptions &channelOptions() const & noexcept;
     void channelOptions() && = delete;
 
-    void setChannelOptions(const QGrpcChannelOptions &options) noexcept;
-    void setChannelOptions(QGrpcChannelOptions &&options) noexcept;
+    void setChannelOptions(const QGrpcChannelOptions &options);
+    void setChannelOptions(QGrpcChannelOptions &&options);
 
 protected:
     QAbstractGrpcChannel();

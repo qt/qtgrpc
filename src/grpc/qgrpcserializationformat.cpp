@@ -138,7 +138,7 @@ QByteArrayView QGrpcSerializationFormat::suffix() const noexcept
 
     /sa QAbstractProtobufSerializer
 */
-std::shared_ptr<QAbstractProtobufSerializer> QGrpcSerializationFormat::serializer() const noexcept
+std::shared_ptr<QAbstractProtobufSerializer> QGrpcSerializationFormat::serializer() const
 {
     Q_D(const QGrpcSerializationFormat);
     return d->serializer;
