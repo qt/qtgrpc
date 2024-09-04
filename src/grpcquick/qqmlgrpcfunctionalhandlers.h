@@ -30,7 +30,7 @@ std::optional<QJSValue> readMessageToJSValue(QJSEngine *jsEngine, QGrpcOperation
     QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operation);
 
     if (std::optional<Ret> result = operation->read<Ret>())
-        return std::make_optional(jsEngine->toScriptValue(*result));
+        return jsEngine->toScriptValue(*result);
     return std::nullopt;
 }
 
