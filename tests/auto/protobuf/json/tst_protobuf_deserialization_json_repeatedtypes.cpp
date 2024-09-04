@@ -232,7 +232,7 @@ void QtProtobufRepeatedTypesJsonDeserializationTest::repeatedBoolMessageTest()
 {
     RepeatedBoolMessage boolMsg;
     boolMsg.deserialize(serializer.get(), "{\"testRepeatedBool\":[true,true,true,false,false,false,false,false,false,false,false,false,true]}"_ba);
-    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::NoError);
+    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::None);
     QtProtobuf::boolList expected({ true,  true,  true,  false, false, false, false,
                                     false, false, false, false, false, true });
     QCOMPARE(boolMsg.testRepeatedBool().count(), 13);
@@ -245,13 +245,13 @@ void QtProtobufRepeatedTypesJsonDeserializationTest::malformedJsonTest()
     RepeatedBoolMessage boolMsg;
     boolMsg.deserialize(serializer.get(), "{\"testRepeatedBool\":true,true,true,false,false,false,false,false,false,false,false,false,true]}"_ba);
     QVERIFY(boolMsg.testRepeatedBool().size() == 0);
-    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
+    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::UnexpectedEndOfStream);
 
     // twice ]
     RepeatedSInt64Message test;
     test.deserialize(serializer.get(), "{\"testRepeatedInt\":[]1,321,-65999,12324523123123,-3,3]}"_ba);
     QVERIFY(test.testRepeatedInt().size() == 0);
-    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
+    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::UnexpectedEndOfStream);
 
 }
 
@@ -261,14 +261,14 @@ void QtProtobufRepeatedTypesJsonDeserializationTest::invalidTypeTest()
     RepeatedSInt64Message test;
     test.deserialize(serializer.get(), "{\"testRepeatedInt\":[1,321,\"abcd\",12324523123123,-3,3]}"_ba);
     QVERIFY(test.testRepeatedInt().size() == 0);
-    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::InvalidFormatError);
+    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::InvalidFormat);
 
     // expected bool, float is used
     RepeatedBoolMessage boolMsg;
     boolMsg.deserialize(serializer.get(),
                         "{\"testRepeatedBool\":[true,true,true,7.8,false,false,false,false,false,false,false,false,true]}"_ba);
     QVERIFY(test.testRepeatedInt().size() == 0);
-    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::InvalidFormatError);
+    QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::InvalidFormat);
 
 }
 

@@ -57,7 +57,7 @@ void QtProtobufEnumTypesDeserializationTest::malformedJsonTest()
     test.deserialize(m_serializer.get(), "{\"localEnum\":\"LOCAL_ENUM_VALUE2\"}}");
 
     QCOMPARE(m_serializer->lastError(),
-             QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
+             QAbstractProtobufSerializer::Error::UnexpectedEndOfStream);
 
     RepeatedEnumMessage msg;
     // no ']'
@@ -68,7 +68,7 @@ void QtProtobufEnumTypesDeserializationTest::malformedJsonTest()
                     "\"LOCAL_ENUM_VALUE3\"}");
 
     QCOMPARE(m_serializer->lastError(),
-             QAbstractProtobufSerializer::UnexpectedEndOfStreamError);
+             QAbstractProtobufSerializer::Error::UnexpectedEndOfStream);
 }
 
 void QtProtobufEnumTypesDeserializationTest::invalidTypeTest()
@@ -77,7 +77,7 @@ void QtProtobufEnumTypesDeserializationTest::invalidTypeTest()
     SimpleEnumMessage invalidTest;
     invalidTest.deserialize(m_serializer.get(), "{\"localEnum\":\"LOCAL_ENUM_VALUE240\"}");
     QCOMPARE(m_serializer->lastError(),
-             QAbstractProtobufSerializer::InvalidFormatError);
+             QAbstractProtobufSerializer::Error::InvalidFormat);
 
     RepeatedEnumMessage msg, msg2;
     // 'false'
@@ -87,7 +87,7 @@ void QtProtobufEnumTypesDeserializationTest::invalidTypeTest()
                     "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
                     "\"LOCAL_ENUM_VALUE3\"]}");
     QCOMPARE(m_serializer->lastError(),
-             QAbstractProtobufSerializer::InvalidFormatError);
+             QAbstractProtobufSerializer::Error::InvalidFormat);
 
     // no LOCAL_ENUM_VALUE_100
     msg2.deserialize(m_serializer.get(),
@@ -96,7 +96,7 @@ void QtProtobufEnumTypesDeserializationTest::invalidTypeTest()
                      "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
                      "\"LOCAL_ENUM_VALUE3\"]}");
     QCOMPARE(m_serializer->lastError(),
-             QAbstractProtobufSerializer::InvalidFormatError);
+             QAbstractProtobufSerializer::Error::InvalidFormat);
 }
 
 QTEST_MAIN(QtProtobufEnumTypesDeserializationTest)

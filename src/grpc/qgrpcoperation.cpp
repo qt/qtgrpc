@@ -115,7 +115,7 @@ bool QGrpcOperation::read(QProtobufMessage *message) const
     const auto ser = d->operationContext->serializer();
     Q_ASSERT_X(ser, "QGrpcOperation", "The serializer is null");
     if (!ser->deserialize(message, d->data)) {
-        qGrpcWarning() << "Unable to deserialize message("<< ser->lastError() <<"): "
+        qGrpcWarning() << "Unable to deserialize message(" << qToUnderlying(ser->lastError()) <<"): "
                        << ser->lastErrorString();
         return false;
     }

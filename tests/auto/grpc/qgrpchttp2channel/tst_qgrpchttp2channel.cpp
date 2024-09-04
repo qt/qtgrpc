@@ -27,7 +27,7 @@ class DummySerializer : public QAbstractProtobufSerializer
 public:
     virtual QAbstractProtobufSerializer::Error lastError() const override
     {
-        return QAbstractProtobufSerializer::NoError;
+        return QAbstractProtobufSerializer::Error::None;
     }
 
     virtual QString lastErrorString() const override { return {}; }

@@ -536,7 +536,7 @@ public:
                 }
 
                 while (!array.isEmpty()
-                       && lastError == QAbstractProtobufSerializer::NoError) {
+                       && lastError == QAbstractProtobufSerializer::Error::None) {
                     activeValue = array.takeAt(0);
                     if (deserializeObject(&propertyIt.addNext()))
                         propertyIt.push();
@@ -544,19 +544,19 @@ public:
                 ok = propertyData.isValid();
             } else {
                 while (!activeValue.isNull()
-                       && lastError == QAbstractProtobufSerializer::NoError) {
+                       && lastError == QAbstractProtobufSerializer::Error::None) {
                     if (deserializeObject(&propertyIt.addNext()))
                         propertyIt.push();
                 }
             }
-            ok = lastError == QAbstractProtobufSerializer::NoError;
+            ok = lastError == QAbstractProtobufSerializer::Error::None;
             return propertyData;
         }
 
         auto handler = QtProtobufPrivate::findHandler(metaType);
         if (handler.deserializer) {
             while (!activeValue.isNull()
-                   && lastError == QAbstractProtobufSerializer::NoError) {
+                   && lastError == QAbstractProtobufSerializer::Error::None) {
                 handler
                     .deserializer([this](QProtobufMessage
                                              *message) { return this->deserializeObject(message); },
@@ -571,7 +571,7 @@ public:
                 if (!ok)
                     setInvalidFormatError();
             } else {
-                setDeserializationError(QAbstractProtobufSerializer::UnknownTypeError,
+                setDeserializationError(QAbstractProtobufSerializer::Error::UnknownType,
                                         QCoreApplication::
                                             translate("QtProtobuf",
                                                       "No deserializer is registered for type %1")
@@ -691,14 +691,14 @@ public:
 
     void setUnexpectedEndOfStreamError()
     {
-        setDeserializationError(QAbstractProtobufSerializer::UnexpectedEndOfStreamError,
+        setDeserializationError(QAbstractProtobufSerializer::Error::UnexpectedEndOfStream,
                                 QCoreApplication::translate("QtProtobuf",
                                                             "JSON: Unexpected end of stream"));
     }
 
     void setInvalidFormatError()
     {
-        setDeserializationError(QAbstractProtobufSerializer::InvalidFormatError,
+        setDeserializationError(QAbstractProtobufSerializer::Error::InvalidFormat,
                                 QCoreApplication::
                                     translate("QtProtobuf",
                                               "JSON: One or more fields have invalid format"));
@@ -706,7 +706,7 @@ public:
 
     void clearError();
 
-    QAbstractProtobufSerializer::Error lastError = QAbstractProtobufSerializer::NoError;
+    QAbstractProtobufSerializer::Error lastError = QAbstractProtobufSerializer::Error::None;
     QString lastErrorString;
     QJsonValue activeValue;
 
@@ -754,7 +754,7 @@ void QProtobufJsonSerializerPrivate::serializeObjectImpl(const QProtobufMessage 
 
 void QProtobufJsonSerializerPrivate::clearError()
 {
-    lastError = QAbstractProtobufSerializer::NoError;
+    lastError = QAbstractProtobufSerializer::Error::None;
     lastErrorString.clear();
 }
 

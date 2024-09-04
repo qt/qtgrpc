@@ -40,15 +40,15 @@ QT_BEGIN_NAMESPACE
     When an error occurs, call lastErrorString() to get a
     human-readable error message.
 
-    \value NoError                      No error occurred.
-    \value InvalidHeaderError           Something went wrong while attempting to
+    \value None                         No error occurred.
+    \value InvalidHeader                Something went wrong while attempting to
                                         decode a header in the message.
-    \value UnknownTypeError             While serializing or deserializing a
+    \value UnknownType                  While serializing or deserializing a
                                         message, no deserializer was found
                                         for a message field.
-    \value UnexpectedEndOfStreamError   While deserializing a message, the
+    \value UnexpectedEndOfStream        While deserializing a message, the
                                         stream ended unexpectedly.
-    \value InvalidFormatError           The data has invalid format. For example
+    \value InvalidFormat                The data has invalid format. For example
                                         the JSON value doesn't match the field type.
 */
 
