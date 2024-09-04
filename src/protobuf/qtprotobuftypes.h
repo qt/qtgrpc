@@ -198,11 +198,11 @@ using if_protobuf_map = std::enable_if_t<std::conjunction_v<QtProtobuf::is_proto
 
 QT_END_NAMESPACE
 
-QT_DECL_METATYPE_EXTERN_TAGGED(QtProtobuf::int32, QtProtobuf_int32, Q_PROTOBUF_EXPORT)
-QT_DECL_METATYPE_EXTERN_TAGGED(QtProtobuf::int64, QtProtobuf_int64, Q_PROTOBUF_EXPORT)
-QT_DECL_METATYPE_EXTERN_TAGGED(QtProtobuf::fixed32, QtProtobuf_fixed32, Q_PROTOBUF_EXPORT)
-QT_DECL_METATYPE_EXTERN_TAGGED(QtProtobuf::fixed64, QtProtobuf_fixed64, Q_PROTOBUF_EXPORT)
-QT_DECL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed32, QtProtobuf_sfixed32, Q_PROTOBUF_EXPORT)
-QT_DECL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64, Q_PROTOBUF_EXPORT)
+Q_DECLARE_METATYPE(QtProtobuf::int32)
+Q_DECLARE_METATYPE(QtProtobuf::int64)
+Q_DECLARE_METATYPE(QtProtobuf::fixed32)
+Q_DECLARE_METATYPE(QtProtobuf::fixed64)
+Q_DECLARE_METATYPE(QtProtobuf::sfixed32)
+Q_DECLARE_METATYPE(QtProtobuf::sfixed64)
 
 #endif // QTPROTOBUFTYPES_H

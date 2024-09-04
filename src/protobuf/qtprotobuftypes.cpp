@@ -6,12 +6,6 @@
 
 QT_BEGIN_NAMESPACE
 
-QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::int32, QtProtobuf_int32)
-QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::int64, QtProtobuf_int64)
-QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::fixed32, QtProtobuf_fixed32)
-QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::fixed64, QtProtobuf_fixed64)
-QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed32, QtProtobuf_sfixed32)
-QT_IMPL_METATYPE_EXTERN_TAGGED(QtProtobuf::sfixed64, QtProtobuf_sfixed64)
 
 /*!
     \enum QtProtobuf::WireTypes
