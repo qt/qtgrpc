@@ -190,11 +190,6 @@ void qRegisterProtobufTypes()
 }
 
 /*!
-    \class QtProtobufPrivate::AbstractRepeatedIterator
-    \internal
-*/
-
-/*!
     \class template <typename T, QtProtobuf::if_protobuf_message<T> = true> class QtProtobufPrivate::ListIterator
     \internal
 */
@@ -203,10 +198,6 @@ void qRegisterProtobufTypes()
     \class template <typename K, typename V, QtProtobuf::if_protobuf_map<K, V> = true> class QtProtobufPrivate::MapIterator
     \internal
 */
-
-namespace QtProtobufPrivate {
-AbstractRepeatedIterator::~AbstractRepeatedIterator() = default;
-}
 
 /*!
     \struct QtProtobufPrivate::SerializationHandler

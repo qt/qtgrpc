@@ -17,21 +17,14 @@
 */
 
 /*!
+    \fn template<typename T> explicit QProtobufRepeatedIterator(T *data) noexcept
     Constructs iterator from \a data pointer.
 */
-QProtobufRepeatedIterator::QProtobufRepeatedIterator(QtProtobufPrivate::AbstractRepeatedIterator
-                                                         *data) noexcept
-    : m_data(data)
-{
-}
 
 /*!
+    \fn QProtobufRepeatedIterator::~QProtobufRepeatedIterator()
     Destroys iterator.
 */
-QProtobufRepeatedIterator::~QProtobufRepeatedIterator()
-{
-    delete m_data;
-}
 
 /*!
     \fn QProtobufRepeatedIterator::QProtobufRepeatedIterator(QProtobufRepeatedIterator &&other) noexcept
@@ -53,33 +46,37 @@ QProtobufRepeatedIterator::~QProtobufRepeatedIterator()
 */
 
 /*!
+    \fn bool QProtobufRepeatedIterator::hasNext() const noexcept
+
     Returns \c true if the iterator can read the next element from the repeated field.
 */
-bool QProtobufRepeatedIterator::hasNext() const noexcept
-{
-    return m_data->hasNext();
-}
 
 /*!
+    \fn QProtobufMessage *QProtobufRepeatedIterator::next()
+
     Returns the next element under from the repeated field.
 */
-QProtobufMessage &QProtobufRepeatedIterator::next() const
-{
-    return m_data->next();
-}
 
 /*!
-    Returns the reference to the new temporary element in the repeated field.
+    \fn QProtobufMessage *QProtobufRepeatedIterator::addNext()
+
+    Returns a new temporary element in the repeated field.
 */
-QProtobufMessage &QProtobufRepeatedIterator::addNext()
-{
-    return m_data->addNext();
-}
 
 /*!
+    \fn void QProtobufRepeatedIterator::push()
+
     Adds the element, created by addNext function, to the repeated field.
 */
-void QProtobufRepeatedIterator::push() const
-{
-    return m_data->push();
-}
+
+/*!
+    \fn template<typename T> static QProtobufRepeatedIterator fromList(QList<T> &list)
+
+    Creates a QProtobufRepeatedIterator instance from a \a list.
+*/
+
+/*!
+    \fn template<typename K, typename V> static QProtobufRepeatedIterator fromHash(QHash<K, V> &hash)
+
+    Creates a QProtobufRepeatedIterator instance from a \a hash.
+*/

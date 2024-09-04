@@ -84,100 +84,6 @@ static QStringList enumToStringList(const QList<T> &v)
     return stringList;
 }
 
-class Q_PROTOBUF_EXPORT AbstractRepeatedIterator
-{
-public:
-    virtual ~AbstractRepeatedIterator();
-
-    virtual bool hasNext() const noexcept = 0;
-    virtual QProtobufMessage &next() const = 0;
-
-    virtual QProtobufMessage &addNext() = 0;
-    virtual void push() = 0;
-};
-
-template <typename T, QtProtobuf::if_protobuf_message<T> = true>
-class ListIterator : public AbstractRepeatedIterator
-{
-public:
-    ~ListIterator() noexcept override = default;
-
-    bool hasNext() const noexcept override { return m_it != m_list->end(); }
-    QProtobufMessage &next() const override
-    {
-        Q_ASSERT(m_it != m_list->end());
-        return *m_it++;
-    }
-
-    QProtobufMessage &addNext() override { return m_list->emplace_back(T()); }
-
-    /* protobuf allows having elements in the repeated fields that are failed to deserialize */
-    void push() noexcept override { }
-
-    static QProtobufRepeatedIterator fromList(QList<T> &list)
-    {
-        return QProtobufRepeatedIterator(new ListIterator<T>(list));
-    }
-
-private:
-    Q_DISABLE_COPY_MOVE(ListIterator)
-
-    explicit ListIterator(QList<T> &list) : m_list(&list), m_it(m_list->begin()) { }
-    QList<T> *m_list = nullptr;
-    mutable typename QList<T>::Iterator m_it;
-};
-
-template <typename K, typename V, QtProtobuf::if_protobuf_map<K, V> = true>
-class MapIterator : public AbstractRepeatedIterator
-{
-    using MapEntry = QProtobufMapEntry<K, V>;
-    static_assert(!std::is_pointer_v<typename MapEntry::KeyType>, "Map key must not be message");
-
-public:
-    ~MapIterator() noexcept override = default;
-
-    bool hasNext() const noexcept override { return m_it != m_hash->end(); }
-    QProtobufMessage &next() const override
-    {
-        Q_ASSERT(m_it != m_hash->end());
-        m_mapEntry.setKey(m_it.key());
-        if constexpr (std::is_pointer_v<typename MapEntry::ValueType>)
-            m_mapEntry.setValue(&m_it.value());
-        else
-            m_mapEntry.setValue(m_it.value());
-        m_it++;
-        return m_mapEntry;
-    }
-
-    QProtobufMessage &addNext() override
-    {
-        m_mapEntry.setKey({});
-        m_mapEntry.setValue({});
-        return m_mapEntry;
-    }
-    void push() override
-    {
-        auto it = m_hash->emplace(m_mapEntry.key());
-        if constexpr (std::is_pointer_v<typename MapEntry::ValueType>)
-            *it = std::move(*m_mapEntry.value());
-        else
-            *it = std::move(m_mapEntry).value();
-    }
-
-    static QProtobufRepeatedIterator fromHash(QHash<K, V> &hash)
-    {
-        return QProtobufRepeatedIterator(new MapIterator<K, V>(hash));
-    }
-
-private:
-    Q_DISABLE_COPY_MOVE(MapIterator)
-
-    explicit MapIterator(QHash<K, V> &hash) : m_hash(&hash), m_it(m_hash->begin()) { }
-    QHash<K, V> *m_hash = nullptr;
-    mutable typename QHash<K, V>::Iterator m_it;
-    mutable MapEntry m_mapEntry;
-};
-
 } // namespace QtProtobufPrivate
 
 Q_PROTOBUF_EXPORT void qRegisterProtobufTypes();
@@ -187,7 +93,7 @@ inline void qRegisterProtobufType()
 {
     T::registerTypes();
     QMetaType::registerMutableView<
-        QList<T>, QProtobufRepeatedIterator>(&QtProtobufPrivate::ListIterator<T>::fromList);
+        QList<T>, QProtobufRepeatedIterator>(&QProtobufRepeatedIterator::fromList<T>);
     QtProtobufPrivate::registerOrdering(QMetaType::fromType<T>(), T::staticPropertyOrdering);
 }
 
@@ -195,7 +101,7 @@ template <typename K, typename V, QtProtobuf::if_protobuf_map<K, V> = true>
 inline void qRegisterProtobufMapType()
 {
     QMetaType::registerMutableView<
-        QHash<K, V>, QProtobufRepeatedIterator>(&QtProtobufPrivate::MapIterator<K, V>::fromHash);
+        QHash<K, V>, QProtobufRepeatedIterator>(&QProtobufRepeatedIterator::fromHash<K, V>);
 }
 
 template <typename T, typename std::enable_if_t<std::is_enum<T>::value, bool> = true>
