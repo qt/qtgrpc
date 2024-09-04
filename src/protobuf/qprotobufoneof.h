@@ -12,6 +12,7 @@
 #include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qmetatype.h>
+#include <QtCore/qtclasshelpermacros.h>
 #include <QtCore/qvariant.h>
 
 QT_BEGIN_NAMESPACE
@@ -27,10 +28,10 @@ public:
     Q_PROTOBUF_EXPORT  QProtobufOneof(const QProtobufOneof &other);
     Q_PROTOBUF_EXPORT  QProtobufOneof &operator=(const QProtobufOneof &other);
     QProtobufOneof(QProtobufOneof &&other) noexcept : d_ptr(std::exchange(other.d_ptr, {})) { }
-    QProtobufOneof &operator=(QProtobufOneof &&other) noexcept
+    QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QProtobufOneof)
+    void swap(QProtobufOneof &other) noexcept
     {
         qt_ptr_swap(d_ptr, other.d_ptr);
-        return *this;
     }
 
     template<typename T, QtProtobuf::if_protobuf_type<T> = true>
