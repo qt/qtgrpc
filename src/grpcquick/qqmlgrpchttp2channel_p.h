@@ -37,7 +37,7 @@ public:
     explicit QQmlGrpcHttp2Channel(QObject *parent = nullptr);
     ~QQmlGrpcHttp2Channel() override;
 
-    std::shared_ptr<QAbstractGrpcChannel> channel() final;
+    std::shared_ptr<QAbstractGrpcChannel> channel() const final;
 
     QQmlGrpcChannelOptions *options() const noexcept;
     void setOptions(QQmlGrpcChannelOptions *options);

@@ -36,7 +36,7 @@ QQmlGrpcHttp2Channel::QQmlGrpcHttp2Channel(QObject *parent)
 
 QQmlGrpcHttp2Channel::~QQmlGrpcHttp2Channel() = default;
 
-std::shared_ptr<QAbstractGrpcChannel> QQmlGrpcHttp2Channel::channel()
+std::shared_ptr<QAbstractGrpcChannel> QQmlGrpcHttp2Channel::channel() const
 {
     Q_D(const QQmlGrpcHttp2Channel);
     return d->channel;
