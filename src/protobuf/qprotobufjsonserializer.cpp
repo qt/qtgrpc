@@ -289,13 +289,13 @@ public:
                 QJsonObject activeObject = activeValue.toObject();
                 activeValue = activeObject.value(fieldName).toArray();
                 while (propertyIt.hasNext())
-                    serializeObject(&propertyIt.next(), fieldInfo);
+                    serializeObject(propertyIt.next(), fieldInfo);
                 if (!activeValue.toArray().empty())
                     activeObject.insert(fieldName, activeValue);
                 activeValue = activeObject;
             } else {
                 while (propertyIt.hasNext())
-                    serializeObject(&propertyIt.next(), fieldInfo);
+                    serializeObject(propertyIt.next(), fieldInfo);
             }
             return;
         }
@@ -538,14 +538,14 @@ public:
                 while (!array.isEmpty()
                        && lastError == QAbstractProtobufSerializer::Error::None) {
                     activeValue = array.takeAt(0);
-                    if (deserializeObject(&propertyIt.addNext()))
+                    if (deserializeObject(propertyIt.addNext()))
                         propertyIt.push();
                 }
                 ok = propertyData.isValid();
             } else {
                 while (!activeValue.isNull()
                        && lastError == QAbstractProtobufSerializer::Error::None) {
-                    if (deserializeObject(&propertyIt.addNext()))
+                    if (deserializeObject(propertyIt.addNext()))
                         propertyIt.push();
                 }
             }

@@ -484,7 +484,7 @@ void QProtobufSerializerPrivate::serializeProperty(QVariant propertyValue,
     if (propertyValue.canView(QMetaType::fromType<QProtobufRepeatedIterator>())) {
         QProtobufRepeatedIterator propertyIt = propertyValue.view<QProtobufRepeatedIterator>();
         while (propertyIt.hasNext())
-            serializeObject(&propertyIt.next(), fieldInfo);
+            serializeObject(propertyIt.next(), fieldInfo);
         return;
     }
 
@@ -632,7 +632,7 @@ bool QProtobufSerializerPrivate::deserializeProperty(QProtobufMessage *message)
         if (!cachedRepeatedIterator.isValid()) {
             cachedRepeatedIterator = cachedPropertyValue.view<QProtobufRepeatedIterator>();
         }
-        if (deserializeObject(&cachedRepeatedIterator.addNext())) {
+        if (deserializeObject(cachedRepeatedIterator.addNext())) {
             cachedRepeatedIterator.push();
             return true;
         }
