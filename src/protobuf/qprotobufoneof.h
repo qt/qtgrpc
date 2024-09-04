@@ -104,7 +104,10 @@ private:
 
     Q_PROTOBUF_EXPORT void setValue(const QVariant &value, int fieldNumber);
     Q_PROTOBUF_EXPORT const QVariant &rawValue() const;
-    Q_PROTOBUF_EXPORT QVariant &rawValue();
+    QVariant &rawValue()
+    {
+        return const_cast<QVariant &>(std::as_const(*this).rawValue());
+    }
 
     QProtobufOneofPrivate *d_ptr;
     Q_DECLARE_PRIVATE(QProtobufOneof)

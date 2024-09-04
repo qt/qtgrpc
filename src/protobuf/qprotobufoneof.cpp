@@ -129,10 +129,6 @@ const QVariant &QProtobufOneof::rawValue() const
     return d_ptr->value;
 }
 
-QVariant &QProtobufOneof::rawValue()
-{
-    return d_ptr->value;
-}
 /*
    Setting of the QProtobufOneof data makes sense only using
    value/fieldNumber pair. Instead of non-constant dereferencing of the
