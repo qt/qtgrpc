@@ -28,7 +28,7 @@ QProtobufRepeatedIterator::QProtobufRepeatedIterator(QtProtobufPrivate::Abstract
 /*!
     Destroys iterator.
 */
-QProtobufRepeatedIterator::~QProtobufRepeatedIterator() noexcept
+QProtobufRepeatedIterator::~QProtobufRepeatedIterator()
 {
     delete m_data;
 }
@@ -63,7 +63,7 @@ bool QProtobufRepeatedIterator::hasNext() const noexcept
 /*!
     Returns the next element under from the repeated field.
 */
-QProtobufMessage &QProtobufRepeatedIterator::next() const noexcept
+QProtobufMessage &QProtobufRepeatedIterator::next() const
 {
     return m_data->next();
 }
@@ -71,7 +71,7 @@ QProtobufMessage &QProtobufRepeatedIterator::next() const noexcept
 /*!
     Returns the reference to the new temporary element in the repeated field.
 */
-QProtobufMessage &QProtobufRepeatedIterator::addNext() noexcept
+QProtobufMessage &QProtobufRepeatedIterator::addNext()
 {
     return m_data->addNext();
 }
@@ -79,7 +79,7 @@ QProtobufMessage &QProtobufRepeatedIterator::addNext() noexcept
 /*!
     Adds the element, created by addNext function, to the repeated field.
 */
-void QProtobufRepeatedIterator::push() const noexcept
+void QProtobufRepeatedIterator::push() const
 {
     return m_data->push();
 }

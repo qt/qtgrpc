@@ -23,7 +23,7 @@ public:
     QProtobufRepeatedIterator() noexcept = default;
     Q_PROTOBUF_EXPORT explicit QProtobufRepeatedIterator(QtProtobufPrivate::AbstractRepeatedIterator
                                                              *data) noexcept;
-    Q_PROTOBUF_EXPORT ~QProtobufRepeatedIterator() noexcept;
+    Q_PROTOBUF_EXPORT ~QProtobufRepeatedIterator();
     QProtobufRepeatedIterator(QProtobufRepeatedIterator &&other) noexcept
         : m_data(std::exchange(other.m_data, nullptr))
     {
@@ -37,10 +37,10 @@ public:
     [[nodiscard]] bool isValid() const noexcept { return m_data != nullptr; }
 
     [[nodiscard]] Q_PROTOBUF_EXPORT bool hasNext() const noexcept;
-    [[nodiscard]] Q_PROTOBUF_EXPORT QProtobufMessage &next() const noexcept;
+    [[nodiscard]] Q_PROTOBUF_EXPORT QProtobufMessage &next() const;
 
-    [[nodiscard]] Q_PROTOBUF_EXPORT QProtobufMessage &addNext() noexcept;
-    Q_PROTOBUF_EXPORT void push() const noexcept;
+    [[nodiscard]] Q_PROTOBUF_EXPORT QProtobufMessage &addNext();
+    Q_PROTOBUF_EXPORT void push() const;
 
 private:
     Q_DISABLE_COPY(QProtobufRepeatedIterator)
