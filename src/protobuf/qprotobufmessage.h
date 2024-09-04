@@ -153,21 +153,21 @@ public:
     }
     Q_DISABLE_COPY_MOVE(QProtobufMapEntry)
 
-    KeyType key() const &
+    const KeyType &key() const &
     {
         return m_key;
     }
-    KeyType &&key() &&
+    KeyType key() &&
     {
         return std::move(m_key);
     }
 
-    ValueType value() const &
+    const ValueType &value() const &
     {
         ensureValue();
         return m_value;
     }
-    ValueType &&value() &&
+    ValueType value() &&
     {
         ensureValue();
         m_ownsValue = false;
