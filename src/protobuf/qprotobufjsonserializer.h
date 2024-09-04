@@ -24,7 +24,7 @@ public:
     Error lastError() const override;
     QString lastErrorString() const override;
 
-protected:
+private:
     QByteArray serializeMessage(const QProtobufMessage *message) const override;
     bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const override;
 
