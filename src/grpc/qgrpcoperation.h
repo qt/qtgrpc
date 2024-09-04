@@ -31,7 +31,7 @@ public:
     std::optional<T> read() const
     {
         std::optional<T> r(std::in_place);
-        if (!read(&r.value()))
+        if (!read(&*r))
             r.reset();
         return r;
     }
