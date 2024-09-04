@@ -26,7 +26,7 @@ public:
     explicit QGrpcHttp2Channel(const QUrl &hostUri, const QGrpcChannelOptions &options);
     ~QGrpcHttp2Channel() override;
 
-    [[nodiscard]] QUrl hostUri() const noexcept;
+    [[nodiscard]] QUrl hostUri() const;
 
 private:
     void call(std::shared_ptr<QGrpcOperationContext> operationContext) override;
@@ -34,7 +34,7 @@ private:
     void clientStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
     void bidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
 
-    [[nodiscard]] std::shared_ptr<QAbstractProtobufSerializer> serializer() const noexcept override;
+    [[nodiscard]] std::shared_ptr<QAbstractProtobufSerializer> serializer() const override;
 
     Q_DISABLE_COPY_MOVE(QGrpcHttp2Channel)
 
