@@ -23,10 +23,7 @@ class QGrpcStatus;
 class Q_GRPC_EXPORT QGrpcOperationContext final : public QObject
 {
     Q_OBJECT
-    struct PrivateConstructor
-    {
-        explicit PrivateConstructor() = default;
-    };
+    QT_DEFINE_TAG_STRUCT(PrivateConstructor);
 
 public:
     explicit QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
