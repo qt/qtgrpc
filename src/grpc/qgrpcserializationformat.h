@@ -20,7 +20,7 @@ class QDebug;
 class QVariant;
 
 class QGrpcSerializationFormatPrivate;
-QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QGrpcSerializationFormatPrivate, Q_GRPC_EXPORT)
+QT_DECLARE_QESDP_SPECIALIZATION_DTOR(QGrpcSerializationFormatPrivate)
 
 class QGrpcSerializationFormat final
 {
