@@ -31,7 +31,7 @@ struct QProtobufPropertyOrdering;
 }
 
 class QProtobufMessagePrivate;
-QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QProtobufMessagePrivate, Q_PROTOBUF_EXPORT)
+QT_DECLARE_QESDP_SPECIALIZATION_DTOR(QProtobufMessagePrivate)
 
 class QProtobufMessage
 {
