@@ -20,7 +20,7 @@ class QDebug;
 class QVariant;
 
 class QGrpcCallOptionsPrivate;
-QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QGrpcCallOptionsPrivate, Q_GRPC_EXPORT)
+QT_DECLARE_QESDP_SPECIALIZATION_DTOR(QGrpcCallOptionsPrivate)
 
 class QGrpcCallOptions final
 {

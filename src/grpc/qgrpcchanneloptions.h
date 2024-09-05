@@ -26,7 +26,7 @@ class QVariant;
 class QGrpcSerializationFormat;
 
 class QGrpcChannelOptionsPrivate;
-QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QGrpcChannelOptionsPrivate, Q_GRPC_EXPORT)
+QT_DECLARE_QESDP_SPECIALIZATION_DTOR(QGrpcChannelOptionsPrivate)
 
 class QGrpcChannelOptions final
 {
