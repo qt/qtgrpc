@@ -180,7 +180,7 @@
 /*!
     \qmlproperty GrpcChannelOptions GrpcHttp2Channel::options
     Returns a pointer to the GrpcChannelOptions object.
-    \note options is \c REQUIRED property. It must be set for object creation.
+
     \sa QQmlGrpcChannelOptions
 */
 
