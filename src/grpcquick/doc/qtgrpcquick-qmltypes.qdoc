@@ -33,10 +33,10 @@
 */
 
 /*!
-    \qmltype QQmlGrpcCallOptions
+    \qmltype GrpcCallOptions
     \inqmlmodule QtGrpc
-    \nativetype QGrpcCallOptions
-    \brief The QQmlGrpcCallOptions is a storage class used to set
+    \nativetype QQmlGrpcCallOptions
+    \brief The GrpcCallOptions is a storage class used to set
            additional call options.
 
     Provides a set of properties to access the call options
@@ -45,22 +45,22 @@
 */
 
 /*!
-    \qmlproperty int QQmlGrpcCallOptions::deadlineTimeout
+    \qmlproperty int GrpcCallOptions::deadlineTimeout
     Sets a deadline value for a call.
     \sa QGrpcCallOptions::deadlineTimeout
 */
 
 /*!
-    \qmlproperty QQmlGrpcMetadata QQmlGrpcCallOptions::metadata
+    \qmlproperty GrpcMetadata GrpcCallOptions::metadata
     Sets a pointer to the metadata used for a call.
-    \sa QQmlGrpcMetadata
+    \sa GrpcMetadata
 */
 
 /*!
-    \qmltype QQmlGrpcChannelOptions
+    \qmltype GrpcChannelOptions
     \inqmlmodule QtGrpc
-    \nativetype QGrpcChannelOptions
-    \brief  The QQmlGrpcChannelOptions is an storage class used to set
+    \nativetype QQmlGrpcChannelOptions
+    \brief  The GrpcChannelOptions is an storage class used to set
             additional channel options.
 
     Provides a set of properties to access the channel
@@ -69,13 +69,13 @@
 */
 
 /*!
-    \qmlproperty int QQmlGrpcChannelOptions::deadlineTimeout
+    \qmlproperty int GrpcChannelOptions::deadlineTimeout
     Sets a deadline value for a channel.
     \sa QGrpcChannelOptions::deadlineTimeout
 */
 
 /*!
-    \qmlproperty enumeration QQmlGrpcChannelOptions::serializationFormat
+    \qmlproperty enumeration GrpcChannelOptions::serializationFormat
     Sets the serialization format for the channel.
     The \l {QtGrpc::SerializationFormat::Default}
     format is used by default.
@@ -93,16 +93,17 @@
 */
 
 /*!
-    \qmlproperty QQmlGrpcMetadata QQmlGrpcChannelOptions::metadata
+    \qmlproperty GrpcMetadata GrpcChannelOptions::metadata
     Sets a pointer to the metadata object used for a channel.
 
-    \sa QQmlGrpcMetadata
+    \sa GrpcMetadata
 */
 
 /*!
-    \qmltype QQmlGrpcMetadata
+    \qmltype GrpcMetadata
     \inqmlmodule QtGrpc
-    \brief  The QQmlGrpcMetadata is a class that stores metadata in unordered
+    \nativetype QQmlGrpcMetadata
+    \brief  The GrpcMetadata is a class that stores metadata in unordered
             multimap container.
 
     Metadata is information about a particular gRPC call or channel
@@ -115,7 +116,7 @@
 */
 
 /*!
-    \qmlproperty QVariantMap QQmlGrpcMetadata::data
+    \qmlproperty QVariantMap GrpcMetadata::data
     Provides access to metadata container and sets it in QVariantMap format
     in QML.
     \note Data is \c REQUIRED property. It must be set for object creation.
@@ -156,12 +157,12 @@
 */
 
 /*!
-    \qmltype QQmlGrpcHttp2Channel
+    \qmltype GrpcHttp2Channel
     \inqmlmodule QtGrpc
-    \nativetype QGrpcHttp2Channel
-    \brief Implements QQmlAbstractGrpcChannel class in QML.
+    \nativetype QQmlGrpcHttp2Channel
+    \brief HTTP/2 QML channel.
 
-    Implements QQmlAbstractGrpcChannel interface for HTTP2 channel type.
+    Implements QQmlAbstractGrpcChannel interface for HTTP/2 channel type.
     It allows to set QQmlGrpcChannelOptions options required for a channel
     creation and returns a pointer to the QAbstractGrpcChannel-based object.
     \note You can inherit from QQmlGrpcChannelOptions for importing custom
@@ -170,21 +171,21 @@
 */
 
 /*!
-    \qmlproperty QUrl QQmlGrpcHttp2Channel::hostUri
+    \qmlproperty QUrl GrpcHttp2Channel::hostUri
     Sets a host \c URL for the channel.
     \note host is \c REQUIRED property. It must be set for object creation.
     \sa QGrpcHttp2Channel::hostUri
 */
 
 /*!
-    \qmlproperty QQmlGrpcChannelOptions QQmlGrpcHttp2Channel::options
-    Returns a pointer to the QQmlGrpcChannelOptions object.
+    \qmlproperty GrpcChannelOptions GrpcHttp2Channel::options
+    Returns a pointer to the GrpcChannelOptions object.
     \note options is \c REQUIRED property. It must be set for object creation.
     \sa QQmlGrpcChannelOptions
 */
 
 /*!
-    \qmlmethod std::shared_ptr<QAbstractGrpcChannel> QQmlGrpcHttp2Channel::getChannel()
+    \qmlmethod std::shared_ptr<QAbstractGrpcChannel> GrpcHttp2Channel::getChannel()
 
     This function is virtual. It returns the pointer to
     the QGrpcHttp2Channel object.
