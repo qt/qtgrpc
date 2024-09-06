@@ -158,12 +158,3 @@
 
     \sa QQmlGrpcChannelOptions
 */
-
-/*!
-    \qmlmethod std::shared_ptr<QAbstractGrpcChannel> GrpcHttp2Channel::getChannel()
-
-    This function is virtual. It returns the pointer to
-    the QGrpcHttp2Channel object.
-
-    \sa QAbstractGrpcChannel, QGrpcHttp2Channel
-*/
