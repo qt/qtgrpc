@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QtGrpc/private/qabstractgrpcchannel_p.h>
-#include <QtGrpc/private/qtgrpcglobal_p.h>
+#include <QtGrpc/private/qtgrpclogging_p.h>
 #include <QtGrpc/qgrpcclientbase.h>
 #include <QtGrpc/qgrpcoperation.h>
 
