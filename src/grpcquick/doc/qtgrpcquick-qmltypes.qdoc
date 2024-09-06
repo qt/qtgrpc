@@ -132,31 +132,6 @@
 */
 
 /*!
-    \qmltype QQmlAbstractGrpcChannel
-    \inqmlmodule QtGrpc
-    \brief The QQmlAbstractGrpcChannel class is interface that represents
-           common gRPC channel functionality in QML.
-
-    You may implement this interface to create your own channels for gRPC
-    transport.
-    QQmlAbstractGrpcChannel is not creatable in QML,
-    but it can be used for custom channel implementation.
-    \note QQmlGrpcHttp2Channel, which are full implementations of
-          QQmlAbstractGrpcChannel, is recommended to use for HTTP2 protocol.
-    \sa QAbstractGrpcChannel, QQmlGrpcHttp2Channel
-*/
-
-/*!
-    \qmlmethod std::shared_ptr<QAbstractGrpcChannel> QQmlAbstractGrpcChannel::getChannel() = 0
-
-    This function returns the pointer to the gRPC channel object.
-    This is a pure virtual function. You may override that function
-    in the derived class.
-
-    \sa QAbstractGrpcChannel, QQmlGrpcHttp2Channel
-*/
-
-/*!
     \qmltype GrpcHttp2Channel
     \inqmlmodule QtGrpc
     \nativetype QQmlGrpcHttp2Channel
