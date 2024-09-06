@@ -1,8 +1,8 @@
 // Copyright (C) 2022 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#ifndef QTGRPCGLOBAL_P_H
-#define QTGRPCGLOBAL_P_H
+#ifndef QTGRPCLOGGING_P_H
+#define QTGRPCLOGGING_P_H
 
 //
 //  W A R N I N G
@@ -15,9 +15,6 @@
 // We mean it.
 //
 
-#include <QtGrpc/qtgrpcglobal.h>
-
-#include <QtCore/private/qglobal_p.h>
 #include <QtCore/qloggingcategory.h>
 
 QT_BEGIN_NAMESPACE
@@ -29,4 +26,4 @@ QT_END_NAMESPACE
 #define qGrpcWarning(...) qCWarning(Grpc, __VA_ARGS__)
 #define qGrpcCritical(...) qCCritical(Grpc, __VA_ARGS__)
 
-#endif // QTGRPCGLOBAL_P_H
+#endif // QTGRPCLOGGING_P_H
