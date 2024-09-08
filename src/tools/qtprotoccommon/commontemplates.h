@@ -19,8 +19,9 @@ public:
     static const std::set<std::string_view> &ListOfCppExceptions();
     static const char *ProtoSuffix();
     static const char *QmlProtobufIncludesTemplate();
-    static const char *PreambleTemplate();
-    static const char *FooterTemplate();
+    static const char *PragmaOnce();
+    static const char *HeaderGuardBeginTemplate();
+    static const char *HeaderGuardEndTemplate();
     static const char *DisclaimerTemplate();
     static const char *InternalIncludeTemplate();
     static const char *ExternalIncludeTemplate();

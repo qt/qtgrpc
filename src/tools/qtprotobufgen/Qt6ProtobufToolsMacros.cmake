@@ -12,6 +12,7 @@ macro(_qt_internal_get_protoc_common_options option_args single_args multi_args)
     )
     set(${single_args}
         EXTRA_NAMESPACE
+        HEADER_GUARD
     )
 
     set(${multi_args} "")
@@ -352,6 +353,13 @@ function(qt6_add_protobuf target)
         set(base_dir "${arg_PROTO_FILES_BASE_DIR}")
     else()
         set(base_dir "${CMAKE_CURRENT_SOURCE_DIR}")
+    endif()
+
+    if(arg_HEADER_GUARD)
+        if(NOT arg_HEADER_GUARD MATCHES "^(pragma|filename)$")
+            message(FATAL_ERROR "Invalid HEADER_GUARD type specified ${arg_HEADER_GUARD}."
+                "Supported types: pragma, filename.")
+        endif()
     endif()
 
     _qt_internal_protobuf_preparse_proto_files(${target}

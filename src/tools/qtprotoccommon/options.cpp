@@ -7,6 +7,7 @@
 #include "utils.h"
 #include <regex>
 #include <stdexcept>
+#include <string_view>
 
 using namespace ::qtprotoccommon;
 static const char QmlPluginOption[] = "QML";
@@ -15,8 +16,12 @@ static const char FolderGenerationOption[] = "GENERATE_PACKAGE_SUBFOLDERS";
 static const char FieldEnumGenerationOption[] = "FIELD_ENUM";
 static const char ExtraNamespaceGenerationOption[] = "EXTRA_NAMESPACE";
 static const char ExportMacroGenerationOption[] = "EXPORT_MACRO";
+static const char HeaderGuardOption[] = "HEADER_GUARD";
 
 static const char ExportSuffix[] = "_exports.qpb.h";
+
+static constexpr std::string_view HeaderGuardPragma = "pragma";
+static constexpr std::string_view HeaderGuardProtoFilename = "filename";
 
 Options::Options()
     : m_generateComments(false), m_isFolder(false), m_generateFieldEnum(true), m_generateMacroExportFile(false), m_qml(false)
@@ -98,6 +103,13 @@ void Options::setFromString(const std::string &options, GeneratorType)
         } else if (option == QmlPluginOption) {
             instance.m_qml = true;
             QT_PROTOBUF_DEBUG("set m_qml: true");
+        } else if (option.find(HeaderGuardOption) == 0) {
+            const auto headerGuardValue = extractCompositeOptionValue(option);
+            if (headerGuardValue == HeaderGuardPragma) {
+                instance.m_headerGuard = Options::HeaderGuardType::Pragma;
+            } else if (headerGuardValue != HeaderGuardProtoFilename) {
+                QT_PROTOBUF_DEBUG("Unknown HEADER_GUARD option value");
+            }
         }
     }
 }

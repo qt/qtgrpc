@@ -145,8 +145,7 @@ void QGrpcGenerator::GenerateQmlClientServices(
     printDisclaimer(qmlSourcePrinter.get());
 
     std::string headerGuard = common::headerGuardFromFilename(qmlBasename + ".h");
-    qmlHeaderPrinter->Print({ { "header_guard", headerGuard } },
-                            CommonTemplates::PreambleTemplate());
+    QGrpcGenerator::printHeaderGuardBegin(qmlHeaderPrinter.get(), headerGuard);
 
     printIncludes(qmlHeaderPrinter.get(), { realtivePath }, externalQmlIncludes(), {});
 
@@ -155,8 +154,8 @@ void QGrpcGenerator::GenerateQmlClientServices(
 
     QGrpcGenerator::RunPrinter<QmlClientDeclarationPrinter>(file, qmlHeaderPrinter);
     QGrpcGenerator::RunPrinter<QmlClientDefinitionPrinter>(file, qmlSourcePrinter);
-    qmlHeaderPrinter->Print({ { "header_guard", headerGuard } },
-                            CommonTemplates::FooterTemplate());
+
+    QGrpcGenerator::printHeaderGuardEnd(qmlHeaderPrinter.get(), headerGuard);
 }
 
 bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
@@ -187,8 +186,8 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
     printDisclaimer(clientSourcePrinter.get());
 
     const std::string headerGuard = common::headerGuardFromFilename(basename + ".h");
-    clientHeaderPrinter->Print({ { "header_guard", headerGuard } },
-                               CommonTemplates::PreambleTemplate());
+    QGrpcGenerator::printHeaderGuardBegin(clientHeaderPrinter.get(), headerGuard);
+
     clientSourcePrinter->Print({ { "include", realtivePath } },
                                CommonTemplates::InternalIncludeTemplate());
 
@@ -203,9 +202,8 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
 
     QGrpcGenerator::RunPrinter<ClientDeclarationPrinter>(file, clientHeaderPrinter);
     QGrpcGenerator::RunPrinter<ClientDefinitionPrinter>(file, clientSourcePrinter);
-    clientHeaderPrinter->Print({ { "header_guard", headerGuard } },
-                               CommonTemplates::FooterTemplate());
 
+    QGrpcGenerator::printHeaderGuardEnd(clientHeaderPrinter.get(), headerGuard);
     return true;
 }
 

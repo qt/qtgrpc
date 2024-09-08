@@ -127,3 +127,24 @@ void GeneratorBase::printIncludes(google::protobuf::io::Printer *printer,
     for (const auto &header : system)
         printer->Print({ {"include", header } }, CommonTemplates::ExternalIncludeTemplate());
 }
+
+void GeneratorBase::printHeaderGuardBegin(google::protobuf::io::Printer *printer,
+                                          const std::string &guard)
+{
+    switch (Options::instance().headerGuard()) {
+    case Options::HeaderGuardType::Pragma:
+        printer->Print(CommonTemplates::PragmaOnce());
+        break;
+    default:
+        printer->Print({ { "header_guard", guard } }, CommonTemplates::HeaderGuardBeginTemplate());
+        break;
+    }
+}
+
+void GeneratorBase::printHeaderGuardEnd(google::protobuf::io::Printer *printer,
+                                        const std::string &guard)
+{
+    if (Options::instance().headerGuard() == Options::HeaderGuardType::Pragma)
+        return;
+    printer->Print({ { "header_guard", guard } }, CommonTemplates::HeaderGuardEndTemplate());
+}

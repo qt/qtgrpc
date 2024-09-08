@@ -125,7 +125,7 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     std::set<std::string> systemIncludes;
 
     const std::string headerGuard = common::headerGuardFromFilename(basename + ".h");
-    headerPrinter->Print({{"header_guard", headerGuard}}, CommonTemplates::PreambleTemplate());
+    QProtobufGenerator::printHeaderGuardBegin(headerPrinter.get(), headerGuard);
     if (!Options::instance().exportMacroFilename().empty()) {
         std::string exportMacroFilename = Options::instance().exportMacroFilename();
         internalIncludes.insert(utils::removeFileSuffix(exportMacroFilename));
@@ -230,7 +230,7 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
         MessageDeclarationPrinter messageDef(message, headerPrinter);
     });
 
-    headerPrinter->Print({{"header_guard", headerGuard}}, CommonTemplates::FooterTemplate());
+    QProtobufGenerator::printHeaderGuardEnd(headerPrinter.get(), headerGuard);
 }
 
 bool QProtobufGenerator::GenerateMessages(const FileDescriptor *file,
