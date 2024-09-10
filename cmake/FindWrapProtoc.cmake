@@ -27,18 +27,11 @@ if(NOT CMAKE_CROSSCOMPILING)
     # gives this possibility.
     set(__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save ${CMAKE_FIND_PACKAGE_PREFER_CONFIG})
     set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
-    find_package(Protobuf ${WrapProtoc_FIND_VERSION} ${__WrapProtoc_find_package_args})
+    find_package(protobuf ${WrapProtoc_FIND_VERSION} ${__WrapProtoc_find_package_args})
     set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save})
     unset(__WrapProtoc_CMAKE_FIND_PACKAGE_PREFER_CONFIG_save)
 
-    if(TARGET protobuf::libprotobuf)
-        qt_internal_disable_find_package_global_promotion(protobuf::libprotobuf)
-    endif()
-    if(TARGET protobuf::libprotoc)
-        qt_internal_disable_find_package_global_promotion(protobuf::libprotoc)
-    endif()
-
-    if(Protobuf_FOUND AND TARGET protobuf::protoc)
+    if(protobuf_FOUND AND TARGET protobuf::protoc)
         get_target_property(__WrapProtoc_is_protoc_imported protobuf::protoc IMPORTED)
         if(__WrapProtoc_is_protoc_imported)
             foreach(config IN ITEMS _RELWITHDEBINFO "" _RELEASE _MINSIZEREL _DEBUG)
@@ -67,9 +60,10 @@ if(__WrapProtoc_protoc_imported_location)
     add_executable(WrapProtoc::WrapProtoc IMPORTED)
     set_target_properties(WrapProtoc::WrapProtoc PROPERTIES
         IMPORTED_LOCATION "${__WrapProtoc_protoc_imported_location}"
-        _qt_internal_protobuf_version "${Protobuf_VERSION}"
+        _qt_internal_protobuf_version "${protobuf_VERSION}"
     )
     set(WrapProtoc_FOUND TRUE)
 endif()
 
+unset(__WrapProtoc_protoc_imported_location)
 unset(__WrapProtoc_find_package_args)

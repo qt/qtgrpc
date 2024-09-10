@@ -3,12 +3,13 @@
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
-find_package(WrapgRPCPlugin)
-find_package(WrapProtobuf)
-find_package(WrapgRPC)
+find_package(protobuf)
+find_package(gRPC)
 
-if(NOT WrapgRPCPlugin_FOUND OR NOT WrapProtobuf_FOUND OR NOT WrapgRPC_FOUND)
+if(NOT TARGET gRPC::grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
+    OR NOT TARGET gRPC::grpc++)
     message(WARNING "Dependencies of QtGrpc benchmark-server not found. Skipping.")
     return()
 endif()
@@ -38,13 +39,13 @@ add_custom_command(
         --grpc_out "${proto_out_dir}"
         --cpp_out "${proto_out_dir}"
         -I "${proto_include}"
-        --plugin=protoc-gen-grpc=$<TARGET_FILE:WrapgRPC::WrapgRPCPlugin>
+        --plugin=protoc-gen-grpc=$<TARGET_FILE:gRPC::grpc_cpp_plugin>
         "${proto_path}"
     WORKING_DIRECTORY "${proto_out_dir}"
     DEPENDS
         "${proto_path}"
         $<TARGET_FILE:WrapProtoc::WrapProtoc>
-        $<TARGET_FILE:WrapgRPC::WrapgRPCPlugin>
+        $<TARGET_FILE:gRPC::grpc_cpp_plugin>
     COMMENT "Generating gRPC ${target} sources..."
     COMMAND_EXPAND_LISTS
     VERBATIM
@@ -58,8 +59,8 @@ qt_internal_add_executable(
         asyncbenchserver.cpp
         "${generated_files}"
     LIBRARIES
-        WrapProtobuf::WrapLibProtobuf
-        WrapgRPC::WrapLibgRPC
+        protobuf::libprotobuf
+        gRPC::grpc++
     INCLUDE_DIRECTORIES
         "${proto_out_include}"
         "${qrpcbench_common_include}"

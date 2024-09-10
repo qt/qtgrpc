@@ -7,15 +7,16 @@ project(GrpcChatServer LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 # Qt6::Grpc module is not used directly in this project. But this allows to find Qt6::Grpc's
 # dependencies without setting extra cmake module paths.
 find_package(Qt6 COMPONENTS Grpc)
-find_package(WrapgRPCPlugin)
-find_package(WrapgRPC)
+find_package(protobuf)
+find_package(gRPC)
 
-if(NOT TARGET WrapgRPC::WrapgRPCPlugin OR NOT TARGET WrapProtoc::WrapProtoc
-    OR NOT TARGET WrapgRPC::WrapLibgRPC)
+if(NOT TARGET gRPC::grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
+    OR NOT TARGET gRPC::grpc++)
     message(WARNING "Dependencies of QtGrpc test server not found. Skipping.")
     return()
 endif()
@@ -41,7 +42,7 @@ add_custom_command(
     --grpc_out "${out_dir}"
     --cpp_out "${out_dir}"
     "-I${CMAKE_CURRENT_LIST_DIR}/../proto/"
-    --plugin=protoc-gen-grpc=$<TARGET_FILE:WrapgRPC::WrapgRPCPlugin>
+    --plugin=protoc-gen-grpc=$<TARGET_FILE:gRPC::grpc_cpp_plugin>
     "${proto_files}"
     WORKING_DIRECTORY ${out_dir}
     DEPENDS "${proto_files}"
@@ -58,7 +59,7 @@ add_executable(grpcchatserver
 )
 
 target_include_directories(grpcchatserver PRIVATE ${out_dir})
-target_link_libraries(grpcchatserver PRIVATE WrapgRPC::WrapLibgRPC)
+target_link_libraries(grpcchatserver PRIVATE gRPC::grpc++ protobuf::libprotobuf)
 
 install(TARGETS grpcchatserver
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"

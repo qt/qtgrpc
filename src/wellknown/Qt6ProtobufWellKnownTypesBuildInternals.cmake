@@ -5,9 +5,9 @@
 # and adds the generated sources to the 'target'
 function(qt_internal_add_protobuf_wellknown_types target)
     set(lookup_dirs "")
-    if(TARGET WrapProtobuf::WrapLibProtobuf)
-        get_target_property(lookup_dirs WrapProtobuf::WrapLibProtobuf
-            _qt_internal_proto_include_dirs)
+    if(TARGET protobuf::libprotobuf)
+        get_target_property(lookup_dirs protobuf::libprotobuf
+            INTERFACE_INCLUDE_DIRECTORIES)
     endif()
 
     if(QT_PROTOBUF_WELL_KNOWN_TYPES_PROTO_DIR)
