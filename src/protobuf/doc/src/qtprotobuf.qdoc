@@ -122,7 +122,6 @@
 
 /*!
     \module QtProtobuf
-    \modulestate Technical Preview
     \title Qt Protobuf C++ Classes
     \qtcmakepackage Protobuf
     \since 6.5
