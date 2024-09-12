@@ -3,7 +3,7 @@
 
 qt_internal_add_module(Grpc
     SOURCES
-        qgrpcoperation.h qgrpcoperation.cpp
+        qgrpcoperation.h qgrpcoperation_p.h qgrpcoperation.cpp
         qgrpcoperationcontext.h qgrpcoperationcontext.cpp
         qgrpccallreply.h qgrpccallreply.cpp
         qgrpcstream.h qgrpcstream.cpp
@@ -20,6 +20,7 @@ qt_internal_add_module(Grpc
     LIBRARIES
         Qt::CorePrivate
         Qt::NetworkPrivate
+        Qt::ProtobufPrivate
     PUBLIC_LIBRARIES
         Qt::Core
         Qt::Protobuf

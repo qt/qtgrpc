@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QtGrpc/private/qabstractgrpcchannel_p.h>
+#include <QtGrpc/private/qgrpcoperation_p.h>
 #include <QtGrpc/private/qtgrpclogging_p.h>
 #include <QtGrpc/qgrpcclientbase.h>
 #include <QtGrpc/qgrpcoperation.h>
@@ -255,6 +256,13 @@ std::unique_ptr<QGrpcBidiStream> QGrpcClientBase::bidiStream(QLatin1StringView m
 {
     Q_D(QGrpcClientBase);
     return d->initOperation<QGrpcBidiStream>(method, arg, options);
+}
+
+void QGrpcClientBase::setOperationResponseMetaType(QGrpcOperation *operation,
+                                                       QMetaType responseMetaType)
+{
+    Q_ASSERT(operation);
+    QGrpcOperationPrivate::get(operation)->operationContext->setResponseMetaType(responseMetaType);
 }
 
 bool QGrpcClientBase::event(QEvent *event)

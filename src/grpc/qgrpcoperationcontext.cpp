@@ -107,6 +107,7 @@ public:
     QGrpcCallOptions options;
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
     QHash<QByteArray, QByteArray> serverMetadata;
+    QMetaType responseMetaType;
 };
 
 QGrpcOperationContext::QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
@@ -198,6 +199,24 @@ void QGrpcOperationContext::setServerMetadata(QHash<QByteArray, QByteArray> &&me
 {
     Q_D(QGrpcOperationContext);
     d->serverMetadata = std::move(metadata);
+}
+
+/*!
+    Returns the meta type of the RPC result message.
+ */
+QMetaType QGrpcOperationContext::responseMetaType() const
+{
+    Q_D(const QGrpcOperationContext);
+    return d->responseMetaType;
+}
+
+/*!
+    Stores the \a metaType of the RPC result message.
+*/
+void QGrpcOperationContext::setResponseMetaType(QMetaType metaType)
+{
+    Q_D(QGrpcOperationContext);
+    d->responseMetaType = metaType;
 }
 
 // For future extensions

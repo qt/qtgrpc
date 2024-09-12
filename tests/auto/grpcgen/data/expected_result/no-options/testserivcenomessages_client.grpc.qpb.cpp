@@ -15,13 +15,17 @@ Client::~Client() = default;
 
 std::unique_ptr<QGrpcCallReply> Client::testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg)
 {
-    return call("testMethod"_L1, arg, {});
+    return testMethod(arg, {});
 }
 
 
 std::unique_ptr<QGrpcCallReply> Client::testMethod(const qtprotobufnamespace::tests::SimpleStringMessage &arg, const QGrpcCallOptions &options)
 {
-    return call("testMethod"_L1, arg, options);
+    auto reply = call("testMethod"_L1, arg, options);
+    if (auto *replyPtr = reply.get(); replyPtr != nullptr) {
+        setOperationResponseMetaType(replyPtr, QMetaType::fromType<qtprotobufnamespace::tests::SimpleStringMessage>());
+    }
+    return reply;
 }
 
 } // namespace TestService
