@@ -15,12 +15,7 @@
 
 #include <QtCore/qtmetamacros.h>
 
-#define Q_PROTOBUF_OBJECT\
-    Q_GADGET\
-    public:\
-    static const QtProtobufPrivate::QProtobufPropertyOrdering staticPropertyOrdering;\
-    private:
-
+#define Q_PROTOBUF_OBJECT Q_PROTOBUF_OBJECT_EXPORT(/* not exported */)
 #define Q_PROTOBUF_OBJECT_EXPORT(...)\
     Q_GADGET_EXPORT(__VA_ARGS__)\
     public:\
