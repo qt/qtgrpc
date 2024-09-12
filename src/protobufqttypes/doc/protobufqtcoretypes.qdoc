@@ -3,7 +3,6 @@
 
 /*!
     \module QtProtobufQtCoreTypes
-    \modulestate Technical Preview
     \title Protobuf Qt Core Types Module
     \ingroup frameworks-technologies
     \qtcmakepackage ProtobufQtCoreTypes

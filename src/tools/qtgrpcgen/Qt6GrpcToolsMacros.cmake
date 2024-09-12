@@ -71,8 +71,6 @@ endfunction()
 #     - Collect PROTO_INCLUDES from the LINK_LIBRARIES property of TARGET
 #     - Collect proto files from the source files of the ${TARGET}
 
-# This function is currently in Technical Preview
-# Its signature and behavior might change.
 function(qt6_add_grpc target type)
     _qt_internal_get_protoc_common_options(protoc_option_opt protoc_single_opt protoc_multi_opt)
     _qt_internal_get_protoc_generate_arguments(protoc_option_arg protoc_single_arg protoc_multi_arg)
