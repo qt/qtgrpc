@@ -67,6 +67,13 @@ void connectSingleReceiveOperationFinishedImpl(QJSEngine *jsEngine,
                                                std::unique_ptr<QGrpcOperation> &&operation,
                                                const QJSValue &successCallback,
                                                const QJSValue &errorCallback);
+Q_GRPCQUICK_EXPORT
+void makeServerStreamConnectionsImpl(QJSEngine *jsEngine,
+                                     HandleReceivedMessageImpl impl,
+                                     std::unique_ptr<QGrpcServerStream> &&stream,
+                                     const QJSValue &messageCallback,
+                                     const QJSValue &finishCallback,
+                                     const QJSValue &errorCallback);
 } // namespace Private
 
 template <typename Ret>
@@ -94,14 +101,9 @@ void makeServerStreamConnections(QJSEngine *jsEngine, std::unique_ptr<QGrpcServe
                                  const QJSValue &messageCallback, const QJSValue &finishCallback,
                                  const QJSValue &errorCallback)
 {
-    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, jsEngine,
-                     [streamPtr = stream.get(), messageCallback, jsEngine, errorCallback]() {
-                         QtGrpcQuickFunctional::handleReceivedMessage<Ret>(jsEngine, streamPtr,
-                                                                           messageCallback,
-                                                                           errorCallback);
-                     });
-    QtGrpcQuickFunctional::connectMultipleReceiveOperationFinished(jsEngine, std::move(stream),
-                                                                   finishCallback, errorCallback);
+    Private::makeServerStreamConnectionsImpl(jsEngine, &handleReceivedMessage<Ret>,
+                                             std::move(stream), messageCallback, finishCallback,
+                                             errorCallback);
 }
 
 template <typename Ret>

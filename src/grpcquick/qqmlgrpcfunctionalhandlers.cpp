@@ -92,6 +92,21 @@ void Private::connectSingleReceiveOperationFinishedImpl(QJSEngine *jsEngine,
     });
 }
 
+void Private::makeServerStreamConnectionsImpl(QJSEngine *jsEngine,
+                                              HandleReceivedMessageImpl impl,
+                                              std::unique_ptr<QGrpcServerStream> &&stream,
+                                              const QJSValue &messageCallback,
+                                              const QJSValue &finishCallback,
+                                              const QJSValue &errorCallback)
+{
+    QObject::connect(stream.get(), &QGrpcServerStream::messageReceived, jsEngine,
+                     [streamPtr = stream.get(), impl, messageCallback, jsEngine, errorCallback]() {
+        impl(jsEngine, streamPtr, messageCallback, errorCallback);
+    });
+    QtGrpcQuickFunctional::connectMultipleReceiveOperationFinished(jsEngine, std::move(stream),
+                                                                   finishCallback, errorCallback);
+}
+
 } // namespace QtGrpcQuickFunctional
 
 QT_END_NAMESPACE
