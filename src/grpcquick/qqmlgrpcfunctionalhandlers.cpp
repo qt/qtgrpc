@@ -68,6 +68,30 @@ void handleReceivedMessageImpl(QJSEngine *jsEngine, std::optional<QJSValue> mess
         QtGrpcQuickFunctional::handleDeserializationError(jsEngine, errorCallback);
 }
 
+void Private::connectSingleReceiveOperationFinishedImpl(QJSEngine *jsEngine,
+                                                        HandleReceivedMessageImpl impl,
+                                                        std::unique_ptr<QGrpcOperation> &&operation,
+                                                        const QJSValue &successCallback,
+                                                        const QJSValue &errorCallback)
+{
+    auto *operationPtr = operation.get();
+    QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operationPtr);
+
+    auto finishConnection = std::make_shared<QMetaObject::Connection>();
+    *finishConnection = QObject::
+            connect(operationPtr, &QGrpcCallReply::finished, jsEngine,
+                    [jsEngine, successCallback, errorCallback, finishConnection, impl,
+                    operation = std::move(operation)](const QGrpcStatus &status) {
+        // We take 'operation' by copy so that its lifetime
+        // is extended until this lambda is destroyed.
+        if (QtGrpcQuickFunctional::checkReceivedStatus(jsEngine, status,
+                                                       errorCallback))
+            impl(jsEngine, operation.get(), successCallback, errorCallback);
+
+        QObject::disconnect(*finishConnection);
+    });
+}
+
 } // namespace QtGrpcQuickFunctional
 
 QT_END_NAMESPACE
