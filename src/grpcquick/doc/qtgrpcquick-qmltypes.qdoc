@@ -35,7 +35,7 @@
 /*!
     \qmltype GrpcCallOptions
     \inqmlmodule QtGrpc
-    \nativetype QQmlGrpcCallOptions
+    \nativetype QGrpcCallOptions
     \brief The GrpcCallOptions is a storage class used to set
            additional call options.
 
@@ -59,7 +59,7 @@
 /*!
     \qmltype GrpcChannelOptions
     \inqmlmodule QtGrpc
-    \nativetype QQmlGrpcChannelOptions
+    \nativetype QGrpcChannelOptions
     \brief  The GrpcChannelOptions is an storage class used to set
             additional channel options.
 
@@ -102,7 +102,6 @@
 /*!
     \qmltype GrpcMetadata
     \inqmlmodule QtGrpc
-    \nativetype QQmlGrpcMetadata
     \brief  The GrpcMetadata is a class that stores metadata in unordered
             multimap container.
 
@@ -134,15 +133,15 @@
 /*!
     \qmltype GrpcHttp2Channel
     \inqmlmodule QtGrpc
-    \nativetype QQmlGrpcHttp2Channel
+    \nativetype QGrpcHttp2Channel
     \brief HTTP/2 QML channel.
 
-    Implements QQmlAbstractGrpcChannel interface for HTTP/2 channel type.
-    It allows to set QQmlGrpcChannelOptions options required for a channel
+    Implements the QAbstractGrpcChannel interface for HTTP/2 channel type.
+    It allows to set QGrpcChannelOptions options required for a channel
     creation and returns a pointer to the QAbstractGrpcChannel-based object.
-    \note You can inherit from QQmlGrpcChannelOptions for importing custom
+    \note You can inherit from QGrpcChannelOptions for importing custom
           channel in QML.
-    \sa QQmlAbstractGrpcChannel, QGrpcHttp2Channel
+    \sa QGrpcHttp2Channel
 */
 
 /*!
@@ -156,5 +155,5 @@
     \qmlproperty GrpcChannelOptions GrpcHttp2Channel::options
     Returns a pointer to the GrpcChannelOptions object.
 
-    \sa QQmlGrpcChannelOptions
+    \sa QGrpcChannelOptions
 */
