@@ -20,6 +20,8 @@
 #include <QByteArray>
 #include <QBuffer>
 
+#include <memory>
+
 SimpleChatEngine::SimpleChatEngine(QObject *parent)
     : QObject(parent),
       m_state(Disconnected),
@@ -103,7 +105,20 @@ void SimpleChatEngine::sendMessage(const QString &content)
     msg.setType(qtgrpc::examples::chat::ChatMessage::ContentType::Text);
     msg.setTimestamp(QDateTime::currentMSecsSinceEpoch());
     msg.setFrom(m_userName);
-    m_client->sendMessage(msg);
+
+    std::unique_ptr<QGrpcCallReply> reply = m_client->sendMessage(msg);
+    // We explicitly take a copy of the reply pointer, since moving it into
+    // the lambda would make the get() function invalid.
+    // Reply's lifetime will be extended until finished() is emitted.
+    // Qt::SingleShotConnection is needed to destroy the lambda (and its capture).
+    auto *replyPtr = reply.get();
+    connect(
+        replyPtr, &QGrpcCallReply::finished, this,
+        [reply = std::move(reply)](const QGrpcStatus &status) {
+            if (!status.isOk())
+                qDebug() << "Failed to send message: " << status;
+        },
+        Qt::SingleShotConnection);
     // ![2]
 }
 
@@ -163,7 +178,16 @@ void SimpleChatEngine::sendImageFromClipboard()
     msg.setType(qtgrpc::examples::chat::ChatMessage::ContentType::Image);
     msg.setTimestamp(QDateTime::currentMSecsSinceEpoch());
     msg.setFrom(m_userName);
-    m_client->sendMessage(msg);
+
+    std::unique_ptr<QGrpcCallReply> reply = m_client->sendMessage(msg);
+    auto *replyPtr = reply.get();
+    connect(
+        replyPtr, &QGrpcCallReply::finished, this,
+        [reply = std::move(reply)](const QGrpcStatus &status) {
+            if (!status.isOk())
+                qDebug() << "Failed to send clipboard message: " << status;
+        },
+        Qt::SingleShotConnection);
 }
 
 ChatMessageModel *SimpleChatEngine::messages()
