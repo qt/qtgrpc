@@ -65,6 +65,8 @@ private:
 
 private:
     friend class QGrpcClientBase;
+    friend class QGrpcClientBasePrivate;
+
     std::unique_ptr<QAbstractGrpcChannelPrivate> d_ptr;
 
     Q_DISABLE_COPY_MOVE(QAbstractGrpcChannel)
