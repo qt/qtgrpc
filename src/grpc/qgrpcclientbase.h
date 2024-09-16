@@ -17,16 +17,8 @@
 #include <QtCore/qtclasshelpermacros.h>
 
 #include <memory>
-#include <type_traits>
 
 QT_BEGIN_NAMESPACE
-
-namespace QtGrpcPrivate {
-template <typename T> inline constexpr bool is_qtgrpc_stream_v = false;
-template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcServerStream> = true;
-template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcClientStream> = true;
-template <> inline constexpr bool is_qtgrpc_stream_v<QGrpcBidiStream> = true;
-}
 
 class QProtobufMessage;
 
@@ -36,9 +28,6 @@ class Q_GRPC_EXPORT QGrpcClientBase : public QObject
     Q_OBJECT
     Q_PROPERTY(std::shared_ptr<QAbstractGrpcChannel> channel READ channel WRITE attachChannel NOTIFY
                    channelChanged)
-
-    template <typename StreamType>
-    using if_qtgrpc_stream = std::enable_if_t<QtGrpcPrivate::is_qtgrpc_stream_v<StreamType>, bool>;
 
 public:
     ~QGrpcClientBase() override;

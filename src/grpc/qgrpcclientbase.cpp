@@ -16,6 +16,7 @@
 #include <QtCore/qlatin1stringview.h>
 
 #include <optional>
+#include <type_traits>
 
 QT_BEGIN_NAMESPACE
 
@@ -62,6 +63,17 @@ QT_BEGIN_NAMESPACE
     or during serialization.
 */
 
+namespace {
+template <typename Operation>
+inline constexpr bool IsStream = false;
+template <>
+inline constexpr bool IsStream<QGrpcServerStream> = true;
+template <>
+inline constexpr bool IsStream<QGrpcClientStream> = true;
+template <>
+inline constexpr bool IsStream<QGrpcBidiStream> = true;
+}
+
 class QGrpcClientBasePrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGrpcClientBase)
@@ -75,6 +87,44 @@ public:
     std::shared_ptr<QAbstractProtobufSerializer> serializer() const
     {
         return channel ? channel->serializer() : nullptr;
+    }
+
+    template <typename T>
+    [[nodiscard]] std::unique_ptr<T> initOperation(QLatin1StringView method,
+                                                   const QProtobufMessage &arg,
+                                                   const QGrpcCallOptions &options)
+    {
+        if (!isReady())
+            return {};
+
+        const auto argData = trySerialize(arg);
+        if (!argData)
+            return {};
+
+        using ChannelFn = std::unique_ptr<T> (QAbstractGrpcChannel::*)(QLatin1StringView,
+                                                                       QLatin1StringView,
+                                                                       QByteArrayView,
+                                                                       const QGrpcCallOptions &);
+        constexpr ChannelFn initializer = [&]() -> ChannelFn {
+            if constexpr (std::is_same_v<T, QGrpcServerStream>) {
+                return &QAbstractGrpcChannel::serverStream;
+            } else if constexpr (std::is_same_v<T, QGrpcClientStream>) {
+                return &QAbstractGrpcChannel::clientStream;
+            } else if constexpr (std::is_same_v<T, QGrpcBidiStream>) {
+                return &QAbstractGrpcChannel::bidiStream;
+            } else if constexpr (std::is_same_v<T, QGrpcCallReply>) {
+                return &QAbstractGrpcChannel::call;
+            } else {
+                Q_UNREACHABLE_RETURN(nullptr);
+            }
+        }();
+
+        std::unique_ptr<T> operation = ((*channel).*(initializer))(method, service, *argData,
+                                                                   options);
+
+        if constexpr (IsStream<T>)
+            addStream(operation.get());
+        return operation;
     }
 
     std::shared_ptr<QAbstractGrpcChannel> channel;
@@ -180,14 +230,7 @@ std::unique_ptr<QGrpcCallReply> QGrpcClientBase::call(QLatin1StringView method,
                                                       const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
-    if (!d->isReady())
-        return {};
-
-    const auto argData = d->trySerialize(arg);
-    if (!argData)
-        return {};
-
-    return d->channel->call(method, d->service, *argData, options);
+    return d->initOperation<QGrpcCallReply>(method, arg, options);
 }
 
 std::unique_ptr<QGrpcServerStream> QGrpcClientBase::serverStream(QLatin1StringView method,
@@ -195,16 +238,7 @@ std::unique_ptr<QGrpcServerStream> QGrpcClientBase::serverStream(QLatin1StringVi
                                                                  const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
-    if (!d->isReady())
-        return {};
-
-    const auto argData = d->trySerialize(arg);
-    if (!argData)
-        return {};
-
-    auto grpcStream = d->channel->serverStream(method, d->service, *argData, options);
-    d->addStream(grpcStream.get());
-    return grpcStream;
+    return d->initOperation<QGrpcServerStream>(method, arg, options);
 }
 
 std::unique_ptr<QGrpcClientStream> QGrpcClientBase::clientStream(QLatin1StringView method,
@@ -212,16 +246,7 @@ std::unique_ptr<QGrpcClientStream> QGrpcClientBase::clientStream(QLatin1StringVi
                                                                  const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
-    if (!d->isReady())
-        return {};
-
-    const auto argData = d->trySerialize(arg);
-    if (!argData)
-        return {};
-
-    auto grpcStream = d->channel->clientStream(method, d->service, *argData, options);
-    d->addStream(grpcStream.get());
-    return grpcStream;
+    return d->initOperation<QGrpcClientStream>(method, arg, options);
 }
 
 std::unique_ptr<QGrpcBidiStream> QGrpcClientBase::bidiStream(QLatin1StringView method,
@@ -229,16 +254,7 @@ std::unique_ptr<QGrpcBidiStream> QGrpcClientBase::bidiStream(QLatin1StringView m
                                                              const QGrpcCallOptions &options)
 {
     Q_D(QGrpcClientBase);
-    if (!d->isReady())
-        return {};
-
-    const auto argData = d->trySerialize(arg);
-    if (!argData)
-        return {};
-
-    auto grpcStream = d->channel->bidiStream(method, d->service, *argData, options);
-    d->addStream(grpcStream.get());
-    return grpcStream;
+    return d->initOperation<QGrpcBidiStream>(method, arg, options);
 }
 
 bool QGrpcClientBase::event(QEvent *event)
