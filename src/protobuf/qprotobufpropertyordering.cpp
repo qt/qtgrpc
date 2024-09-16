@@ -210,7 +210,7 @@ QProtobufMessagePointer constructMessageByName(const QString &messageType)
     QProtobufMessagePointer pointer;
     if (type.id() != QMetaType::UnknownType) {
         void *msg = type.create();
-        pointer.reset(reinterpret_cast<QProtobufMessage *>(msg));
+        pointer.reset(static_cast<QProtobufMessage *>(msg));
         return pointer;
     }
     qProtoWarning() << "Unable to find protobuf message with name" << messageType
