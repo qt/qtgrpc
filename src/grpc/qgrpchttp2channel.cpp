@@ -236,7 +236,7 @@ class QGrpcHttp2ChannelPrivate : public QObject
     Q_OBJECT
 public:
     explicit QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Channel *q);
-    ~QGrpcHttp2ChannelPrivate() override;
+    ~QGrpcHttp2ChannelPrivate() override = default;
 
     void processOperation(const std::shared_ptr<QGrpcOperationContext> &operationContext,
                           bool endStream = false);
@@ -706,10 +706,6 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
     m_reconnectFunction();
 }
 
-QGrpcHttp2ChannelPrivate::~QGrpcHttp2ChannelPrivate()
-{
-}
-
 void QGrpcHttp2ChannelPrivate::processOperation(const std::shared_ptr<QGrpcOperationContext>
                                                     &operationContext,
                                                 bool endStream)
@@ -733,7 +729,7 @@ void QGrpcHttp2ChannelPrivate::processOperation(const std::shared_ptr<QGrpcOpera
                                              operationContextPtr);
     }
 
-    Http2Handler *handler = new Http2Handler(operationContext, this, endStream);
+    auto *handler = new Http2Handler(operationContext, this, endStream);
     if (m_connection == nullptr) {
         m_pendingHandlers.push_back(handler);
     } else {
@@ -826,7 +822,7 @@ void QGrpcHttp2ChannelPrivate::deleteHandler(Http2Handler *handler)
     Constructs QGrpcHttp2Channel with \a hostUri.
 */
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri)
-    : QAbstractGrpcChannel(), d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, this))
+    : d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, this))
 {
 }
 
