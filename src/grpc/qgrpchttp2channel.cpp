@@ -180,6 +180,8 @@ struct ExpectedData
     }
 };
 
+// The Http2Handler manages an individual RPC over the HTTP/2 channel.
+// Each instance corresponds to an RPC initiated by the user.
 class Http2Handler : public QObject
 {
     // Q_OBJECT macro is not needed and adds unwanted overhead.
@@ -318,6 +320,9 @@ Http2Handler::~Http2Handler()
     }
 }
 
+// Attaches the HTTP/2 stream and sets up the necessary connections and
+// preconditions. The HTTP/2 connection is established, and the transport
+// is now ready for communication.
 void Http2Handler::attachStream(QHttp2Stream *stream_)
 {
     Q_ASSERT(m_stream == nullptr);
@@ -421,7 +426,8 @@ QGrpcOperationContext *Http2Handler::operation() const
     return m_operation.lock().get();
 }
 
-// The initial headers to be sent before the first data.
+// Prepares the initial headers and enqueues the initial message.
+// The headers are sent once the HTTP/2 connection is established.
 void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext,
                                          QGrpcHttp2ChannelPrivate *channel)
 {
@@ -458,8 +464,8 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
     writeMessage(operationContext->argument());
 }
 
-// Do not send the data immediately, but put it to message queue, for further processing.
-// The data for cancelled stream is ignored.
+// Slot to enqueue a writeMessage request, either from the initial message
+// or from the user in client/bidirectional streaming RPCs.
 void Http2Handler::writeMessage(QByteArrayView data)
 {
     if (m_handlerState != Active || isStreamClosedForSending()) {
@@ -481,7 +487,9 @@ void Http2Handler::writeMessage(QByteArrayView data)
     processQueue();
 }
 
-// Sends the initial headers before processing the message queue.
+// Sends the initial headers and processes the message queue containing the
+// initial message. At this point, the HTTP/2 connection is established, and
+// the stream is attached.
 void Http2Handler::sendInitialRequest()
 {
     Q_ASSERT(!m_initialHeaders.empty());
@@ -498,7 +506,9 @@ void Http2Handler::sendInitialRequest()
     processQueue();
 }
 
-// Once steam is ready to upload more data, send it.
+// The core logic for sending the already serialized data through the HTTP/2 stream.
+// This function is invoked either by the user via writeMessageRequested() or
+// writesDoneRequested(), or it is continuously polled after the previous uploadFinished()
 void Http2Handler::processQueue()
 {
     if (!m_stream)
