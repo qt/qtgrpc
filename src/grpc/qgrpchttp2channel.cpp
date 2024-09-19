@@ -192,7 +192,6 @@ public:
     ~Http2Handler() override;
 
     void sendInitialRequest();
-    [[nodiscard]] bool sendHeaders(const HPack::HttpHeader &headers); // TODO: remove dead code
     void attachStream(QHttp2Stream *stream_);
     void processQueue();
 
@@ -500,20 +499,6 @@ void Http2Handler::sendInitialRequest()
     }
     m_initialHeaders.clear();
     processQueue();
-}
-
-// Sends pre-backed headers to the m_stream.
-bool Http2Handler::sendHeaders(const HPack::HttpHeader &headers)
-{
-    Q_ASSERT(m_stream != nullptr);
-
-    if (m_handlerState != Active || isStreamClosedForSending()) {
-        qGrpcDebug("Attempt sending headers to the ended stream");
-        return false;
-    }
-
-    // We assume that only data packages may end the stream.
-    return m_stream->sendHEADERS(headers, false);
 }
 
 // Once steam is ready to upload more data, send it.
