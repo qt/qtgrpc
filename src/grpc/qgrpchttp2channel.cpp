@@ -248,8 +248,6 @@ public:
     QGrpcHttp2Channel *q_ptr = nullptr;
 
 private:
-    enum SerializerTypes { Default = 0, Protobuf, JSON };
-
     enum ConnectionState { Connecting = 0, Connected, Error };
 
     template <typename T>
@@ -265,7 +263,6 @@ private:
     }
 
     void sendInitialRequest(Http2Handler *handler);
-    void sendPendingRequests();
     void createHttp2Connection();
     void handleSocketError();
 
