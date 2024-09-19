@@ -182,6 +182,8 @@ struct ExpectedData
 
 class Http2Handler : public QObject
 {
+    // Q_OBJECT macro is not needed and adds unwanted overhead.
+
 public:
     enum State : uint8_t { Active, Cancelled, Finished };
 
@@ -192,13 +194,7 @@ public:
     void sendInitialRequest();
     [[nodiscard]] bool sendHeaders(const HPack::HttpHeader &headers); // TODO: remove dead code
     void attachStream(QHttp2Stream *stream_);
-
-    void writeMessage(QByteArrayView data);
     void processQueue();
-
-    bool cancel();
-    void finish();
-    void onDeadlineTimeout();
 
     [[nodiscard]] QGrpcOperationContext *operation() const;
     [[nodiscard]] bool expired() const { return m_operation.expired(); }
@@ -211,6 +207,12 @@ public:
             && (m_stream->state() == QHttp2Stream::State::HalfClosedLocal
                 || m_stream->state() == QHttp2Stream::State::Closed);
     }
+
+// context slot handlers:
+    bool cancel();
+    void writesDone();
+    void writeMessage(QByteArrayView data);
+    void deadlineTimeout();
 
 private:
     void prepareInitialRequest(QGrpcOperationContext *operationContext,
@@ -301,7 +303,7 @@ Http2Handler::Http2Handler(const std::shared_ptr<QGrpcOperationContext> &operati
     QObject::connect(channelOpPtr, &QGrpcOperationContext::cancelRequested, this,
                      &Http2Handler::cancel);
     QObject::connect(channelOpPtr, &QGrpcOperationContext::writesDoneRequested, this,
-                     &Http2Handler::finish);
+                     &Http2Handler::writesDone);
     if (!m_endStreamAtFirstData) {
         QObject::connect(channelOpPtr, &QGrpcOperationContext::writeMessageRequested, this,
                          &Http2Handler::writeMessage);
@@ -411,8 +413,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
         deadline = parentChannel->q_ptr->channelOptions().deadlineTimeout();
     if (deadline) {
         // We have an active stream and a deadline. It's time to start the timer.
-        QObject::connect(&m_deadlineTimer, &QTimer::timeout, this,
-                         &Http2Handler::onDeadlineTimeout);
+        QObject::connect(&m_deadlineTimer, &QTimer::timeout, this, &Http2Handler::deadlineTimeout);
         m_deadlineTimer.start(*deadline);
     }
 }
@@ -552,7 +553,7 @@ bool Http2Handler::cancel()
     return m_stream->sendRST_STREAM(Http2::Http2Error::CANCEL);
 }
 
-void Http2Handler::finish()
+void Http2Handler::writesDone()
 {
     if (m_handlerState != Active)
         return;
@@ -567,7 +568,7 @@ void Http2Handler::finish()
     processQueue();
 }
 
-void Http2Handler::onDeadlineTimeout()
+void Http2Handler::deadlineTimeout()
 {
     Q_ASSERT_X(m_stream, "onDeadlineTimeout", "stream is not available");
 
