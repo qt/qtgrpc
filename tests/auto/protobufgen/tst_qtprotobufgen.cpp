@@ -1,41 +1,65 @@
 // Copyright (C) 2022 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <QTest>
+#include <QtTest/qtest.h>
 
-#include <QString>
-#include <QLibraryInfo>
-#include <QProcess>
-#include <QCryptographicHash>
-#include <qtprotobuftypes.h>
+#include <QtProtobuf/qtprotobuftypes.h>
 
-#define XSTR(x) DEFSTR(x)
-#define DEFSTR(x) #x
+#include <QtCore/qcryptographichash.h>
+#include <QtCore/qdir.h>
+#include <QtCore/qdiriterator.h>
+#if QT_CONFIG(process)
+#  include <QtCore/qprocess.h>
+#endif
+#include <QtCore/qstring.h>
 
 using namespace Qt::StringLiterals;
 
-const QLatin1StringView cppExtension(".qpb.cpp");
-const QLatin1StringView headerExtension(".qpb.h");
-const QLatin1StringView cppRegistrationsExtension("_protobuftyperegistrations.cpp");
-const QLatin1StringView protocGenQtprotobufKey(" --plugin=protoc-gen-qtprotobuf=");
-const QLatin1StringView optKey(" --qtprotobuf_opt=");
-const QLatin1StringView outputKey(" --qtprotobuf_out=");
-const QLatin1StringView includeKey(" -I");
-#ifdef ALLOW_PROTO3_OPTIONAL
-const QLatin1StringView allow_proto3_optional(" --experimental_allow_proto3_optional");
-#else
-const QLatin1StringView allow_proto3_optional("");
-#endif // ALLOW_PROTO3_OPTIONAL
-#ifndef PROTOC_EXECUTABLE
-#  error PROTOC_EXECUTABLE definition must be set and point to the valid protoc executable
-#endif
-const QLatin1StringView protocolBufferCompiler(XSTR(PROTOC_EXECUTABLE));
-#if defined(Q_OS_WIN)
-const QLatin1StringView qtprotobufgen("/qtprotobufgen.exe");
-#else
-const QLatin1StringView qtprotobufgen("/qtprotobufgen");
-#endif
+namespace {
+#if QT_CONFIG(process)
+#  ifndef PROTOC_EXECUTABLE
+#    error PROTOC_EXECUTABLE definition must be set and point to the valid protoc executable
+#  endif
+constexpr QLatin1StringView ProtocPath(PROTOC_EXECUTABLE);
 
+#  ifndef PROTOC_PLUGIN
+#    error PROTOC_PLUGIN definition must be set and point to the valid protoc plugin
+#  endif
+constexpr QLatin1StringView QtprotobufgenPath(PROTOC_PLUGIN);
+
+constexpr QLatin1StringView PluginKey(" --plugin=protoc-gen-qtprotobuf=");
+constexpr QLatin1StringView OptKey(" --qtprotobuf_opt=");
+constexpr QLatin1StringView OutKey(" --qtprotobuf_out=");
+constexpr QLatin1StringView IncludeKey(" -I");
+#  ifdef ALLOW_PROTO3_OPTIONAL
+const QLatin1StringView allow_proto3_optional(" --experimental_allow_proto3_optional");
+#  else
+constexpr QLatin1StringView allow_proto3_optional;
+#  endif // ALLOW_PROTO3_OPTIONAL
+
+#  define CMD_LINE_GENERATED_DIR "cmd_line_generated"
+constexpr QLatin1StringView CmdLineGeneratedDir(CMD_LINE_GENERATED_DIR);
+constexpr QLatin1StringView CmdLineGeneratedPathInfix("/" CMD_LINE_GENERATED_DIR "/");
+
+#endif // QT_CONFIG(process)
+
+#  ifndef BINARY_DIR
+#    error BINARY_DIR definition must be set
+#  endif
+constexpr QLatin1StringView BinaryDir(BINARY_DIR);
+
+#ifndef CMAKE_GENERATOR_TESTS
+#  define CMAKE_GENERATOR_TESTS
+#endif
+constexpr QLatin1StringView CMakeGeneratorTests(CMAKE_GENERATOR_TESTS);
+
+#ifndef CMAKE_GENERATED_DIR
+#  error CMAKE_GENERATED_DIR definition must be set
+#endif
+constexpr QLatin1StringView CMakeGeneratedDir(CMAKE_GENERATED_DIR);
+constexpr QLatin1StringView CMakeGeneratedPathInfix("/" CMAKE_GENERATED_DIR "/");
+
+#if QT_CONFIG(process)
 QByteArray msgProcessStartFailed(const QProcess &p)
 {
     const QString result = QLatin1StringView("Could not start \"")
@@ -52,16 +76,31 @@ QByteArray msgProcessTimeout(const QProcess &p)
 
 QByteArray msgProcessCrashed(QProcess &p)
 {
-    return '"' + QDir::toNativeSeparators(p.program()).toLocal8Bit()
-            + "\" crashed.\n" + p.readAllStandardError();
+    return '"' + QDir::toNativeSeparators(p.program()).toLocal8Bit() + "\" crashed.\n"
+        + p.readAll();
 }
 
 QByteArray msgProcessFailed(QProcess &p)
 {
-    return '"' + QDir::toNativeSeparators(p.program()).toLocal8Bit()
-            + "\" returned " + QByteArray::number(p.exitCode()) + ":\n"
-            + p.readAllStandardError();
+    return '"' + QDir::toNativeSeparators(p.program()).toLocal8Bit() + "\" returned "
+        + QByteArray::number(p.exitCode()) + ":\n" + p.readAll();
 }
+
+bool protocolCompilerAvailableToRun()
+{
+    QProcess protoc;
+    protoc.startCommand(ProtocPath + " --version");
+
+    if (!protoc.waitForStarted())
+        return false;
+
+    if (!protoc.waitForFinished()) {
+        protoc.kill();
+        return false;
+    }
+    return protoc.exitStatus() == QProcess::NormalExit;
+}
+#endif // QT_CONFIG(process)
 
 QByteArray hash(const QByteArray &fileData)
 {
@@ -133,434 +172,265 @@ void compareTwoFiles(const QString &expectedFileName, const QString &actualFileN
     QVERIFY(generatedData == expectedData);
 }
 
-bool containsString(const QStringList &list, const QString &comment)
-{
-    return std::any_of(list.cbegin(), list.cend(),
-                       [&comment](const auto &it) {return it == comment;});
-}
-
 void cleanFolder(const QString &folderName)
 {
     QDir dir(folderName);
     dir.removeRecursively();
 }
 
-bool protocolCompilerAvailableToRun()
+QFileInfoList scanDirectoryRecursively(const QDir &dir)
 {
-    QProcess protoc;
-    protoc.startCommand(protocolBufferCompiler + " --version");
-
-    if (!protoc.waitForStarted())
-        return false;
-
-    if (!protoc.waitForFinished()) {
-        protoc.kill();
-        return false;
+    QFileInfoList result;
+    QDirIterator it(dir.path(), QStringList() << "*.cpp" << "*.h", QDir::Files | QDir::NoSymLinks,
+                    QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        it.next();
+        result.append(it.fileInfo());
     }
-    return protoc.exitStatus() == QProcess::NormalExit;
+
+    std::sort(result.begin(), result.end(), [&dir](const QFileInfo &lhs, const QFileInfo &rhs) {
+        return dir.relativeFilePath(lhs.absoluteFilePath())
+            < dir.relativeFilePath(rhs.absoluteFilePath());
+    });
+    return result;
 }
 
-class tst_qtprotobufgen : public QObject
+QStringList relativePaths(const QDir &dir, const QFileInfoList &files)
+{
+    QStringList result;
+    for (const auto &file : files) {
+        result.append(dir.relativeFilePath(file.absoluteFilePath()));
+    }
+    return result;
+}
+
+bool copyDirectoryRecursively(const QDir &from, QDir to)
+{
+    if (!from.exists()) {
+        qDebug() << "Unable to copy directory" << from << ". Directory doesn't exists.";
+        return false;
+    }
+    for (const auto &item :
+         from.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks)) {
+        const auto fileName = item.fileName();
+        const auto absolutePath = item.absoluteFilePath();
+        if (fileName.isEmpty()) {
+            qDebug() << "fileName is empty";
+            return false;
+        }
+        if (item.isFile()) {
+            if (!QFile::copy(item.absoluteFilePath(), to.absolutePath() + u'/' + fileName)) {
+                qDebug() << "Unable to copy " << item.absoluteFilePath() << "to"
+                         << to.absolutePath() + u'/' + fileName;
+                return false;
+            }
+        } else {
+            if (!to.mkdir(fileName)) {
+                qDebug() << "Unable to create " << to.absolutePath() + u'/' + fileName;
+                return false;
+            }
+            if (!to.cd(fileName)) {
+                qDebug() << "Unable to enter " << to.absolutePath() + u'/' + fileName;
+                return false;
+            }
+            if (!copyDirectoryRecursively(QDir(absolutePath), to))
+                return false;
+            if (!to.cdUp())
+                return false;
+        }
+    }
+    return true;
+}
+} // namespace
+
+class qtprotobufgenTest : public QObject
 {
     Q_OBJECT
-
 private Q_SLOTS:
     void initTestCase();
 
     //! Test qt_add_protobuf() cmake function
-    void cmakeGeneratedFile_data();
-    void cmakeGeneratedFile();
+    void cmakeGenerated_data();
+    void cmakeGenerated();
 
+#if QT_CONFIG(process)
     //! Test command-line call of qtprotobufgen
-    void cmdLineGeneratedFile_data();
-    void cmdLineGeneratedFile();
-    void cmdLineGeneratedNoOptions_data();
-    void cmdLineGeneratedNoOptions();
+    void cmdLineGenerated_data();
+    void cmdLineGenerated();
     void cmdLineInvalidExportMacro_data();
     void cmdLineInvalidExportMacro();
+#endif
 
     void cleanupTestCase();
 
 private:
-    QString m_protobufgen;
     QString m_cmakeGenerated;
-    QString m_commandLineGenerated;
     QString m_expectedResult;
-    QString m_protoFiles;
+
+#if QT_CONFIG(process)
+    QString m_cmdLineGenerated;
+#endif
+
+    // Copy test results back to source directory if COPY_TEST_RESULTS environment variable is
+    // set to 'true'. Useful when changing the generator to update the test data.
+    bool m_copyTestResults = false;
 };
 
-void tst_qtprotobufgen::initTestCase()
+void qtprotobufgenTest::initTestCase()
 {
-    m_protobufgen = QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath) + qtprotobufgen;
-
-    m_cmakeGenerated = QFINDTESTDATA("qt_protobuf_generated");
-    QVERIFY(!m_cmakeGenerated.isEmpty());
-
-    m_expectedResult = QFINDTESTDATA("data/expected_result");
-    QVERIFY(!m_expectedResult.isEmpty());
-
-    m_protoFiles = QFINDTESTDATA("../shared/data/proto/");
-    QVERIFY(!m_protoFiles.isEmpty());
-
-    QDir testOutputBaseDir(QCoreApplication::applicationDirPath());
-    testOutputBaseDir.mkdir(QLatin1StringView("cmd_line_generation"));
-    QLatin1StringView folders[] = {
-        "comments"_L1,       "extra-namespace"_L1, "fieldenum"_L1,           "folder"_L1,
-        "qml-no-package"_L1, "no-options"_L1,      "invalid_export_macro"_L1
-    };
-    for (QLatin1StringView folder : folders)
-        testOutputBaseDir.mkdir("cmd_line_generation/"_L1 + folder);
-
-    m_commandLineGenerated = testOutputBaseDir.absolutePath() +
-                             QLatin1StringView("/cmd_line_generation");
-    QVERIFY(!m_commandLineGenerated.isEmpty());
-#ifdef Q_OS_MACOS
+    QDir(BinaryDir).mkdir(CmdLineGeneratedDir);
+#if QT_CONFIG(process)
+    m_cmdLineGenerated = BinaryDir + CmdLineGeneratedPathInfix;
+    QVERIFY(!m_cmdLineGenerated.isEmpty());
+    QVERIFY(QFile::exists(m_cmdLineGenerated));
+#  ifdef Q_OS_MACOS
     if (!protocolCompilerAvailableToRun())
         QSKIP("Protocol buffer compiler is not provisioned for macOS ARM VMs: QTBUG-109130");
-#else
+#  else
     QVERIFY(protocolCompilerAvailableToRun());
+#  endif
 #endif
+
+    m_cmakeGenerated = QFINDTESTDATA(CMakeGeneratedDir);
+    QVERIFY(!m_cmakeGenerated.isEmpty());
+
+    m_expectedResult = QFINDTESTDATA("data");
+    QVERIFY(!m_expectedResult.isEmpty());
+
+    m_copyTestResults = qgetenv("COPY_TEST_RESULTS") == "true"_L1;
 }
 
-void tst_qtprotobufgen::cmakeGeneratedFile_data()
+void qtprotobufgenTest::cmakeGenerated_data()
 {
-    QTest::addColumn<QString>("fileName");
-    QTest::addColumn<QString>("folder");
-    QTest::addColumn<QString>("extension");
+    QTest::addColumn<QString>("testName");
+    QTest::addColumn<QString>("filePath");
 
-    const QLatin1StringView extensions[] = {cppExtension,
-                                            headerExtension,
-                                            cppRegistrationsExtension};
-
-    for (const auto extension : extensions) {
-        QTest::addRow("repeatednonpackedmessages%s", extension.data())
-                << "repeatednonpackedmessages"
-                << "/packed/"
-                << QString(extension);
-
-        QTest::addRow("annotation%s", extension.data())
-                << "annotation"
-                << "/comments/"
-                << QString(extension);
-
-        QTest::addRow("basicmessages%s", extension.data())
-                << "basicmessages"
-                << "/folder/qtprotobufnamespace/tests/"
-                << QString(extension);
-
-        QTest::addRow("mapmessages%s", extension.data())
-                << "mapmessages"
-                << "/folder/qtprotobufnamespace/tests/"
-                << QString(extension);
-
-        QTest::addRow("oneofmessages%s", extension.data())
-                << "oneofmessages"
-                << "/folder/qtprotobufnamespace/tests/"
-                << QString(extension);
-
-        QTest::addRow("optional%s", extension.data())
-                << "optional"
-                << "/folder/qtprotobufnamespace/optional/tests/"
-                << QString(extension);
-
-        QTest::addRow("repeatedmessages%s", extension.data())
-                << "repeatedmessages"
-                << "/folder/qtprotobufnamespace/tests/"
-                << QString(extension);
-
-        QTest::addRow("fieldindexrange%s", extension.data())
-                << "fieldindexrange"
-                << "/fieldenum/"
-                << QString(extension);
-
-        QTest::addRow("extranamespace%s", extension.data())
-                << "extranamespace"
-                << "/extra-namespace/"
-                << QString(extension);
-
-        QTest::addRow("custom-exports/basicmessages%s", extension.data())
-            << "basicmessages"
-            << "/custom-exports/"
-            << QString(extension);
-
-        QTest::addRow("no-exports/basicmessages%s", extension.data())
-            << "basicmessages"
-            << "/no-exports/"
-            << QString(extension);
-#ifdef HAVE_QML
-        QTest::addRow("nopackage%s", extension.data())
-                << "nopackage"
-                << "/qml-no-package/"
-                << QString(extension);
-#endif
-    }
-
-    //Check the generating of cpp export files
-    QTest::addRow("cpp-exports")
-        << "tst_qtprotobufgen_gen_exports.qpb.h"
-        << "/folder/"
-        << QString();
-
-    QTest::addRow("custom-cpp-exports")
-        << "tst_qtprotobufgen_custom_exports_gen_exports.qpb.h"
-        << "/custom-exports/"
-        << QString();
-
-
-#ifdef HAVE_QML
-    const QLatin1StringView qmlExtensions[]
-            = {cppExtension,
-               headerExtension,
-               cppRegistrationsExtension};
-
-    for (const auto extension : qmlExtensions) {
-        QTest::addRow("enummessages%s with QML option", extension.data())
-                << "enummessages"
-                << "/qmlgen/"
-                << QString(extension);
-
-        QTest::addRow("basicmessages%s with QML option", extension.data())
-                << "basicmessages"
-                << "/qmlgen/"
-                << QString(extension);
-        QTest::addRow("oneofmessages%s with QML option", extension.data())
-                << "oneofmessages"
-                << "/qmlgen/"
-                << QString(extension);
-    }
-#endif
-}
-
-void tst_qtprotobufgen::cmakeGeneratedFile()
-{
-    QFETCH(QString, fileName);
-    QFETCH(QString, folder);
-    QFETCH(QString, extension);
-
-    const QString filePath = folder + fileName + extension;
-    compareTwoFiles(m_expectedResult + filePath, m_cmakeGenerated + filePath);
-}
-
-void tst_qtprotobufgen::cmdLineGeneratedFile_data()
-{
-    QTest::addColumn<QString>("fileName");
-    QTest::addColumn<QString>("generatingOption");
-    QTest::addColumn<QString>("folder");
-    QTest::addColumn<QString>("extension");
-    QTest::addColumn<QString>("generatedFolderStructure");
-    QTest::addColumn<QString>("exportMacro");
-
-    const QLatin1StringView extensions[]
-            = {cppExtension, headerExtension, cppRegistrationsExtension};
-
-    for (const auto extension : extensions) {
-        QTest::addRow("basicmessages%s", extension.data())
-                << "basicmessages"
-                << "GENERATE_PACKAGE_SUBFOLDERS"
-                << "/folder/"
-                << QString(extension)
-                << "qtprotobufnamespace/tests/"
-                << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
-
-        QTest::addRow("mapmessages%s", extension.data())
-                << "mapmessages"
-                << "GENERATE_PACKAGE_SUBFOLDERS"
-                << "/folder/"
-                << QString(extension)
-                << "qtprotobufnamespace/tests/"
-                << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
-
-        QTest::addRow("oneofmessages%s", extension.data())
-                << "oneofmessages"
-                << "GENERATE_PACKAGE_SUBFOLDERS"
-                << "/folder/"
-                << QString(extension)
-                << "qtprotobufnamespace/tests/"
-                << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
-
-        QTest::addRow("optional%s", extension.data())
-                << "optional"
-                << "GENERATE_PACKAGE_SUBFOLDERS"
-                << "/folder/"
-                << QString(extension)
-                << "qtprotobufnamespace/optional/tests/"
-                << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
-
-        QTest::addRow("repeatedmessages%s", extension.data())
-                << "repeatedmessages"
-                << "GENERATE_PACKAGE_SUBFOLDERS"
-                << "/folder/"
-                << QString(extension)
-                << "qtprotobufnamespace/tests/"
-                << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
-
-        QTest::addRow("annotation%s", extension.data())
-                << "annotation"
-                << "COPY_COMMENTS"
-                << "/comments/"
-                << QString(extension)
-                << "" << "";
-
-        QTest::addRow("fieldindexrange%s", extension.data())
-                << "fieldindexrange"
-                << ""
-                << "/fieldenum/"
-                << QString(extension)
-                << "" << "";
-
-        QTest::addRow("extranamespace%s", extension.data())
-                << "extranamespace"
-                << "EXTRA_NAMESPACE=MyTopLevelNamespace"
-                << "/extra-namespace/"
-                << QString(extension)
-                << "" << "";
-#ifdef HAVE_QML
-        QTest::addRow("nopackage%s", extension.data())
-                << "nopackage"
-                << "QML;EXPORT_MACRO=TST_QTPROTOBUFGEN_NOPACKAGE_QML_GEN"
-                << "/qml-no-package/"
-                << QString(extension)
-                << "" << "";
-#endif
+    const QStringList tests = QString(CMakeGeneratorTests).split(','_L1, Qt::SkipEmptyParts);
+    for (const auto &testName : tests) {
+        QDir testDir(m_expectedResult + CMakeGeneratedPathInfix + testName);
+        const auto testFiles = scanDirectoryRecursively(testDir);
+        for (const auto &testFile : testFiles) {
+            auto relativePath = testDir.relativeFilePath(testFile.absoluteFilePath());
+            QTest::addRow("%s: %s", testName.toUtf8().constData(),
+                          relativePath.toUtf8().constData())
+                << testName << relativePath;
+        }
     }
 }
 
-void tst_qtprotobufgen::cmdLineGeneratedFile()
+void qtprotobufgenTest::cmakeGenerated()
 {
-    QFETCH(QString, fileName);
-    QFETCH(QString, generatingOption);
-    QFETCH(QString, folder);
-    QFETCH(QString, extension);
-    QFETCH(QString, generatedFolderStructure);
-    QFETCH(QString, exportMacro);
+    QFETCH(QString, testName);
+    QFETCH(QString, filePath);
+    compareTwoFiles(m_expectedResult + CMakeGeneratedPathInfix + testName + '/'_L1 + filePath,
+                    m_cmakeGenerated + '/'_L1 + testName + '/'_L1 + filePath);
+}
+
+#if QT_CONFIG(process)
+void qtprotobufgenTest::cmdLineGenerated_data()
+{
+    QTest::addColumn<QString>("directory");
+    QTest::addColumn<QString>("protoFile");
+    QTest::addColumn<QString>("generatorOptions");
+
+    QTest::addRow("no_options") << "no_options"
+                                << "qtprotobufgen.proto"
+                                << "";
+
+    QTest::addRow("export_macro") << "export_macro"
+                                  << "qtprotobufgen.proto"
+                                  << "EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
+
+    QTest::addRow("generate_package_subfolders") << "generate_package_subfolders"
+                                                 << "qtprotobufgen.proto"
+                                                 << "GENERATE_PACKAGE_SUBFOLDERS";
+
+    QTest::addRow("copy_comments") << "copy_comments"
+                                   << "annotation.proto"
+                                   << "COPY_COMMENTS";
+
+    QTest::addRow("extra_namespace") << "extra_namespace"
+                                     << "qtprotobufgen.proto"
+                                     << "EXTRA_NAMESPACE=MyTopLevelNamespace";
+
+    QTest::addRow("qml") << "qml"
+                         << "qtprotobufgen.proto"
+                         << "QML";
+
+    QTest::addRow("qml_uri") << "qml_uri"
+                             << "qtprotobufgen.proto"
+                             << "QML;QML_URI=my.test.uri";
+
+    QTest::addRow("qml_uri_export_macro")
+        << "qml_uri_export_macro"
+        << "qtprotobufgen.proto"
+        << "QML;QML_URI=my.test.uri;EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN";
+
+    QTest::addRow("qml_uri_export_macro_generate_package_subfolders")
+        << "qml_uri_export_macro_generate_package_subfolders"
+        << "qtprotobufgen.proto"
+        << "QML;QML_URI=my.test.uri;EXPORT_MACRO=TST_QTPROTOBUFGEN_GEN;GENERATE_PACKAGE_SUBFOLDERS";
+
+    QTest::addRow("export_macro_custom_file_name")
+        << "export_macro_custom_file_name"
+        << "qtprotobufgen.proto"
+        << "EXPORT_MACRO=EXPORT_MACRO_WITH_FILE:custom_file_name";
+
+    QTest::addRow("export_macro_custom_file_name_force_generate")
+        << "export_macro_custom_file_name_force_generate"
+        << "qtprotobufgen.proto"
+        << "EXPORT_MACRO=EXPORT_MACRO_WITH_FILE:custom_file_name.hpp:true";
+
+    QTest::addRow("export_macro_custom_file_name_skip_generate")
+        << "export_macro_custom_file_name_skip_generate"
+        << "qtprotobufgen.proto"
+        << "EXPORT_MACRO=EXPORT_MACRO_WITH_FILE:custom_file_name.hxx:false";
+}
+
+void qtprotobufgenTest::cmdLineGenerated()
+{
+
+    QFETCH(QString, directory);
+    QFETCH(QString, protoFile);
+    QFETCH(QString, generatorOptions);
+
+    const QString fullProtoFilePath(m_expectedResult + '/'_L1 + protoFile);
+    QVERIFY2(QFile::exists(fullProtoFilePath),
+             qPrintable("Input .proto scheme "_L1 + fullProtoFilePath + " doesn't exists"_L1));
+
+    QDir outputDirectory(m_cmdLineGenerated);
+    if (!outputDirectory.exists(directory))
+        outputDirectory.mkdir(directory);
+    outputDirectory.cd(directory);
 
     QProcess process;
-    process.setWorkingDirectory(m_commandLineGenerated);
-    /* Call command:
-         protoc --plugin=protoc-gen-qtprotobuf=<path/to/bin/>qtprotobufgen \
-         --qtprotobuf_opt=<option> \
-         --qtprotobuf_out=<output_dir> [-I/extra/proto/include/path] <protofile>.proto */
-    if (exportMacro.isEmpty()) {
-        process.startCommand(protocolBufferCompiler + QString(" ")
-                             + protocGenQtprotobufKey + m_protobufgen
-                             + optKey + generatingOption
-                             + outputKey + m_commandLineGenerated + folder
-                             + includeKey + m_protoFiles
-                             + " " + fileName + ".proto" + allow_proto3_optional);
-    } else {
-        process.startCommand(protocolBufferCompiler + QString(" ")
-                             + protocGenQtprotobufKey + m_protobufgen
-                             + optKey + generatingOption + ";" + exportMacro
-                             + outputKey + m_commandLineGenerated + folder
-                             + includeKey + m_protoFiles
-                             + " " + fileName + ".proto" + allow_proto3_optional);
-    }
+    process.setWorkingDirectory(m_cmdLineGenerated);
+    process.startCommand(ProtocPath + PluginKey + QtprotobufgenPath + OptKey + generatorOptions
+                         + OutKey + outputDirectory.absolutePath() + IncludeKey + m_expectedResult
+                         + ' '_L1 + fullProtoFilePath + allow_proto3_optional);
 
-    QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
+    QVERIFY2(process.waitForStarted(), qPrintable(msgProcessStartFailed(process)));
     if (!process.waitForFinished()) {
         process.kill();
-        QFAIL(msgProcessTimeout(process).constData());
+        QFAIL(qPrintable(msgProcessTimeout(process)));
     }
-    QVERIFY2(process.exitStatus() == QProcess::NormalExit, msgProcessCrashed(process).constData());
-    QVERIFY2(process.exitCode() == 0, msgProcessFailed(process).constData());
+    QVERIFY2(process.exitStatus() == QProcess::NormalExit, qPrintable(msgProcessCrashed(process)));
+    QVERIFY2(process.exitCode() == 0, qPrintable(msgProcessFailed(process)));
 
-    const QString filePath = folder + generatedFolderStructure + fileName  + extension;
-    compareTwoFiles(m_expectedResult + filePath, m_commandLineGenerated + filePath);
-}
+    QDir expectedResultDir(m_expectedResult + "/cmd_line_generated/"_L1 + directory);
+    const auto generatedFileList = scanDirectoryRecursively(outputDirectory);
+    const auto expectedFileList = scanDirectoryRecursively(expectedResultDir);
 
-void tst_qtprotobufgen::cmdLineGeneratedNoOptions_data()
-{
-    QTest::addColumn<QString>("fileName");
-    QTest::addColumn<QString>("folder");
-    QTest::addColumn<QString>("extension");
+    QCOMPARE_EQ(relativePaths(outputDirectory, generatedFileList),
+                relativePaths(expectedResultDir, expectedFileList));
 
-    const QLatin1StringView extensions[]
-            = {cppExtension, headerExtension, cppRegistrationsExtension};
-
-    for (const auto extension : extensions) {
-        QTest::addRow("annotation%s", extension.data())
-                << "annotation"
-                << "/no-options/"
-                << QString(extension);
-
-        QTest::addRow("fieldindexrange%s", extension.data())
-                << "fieldindexrange"
-                << "/no-options/"
-                << QString(extension);
-
-        QTest::addRow("extranamespace%s", extension.data())
-                << "extranamespace"
-                << "/no-options/"
-                << QString(extension);
-
-        QTest::addRow("basicmessages%s", extension.data())
-                << "basicmessages"
-                << "/no-options/"
-                << QString(extension);
-
-        QTest::addRow("mapmessages%s", extension.data())
-                << "mapmessages"
-                << "/no-options/"
-                << QString(extension);
-
-        QTest::addRow("oneofmessages%s", extension.data())
-                << "oneofmessages"
-                << "/no-options/"
-                << QString(extension);
-
-        QTest::addRow("optional%s", extension.data())
-                << "optional"
-                << "/no-options/"
-                << QString(extension);
-
-        QTest::addRow("repeatedmessages%s", extension.data())
-                << "repeatedmessages"
-                << "/no-options/"
-                << QString(extension);
-
-        QTest::addRow("repeatednonpackedmessages%s", extension.data())
-                << "repeatednonpackedmessages"
-                << "/no-options/"
-                << QString(extension);
-
-        QTest::addRow("anymessages%s", extension.data())
-                << "anymessages"
-                << "/no-options/"
-                << QString(extension);
+    for (qsizetype i = 0; i < expectedFileList.size(); ++i) {
+        compareTwoFiles(generatedFileList.at(i).absoluteFilePath(),
+                        expectedFileList.at(i).absoluteFilePath());
     }
 }
 
-void tst_qtprotobufgen::cmdLineGeneratedNoOptions()
-{
-    QFETCH(QString, fileName);
-    QFETCH(QString, folder);
-    QFETCH(QString, extension);
-
-    QProcess process;
-    process.setWorkingDirectory(m_commandLineGenerated);
-
-    /* Call command:
-         protoc --plugin=protoc-gen-qtprotobuf=<path/to/bin/>qtprotobufgen \
-         --qtprotobuf_out=<output_dir> [-I/extra/proto/include/path] <protofile>.proto */
-    process.startCommand(protocolBufferCompiler + QString(" ")
-                         + protocGenQtprotobufKey + m_protobufgen
-                         + outputKey + m_commandLineGenerated + folder
-                         + includeKey + m_protoFiles
-                         + " " + fileName + ".proto" + allow_proto3_optional);
-
-    QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
-    if (!process.waitForFinished()) {
-        process.kill();
-        QFAIL(msgProcessTimeout(process).constData());
-    }
-    QVERIFY2(process.exitStatus() == QProcess::NormalExit, msgProcessCrashed(process).constData());
-    QVERIFY2(process.exitCode() == 0, msgProcessFailed(process).constData());
-
-    const QString filePath = folder + fileName  + extension;
-    compareTwoFiles(m_expectedResult + filePath, m_commandLineGenerated + filePath);
-}
-
-void tst_qtprotobufgen::cmdLineInvalidExportMacro_data()
+void qtprotobufgenTest::cmdLineInvalidExportMacro_data()
 {
     QTest::addColumn<QString>("exportMacro");
     QTest::addColumn<int>("result");
@@ -569,21 +439,23 @@ void tst_qtprotobufgen::cmdLineInvalidExportMacro_data()
     QTest::addRow("contains_number_first") << "1Not_ALLoWeD" << 1;
 }
 
-void tst_qtprotobufgen::cmdLineInvalidExportMacro()
+void qtprotobufgenTest::cmdLineInvalidExportMacro()
 {
     QFETCH(QString, exportMacro);
     QFETCH(int, result);
 
-    QString folder = "/invalid_export_macro/";
-    QString fileName = "basicmessages";
+    static constexpr QLatin1StringView directory("invalid_export_macro");
+    QDir outputDirectory(m_cmdLineGenerated);
+    if (!outputDirectory.exists(directory))
+        outputDirectory.mkdir(directory);
+    outputDirectory.cd(directory);
     QString exportMacroCmd = "EXPORT_MACRO=" + exportMacro;
 
     QProcess process;
-    process.setWorkingDirectory(m_commandLineGenerated);
-    process.startCommand(protocolBufferCompiler + QString(" ") + protocGenQtprotobufKey
-                         + m_protobufgen + optKey + ";" + exportMacroCmd
-                         + outputKey + m_commandLineGenerated + folder + includeKey + m_protoFiles
-                         + " " + fileName + ".proto" + allow_proto3_optional);
+    process.setWorkingDirectory(m_cmdLineGenerated);
+    process.startCommand(ProtocPath + QString(" ") + PluginKey + QtprotobufgenPath + OptKey
+                         + exportMacroCmd + OutKey + outputDirectory.absolutePath() + IncludeKey
+                         + m_expectedResult + "qtprotobufgen.proto" + allow_proto3_optional);
     QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
     if (!process.waitForFinished()) {
         process.kill();
@@ -592,12 +464,34 @@ void tst_qtprotobufgen::cmdLineInvalidExportMacro()
     QVERIFY2(process.exitStatus() == QProcess::NormalExit, msgProcessCrashed(process).constData());
     QVERIFY2(process.exitCode() == result, msgProcessFailed(process).constData());
 }
+#endif // QT_CONFIG(process)
 
-void tst_qtprotobufgen::cleanupTestCase()
+void qtprotobufgenTest::cleanupTestCase()
 {
-    // Leave this function at the bottom. It removes generated content.
-    // cleanFolder(m_commandLineGenerated);
+    if (m_copyTestResults) {
+        const QString cmakeExpectedResultDir = m_expectedResult + CMakeGeneratedPathInfix;
+        if (QFile::exists(cmakeExpectedResultDir))
+            QDir(cmakeExpectedResultDir).removeRecursively();
+        QVERIFY(QDir(m_expectedResult).mkdir(CMakeGeneratedDir));
+
+        QVERIFY(copyDirectoryRecursively(QDir(m_cmakeGenerated), QDir(cmakeExpectedResultDir)));
+
+#if QT_CONFIG(process)
+        const QString cmdLineExpectedResultDir = m_expectedResult + CmdLineGeneratedPathInfix;
+        if (QFile::exists(cmdLineExpectedResultDir))
+            QDir(cmdLineExpectedResultDir).removeRecursively();
+        QVERIFY(QDir(m_expectedResult).mkdir(CmdLineGeneratedDir));
+
+        QVERIFY(copyDirectoryRecursively(QDir(m_cmdLineGenerated), QDir(cmdLineExpectedResultDir)));
+#endif
+    }
+
+#if QT_CONFIG(process)
+    // Remove content generated by command line tests.
+    if (!m_cmdLineGenerated.isEmpty())
+        cleanFolder(m_cmdLineGenerated);
+#endif
 }
 
-QTEST_MAIN(tst_qtprotobufgen)
+QTEST_MAIN(qtprotobufgenTest)
 #include "tst_qtprotobufgen.moc"
