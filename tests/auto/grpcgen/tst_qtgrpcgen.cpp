@@ -8,10 +8,14 @@
 #include <QCryptographicHash>
 #include <qtprotobuftypes.h>
 
+#include "protocplugintestcommon.h"
+
 #define XSTR(x) DEFSTR(x)
 #define DEFSTR(x) #x
 
 using namespace Qt::StringLiterals;
+using namespace ProtocPluginTest;
+
 const QLatin1StringView cppProtobufGenExtension(".qpb.cpp");
 const QLatin1StringView headerProtobufGenExtension(".qpb.h");
 const QLatin1StringView cppExtension("_client.grpc.qpb.cpp");
@@ -29,96 +33,6 @@ const QLatin1StringView qtgrpcgen("/qtgrpcgen.exe");
 #else
 const QLatin1StringView qtgrpcgen("/qtgrpcgen");
 #endif
-
-QByteArray msgProcessStartFailed(const QProcess &p)
-{
-    const QString result = QLatin1StringView("Could not start \"")
-            + QDir::toNativeSeparators(p.program()) + QLatin1StringView("\": ")
-            + p.errorString();
-    return result.toLocal8Bit();
-}
-
-QByteArray msgProcessTimeout(const QProcess &p)
-{
-    return '"' + QDir::toNativeSeparators(p.program()).toLocal8Bit()
-            + "\" timed out.";
-}
-
-QByteArray msgProcessCrashed(QProcess &p)
-{
-    return '"' + QDir::toNativeSeparators(p.program()).toLocal8Bit()
-            + "\" crashed.\n" + p.readAllStandardError();
-}
-
-QByteArray msgProcessFailed(QProcess &p)
-{
-    return '"' + QDir::toNativeSeparators(p.program()).toLocal8Bit()
-            + "\" returned " + QByteArray::number(p.exitCode()) + ":\n"
-            + p.readAllStandardError();
-}
-
-QByteArray hash(const QByteArray &fileData)
-{
-    return QCryptographicHash::hash(fileData, QCryptographicHash::Sha1);
-}
-
-QByteArrayList splitToLines(const QByteArray &data)
-{
-    return data.split('\n');
-}
-
-// Return size diff and first NOT equal line;
-QByteArray doCompare(const QByteArrayList &actual, const QByteArrayList &expected)
-{
-    QByteArray ba;
-
-    if (actual.size() != expected.size()) {
-        ba.append(QString("Length count different: actual: %1, expected: %2")
-                  .arg(actual.size()).arg(expected.size()).toUtf8());
-    }
-
-    for (int i = 0, n = expected.size(); i != n; ++i) {
-        QString expectedLine = expected.at(i);
-        if (expectedLine != actual.at(i)) {
-            ba.append("\n<<<<<< ACTUAL\n" + actual.at(i)
-                      + "\n======\n" + expectedLine.toUtf8()
-                      + "\n>>>>>> EXPECTED\n"
-                      );
-            break;
-        }
-    }
-    return ba;
-}
-
-QByteArray msgCannotReadFile(const QFile &file)
-{
-    const QString result = QLatin1StringView("Could not read file: ")
-            + QDir::toNativeSeparators(file.fileName())
-            + QLatin1StringView(": ") + file.errorString();
-    return result.toLocal8Bit();
-}
-
-void cleanFolder(const QString &folderName)
-{
-    QDir dir(folderName);
-    dir.removeRecursively();
-}
-
-bool protocolCompilerAvailableToRun()
-{
-    QProcess protoc;
-    protoc.startCommand(protocolBufferCompiler + " --version");
-
-    if (!protoc.waitForStarted())
-        return false;
-
-    if (!protoc.waitForFinished()) {
-        protoc.kill();
-        return false;
-    }
-
-    return protoc.exitStatus() == QProcess::NormalExit;
-}
 
 class tst_qtgrpcgen : public QObject
 {
@@ -175,10 +89,10 @@ void tst_qtgrpcgen::initTestCase()
             QLatin1StringView("/cmd_line_generation");
     QVERIFY(!m_commandLineGenerated.isEmpty());
 #ifdef Q_OS_MACOS
-    if (!protocolCompilerAvailableToRun())
+    if (!protocolCompilerAvailableToRun(protocolBufferCompiler))
         QSKIP("Protocol buffer compiler is not provisioned for macOS ARM VMs: QTBUG-109130");
 #else
-    QVERIFY(protocolCompilerAvailableToRun());
+    QVERIFY(protocolCompilerAvailableToRun(protocolBufferCompiler));
 #endif
 }
 
@@ -241,32 +155,8 @@ void tst_qtgrpcgen::cmakeGeneratedFile()
     QFETCH(QString, extension);
     QFETCH(QString, cmakeGenerationFolder);
 
-    QFile expectedResultFile(m_expectedResult + folder + fileName + extension);
-    QFile generatedFile(cmakeGenerationFolder + folder + fileName + extension);
-
-    QVERIFY2(expectedResultFile.exists(), qPrintable(expectedResultFile.fileName()));
-    QVERIFY(generatedFile.exists());
-
-    QVERIFY2(expectedResultFile.open(QIODevice::ReadOnly | QIODevice::Text),
-             msgCannotReadFile(expectedResultFile).constData());
-    QVERIFY2(generatedFile.open(QIODevice::ReadOnly | QIODevice::Text),
-             msgCannotReadFile(generatedFile).constData());
-
-    QByteArray expectedData = expectedResultFile.readAll();
-    QByteArray generatedData = generatedFile.readAll();
-
-    expectedResultFile.close();
-    generatedFile.close();
-
-    if (hash(expectedData).toHex() != hash(generatedData).toHex())
-    {
-        const QString diff = doCompare(splitToLines(generatedData),
-                                       splitToLines(expectedData));
-        QCOMPARE_GT(diff.size(), 0); // Hashes can only differ if content does.
-        QFAIL(qPrintable(diff));
-    }
-    // Ensure we do see a failure, even in the unlikely case of a hash collision:
-    QVERIFY(generatedData == expectedData);
+    compareTwoFiles(m_expectedResult + folder + fileName + extension,
+                    cmakeGenerationFolder + folder + fileName + extension);
 }
 
 void tst_qtgrpcgen::cmdLineGeneratedFile_data()
@@ -317,32 +207,8 @@ void tst_qtgrpcgen::cmdLineGeneratedFile()
     QVERIFY2(process.exitStatus() == QProcess::NormalExit, msgProcessCrashed(process).constData());
     QVERIFY2(process.exitCode() == 0, msgProcessFailed(process).constData());
 
-    QFile expectedResultFile(m_expectedResult + folder + fileName  + extension);
-    QFile generatedFile(m_commandLineGenerated + folder + fileName + extension);
-
-    QVERIFY(generatedFile.exists());
-    QVERIFY(expectedResultFile.exists());
-
-    QVERIFY2(expectedResultFile.open(QIODevice::ReadOnly | QIODevice::Text),
-             msgCannotReadFile(expectedResultFile).constData());
-    QVERIFY2(generatedFile.open(QIODevice::ReadOnly | QIODevice::Text),
-             msgCannotReadFile(generatedFile).constData());
-
-    QByteArray expectedData = expectedResultFile.readAll();
-    QByteArray generatedData = generatedFile.readAll();
-
-    expectedResultFile.close();
-    generatedFile.close();
-
-    if (hash(expectedData).toHex() != hash(generatedData).toHex())
-    {
-        const QString diff = doCompare(splitToLines(generatedData),
-                                       splitToLines(expectedData));
-        QCOMPARE_GT(diff.size(), 0); // Hashes can only differ if content does.
-        QFAIL(qPrintable(diff));
-    }
-    // Ensure we do see a failure, even in the unlikely case of a hash collision:
-    QVERIFY(generatedData == expectedData);
+    compareTwoFiles(m_expectedResult + folder + fileName + extension,
+                    m_commandLineGenerated + folder + fileName + extension);
 }
 
 void tst_qtgrpcgen::cleanupTestCase()

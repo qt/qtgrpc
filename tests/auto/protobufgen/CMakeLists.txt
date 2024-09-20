@@ -5,6 +5,7 @@ if(NOT QT_BUILD_STANDALONE_TESTS AND NOT QT_BUILDING_QT)
     cmake_minimum_required(VERSION 3.16)
     project(tst_qtprotobufgen LANGUAGES CXX)
     find_package(Qt6BuildInternals REQUIRED COMPONENTS STANDALONE_TEST)
+    include("${CMAKE_CURRENT_LIST_DIR}/../protocplugintestcommon/CMakeLists.txt")
 endif()
 
 get_target_property(protoc_version WrapProtoc::WrapProtoc _qt_internal_protobuf_version)
@@ -14,6 +15,7 @@ qt_internal_add_test(tst_qtprotobufgen
     SOURCES
         tst_qtprotobufgen.cpp
     LIBRARIES
+        protocplugintestcommon
         Qt::Test
         Qt::Protobuf
     DEFINES
