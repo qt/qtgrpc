@@ -101,12 +101,7 @@ void qtprotobufgenTest::initTestCase()
     m_cmdLineGenerated = BinaryDir + CmdLineGeneratedPathInfix;
     QVERIFY(!m_cmdLineGenerated.isEmpty());
     QVERIFY(QFile::exists(m_cmdLineGenerated));
-#  ifdef Q_OS_MACOS
-    if (!protocolCompilerAvailableToRun(ProtocPath))
-        QSKIP("Protocol buffer compiler is not provisioned for macOS ARM VMs: QTBUG-109130");
-#  else
     QVERIFY(protocolCompilerAvailableToRun(ProtocPath));
-#  endif
 #endif
 
     m_cmakeGenerated = QFINDTESTDATA(CMakeGeneratedDir);
