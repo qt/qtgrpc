@@ -385,6 +385,16 @@ void qtprotobufgenTest::cmdLineGenerated_data()
         << "export_macro_custom_file_name_skip_generate"
         << "qtprotobufgen.proto"
         << "EXPORT_MACRO=EXPORT_MACRO_WITH_FILE:custom_file_name.hxx:false";
+
+    QTest::addRow("header_guard_filename")
+        << "header_guard_filename"
+        << "qtprotobufgenminimal.proto"
+        << "HEADER_GUARD=filename";
+
+    QTest::addRow("header_guard_pragma")
+        << "header_guard_pragma"
+        << "qtprotobufgenminimal.proto"
+        << "HEADER_GUARD=pragma";
 }
 
 void qtprotobufgenTest::cmdLineGenerated()
