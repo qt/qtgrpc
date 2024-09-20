@@ -167,6 +167,7 @@ public:
 
     static const char *RepeatedSuffix();
     static const char *ProtoFileSuffix();
+    static const char *HeaderSuffix();
     static const char *EnumClassSuffix();
 
     static const std::unordered_map<::google::protobuf::FieldDescriptor::Type, std::string> &
