@@ -1,6 +1,10 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
+if(QT_FEATURE_qtprotobufgen OR QT_FEATURE_qtgrpcgen)
+    add_subdirectory(protocplugintestcommon)
+endif()
+
 if(QT_FEATURE_qtprotobufgen)
     add_subdirectory(protobufgen)
 endif()
