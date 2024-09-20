@@ -88,12 +88,7 @@ void tst_qtgrpcgen::initTestCase()
     m_commandLineGenerated = testOutputBaseDir.absolutePath() +
             QLatin1StringView("/cmd_line_generation");
     QVERIFY(!m_commandLineGenerated.isEmpty());
-#ifdef Q_OS_MACOS
-    if (!protocolCompilerAvailableToRun(protocolBufferCompiler))
-        QSKIP("Protocol buffer compiler is not provisioned for macOS ARM VMs: QTBUG-109130");
-#else
     QVERIFY(protocolCompilerAvailableToRun(protocolBufferCompiler));
-#endif
 }
 
 void tst_qtgrpcgen::cmakeGeneratedFile_data()
