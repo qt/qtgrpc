@@ -60,7 +60,8 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
     printDisclaimer(sourcePrinter.get());
 
     utils::ExternalIncludesOrderedSet externalIncludes{ "QtProtobuf/qprotobufregistration.h" };
-    std::set<std::string> internalIncludes{ relativePath + CommonTemplates::ProtoFileSuffix() };
+    std::set<std::string> internalIncludes{ relativePath + CommonTemplates::ProtoFileSuffix()
+                                            + CommonTemplates::HeaderSuffix() };
 
     printIncludes(registrationPrinter.get(), internalIncludes, externalIncludes, {});
 
@@ -114,8 +115,8 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
         CommonTemplates::ProtoFileSuffix();
     std::string relativePath = common::generateRelativeFilePath(file, basename);
 
-    std::unique_ptr<io::ZeroCopyOutputStream> headerStream(generatorContext->Open(relativePath
-                                                                                  + ".h"));
+    std::unique_ptr<io::ZeroCopyOutputStream>
+        headerStream(generatorContext->Open(relativePath + CommonTemplates::HeaderSuffix()));
     std::shared_ptr<Printer> headerPrinter(new Printer(headerStream.get(), '$'));
 
     printDisclaimer(headerPrinter.get());
@@ -124,11 +125,12 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
     utils::ExternalIncludesOrderedSet externalIncludes;
     std::set<std::string> systemIncludes;
 
-    const std::string headerGuard = common::headerGuardFromFilename(basename + ".h");
+    const std::string
+        headerGuard = common::headerGuardFromFilename(basename + CommonTemplates::HeaderSuffix());
     headerPrinter->Print({{"header_guard", headerGuard}}, CommonTemplates::PreambleTemplate());
     if (!Options::instance().exportMacroFilename().empty()) {
         std::string exportMacroFilename = Options::instance().exportMacroFilename();
-        internalIncludes.insert(utils::removeFileSuffix(exportMacroFilename));
+        internalIncludes.insert(exportMacroFilename);
     }
 
     externalIncludes.insert("QtCore/qbytearray.h");
@@ -200,7 +202,8 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
             continue;
         }
         internalIncludes.insert(utils::removeFileSuffix(file->dependency(i)->name())
-                                + CommonTemplates::ProtoFileSuffix());
+                                + CommonTemplates::ProtoFileSuffix()
+                                + CommonTemplates::HeaderSuffix());
     }
 
     printIncludes(headerPrinter.get(), internalIncludes, externalIncludes, systemIncludes);

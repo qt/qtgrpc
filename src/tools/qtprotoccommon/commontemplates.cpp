@@ -90,7 +90,7 @@ const char *CommonTemplates::FooterTemplate()
 
 const char *CommonTemplates::InternalIncludeTemplate()
 {
-    return "#include \"$include$.h\"\n";
+    return "#include \"$include$\"\n";
 }
 const char *CommonTemplates::ExternalIncludeTemplate()
 {
@@ -974,6 +974,11 @@ const std::unordered_map<::google::protobuf::FieldDescriptor::Type, std::string>
         { ::google::protobuf::FieldDescriptor::TYPE_SINT64, "sint64" } // Limited
     };
     return map;
+}
+
+const char *CommonTemplates::HeaderSuffix()
+{
+    return ".h";
 }
 
 const char *CommonTemplates::ProtoFileSuffix()
