@@ -84,8 +84,8 @@ std::set<std::string> QGrpcGenerator::GetInternalIncludes(const FileDescriptor *
     assert(file != nullptr);
     for (int i = 0; i < file->service_count(); ++i) {
         const ServiceDescriptor *service = file->service(i);
-        for (int i = 0; i < service->method_count(); ++i) {
-            const MethodDescriptor *method = service->method(i);
+        for (int j = 0; j < service->method_count(); ++j) {
+            const MethodDescriptor *method = service->method(j);
             if (method->input_type()->file() != service->file()) {
                 includes.insert(utils::removeFileSuffix(method->input_type()->file()->name())
                                 + fullSuffix);
