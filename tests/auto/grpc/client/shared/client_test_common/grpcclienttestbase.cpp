@@ -20,7 +20,7 @@ void GrpcClientTestBase::initTestCase_data()
             << std::shared_ptr<
                    QAbstractGrpcChannel>(new QGrpcHttp2Channel(QUrl("http://localhost:50051",
                                                                     QUrl::StrictMode)));
-#ifndef Q_OS_WINDOWS
+#if !defined(Q_OS_WINDOWS) && QT_CONFIG(localserver)
         QTest::newRow("Http2ClientUnix")
             << QFlags{ Channel::Qt }
             << std::shared_ptr<
