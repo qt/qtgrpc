@@ -38,9 +38,7 @@ const QLatin1StringView allow_proto3_optional(" --experimental_allow_proto3_opti
 constexpr QLatin1StringView allow_proto3_optional;
 #  endif // ALLOW_PROTO3_OPTIONAL
 
-#  define CMD_LINE_GENERATED_DIR "cmd_line_generated"
-constexpr QLatin1StringView CmdLineGeneratedDir(CMD_LINE_GENERATED_DIR);
-constexpr QLatin1StringView CmdLineGeneratedPathInfix("/" CMD_LINE_GENERATED_DIR "/");
+constexpr QLatin1StringView CmdLineGeneratedDir("cmd_line_generated");
 
 #endif // QT_CONFIG(process)
 
@@ -58,10 +56,9 @@ constexpr QLatin1StringView CMakeGeneratorTests(CMAKE_GENERATOR_TESTS);
 #  error CMAKE_GENERATED_DIR definition must be set
 #endif
 constexpr QLatin1StringView CMakeGeneratedDir(CMAKE_GENERATED_DIR);
-constexpr QLatin1StringView CMakeGeneratedPathInfix("/" CMAKE_GENERATED_DIR "/");
 } // namespace
 
-class qtprotobufgenTest : public QObject
+class qtprotobufgenTest : public ProtocPluginTest::TestBase
 {
     Q_OBJECT
 private Q_SLOTS:
@@ -80,37 +77,16 @@ private Q_SLOTS:
 #endif
 
     void cleanupTestCase();
-
-private:
-    QString m_cmakeGenerated;
-    QString m_expectedResult;
-
-#if QT_CONFIG(process)
-    QString m_cmdLineGenerated;
-#endif
-
-    // Copy test results back to source directory if COPY_TEST_RESULTS environment variable is
-    // set to 'true'. Useful when changing the generator to update the test data.
-    bool m_copyTestResults = false;
 };
 
 void qtprotobufgenTest::initTestCase()
 {
-    QDir(BinaryDir).mkdir(CmdLineGeneratedDir);
+    initPaths(BinaryDir, CMakeGeneratedDir, CmdLineGeneratedDir);
+    QVERIFY(!cmakeGeneratedPath().isEmpty());
 #if QT_CONFIG(process)
-    m_cmdLineGenerated = BinaryDir + CmdLineGeneratedPathInfix;
-    QVERIFY(!m_cmdLineGenerated.isEmpty());
-    QVERIFY(QFile::exists(m_cmdLineGenerated));
-    QVERIFY(protocolCompilerAvailableToRun(ProtocPath));
+    QVERIFY(!cmdLineGeneratedPath().isEmpty());
 #endif
-
-    m_cmakeGenerated = QFINDTESTDATA(CMakeGeneratedDir);
-    QVERIFY(!m_cmakeGenerated.isEmpty());
-
-    m_expectedResult = QFINDTESTDATA("data");
-    QVERIFY(!m_expectedResult.isEmpty());
-
-    m_copyTestResults = qgetenv("COPY_TEST_RESULTS") == "true"_L1;
+    QVERIFY(protocolCompilerAvailableToRun(ProtocPath));
 }
 
 void qtprotobufgenTest::cmakeGenerated_data()
@@ -120,7 +96,7 @@ void qtprotobufgenTest::cmakeGenerated_data()
 
     const QStringList tests = QString(CMakeGeneratorTests).split(','_L1, Qt::SkipEmptyParts);
     for (const auto &testName : tests) {
-        QDir testDir(m_expectedResult + CMakeGeneratedPathInfix + testName);
+        QDir testDir(cmakeExpectedResultPath() + '/'_L1 + testName);
         const auto testFiles = scanDirectoryRecursively(testDir);
         for (const auto &testFile : testFiles) {
             auto relativePath = testDir.relativeFilePath(testFile.absoluteFilePath());
@@ -135,8 +111,8 @@ void qtprotobufgenTest::cmakeGenerated()
 {
     QFETCH(QString, testName);
     QFETCH(QString, filePath);
-    compareTwoFiles(m_expectedResult + CMakeGeneratedPathInfix + testName + '/'_L1 + filePath,
-                    m_cmakeGenerated + '/'_L1 + testName + '/'_L1 + filePath);
+    compareTwoFiles(cmakeExpectedResultPath() + '/'_L1 + testName + '/'_L1 + filePath,
+                    cmakeGeneratedPath() + '/'_L1 + testName + '/'_L1 + filePath);
 }
 
 #if QT_CONFIG(process)
@@ -212,25 +188,25 @@ void qtprotobufgenTest::cmdLineGenerated_data()
 
 void qtprotobufgenTest::cmdLineGenerated()
 {
-
     QFETCH(QString, directory);
     QFETCH(QString, protoFile);
     QFETCH(QString, generatorOptions);
 
-    const QString fullProtoFilePath(m_expectedResult + '/'_L1 + protoFile);
+    const QString fullProtoFilePath(expectedResultPath() + '/'_L1 + protoFile);
     QVERIFY2(QFile::exists(fullProtoFilePath),
              qPrintable("Input .proto scheme "_L1 + fullProtoFilePath + " doesn't exists"_L1));
 
-    QDir outputDirectory(m_cmdLineGenerated);
+    QDir outputDirectory(cmdLineGeneratedPath());
     if (!outputDirectory.exists(directory))
         outputDirectory.mkdir(directory);
     outputDirectory.cd(directory);
 
     QProcess process;
-    process.setWorkingDirectory(m_cmdLineGenerated);
+    process.setWorkingDirectory(cmdLineGeneratedPath());
     process.startCommand(ProtocPath + PluginKey + QtprotobufgenPath + OptKey + generatorOptions
-                         + OutKey + outputDirectory.absolutePath() + IncludeKey + m_expectedResult
-                         + ' '_L1 + fullProtoFilePath + allow_proto3_optional);
+                         + OutKey + outputDirectory.absolutePath() + IncludeKey
+                         + expectedResultPath() + ' '_L1 + fullProtoFilePath
+                         + allow_proto3_optional);
 
     QVERIFY2(process.waitForStarted(), qPrintable(msgProcessStartFailed(process)));
     if (!process.waitForFinished()) {
@@ -240,7 +216,7 @@ void qtprotobufgenTest::cmdLineGenerated()
     QVERIFY2(process.exitStatus() == QProcess::NormalExit, qPrintable(msgProcessCrashed(process)));
     QVERIFY2(process.exitCode() == 0, qPrintable(msgProcessFailed(process)));
 
-    QDir expectedResultDir(m_expectedResult + "/cmd_line_generated/"_L1 + directory);
+    QDir expectedResultDir(cmdLineExpectedResultPath() + '/'_L1 + directory);
     const auto generatedFileList = scanDirectoryRecursively(outputDirectory);
     const auto expectedFileList = scanDirectoryRecursively(expectedResultDir);
 
@@ -268,17 +244,17 @@ void qtprotobufgenTest::cmdLineInvalidExportMacro()
     QFETCH(int, result);
 
     static constexpr QLatin1StringView directory("invalid_export_macro");
-    QDir outputDirectory(m_cmdLineGenerated);
+    QDir outputDirectory(cmdLineGeneratedPath());
     if (!outputDirectory.exists(directory))
         outputDirectory.mkdir(directory);
     outputDirectory.cd(directory);
     QString exportMacroCmd = "EXPORT_MACRO=" + exportMacro;
 
     QProcess process;
-    process.setWorkingDirectory(m_cmdLineGenerated);
+    process.setWorkingDirectory(cmdLineGeneratedPath());
     process.startCommand(ProtocPath + QString(" ") + PluginKey + QtprotobufgenPath + OptKey
                          + exportMacroCmd + OutKey + outputDirectory.absolutePath() + IncludeKey
-                         + m_expectedResult + "qtprotobufgen.proto" + allow_proto3_optional);
+                         + expectedResultPath() + "qtprotobufgen.proto" + allow_proto3_optional);
     QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
     if (!process.waitForFinished()) {
         process.kill();
@@ -291,29 +267,7 @@ void qtprotobufgenTest::cmdLineInvalidExportMacro()
 
 void qtprotobufgenTest::cleanupTestCase()
 {
-    if (m_copyTestResults) {
-        const QString cmakeExpectedResultDir = m_expectedResult + CMakeGeneratedPathInfix;
-        if (QFile::exists(cmakeExpectedResultDir))
-            QDir(cmakeExpectedResultDir).removeRecursively();
-        QVERIFY(QDir(m_expectedResult).mkdir(CMakeGeneratedDir));
-
-        QVERIFY(copyDirectoryRecursively(QDir(m_cmakeGenerated), QDir(cmakeExpectedResultDir)));
-
-#if QT_CONFIG(process)
-        const QString cmdLineExpectedResultDir = m_expectedResult + CmdLineGeneratedPathInfix;
-        if (QFile::exists(cmdLineExpectedResultDir))
-            QDir(cmdLineExpectedResultDir).removeRecursively();
-        QVERIFY(QDir(m_expectedResult).mkdir(CmdLineGeneratedDir));
-
-        QVERIFY(copyDirectoryRecursively(QDir(m_cmdLineGenerated), QDir(cmdLineExpectedResultDir)));
-#endif
-    }
-
-#if QT_CONFIG(process)
-    // Remove content generated by command line tests.
-    if (!m_cmdLineGenerated.isEmpty())
-        cleanFolder(m_cmdLineGenerated);
-#endif
+    QVERIFY(cleanupTestData());
 }
 
 QTEST_MAIN(qtprotobufgenTest)

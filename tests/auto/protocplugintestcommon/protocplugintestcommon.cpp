@@ -11,6 +11,8 @@
 #  include <QtCore/qprocess.h>
 #endif
 
+using namespace Qt::StringLiterals;
+
 namespace {
 
 QByteArray hash(const QByteArray &fileData)
@@ -45,6 +47,45 @@ QByteArrayList splitToLines(const QByteArray &data)
 {
     return data.split('\n');
 }
+
+bool copyDirectoryRecursively(const QDir &from, QDir to)
+{
+    if (!from.exists()) {
+        qDebug() << "Unable to copy directory" << from << ". Directory doesn't exists.";
+        return false;
+    }
+    for (const auto &item :
+         from.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks)) {
+        const auto fileName = item.fileName();
+        const auto absolutePath = item.absoluteFilePath();
+        if (fileName.isEmpty()) {
+            qDebug() << "fileName is empty";
+            return false;
+        }
+        if (item.isFile()) {
+            if (!QFile::copy(item.absoluteFilePath(), to.absolutePath() + u'/' + fileName)) {
+                qDebug() << "Unable to copy " << item.absoluteFilePath() << "to"
+                         << to.absolutePath() + u'/' + fileName;
+                return false;
+            }
+        } else {
+            if (!to.mkdir(fileName)) {
+                qDebug() << "Unable to create " << to.absolutePath() + u'/' + fileName;
+                return false;
+            }
+            if (!to.cd(fileName)) {
+                qDebug() << "Unable to enter " << to.absolutePath() + u'/' + fileName;
+                return false;
+            }
+            if (!copyDirectoryRecursively(QDir(absolutePath), to))
+                return false;
+            if (!to.cdUp())
+                return false;
+        }
+    }
+    return true;
+}
+
 } // namespace
 
 QByteArray ProtocPluginTest::msgCannotReadFile(const QFile &file)
@@ -155,40 +196,89 @@ QStringList ProtocPluginTest::relativePaths(const QDir &dir, const QFileInfoList
     return result;
 }
 
-bool ProtocPluginTest::copyDirectoryRecursively(const QDir &from, QDir to)
+namespace ProtocPluginTest {
+TestBase::TestBase(QObject *parent)
+    : QObject(parent), m_copyTestResults(qgetenv("COPY_TEST_RESULTS") == "true"_L1)
 {
-    if (!from.exists()) {
-        qDebug() << "Unable to copy directory" << from << ". Directory doesn't exists.";
-        return false;
-    }
-    for (const auto &item :
-         from.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks)) {
-        const auto fileName = item.fileName();
-        const auto absolutePath = item.absoluteFilePath();
-        if (fileName.isEmpty()) {
-            qDebug() << "fileName is empty";
+}
+
+void TestBase::initPaths(const QLatin1StringView binaryDir,
+                         const QLatin1StringView cmakeGeneratedDir,
+                         const QLatin1StringView cmdLineGeneratedDir)
+{
+    m_expectedResultPath = QFINDTESTDATA("data");
+
+    m_cmakeGeneratedPath = binaryDir + '/'_L1 + cmakeGeneratedDir;
+    m_cmakeExpectedResultPath = m_expectedResultPath + '/'_L1 + cmakeGeneratedDir;
+
+#if QT_CONFIG(process)
+    QDir(binaryDir).mkdir(cmdLineGeneratedDir);
+    m_cmdLineGeneratedPath = binaryDir + '/'_L1 + cmdLineGeneratedDir;
+    m_cmdLineExpectedResultPath = m_expectedResultPath + '/'_L1 + cmdLineGeneratedDir;
+#endif
+}
+
+const QString &TestBase::expectedResultPath() const
+{
+    return m_expectedResultPath;
+}
+
+const QString &TestBase::cmakeGeneratedPath() const
+{
+    return m_cmakeGeneratedPath;
+}
+
+const QString &TestBase::cmakeExpectedResultPath() const
+{
+    return m_cmakeExpectedResultPath;
+}
+
+#if QT_CONFIG(process)
+const QString &TestBase::cmdLineGeneratedPath() const
+{
+    return m_cmdLineGeneratedPath;
+}
+const QString &TestBase::cmdLineExpectedResultPath() const
+{
+    return m_cmdLineExpectedResultPath;
+}
+#endif
+
+bool TestBase::cleanupTestData() const
+{
+    if (m_copyTestResults) {
+        static const auto clearAndCopy = [](const QString &actual, const QString &expected) {
+            QFileInfo info(expected);
+            if (info.exists()) {
+                if (!info.isDir()) {
+                    qWarning() << info.absoluteFilePath()
+                               << " is not a directory."
+                                  " Unable to copy files.";
+                    return false;
+                }
+                QDir(info.absoluteFilePath()).removeRecursively();
+                info.absoluteDir().mkdir(info.fileName());
+            }
+            return copyDirectoryRecursively(QDir(actual), QDir(expected));
+        };
+
+        if (!clearAndCopy(m_cmakeGeneratedPath, m_cmakeExpectedResultPath))
             return false;
-        }
-        if (item.isFile()) {
-            if (!QFile::copy(item.absoluteFilePath(), to.absolutePath() + u'/' + fileName)) {
-                qDebug() << "Unable to copy " << item.absoluteFilePath() << "to"
-                         << to.absolutePath() + u'/' + fileName;
-                return false;
-            }
-        } else {
-            if (!to.mkdir(fileName)) {
-                qDebug() << "Unable to create " << to.absolutePath() + u'/' + fileName;
-                return false;
-            }
-            if (!to.cd(fileName)) {
-                qDebug() << "Unable to enter " << to.absolutePath() + u'/' + fileName;
-                return false;
-            }
-            if (!copyDirectoryRecursively(QDir(absolutePath), to))
-                return false;
-            if (!to.cdUp())
-                return false;
-        }
+
+#if QT_CONFIG(process)
+        if (!clearAndCopy(m_cmdLineGeneratedPath, m_cmdLineExpectedResultPath))
+            return false;
+#endif
     }
+
+#if QT_CONFIG(process)
+    // Remove content generated by command line tests.
+    if (!m_cmdLineGeneratedPath.isEmpty())
+        cleanFolder(m_cmdLineGeneratedPath);
+#endif
     return true;
 }
+
+} // namespace ProtocPluginTest
+
+#include "moc_protocplugintestcommon.cpp"
