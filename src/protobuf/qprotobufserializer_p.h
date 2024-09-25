@@ -546,11 +546,10 @@ private:
     Q_DISABLE_COPY_MOVE(QProtobufSerializerPrivate)
 };
 
-inline bool
-isOneofOrOptionalField(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
+inline bool isOneofOrOptionalField(const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
 {
-    return fieldInfo.fieldFlags() & QtProtobufPrivate::FieldFlag::Oneof
-        || fieldInfo.fieldFlags() & QtProtobufPrivate::FieldFlag::Optional;
+    return fieldInfo.fieldFlags().testAnyFlags({ QtProtobufPrivate::FieldFlag::Oneof,
+                                                 QtProtobufPrivate::FieldFlag::Optional });
 }
 
 QT_END_NAMESPACE
