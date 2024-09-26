@@ -3,6 +3,7 @@
 
 #include <QtProtobuf/qprotobufjsonserializer.h>
 
+#include <QtProtobuf/private/protobuffieldpresencechecker_p.h>
 #include <QtProtobuf/private/qprotobufregistration_p.h>
 #include <QtProtobuf/private/qprotobufserializer_p.h>
 #include <QtProtobuf/private/qtprotobufdefs_p.h>
@@ -105,7 +106,7 @@ public:
         Serializer serializer;
         // deserializer assigned to class
         Deserializer deserializer;
-        QProtobufSerializerPrivate::IsPresentChecker isPresent;
+        ProtobufFieldPresenceChecker::Function isPresent;
     };
 
     template <typename T>
@@ -113,7 +114,7 @@ public:
     {
         return { QProtobufJsonSerializerPrivate::serializeCommon<T>,
                  QProtobufJsonSerializerPrivate::deserializeCommon<T>,
-                 QProtobufSerializerPrivate::isPresent<T> };
+                 ProtobufFieldPresenceChecker::isPresent<T> };
     }
 
     template <typename L, typename T>
@@ -121,7 +122,7 @@ public:
     {
         return { QProtobufJsonSerializerPrivate::serializeList<L>,
                  QProtobufJsonSerializerPrivate::deserializeList<L, T>,
-                 QProtobufSerializerPrivate::isPresent<L> };
+                 ProtobufFieldPresenceChecker::isPresent<L> };
     }
 
     template<typename T,

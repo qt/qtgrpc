@@ -43,32 +43,25 @@ using SerializerRegistryType =
 
 namespace {
 
-#define QT_CONSTRUCT_PROTOBUF_SERIALIZATION_HANDLER(Type, WireType)          \
-  {                                                                          \
-    QMetaType::fromType<Type>(),                                             \
-            QProtobufSerializerPrivate::serializeWrapper<                    \
-                    Type, QProtobufSerializerPrivate::serializeBasic<Type>>, \
-            QProtobufSerializerPrivate::deserializeBasic<Type>,              \
-            QProtobufSerializerPrivate::isPresent<Type>, WireType        \
-  }
-#define QT_CONSTRUCT_PROTOBUF_LIST_SERIALIZATION_HANDLER(ListType, Type)            \
-  {                                                                                 \
-    QMetaType::fromType<ListType>(),                                                \
-            QProtobufSerializerPrivate::serializeWrapper<                           \
-                    ListType, QProtobufSerializerPrivate::serializeListType<Type>>, \
-            QProtobufSerializerPrivate::deserializeList<Type>,                      \
-            QProtobufSerializerPrivate::isPresent<ListType>,                    \
-            QtProtobuf::WireTypes::LengthDelimited                                  \
-  }
+#define QT_CONSTRUCT_PROTOBUF_SERIALIZATION_HANDLER(Type, WireType) \
+    { QMetaType::fromType<Type>(),                                  \
+      QProtobufSerializerPrivate::serializeWrapper<                 \
+          Type, QProtobufSerializerPrivate::serializeBasic<Type>>,  \
+      QProtobufSerializerPrivate::deserializeBasic<Type>,           \
+      ProtobufFieldPresenceChecker::isPresent<Type>, WireType }
+#define QT_CONSTRUCT_PROTOBUF_LIST_SERIALIZATION_HANDLER(ListType, Type)  \
+    { QMetaType::fromType<ListType>(),                                    \
+      QProtobufSerializerPrivate::serializeWrapper<                       \
+          ListType, QProtobufSerializerPrivate::serializeListType<Type>>, \
+      QProtobufSerializerPrivate::deserializeList<Type>,                  \
+      ProtobufFieldPresenceChecker::isPresent<ListType>, QtProtobuf::WireTypes::LengthDelimited }
 
 #define QT_CONSTRUCT_PROTOBUF_NON_PACKED_LIST_SERIALIZATION_HANDLER(ListType, Type, WireType) \
-{                                                                                           \
-QMetaType::fromType<ListType>(),                                                          \
-        QProtobufSerializerPrivate::serializeNonPackedWrapper<                            \
-                ListType, QProtobufSerializerPrivate::serializeNonPackedList<Type>>,      \
-        QProtobufSerializerPrivate::deserializeNonPackedList<Type>,                       \
-        QProtobufSerializerPrivate::isPresent<ListType>, WireType                     \
-}
+    { QMetaType::fromType<ListType>(),                                                        \
+      QProtobufSerializerPrivate::serializeNonPackedWrapper<                                  \
+          ListType, QProtobufSerializerPrivate::serializeNonPackedList<Type>>,                \
+      QProtobufSerializerPrivate::deserializeNonPackedList<Type>,                             \
+      ProtobufFieldPresenceChecker::isPresent<ListType>, WireType }
 
 constexpr SerializerRegistryType<30> IntegratedTypesSerializers = { {
         QT_CONSTRUCT_PROTOBUF_SERIALIZATION_HANDLER(float, QtProtobuf::WireTypes::Fixed32),
