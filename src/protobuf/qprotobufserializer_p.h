@@ -22,6 +22,7 @@
 #include <QtProtobuf/qprotobufrepeatediterator.h>
 #include <QtProtobuf/qtprotobuftypes.h>
 
+#include <QtProtobuf/private/protobuffieldpresencechecker_p.h>
 #include <QtProtobuf/private/qprotobufselfcheckiterator_p.h>
 #include <QtProtobuf/private/qtprotobuflogging_p.h>
 
@@ -131,7 +132,6 @@ public:
     // Deserializer is interface function for deserialize method
     using Deserializer = bool (*)(QProtobufSelfcheckIterator &, QVariant &);
     // Function checks if value in QVariant is considered to be non-ignorable.
-    using IsPresentChecker = bool (*)(const QVariant &);
 
     // SerializationHandlers contains set of objects that required for class
     // serializaion/deserialization
@@ -140,21 +140,9 @@ public:
         QMetaType metaType;
         Serializer serializer; // serializer assigned to class
         Deserializer deserializer; // deserializer assigned to class
-        IsPresentChecker isPresent; // checks if contains non-ignorable value
+        ProtobufFieldPresenceChecker::Function isPresent; // checks if contains non-ignorable value
         QtProtobuf::WireTypes wireType; // Serialization WireType
     };
-
-    template<typename V, std::enable_if_t<IsI32OrI64<V>::value || IsInt<V>::value, int> = 0>
-    static bool isPresent(const QVariant &value)
-    {
-        return value.value<V>() != 0;
-    }
-
-    template<typename V, std::enable_if_t<!IsI32OrI64<V>::value && !IsInt<V>::value, int> = 0>
-    static bool isPresent(const QVariant &value)
-    {
-        return !value.value<V>().isEmpty();
-    }
 
     QProtobufSerializerPrivate() = default;
     ~QProtobufSerializerPrivate() = default;

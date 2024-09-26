@@ -3,6 +3,7 @@
 
 qt_internal_add_module(Protobuf
     SOURCES
+        protobuffieldpresencechecker_p.h
         qtprotobufglobal.h
         qabstractprotobufserializer.cpp qabstractprotobufserializer.h
         qprotobufjsonserializer.cpp qprotobufjsonserializer.h
