@@ -336,9 +336,9 @@ void QtProtobufTypesJsonSerializationTest::floatMessageSerializeTest_data()
     QTest::newRow("float_neg_value_4_2") << -4.2f << "{\"testFieldFloat\":-4.199999809265137}"_ba;
     QTest::newRow("float_neg_value_0_0") << (float)-0.0f << "{\"testFieldFloat\":-0}"_ba;
     QTest::newRow("float_value_0_0") << (float)0.0f << "{}"_ba;
-    QTest::newRow("float_nan") << NAN << "{\"testFieldFloat\":\"nan\"}"_ba;
-    QTest::newRow("float_infinity") << INFINITY << "{\"testFieldFloat\":\"infinity\"}"_ba;
-    QTest::newRow("float_neg_infinity") << -INFINITY << "{\"testFieldFloat\":\"-infinity\"}"_ba;
+    QTest::newRow("float_nan") << NAN << "{\"testFieldFloat\":\"NaN\"}"_ba;
+    QTest::newRow("float_infinity") << INFINITY << "{\"testFieldFloat\":\"Infinity\"}"_ba;
+    QTest::newRow("float_neg_infinity") << -INFINITY << "{\"testFieldFloat\":\"-Infinity\"}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::floatMessageSerializeTest()
@@ -372,10 +372,10 @@ void QtProtobufTypesJsonSerializationTest::doubleMessageSerializeTest_data()
                                           << "{\"testFieldDouble\":-4.2}"_ba;
     QTest::newRow("double_neg_value_0_0") << -0.0 << "{\"testFieldDouble\":-0}"_ba;
     QTest::newRow("double_value_0_0") << 0.0 << "{}"_ba;
-    QTest::newRow("double_nan") << double(NAN) << "{\"testFieldDouble\":\"nan\"}"_ba;
-    QTest::newRow("double_infinity") << double(INFINITY) << "{\"testFieldDouble\":\"infinity\"}"_ba;
+    QTest::newRow("double_nan") << double(NAN) << "{\"testFieldDouble\":\"NaN\"}"_ba;
+    QTest::newRow("double_infinity") << double(INFINITY) << "{\"testFieldDouble\":\"Infinity\"}"_ba;
     QTest::newRow("double_neg_infinity")
-        << double(-INFINITY) << "{\"testFieldDouble\":\"-infinity\"}"_ba;
+        << double(-INFINITY) << "{\"testFieldDouble\":\"-Infinity\"}"_ba;
 }
 
 void QtProtobufTypesJsonSerializationTest::doubleMessageSerializeTest()
