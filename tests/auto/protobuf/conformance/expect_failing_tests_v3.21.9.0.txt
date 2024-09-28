@@ -110,15 +110,5 @@ Required.Proto3.ProtobufInput.ValidDataScalar.ENUM[3].JsonOutput
 Required.Proto3.ProtobufInput.ValidDataScalar.ENUM[4].JsonOutput
 Required.DurationProtoInputTooLarge.JsonOutput
 Required.DurationProtoInputTooSmall.JsonOutput
-Required.Proto3.JsonInput.DoubleFieldInfinity.JsonOutput
-Required.Proto3.JsonInput.DoubleFieldNan.JsonOutput
-Required.Proto3.JsonInput.DoubleFieldNegativeInfinity.JsonOutput
-Required.Proto3.JsonInput.FloatFieldInfinity.JsonOutput
-Required.Proto3.JsonInput.FloatFieldNan.JsonOutput
-Required.Proto3.JsonInput.FloatFieldNegativeInfinity.JsonOutput
-Required.Proto3.ProtobufInput.DoubleFieldNormalizeQuietNan.JsonOutput
-Required.Proto3.ProtobufInput.DoubleFieldNormalizeSignalingNan.JsonOutput
-Required.Proto3.ProtobufInput.FloatFieldNormalizeQuietNan.JsonOutput
-Required.Proto3.ProtobufInput.FloatFieldNormalizeSignalingNan.JsonOutput
 Required.TimestampProtoInputTooLarge.JsonOutput
 Required.TimestampProtoInputTooSmall.JsonOutput

@@ -157,13 +157,13 @@ public:
     static QJsonValue serialize(T propertyValue)
     {
         if (propertyValue == -std::numeric_limits<T>::infinity())
-            return QJsonValue("-infinity"_L1);
+            return QJsonValue("-Infinity"_L1);
 
         if (propertyValue == std::numeric_limits<T>::infinity())
-            return QJsonValue("infinity"_L1);
+            return QJsonValue("Infinity"_L1);
 
         if (propertyValue != propertyValue)
-            return QJsonValue("nan"_L1);
+            return QJsonValue("NaN"_L1);
 
         return QJsonValue(propertyValue);
     }
