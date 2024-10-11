@@ -31,6 +31,7 @@ qt_add_protobuf(tst_qtgrpcgen_protobuf_common
     PROTO_FILES
         data/qtgrpcgen.proto
 )
+qt_autogen_tools_initial_setup(tst_qtgrpcgen_protobuf_common)
 
 set(cmake_generator_tests "")
 qt_add_grpc(tst_qtgrpcgen_generate_package_subfolders CLIENT
