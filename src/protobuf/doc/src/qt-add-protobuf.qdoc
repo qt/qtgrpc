@@ -8,7 +8,6 @@
 \title qt_add_protobuf
 \keyword qt6_add_protobuf
 \summary {Generates Qt-based C++ source code using a protobuf schema}
-\preliminarycmakecommand
 \cmakecommandsince 6.5
 
 Use qt_add_protobuf to invoke \c qtprotobufgen in your CMake scripts and generate
