@@ -71,7 +71,7 @@ qt_add_grpc(tst_qtgrpcgen_invalid-identifier CLIENT
 )
 target_link_libraries(tst_qtgrpcgen_invalid-identifier
     PRIVATE tst_qtgrpcgen_protobuf_invalid-identifier)
-list(APPEND cmake_generator_tests invalid-identifier)
+list(APPEND cmake_generator_tests invalid-identifier protobuf_invalid-identifier)
 
 if(TARGET Qt6::GrpcQuick)
     qt_internal_extend_target(tst_qtgrpcgen
