@@ -6,6 +6,7 @@
 #include <QtProtobuf/private/protobuffieldpresencechecker_p.h>
 #include <QtProtobuf/private/protobufscalarjsonserializers_p.h>
 #include <QtProtobuf/private/qprotobufdeserializerbase_p.h>
+#include <QtProtobuf/private/qprotobufjsonserializer_p.h>
 #include <QtProtobuf/private/qprotobufregistration_p.h>
 #include <QtProtobuf/private/qprotobufserializerbase_p.h>
 #include <QtProtobuf/private/qtprotobufdefs_p.h>
@@ -17,6 +18,7 @@
 #include <QtCore/qjsonarray.h>
 #include <QtCore/qjsondocument.h>
 #include <QtCore/qjsonobject.h>
+#include <QtCore/qreadwritelock.h>
 #include <QtCore/qtimezone.h>
 #include <QtCore/qvariant.h>
 
@@ -45,6 +47,41 @@ using namespace ProtobufScalarJsonSerializers;
 
 namespace {
 
+struct JsonHandlerRegistry
+{
+    void registerHandler(QMetaType metaType, QtProtobufPrivate::CustomJsonSerializer serializer,
+                         QtProtobufPrivate::CustomJsonDeserializer deserializer)
+    {
+        QWriteLocker locker(&m_lock);
+        m_registry[metaType] = { serializer, deserializer };
+    }
+
+    QtProtobufPrivate::CustomJsonSerializer findSerializer(QMetaType metaType)
+    {
+        QReadLocker locker(&m_lock);
+        const auto it = m_registry.constFind(metaType);
+        if (it != m_registry.constEnd())
+            return it.value().first;
+        return nullptr;
+    }
+
+    QtProtobufPrivate::CustomJsonDeserializer findDeserializer(QMetaType metaType)
+    {
+        QReadLocker locker(&m_lock);
+        const auto it = m_registry.constFind(metaType);
+        if (it != m_registry.constEnd())
+            return it.value().second;
+        return nullptr;
+    }
+
+private:
+    using Handler = std::pair<QtProtobufPrivate::CustomJsonSerializer,
+                              QtProtobufPrivate::CustomJsonDeserializer>;
+    QReadWriteLock m_lock;
+    QHash<QMetaType, Handler> m_registry;
+};
+Q_GLOBAL_STATIC(JsonHandlerRegistry, jsonHandlersRegistry)
+
 inline QString convertJsonKeyToJsonName(QStringView name)
 {
     QString result;
@@ -61,6 +98,27 @@ inline QString convertJsonKeyToJsonName(QStringView name)
     return result;
 }
 
+}
+
+void QtProtobufPrivate::registerCustomJsonHandler(QMetaType metaType,
+                                                  QtProtobufPrivate::CustomJsonSerializer
+                                                      serializer,
+                                                  QtProtobufPrivate::CustomJsonDeserializer
+                                                      deserializer)
+{
+    jsonHandlersRegistry->registerHandler(metaType, serializer, deserializer);
+}
+
+QtProtobufPrivate::CustomJsonSerializer
+QtProtobufPrivate::findCustomJsonSerializer(QMetaType metaType)
+{
+    return jsonHandlersRegistry->findSerializer(metaType);
+}
+
+QtProtobufPrivate::CustomJsonDeserializer
+QtProtobufPrivate::findCustomJsonDeserializer(QMetaType metaType)
+{
+    return jsonHandlersRegistry->findDeserializer(metaType);
 }
 
 class QProtobufJsonSerializerImpl final : public QProtobufSerializerBase
@@ -83,9 +141,6 @@ private:
     void serializeMessageFieldBegin() override;
     void serializeMessageFieldEnd(const QProtobufMessage *message,
                                   const QProtobufFieldInfo &fieldInfo) override;
-
-    void serializeTimestamp(const QProtobufMessage *message,
-                            const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo);
 
     QJsonObject m_result;
     QList<QJsonObject> m_state;
@@ -114,8 +169,6 @@ private:
                          const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) override;
     int nextFieldIndex(QProtobufMessage *message) override;
     bool deserializeScalarField(QVariant &, const QtProtobufPrivate::QProtobufFieldInfo &) override;
-
-    [[nodiscard]] bool deserializeTimestamp(QProtobufMessage *message);
 
     struct JsonDeserializerState
     {
@@ -194,41 +247,17 @@ void QProtobufJsonSerializerImpl::serializeMessageField(const QProtobufMessage *
                                                         const QtProtobufPrivate::QProtobufFieldInfo
                                                             &fieldInfo)
 {
-    if (message->propertyOrdering()
-            ->messageFullName()
-            .compare(QString::fromUtf8("google.protobuf.Timestamp"))
-        == 0) {
-        serializeTimestamp(message, fieldInfo);
+    if (!message)
+        return;
+
+    const auto *metaObject = QtProtobufSerializerHelpers::messageMetaObject(message);
+
+    if (auto *serializer = QtProtobufPrivate::findCustomJsonSerializer(metaObject->metaType())) {
+        if (const QJsonValue value = serializer(message); !value.isUndefined())
+            m_result.insert(fieldInfo.jsonName().toString(), value);
     } else {
         QProtobufSerializerBase::serializeMessageField(message, fieldInfo);
     }
-}
-
-void QProtobufJsonSerializerImpl::serializeTimestamp(const QProtobufMessage *message,
-                                                     const QtProtobufPrivate::QProtobufFieldInfo
-                                                         &fieldInfo)
-{
-    qint64 secs = 0;
-    qint32 nanos = 0;
-
-    if (const auto secondsValue = message->property("seconds"); secondsValue.canConvert<qint64>()) {
-        secs = secondsValue.value<qint64>();
-    } else {
-        qWarning() << "QProtobufJsonSerializerImpl::serializeTimestamp() failed to convert seconds";
-    }
-
-    if (const auto nanosValue = message->property("nanos"); nanosValue.canConvert<qint32>()) {
-        nanos = nanosValue.value<qint32>();
-    } else {
-        qWarning() << "QProtobufJsonSerializerImpl::serializeTimestamp() failed to convert nanos";
-    }
-
-    const auto datetime = QDateTime::fromMSecsSinceEpoch(secs * 1000 + nanos / 1000000,
-                                                         QTimeZone::UTC);
-    const auto datetimeISO = datetime.toString(Qt::ISODateWithMs);
-
-    const auto jsonName = fieldInfo.jsonName();
-    m_result.insert(jsonName.toString(), serializeCommon<QString>(datetimeISO));
 }
 
 bool QProtobufJsonSerializerImpl::serializeEnum(QVariant &value,
@@ -328,49 +357,20 @@ void QProtobufJsonDeserializerImpl::setError(QAbstractProtobufSerializer::Error 
 
 bool QProtobufJsonDeserializerImpl::deserializeMessageField(QProtobufMessage *message)
 {
-    if (!m_state.last().scalarValue.isNull()) {
-        if (message->propertyOrdering()
-                    ->messageFullName()
-                    .compare(QString::fromUtf8("google.protobuf.Timestamp"))
-                == 0
-            && m_state.last().scalarValue.isString()) {
-            return deserializeTimestamp(message);
+    if (!message)
+        return true;
+
+    const auto &value = m_state.last().scalarValue;
+    if (!value.isNull()) {
+        const auto *metaObject = QtProtobufSerializerHelpers::messageMetaObject(message);
+        if (auto *deserializer = QtProtobufPrivate::findCustomJsonDeserializer(metaObject
+                                                                                   ->metaType())) {
+            return deserializer(message, value);
         }
         setInvalidFormatError();
         return false;
     }
     return QProtobufDeserializerBase::deserializeMessageField(message);
-}
-
-bool QProtobufJsonDeserializerImpl::deserializeTimestamp(QProtobufMessage *message)
-{
-    const auto tsString = m_state.last().scalarValue.toString();
-    // Protobuf requires upper-case letters in timestamp string be case sensitive.
-    if (tsString.toUpper() != tsString)
-        return false;
-
-    if (tsString.contains(u' '))
-        return false;
-
-    //Ensure the field either ends with Z or a valid offset
-    static const QRegularExpression TimeStampEnding(".+([\\+\\-]\\d{2}:\\d{2}|Z)$"_L1);
-    if (!TimeStampEnding.match(tsString).hasMatch())
-        return false;
-
-    const auto datetime = QDateTime::fromString(tsString, Qt::ISODateWithMs);
-
-    if (!datetime.isValid()) {
-        qWarning() << "QProtobufJsonDeserializerImpl::deserializeTimestamp() datetime is invalid";
-        return false;
-    }
-    const auto msecs = datetime.toMSecsSinceEpoch();
-    const qint64 seconds = msecs / 1000;
-    const qint32 nanos = (msecs % 1000) * 1000000;
-
-    message->setProperty("seconds", QVariant::fromValue(seconds));
-    message->setProperty("nanos", QVariant::fromValue(nanos));
-
-    return true;
 }
 
 bool QProtobufJsonDeserializerImpl::deserializeEnum(QVariant &value,

@@ -9,7 +9,7 @@ qt_internal_add_module(Protobuf
         qtprotobufglobal.h
         qabstractprotobufserializer.cpp qabstractprotobufserializer.h
         qprotobufdeserializerbase_p.h qprotobufdeserializerbase.cpp
-        qprotobufjsonserializer.cpp qprotobufjsonserializer.h
+        qprotobufjsonserializer.cpp qprotobufjsonserializer.h qprotobufjsonserializer_p.h
         qprotobuflazymessagepointer.h
         qprotobufmessage.cpp qprotobufmessage.h qprotobufmessage_p.h
         qprotobufobject.h

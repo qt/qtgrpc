@@ -73,8 +73,11 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
             return;
         }
     });
-    if (generateWellknownTimestamp)
+    if (generateWellknownTimestamp) {
+        externalIncludes
+            .insert("QtProtobufWellKnownTypes/private/qprotobufwellknowntypesjsonserializers_p.h");
         externalIncludes.insert("QtCore/QTimeZone");
+    }
     printIncludes(sourcePrinter.get(), internalIncludes, externalIncludes, { "cmath" });
 
     OpenFileNamespaces(file, sourcePrinter.get());

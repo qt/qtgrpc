@@ -5,6 +5,7 @@ qt_internal_add_protobuf_module(ProtobufWellKnownTypes
     SOURCES
         qtprotobufwellknowntypesglobal.h
         qprotobufanysupport.cpp qprotobufanysupport.h
+        qprotobufwellknowntypesjsonserializers_p.h qprotobufwellknowntypesjsonserializers.cpp
     PUBLIC_LIBRARIES
         Qt::Protobuf
     LIBRARIES
