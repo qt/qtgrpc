@@ -66,18 +66,17 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
 
     printIncludes(registrationPrinter.get(), internalIncludes, externalIncludes, {});
 
-    bool generateWellknownTimestamp = false;
     common::iterateMessages(file, [&](const Descriptor *message) {
         if (message->full_name() == "google.protobuf.Timestamp") {
-            generateWellknownTimestamp = true;
-            return;
+            externalIncludes.insert("QtCore/QTimeZone");
+            externalIncludes.insert("QtProtobufWellKnownTypes/private/"
+                                    "qprotobufwellknowntypesjsonserializers_p.h");
+        } else if (message->full_name() == "google.protobuf.Duration") {
+            externalIncludes.insert("QtProtobufWellKnownTypes/private/"
+                                    "qprotobufwellknowntypesjsonserializers_p.h");
         }
     });
-    if (generateWellknownTimestamp) {
-        externalIncludes
-            .insert("QtProtobufWellKnownTypes/private/qprotobufwellknowntypesjsonserializers_p.h");
-        externalIncludes.insert("QtCore/QTimeZone");
-    }
+
     printIncludes(sourcePrinter.get(), internalIncludes, externalIncludes, { "cmath" });
 
     OpenFileNamespaces(file, sourcePrinter.get());

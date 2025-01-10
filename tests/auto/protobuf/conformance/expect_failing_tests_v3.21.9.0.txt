@@ -18,10 +18,6 @@ Required.Proto3.JsonInput.AnyWithValueForInteger.JsonOutput
 Required.Proto3.JsonInput.AnyWithValueForInteger.ProtobufOutput
 Required.Proto3.JsonInput.AnyWithValueForJsonObject.JsonOutput
 Required.Proto3.JsonInput.AnyWithValueForJsonObject.ProtobufOutput
-Required.Proto3.JsonInput.DurationMaxValue.JsonOutput
-Required.Proto3.JsonInput.DurationMaxValue.ProtobufOutput
-Required.Proto3.JsonInput.DurationMinValue.JsonOutput
-Required.Proto3.JsonInput.DurationMinValue.ProtobufOutput
 Required.Proto3.JsonInput.DurationRepeatedValue.JsonOutput
 Required.Proto3.JsonInput.DurationRepeatedValue.ProtobufOutput
 Required.Proto3.JsonInput.EmptyFieldMask.JsonOutput

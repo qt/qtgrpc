@@ -253,7 +253,7 @@ void QProtobufJsonSerializerImpl::serializeMessageField(const QProtobufMessage *
     const auto *metaObject = QtProtobufSerializerHelpers::messageMetaObject(message);
 
     if (auto *serializer = QtProtobufPrivate::findCustomJsonSerializer(metaObject->metaType())) {
-        if (const QJsonValue value = serializer(message); !value.isUndefined())
+        if (const QJsonValue value = serializer(message); !value.isNull())
             m_result.insert(fieldInfo.jsonName().toString(), value);
     } else {
         QProtobufSerializerBase::serializeMessageField(message, fieldInfo);

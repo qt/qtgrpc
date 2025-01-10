@@ -43,3 +43,19 @@ qt6_add_protobuf(tst_protobuf_timestamp
         MyTopLevelNamespace
 )
 qt_autogen_tools_initial_setup(tst_protobuf_timestamp)
+
+qt_internal_add_test(tst_protobuf_duration
+    SOURCES
+        tst_protobuf_duration.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::ProtobufWellKnownTypes
+)
+qt6_add_protobuf(tst_protobuf_duration
+    PROTO_FILES
+        proto/durationtest.proto
+    PROTO_INCLUDES
+        $<TARGET_PROPERTY:Qt6::ProtobufWellKnownTypes,QT_PROTO_INCLUDES>
+)
+
+qt_autogen_tools_initial_setup(tst_protobuf_duration)

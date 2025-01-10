@@ -153,6 +153,11 @@ void MessageDefinitionPrinter::printRegisterBody()
                          "registerTimestampCustomJsonHandler();\n");
     }
 
+    if (m_descriptor->full_name() == "google.protobuf.Duration") {
+        m_printer->Print("QT_PREPEND_NAMESPACE(QtProtobufWellKnownTypesPrivate)::"
+                         "registerDurationCustomJsonHandler();\n");
+    }
+
     common::iterateMessageFields(
             m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
                 auto it = propertyMap.find("full_type");
