@@ -71,7 +71,7 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
             externalIncludes.insert("QtCore/QTimeZone");
             externalIncludes.insert("QtProtobufWellKnownTypes/private/"
                                     "qprotobufwellknowntypesjsonserializers_p.h");
-        } else if (message->full_name() == "google.protobuf.Duration") {
+        } else if (common::hasCustomJsonCoversion(message)) {
             externalIncludes.insert("QtProtobufWellKnownTypes/private/"
                                     "qprotobufwellknowntypesjsonserializers_p.h");
         }

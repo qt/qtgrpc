@@ -1020,6 +1020,12 @@ const char *CommonTemplates::ExportMacroTemplate()
            "#endif\n";
 }
 
+const char *CommonTemplates::CustomJsonHanderTemplate()
+{
+    return "QT_PREPEND_NAMESPACE(QtProtobufWellKnownTypesPrivate)::"
+           "register$type_name$CustomJsonHandler();\n";
+}
+
 const char *CommonTemplates::MocIncludeTemplate()
 {
     return "#include \"$source_file$\"\n";

@@ -13,6 +13,7 @@
 #  include <google/protobuf/descriptor.pb.h>
 #endif
 
+#include <array>
 #include <cassert>
 #include <string_view>
 
@@ -830,3 +831,14 @@ std::string common::generateRelativeFilePath(const FileDescriptor *file, const s
     return outFileBasename;
 }
 
+bool common::hasCustomJsonCoversion(const Descriptor *message)
+{
+    static constexpr std::array<std::string_view, 11> TypesSupportingOptionalCoversion{
+        "Timestamp",   "Duration",   "BoolValue",   "Int32Value", "Int64Value",  "UInt32Value",
+        "UInt64Value", "FloatValue", "DoubleValue", "BytesValue", "StringValue",
+    };
+
+    return std::find(TypesSupportingOptionalCoversion.begin(),
+                     TypesSupportingOptionalCoversion.end(), std::string_view(message->name()))
+        != TypesSupportingOptionalCoversion.end();
+}

@@ -162,6 +162,9 @@ struct common {
 
     static std::string generateRelativeFilePath(const ::google::protobuf::FileDescriptor *file,
                                                 const std::string &name);
+
+    static bool hasCustomJsonCoversion(const Descriptor *message);
+
 private:
     static std::set<std::string> m_extraNamespacedFiles;
 };

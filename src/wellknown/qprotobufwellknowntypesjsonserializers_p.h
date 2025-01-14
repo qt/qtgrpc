@@ -22,6 +22,15 @@ QT_BEGIN_NAMESPACE
 namespace QtProtobufWellKnownTypesPrivate {
 void registerTimestampCustomJsonHandler();
 void registerDurationCustomJsonHandler();
+void registerBoolValueCustomJsonHandler();
+void registerInt32ValueCustomJsonHandler();
+void registerInt64ValueCustomJsonHandler();
+void registerUInt32ValueCustomJsonHandler();
+void registerUInt64ValueCustomJsonHandler();
+void registerFloatValueCustomJsonHandler();
+void registerDoubleValueCustomJsonHandler();
+void registerStringValueCustomJsonHandler();
+void registerBytesValueCustomJsonHandler();
 }
 
 QT_END_NAMESPACE

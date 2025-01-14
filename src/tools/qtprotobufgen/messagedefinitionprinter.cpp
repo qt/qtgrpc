@@ -148,14 +148,11 @@ void MessageDefinitionPrinter::printRegisterBody()
     if (m_descriptor->full_name() == "google.protobuf.Any")
         m_printer->Print("QT_PREPEND_NAMESPACE(QtProtobuf)::Any::registerTypes();\n");
 
-    if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
-        m_printer->Print("QT_PREPEND_NAMESPACE(QtProtobufWellKnownTypesPrivate)::"
-                         "registerTimestampCustomJsonHandler();\n");
-    }
-
-    if (m_descriptor->full_name() == "google.protobuf.Duration") {
-        m_printer->Print("QT_PREPEND_NAMESPACE(QtProtobufWellKnownTypesPrivate)::"
-                         "registerDurationCustomJsonHandler();\n");
+    if (m_descriptor->file()->package() == "google.protobuf") {
+        if (common::hasCustomJsonCoversion(m_descriptor)) {
+            m_printer->Print({ { "type_name", m_descriptor->name() } },
+                CommonTemplates::CustomJsonHanderTemplate());
+        }
     }
 
     common::iterateMessageFields(

@@ -1,6 +1,7 @@
 // Copyright (C) 2025 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
+#include "wrappers.qpb.h"
 #include <QtProtobufWellKnownTypes/duration.qpb.h>
 #include <QtProtobufWellKnownTypes/private/qprotobufwellknowntypesjsonserializers_p.h>
 #include <QtProtobufWellKnownTypes/timestamp.qpb.h>
@@ -189,6 +190,24 @@ bool deserializeProtobufWellKnownDuration(QProtobufMessage *message, const QJson
     return true;
 }
 
+template <typename T>
+bool deserializeProtobufWellKnownValueType(QProtobufMessage *message, const QJsonValue &value)
+{
+    using ReturnType = std::invoke_result_t<decltype(&T::value), T>;
+
+    bool ok = false;
+    message->setProperty("value",
+                         ProtobufScalarJsonSerializers::deserializeCommon<ReturnType>(value, ok));
+    return ok;
+}
+
+template <typename T>
+void registerProtobufWellKnownValueTypeJsonHandler()
+{
+    QtProtobufPrivate::registerCustomJsonHandler(QMetaType::fromType<T>(), nullptr,
+                                                 deserializeProtobufWellKnownValueType<T>);
+}
+
 } // namespace
 
 void QtProtobufWellKnownTypesPrivate::registerTimestampCustomJsonHandler()
@@ -203,6 +222,68 @@ void QtProtobufWellKnownTypesPrivate::registerDurationCustomJsonHandler()
     QtProtobufPrivate::registerCustomJsonHandler(QMetaType::fromType<google::protobuf::Duration>(),
                                                  serializeProtobufWellKnownDuration,
                                                  deserializeProtobufWellKnownDuration);
+}
+
+void QtProtobufWellKnownTypesPrivate::registerBoolValueCustomJsonHandler()
+{
+    registerProtobufWellKnownValueTypeJsonHandler<google::protobuf::BoolValue>();
+}
+
+void QtProtobufWellKnownTypesPrivate::registerInt32ValueCustomJsonHandler()
+{
+    registerProtobufWellKnownValueTypeJsonHandler<google::protobuf::Int32Value>();
+}
+
+void QtProtobufWellKnownTypesPrivate::registerInt64ValueCustomJsonHandler()
+{
+    registerProtobufWellKnownValueTypeJsonHandler<google::protobuf::Int64Value>();
+}
+
+void QtProtobufWellKnownTypesPrivate::registerUInt32ValueCustomJsonHandler()
+{
+    registerProtobufWellKnownValueTypeJsonHandler<google::protobuf::UInt32Value>();
+}
+
+void QtProtobufWellKnownTypesPrivate::registerUInt64ValueCustomJsonHandler()
+{
+    registerProtobufWellKnownValueTypeJsonHandler<google::protobuf::UInt64Value>();
+}
+
+void QtProtobufWellKnownTypesPrivate::registerFloatValueCustomJsonHandler()
+{
+    registerProtobufWellKnownValueTypeJsonHandler<google::protobuf::FloatValue>();
+}
+
+void QtProtobufWellKnownTypesPrivate::registerDoubleValueCustomJsonHandler()
+{
+    registerProtobufWellKnownValueTypeJsonHandler<google::protobuf::DoubleValue>();
+}
+
+void QtProtobufWellKnownTypesPrivate::registerStringValueCustomJsonHandler()
+{
+    QtProtobufPrivate::
+        registerCustomJsonHandler(QMetaType::fromType<google::protobuf::StringValue>(), nullptr,
+                                  [](QProtobufMessage *message, const QJsonValue &value) -> bool {
+                                      if (!value.isString())
+                                          return false;
+                                      message->setProperty("value",
+                                                           QVariant::fromValue(value.toString()));
+                                      return true;
+                                  });
+}
+
+void QtProtobufWellKnownTypesPrivate::registerBytesValueCustomJsonHandler()
+{
+    QtProtobufPrivate::registerCustomJsonHandler(
+        QMetaType::fromType<google::protobuf::BytesValue>(), nullptr,
+        [](QProtobufMessage *message, const QJsonValue &value) -> bool {
+            if (!value.isString())
+                return false;
+            message->setProperty("value",
+                                 QVariant::fromValue(QByteArray::fromBase64(value.toString()
+                                                                                .toLatin1())));
+            return true;
+        });
 }
 
 QT_END_NAMESPACE
