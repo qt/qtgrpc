@@ -253,8 +253,15 @@ void QProtobufJsonSerializerImpl::serializeMessageField(const QProtobufMessage *
     const auto *metaObject = QtProtobufSerializerHelpers::messageMetaObject(message);
 
     if (auto *serializer = QtProtobufPrivate::findCustomJsonSerializer(metaObject->metaType())) {
-        if (const QJsonValue value = serializer(message); !value.isNull())
-            m_result.insert(fieldInfo.jsonName().toString(), value);
+        if (const QJsonValue value = serializer(message); !value.isNull()) {
+            if (fieldInfo.fieldFlags().testAnyFlags(QtProtobufPrivate::FieldFlag::Repeated)) {
+                auto array = m_result.value(fieldInfo.jsonName().toString()).toArray();
+                array.append(value);
+                m_result.insert(fieldInfo.jsonName().toString(), array);
+            } else {
+                m_result.insert(fieldInfo.jsonName().toString(), value);
+            }
+        }
     } else {
         QProtobufSerializerBase::serializeMessageField(message, fieldInfo);
     }

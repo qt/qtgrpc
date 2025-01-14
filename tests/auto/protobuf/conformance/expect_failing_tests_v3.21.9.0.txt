@@ -18,7 +18,6 @@ Required.Proto3.JsonInput.AnyWithValueForInteger.JsonOutput
 Required.Proto3.JsonInput.AnyWithValueForInteger.ProtobufOutput
 Required.Proto3.JsonInput.AnyWithValueForJsonObject.JsonOutput
 Required.Proto3.JsonInput.AnyWithValueForJsonObject.ProtobufOutput
-Required.Proto3.JsonInput.DurationRepeatedValue.JsonOutput
 Required.Proto3.JsonInput.EmptyFieldMask.JsonOutput
 Required.Proto3.JsonInput.EmptyFieldMask.ProtobufOutput
 Required.Proto3.JsonInput.EnumFieldUnknownValue.Validator
