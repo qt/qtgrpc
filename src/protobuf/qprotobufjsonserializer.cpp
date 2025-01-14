@@ -435,17 +435,22 @@ int QProtobufJsonDeserializerImpl::nextFieldIndex(QProtobufMessage *message)
             auto array = val.toArray();
             if (array.isEmpty()) {
                 ++state.index;
+                state.scalarValue = {};
                 continue;
             }
 
-            if (!array.at(0).isObject()) {
+            auto nextValue = array.takeAt(0);
+            if (nextValue.isNull()) {
                 setInvalidFormatError();
                 return -1;
             }
 
-            auto nextObject = array.takeAt(0).toObject();
             state.obj.insert(*it, array);
-            m_state.push_back({ nextObject });
+            if (nextValue.isObject()) {
+                m_state.push_back({ nextValue.toObject() });
+            } else {
+                state.scalarValue = nextValue;
+            }
         } else if (flags.testFlag(QtProtobufPrivate::FieldFlag::Map)) {
             if (!val.isObject()) {
                 setInvalidFormatError();
