@@ -418,7 +418,7 @@ function(qt6_add_protobuf target)
         )
 
         list(APPEND type_registrations
-            "${output_directory}/${package_full_path}${basename}_protobuftyperegistrations.cpp")
+            "${output_directory}/${package_full_path}${basename}_qtprotoreg.cpp")
     endforeach()
 
     if(TARGET ${target})

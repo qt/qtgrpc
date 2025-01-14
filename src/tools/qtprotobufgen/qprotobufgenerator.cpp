@@ -53,7 +53,7 @@ void QProtobufGenerator::GenerateSources(const FileDescriptor *file,
     std::unique_ptr<io::ZeroCopyOutputStream> sourceStream(
                 generatorContext->Open(relativePath + CommonTemplates::ProtoFileSuffix() + ".cpp"));
     std::unique_ptr<io::ZeroCopyOutputStream> registrationStream(
-                generatorContext->Open(relativePath + "_protobuftyperegistrations.cpp"));
+                generatorContext->Open(relativePath + "_qtprotoreg.cpp"));
 
     std::shared_ptr<Printer> sourcePrinter(new Printer(sourceStream.get(), '$'));
     std::shared_ptr<Printer> registrationPrinter(new Printer(registrationStream.get(), '$'));
