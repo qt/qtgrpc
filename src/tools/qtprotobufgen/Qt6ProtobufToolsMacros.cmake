@@ -570,17 +570,17 @@ function(qt6_add_protobuf target)
 
     set_source_files_properties(${type_registrations} PROPERTIES SKIP_AUTOGEN ON)
     if(is_static OR (WIN32 AND NOT is_executable))
-        if(TARGET ${target}_protobuf_registration)
-            target_sources(${target}_protobuf_registration PRIVATE ${type_registrations})
+        if(TARGET ${target}_qtprotoreg)
+            target_sources(${target}_qtprotoreg PRIVATE ${type_registrations})
         else()
-            add_library(${target}_protobuf_registration OBJECT ${type_registrations})
+            add_library(${target}_qtprotoreg OBJECT ${type_registrations})
             if(export_macro_file)
-                target_sources(${target}_protobuf_registration PRIVATE ${export_macro_file})
+                target_sources(${target}_qtprotoreg PRIVATE ${export_macro_file})
             endif()
 
             target_link_libraries(${target}
-                INTERFACE "$<TARGET_OBJECTS:$<TARGET_NAME:${target}_protobuf_registration>>")
-            add_dependencies(${target} ${target}_protobuf_registration)
+                INTERFACE "$<TARGET_OBJECTS:$<TARGET_NAME:${target}_qtprotoreg>>")
+            add_dependencies(${target} ${target}_qtprotoreg)
 
             get_target_property(num_deps ${target} _qt_qtprotobufgen_deps_num)
             if(num_deps)
@@ -589,13 +589,13 @@ function(qt6_add_protobuf target)
                 foreach(i RANGE 0 ${num_deps})
                     _qt_internal_get_generator_dep_target_name(deps_target ${target}
                         qtprotobufgen ${i})
-                    add_dependencies(${target}_protobuf_registration ${deps_target})
+                    add_dependencies(${target}_qtprotoreg ${deps_target})
                 endforeach()
             endif()
 
-            target_include_directories(${target}_protobuf_registration
+            target_include_directories(${target}_qtprotoreg
                 PRIVATE "$<GENEX_EVAL:$<TARGET_PROPERTY:${target},INCLUDE_DIRECTORIES>>")
-            target_link_libraries(${target}_protobuf_registration
+            target_link_libraries(${target}_qtprotoreg
                 PRIVATE
                     ${QT_CMAKE_EXPORT_NAMESPACE}::Platform
                     ${QT_CMAKE_EXPORT_NAMESPACE}::Protobuf
@@ -603,13 +603,13 @@ function(qt6_add_protobuf target)
             )
 
             if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-                target_compile_options(${target}_protobuf_registration
+                target_compile_options(${target}_qtprotoreg
                     PRIVATE "/Zc:__cplusplus" "/permissive-" "/bigobj")
             endif()
         endif()
         if(DEFINED arg_OUTPUT_TARGETS)
             list(APPEND ${arg_OUTPUT_TARGETS}
-                "${target}_protobuf_registration")
+                "${target}_qtprotoreg")
         endif()
     else()
         target_sources(${target} PRIVATE ${type_registrations})
