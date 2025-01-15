@@ -98,23 +98,23 @@ QJsonValue serializeProtobufWellKnownDuration(const QProtobufMessage *message)
         seconds = secondsValue.value<qint64>();
     } else {
         qProtoWarning("Failed to convert seconds");
-        return {};
+        return {QJsonValue::Undefined};
     }
 
     if (const auto nanosValue = message->property("nanos"); nanosValue.canConvert<qint32>()) {
         nanos = nanosValue.value<qint32>();
     } else {
         qProtoWarning("Failed to convert nanos");
-        return {};
+        return {QJsonValue::Undefined};
     }
 
     if (seconds != 0 && nanos != 0 && (seconds ^ qint64(nanos)) < 0 ) {
         qProtoWarning("Duration seconds and nanos must have the same sign");
-        return {};
+        return {QJsonValue::Undefined};
     }
 
     if (!checkDurationRanges(seconds, nanos))
-        return {};
+        return {QJsonValue::Undefined};
 
     // Reserve the maximum possible number of bytes that can be used by duration string:
     //  - 9 symbols for nanoseconds

@@ -176,7 +176,7 @@ private:
 
         QJsonObject obj = {};
         int index = 0;
-        QJsonValue scalarValue = {};
+        QJsonValue scalarValue = {QJsonValue::Undefined};
     };
 
     QList<JsonDeserializerState> m_state;
@@ -253,7 +253,7 @@ void QProtobufJsonSerializerImpl::serializeMessageField(const QProtobufMessage *
     const auto *metaObject = QtProtobufSerializerHelpers::messageMetaObject(message);
 
     if (auto *serializer = QtProtobufPrivate::findCustomJsonSerializer(metaObject->metaType())) {
-        if (const QJsonValue value = serializer(message); !value.isNull()) {
+        if (const QJsonValue value = serializer(message); !value.isUndefined()) {
             if (fieldInfo.fieldFlags().testAnyFlags(QtProtobufPrivate::FieldFlag::Repeated)) {
                 auto array = m_result.value(fieldInfo.jsonName().toString()).toArray();
                 array.append(value);
@@ -368,7 +368,7 @@ bool QProtobufJsonDeserializerImpl::deserializeMessageField(QProtobufMessage *me
         return true;
 
     const auto &value = m_state.last().scalarValue;
-    if (!value.isNull()) {
+    if (!value.isUndefined()) {
         const auto *metaObject = QtProtobufSerializerHelpers::messageMetaObject(message);
         if (auto *deserializer = QtProtobufPrivate::findCustomJsonDeserializer(metaObject
                                                                                    ->metaType())) {
@@ -477,7 +477,7 @@ int QProtobufJsonDeserializerImpl::nextFieldIndex(QProtobufMessage *message)
             state.obj.insert(*it, mapObject);
             m_state.push_back({ nextObject });
         } else if (flags.testFlag(QtProtobufPrivate::FieldFlag::Message)) {
-            if (val.isArray() || val.isUndefined() || val.isNull()) {
+            if (val.isArray() || val.isUndefined()) {
                 setInvalidFormatError();
                 return -1;
             }
