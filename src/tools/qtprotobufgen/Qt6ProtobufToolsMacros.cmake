@@ -365,6 +365,11 @@ function(qt6_add_protobuf target)
         ${arg_PROTO_FILES}
     )
 
+    if(NOT proto_files AND arg_PROTO_FILES)
+        _qt_internal_protobuf_missing_definitions_warning(${target} protobuf "${arg_PROTO_FILES}")
+        return()
+    endif()
+
     set(output_directory "${CMAKE_CURRENT_BINARY_DIR}")
     if(DEFINED arg_OUTPUT_DIRECTORY)
         set(output_directory "${arg_OUTPUT_DIRECTORY}")
@@ -747,4 +752,17 @@ function(_qt_internal_preparse_proto_file_common out_result out_package proto_fi
 
     set(${out_package} "${proto_package}" PARENT_SCOPE)
     set(${out_result} "${found_key}" PARENT_SCOPE)
+endfunction()
+
+function(_qt_internal_protobuf_missing_definitions_warning target generator_type proto_files)
+    if(TARGET ${target})
+        set(warning_action "adding")
+    else()
+        set(warning_action "extending")
+    endif()
+
+    if(NOT QT_SKIP_PROTOBUF_MISSING_DEFINITIONS_WARNING)
+        message(WARNING "PROTO_FILES ${proto_files} do not contain code for ${generator_type}"
+            " generator. Skipping ${warning_action} the ${target} target.")
+    endif()
 endfunction()
