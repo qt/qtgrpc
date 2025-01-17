@@ -21,6 +21,9 @@ qt_add_grpc(clientguide_client CLIENT
 target_link_libraries(clientguide_client PRIVATE Qt6::Protobuf Qt6::Grpc)
 #! [0]
 
+target_compile_definitions(clientguide_client PRIVATE
+        SERVER_PATH="$<TARGET_FILE:clientguide_server>")
+
 install(TARGETS clientguide_client
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"

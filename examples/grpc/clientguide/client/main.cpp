@@ -243,7 +243,7 @@ void startServerProcess()
     });
     serverProcess.setProcessChannelMode(QProcess::MergedChannels);
     serverProcess.setReadChannel(QProcess::StandardOutput);
-    serverProcess.start("./clientguide_server");
+    serverProcess.start(SERVER_PATH);
     if (!serverProcess.waitForStarted()) {
         qFatal() << "Couldn't start the server: " << serverProcess.errorString();
         exit(EXIT_FAILURE);
