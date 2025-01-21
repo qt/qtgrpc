@@ -6,6 +6,9 @@ accept_configuration:
 
 instructions:
   Build:
+    - type: EnvironmentVariable
+      variableName: VERIFY_SOURCE_SBOM
+      variableValue: "ON"
     - type: AppendToEnvironmentVariable
       variableName: COMMON_TEST_CMAKE_ARGS
       variableValue: " -DQT_ALLOW_DOWNLOAD=ON"
