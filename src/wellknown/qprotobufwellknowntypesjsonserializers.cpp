@@ -11,6 +11,7 @@
 #include <QtProtobuf/private/qtprotobuflogging_p.h>
 
 #include <QtCore/qjsonvalue.h>
+#include <QtCore/qtimezone.h>
 
 QT_BEGIN_NAMESPACE
 
