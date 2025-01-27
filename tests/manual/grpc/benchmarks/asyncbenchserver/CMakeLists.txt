@@ -61,6 +61,7 @@ qt_internal_add_executable(
     LIBRARIES
         protobuf::libprotobuf
         gRPC::grpc++
+        Qt::Core
     INCLUDE_DIRECTORIES
         "${proto_out_include}"
         "${qrpcbench_common_include}"

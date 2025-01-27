@@ -5,6 +5,7 @@
 #include <qrpcbench_common.h>
 
 #include <grpcpp/completion_queue.h>
+#include <grpcpp/security/server_credentials.h>
 #include <grpcpp/server.h>
 #include <grpcpp/server_builder.h>
 
@@ -21,7 +22,7 @@ class AsyncServer
 public:
     enum class State { Created, Running, Finished };
 
-    void run(std::string_view address = "0.0.0.0:0")
+    void run(std::string_view address = "0.0.0.0:0", bool enableSsl = false)
     {
         State expected = State::Created;
         while (!mState.compare_exchange_weak(expected, State::Running)) {
@@ -31,8 +32,21 @@ public:
 
         {
             grpc::ServerBuilder builder;
-            builder.AddListeningPort(address.data(), grpc::InsecureServerCredentials(),
-                                     &mSelectedPort);
+            std::shared_ptr<grpc::ServerCredentials> creds;
+            if (!enableSsl) {
+                std::cout << "Using InsecureServerCredentials\n";
+                creds = grpc::InsecureServerCredentials();
+            } else {
+                std::cout << "Using SslServerCredentials\n";
+                grpc::SslServerCredentialsOptions sslOpts;
+                sslOpts.pem_key_cert_pairs
+                    .emplace_back(grpc::SslServerCredentialsOptions::PemKeyCertPair{
+                        .private_key = { SslKey.data(),  SslKey.size()  },
+                        .cert_chain = { SslCert.data(), SslCert.size() },
+                });
+                creds = grpc::SslServerCredentials(sslOpts);
+            }
+            builder.AddListeningPort({ address.data(), address.size() }, creds, &mSelectedPort);
             builder.RegisterService(&mService);
             mCompletionQueue = builder.AddCompletionQueue();
             mAddressUri = address.substr(0, address.find_last_of(':'));
@@ -71,9 +85,21 @@ private:
     }
 };
 
-int main()
+int main(int argc, char *argv[])
 {
+    QStringList args;
+    for (int i = 0; i < argc; ++i)
+        args.push_back(argv[i]);
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Asyncbenchserver");
+    parser.addHelpOption();
+
+    QCommandLineOption enableSsl("ssl", "Enable SSL");
+
+    parser.addOption(enableSsl);
+    parser.process(args);
+
     absl::InitializeLog();
     AsyncServer server;
-    server.run(HostUri);
+    server.run(HostUri, parser.isSet(enableSsl));
 }

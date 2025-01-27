@@ -1,22 +1,33 @@
 // Copyright (C) 2024 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <qrpcbench_common.h>
 #include <proto/bench.grpc.pb.h>
 #include <proto/bench.pb.h>
+#include <qrpcbench_common.h>
 
 #include <grpcpp/grpcpp.h>
+#include <grpcpp/security/credentials.h>
 
 #include <absl/log/initialize.h>
 
 class AsyncGrpcClientBenchmark
 {
 public:
-    explicit AsyncGrpcClientBenchmark(uint64_t calls, size_t payload = 0) : mCalls(calls)
+    explicit AsyncGrpcClientBenchmark(uint64_t calls, size_t payload = 0, bool enableSsl = false)
+        : mCalls(calls)
     {
         if (payload > 0)
             sData.assign(payload, 'x');
-        auto channel = grpc::CreateChannel(HostUri.data(), grpc::InsecureChannelCredentials());
+
+        std::shared_ptr<grpc::ChannelCredentials> creds;
+        if (enableSsl) {
+            grpc::SslCredentialsOptions sslOpts;
+            sslOpts.pem_root_certs = { SslRootKey.data(), SslRootKey.size() };
+            creds = grpc::SslCredentials(sslOpts);
+        } else {
+            creds = grpc::InsecureChannelCredentials();
+        }
+        auto channel = grpc::CreateChannel(HostUri.data(), creds);
         mStub = qt::bench::BenchmarkService::NewStub(std::move(channel));
     }
 

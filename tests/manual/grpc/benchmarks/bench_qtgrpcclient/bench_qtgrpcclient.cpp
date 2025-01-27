@@ -4,7 +4,11 @@
 #include <proto/bench_client.grpc.qpb.h>
 #include <qrpcbench_common.h>
 
+#include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qgrpchttp2channel.h>
+
+#include <QtNetwork/qsslcertificate.h>
+#include <QtNetwork/qsslconfiguration.h>
 
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qelapsedtimer.h>
@@ -18,13 +22,23 @@ class QtGrpcClientBenchmark : public QObject
 {
     Q_OBJECT
 public:
-    explicit QtGrpcClientBenchmark(quint64 calls, qsizetype payload = 0) : mCalls(calls)
+    explicit QtGrpcClientBenchmark(quint64 calls, qsizetype payload = 0, bool enableSsl = false)
+        : mCalls(calls)
     {
         if (payload > 0)
             sData = QByteArray(payload, 'x');
 
         QUrl uri(QString("http://") + HostUri.data());
-        mClient.attachChannel(std::make_shared<QGrpcHttp2Channel>(std::move(uri)));
+        QGrpcChannelOptions opts;
+        if (enableSsl) {
+            QSslCertificate crt(QByteArray(SslRootKey.data(), SslRootKey.size()));
+            QSslConfiguration sslConfig;
+            sslConfig.setProtocol(QSsl::TlsV1_2OrLater);
+            sslConfig.addCaCertificate(crt);
+            sslConfig.setAllowedNextProtocols({ "h2" });
+            opts.setSslConfiguration(sslConfig);
+        }
+        mClient.attachChannel(std::make_shared<QGrpcHttp2Channel>(std::move(uri), opts));
     }
     ~QtGrpcClientBenchmark() override = default;
 
@@ -151,7 +165,7 @@ void QtGrpcClientBenchmark::clientStreaming()
                              quint64 recvBytes = 0;
                              const auto resp = stream->read<qt::bench::ClientStreamingResponse>();
                              if (resp->hasPayload())
-                                recvBytes = static_cast<quint64>(resp->payload().size());
+                                 recvBytes = static_cast<quint64>(resp->payload().size());
                              Client::printRpcResult("ClientStreaming", mTimer.nsecsElapsed(),
                                                     counter, recvBytes, sendBytes);
                          } else {
