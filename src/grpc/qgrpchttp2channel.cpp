@@ -268,6 +268,8 @@ public:
     }
     [[nodiscard]] QByteArrayView contentType() const { return m_contentType; }
 
+    [[nodiscard]] const QByteArray &authorityHeader() const { return m_authorityHeader; }
+
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
     QUrl hostUri;
     QGrpcHttp2Channel *q_ptr = nullptr;
@@ -311,6 +313,7 @@ private:
     ConnectionState m_state = Connecting;
     std::function<void()> m_reconnectFunction;
 
+    QByteArray m_authorityHeader;
     Q_DISABLE_COPY_MOVE(QGrpcHttp2ChannelPrivate)
 };
 
@@ -459,7 +462,7 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
     QByteArray service{ operationContext->service().data(), operationContext->service().size() };
     QByteArray method{ operationContext->method().data(), operationContext->method().size() };
     m_initialHeaders = HPack::HttpHeader{
-        { AuthorityHeader.toByteArray(),          channel->hostUri.host().toLatin1()       },
+        { AuthorityHeader.toByteArray(),          channel->authorityHeader()               },
         { MethodHeader.toByteArray(),             "POST"_ba                                },
         { PathHeader.toByteArray(),               QByteArray('/' + service + '/' + method) },
         { SchemeHeader.toByteArray(),
@@ -655,6 +658,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
                              QString::fromLatin1(it.value()));
     }
 
+    bool nonDefaultPort = false;
 #if QT_CONFIG(localserver)
     if (hostUri.scheme() == "unix"_L1) {
         auto *localSocket = initSocket<QLocalSocket>();
@@ -680,6 +684,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         auto *sslSocket = initSocket<QSslSocket>();
         if (hostUri.port() < 0) {
             hostUri.setPort(443);
+        } else {
+            nonDefaultPort = hostUri.port() != 443;
         }
 
         if (const auto userSslConfig = channelOptions.sslConfiguration(); userSslConfig) {
@@ -718,6 +724,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         auto *httpSocket = initSocket<QTcpSocket>();
         if (hostUri.port() < 0) {
             hostUri.setPort(80);
+        } else {
+            nonDefaultPort = hostUri.port() != 80;
         }
 
         QObject::connect(httpSocket, &QAbstractSocket::connected, this,
@@ -734,6 +742,13 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
             httpSocket->connectToHost(hostUri.host(), static_cast<quint16>(hostUri.port()));
         };
     }
+
+    m_authorityHeader = hostUri.host().toLatin1();
+    if (nonDefaultPort) {
+        m_authorityHeader += ':';
+        m_authorityHeader += QByteArray::number(hostUri.port());
+    }
+
     m_reconnectFunction();
 }
 
