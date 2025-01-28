@@ -266,7 +266,7 @@ public:
         return false;
 #endif
     }
-    [[nodiscard]] QByteArrayView contentType() const { return m_contentType; }
+    [[nodiscard]] const QByteArray &contentType() const { return m_contentType; }
 
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
     QUrl hostUri;
@@ -465,7 +465,7 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
         { PathHeader.toByteArray(),               QByteArray('/' + service + '/' + method) },
         { SchemeHeader.toByteArray(),
          channel->isLocalSocket() ? "http"_ba : channel->hostUri.scheme().toLatin1()       },
-        { ContentTypeHeader.toByteArray(),        channel->contentType().toByteArray()     },
+        { ContentTypeHeader.toByteArray(),        channel->contentType()                   },
         { GrpcServiceNameHeader.toByteArray(),    { service }                              },
         { GrpcAcceptEncodingHeader.toByteArray(), "identity,deflate,gzip"_ba               },
         { AcceptEncodingHeader.toByteArray(),     "identity,gzip"_ba                       },
