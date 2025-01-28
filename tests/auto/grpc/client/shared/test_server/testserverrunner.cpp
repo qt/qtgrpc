@@ -329,11 +329,17 @@ void TestServer::run(qint64 latency)
 
     grpc::ServerBuilder builder;
     QFile cfile(":/assets/cert.pem");
-    cfile.open(QFile::ReadOnly);
+    if (!cfile.open(QFile::ReadOnly)) {
+        qDebug() << "Unable to open SSL certificate. Test lacks resources.";
+        return;
+    }
     QString cert = cfile.readAll();
 
     QFile kfile(":/assets/key.pem");
-    kfile.open(QFile::ReadOnly);
+    if (!kfile.open(QFile::ReadOnly)){
+        qDebug() << "Unable to open SSL key. Test lacks resources.";
+        return;
+    }
     QString key = kfile.readAll();
 
     grpc::SslServerCredentialsOptions opts(GRPC_SSL_DONT_REQUEST_CLIENT_CERTIFICATE);
