@@ -269,6 +269,7 @@ public:
     [[nodiscard]] const QByteArray &contentType() const { return m_contentType; }
 
     [[nodiscard]] const QByteArray &authorityHeader() const { return m_authorityHeader; }
+    [[nodiscard]] const QByteArray &schemeHeader() const { return m_schemeHeader; }
 
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
     QUrl hostUri;
@@ -314,6 +315,7 @@ private:
     std::function<void()> m_reconnectFunction;
 
     QByteArray m_authorityHeader;
+    QByteArray m_schemeHeader;
     Q_DISABLE_COPY_MOVE(QGrpcHttp2ChannelPrivate)
 };
 
@@ -465,8 +467,7 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
         { AuthorityHeader.toByteArray(),          channel->authorityHeader()               },
         { MethodHeader.toByteArray(),             "POST"_ba                                },
         { PathHeader.toByteArray(),               QByteArray('/' + service + '/' + method) },
-        { SchemeHeader.toByteArray(),
-         channel->isLocalSocket() ? "http"_ba : channel->hostUri.scheme().toLatin1()       },
+        { SchemeHeader.toByteArray(),             channel->schemeHeader()                  },
         { ContentTypeHeader.toByteArray(),        channel->contentType()                   },
         { GrpcServiceNameHeader.toByteArray(),    { service }                              },
         { GrpcAcceptEncodingHeader.toByteArray(), "identity,deflate,gzip"_ba               },
@@ -748,6 +749,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         m_authorityHeader += ':';
         m_authorityHeader += QByteArray::number(hostUri.port());
     }
+
+    m_schemeHeader = isLocalSocket() ? "http"_ba : hostUri.scheme().toLatin1();
 
     m_reconnectFunction();
 }
