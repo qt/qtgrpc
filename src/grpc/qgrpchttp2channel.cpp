@@ -744,7 +744,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         };
     }
 
-    m_authorityHeader = hostUri.host().toLatin1();
+    m_authorityHeader = hostUri.authority(QUrl::FullyEncoded | QUrl::RemoveUserInfo |
+                                          QUrl::RemovePort).toLatin1();
     if (nonDefaultPort) {
         m_authorityHeader += ':';
         m_authorityHeader += QByteArray::number(hostUri.port());
