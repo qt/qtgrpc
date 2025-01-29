@@ -149,6 +149,10 @@ using namespace QtGrpc;
 
 namespace {
 
+constexpr QLatin1String UnixScheme("unix");
+constexpr QLatin1String HttpScheme("http");
+constexpr QLatin1String HttpsScheme("https");
+
 constexpr QByteArrayView AuthorityHeader(":authority");
 constexpr QByteArrayView MethodHeader(":method");
 constexpr QByteArrayView PathHeader(":path");
@@ -331,6 +335,8 @@ private:
                                      .arg(error) });
                          });
     }
+
+    void ensureSchemeIsValid(QLatin1String expected);
 
     void sendInitialRequest(Http2Handler *handler);
     void createHttp2Connection();
@@ -705,7 +711,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
 
     bool nonDefaultPort = false;
 #if QT_CONFIG(localserver)
-    if (hostUri.scheme() == "unix"_L1) {
+    if (hostUri.scheme() == UnixScheme) {
+        hostUri.setScheme(HttpScheme);
         auto *localSocket = initSocket<QLocalSocket>();
         m_isLocalSocket = true;
 
@@ -725,7 +732,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
     } else
 #endif
 #if QT_CONFIG(ssl)
-        if (hostUri.scheme() == "https"_L1 || channelOptions.sslConfiguration()) {
+    if (hostUri.scheme() == HttpsScheme || channelOptions.sslConfiguration()) {
+        ensureSchemeIsValid(HttpsScheme);
         auto *sslSocket = initSocket<QSslSocket>();
         if (hostUri.port() < 0) {
             hostUri.setPort(443);
@@ -761,11 +769,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
     } else
 #endif
     {
-        if (hostUri.scheme() != "http"_L1) {
-            qGrpcWarning() << "Unsupported transport protocol scheme '" << hostUri.scheme()
-                           << "'. Fall back to 'http'.";
-        }
-
+        ensureSchemeIsValid(HttpScheme);
         auto *httpSocket = initSocket<QTcpSocket>();
         if (hostUri.port() < 0) {
             hostUri.setPort(80);
@@ -795,7 +799,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         m_authorityHeader += QByteArray::number(hostUri.port());
     }
 
-    m_schemeHeader = isLocalSocket() ? "http"_ba : hostUri.scheme().toLatin1();
+    m_schemeHeader = hostUri.scheme().toLatin1();
 
     m_reconnectFunction();
 }
@@ -891,6 +895,16 @@ void QGrpcHttp2ChannelPrivate::handleSocketError()
     delete m_connection;
     m_connection = nullptr;
     m_state = ConnectionState::Error;
+}
+
+void QGrpcHttp2ChannelPrivate::ensureSchemeIsValid(QLatin1String expected)
+{
+    if (hostUri.scheme() != expected) {
+        qGrpcWarning("Unsupported transport protocol scheme '%s'. Fall back to '%s'.",
+                     qPrintable(hostUri.scheme()),
+                     qPrintable(expected));
+        hostUri.setScheme(expected);
+    }
 }
 
 void QGrpcHttp2ChannelPrivate::sendInitialRequest(Http2Handler *handler)
