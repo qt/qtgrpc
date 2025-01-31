@@ -3,9 +3,18 @@
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG_save "${CMAKE_FIND_PACKAGE_PREFER_CONFIG}")
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
-qt_find_package(Protobuf
+
+qt_find_package(protobuf
     MODULE_NAME global
+    NAMES protobuf Protobuf
 )
+if(NOT protobuf_FOUND)
+    # Attempt looking in MODULE mode
+    qt_find_package(Protobuf
+        MODULE_NAME global
+    )
+endif()
+
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG "${CMAKE_FIND_PACKAGE_PREFER_CONFIG_save}")
 
 # WrapProtoc::WrapProtoc could come from top-level CMakeLists.txt so avoid promoting it to GLOBAL

@@ -4,7 +4,7 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 find_package(Protobuf)
 
-if(NOT WrapProtobuf_FOUND)
+if(NOT Protobuf_FOUND)
     message(WARNING "Dependencies of Qt GRPC test server not found. Skipping.")
     return()
 endif()
