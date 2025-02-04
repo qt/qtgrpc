@@ -11,11 +11,29 @@
 
 #include <chrono>
 #include <concepts>
+#include <cstdlib>
 #include <format>
 #include <iostream>
 #include <string_view>
 
-static constexpr std::string_view HostUri = "localhost:65002";
+inline std::string getTransportAddress(QAnyStringView transport)
+{
+    if (transport == "http") {
+        return "localhost:65002";
+    } else if (transport == "https") {
+        return "localhost:65003";
+    }
+#ifndef Q_OS_WINDOWS
+    else if (transport == "unix") {
+        return "unix-abstract:bench";
+    }
+#endif
+    else {
+        std::cerr << "Invalid transport specified: " << transport.toString().toStdString()
+                  << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+}
 
 // Valid for the next 100 years.
 static constexpr std::string_view SslCert = R"(
@@ -107,7 +125,7 @@ namespace Client {
 
 template <typename T>
 concept ClientConcept = requires(T t) {
-    { T(uint64_t()) };
+    { T(std::string(), uint64_t()) };
     { t.unaryCall() } -> std::same_as<void>;
     { t.serverStreaming() } -> std::same_as<void>;
     { t.clientStreaming() } -> std::same_as<void>;
@@ -125,6 +143,11 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
     parser.setApplicationDescription(name.data());
     parser.addHelpOption();
 
+    QCommandLineOption transport({ "t", "transport" }, "Use Transport", "http|https", "http");
+#ifndef Q_OS_WINDOWS
+    transport.setValueName("http|https|unix");
+#endif
+
     QCommandLineOption calls({ "c", "calls" }, "Amount of calls made.", "size", "1000");
     QCommandLineOption payload({ "p", "payload" }, "Payload size in bytes", "size", "0");
     QCommandLineOption uniqueRpc({ "u", "unique" }, "Make each RPC on a fresh client");
@@ -133,9 +156,10 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
     QCommandLineOption enableSStream("S", "Enable ServerStream");
     QCommandLineOption enableCStream("C", "Enable ClientStream");
     QCommandLineOption enableBStream("B", "Enable BiDiStream");
-    QCommandLineOption enableSsl("ssl", "Enable SSL");
 
     parser.addOptions({
+        transport,
+
         calls,
         payload,
         uniqueRpc,
@@ -144,7 +168,6 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
         enableSStream,
         enableCStream,
         enableBStream,
-        enableSsl,
     });
 
     parser.process(args);
@@ -153,46 +176,45 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
         && !parser.isSet(enableCStream) && !parser.isSet(enableBStream);
     uint64_t amountCalls = parser.value(calls).toULong();
     qsizetype payloadSize = parser.value(payload).toLong();
-    bool hasSsl = parser.isSet(enableSsl);
+    const auto transportValue = parser.value(transport).toStdString();
 
     std::cout << std::format("#### Start of {} benchmark ####\n", name);
     std::cout << std::format("  cpu-arch: {}\n", QSysInfo::buildCpuArchitecture().toStdString());
     std::cout << std::format("  kernel: {}, {}\n", QSysInfo::kernelType().toStdString(),
                              QSysInfo::kernelVersion().toStdString());
-    std::cout << std::format("  host URI: {}\n\n", HostUri);
+    std::cout << std::format("  host URI: {}, {}\n\n", transportValue,
+                             getTransportAddress(transportValue));
 
     if (parser.isSet(payload))
         std::cout << std::format("  Option: payload per message {} bytes\n", payloadSize);
     if (parser.isSet(uniqueRpc))
         std::cout << std::format("  Option: unique client per RPC {}\n", parser.isSet(uniqueRpc));
-    if (parser.isSet(enableSsl))
-        std::cout << std::format("  Option: SSL communication\n");
-    if (parser.isSet(payload) || parser.isSet(uniqueRpc) || parser.isSet(enableSsl))
+    if (parser.isSet(payload) || parser.isSet(uniqueRpc))
         std::cout << "\n";
 
     if (parser.isSet(uniqueRpc)) {
         {
-            C client(amountCalls, payloadSize, hasSsl);
+            C client(transportValue, amountCalls, payloadSize);
             if (defaultRun || parser.isSet(enableUnary))
                 client.unaryCall();
         }
         {
-            C client(amountCalls, payloadSize, hasSsl);
+            C client(transportValue, amountCalls, payloadSize);
             if (defaultRun || parser.isSet(enableSStream))
                 client.serverStreaming();
         }
         {
-            C client(amountCalls, payloadSize, hasSsl);
+            C client(transportValue, amountCalls, payloadSize);
             if (defaultRun || parser.isSet(enableCStream))
                 client.clientStreaming();
         }
         {
-            C client(amountCalls, payloadSize, hasSsl);
+            C client(transportValue, amountCalls, payloadSize);
             if (defaultRun || parser.isSet(enableBStream))
                 client.bidiStreaming();
         }
     } else {
-        C client(amountCalls, payloadSize, hasSsl);
+        C client(transportValue, amountCalls, payloadSize);
         if (defaultRun || parser.isSet(enableUnary))
             client.unaryCall();
         if (defaultRun || parser.isSet(enableSStream))

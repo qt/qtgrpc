@@ -1,11 +1,13 @@
 # Copyright (C) 2024 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 set(proto_out_dir "${CMAKE_CURRENT_BINARY_DIR}/include/proto/")
 set(proto_out_include "${CMAKE_CURRENT_BINARY_DIR}/include/")
+
+if (NOT TARGET Qt6::Grpc)
+    message(WARNING "Dependencies of QtGrpc bench_qtgrpcclient not found. Skipping.")
+    return()
+endif()
 
 qt_internal_add_executable(
     bench_qtgrpcclient
@@ -34,4 +36,6 @@ qt_add_grpc(bench_qtgrpcclient CLIENT
         "${proto_out_dir}"
 )
 
-add_dependencies(bench_qtgrpcclient asyncbenchserver)
+if(TARGET asyncbenchserver)
+    add_dependencies(bench_qtgrpcclient asyncbenchserver)
+endif()

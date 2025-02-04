@@ -22,22 +22,30 @@ class QtGrpcClientBenchmark : public QObject
 {
     Q_OBJECT
 public:
-    explicit QtGrpcClientBenchmark(quint64 calls, qsizetype payload = 0, bool enableSsl = false)
+    explicit QtGrpcClientBenchmark(const std::string &transport, quint64 calls,
+                                   qsizetype payload = 0)
         : mCalls(calls)
     {
         if (payload > 0)
             sData = QByteArray(payload, 'x');
 
-        QUrl uri(QString("http://") + HostUri.data());
+        QUrl uri;
         QGrpcChannelOptions opts;
-        if (enableSsl) {
+        const auto address = QString::fromStdString(getTransportAddress(transport));
+        if (transport == "https") {
+            uri = QString("https://") + address;
             QSslCertificate crt(QByteArray(SslRootKey.data(), SslRootKey.size()));
             QSslConfiguration sslConfig;
             sslConfig.setProtocol(QSsl::TlsV1_2OrLater);
             sslConfig.addCaCertificate(crt);
             sslConfig.setAllowedNextProtocols({ "h2" });
             opts.setSslConfiguration(sslConfig);
+        } else if (transport == "http") {
+            uri = QString("http://") + address;
+        } else {
+            uri = address;
         }
+
         mClient.attachChannel(std::make_shared<QGrpcHttp2Channel>(std::move(uri), opts));
     }
     ~QtGrpcClientBenchmark() override = default;
@@ -141,9 +149,11 @@ void QtGrpcClientBenchmark::clientStreaming()
     quint64 sendBytes = 0;
 
     qt::bench::ClientStreamingRequest request;
-    if (!sData.isEmpty())
+    if (!sData.isEmpty()) {
         request.setPayload(sData);
-    request.setPing(10);
+        sendBytes += static_cast<quint64>(request.payload().size());
+    }
+    request.setPing(counter++);
 
     const auto stream = mClient.ClientStreaming(request);
 
@@ -183,21 +193,24 @@ void QtGrpcClientBenchmark::bidiStreaming()
     quint64 sendBytes = 0;
 
     qt::bench::BiDiStreamingRequest request;
-    if (!sData.isEmpty())
+    if (!sData.isEmpty()) {
         request.setPayload(sData);
+        sendBytes += static_cast<quint64>(request.payload().size());
+    }
+
+    request.setPing(counter++);
     qt::bench::BiDiStreamingResponse response;
     auto stream = mClient.BiDiStreaming(request);
-    auto streamPtr = stream.get();
+    auto *streamPtr = stream.get();
+    mTimer.start();
 
     QObject::connect(streamPtr, &QGrpcBidiStream::messageReceived, this,
                      [this, stream = streamPtr, &counter, &response, &request, &recvBytes,
                       &sendBytes]() {
-                         if (counter == 0)
-                             mTimer.start();
                          if (stream->read(&response)) {
+                             if (response.hasPayload())
+                                 recvBytes += static_cast<quint64>(response.payload().size());
                              if (counter < mCalls) {
-                                 if (response.hasPayload())
-                                     recvBytes += static_cast<quint64>(response.payload().size());
                                  request.setPing(counter);
                                  stream->writeMessage(request);
                                  if (request.hasPayload())

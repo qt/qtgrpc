@@ -1,10 +1,7 @@
 # Copyright (C) 2024 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
-
+find_package(WrapProtoc)
 find_package(Protobuf)
 find_package(gRPC)
 
