@@ -13,21 +13,23 @@
 class AsyncGrpcClientBenchmark
 {
 public:
-    explicit AsyncGrpcClientBenchmark(uint64_t calls, size_t payload = 0, bool enableSsl = false)
+    explicit AsyncGrpcClientBenchmark(const std::string &transport, uint64_t calls,
+                                      size_t payload = 0)
         : mCalls(calls)
     {
         if (payload > 0)
             sData.assign(payload, 'x');
 
         std::shared_ptr<grpc::ChannelCredentials> creds;
-        if (enableSsl) {
+        grpc::ChannelArguments args;
+        if (transport == "https") {
             grpc::SslCredentialsOptions sslOpts;
             sslOpts.pem_root_certs = { SslRootKey.data(), SslRootKey.size() };
             creds = grpc::SslCredentials(sslOpts);
         } else {
             creds = grpc::InsecureChannelCredentials();
         }
-        auto channel = grpc::CreateChannel(HostUri.data(), creds);
+        auto channel = grpc::CreateCustomChannel(getTransportAddress(transport), creds, args);
         mStub = qt::bench::BenchmarkService::NewStub(std::move(channel));
     }
 
@@ -89,11 +91,14 @@ void AsyncGrpcClientBenchmark::unaryCall()
         delete rpcResult;
     }
     Client::printRpcResult("UnaryCall", mTimer.nsecsElapsed(), counter);
+
+    cq.Shutdown();
+    while (cq.Next(&rawTag, &ok))
+        ;
 }
 
 void AsyncGrpcClientBenchmark::serverStreaming()
 {
-
     struct ServerStreamingData
     {
         grpc::ClientContext context;
@@ -158,6 +163,10 @@ void AsyncGrpcClientBenchmark::serverStreaming()
             break;
     }
 
+    cq.Shutdown();
+    while (cq.Next(&rawTag, &ok))
+        ;
+
     delete call;
 }
 
@@ -213,9 +222,9 @@ void AsyncGrpcClientBenchmark::clientStreaming()
     };
     call->callHandler = [this, call](bool ok) {
         if (ok) {
-            call->stream->Finish(&call->status, &call->finishHandler);
-            call->stream->Write(call->request, &call->writeHandler);
             mTimer.start();
+            call->writeHandler(true); // Start first write
+            call->stream->Finish(&call->status, &call->finishHandler);
             return true;
         } else {
             std::cout << "FAILED: clientStreaming\n";
@@ -233,6 +242,10 @@ void AsyncGrpcClientBenchmark::clientStreaming()
         if (!rpcTag(ok))
             break;
     }
+
+    cq.Shutdown();
+    while (cq.Next(&rawTag, &ok))
+        ;
 
     delete call;
 }
@@ -317,6 +330,10 @@ void AsyncGrpcClientBenchmark::bidiStreaming()
         if (!rpcTag(ok))
             break;
     }
+
+    cq.Shutdown();
+    while (cq.Next(&rawTag, &ok))
+        ;
 
     delete call;
 }
