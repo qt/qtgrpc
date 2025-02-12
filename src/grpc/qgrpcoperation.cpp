@@ -19,7 +19,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn template <typename T> T QGrpcOperation::read() const;
+    \fn template <typename T> T QGrpcOperation::read() const
 
     Reads message from raw byte array stored in QGrpcCallReply.
 
@@ -43,6 +43,8 @@ QT_BEGIN_NAMESPACE
 
     This signal is emitted when error with \a status occurs in channel
     or during serialization.
+
+    \sa QAbstractGrpcClient::errorOccurred
 */
 
 class QGrpcOperationPrivate : public QObjectPrivate

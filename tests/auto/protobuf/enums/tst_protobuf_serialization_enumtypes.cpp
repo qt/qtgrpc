@@ -10,11 +10,10 @@
 class QtProtobufEnumTypesSerializationTest : public QObject
 {
     Q_OBJECT
-public:
+private slots:
     void SimpleEnumMessageSerializeTest();
     void RepeatedEnumMessageTest();
 
-private slots:
     void init() {
         m_serializer.reset(new QProtobufSerializer);
     }
@@ -23,6 +22,7 @@ private:
 };
 
 using namespace qtprotobufnamespace::tests;
+using namespace Qt::Literals::StringLiterals;
 
 void QtProtobufEnumTypesSerializationTest::SimpleEnumMessageSerializeTest()
 {
@@ -30,7 +30,7 @@ void QtProtobufEnumTypesSerializationTest::SimpleEnumMessageSerializeTest()
     test.setLocalEnum(SimpleEnumMessage::LOCAL_ENUM_VALUE2);
     QByteArray result = test.serialize(m_serializer.get());
     QCOMPARE(result.size(), 2);
-    QCOMPARE(result.toHex().toStdString().c_str(), "0802");
+    QCOMPARE(result.toHex(), "0802"_ba);
 }
 
 void QtProtobufEnumTypesSerializationTest::RepeatedEnumMessageTest()
@@ -44,12 +44,10 @@ void QtProtobufEnumTypesSerializationTest::RepeatedEnumMessageTest()
                           RepeatedEnumMessage::LOCAL_ENUM_VALUE2,
                           RepeatedEnumMessage::LOCAL_ENUM_VALUE3});
     QByteArray result = msg.serialize(m_serializer.get());
-    QCOMPARE(result.toHex().toStdString().c_str(),
-                 "0a06000102010203");
+    QCOMPARE(result.toHex(), "0a06000102010203"_ba);
     msg.setLocalEnumList({});
     result = msg.serialize(m_serializer.get());
-    QCOMPARE(result.toHex().toStdString().c_str(),
-                 "");
+    QCOMPARE(result.toHex(), ""_ba);
 }
 
 QTEST_MAIN(QtProtobufEnumTypesSerializationTest)

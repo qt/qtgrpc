@@ -15,6 +15,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <string_view>
 
 using namespace ::google::protobuf;
 using namespace ::google::protobuf::io;
@@ -379,7 +380,7 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
         scriptable = "false";
     }
 
-    std::string propertyName = qualifiedName(utils::deCapitalizeAsciiName(field->camelcase_name()));
+    std::string propertyName = qualifiedCppName(qualifiedQmlName(utils::deCapitalizeAsciiName(field->camelcase_name())));
     std::string propertyNameCap = utils::capitalizeAsciiName(propertyName);
 
     propertyMap["property_name"] = propertyName;
@@ -407,7 +408,7 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
     return propertyMap;
 }
 
-std::string common::qualifiedName(const std::string &name)
+std::string common::qualifiedQmlName(const std::string &name)
 {
     std::string fieldName(name);
     const std::vector<std::string> &searchExceptions = CommonTemplates::ListOfQmlExceptions();
@@ -415,6 +416,11 @@ std::string common::qualifiedName(const std::string &name)
     if (utils::contains(searchExceptions, fieldName))
         return fieldName.append(CommonTemplates::ProtoSuffix());
     return fieldName;
+}
+
+std::string common::qualifiedCppName(const std::string &name)
+{
+    return utils::contains(CommonTemplates::ListOfCppExceptions(), name) ? name + "_" : name;
 }
 
 bool common::isLocalEnum(const EnumDescriptor *type, const Descriptor *scope)

@@ -39,7 +39,7 @@
         \li No need to integrate generated code into project tree manually.
         \li Convenient serialization and deserialization API.
         \li Integrated properties mechanism for generated protobuf messages.
-        \li Integrated gRPC-client support (see \l {Qt GRPC}{QtGrpc module}).
+        \li Integrated gRPC-client support (see \l {Qt GRPC}{Qt GRPC module}).
     \endlist
 
     \section2 Incoming features
