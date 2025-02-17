@@ -21,7 +21,7 @@ SPDX-FileCopyrightText = "Copyright (C) 2024 The Qt Company Ltd."
 SPDX-License-Identifier = "BSD-3-Clause"
 
 [[annotations]]
-path = [".tag", "**/.gitattributes", "**.gitignore"]
+path = [".tag", "**/.gitattributes", "**.gitignore", "**/.gitreview"]
 comment = "version control system. Licensed as build system"
 precedence = "closest"
 SPDX-FileCopyrightText = "Copyright (C) 2024 The Qt Company Ltd."
