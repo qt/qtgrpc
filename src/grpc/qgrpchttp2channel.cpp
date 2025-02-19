@@ -778,7 +778,7 @@ void QGrpcHttp2ChannelPrivate::processOperation(const std::shared_ptr<QGrpcOpera
     Q_ASSERT_X(operationContextPtr != nullptr, "QGrpcHttp2ChannelPrivate::processOperation",
                "operation context is nullptr.");
 
-    if (!m_socket->isWritable()) {
+    if (!m_socket->isWritable() && m_state == ConnectionState::Connected) {
         operationContextAsyncError(operationContextPtr,
                                    QGrpcStatus{ StatusCode::Unavailable,
                                                 m_socket->errorString() });
