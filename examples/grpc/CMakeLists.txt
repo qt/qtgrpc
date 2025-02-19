@@ -10,7 +10,8 @@ if(TARGET Qt6::qtprotobufgen AND TARGET Qt6::qtgrpcgen)
             qt_internal_add_example(vehicle)
         endif()
 
-        if(QT_FEATURE_clipboard)
+        if(QT_FEATURE_clipboard AND QT_FEATURE_quickcontrols2_material
+                AND TARGET Qt6::ProtobufQtCoreTypes AND TARGET Qt6::GrpcQuick)
             qt_internal_add_example(chat)
         endif()
     endif()
