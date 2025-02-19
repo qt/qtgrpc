@@ -278,13 +278,22 @@ private:
     enum ConnectionState { Connecting = 0, Connected, Error };
 
     template <typename T>
-    static void connectErrorHandler(T *socket, QGrpcOperationContext *operationContext)
+    void connectErrorHandler(T *socket, QGrpcOperationContext *operationContext)
     {
         QObject::connect(socket, &T::errorOccurred, operationContext,
-                         [operationContextPtr = QPointer(operationContext)](auto error) {
+                         [operationContextPtr = QPointer(operationContext), this](auto error) {
+                             if (m_isInsideSocketErrorOccurred) {
+                                 qGrpcCritical("Socket errorOccurred signal triggered while "
+                                               "already handling an error");
+                                 return;
+                             }
+                             m_isInsideSocketErrorOccurred = true;
+                             auto reset = qScopeGuard([this]() {
+                                 m_isInsideSocketErrorOccurred = false;
+                             });
                              emit operationContextPtr->finished(QGrpcStatus{
                                  StatusCode::Unavailable,
-                                 QGrpcHttp2ChannelPrivate::tr("Network error occurred %1")
+                                 QGrpcHttp2ChannelPrivate::tr("Network error occurred: %1")
                                      .arg(error) });
                          });
     }
@@ -303,6 +312,7 @@ private:
     }
 
     std::unique_ptr<QIODevice> m_socket = nullptr;
+    bool m_isInsideSocketErrorOccurred = false;
     QHttp2Connection *m_connection = nullptr;
     QList<Http2Handler *> m_activeHandlers;
     QList<Http2Handler *> m_pendingHandlers;
@@ -790,7 +800,12 @@ void QGrpcHttp2ChannelPrivate::processOperation(const std::shared_ptr<QGrpcOpera
     if (m_state == ConnectionState::Error) {
         Q_ASSERT_X(m_reconnectFunction, "QGrpcHttp2ChannelPrivate::processOperation",
                    "Socket reconnection function is not defined.");
-        m_reconnectFunction();
+        if (m_isInsideSocketErrorOccurred) {
+            qGrpcWarning("Inside socket error handler. Reconnect deferred to event loop.");
+            QTimer::singleShot(0, [this]{ m_reconnectFunction(); });
+        } else {
+            m_reconnectFunction();
+        }
         m_state = ConnectionState::Connecting;
     }
 }
