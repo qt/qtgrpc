@@ -36,7 +36,7 @@ qhp.QtGrpc.subprojects.manual.title = Qt GRPC
 qhp.QtGrpc.subprojects.manual.indexTitle = Qt GRPC module topics
 qhp.QtGrpc.subprojects.manual.type = manual
 
-depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake qtqml
+depends += qtdoc qtcore qtnetwork qtwidgets qtprotobuf qtcmake qtqml qtquick qtquickcontrols
 
 {headerdirs,sourcedirs}  += .. \
                             ../../grpcquick
