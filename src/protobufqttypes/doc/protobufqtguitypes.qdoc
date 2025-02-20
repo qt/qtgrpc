@@ -69,6 +69,17 @@
     ProtobufQtGuiTypes package, and uses them directly. This gives
     you the flexibility to use these types without additional conversion.
 
+    In CMake, you can extract the proto include path from the library using the
+    \c{QT_PROTO_INCLUDES} target property:
+    \badcode
+        qt_add_protobuf(MyProtoLib
+            PROTO_FILES
+                MyQtGuiTypesUsage.proto
+            PROTO_INCLUDES
+                $<TARGET_PROPERTY:Qt::ProtobufQtGuiTypes,QT_PROTO_INCLUDES>
+        )
+    \endcode
+
     \section2 QImage serialization
     The ProtobufQtGuiTypes library provides the possibility to work with the
     QImage class. Usually, the library converts all QImage objects in
