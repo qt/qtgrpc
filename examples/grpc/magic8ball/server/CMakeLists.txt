@@ -9,9 +9,7 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 find_package(Protobuf)
 find_package(gRPC)
 
-if(NOT TARGET gRPC::grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
-    OR NOT TARGET gRPC::grpc++)
-    message(WARNING "Dependencies of QtGrpc magic8ball_server not found. Skipping.")
+if(NOT TARGET gRPC::grpc_cpp_plugin OR NOT TARGET gRPC::grpc++)
     return()
 endif()
 
