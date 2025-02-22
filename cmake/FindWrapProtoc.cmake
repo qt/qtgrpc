@@ -74,5 +74,13 @@ if(__WrapProtoc_protoc_imported_location)
     set(WrapProtoc_FOUND TRUE)
 endif()
 
+if(NOT WrapProtoc_FOUND)
+    if(NOT WrapProtoc_FIND_QUIETLY)
+        message(WARNING "'protoc' executable is not found. Install protobuf using this"
+            " instruction https://protobuf.dev/installation/ and"
+            " make sure 'protoc' executable is in PATH.")
+    endif()
+endif()
+
 unset(__WrapProtoc_protoc_imported_location)
 unset(__WrapProtoc_find_package_args)
