@@ -481,6 +481,10 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
     const static QByteArray GrpcServiceNameHeader("service-name");
     const static QByteArray GrpcAcceptEncodingHeader("grpc-accept-encoding");
     const static QByteArray GrpcAcceptEncodingValue("identity,deflate,gzip");
+    const static QByteArray UserAgentHeader("user-agent");
+    const static QByteArray UserAgentValue("grpc-c++-qtgrpc/"_ba + QT_VERSION_STR + " ("_ba
+                                    + QSysInfo::productType().toUtf8() + '/'
+                                    + QSysInfo::productVersion().toUtf8() + ')');
 
     const auto &channelOptions = channel->q_ptr->channelOptions();
     QByteArray service{ operationContext->service() };
@@ -494,6 +498,7 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
         { GrpcServiceNameHeader,    service                                  },
         { GrpcAcceptEncodingHeader, GrpcAcceptEncodingValue                  },
         { AcceptEncodingHeader,     AcceptEncodingValue                      },
+        { UserAgentHeader,          UserAgentValue                           },
         { TEHeader,                 TEValue                                  },
     };
 
