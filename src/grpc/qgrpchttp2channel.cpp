@@ -41,7 +41,7 @@
 
 QT_BEGIN_NAMESPACE
 
-using namespace Qt::StringLiterals;
+using namespace Qt::Literals::StringLiterals;
 using namespace QtGrpc;
 
 /*!
@@ -121,21 +121,12 @@ constexpr QLatin1String HttpScheme("http");
 #if QT_CONFIG(ssl)
 constexpr QLatin1String HttpsScheme("https");
 #endif
-constexpr QByteArrayView AuthorityHeader(":authority");
-constexpr QByteArrayView MethodHeader(":method");
-constexpr QByteArrayView PathHeader(":path");
-constexpr QByteArrayView SchemeHeader(":scheme");
 
-constexpr QByteArrayView ContentTypeHeader("content-type");
-constexpr QByteArrayView AcceptEncodingHeader("accept-encoding");
-constexpr QByteArrayView TEHeader("te");
-
-constexpr QByteArrayView GrpcServiceNameHeader("service-name");
-constexpr QByteArrayView GrpcAcceptEncodingHeader("grpc-accept-encoding");
-constexpr QByteArrayView GrpcStatusHeader("grpc-status");
-constexpr QByteArrayView GrpcStatusMessageHeader("grpc-message");
+const QByteArray ContentTypeHeader("content-type");
+const QByteArray GrpcStatusHeader("grpc-status");
+const QByteArray GrpcStatusMessageHeader("grpc-message");
+const QByteArray DefaultContentType("application/grpc");
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
-constexpr QByteArrayView DefaultContentType = "application/grpc";
 
 // This HTTP/2 Error Codes to QGrpcStatus::StatusCode mapping should be kept in sync
 // with the following docs:
@@ -477,19 +468,33 @@ QGrpcOperationContext *Http2Handler::operation() const
 void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext,
                                          QGrpcHttp2ChannelPrivate *channel)
 {
+    const static QByteArray AuthorityHeader(":authority");
+    const static QByteArray MethodHeader(":method");
+    const static QByteArray MethodValue("POST");
+    const static QByteArray PathHeader(":path");
+    const static QByteArray SchemeHeader(":scheme");
+
+    const static QByteArray AcceptEncodingHeader("accept-encoding");
+    const static QByteArray AcceptEncodingValue("identity,gzip");
+    const static QByteArray TEHeader("te");
+    const static QByteArray TEValue("trailers");
+    const static QByteArray GrpcServiceNameHeader("service-name");
+    const static QByteArray GrpcAcceptEncodingHeader("grpc-accept-encoding");
+    const static QByteArray GrpcAcceptEncodingValue("identity,deflate,gzip");
+
     const auto &channelOptions = channel->q_ptr->channelOptions();
-    QByteArray service{ operationContext->service().data(), operationContext->service().size() };
-    QByteArray method{ operationContext->method().data(), operationContext->method().size() };
+    QByteArray service{ operationContext->service() };
+    QByteArray method{ operationContext->method() };
     m_initialHeaders = HPack::HttpHeader{
-        { AuthorityHeader.toByteArray(),          channel->authorityHeader()               },
-        { MethodHeader.toByteArray(),             "POST"_ba                                },
-        { PathHeader.toByteArray(),               QByteArray('/' + service + '/' + method) },
-        { SchemeHeader.toByteArray(),             channel->schemeHeader()                  },
-        { ContentTypeHeader.toByteArray(),        channel->contentType()                   },
-        { GrpcServiceNameHeader.toByteArray(),    { service }                              },
-        { GrpcAcceptEncodingHeader.toByteArray(), "identity,deflate,gzip"_ba               },
-        { AcceptEncodingHeader.toByteArray(),     "identity,gzip"_ba                       },
-        { TEHeader.toByteArray(),                 "trailers"_ba                            },
+        { AuthorityHeader,          channel->authorityHeader()               },
+        { MethodHeader,             MethodValue                              },
+        { PathHeader,               QByteArray('/' + service + '/' + method) },
+        { SchemeHeader,             channel->schemeHeader()                  },
+        { ContentTypeHeader,        channel->contentType()                   },
+        { GrpcServiceNameHeader,    service                                  },
+        { GrpcAcceptEncodingHeader, GrpcAcceptEncodingValue                  },
+        { AcceptEncodingHeader,     AcceptEncodingValue                      },
+        { TEHeader,                 TEValue                                  },
     };
 
     auto iterateMetadata = [this](const auto &metadata) {
@@ -632,7 +637,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
 {
     auto channelOptions = q_ptr->channelOptions();
     auto formatSuffix = channelOptions.serializationFormat().suffix();
-    const QByteArray defaultContentType = DefaultContentType.toByteArray();
+    const QByteArray defaultContentType = DefaultContentType;
     const QByteArray contentTypeFromOptions = !formatSuffix.isEmpty()
         ? defaultContentType + '+' + formatSuffix
         : defaultContentType;
