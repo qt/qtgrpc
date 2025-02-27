@@ -314,7 +314,7 @@ public:
     QGrpcHttp2Channel *q_ptr = nullptr;
 
 private:
-    enum ConnectionState { Connecting = 0, Connected, Error };
+    enum ConnectionState { Connecting = 0, Connected, SettingsReceived, Error };
 
     template <typename T>
     void connectErrorHandler(T *socket, QGrpcOperationContext *operationContext)
@@ -339,7 +339,7 @@ private:
 
     void ensureSchemeIsValid(QLatin1String expected);
 
-    void sendInitialRequest(Http2Handler *handler);
+    void createHttp2Stream(Http2Handler *handler);
     void createHttp2Connection();
     void handleSocketError();
 
@@ -850,11 +850,15 @@ void QGrpcHttp2ChannelPrivate::processOperation(const std::shared_ptr<QGrpcOpera
     }
 
     auto *handler = new Http2Handler(operationContext, this, endStream);
-    if (m_connection == nullptr) {
-        m_pendingHandlers.push_back(handler);
-    } else {
-        sendInitialRequest(handler);
+
+    if (m_connection)
+        createHttp2Stream(handler);
+
+    if (m_state == ConnectionState::SettingsReceived) {
+        handler->sendInitialRequest();
         m_activeHandlers.push_back(handler);
+    } else {
+        m_pendingHandlers.push_back(handler);
     }
 
     if (m_state == ConnectionState::Error) {
@@ -888,21 +892,36 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
 
     m_connection = QHttp2Connection::createDirectConnection(m_socket.get(), {});
 
-    if (m_connection) {
-        QObject::connect(m_socket.get(), &QAbstractSocket::readyRead, m_connection,
-                         &QHttp2Connection::handleReadyRead);
-        m_state = ConnectionState::Connected;
-    }
+    Q_ASSERT_X(m_connection, "QGrpcHttp2ChannelPrivate", "Unable to create the HTTP/2 connection");
+    QObject::connect(m_socket.get(), &QAbstractSocket::readyRead, m_connection,
+                     &QHttp2Connection::handleReadyRead);
+    m_state = ConnectionState::Connected;
 
-    for (const auto &handler : m_pendingHandlers) {
+    QObject::connect(m_connection, &QHttp2Connection::settingsFrameReceived, this, [this] {
+        if (m_state == ConnectionState::SettingsReceived) {
+            qGrpcWarning("Unexpected SETTINGS frame received multiple times in this session.");
+            return;
+        }
+        m_state = ConnectionState::SettingsReceived;
+
+        m_activeHandlers.reserve(m_activeHandlers.size() + m_pendingHandlers.size());
+        for (auto *handler : m_pendingHandlers) {
+            if (handler->expired()) {
+                delete handler;
+                continue;
+            }
+            handler->sendInitialRequest();
+            m_activeHandlers.append(handler);
+        }
+        m_pendingHandlers.clear();
+    });
+    for (auto *handler : m_pendingHandlers) {
         if (handler->expired()) {
             delete handler;
             continue;
         }
-        sendInitialRequest(handler);
+        createHttp2Stream(handler);
     }
-    m_activeHandlers.append(m_pendingHandlers);
-    m_pendingHandlers.clear();
 }
 
 void QGrpcHttp2ChannelPrivate::handleSocketError()
@@ -926,15 +945,15 @@ void QGrpcHttp2ChannelPrivate::ensureSchemeIsValid(QLatin1String expected)
     }
 }
 
-void QGrpcHttp2ChannelPrivate::sendInitialRequest(Http2Handler *handler)
+void QGrpcHttp2ChannelPrivate::createHttp2Stream(Http2Handler *handler)
 {
     Q_ASSERT(handler != nullptr);
+
     auto *channelOpPtr = handler->operation();
     if (!m_connection) {
         operationContextAsyncError(channelOpPtr,
-                                   QGrpcStatus{
-                                       StatusCode::Unavailable,
-                                       tr("Unable to establish an HTTP/2 connection") });
+                                   QGrpcStatus{ StatusCode::Unavailable,
+                                                tr("Unable to establish an HTTP/2 connection") });
         return;
     }
 
@@ -948,7 +967,6 @@ void QGrpcHttp2ChannelPrivate::sendInitialRequest(Http2Handler *handler)
         return;
     }
     handler->attachStream(streamAttempt.unwrap());
-    handler->sendInitialRequest();
 }
 
 void QGrpcHttp2ChannelPrivate::deleteHandler(Http2Handler *handler)
