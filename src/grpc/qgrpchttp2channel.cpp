@@ -117,6 +117,7 @@ using namespace QtGrpc;
 namespace {
 
 constexpr QLatin1String UnixScheme("unix");
+constexpr QLatin1String UnixAbstractScheme("unix-abstract");
 constexpr QLatin1String HttpScheme("http");
 #if QT_CONFIG(ssl)
 constexpr QLatin1String HttpsScheme("https");
@@ -687,10 +688,13 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
     }
 
     bool nonDefaultPort = false;
+    const auto scheme = hostUri.scheme();
 #if QT_CONFIG(localserver)
-    if (hostUri.scheme() == UnixScheme) {
+    if (scheme == UnixScheme || scheme == UnixAbstractScheme) {
         hostUri.setScheme(HttpScheme);
         auto *localSocket = initSocket<QLocalSocket>();
+        if (scheme == UnixAbstractScheme)
+          localSocket->setSocketOptions(QLocalSocket::AbstractNamespaceOption);
         m_isLocalSocket = true;
 
         QObject::connect(localSocket, &QLocalSocket::connected, this,
@@ -709,7 +713,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
     } else
 #endif
 #if QT_CONFIG(ssl)
-    if (hostUri.scheme() == HttpsScheme || channelOptions.sslConfiguration()) {
+    if (scheme == HttpsScheme || channelOptions.sslConfiguration()) {
         ensureSchemeIsValid(HttpsScheme);
         auto *sslSocket = initSocket<QSslSocket>();
         if (hostUri.port() < 0) {
