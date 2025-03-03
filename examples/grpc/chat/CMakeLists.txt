@@ -4,5 +4,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(QtGrpcChat LANGUAGES CXX)
 
+find_package(Qt6 REQUIRED COMPONENTS Qml) # Needed for deployment
+
 add_subdirectory(server)
 add_subdirectory(client)
