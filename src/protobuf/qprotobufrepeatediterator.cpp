@@ -17,11 +17,6 @@
 */
 
 /*!
-    \fn template<typename T> explicit QProtobufRepeatedIterator(T *data) noexcept
-    Constructs iterator from \a data pointer.
-*/
-
-/*!
     \fn QProtobufRepeatedIterator::~QProtobufRepeatedIterator()
     Destroys iterator.
 */
