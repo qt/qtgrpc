@@ -53,31 +53,6 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn void QAbstractProtobufSerializer::serializeObject(const QProtobufMessage *message,
-        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) const
-
-    Serializes a registered Protobuf message \a message with defined
-    \a fieldInfo, that is recognized like an object, into a QByteArray.
-    \a message must not be \nullptr.
-
-    You should not call this function directly.
-
-    \sa QAbstractProtobufSerializer::deserializeObject()
-*/
-
-/*!
-    \fn bool QAbstractProtobufSerializer::deserializeObject(QProtobufMessage *message) const
-
-    Deserializes a registered Protobuf message \a message.
-    \a message must not be \nullptr.
-    Returns \c true if deserialization was successful, otherwise \c false.
-
-    You should not call this function directly.
-
-    \sa QAbstractProtobufSerializer::serializeObject()
-*/
-
-/*!
    \fn QAbstractProtobufSerializer::Error QAbstractProtobufSerializer::lastError() const
    \since 6.8
 
@@ -119,8 +94,6 @@ QAbstractProtobufSerializer::~QAbstractProtobufSerializer() = default;
 */
 
 /*!
-    \fn QAbstractProtobufSerializer::serialize(const QProtobufMessage *message) const
-
     Serializes a registered Protobuf message \a message into a QByteArray.
     \a message must not be \nullptr.
 
@@ -134,8 +107,6 @@ QByteArray QAbstractProtobufSerializer::serialize(const QProtobufMessage *messag
 }
 
 /*!
-    \fn QAbstractProtobufSerializer::deserialize(QProtobufMessage *message, QByteArrayView data) const
-
     Deserializes a registered Protobuf message \a message from a QByteArray
     \a data. \a message must not be \nullptr.
     Returns \c true if deserialization was successful, otherwise \c false.
