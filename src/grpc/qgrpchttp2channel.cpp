@@ -64,6 +64,39 @@ using namespace QtGrpc;
     {serializationFormat}, or other options by constructing it with a
     QGrpcChannelOptions containing the required customizations.
 
+    \section2 Transportation scheme
+
+    The QGrpcHttp2Channel implementation prefers different transportation
+    methods based on the provided \c{hostUri}, \l{QUrl::}{scheme} and options.
+    The following criteria applies:
+
+    \table
+    \header
+        \li Scheme
+        \li Description
+        \li Default Port
+        \li Requirements
+        \li Example
+    \row
+        \li \c{http}
+        \li Unencrypted HTTP/2 over TCP
+        \li 80
+        \li None
+        \li \c{http://localhost}
+    \row
+        \li \c{https}
+        \li TLS-encrypted HTTP/2 over TCP
+        \li 443
+        \li QSslSocket support \b{AND} (scheme \b{OR} \l{QGrpcChannelOptions::}{sslConfiguration})
+        \li \c{https://localhost}
+    \row
+        \li \c{unix}
+        \li Unix domain socket in filesystem path
+        \li ✗
+        \li QLocalSocket support \b{AND} scheme
+        \li \c{unix:///tmp/grpc.socket}
+    \endtable
+
     \section2 Content-Type
 
     The \e{content-type} in \gRPC over HTTP/2 determines the message
@@ -918,7 +951,8 @@ void QGrpcHttp2ChannelPrivate::deleteHandler(Http2Handler *handler)
 ///
 
 /*!
-    Constructs QGrpcHttp2Channel with \a hostUri.
+    Constructs QGrpcHttp2Channel with \a hostUri. Please see the
+    \l{Transportation scheme} section for more information.
 */
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri)
     : d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, this))
@@ -926,7 +960,8 @@ QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri)
 }
 
 /*!
-    Constructs QGrpcHttp2Channel with \a hostUri and \a options.
+    Constructs QGrpcHttp2Channel with \a hostUri and \a options. Please see the
+    \l{Transportation scheme} section for more information.
 */
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri, const QGrpcChannelOptions &options)
     : QAbstractGrpcChannel(options),
