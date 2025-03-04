@@ -118,8 +118,9 @@ namespace {
 
 constexpr QLatin1String UnixScheme("unix");
 constexpr QLatin1String HttpScheme("http");
+#if QT_CONFIG(ssl)
 constexpr QLatin1String HttpsScheme("https");
-
+#endif
 constexpr QByteArrayView AuthorityHeader(":authority");
 constexpr QByteArrayView MethodHeader(":method");
 constexpr QByteArrayView PathHeader(":path");
