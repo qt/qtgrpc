@@ -823,6 +823,17 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
     Q_ASSERT_X(m_connection == nullptr, "QGrpcHttp2ChannelPrivate::createHttp2Connection",
                "Attempt to create the HTTP/2 connection, but it already exists. This situation is "
                "exceptional.");
+
+    // Nagle's algorithm slows down gRPC communication when frequently sending small utility
+    // HTTP/2 frames. Since an ACK is not sent until a predefined timeout if the TCP frame is
+    // not full enough, communication hangs. In our case, this results in a 40ms delay when
+    // WINDOW_UPDATE or PING frames are sent in a separate TCP frame.
+    //
+    // TODO: We should probably allow users to opt out of this using QGrpcChannelOptions,
+    // see QTBUG-134428.
+    if (QAbstractSocket *abstractSocket = qobject_cast<QAbstractSocket *>(m_socket.get()))
+        abstractSocket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
+
     m_connection = QHttp2Connection::createDirectConnection(m_socket.get(), {});
 
     if (m_connection) {
