@@ -174,12 +174,10 @@ function(qt6_add_grpc target type)
     set(generated_headers "${generated_files}")
     list(FILTER generated_headers INCLUDE REGEX ".+\\.h$")
 
-    if(is_static OR is_shared)
-        set_target_properties(${target}
-            PROPERTIES
-                AUTOMOC ON
-        )
-    endif()
+    set_target_properties(${target}
+        PROPERTIES
+            AUTOMOC ON
+    )
 
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         target_compile_options(${target}

@@ -1,6 +1,6 @@
 // Copyright (C) 2020 Alexey Edelev <semlanik@gmail.com>
 // Copyright (C) 2022 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial
 
 #ifndef QPROTOBUFLAZYMESSAGEPOINTER_H
 #define QPROTOBUFLAZYMESSAGEPOINTER_H
@@ -8,8 +8,6 @@
 #include <QtProtobuf/qtprotobufglobal.h>
 
 #include <QtProtobuf/qprotobufmessage.h>
-
-#include <type_traits>
 
 QT_BEGIN_NAMESPACE
 namespace QtProtobufPrivate {

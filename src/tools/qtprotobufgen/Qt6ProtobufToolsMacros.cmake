@@ -79,7 +79,8 @@ function(_qt_internal_protoc_generate target generator output_directory)
 
     get_filename_component(output_directory "${output_directory}" REALPATH)
     get_target_property(is_generator_imported ${QT_CMAKE_EXPORT_NAMESPACE}::${generator} IMPORTED)
-    if(QT_INTERNAL_AVOID_USING_PROTOBUF_TMP_OUTPUT_DIR OR is_generator_imported)
+    if(QT_INTERNAL_AVOID_USING_PROTOBUF_TMP_OUTPUT_DIR OR is_generator_imported
+        OR NOT CMAKE_GENERATOR MATCHES "^Ninja")
         set(tmp_output_directory "${output_directory}")
     else()
         set(tmp_output_directory "${output_directory}/.tmp")
@@ -131,7 +132,8 @@ function(_qt_internal_protoc_generate target generator output_directory)
         "${proto_includes_string}"
     )
 
-    unset(extra_copy_commands)
+    set(extra_copy_commands "")
+    set(temporary_files "")
     if(NOT tmp_output_directory STREQUAL output_directory)
         foreach(f IN LISTS generated_files)
             get_filename_component(filename "${f}" NAME)
@@ -143,9 +145,15 @@ function(_qt_internal_protoc_generate target generator output_directory)
                     calling _qt_internal_protoc_generate"
                 )
             endif()
+            list(APPEND temporary_files "${tmp_output_directory}/${f_rel}")
             list(APPEND extra_copy_commands COMMAND
                 ${CMAKE_COMMAND} -E copy_if_different "${tmp_output_directory}/${f_rel}" "${f}")
         endforeach()
+    endif()
+
+    set(byproducts "")
+    if(temporary_files)
+        set(byproducts BYPRODUCTS ${temporary_files})
     endif()
 
     add_custom_command(OUTPUT ${generated_files}
@@ -157,6 +165,7 @@ function(_qt_internal_protoc_generate target generator output_directory)
             -P
             ${__qt_protobuf_macros_module_base_dir}/QtProtocCommandWrapper.cmake
         ${extra_copy_commands}
+        ${byproducts}
         WORKING_DIRECTORY ${output_directory}
         DEPENDS
             ${QT_CMAKE_EXPORT_NAMESPACE}::${generator}
@@ -346,16 +355,19 @@ function(qt6_add_protobuf target)
 
     target_sources(${target} PRIVATE ${generated_headers} ${generated_sources})
 
-    if(is_static OR is_shared)
-        set_target_properties(${target}
-            PROPERTIES
-                AUTOMOC ON
-        )
-    endif()
+    set_target_properties(${target}
+        PROPERTIES
+            AUTOMOC ON
+    )
 
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        target_compile_options(${target}
-            PRIVATE "/Zc:__cplusplus" "/permissive-" "/bigobj")
+    if(WIN32)
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+            target_compile_options(${target}
+                PRIVATE "/Zc:__cplusplus" "/permissive-" "/bigobj")
+        elseif(MINGW)
+            target_compile_options(${target}
+                PRIVATE "-Wa,-mbig-obj")
+        endif()
     endif()
 
     target_link_libraries(${target} PRIVATE

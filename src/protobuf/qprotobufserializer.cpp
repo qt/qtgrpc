@@ -1,6 +1,6 @@
 // Copyright (C) 2022 The Qt Company Ltd.
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>, Viktor Kopp <vifactor@gmail.com>
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial
 
 #include "qprotobufserializer.h"
 #include "qprotobufserializer_p.h"
@@ -70,7 +70,6 @@ QtProtobufPrivate::SerializationHandler QtProtobufPrivate::findHandler(QMetaType
     \since 6.5
     \brief The QProtobufSerializer class is interface that represents
            basic functions for serialization/deserialization.
-    \reentrant
 
     The QProtobufSerializer class registers serializers/deserializers for
     classes implementing a protobuf message, inheriting QProtobufMessage. These
