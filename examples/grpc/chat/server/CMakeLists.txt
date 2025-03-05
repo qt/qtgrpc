@@ -76,6 +76,10 @@ add_executable(qtgrpc_chat_server
 target_include_directories(qtgrpc_chat_server PRIVATE ${proto_out})
 target_link_libraries(qtgrpc_chat_server PRIVATE WrapgRPC::WrapLibgRPC)
 
+target_compile_definitions(qtgrpc_chat_server
+    PRIVATE SERVER_DIR="$<TARGET_FILE_DIR:qtgrpc_chat_server>"
+)
+
 install(TARGETS qtgrpc_chat_server
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
