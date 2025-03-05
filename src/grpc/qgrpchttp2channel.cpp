@@ -516,8 +516,6 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
     const static QByteArray PathHeader(":path");
     const static QByteArray SchemeHeader(":scheme");
 
-    const static QByteArray AcceptEncodingHeader("accept-encoding");
-    const static QByteArray AcceptEncodingValue("identity,gzip");
     const static QByteArray TEHeader("te");
     const static QByteArray TEValue("trailers");
     const static QByteArray GrpcServiceNameHeader("service-name");
@@ -539,7 +537,6 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
         { ContentTypeHeader,        channel->contentType()                   },
         { GrpcServiceNameHeader,    service                                  },
         { GrpcAcceptEncodingHeader, GrpcAcceptEncodingValue                  },
-        { AcceptEncodingHeader,     AcceptEncodingValue                      },
         { UserAgentHeader,          UserAgentValue                           },
         { TEHeader,                 TEValue                                  },
     };
