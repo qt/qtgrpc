@@ -78,6 +78,7 @@ if(GRPC_CHAT_USE_EMOJI_FONT)
 endif()
 
 #! [client-setup-1]
+add_library(qtgrpc_chat_client_proto STATIC)
 qt_add_protobuf(qtgrpc_chat_client_proto
     QML
     QML_URI QtGrpcChat.Proto

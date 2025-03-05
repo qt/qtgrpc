@@ -372,8 +372,8 @@ int main(int /* argc */, char * /* argv */[])
 //! [server-ssl]
         grpc::SslServerCredentialsOptions sslOpts;
         sslOpts.pem_key_cert_pairs.emplace_back(grpc::SslServerCredentialsOptions::PemKeyCertPair{
-            readFromFile("credentials/localhost.key"),
-            readFromFile("credentials/localhost.crt"),
+            readFromFile(SERVER_DIR "credentials/localhost.key"),
+            readFromFile(SERVER_DIR "credentials/localhost.crt"),
         });
         builder.AddListeningPort(QtGrpcChatService::httpsAddress(), grpc::SslServerCredentials(sslOpts));
         builder.AddListeningPort(QtGrpcChatService::httpAddress(), grpc::InsecureServerCredentials());
