@@ -133,7 +133,7 @@ target_link_libraries(qtgrpc_chat_client
         qtgrpc_chat_client_proto
 )
 
-install(TARGETS qtgrpc_chat_client qtgrpc_chat_client_proto
+install(TARGETS qtgrpc_chat_client
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
