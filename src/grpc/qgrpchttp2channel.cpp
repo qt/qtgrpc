@@ -95,6 +95,14 @@ using namespace QtGrpc;
         \li ✗
         \li QLocalSocket support \b{AND} scheme
         \li \c{unix:///tmp/grpc.socket}
+    \row
+        \li \c{unix-abstract}
+        \li Unix domain socket in abstract namespace
+        \li ✗
+        \li QLocalSocket support \b{AND}
+            \l{QLocalSocket::AbstractNamespaceOption}{AbstractNamespace}
+            support \b{AND} scheme
+        \li \c{unix-abstract:app_grpc_channel}
     \endtable
 
     \section2 Content-Type
