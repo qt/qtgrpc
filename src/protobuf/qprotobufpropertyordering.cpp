@@ -311,7 +311,7 @@ QProtobufPropertyOrdering::Data *QProtobufPropertyOrderingBuilder::build() const
         uintData[i + data->flagsOffset] = uint(field.flags.toInt());
     }
     uintData[d->fields.size()] = jsonArrayOffset;
-    Q_ASSERT(jsonArrayOffset + NullTerminator == charSpaceNeeded);
+    Q_ASSERT(static_cast<qsizetype>(jsonArrayOffset + NullTerminator) == charSpaceNeeded);
 
     char *charData = ordering.char_data(NonConstTag{});
     [[maybe_unused]]
