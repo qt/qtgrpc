@@ -8,6 +8,7 @@
 #include <QtProtobuf/private/qtprotobuflogging_p.h>
 #include <QtProtobuf/qprotobufregistration.h>
 
+#include <QtCore/q20utility.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qmetatype.h>
 #include <QtCore/qpair.h>
