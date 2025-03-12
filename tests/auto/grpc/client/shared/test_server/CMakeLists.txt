@@ -6,7 +6,15 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 find_package(Protobuf)
 find_package(gRPC)
 
-if(NOT TARGET gRPC::grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
+if(CMAKE_CROSSCOMPILING)
+    find_program(grpc_cpp_plugin grpc_cpp_plugin NO_CACHE)
+elseif(TARGET gRPC::grpc_cpp_plugin)
+    set(grpc_cpp_plugin $<TARGET_FILE:gRPC::grpc_cpp_plugin>)
+else()
+    set(grpc_cpp_plugin "")
+endif()
+
+if(NOT grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
     OR NOT TARGET gRPC::grpc++)
     message(WARNING "Dependencies of Qt GRPC test server not found. Skipping.")
     return()
@@ -34,7 +42,7 @@ add_custom_command(
         --grpc_out "${out_dir}"
         --cpp_out "${out_dir}"
         -I "${CMAKE_CURRENT_LIST_DIR}/../../../shared/proto/"
-        --plugin=protoc-gen-grpc=$<TARGET_FILE:gRPC::grpc_cpp_plugin>
+        --plugin=protoc-gen-grpc=${grpc_cpp_plugin}
         "${proto_files}"
     WORKING_DIRECTORY ${out_dir}
     DEPENDS "${proto_files}" $<TARGET_FILE:WrapProtoc::WrapProtoc>

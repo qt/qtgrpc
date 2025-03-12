@@ -5,7 +5,15 @@ find_package(WrapProtoc)
 find_package(Protobuf)
 find_package(gRPC)
 
-if(NOT TARGET gRPC::grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
+if(CMAKE_CROSSCOMPILING)
+    find_program(grpc_cpp_plugin grpc_cpp_plugin NO_CACHE)
+elseif(TARGET gRPC::grpc_cpp_plugin)
+    set(grpc_cpp_plugin $<TARGET_FILE:gRPC::grpc_cpp_plugin>)
+else()
+    set(grpc_cpp_plugin "")
+endif()
+
+if(NOT grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
     OR NOT TARGET gRPC::grpc++)
     message(WARNING "Dependencies of QtGrpc benchmark-server not found. Skipping.")
     return()
@@ -36,13 +44,13 @@ add_custom_command(
         --grpc_out "${proto_out_dir}"
         --cpp_out "${proto_out_dir}"
         -I "${proto_include}"
-        --plugin=protoc-gen-grpc=$<TARGET_FILE:gRPC::grpc_cpp_plugin>
+        --plugin=protoc-gen-grpc=${grpc_cpp_plugin}
         "${proto_path}"
     WORKING_DIRECTORY "${proto_out_dir}"
     DEPENDS
         "${proto_path}"
         $<TARGET_FILE:WrapProtoc::WrapProtoc>
-        $<TARGET_FILE:gRPC::grpc_cpp_plugin>
+        ${grpc_cpp_plugin}
     COMMENT "Generating gRPC ${target} sources..."
     COMMAND_EXPAND_LISTS
     VERBATIM
@@ -65,4 +73,3 @@ qt_internal_add_executable(
     OUTPUT_DIRECTORY
         "${CMAKE_CURRENT_BINARY_DIR}"
 )
-
