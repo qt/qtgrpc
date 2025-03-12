@@ -10,7 +10,15 @@ find_package(protobuf)
 find_package(gRPC)
 find_package(Qt6 COMPONENTS ProtobufTools)
 
-if(NOT TARGET gRPC::grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
+if(CMAKE_CROSSCOMPILING)
+    find_program(grpc_cpp_plugin grpc_cpp_plugin NO_CACHE)
+elseif(TARGET gRPC::grpc_cpp_plugin)
+    set(grpc_cpp_plugin $<TARGET_FILE:gRPC::grpc_cpp_plugin>)
+else()
+    set(grpc_cpp_plugin "")
+endif()
+
+if(NOT grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
     OR NOT TARGET gRPC::grpc++)
     message(WARNING "Dependencies of ${PROJECT_NAME} not found. Skipping.")
     return()
@@ -36,7 +44,7 @@ add_custom_command(
         --grpc_out "${proto_out}"
         --cpp_out "${proto_out}"
         -I "${CMAKE_CURRENT_LIST_DIR}/../proto"
-        --plugin=protoc-gen-grpc=$<TARGET_FILE:gRPC::grpc_cpp_plugin>
+        --plugin=protoc-gen-grpc=${grpc_cpp_plugin}
         "${proto_files}"
     WORKING_DIRECTORY ${proto_out}
     DEPENDS "${proto_files}"
