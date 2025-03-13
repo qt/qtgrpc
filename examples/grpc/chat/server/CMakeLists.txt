@@ -76,33 +76,8 @@ add_executable(qtgrpc_chat_server
 target_include_directories(qtgrpc_chat_server PRIVATE ${proto_out})
 target_link_libraries(qtgrpc_chat_server PRIVATE WrapgRPC::WrapLibgRPC)
 
-target_compile_definitions(qtgrpc_chat_server
-    PRIVATE SERVER_DIR="$<TARGET_FILE_DIR:qtgrpc_chat_server>"
-)
-
 install(TARGETS qtgrpc_chat_server
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
-)
-
-# copy the required certificates
-add_custom_command(
-    TARGET qtgrpc_chat_server PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_LIST_DIR}/credentials/localhost.crt ${CMAKE_CURRENT_BINARY_DIR}/credentials/localhost.crt
-    COMMENT "Copying certificates to build directory"
-)
-
-add_custom_command(
-    TARGET qtgrpc_chat_server PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_LIST_DIR}/credentials/localhost.key ${CMAKE_CURRENT_BINARY_DIR}/credentials/localhost.key
-    COMMENT "Copying certificates to build directory"
-)
-
-install(FILES
-    ${CMAKE_CURRENT_LIST_DIR}/credentials/localhost.crt
-    ${CMAKE_CURRENT_LIST_DIR}/credentials/localhost.key
-    DESTINATION "${INSTALL_EXAMPLEDIR}/credentials"
 )
