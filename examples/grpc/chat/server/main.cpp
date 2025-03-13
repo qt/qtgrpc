@@ -5,6 +5,7 @@
 
 #include "chatmessages.pb.h"
 #include "qtgrpcchat.grpc.pb.h"
+#include "credentials/certificates.h"
 
 #include <grpc++/grpc++.h>
 #include <grpc++/security/server_credentials.h>
@@ -17,7 +18,6 @@
 #include <memory>
 #include <mutex>
 #include <queue>
-#include <sstream>
 #include <string>
 #include <vector>
 
@@ -36,18 +36,6 @@ std::istream &operator>>(std::istream &is, chat::Credentials &u)
         u.set_password(std::move(password));
     }
     return is;
-}
-
-std::string readFromFile(const std::string &path)
-{
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        std::cerr << "Failed to open " << path << '\n';
-        std::terminate();
-    }
-    std::stringstream ss;
-    ss << file.rdbuf();
-    return ss.str();
 }
 
 } // namespace
@@ -374,8 +362,8 @@ int main(int /* argc */, char * /* argv */[])
 //! [server-ssl]
         grpc::SslServerCredentialsOptions sslOpts;
         sslOpts.pem_key_cert_pairs.emplace_back(grpc::SslServerCredentialsOptions::PemKeyCertPair{
-            readFromFile(SERVER_DIR "/credentials/localhost.key"),
-            readFromFile(SERVER_DIR "/credentials/localhost.crt"),
+            LocalhostKey,
+            LocalhostCert,
         });
         builder.AddListeningPort(QtGrpcChatService::httpsAddress(), grpc::SslServerCredentials(sslOpts));
         builder.AddListeningPort(QtGrpcChatService::httpAddress(), grpc::InsecureServerCredentials());
