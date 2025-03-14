@@ -87,6 +87,7 @@
         \li \l {Protobuf Qt Core Types Module} {Protobuf Qt Core Types}
         \li \l {Protobuf Qt GUI Types Module} {Protobuf Qt GUI Types}
         \li \l {Qt Protobuf Well-Known Types C++ Classes} {Qt Protobuf Well-Known types}
+        \li \l {Qt Protobuf Mutable Getters} {Qt Protobuf Mutable Getters}
     \endlist
 
     \section1 References

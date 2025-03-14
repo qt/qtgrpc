@@ -472,6 +472,7 @@ const char *CommonTemplates::GetterMessageDeclarationTemplate()
     return "$export_macro$bool has$property_name_cap$() const;\n"
            "$export_macro$const $getter_type$ &$property_name$() const &;\n";
 }
+
 const char *CommonTemplates::GetterMessageDefinitionTemplate()
 {
     return "bool $classname$::has$property_name_cap$() const\n{\n"
@@ -479,6 +480,20 @@ const char *CommonTemplates::GetterMessageDefinitionTemplate()
            "}\n\n"
            "const $getter_type$ &$classname$::$property_name$() const &\n"
            "{\n"
+           "    return *dptr->m_$property_name$;\n"
+           "}\n\n";
+}
+
+const char *CommonTemplates::GetterMessageMutableDeclarationTemplate()
+{
+    return "$export_macro$$getter_type$ &$mutable_getter_name$() &;\n";
+}
+
+const char *CommonTemplates::GetterMessageMutableDefinitionTemplate()
+{
+    return "$getter_type$ &$classname$::$mutable_getter_name$() &\n"
+           "{\n"
+           "    dptr.detach();\n"
            "    return *dptr->m_$property_name$;\n"
            "}\n\n";
 }
@@ -495,6 +510,7 @@ const char *CommonTemplates::GetterComplexDefinitionTemplate()
            "    return dptr->m_$property_name$;\n"
            "}\n\n";
 }
+
 const char *CommonTemplates::PrivateGetterOneofDeclarationTemplate()
 {
     return "$export_macro$$getter_type$ $property_name$_p() const;\n";
@@ -1047,4 +1063,9 @@ const char *CommonTemplates::CustomJsonHanderTemplate()
 const char *CommonTemplates::MocIncludeTemplate()
 {
     return "#include \"$source_file$\"\n";
+}
+
+const char *CommonTemplates::MutableGetterPrefix()
+{
+    return "mut";
 }

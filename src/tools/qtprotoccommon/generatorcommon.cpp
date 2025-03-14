@@ -558,6 +558,9 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
 
     propertyMap["property_name"] = propertyName;
     propertyMap["property_name_cap"] = propertyNameCap;
+    propertyMap["mutable_getter_name"] = CommonTemplates::MutableGetterPrefix();
+    propertyMap["mutable_getter_name"] += propertyNameCap;
+
     propertyMap["scriptable"] = scriptable;
     propertyMap["export_macro"] = common::buildExportMacro();
 

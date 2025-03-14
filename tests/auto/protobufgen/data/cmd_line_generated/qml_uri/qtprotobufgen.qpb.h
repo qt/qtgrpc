@@ -1139,12 +1139,14 @@ public:
 
     bool hasField1() const;
     const ScalarTypes &field1() const &;
+    ScalarTypes &mutField1() &;
     Q_INVOKABLE void clearField1();
 
     const QList<ScalarTypes> &field2() const &;
 
     bool hasField3() const;
     const ScalarTypes &field3() const &;
+    ScalarTypes &mutField3() &;
     Q_INVOKABLE void clearField3();
 
     EnumTypes_QtProtobufNested::NestedEnum field4() const;
@@ -1257,6 +1259,7 @@ public:
 
     bool hasField1() const;
     const MessageNestedTypes_QtProtobufNested::NestedMessage &field1() const &;
+    MessageNestedTypes_QtProtobufNested::NestedMessage &mutField1() &;
     Q_INVOKABLE void clearField1();
     void setField1(const MessageNestedTypes_QtProtobufNested::NestedMessage &field1);
     void setField1(MessageNestedTypes_QtProtobufNested::NestedMessage &&field1);
@@ -1319,6 +1322,7 @@ public:
 
     bool hasField2() const;
     const MessageTypes &field2() const &;
+    MessageTypes &mutField2() &;
     Q_INVOKABLE void clearField2();
     void setField1(QtProtobuf::int32 field1);
     void setField2(const MessageTypes &field2);

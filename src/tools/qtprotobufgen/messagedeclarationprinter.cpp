@@ -284,6 +284,9 @@ void MessageDeclarationPrinter::printGetters()
                     if (common::isPureMessage(field)) {
                         m_printer->Print(propertyMap,
                                          CommonTemplates::GetterMessageDeclarationTemplate());
+                        m_printer
+                            ->Print(propertyMap,
+                                    CommonTemplates::GetterMessageMutableDeclarationTemplate());
                         m_printer->Print(propertyMap,
                                          Options::instance().hasQml()
                                              ? CommonTemplates::ClearQmlMessageDeclarationTemplate()

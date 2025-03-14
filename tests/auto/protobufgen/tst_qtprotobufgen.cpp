@@ -74,6 +74,8 @@ private Q_SLOTS:
     void cmdLineGenerated();
     void cmdLineInvalidExportMacro_data();
     void cmdLineInvalidExportMacro();
+
+    void cmdLineMutableGetterConflicts();
 #endif
 
     void cleanupTestCase();
@@ -266,6 +268,31 @@ void qtprotobufgenTest::cmdLineInvalidExportMacro()
     QVERIFY2(process.exitStatus() == QProcess::NormalExit, msgProcessCrashed(process).constData());
     QVERIFY2(process.exitCode() == result, msgProcessFailed(process).constData());
 }
+
+void qtprotobufgenTest::cmdLineMutableGetterConflicts()
+{
+    static constexpr QLatin1StringView directory("invalid_export_macro");
+    QDir outputDirectory(cmdLineGeneratedPath());
+    if (!outputDirectory.exists(directory))
+        outputDirectory.mkdir(directory);
+    outputDirectory.cd(directory);
+
+    QProcess process;
+    process.setWorkingDirectory(cmdLineGeneratedPath());
+    process.startCommand(ProtocPath + QString(" ") + PluginKey + QtprotobufgenPath
+                         + OutKey + outputDirectory.absolutePath()
+                         + IncludeKey + expectedResultPath()
+                         + " " + expectedResultPath()
+                         + "/qtprotobufgen_mutable_getter_clashing.proto");
+    QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
+    if (!process.waitForFinished()) {
+        process.kill();
+        QFAIL(msgProcessTimeout(process).constData());
+    }
+    QVERIFY2(process.exitStatus() == QProcess::NormalExit, msgProcessCrashed(process).constData());
+    QVERIFY2(process.exitCode() == 1, msgProcessFailed(process).constData());
+}
+
 #endif // QT_CONFIG(process)
 
 void qtprotobufgenTest::cleanupTestCase()

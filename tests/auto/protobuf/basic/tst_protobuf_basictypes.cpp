@@ -43,6 +43,7 @@ private Q_SLOTS:
     void moveOperatorTest();
     void rvalueSettersTest();
     void rvalueOneOfSettersTest();
+    void mutableGetterTest();
 
     void invalidMessageConstructorTest();
 };
@@ -592,6 +593,41 @@ void QtProtobufTypesGenerationTest::rvalueOneOfSettersTest()
         QCOMPARE_NE(oneOfField.secondSecondComplexField().testComplexField().testFieldString(),
                     "Value4");
     }
+}
+
+void QtProtobufTypesGenerationTest::mutableGetterTest()
+{
+    ComplexMessage complexMsg;
+
+    const auto MutableGetterValue = "Value from mutable getter"_L1;
+    complexMsg.mutTestComplexField().setTestFieldString(MutableGetterValue);
+    QCOMPARE_EQ(MutableGetterValue, complexMsg.testComplexField().testFieldString());
+
+    const auto InitialFieldValue = "Value from standalone field";
+    SimpleStringMessage complexFieldValue;
+    complexFieldValue.setTestFieldString(InitialFieldValue);
+
+    complexMsg.setTestComplexField(complexFieldValue);
+    QCOMPARE_EQ(InitialFieldValue, complexMsg.testComplexField().testFieldString());
+
+    // Reset the field and ensure that it didn't affect the copied standalone
+    // field value.
+    complexMsg.mutTestComplexField().setTestFieldString(MutableGetterValue);
+    QCOMPARE_EQ(MutableGetterValue, complexMsg.testComplexField().testFieldString());
+    QCOMPARE_EQ(InitialFieldValue, complexFieldValue.testFieldString());
+
+    // Make a shared copy of the complexMsg
+    ComplexMessage complexMsgCopy(complexMsg);
+    QCOMPARE_EQ(MutableGetterValue, complexMsgCopy.testComplexField().testFieldString());
+    QCOMPARE_EQ(complexMsg.testComplexField().testFieldString(),
+        complexMsgCopy.testComplexField().testFieldString());
+
+    // Ensure that mutable getter detaches and the new value is not applied to
+    // to a shared copy.
+    const auto NewMutableGetterValue = "New value from mutable getter"_L1;
+    complexMsg.mutTestComplexField().setTestFieldString(NewMutableGetterValue);
+    QCOMPARE_EQ(MutableGetterValue, complexMsgCopy.testComplexField().testFieldString());
+    QCOMPARE_EQ(NewMutableGetterValue, complexMsg.testComplexField().testFieldString());
 }
 
 void QtProtobufTypesGenerationTest::invalidMessageConstructorTest()
