@@ -252,9 +252,12 @@ void qtprotobufgenTest::cmdLineInvalidExportMacro()
 
     QProcess process;
     process.setWorkingDirectory(cmdLineGeneratedPath());
-    process.startCommand(ProtocPath + QString(" ") + PluginKey + QtprotobufgenPath + OptKey
-                         + exportMacroCmd + OutKey + outputDirectory.absolutePath() + IncludeKey
-                         + expectedResultPath() + "qtprotobufgen.proto" + allow_proto3_optional);
+    process.startCommand(ProtocPath + QString(" ") + PluginKey + QtprotobufgenPath
+                         + OptKey + exportMacroCmd
+                         + OutKey + outputDirectory.absolutePath()
+                         + IncludeKey + expectedResultPath() +
+                         + " " + expectedResultPath() + "/qtprotobufgen.proto"
+                         + allow_proto3_optional);
     QVERIFY2(process.waitForStarted(), msgProcessStartFailed(process).constData());
     if (!process.waitForFinished()) {
         process.kill();
