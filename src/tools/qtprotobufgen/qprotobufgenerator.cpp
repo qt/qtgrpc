@@ -169,9 +169,10 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
             const auto *field = message->field(i);
             if (field->type() == FieldDescriptor::TYPE_MESSAGE && !field->is_map()
                 && !field->is_repeated() && common::isQtType(field)) {
-                externalIncludes.insert(field->message_type()->file()->package()
-                                        + "/" + field->message_type()->name());
-                qtTypesSet.insert(field->message_type()->file()->package());
+                const std::string package{ field->message_type()->file()->package() };
+                externalIncludes.insert(package + "/"
+                                        + std::string{ field->message_type()->name() });
+                qtTypesSet.insert(package);
             }
 
             if (common::isOptionalField(field))
