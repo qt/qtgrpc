@@ -4,6 +4,12 @@
 # The function generates Qt classes from the .proto schema of the well-know types passed in 'ARGN'
 # and adds the generated sources to the 'target'
 function(qt_internal_add_protobuf_wellknown_types target)
+    cmake_parse_arguments(PARSE_ARGV 1 arg "" "" "TYPES")
+
+    if(NOT arg_TYPES)
+        message("The TYPES argument is missing.")
+    endif()
+
     set(lookup_dirs "")
     if(TARGET WrapProtobuf::WrapLibProtobuf)
         get_target_property(lookup_dirs WrapProtobuf::WrapLibProtobuf
@@ -21,7 +27,7 @@ function(qt_internal_add_protobuf_wellknown_types target)
     # them.
     set(generated_headers "")
     set(generated_targets "")
-    foreach(type IN LISTS ARGN)
+    foreach(type IN LISTS arg_TYPES)
         set(proto_file_name "google/protobuf/${type}.proto")
         unset(proto_file_dir)
         find_path(proto_file_dir
