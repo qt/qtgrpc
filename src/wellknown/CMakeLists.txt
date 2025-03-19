@@ -8,6 +8,9 @@ qt_internal_add_protobuf_module(ProtobufWellKnownTypes
         qprotobufwellknowntypesjsonserializers_p.h qprotobufwellknowntypesjsonserializers.cpp
     PUBLIC_LIBRARIES
         Qt::Protobuf
+    EXTRA_CMAKE_INCLUDES
+        # Generated inside the qt_internal_add_protobuf_wellknown_types call
+        "${QT_CMAKE_EXPORT_NAMESPACE}ProtobufWellKnownTypesExtras.cmake"
     LIBRARIES
         Qt::ProtobufPrivate
 )
