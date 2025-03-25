@@ -1,7 +1,7 @@
 # Copyright (C) 2024 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
-if(NOT QT_NO_CREATE_TARGETS)
+if(__qt_Protobuf_targets_file_included)
     set(_@target@_proto_include_dirs "@PROTO_INCLUDE_DIRS@")
     foreach(proto_include_dir IN LISTS _@target@_proto_include_dirs)
         set_property(TARGET ${QT_CMAKE_EXPORT_NAMESPACE}::@target@ APPEND PROPERTY
