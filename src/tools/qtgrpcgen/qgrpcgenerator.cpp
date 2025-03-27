@@ -223,6 +223,8 @@ bool QGrpcGenerator::GenerateAll(const std::vector<const FileDescriptor *> &file
                                  const std::string &parameter, GeneratorContext *generatorContext,
                                  std::string *error) const
 {
-    Options::setFromString(parameter, qtprotoccommon::Options::QtGrpcGen);
+    Options::setFromString(parameter, qtprotoccommon::Options::QtGrpcGen, error);
+    if (!error->empty())
+        return false;
     return GeneratorBase::GenerateAll(files, parameter, generatorContext, error);
 }
