@@ -27,7 +27,7 @@ class QGrpcOperationPrivate : public QObjectPrivate
     Q_DECLARE_PUBLIC(QGrpcOperation)
 public:
     explicit QGrpcOperationPrivate(std::shared_ptr<QGrpcOperationContext> &&operationContext_)
-        : operationContext(operationContext_)
+        : operationContext(std::move(operationContext_))
     {
     }
     ~QGrpcOperationPrivate() override;
