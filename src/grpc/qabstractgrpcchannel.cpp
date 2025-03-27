@@ -168,7 +168,7 @@ std::unique_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
                      });
 
     auto reply = std::make_unique<QGrpcCallReply>(operationContext);
-    call(operationContext);
+    call(std::move(operationContext));
 
     return reply;
 }
