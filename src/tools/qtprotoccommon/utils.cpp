@@ -32,16 +32,15 @@ std::vector<std::string> split(std::string_view s, std::string_view c, bool keep
     assert(!c.empty());
     std::vector<std::string> out;
     std::string::size_type pos = 0;
-    std::string item;
     for (std::string::size_type posNext = 0; (posNext = s.find(c, pos)) != std::string::npos;
          pos = posNext + c.size()) {
-        item = s.substr(pos, posNext - pos);
+        auto item = s.substr(pos, posNext - pos);
         if (keepEmpty || !item.empty())
-            out.push_back(item);
+            out.emplace_back(item);
     }
-    item = s.substr(pos);
+    auto item = s.substr(pos);
     if (keepEmpty || !item.empty())
-        out.push_back(item);
+        out.emplace_back(item);
     return out;
 }
 
