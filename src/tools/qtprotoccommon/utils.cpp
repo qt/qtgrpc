@@ -9,6 +9,7 @@
 #include <cctype>
 #include <cassert>
 #include <regex>
+#include <filesystem>
 
 namespace {
 const std::string_view asciiSpacing = " \t\n\r\f\v";
@@ -80,20 +81,13 @@ void asciiToUpper(std::string &str)
 
 std::string removeFileSuffix(std::string_view fileName)
 {
-    std::string result(fileName);
-    size_t dot = result.rfind('.'), slash = result.rfind('/');
-    if (dot != std::string::npos && (slash == std::string::npos || dot > slash))
-        result.resize(dot);
-    return result;
+    std::filesystem::path path(fileName);
+    return (path.parent_path() / path.stem()).string();
 }
 
 std::string extractFileBasename(std::string_view fileName)
 {
-    std::string result(fileName);
-    size_t dot = result.rfind('.'), slash = result.rfind('/');
-    if (dot != std::string::npos && (slash == std::string::npos || dot > slash))
-        result.resize(dot);
-    return slash != std::string::npos ? result.substr(slash + 1) : result;
+    return std::filesystem::path(fileName).stem().string();
 }
 
 std::string toValidIdentifier(std::string_view name)
