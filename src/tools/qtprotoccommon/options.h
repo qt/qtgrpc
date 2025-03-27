@@ -31,7 +31,7 @@ public:
     Options &operator=(Options &&) = delete;
 
     static const Options &instance();
-    static void setFromString(const std::string &options, GeneratorType type = QtProtobufGen);
+    static void setFromString(const std::string &options, GeneratorType type, std::string *error);
 
     bool hasQml() const { return m_qml; }
     bool generateComments() const { return m_generateComments; }

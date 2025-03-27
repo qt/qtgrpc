@@ -3,10 +3,10 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 
 #include "options.h"
-
 #include "utils.h"
+
 #include <regex>
-#include <stdexcept>
+#include <string_view>
 
 using namespace ::qtprotoccommon;
 static const char QmlPluginOption[] = "QML";
@@ -48,7 +48,8 @@ std::string extractCompositeOptionValue(const std::string &option)
     return optionValue;
 }
 
-void Options::setFromString(const std::string &options, GeneratorType)
+void Options::setFromString(const std::string &options, GeneratorType /*unused*/,
+                            std::string *error)
 {
     Options &instance = mutableInstance();
     for (const auto &option : utils::split(options, ";")) {
@@ -72,8 +73,9 @@ void Options::setFromString(const std::string &options, GeneratorType)
             if (!export_macro_values.empty()) {
                 static const std::regex valid_c_identifier("[a-zA-Z_][0-9a-zA-Z_]*");
                 if (!std::regex_match(export_macro_values[0], valid_c_identifier)) {
-                    throw std::invalid_argument("EXPORT_MACRO '" + export_macro_values[0]
-                                                + "' is not a valid C identifier.");
+                    *error = "EXPORT_MACRO '" + export_macro_values[0]
+                        + "' is not a valid C identifier.";
+                    return;
                 }
                 instance.m_exportMacro = export_macro_values[0];
                 QT_PROTOBUF_DEBUG("set m_exportMacro: " << instance.m_exportMacro);

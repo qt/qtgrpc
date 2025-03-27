@@ -28,7 +28,9 @@ bool GeneratorBase::GenerateAll(const std::vector<const FileDescriptor *> &files
     assert(!files.empty());
     assert(generatorContext != nullptr);
 
-    Options::setFromString(parameter);
+    Options::setFromString(parameter, Options::QtProtobufGen, error);
+    if (!error->empty())
+        return false;
     if (Options::instance().generateMacroExportFile()) {
         std::string exportMacroName = Options::instance().exportMacro();
         std::string exportMacroFilename = Options::instance().exportMacroFilename();
