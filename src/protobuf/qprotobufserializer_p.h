@@ -74,7 +74,7 @@ public:
 
     void reset(QByteArrayView data);
 
-    QProtobufSelfcheckIterator m_it;
+    QProtobufSelfcheckIterator m_it = {};
 
 private:
     void setError(QAbstractProtobufSerializer::Error error, QAnyStringView errorString) override;
