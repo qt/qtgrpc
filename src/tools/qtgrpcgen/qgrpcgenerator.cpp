@@ -208,10 +208,8 @@ bool QGrpcGenerator::GenerateClientServices(const FileDescriptor *file,
         CommonTemplates::InternalIncludeTemplate());
 
     std::set<std::string> internalIncludes = QGrpcGenerator::GetInternalIncludes(file);
-    if (!Options::instance().exportMacroFilename().empty()) {
-        std::string exportMacroFilename = Options::instance().exportMacroFilename();
-        internalIncludes.insert(exportMacroFilename);
-    }
+    if (auto macroFilename = Options::instance().exportMacroFilename(); !macroFilename.empty())
+        internalIncludes.emplace(std::move(macroFilename));
 
     printIncludes(clientHeaderPrinter.get(), internalIncludes, externalIncludes(),
                   systemIncludes());
