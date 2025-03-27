@@ -12,7 +12,7 @@
 #include <filesystem>
 
 namespace {
-const std::string_view asciiSpacing = " \t\n\r\f\v";
+constexpr std::string_view AsciiSpacing = " \t\n\r\f\v";
 }
 
 namespace qtprotoccommon::utils {
@@ -129,30 +129,21 @@ std::string deCapitalizeAsciiName(std::string_view name)
 
 std::string &rtrim(std::string &s)
 {
-    const size_t cut = s.find_last_not_of(asciiSpacing);
+    const size_t cut = s.find_last_not_of(AsciiSpacing);
     s.erase(cut != std::string::npos ? cut + 1 : 0);
     return s;
 }
 
 std::string &ltrim(std::string &s)
 {
-    const size_t cut = s.find_first_not_of(asciiSpacing);
+    const size_t cut = s.find_first_not_of(AsciiSpacing);
     s.erase(0, cut == std::string::npos ? s.size() : cut);
     return s;
 }
 
 std::string &trim(std::string &s)
 {
-    const size_t lastKept = s.find_last_not_of(asciiSpacing);
-    if (lastKept == std::string::npos) { // true, in particular, if empty
-        s.erase(0);
-        return s;
-    }
-    const size_t firstKept = s.find_first_not_of(asciiSpacing);
-    assert(firstKept != std::string::npos);
-    assert(firstKept <= lastKept);
-    s = s.substr(firstKept, lastKept + 1 - firstKept);
-    return s;
+    return ltrim(rtrim(s));
 }
 
 bool HeaderComparator::operator()(const std::string &lhs, const std::string &rhs) const
