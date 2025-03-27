@@ -137,7 +137,7 @@ std::string &rtrim(std::string &s)
 std::string &ltrim(std::string &s)
 {
     const size_t cut = s.find_first_not_of(asciiSpacing);
-    s.erase(0, cut == std::string::npos ? s.size() - 1 : cut);
+    s.erase(0, cut == std::string::npos ? s.size() : cut);
     return s;
 }
 
