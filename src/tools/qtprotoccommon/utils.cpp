@@ -4,11 +4,8 @@
 
 #include "utils.h"
 
-#include <string_view>
-
-#include <cctype>
 #include <cassert>
-#include <regex>
+#include <cctype>
 #include <filesystem>
 
 namespace {
@@ -65,12 +62,7 @@ std::string replace(std::string_view where, std::string_view from, std::string_v
 
 void asciiToLower(std::string &str)
 {
-    const auto toLower = [](char c) {
-        if (!isAsciiAlpha(c))
-            return c;
-        return char(c | char(0x20));
-    };
-    std::transform(std::begin(str), std::end(str), std::begin(str), toLower);
+    std::transform(std::begin(str), std::end(str), std::begin(str), utils::toAsciiLower);
 }
 
 void asciiToUpper(std::string &str)

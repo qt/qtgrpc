@@ -6,6 +6,7 @@
 #define QTPROTOBUFGEN_UTILS_H
 
 #include <string>
+#include <string_view>
 #include <vector>
 #include <algorithm>
 #include <set>
@@ -68,7 +69,7 @@ std::string join(const T &container, std::string_view separator, std::string_vie
 
 size_t count(std::string_view s, char c);
 
-// ASCI check functions
+// ASCII check functions
 constexpr bool isAsciiUpper(char32_t c) noexcept
 {
     return c >= 'A' && c <= 'Z';
