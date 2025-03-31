@@ -524,12 +524,13 @@ TypeMap common::produceTypeMap(const FieldDescriptor *field, const Descriptor *s
 PropertyMap common::producePropertyMap(const OneofDescriptor *oneof, const Descriptor *scope)
 {
     assert(oneof != nullptr);
+    assert(scope != nullptr);
 
     PropertyMap propertyMap;
     propertyMap["optional_property_name"] = qualifiedCppName(qualifiedQmlName(oneof->name()));
     propertyMap["optional_property_name_cap"] = utils::capitalizeAsciiName(oneof->name());
     auto scopeTypeMap = produceMessageTypeMap(scope, nullptr);
-    propertyMap["classname"] = scope != nullptr ? scopeTypeMap["classname"] : "";
+    propertyMap["classname"] = scopeTypeMap["classname"];
     propertyMap["dataclassname"] = propertyMap["classname"] + CommonTemplates::DataClassName();
     propertyMap["type"] = propertyMap["optional_property_name_cap"] + "Fields";
     propertyMap["export_macro"] = common::buildExportMacro();
@@ -540,6 +541,7 @@ PropertyMap common::producePropertyMap(const OneofDescriptor *oneof, const Descr
 PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descriptor *scope)
 {
     assert(field != nullptr);
+    assert(scope != nullptr);
 
     PropertyMap propertyMap = produceTypeMap(field, scope);
 
@@ -567,7 +569,7 @@ PropertyMap common::producePropertyMap(const FieldDescriptor *field, const Descr
     auto scopeTypeMap = produceMessageTypeMap(scope, nullptr);
     propertyMap["key_type"] = "";
     propertyMap["value_type"] = "";
-    propertyMap["classname"] = scope != nullptr ? scopeTypeMap["classname"] : "";
+    propertyMap["classname"] = scopeTypeMap["classname"];
     propertyMap["dataclassname"] = propertyMap["classname"] + CommonTemplates::DataClassName();
     propertyMap["number"] = std::to_string(field->number());
 
