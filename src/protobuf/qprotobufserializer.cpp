@@ -267,7 +267,7 @@ void QProtobufSerializerImpl::serializeMessageFieldEnd(const QProtobufMessage *m
     last.append(encodeHeader(fieldInfo.fieldNumber(), QtProtobuf::WireTypes::LengthDelimited));
     last.append(serializeVarintCommon<uint32_t>(m_result.size()));
     last.append(m_result);
-    m_result = last;
+    m_result = std::move(last);
 }
 
 QByteArray QProtobufSerializerImpl::encodeHeader(int fieldNumber, QtProtobuf::WireTypes wireType)
