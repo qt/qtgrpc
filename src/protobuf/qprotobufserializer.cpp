@@ -283,8 +283,11 @@ QByteArray QProtobufSerializerImpl::encodeHeader(int fieldNumber, QtProtobuf::Wi
     // wireType:    Serialization type used for the property with fieldNumber
 
     // Returns a varint-encoded fieldIndex and wireType
-
-    uint32_t header = (fieldNumber << 3) | int(wireType);
+    [[maybe_unused]] static constexpr int32_t MaxFieldNumber =
+        std::numeric_limits<uint32_t>::max() >> 3u;
+    Q_ASSERT(fieldNumber >= 1 && fieldNumber <= MaxFieldNumber
+             && (fieldNumber < 19000 || fieldNumber > 19999));
+    uint32_t header = (uint(fieldNumber) << 3u) | uint32_t(wireType);
     return serializeVarintCommon<uint32_t>(header);
 }
 
