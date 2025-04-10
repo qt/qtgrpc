@@ -15,6 +15,7 @@ qt_internal_add_executable(
         bench_qtgrpcclient.cpp
     LIBRARIES
         Qt::Grpc
+        Qt::ProtobufWellKnownTypes
     INCLUDE_DIRECTORIES
         "${proto_out_include}"
         "${qrpcbench_common_include}"
@@ -27,6 +28,8 @@ qt_add_protobuf(bench_qtgrpcclient
         "${proto_path}"
     OUTPUT_DIRECTORY
         "${proto_out_dir}"
+    PROTO_INCLUDES
+        $<TARGET_PROPERTY:Qt6::ProtobufWellKnownTypes,QT_PROTO_INCLUDES>
 )
 
 qt_add_grpc(bench_qtgrpcclient CLIENT
@@ -34,7 +37,11 @@ qt_add_grpc(bench_qtgrpcclient CLIENT
         "${proto_path}"
     OUTPUT_DIRECTORY
         "${proto_out_dir}"
+    PROTO_INCLUDES
+        $<TARGET_PROPERTY:Qt6::ProtobufWellKnownTypes,QT_PROTO_INCLUDES>
 )
+
+target_compile_definitions(bench_qtgrpcclient PRIVATE QTGRPCCLIENT)
 
 if(TARGET asyncbenchserver)
     add_dependencies(bench_qtgrpcclient asyncbenchserver)

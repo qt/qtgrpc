@@ -16,6 +16,8 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <vector>
+#include <thread>
 
 class AsyncServer
 {
@@ -60,22 +62,33 @@ public:
                 std::cout << std::format("Server listening on: {}, {}\n", t.toStdString(), address);
             }
             builder.RegisterService(&mService);
-            mCompletionQueue = builder.AddCompletionQueue();
+            for (int i = 0; i < 1; ++i) // 2 completion queues for better concurrency
+                mCompletionQueues.emplace_back(builder.AddCompletionQueue());
             mServer = builder.BuildAndStart();
         }
 
-        new UnaryCall(mCompletionQueue.get(), &mService);
-        new ServerStreaming(mCompletionQueue.get(), &mService);
-        new ClientStreaming(mCompletionQueue.get(), &mService);
-        new BiDiStreaming(mCompletionQueue.get(), &mService);
-
-        AsyncServer::processRPCs(mCompletionQueue.get());
+        // Pre-register multiple instances type across all CQs
+        constexpr size_t initial_instances = 1; // 10 per CQ
+        for (auto& cq : mCompletionQueues) {
+            for (size_t i = 0; i < initial_instances / mCompletionQueues.size(); ++i) {
+                new UnaryCall(cq.get(), &mService);
+                new ServerStreaming(cq.get(), &mService);
+                new ClientStreaming(cq.get(), &mService);
+                new BiDiStreaming(cq.get(), &mService);
+            }
+        }
+        // Two threads per CQ for reducing bursts in queries.
+        for (auto& cq : mCompletionQueues) {
+            mThreads.emplace_back([this, cq = cq.get()] { processRPCs(cq); });
+            // mThreads.emplace_back([this, cq = cq.get()] { processRPCs(cq); });
+        }
     }
 
 private:
     qt::bench::BenchmarkService::AsyncService mService;
     std::unique_ptr<grpc::Server> mServer;
-    std::unique_ptr<grpc::ServerCompletionQueue> mCompletionQueue;
+    std::vector<std::unique_ptr<grpc::ServerCompletionQueue>> mCompletionQueues;
+    std::vector<std::jthread> mThreads;
 
     std::atomic<State> mState = { State::Created };
     static_assert(std::atomic<State>::is_always_lock_free);
