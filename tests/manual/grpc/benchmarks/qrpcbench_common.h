@@ -15,6 +15,7 @@
 #include <cstdlib>
 #include <format>
 #include <iostream>
+#include <ranges>
 #include <string_view>
 
 inline std::string getTransportAddress(QAnyStringView transport)
@@ -122,6 +123,63 @@ Esh/Nj3INbL1yljh4Fi447mtfgg+ERh+BgAv61ZwsA==
 -----END CERTIFICATE-----
 )";
 
+struct BenchmarkData
+{
+    explicit BenchmarkData(uint64_t expected)
+    {
+        requestLatenciesNanos.reserve(expected);
+        responseLatenciesNanos.reserve(expected);
+    }
+
+    int64_t callCount = {};
+    std::vector<uint64_t> requestLatenciesNanos;
+    std::vector<uint64_t> responseLatenciesNanos;
+    uint64_t receivedBytes = {};
+    uint64_t sendBytes = {};
+    int64_t elapsedNanos = {};
+};
+
+#if defined QTGRPCCLIENT
+#  include "google/protobuf/timestamp.qpb.h"
+#else
+#  include <google/protobuf/timestamp.pb.h>
+#endif
+
+static google::protobuf::Timestamp getTimestamp()
+{
+    google::protobuf::Timestamp ts;
+    auto now = std::chrono::system_clock::now();
+    auto seconds = std::chrono::time_point_cast<std::chrono::seconds>(now);
+    auto nanos = static_cast<
+        int32_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(now - seconds).count());
+#if defined QTGRPCCLIENT
+    ts.setSeconds(seconds.time_since_epoch().count());
+    ts.setNanos(nanos);
+#else
+    ts.set_seconds(seconds.time_since_epoch().count());
+    ts.set_nanos(nanos);
+#endif
+    return ts;
+}
+
+[[maybe_unused]] static int64_t calculateLatencyNanos(const google::protobuf::Timestamp &start,
+                                                      const google::protobuf::Timestamp &end)
+{
+    int64_t startNanos = (start.seconds() * 1'000'000'000LL) + start.nanos();
+    int64_t endNanos = (end.seconds() * 1'000'000'000LL) + end.nanos();
+    return endNanos - startNanos;
+}
+
+[[maybe_unused]] static int64_t calculateLatencyNanosNow(const google::protobuf::Timestamp &start)
+{
+    int64_t startNanos = (start.seconds() * 1'000'000'000LL) + start.nanos();
+    int64_t endNanos = std::chrono::time_point_cast<
+                           std::chrono::nanoseconds>(std::chrono::system_clock::now())
+                           .time_since_epoch()
+                           .count();
+    return endNanos - startNanos;
+}
+
 namespace Client {
 
 template <typename T>
@@ -180,7 +238,7 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
     const auto transportValue = parser.value(transport).toStdString();
 
     std::cout << std::format("#### Start of {} benchmark ####\n", name);
-    std::cout << std::format("  cpu-arch: {}\n", QSysInfo::buildCpuArchitecture().toStdString());
+    std::cout << std::format("  cpu-arch: {}\n", QSysInfo::currentCpuArchitecture().toStdString());
     std::cout << std::format("  kernel: {}, {}\n", QSysInfo::kernelType().toStdString(),
                              QSysInfo::kernelVersion().toStdString());
     std::cout << std::format("  host URI: {}, {}\n\n", transportValue,
@@ -190,8 +248,6 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
         std::cout << std::format("  Option: payload per message {} bytes\n", payloadSize);
     if (parser.isSet(uniqueRpc))
         std::cout << std::format("  Option: unique client per RPC {}\n", parser.isSet(uniqueRpc));
-    if (parser.isSet(payload) || parser.isSet(uniqueRpc))
-        std::cout << "\n";
 
     if (parser.isSet(uniqueRpc)) {
         {
@@ -227,6 +283,119 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
     }
 
     std::cout << std::format("\n#### End of {} benchmark ####\n", name);
+}
+
+inline std::string formatTime(uint64_t ns)
+{
+    std::ostringstream oss;
+    if (ns < 1000) {
+        oss << ns << " ns";
+    } else if (ns < 1000000) { // less than 1e6 ns -> microseconds
+        oss << std::fixed << std::setprecision(2) << (ns / 1000.0) << " us";
+    } else if (ns < 1000000000) { // less than 1e9 ns -> milliseconds
+        oss << std::fixed << std::setprecision(2) << (ns / 1000000.0) << " ms";
+    } else { // one second or more -> seconds
+        oss << std::fixed << std::setprecision(2) << (ns / 1000000000.0) << " s";
+    }
+    return oss.str();
+}
+
+inline std::string formatBytes(double bytes, uint8_t p)
+{
+    std::ostringstream oss;
+    constexpr uint32_t D = 1000;
+    if (bytes < D) {
+        oss << std::fixed << std::setprecision(p) << bytes << " B";
+    } else if (bytes < D * D) {
+        oss << std::fixed << std::setprecision(p) << (bytes / D) << " KB";
+    } else if (bytes < D * D * D) {
+        oss << std::fixed << std::setprecision(p) << (bytes / (D * D)) << " MB";
+    } else {
+        oss << std::fixed << std::setprecision(p) << (bytes / (D * D * D)) << " GB";
+    }
+    return oss.str();
+}
+
+inline void printLatencyStats(const std::vector<uint64_t> &latencies, const std::string &label)
+{
+    if (latencies.empty())
+        return;
+
+    std::vector<uint64_t> sorted = latencies;
+    std::sort(sorted.begin(), sorted.end());
+    size_t n = sorted.size();
+
+    double sum = std::accumulate(sorted.begin(), sorted.end(), 0.0);
+    double mean = sum / n;
+
+    // Compute the p-th percentile of latency
+    auto percentile = [n, &sorted](double p) -> uint64_t {
+        size_t idx = (n == 0) ? 0 : (static_cast<size_t>(std::ceil(p * n)) - 1);
+        if (idx >= n)
+            idx = n - 1;
+        return sorted[idx];
+    };
+
+    uint64_t p80 = percentile(0.80);
+    uint64_t p95 = percentile(0.95);
+    uint64_t minVal = sorted.front();
+    uint64_t maxVal = sorted.back();
+
+    double variance = std::accumulate(sorted.begin(), sorted.end(), 0.0,
+                                      [mean](double acc, uint64_t val) {
+                                          double diff = static_cast<double>(val) - mean;
+                                          return acc + diff * diff;
+                                      })
+        / n;
+    double stddev = std::sqrt(variance);
+
+    std::vector<std::string> l = {
+        formatTime(minVal), formatTime(static_cast<uint64_t>(mean)),
+        formatTime(maxVal), formatTime(p80),
+        formatTime(p95),    formatTime(static_cast<uint64_t>(stddev)),
+    };
+    constexpr int keyWidth = 6;
+    auto valWidth = std::ranges::max(l | std::views::transform(&std::string::size)) + 1;
+    std::cout << label << " Latencies:\n";
+    std::cout << std::format("  {:<{}}: {:<{}}| {:<{}}: {:<{}}| {:<{}}: {:<{}}\n", "Min", keyWidth,
+                             l[0], valWidth, "Mean", keyWidth, l[1], valWidth, "Max", keyWidth,
+                             l[2], valWidth);
+    std::cout << std::format("  {:<{}}: {:<{}}| {:<{}}: {:<{}}| {:<{}}: {:<{}}\n", "P80", keyWidth,
+                             l[3], valWidth, "P95", keyWidth, l[4], valWidth, "StdDev", keyWidth,
+                             l[5], valWidth);
+}
+
+void printBenchmarkResult(const std::string &title, const BenchmarkData &data)
+{
+    assert(data.callCount > 0);
+    std::string titleString = "========== Benchmark Results: " + title + " ==========";
+    std::cout << std::format("\n{}\n", titleString);
+
+    std::cout << "Calls: " << data.callCount << "\n";
+
+    auto avgCallTime = data.elapsedNanos / data.callCount;
+    std::cout << "Total Time: " << formatTime(data.elapsedNanos);
+    std::cout << " | Avg per call: " << formatTime(avgCallTime);
+    std::cout << "\n";
+
+    printLatencyStats(data.requestLatenciesNanos, "Request  (Client → Server)");
+    printLatencyStats(data.responseLatenciesNanos, "Response (Server → Client)");
+
+    if (data.sendBytes > 0 || data.receivedBytes > 0) {
+        std::cout << "Total Sent: " << formatBytes(double(data.sendBytes), 0)
+                  << " | Total Recv: " << formatBytes(double(data.receivedBytes), 0) << '\n';
+    }
+
+    double totalTimeSec = double(data.elapsedNanos) / 1e9;
+    double totalBytes = static_cast<double>(data.sendBytes + data.receivedBytes);
+    double throughput = (totalTimeSec > 0) ? (totalBytes / totalTimeSec) : 0.0;
+    if (throughput > 0.0)
+        std::cout << "Throughput: " << formatBytes(throughput, 2) << "/s\n";
+    double qps = totalTimeSec > 0.0 ? (data.callCount / totalTimeSec) : 0.0;
+    std::cout << std::format("QPS: {:.0f}{}\n", qps > 10000.0 ? qps / 1'000 : qps,
+                             qps > 10'000 ? " k" : "");
+
+    std::cout << std::string(titleString.size(), '=') << '\n';
 }
 
 inline void printRpcResult(std::string benched, int64_t elapsedNs, uint64_t amountCalls,
