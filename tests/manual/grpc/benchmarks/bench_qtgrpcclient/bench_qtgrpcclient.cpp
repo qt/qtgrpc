@@ -11,7 +11,6 @@
 #include <QtNetwork/qsslconfiguration.h>
 
 #include <QtCore/qcoreapplication.h>
-#include <QtCore/qelapsedtimer.h>
 #include <QtCore/qeventloop.h>
 #include <QtCore/qobject.h>
 #include <QtCore/qtimer.h>
