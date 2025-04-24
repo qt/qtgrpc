@@ -6,6 +6,7 @@
 
 #include <QtCore/qcommandlineoption.h>
 #include <QtCore/qcommandlineparser.h>
+#include <QtCore/qelapsedtimer.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qsysinfo.h>
 
