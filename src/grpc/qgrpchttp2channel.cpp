@@ -553,8 +553,8 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
         }
     };
 
-    iterateMetadata(channelOptions.metadata());
-    iterateMetadata(operationContext->callOptions().metadata());
+    iterateMetadata(channelOptions.metadata(QtGrpc::MultiValue));
+    iterateMetadata(operationContext->callOptions().metadata(QtGrpc::MultiValue));
 
     writeMessage(operationContext->argument());
 }
@@ -688,8 +688,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         : defaultContentType;
     bool warnAboutFormatConflict = !formatSuffix.isEmpty();
 
-    const auto it = channelOptions.metadata().constFind(ContentTypeHeader.data());
-    if (it != channelOptions.metadata().cend()) {
+    const auto it = channelOptions.metadata(QtGrpc::MultiValue).constFind(ContentTypeHeader.data());
+    if (it != channelOptions.metadata(QtGrpc::MultiValue).cend()) {
         if (formatSuffix.isEmpty() && it.value() != DefaultContentType) {
             if (it.value() == "application/grpc+json") {
                 channelOptions.setSerializationFormat(SerializationFormat::Json);

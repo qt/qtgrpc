@@ -82,3 +82,21 @@
     \sa{https://github.com/grpc/grpc/blob/master/doc/statuscodes.md}{gRPC status codes}
 */
 
+/*!
+    \since 6.10
+    \enum QtGrpc::MultiValueTag
+    \brief Tag type used to access QMultiHash metadata.
+    \omitvalue Allow
+    \note This type is an implementation detail. Use QtGrpc::MultiValue for public API access.
+
+    \sa QtGrpc::MultiValue, QGrpcChannelOptions::metadata(QtGrpc::MultiValueTag),
+        QGrpcCallOptions::metadata(QtGrpc::MultiValueTag)
+*/
+
+/*!
+    \since 6.10
+    \variable QtGrpc::MultiValue
+    \brief Tag used to access QMultiHash metadata.
+    \sa QGrpcChannelOptions::metadata(QtGrpc::MultiValueTag),
+        QGrpcCallOptions::metadata(QtGrpc::MultiValueTag)
+*/
