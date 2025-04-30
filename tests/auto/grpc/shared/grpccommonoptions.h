@@ -210,6 +210,14 @@ QT_WARNING_POP
         T o4;
         o4.setMetadata(list);
         QCOMPARE_EQ(o4.metadata(QtGrpc::MultiValue), data);
+
+        // addMetadata
+        T o5 = T{}.addMetadata("keyA", "valA1").addMetadata("keyA", "valA2");
+        auto o5Detach = o5;
+        QByteArray k = "keyB", v = "valB";
+        o5.addMetadata(k, v);
+        QCOMPARE_EQ(o5.metadata(QtGrpc::MultiValue), data);
+        QCOMPARE_NE(o5.metadata(QtGrpc::MultiValue), o5Detach.metadata(QtGrpc::MultiValue));
     }
     void propertyDeadline() const
     {

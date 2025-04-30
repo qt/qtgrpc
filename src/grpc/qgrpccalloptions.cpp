@@ -256,6 +256,22 @@ QGrpcCallOptions::setMetadata(std::initializer_list<std::pair<QByteArray, QByteA
     return setMetadata(QMultiHash<QByteArray, QByteArray>(list));
 }
 
+/*!
+    \include qgrpccommonoptions.cpp add-metadata
+
+    \include qgrpccalloptions.cpp merge-md-note
+    \l{QGrpcChannelOptions::addMetadata()}
+*/
+QGrpcCallOptions &QGrpcCallOptions::addMetadata(QByteArray key, QByteArray value)
+{
+    if (d_ptr->metadata(QtGrpc::MultiValue).contains(key, value))
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcCallOptions);
+    d->addMetadata(std::move(key), std::move(value));
+    return *this;
+}
+
 #ifndef QT_NO_DEBUG_STREAM
 /*!
     \since 6.8

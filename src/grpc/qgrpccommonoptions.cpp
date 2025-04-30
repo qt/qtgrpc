@@ -137,4 +137,24 @@ void QGrpcCommonOptions::setMetadata(QMultiHash<QByteArray, QByteArray> &&md)
 #endif
 }
 
+/*!
+//! [add-metadata]
+    \since 6.10
+
+    Adds \a key and \a value to the \l metadata if the exact pair is not already contained.
+    The same key may appear multiple times with different values.
+
+    \sa {metadata(QtGrpc::MultiValueTag)}{metadata()} {setMetadata(const
+    QMultiHash<QByteArray, QByteArray>&)}{setMetadata()}
+//! [add-metadata]
+*/
+void QGrpcCommonOptions::addMetadata(QByteArray &&key, QByteArray &&value)
+{
+#if QT_DEPRECATED_SINCE(6, 13)
+    if (m_deprecatedQHashRefUsed)
+        m_metadata.insertOrAssign(key, value);
+#endif
+    m_metadataMulti.emplace(std::move(key), std::move(value));
+}
+
 QT_END_NAMESPACE

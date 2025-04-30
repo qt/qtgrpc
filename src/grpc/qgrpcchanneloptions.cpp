@@ -266,6 +266,22 @@ QGrpcChannelOptions::setMetadata(std::initializer_list<std::pair<QByteArray, QBy
 }
 
 /*!
+    \include qgrpccommonoptions.cpp add-metadata
+
+    \include qgrpcchanneloptions.cpp merge-md-note
+    \l{QGrpcCallOptions::addMetadata()}
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::addMetadata(QByteArray key, QByteArray value)
+{
+    if (d_ptr->metadata(QtGrpc::MultiValue).contains(key, value))
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->addMetadata(std::move(key), std::move(value));
+    return *this;
+}
+
+/*!
     \since 6.8
 
     Sets the serialization \a format for the channel and returns a reference to

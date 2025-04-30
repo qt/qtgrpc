@@ -46,6 +46,7 @@ public:
     QMultiHash<QByteArray, QByteArray> metadata(QtGrpc::MultiValueTag /*tag*/) &&;
     void setMetadata(const QMultiHash<QByteArray, QByteArray> &md);
     void setMetadata(QMultiHash<QByteArray, QByteArray> &&md);
+    void addMetadata(QByteArray &&key, QByteArray &&value);
 
 private:
     std::optional<std::chrono::milliseconds> m_timeout;

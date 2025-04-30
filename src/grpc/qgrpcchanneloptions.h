@@ -68,6 +68,7 @@ public:
     Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(QMultiHash<QByteArray, QByteArray> &&metadata);
     Q_GRPC_EXPORT QGrpcChannelOptions &
     setMetadata(std::initializer_list<std::pair<QByteArray, QByteArray>> list);
+    Q_GRPC_EXPORT QGrpcChannelOptions &addMetadata(QByteArray key, QByteArray value);
 
     [[nodiscard]] Q_GRPC_EXPORT QGrpcSerializationFormat serializationFormat() const;
     Q_GRPC_EXPORT QGrpcChannelOptions &
