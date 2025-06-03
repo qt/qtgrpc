@@ -1,6 +1,6 @@
 // Copyright (C) 2022 The Qt Company Ltd.
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
@@ -17,9 +17,10 @@ QT_BEGIN_NAMESPACE
     \reentrant
 
     The QProtobufSerializer class registers serializers/deserializers for
-    classes implementing a protobuf message, inheriting QProtobufMessage. These
-    classes are generated automatically, based on a .proto file, using the cmake
-    build macro qt6_add_protobuf or by running qtprotobufgen directly.
+    classes implementing a protobuf message, inheriting \l QProtobufMessage. These
+    classes are generated automatically, based on a \c{.proto} file, using the CMake
+    function \l qt_add_protobuf or by running
+    \l {The qtprotobufgen Tool} {qtprotobufgen} directly.
 
     This class should be used as a base for specific serializers. The handlers
     property contains all message-specific serializers and should be used while

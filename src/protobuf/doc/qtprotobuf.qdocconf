@@ -17,13 +17,16 @@ qhp.QtProtobuf.indexTitle          = Qt Protobuf
 qhp.QtProtobuf.indexRoot           =
 
 qhp.QtProtobuf.subprojects = qmltypes examples classes
+
 qhp.QtProtobuf.subprojects.qmltypes.title = QML Types
 qhp.QtProtobuf.subprojects.qmltypes.indexTitle = Qt Protobuf QML Types
 qhp.QtProtobuf.subprojects.qmltypes.selectors = qmlclass
 qhp.QtProtobuf.subprojects.qmltypes.sortPages = true
+
 qhp.QtProtobuf.subprojects.examples.title = Examples
 qhp.QtProtobuf.subprojects.examples.indexTitle = Qt Protobuf Examples and Tutorials
 qhp.QtProtobuf.subprojects.examples.selectors = doc:example
+
 qhp.QtProtobuf.subprojects.classes.title      = C++ Classes
 qhp.QtProtobuf.subprojects.classes.indexTitle = Qt Protobuf C++ Classes
 qhp.QtProtobuf.subprojects.classes.selectors  = class doc:headerfile
@@ -32,10 +35,11 @@ qhp.QtProtobuf.subprojects.classes.sortPages  = true
 depends += qtdoc qtcore qtcmake qtgrpc qtwidgets
 
 {headerdirs,sourcedirs} += ..
-sourcedirs += ../../tools/doc/src
+sourcedirs += ../../tools/doc/src \
+              ../../tools/qtprotobufgen/doc/src
 
 exampledirs +=  ../../../examples/protobuf \
-                ../../tools/doc/src/snippets
+                ../../tools/qtprotobufgen/doc/src/snippets
 
 imagedirs   += images \
     ../../../examples/protobuf/sensors/doc/images
@@ -48,6 +52,5 @@ manifestmeta.highlighted.names = "QtProtobuf/Sensors"
 
 tagfile                 = qtprotobuf.tags
 
-# Fail the documentation build if there are more warnings than the limit
+# Enforce zero documentation warnings
 warninglimit = 0
-
