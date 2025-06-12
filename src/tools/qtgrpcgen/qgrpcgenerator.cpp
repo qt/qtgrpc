@@ -133,7 +133,7 @@ void QGrpcGenerator::GenerateQmlClientServices(
     const std::string qmlBasename = qmlPrefix + basename;
 
     const std::string realtivePath = common::generateRelativeFilePath(file, basename);
-    const std::string qmlRealtivePath = qmlPrefix + realtivePath;
+    const std::string qmlRealtivePath = common::generateRelativeFilePath(file, qmlBasename);
 
     // QML registered client class
     std::unique_ptr<ZeroCopyOutputStream>
