@@ -42,8 +42,8 @@ public:
     void setMetadata(const QHash<QByteArray, QByteArray> &md);
     void setMetadata(QHash<QByteArray, QByteArray> &&md);
 #endif
-    const QMultiHash<QByteArray, QByteArray> &metadata(QtGrpc::MultiValueTag /*tag*/) const &;
-    QMultiHash<QByteArray, QByteArray> metadata(QtGrpc::MultiValueTag /*tag*/) &&;
+    const QMultiHash<QByteArray, QByteArray> &metadata(QtGrpc::MultiValue_t /*tag*/) const &;
+    QMultiHash<QByteArray, QByteArray> metadata(QtGrpc::MultiValue_t /*tag*/) &&;
     void setMetadata(const QMultiHash<QByteArray, QByteArray> &md);
     void setMetadata(QMultiHash<QByteArray, QByteArray> &&md);
     void addMetadata(QByteArray &&key, QByteArray &&value);

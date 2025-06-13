@@ -144,11 +144,11 @@ QGrpcChannelOptions &QGrpcChannelOptions::setDeadlineTimeout(std::chrono::millis
 /*!
     \fn const QHash<QByteArray, QByteArray> &QGrpcChannelOptions::metadata() const &
     \fn QHash<QByteArray, QByteArray> QGrpcChannelOptions::metadata() &&
-    \deprecated [6.13] Use \l{metadata(QtGrpc::MultiValueTag)}{metadata(QtGrpc::MultiValue)} instead.
+    \deprecated [6.13] Use \l{metadata(QtGrpc::MultiValue_t)}{metadata(QtGrpc::MultiValue)} instead.
 
     \include qgrpccommonoptions.cpp metadata
 
-    \sa metadata(QtGrpc::MultiValueTag), setMetadata()
+    \sa metadata(QtGrpc::MultiValue_t), setMetadata()
 */
 const QHash<QByteArray, QByteArray> &QGrpcChannelOptions::metadata() const & noexcept
 {
@@ -203,22 +203,22 @@ QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(QHash<QByteArray, QByteArr
 
 /*!
     \since 6.10
-    \fn const QMultiHash<QByteArray, QByteArray> &QGrpcChannelOptions::metadata(QtGrpc::MultiValueTag) const &
-    \fn QMultiHash<QByteArray, QByteArray> QGrpcChannelOptions::metadata(QtGrpc::MultiValueTag) &&
+    \fn const QMultiHash<QByteArray, QByteArray> &QGrpcChannelOptions::metadata(QtGrpc::MultiValue_t) const &
+    \fn QMultiHash<QByteArray, QByteArray> QGrpcChannelOptions::metadata(QtGrpc::MultiValue_t) &&
 
     \include qgrpccommonoptions.cpp metadata-multi
 
     \sa {setMetadata(const QMultiHash<QByteArray, QByteArray>&)}{setMetadata}
 */
 const QMultiHash<QByteArray, QByteArray> &
-QGrpcChannelOptions::metadata(QtGrpc::MultiValueTag tag) const & noexcept
+QGrpcChannelOptions::metadata(QtGrpc::MultiValue_t tag) const & noexcept
 {
     Q_D(const QGrpcChannelOptions);
     return d->metadata(tag);
 }
 
 QMultiHash<QByteArray, QByteArray>
-QGrpcChannelOptions::metadata(QtGrpc::MultiValueTag tag) &&
+QGrpcChannelOptions::metadata(QtGrpc::MultiValue_t tag) &&
 {
     Q_D(QGrpcChannelOptions);
     if (d->ref.loadRelaxed() != 1)
@@ -238,7 +238,7 @@ QGrpcChannelOptions::metadata(QtGrpc::MultiValueTag tag) &&
     \l{QGrpcCallOptions::setMetadata(const QMultiHash<QByteArray,
     QByteArray>&)}{QGrpcCallOptions::setMetadata(QMultiHash)}
 
-    \sa metadata(QtGrpc::MultiValueTag)
+    \sa metadata(QtGrpc::MultiValue_t)
 */
 QGrpcChannelOptions &
 QGrpcChannelOptions::setMetadata(const QMultiHash<QByteArray, QByteArray> &metadata)
