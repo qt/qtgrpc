@@ -48,12 +48,7 @@ enum class StatusCode : quint8 {
 Q_ENUM_NS(StatusCode)
 
 // ### Qt7: remove QHash metadata interfaces.
-enum class MultiValueTag : quint8 { Allow QT_DEPRECATED_X("use QtGrpc::MultiValue") };
-QT_WARNING_PUSH
-QT_WARNING_DISABLE_DEPRECATED
-QT_WARNING_DISABLE_CLANG("-Wunused-const-variable")
-inline static constexpr auto MultiValue = QtGrpc::MultiValueTag::Allow;
-QT_WARNING_POP
+inline QT_DEFINE_TAG(MultiValue);
 
 Q_CLASSINFO("RegisterEnumClassesUnscoped", "false")
 } // namespace QtGrpc

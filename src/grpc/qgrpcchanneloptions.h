@@ -60,9 +60,9 @@ public:
     Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(QHash<QByteArray, QByteArray> &&metadata);
 #endif
     [[nodiscard]] Q_GRPC_EXPORT const QMultiHash<QByteArray, QByteArray> &
-        metadata(QtGrpc::MultiValueTag) const & noexcept;
+        metadata(QtGrpc::MultiValue_t) const & noexcept;
     [[nodiscard]] Q_GRPC_EXPORT QMultiHash<QByteArray, QByteArray>
-    metadata(QtGrpc::MultiValueTag) &&;
+    metadata(QtGrpc::MultiValue_t) &&;
     Q_GRPC_EXPORT QGrpcChannelOptions &
     setMetadata(const QMultiHash<QByteArray, QByteArray> &metadata);
     Q_GRPC_EXPORT QGrpcChannelOptions &setMetadata(QMultiHash<QByteArray, QByteArray> &&metadata);

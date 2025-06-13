@@ -197,20 +197,20 @@ QGrpcCallOptions &QGrpcCallOptions::setMetadata(QHash<QByteArray, QByteArray> &&
 
 /*!
     \since 6.10
-    \fn const QMultiHash<QByteArray, QByteArray> &QGrpcCallOptions::metadata(QtGrpc::MultiValueTag) const &
-    \fn QMultiHash<QByteArray, QByteArray> QGrpcCallOptions::metadata(QtGrpc::MultiValueTag) &&
+    \fn const QMultiHash<QByteArray, QByteArray> &QGrpcCallOptions::metadata(QtGrpc::MultiValue_t) const &
+    \fn QMultiHash<QByteArray, QByteArray> QGrpcCallOptions::metadata(QtGrpc::MultiValue_t) &&
 
     \include qgrpccommonoptions.cpp metadata-multi
 
     \sa {setMetadata(const QMultiHash<QByteArray, QByteArray>&)}{setMetadata}
 */
 const QMultiHash<QByteArray, QByteArray> &
-QGrpcCallOptions::metadata(QtGrpc::MultiValueTag tag) const & noexcept
+QGrpcCallOptions::metadata(QtGrpc::MultiValue_t tag) const & noexcept
 {
     Q_D(const QGrpcCallOptions);
     return d->metadata(tag);
 }
-QMultiHash<QByteArray, QByteArray> QGrpcCallOptions::metadata(QtGrpc::MultiValueTag tag) &&
+QMultiHash<QByteArray, QByteArray> QGrpcCallOptions::metadata(QtGrpc::MultiValue_t tag) &&
 {
     Q_D(QGrpcCallOptions);
     if (d->ref.loadRelaxed() != 1)
@@ -230,7 +230,7 @@ QMultiHash<QByteArray, QByteArray> QGrpcCallOptions::metadata(QtGrpc::MultiValue
     \l{QGrpcChannelOptions::setMetadata(const QMultiHash<QByteArray,
     QByteArray>&)}{QGrpcChannelOptions::setMetadata(QMultiHash)}.
 
-    \sa metadata(QtGrpc::MultiValueTag)
+    \sa metadata(QtGrpc::MultiValue_t)
 */
 QGrpcCallOptions &QGrpcCallOptions::setMetadata(const QMultiHash<QByteArray, QByteArray> &metadata)
 {

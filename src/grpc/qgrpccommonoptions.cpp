@@ -104,11 +104,11 @@ void QGrpcCommonOptions::setDeadlineTimeout(std::chrono::milliseconds t)
 //! [metadata-multi]
 */
 const QMultiHash<QByteArray, QByteArray> &
-QGrpcCommonOptions::metadata(QtGrpc::MultiValueTag /*tag*/) const &
+QGrpcCommonOptions::metadata(QtGrpc::MultiValue_t /*tag*/) const &
 {
     return m_metadataMulti;
 }
-QMultiHash<QByteArray, QByteArray> QGrpcCommonOptions::metadata(QtGrpc::MultiValueTag /*tag*/) &&
+QMultiHash<QByteArray, QByteArray> QGrpcCommonOptions::metadata(QtGrpc::MultiValue_t /*tag*/) &&
 {
     return std::move(m_metadataMulti);
 }
@@ -144,7 +144,7 @@ void QGrpcCommonOptions::setMetadata(QMultiHash<QByteArray, QByteArray> &&md)
     Adds \a key and \a value to the \l metadata if the exact pair is not already contained.
     The same key may appear multiple times with different values.
 
-    \sa {metadata(QtGrpc::MultiValueTag)}{metadata()} {setMetadata(const
+    \sa {metadata(QtGrpc::MultiValue_t)}{metadata()} {setMetadata(const
     QMultiHash<QByteArray, QByteArray>&)}{setMetadata()}
 //! [add-metadata]
 */
