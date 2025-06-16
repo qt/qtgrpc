@@ -41,6 +41,14 @@ QHash<QByteArray, QByteArray> QGrpcCommonOptions::metadata() &&
 }
 
 /*!
+    \internal
+    \class QGrpcCommonOptions
+    \inmodule QtGrpc
+    \brief Shared implementation of QGrpcCallOptions and QGrpcChannelOptions
+    functionality.
+*/
+
+/*!
 //! [set-metadata]
     Sets the \a metadata and returns a reference to the updated object.
 
