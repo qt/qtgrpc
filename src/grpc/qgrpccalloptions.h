@@ -62,7 +62,7 @@ public:
     Q_GRPC_EXPORT QGrpcCallOptions &setMetadata(QMultiHash<QByteArray, QByteArray> &&metadata);
     Q_GRPC_EXPORT QGrpcCallOptions &
     setMetadata(std::initializer_list<std::pair<QByteArray, QByteArray>> list);
-    Q_GRPC_EXPORT QGrpcCallOptions &addMetadata(QByteArray key, QByteArray value);
+    Q_GRPC_EXPORT QGrpcCallOptions &addMetadata(QByteArrayView key, QByteArrayView value);
 
 private:
     QExplicitlySharedDataPointer<QGrpcCallOptionsPrivate> d_ptr;

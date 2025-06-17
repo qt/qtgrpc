@@ -47,6 +47,7 @@ public:
     void setMetadata(const QMultiHash<QByteArray, QByteArray> &md);
     void setMetadata(QMultiHash<QByteArray, QByteArray> &&md);
     void addMetadata(QByteArray &&key, QByteArray &&value);
+    bool containsMetadata(QByteArrayView key, QByteArrayView value) const;
 
 private:
     std::optional<std::chrono::milliseconds> m_timeout;

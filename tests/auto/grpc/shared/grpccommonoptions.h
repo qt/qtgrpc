@@ -216,6 +216,10 @@ QT_WARNING_POP
         auto o5Detach = o5;
         QByteArray k = "keyB", v = "valB";
         o5.addMetadata(k, v);
+        // Check that exact key-value pairs are discarded no matter the order.
+        o5.addMetadata("keyA", "valA1");
+        o5.addMetadata("keyA", "valA2");
+        o5.addMetadata("keyB", "valB");
         QCOMPARE_EQ(o5.metadata(QtGrpc::MultiValue), data);
         QCOMPARE_NE(o5.metadata(QtGrpc::MultiValue), o5Detach.metadata(QtGrpc::MultiValue));
     }

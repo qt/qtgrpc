@@ -271,13 +271,13 @@ QGrpcChannelOptions::setMetadata(std::initializer_list<std::pair<QByteArray, QBy
     \include qgrpcchanneloptions.cpp merge-md-note
     \l{QGrpcCallOptions::addMetadata()}
 */
-QGrpcChannelOptions &QGrpcChannelOptions::addMetadata(QByteArray key, QByteArray value)
+QGrpcChannelOptions &QGrpcChannelOptions::addMetadata(QByteArrayView key, QByteArrayView value)
 {
-    if (d_ptr->metadata(QtGrpc::MultiValue).contains(key, value))
+    if (d_ptr->containsMetadata(key, value))
         return *this;
     d_ptr.detach();
     Q_D(QGrpcChannelOptions);
-    d->addMetadata(std::move(key), std::move(value));
+    d->addMetadata(key.toByteArray(), value.toByteArray());
     return *this;
 }
 
