@@ -165,4 +165,11 @@ void QGrpcCommonOptions::addMetadata(QByteArray &&key, QByteArray &&value)
     m_metadataMulti.emplace(std::move(key), std::move(value));
 }
 
+bool QGrpcCommonOptions::containsMetadata(QByteArrayView key, QByteArrayView value) const
+{
+    const auto &md = metadata(QtGrpc::MultiValue);
+    auto [f, l] = md.equal_range(key);
+    return std::find(f, l, value) != l;
+}
+
 QT_END_NAMESPACE
