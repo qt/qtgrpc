@@ -615,16 +615,9 @@ void Http2Handler::processQueue()
     if (m_queue.isEmpty())
         return;
 
-    // Take ownership of the byte device.
-    auto *device = QNonContiguousByteDeviceFactory::create(m_queue.dequeue());
-    device->setParent(m_stream);
-
-    m_stream->sendDATA(device, device->atEnd() || m_endStreamAtFirstData);
-    // Manage the lifetime through the uploadFinished signal (or this
-    // Http2Handler). Don't use QObject::deleteLater here as this function is
-    // expensive and blocking. Delete the byte device directly.
-    //              This is fine in this context.
-    connect(m_stream.get(), &QHttp2Stream::uploadFinished, device, [device] { delete device; });
+    const auto nextMessage = m_queue.dequeue();
+    const bool closeStream = nextMessage.isEmpty() || m_endStreamAtFirstData;
+    m_stream->sendDATA(nextMessage, closeStream);
 }
 
 bool Http2Handler::cancel()
