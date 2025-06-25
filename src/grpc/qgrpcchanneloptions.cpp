@@ -14,6 +14,7 @@ QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
 using namespace QtGrpc;
+using namespace QtGrpcPrivate;
 
 /*!
     \class QGrpcChannelOptions

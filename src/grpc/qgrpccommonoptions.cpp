@@ -7,10 +7,9 @@ QT_BEGIN_NAMESPACE
 
 #if QT_DEPRECATED_SINCE(6, 13)
 
-namespace
-{
+namespace QtGrpcPrivate {
 
-inline QHash<QByteArray, QByteArray> mergeHash(const QMultiHash<QByteArray, QByteArray> &multiHash)
+QHash<QByteArray, QByteArray> mergeHash(const QMultiHash<QByteArray, QByteArray> &multiHash)
 {
     QHash<QByteArray, QByteArray> out;
     for (const auto &key : multiHash.uniqueKeys())
@@ -18,7 +17,28 @@ inline QHash<QByteArray, QByteArray> mergeHash(const QMultiHash<QByteArray, QByt
     return out;
 }
 
-} // namespace
+bool operator==(const QMultiHash<QByteArray, QByteArray> &multiHash,
+                const QHash<QByteArray, QByteArray> &hash)
+{
+    if (hash.size() != multiHash.size())
+        return false;
+    for (const auto &[k, v] : hash.asKeyValueRange()) {
+        const auto [f, l] = multiHash.equal_range(k);
+        if (f == l || std::next(f) != l || *f != v)
+            return false;
+    }
+    return true;
+}
+
+inline bool operator!=(const QMultiHash<QByteArray, QByteArray> &multiHash,
+                       const QHash<QByteArray, QByteArray> &hash)
+{
+    return !(multiHash == hash);
+}
+
+}
+
+using namespace QtGrpcPrivate;
 
 /*!
 //! [metadata]
