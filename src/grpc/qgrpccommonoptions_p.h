@@ -58,23 +58,14 @@ private:
 #endif
 };
 
-inline bool operator==(const QMultiHash<QByteArray, QByteArray> &multiHash,
-                       const QHash<QByteArray, QByteArray> &hash)
-{
-    if (hash.size() != multiHash.size())
-        return false;
-    for (const auto &[k, v] : hash.asKeyValueRange()) {
-        const auto [f, l] = multiHash.equal_range(k);
-        if (f == l || std::next(f) != l || *f != v)
-            return false;
-    }
-    return true;
-}
+namespace QtGrpcPrivate {
 
-inline bool operator!=(const QMultiHash<QByteArray, QByteArray> &multiHash,
-                       const QHash<QByteArray, QByteArray> &hash)
-{
-    return !(multiHash == hash);
+QHash<QByteArray, QByteArray> mergeHash(const QMultiHash<QByteArray, QByteArray> &multiHash);
+bool operator==(const QMultiHash<QByteArray, QByteArray> &multiHash,
+                const QHash<QByteArray, QByteArray> &hash);
+bool operator!=(const QMultiHash<QByteArray, QByteArray> &multiHash,
+                const QHash<QByteArray, QByteArray> &hash);
+
 }
 
 QT_END_NAMESPACE
