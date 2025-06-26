@@ -61,7 +61,7 @@ protected:
     {
         return const_cast<QGrpcOperationContext &>(std::as_const(*this).context());
     }
-    void context() && = delete;
+    void context() const && = delete;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)

@@ -36,10 +36,10 @@ public:
     [[nodiscard]] QLatin1StringView service() const noexcept;
     [[nodiscard]] QByteArrayView argument() const noexcept;
 
-    void callOptions() && = delete;
+    void callOptions() const && = delete;
     [[nodiscard]] const QGrpcCallOptions &callOptions() const & noexcept;
 
-    void serverMetadata() && = delete;
+    void serverMetadata() const && = delete;
     [[nodiscard]] const QHash<QByteArray, QByteArray> &serverMetadata() const & noexcept;
     void setServerMetadata(const QHash<QByteArray, QByteArray> &metadata);
     void setServerMetadata(QHash<QByteArray, QByteArray> &&metadata);
