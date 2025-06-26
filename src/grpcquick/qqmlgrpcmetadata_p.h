@@ -38,7 +38,7 @@ public:
     ~QQmlGrpcMetadata() override;
 
     const QMultiHash<QByteArray, QByteArray> &metadata() const & noexcept { return m_metadata; }
-    void metadata() && = delete;
+    void metadata() const && = delete;
 
     const QVariantMap &data() const { return m_variantdata; }
     void setData(const QVariantMap &data);
