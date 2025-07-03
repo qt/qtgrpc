@@ -28,6 +28,8 @@
         \li Visualizing QtProtobuf messages in a QML ListView.
     \endlist
 
+    \note Make sure to read the prerequisites in \l{Running the Example}.
+
     \section1 Protobuf Schema
 
     The Protobuf schema defines the structure of messages and services used in
