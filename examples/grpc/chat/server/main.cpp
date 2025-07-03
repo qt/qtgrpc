@@ -128,7 +128,7 @@ public:
         if (std::find(m_activeClients.begin(), m_activeClients.end(), client) != m_activeClients.end())
             return false;
 
-        std::cout << "login:  " << client << ", " << client->name() << '\n';
+        std::cout << "login:  " << client << ", " << client->name() << std::endl;
         m_activeClients.push_back(client);
 
         // Notify all clients including the connecting one about the new login
@@ -155,7 +155,7 @@ public:
         std::unique_lock lock(m_activeClientsMtx);
         if (const auto it = std::find(m_activeClients.begin(), m_activeClients.end(), client);
             it != m_activeClients.end()) {
-            std::cout << "logout: " << client << ", " << client->name() << '\n';
+            std::cout << "logout: " << client << ", " << client->name() << std::endl;
             m_activeClients.erase(it);
             return true;
         }
@@ -370,8 +370,8 @@ int main(int /* argc */, char * /* argv */[])
 //! [server-ssl]
         builder.RegisterService(&service);
         server = builder.BuildAndStart();
-        std::cout << "Server listening on https://" << QtGrpcChatService::httpsAddress() << '\n';
-        std::cout << "Server listening on http://" << QtGrpcChatService::httpAddress() << '\n';
+        std::cout << "Server listening on https://" << QtGrpcChatService::httpsAddress() << std::endl;
+        std::cout << "Server listening on http://" << QtGrpcChatService::httpAddress() << std::endl;
     }
     server->Wait();
 }
