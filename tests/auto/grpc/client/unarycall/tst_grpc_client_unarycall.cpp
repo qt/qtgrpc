@@ -47,6 +47,7 @@ private Q_SLOTS:
 #if QT_DEPRECATED_SINCE(6, 13)
     void deprecatedMetadata();
 #endif
+    void metadata_data();
     void metadata();
 };
 
@@ -171,8 +172,17 @@ void QtGrpcClientUnaryCallTest::deprecatedMetadata()
 
 #endif // QT_DEPRECATED_SINCE(6, 13)
 
+void QtGrpcClientUnaryCallTest::metadata_data()
+{
+    QTest::addColumn<bool>("filterServerMetadata");
+    QTest::addRow("filterServerMetadata(true)") << true;
+    QTest::addRow("filterServerMetadata(false)") << false;
+}
+
 void QtGrpcClientUnaryCallTest::metadata()
 {
+    // TODO: QTBUG-138407
+    QFETCH(const bool, filterServerMetadata);
     QGrpcCallOptions opt;
     QMultiHash<QByteArray, QByteArray> clientMd{
         { "request_initial",  "3"  },
@@ -180,6 +190,7 @@ void QtGrpcClientUnaryCallTest::metadata()
         { "request_sum",      "20" },
         { "request_sum",      "10" }
     };
+    opt.setFilterServerMetadata(filterServerMetadata);
     opt.setMetadata(clientMd);
     auto reply = client()->testMetadata({}, opt);
     QSignalSpy replyFinishedSpy(reply.get(), &QGrpcCallReply::finished);
@@ -191,6 +202,10 @@ void QtGrpcClientUnaryCallTest::metadata()
     QVERIFY(args.first().value<QGrpcStatus>().isOk());
 
     const auto &initialMd = reply->serverInitialMetadata();
+    if (filterServerMetadata)
+        QCOMPARE_EQ(initialMd.size(), 3);
+    else
+        QCOMPARE_GT(initialMd.size(), 3);
     auto initialIt = initialMd.equal_range("response_initial");
     QCOMPARE_EQ(std::distance(initialIt.first, initialIt.second), 3);
     QCOMPARE_EQ(initialIt.first.value(), "2");
@@ -200,6 +215,10 @@ void QtGrpcClientUnaryCallTest::metadata()
     QCOMPARE_EQ(initialIt.first.value(), "0");
 
     const auto &trailingMd = reply->serverTrailingMetadata();
+    if (filterServerMetadata)
+        QCOMPARE_EQ(trailingMd.size(), 3);
+    else
+        QCOMPARE_GT(trailingMd.size(), 3);
     auto trailingIt = trailingMd.equal_range("response_trailing");
     QCOMPARE_EQ(std::distance(trailingIt.first, trailingIt.second), 2);
     QCOMPARE_EQ(trailingIt.first.value(), "1");

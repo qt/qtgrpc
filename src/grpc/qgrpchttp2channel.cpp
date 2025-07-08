@@ -68,6 +68,8 @@ using namespace QtGrpc;
     {serializationFormat}, or other options by constructing it with a
     QGrpcChannelOptions containing the required customizations.
 
+    \note \l{QGrpcChannelOptions::filterServerMetadata} is enabled by default.
+
     \section2 Transportation scheme
 
     The QGrpcHttp2Channel implementation prefers different transportation
@@ -312,6 +314,7 @@ public:
 
 private:
     [[nodiscard]] HPack::HttpHeader constructInitialHeaders() const;
+    [[nodiscard]] bool constructFilterServerMetadata() const;
     [[nodiscard]] QGrpcHttp2ChannelPrivate *channelPriv() const;
     [[nodiscard]] QGrpcHttp2Channel *channel() const;
     [[nodiscard]] bool handleContextExpired();
@@ -324,6 +327,7 @@ private:
     State m_state = State::Idle;
     const bool m_endStreamAtFirstData;
     bool m_writesDoneSent = false;
+    bool m_filterServerMetadata;
     QTimer m_deadlineTimer;
 
     Q_DISABLE_COPY_MOVE(Http2Handler)
@@ -434,7 +438,7 @@ private:
 Http2Handler::Http2Handler(QGrpcOperationContext *operation, QGrpcHttp2ChannelPrivate *parent,
                            bool endStream)
     : QObject(parent), m_operation(operation), m_initialHeaders(constructInitialHeaders()),
-      m_endStreamAtFirstData(endStream)
+      m_endStreamAtFirstData(endStream), m_filterServerMetadata(constructFilterServerMetadata())
 {
     // If the context (lifetime bound to the user) is destroyed, this handler
     // can no longer perform any meaningful work. We allow it to be deleted;
@@ -596,6 +600,13 @@ HPack::HttpHeader Http2Handler::constructInitialHeaders() const
     iterateMetadata(m_operation->callOptions().metadata(QtGrpc::MultiValue));
 
     return headers;
+}
+
+bool Http2Handler::constructFilterServerMetadata() const
+{
+    return m_operation->callOptions()
+        .filterServerMetadata()
+        .value_or(channel()->channelOptions().filterServerMetadata().value_or(true));
 }
 
 QGrpcHttp2ChannelPrivate *Http2Handler::channelPriv() const
@@ -815,9 +826,13 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
             qGrpcWarning("Received unexcpected gRPC-reserved header: { key: %s, value: %s } in "
                          "phase: %s",
                          k.data(), v.data(), QDebug::toBytes(phase).data());
+        } else { // Custom-Metadata
+            metadata.insert(k, v);
+            continue;
         }
 
-        metadata.insert(k, v);
+        if (!m_filterServerMetadata)
+            metadata.insert(k, v);
     }
 
     if (validation.requireHttpStatus && !validation.hasHttpStatus) {
