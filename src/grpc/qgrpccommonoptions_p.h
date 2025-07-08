@@ -50,12 +50,16 @@ public:
     void addMetadata(QByteArray &&key, QByteArray &&value);
     bool containsMetadata(QByteArrayView key, QByteArrayView value) const;
 
+    std::optional<bool> filterServerMetadata() const noexcept;
+    void setFilterServerMetadata(bool value);
+
 private:
     std::optional<std::chrono::milliseconds> m_timeout;
     QMultiHash<QByteArray, QByteArray> m_metadata;
 #if QT_DEPRECATED_SINCE(6, 13)
     QHash<QByteArray, QByteArray> m_deprecatedMetadata;
 #endif
+    std::optional<bool> m_filterServerMetadata;
 };
 
 namespace QtGrpcPrivate {

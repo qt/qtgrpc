@@ -21,6 +21,7 @@ private Q_SLOTS:
 #endif
     void propertyMetadata() const { common.propertyMetadata(); }
     void propertyDeadline() const { common.propertyDeadline(); }
+    void propertyFilterServerMetadata() const { common.propertyFilterServerMetadata(); }
     void streamsToDebug() const { common.streamsToDebug(); }
 
 private:

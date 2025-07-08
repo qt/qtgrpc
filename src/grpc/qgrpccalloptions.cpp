@@ -272,6 +272,33 @@ QGrpcCallOptions &QGrpcCallOptions::addMetadata(QByteArrayView key, QByteArrayVi
     return *this;
 }
 
+/*!
+    \include qgrpccommonoptions.cpp filterServerMetadata
+    \sa QGrpcChannelOptions::filterServerMetadata()
+*/
+std::optional<bool> QGrpcCallOptions::filterServerMetadata() const noexcept
+{
+    Q_D(const QGrpcCallOptions);
+    return d->filterServerMetadata();
+}
+
+/*!
+    \include qgrpccommonoptions.cpp setFilterServerMetadata
+    \note Setting this field \b{overrides} the corresponding channel options
+    field — see \l{QGrpcChannelOptions::setFilterServerMetadata()}
+
+    \sa QGrpcChannelOptions::setFilterServerMetadata()
+*/
+QGrpcCallOptions &QGrpcCallOptions::setFilterServerMetadata(bool value)
+{
+    if (d_ptr->filterServerMetadata() == value)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcCallOptions);
+    d->setFilterServerMetadata(value);
+    return *this;
+}
+
 #ifndef QT_NO_DEBUG_STREAM
 /*!
     \since 6.8
