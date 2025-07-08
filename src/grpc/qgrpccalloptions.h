@@ -64,6 +64,9 @@ public:
     setMetadata(std::initializer_list<std::pair<QByteArray, QByteArray>> list);
     Q_GRPC_EXPORT QGrpcCallOptions &addMetadata(QByteArrayView key, QByteArrayView value);
 
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<bool> filterServerMetadata() const noexcept;
+    Q_GRPC_EXPORT QGrpcCallOptions &setFilterServerMetadata(bool value);
+
 private:
     QExplicitlySharedDataPointer<QGrpcCallOptionsPrivate> d_ptr;
 

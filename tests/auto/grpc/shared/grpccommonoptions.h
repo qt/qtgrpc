@@ -231,6 +231,15 @@ QT_WARNING_POP
         QCOMPARE_EQ(o1.deadlineTimeout(), Dur);
         QCOMPARE_NE(o1.deadlineTimeout(), o1Detach.deadlineTimeout());
     }
+    void propertyFilterServerMetadata() const
+    {
+        T o1;
+        QCOMPARE_EQ(o1.filterServerMetadata(), std::nullopt);
+        auto o1Detach = o1;
+        o1.setFilterServerMetadata(true);
+        QCOMPARE_NE(o1.filterServerMetadata(), o1Detach.filterServerMetadata());
+        QCOMPARE_EQ(o1.filterServerMetadata(), std::optional<bool>(true));
+    }
     void streamsToDebug() const
     {
         T o;

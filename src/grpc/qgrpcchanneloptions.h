@@ -70,6 +70,9 @@ public:
     setMetadata(std::initializer_list<std::pair<QByteArray, QByteArray>> list);
     Q_GRPC_EXPORT QGrpcChannelOptions &addMetadata(QByteArrayView key, QByteArrayView value);
 
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<bool> filterServerMetadata() const noexcept;
+    Q_GRPC_EXPORT QGrpcChannelOptions &setFilterServerMetadata(bool value);
+
     [[nodiscard]] Q_GRPC_EXPORT QGrpcSerializationFormat serializationFormat() const;
     Q_GRPC_EXPORT QGrpcChannelOptions &
     setSerializationFormat(const QGrpcSerializationFormat &format);

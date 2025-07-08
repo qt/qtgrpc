@@ -161,4 +161,36 @@ bool QGrpcCommonOptions::containsMetadata(QByteArrayView key, QByteArrayView val
     return std::find(f, l, value) != l;
 }
 
+/*!
+//! [filterServerMetadata]
+    \since 6.11
+
+    Returns \c true if protocol-related server metadata is excluded from the
+    result. Returns \c false to include all metadata received from the server.
+
+    If this field is unset, returns an empty \c {std::optional}.
+
+    \sa setFilterServerMetadata()
+//! [filterServerMetadata]
+*/
+std::optional<bool> QGrpcCommonOptions::filterServerMetadata() const noexcept
+{
+    return m_filterServerMetadata;
+}
+
+/*!
+//! [setFilterServerMetadata]
+    \since 6.11
+
+    If \a value is \c true, protocol-related metadata defined by the gRPC
+    transport (such as reserved \c{grpc-} keys) will be excluded. If \a value
+    is \c false, all metadata received from the server will be included.
+
+    \sa filterServerMetadata()
+*/
+void QGrpcCommonOptions::setFilterServerMetadata(bool value)
+{
+    m_filterServerMetadata = value;
+}
+
 QT_END_NAMESPACE

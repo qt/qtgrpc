@@ -282,6 +282,34 @@ QGrpcChannelOptions &QGrpcChannelOptions::addMetadata(QByteArrayView key, QByteA
 }
 
 /*!
+    \include qgrpccommonoptions.cpp filterServerMetadata
+    \sa QGrpcCallOptions::filterServerMetadata()
+*/
+std::optional<bool> QGrpcChannelOptions::filterServerMetadata() const noexcept
+{
+    Q_D(const QGrpcChannelOptions);
+    return d->filterServerMetadata();
+}
+
+/*!
+    \include qgrpccommonoptions.cpp setFilterServerMetadata
+
+    \include qgrpcchanneloptions.cpp channel-note
+    \l{QGrpcCallOptions::filterServerMetadata}
+
+    \sa QGrpcCallOptions::setFilterServerMetadata()
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::setFilterServerMetadata(bool value)
+{
+    if (filterServerMetadata() == value)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->setFilterServerMetadata(value);
+    return *this;
+}
+
+/*!
     \since 6.8
 
     Sets the serialization \a format for the channel and returns a reference to
