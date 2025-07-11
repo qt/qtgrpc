@@ -313,7 +313,7 @@ void QGrpcOperationContext::setServerInitialMetadata(QMultiHash<QByteArray, QByt
         return;
     d->serverInitialMetadata = std::move(metadata);
 #if QT_DEPRECATED_SINCE(6, 13)
-    d->deprServerInitialMetadata = QtGrpcPrivate::mergeHash(d->serverInitialMetadata);
+    d->deprServerInitialMetadata = QtGrpcPrivate::toHash(d->serverInitialMetadata);
 #endif
 }
 

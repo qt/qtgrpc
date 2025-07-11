@@ -60,11 +60,13 @@ private:
 
 namespace QtGrpcPrivate {
 
-QHash<QByteArray, QByteArray> mergeHash(const QMultiHash<QByteArray, QByteArray> &multiHash);
 bool operator==(const QMultiHash<QByteArray, QByteArray> &multiHash,
                 const QHash<QByteArray, QByteArray> &hash);
 bool operator!=(const QMultiHash<QByteArray, QByteArray> &multiHash,
                 const QHash<QByteArray, QByteArray> &hash);
+#if QT_DEPRECATED_SINCE(6, 13)
+QHash<QByteArray, QByteArray> toHash(const QMultiHash<QByteArray, QByteArray> &multiHash);
+#endif
 
 }
 
