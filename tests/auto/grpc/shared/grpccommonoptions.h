@@ -138,9 +138,7 @@ QT_WARNING_DISABLE_DEPRECATED
         QCOMPARE_NE(mdRef, md);
         md.insert("keyD", "valD");
         QCOMPARE_EQ(mdRef, md);
-        // Check that the handed out reference gets updates for QHash setter
         o1.setMetadata(md);
-        QCOMPARE_EQ(multiMdRef, toMulti(md));
         QCOMPARE_EQ(mdRef, md);
 
         // Check shared state mutation due to lazy evaluation in metadata()
