@@ -9,11 +9,15 @@ QT_BEGIN_NAMESPACE
 
 namespace QtGrpcPrivate {
 
-QHash<QByteArray, QByteArray> mergeHash(const QMultiHash<QByteArray, QByteArray> &multiHash)
+QHash<QByteArray, QByteArray>
+toHash(const QMultiHash<QByteArray, QByteArray> &multiHash)
 {
+    // Transform a QMultiHash into a QHash by keeping only the first value for each key.
+    // The first value will be the newest one when iterating the multi-hash.
     QHash<QByteArray, QByteArray> out;
-    for (const auto &key : multiHash.uniqueKeys())
-        out.insert(key, multiHash.value(key));
+    out.reserve(multiHash.size());
+    for (const auto &[k, v] : multiHash.asKeyValueRange())
+        out.try_emplace(k, v);
     return out;
 }
 
@@ -50,13 +54,13 @@ const QHash<QByteArray, QByteArray> &QGrpcCommonOptions::metadata() const &
 {
     m_deprecatedQHashRefUsed = true;
     if (m_metadataMulti != m_metadata)
-        m_metadata = mergeHash(m_metadataMulti);
+        m_metadata = toHash(m_metadataMulti);
     return m_metadata;
 }
 QHash<QByteArray, QByteArray> QGrpcCommonOptions::metadata() &&
 {
     if (m_metadataMulti != m_metadata)
-        m_metadata = mergeHash(m_metadataMulti);
+        m_metadata = toHash(m_metadataMulti);
     return std::move(m_metadata);
 }
 
@@ -152,7 +156,7 @@ void QGrpcCommonOptions::setMetadata(const QMultiHash<QByteArray, QByteArray> &m
     m_metadataMulti = md;
 #if QT_DEPRECATED_SINCE(6, 13)
     if (m_deprecatedQHashRefUsed)
-        m_metadata = mergeHash(m_metadataMulti);
+        m_metadata = toHash(m_metadataMulti);
 #endif
 }
 
@@ -161,7 +165,7 @@ void QGrpcCommonOptions::setMetadata(QMultiHash<QByteArray, QByteArray> &&md)
     m_metadataMulti = std::move(md);
 #if QT_DEPRECATED_SINCE(6, 13)
     if (m_deprecatedQHashRefUsed)
-        m_metadata = mergeHash(m_metadataMulti);
+        m_metadata = toHash(m_metadataMulti);
 #endif
 }
 
