@@ -37,12 +37,13 @@ public:
     void setDeadlineTimeout(std::chrono::milliseconds t);
 
 #if QT_DEPRECATED_SINCE(6, 13)
-    const QHash<QByteArray, QByteArray> &metadata() const &;
+    const QHash<QByteArray, QByteArray> &metadata() const & noexcept;
     QHash<QByteArray, QByteArray> metadata() &&;
     void setMetadata(const QHash<QByteArray, QByteArray> &md);
     void setMetadata(QHash<QByteArray, QByteArray> &&md);
 #endif
-    const QMultiHash<QByteArray, QByteArray> &metadata(QtGrpc::MultiValue_t /*tag*/) const &;
+    const QMultiHash<QByteArray, QByteArray> &
+        metadata(QtGrpc::MultiValue_t /*tag*/) const & noexcept;
     QMultiHash<QByteArray, QByteArray> metadata(QtGrpc::MultiValue_t /*tag*/) &&;
     void setMetadata(const QMultiHash<QByteArray, QByteArray> &md);
     void setMetadata(QMultiHash<QByteArray, QByteArray> &&md);
@@ -51,19 +52,14 @@ public:
 
 private:
     std::optional<std::chrono::milliseconds> m_timeout;
-    QMultiHash<QByteArray, QByteArray> m_metadataMulti;
+    QMultiHash<QByteArray, QByteArray> m_metadata;
 #if QT_DEPRECATED_SINCE(6, 13)
-    mutable QHash<QByteArray, QByteArray> m_metadata;
-    mutable bool m_deprecatedQHashRefUsed = false;
+    QHash<QByteArray, QByteArray> m_deprecatedMetadata;
 #endif
 };
 
 namespace QtGrpcPrivate {
 
-bool operator==(const QMultiHash<QByteArray, QByteArray> &multiHash,
-                const QHash<QByteArray, QByteArray> &hash);
-bool operator!=(const QMultiHash<QByteArray, QByteArray> &multiHash,
-                const QHash<QByteArray, QByteArray> &hash);
 #if QT_DEPRECATED_SINCE(6, 13)
 QHash<QByteArray, QByteArray> toHash(const QMultiHash<QByteArray, QByteArray> &multiHash);
 #endif

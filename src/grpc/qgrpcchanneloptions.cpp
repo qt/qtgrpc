@@ -14,7 +14,6 @@ QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
 using namespace QtGrpc;
-using namespace QtGrpcPrivate;
 
 /*!
     \class QGrpcChannelOptions
@@ -183,7 +182,7 @@ QHash<QByteArray, QByteArray> QGrpcChannelOptions::metadata() &&
 */
 QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QHash<QByteArray, QByteArray> &metadata)
 {
-    if (d_ptr->metadata(QtGrpc::MultiValue) == metadata)
+    if (d_ptr->metadata() == metadata)
         return *this;
     d_ptr.detach();
     Q_D(QGrpcChannelOptions);
@@ -192,7 +191,7 @@ QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(const QHash<QByteArray, QB
 }
 QGrpcChannelOptions &QGrpcChannelOptions::setMetadata(QHash<QByteArray, QByteArray> &&metadata)
 {
-    if (d_ptr->metadata(QtGrpc::MultiValue) == metadata)
+    if (d_ptr->metadata() == metadata)
         return *this;
     d_ptr.detach();
     Q_D(QGrpcChannelOptions);

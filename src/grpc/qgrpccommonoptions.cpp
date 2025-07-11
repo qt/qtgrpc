@@ -7,10 +7,8 @@ QT_BEGIN_NAMESPACE
 
 #if QT_DEPRECATED_SINCE(6, 13)
 
-namespace QtGrpcPrivate {
-
 QHash<QByteArray, QByteArray>
-toHash(const QMultiHash<QByteArray, QByteArray> &multiHash)
+QtGrpcPrivate::toHash(const QMultiHash<QByteArray, QByteArray> &multiHash)
 {
     // Transform a QMultiHash into a QHash by keeping only the first value for each key.
     // The first value will be the newest one when iterating the multi-hash.
@@ -21,47 +19,19 @@ toHash(const QMultiHash<QByteArray, QByteArray> &multiHash)
     return out;
 }
 
-bool operator==(const QMultiHash<QByteArray, QByteArray> &multiHash,
-                const QHash<QByteArray, QByteArray> &hash)
-{
-    if (hash.size() != multiHash.size())
-        return false;
-    for (const auto &[k, v] : hash.asKeyValueRange()) {
-        const auto [f, l] = multiHash.equal_range(k);
-        if (f == l || std::next(f) != l || *f != v)
-            return false;
-    }
-    return true;
-}
-
-inline bool operator!=(const QMultiHash<QByteArray, QByteArray> &multiHash,
-                       const QHash<QByteArray, QByteArray> &hash)
-{
-    return !(multiHash == hash);
-}
-
-}
-
-using namespace QtGrpcPrivate;
-
 /*!
 //! [metadata]
     Returns the metadata. If this field is unset, returns empty
     metadata.
 //! [metadata]
 */
-const QHash<QByteArray, QByteArray> &QGrpcCommonOptions::metadata() const &
+const QHash<QByteArray, QByteArray> &QGrpcCommonOptions::metadata() const & noexcept
 {
-    m_deprecatedQHashRefUsed = true;
-    if (m_metadataMulti != m_metadata)
-        m_metadata = toHash(m_metadataMulti);
-    return m_metadata;
+    return m_deprecatedMetadata;
 }
 QHash<QByteArray, QByteArray> QGrpcCommonOptions::metadata() &&
 {
-    if (m_metadataMulti != m_metadata)
-        m_metadata = toHash(m_metadataMulti);
-    return std::move(m_metadata);
+    return std::move(m_deprecatedMetadata);
 }
 
 /*!
@@ -82,15 +52,13 @@ QHash<QByteArray, QByteArray> QGrpcCommonOptions::metadata() &&
 */
 void QGrpcCommonOptions::setMetadata(const QHash<QByteArray, QByteArray> &md)
 {
-    if (m_deprecatedQHashRefUsed)
-        m_metadata = md;
-    m_metadataMulti = QMultiHash<QByteArray, QByteArray>(md);
+    m_deprecatedMetadata = md;
+    m_metadata = QMultiHash<QByteArray, QByteArray>(md);
 }
 void QGrpcCommonOptions::setMetadata(QHash<QByteArray, QByteArray> &&md)
 {
-    if (m_deprecatedQHashRefUsed)
-        m_metadata = md;
-    m_metadataMulti = QMultiHash<QByteArray, QByteArray>(std::move(md));
+    m_deprecatedMetadata = std::move(md);
+    m_metadata = QMultiHash<QByteArray, QByteArray>(m_deprecatedMetadata);
 }
 
 #endif // QT_DEPRECATED_SINCE(6, 13)
@@ -136,13 +104,13 @@ void QGrpcCommonOptions::setDeadlineTimeout(std::chrono::milliseconds t)
 //! [metadata-multi]
 */
 const QMultiHash<QByteArray, QByteArray> &
-QGrpcCommonOptions::metadata(QtGrpc::MultiValue_t /*tag*/) const &
+QGrpcCommonOptions::metadata(QtGrpc::MultiValue_t /*tag*/) const & noexcept
 {
-    return m_metadataMulti;
+    return m_metadata;
 }
 QMultiHash<QByteArray, QByteArray> QGrpcCommonOptions::metadata(QtGrpc::MultiValue_t /*tag*/) &&
 {
-    return std::move(m_metadataMulti);
+    return std::move(m_metadata);
 }
 
 /*!
@@ -153,19 +121,17 @@ QMultiHash<QByteArray, QByteArray> QGrpcCommonOptions::metadata(QtGrpc::MultiVal
 */
 void QGrpcCommonOptions::setMetadata(const QMultiHash<QByteArray, QByteArray> &md)
 {
-    m_metadataMulti = md;
+    m_metadata = md;
 #if QT_DEPRECATED_SINCE(6, 13)
-    if (m_deprecatedQHashRefUsed)
-        m_metadata = toHash(m_metadataMulti);
+    m_deprecatedMetadata = QtGrpcPrivate::toHash(m_metadata);
 #endif
 }
 
 void QGrpcCommonOptions::setMetadata(QMultiHash<QByteArray, QByteArray> &&md)
 {
-    m_metadataMulti = std::move(md);
+    m_metadata = std::move(md);
 #if QT_DEPRECATED_SINCE(6, 13)
-    if (m_deprecatedQHashRefUsed)
-        m_metadata = toHash(m_metadataMulti);
+    m_deprecatedMetadata = QtGrpcPrivate::toHash(m_metadata);
 #endif
 }
 
@@ -183,10 +149,9 @@ void QGrpcCommonOptions::setMetadata(QMultiHash<QByteArray, QByteArray> &&md)
 void QGrpcCommonOptions::addMetadata(QByteArray &&key, QByteArray &&value)
 {
 #if QT_DEPRECATED_SINCE(6, 13)
-    if (m_deprecatedQHashRefUsed)
-        m_metadata.insertOrAssign(key, value);
+    m_deprecatedMetadata.insertOrAssign(key, value);
 #endif
-    m_metadataMulti.emplace(std::move(key), std::move(value));
+    m_metadata.emplace(std::move(key), std::move(value));
 }
 
 bool QGrpcCommonOptions::containsMetadata(QByteArrayView key, QByteArrayView value) const
