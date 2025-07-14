@@ -13,6 +13,7 @@
 #include <QtCore/qhash.h>
 #include <QtCore/qobject.h>
 #include <QtCore/qstringfwd.h>
+#include <QtCore/qtdeprecationdefinitions.h>
 
 #include <optional>
 
@@ -37,8 +38,16 @@ public:
     }
     bool read(QProtobufMessage *message) const;
 
+#if QT_DEPRECATED_SINCE(6, 13)
+    QT_DEPRECATED_VERSION_X_6_13("Use serverInitialMetadata()")
     [[nodiscard]] const QHash<QByteArray, QByteArray> &metadata() const & noexcept;
     void metadata() const && = delete;
+#endif
+
+    [[nodiscard]] const QMultiHash<QByteArray, QByteArray> &
+    serverInitialMetadata() const & noexcept;
+    [[nodiscard]] const QMultiHash<QByteArray, QByteArray> &
+    serverTrailingMetadata() const & noexcept;
 
     [[nodiscard]] QLatin1StringView method() const noexcept;
 

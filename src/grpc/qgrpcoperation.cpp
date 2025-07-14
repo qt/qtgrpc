@@ -155,16 +155,69 @@ void QGrpcOperation::cancel()
     emit d->operationContext->cancelRequested();
 }
 
-/*!
-    Returns the server metadata received from the channel.
+#if QT_DEPRECATED_SINCE(6, 13)
 
-    \note For \l {QGrpcHttp2Channel} {HTTP/2 channels} it usually includes the
-    HTTP headers received from the server.
+/*!
+    \deprecated [6.13] Use serverInitialMetadata() and serverTrailingMetadata() instead.
+
+    \include qgrpcoperation.cpp serverInitialMetadata
+
+    \sa serverInitialMetadata() serverTrailingMetadata()
 */
 const QHash<QByteArray, QByteArray> &QGrpcOperation::metadata() const & noexcept
 {
     Q_D(const QGrpcOperation);
-    return d->operationContext->serverMetadata();
+    QT_IGNORE_DEPRECATIONS(return d->operationContext->serverMetadata();)
+}
+
+#endif // QT_DEPRECATED_SINCE(6, 13)
+
+/*!
+    \since 6.10
+
+//! [serverInitialMetadata]
+    Returns the initial metadata received from the server before any response
+    messages.
+
+    Initial metadata is sent by the server immediately after the call is
+    established. It may include key-value pairs that provide context for the
+    call.
+
+    \note For \l {QGrpcHttp2Channel} {HTTP/2 channels}, this is delivered
+    via response headers.
+//! [serverInitialMetadata]
+
+    The metadata may contain multiple entries under the same key.
+
+    \sa serverTrailingMetadata()
+*/
+const QMultiHash<QByteArray, QByteArray> &QGrpcOperation::serverInitialMetadata() const & noexcept
+{
+    Q_D(const QGrpcOperation);
+    return d->operationContext->serverInitialMetadata();
+}
+
+/*!
+    \since 6.10
+
+//! [serverTrailingMetadata]
+    Returns the trailing metadata received from the server after all response
+    messages.
+
+    Trailing metadata is sent only by the server once all response messages
+    have been sent and just before the RPC completes. It may include key-value
+    pairs providing additional context about the completed call.
+
+    \note For \l {QGrpcHttp2Channel} {HTTP/2 channels}, this is delivered
+    via response trailers.
+//! [serverTrailingMetadata]
+
+    The metadata may contain multiple entries under the same key.
+*/
+const QMultiHash<QByteArray, QByteArray> &QGrpcOperation::serverTrailingMetadata() const & noexcept
+{
+    Q_D(const QGrpcOperation);
+    return d->operationContext->serverTrailingMetadata();
 }
 
 /*!
