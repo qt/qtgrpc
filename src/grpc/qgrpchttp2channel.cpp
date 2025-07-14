@@ -771,7 +771,7 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
         false,
     };
 
-    QHash<QByteArray, QByteArray> metadata;
+    QMultiHash<QByteArray, QByteArray> metadata;
     std::optional<QtGrpc::StatusCode> statusCode;
     QString statusMessage;
 
@@ -837,16 +837,14 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
 
     switch (phase) {
     case HeaderPhase::Initial:
-        m_operation->setServerMetadata(std::move(metadata));
+        m_operation->setServerInitialMetadata(std::move(metadata));
         break;
     case HeaderPhase::TrailersOnly:
         [[fallthrough]];
-    case HeaderPhase::Trailers: {
-        auto md = m_operation->serverMetadata();
-        md.insert(metadata);
-        m_operation->setServerMetadata(std::move(md));
+    case HeaderPhase::Trailers:
+        m_operation->setServerTrailingMetadata(std::move(metadata));
         finish({ *statusCode, statusMessage });
-    }   break;
+        break;
     default:
         Q_UNREACHABLE();
     }
