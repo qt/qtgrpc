@@ -6,7 +6,12 @@
 #include <QtProtobuf/qtprotobuftypes.h>
 
 #include <QtCore/qdir.h>
-#if QT_CONFIG(process)
+
+#if !QT_CONFIG(process) || defined(CROSSCOMPILING)
+#  define SKIP_COMMAND_LINE_TESTS
+#endif
+
+#if !defined(SKIP_COMMAND_LINE_TESTS)
 #  include <QtCore/qprocess.h>
 #endif
 #include <QtCore/qstring.h>
@@ -17,7 +22,7 @@ using namespace Qt::StringLiterals;
 using namespace ProtocPluginTest;
 
 namespace {
-#if QT_CONFIG(process)
+#if !defined(SKIP_COMMAND_LINE_TESTS)
 #  ifndef PROTOC_EXECUTABLE
 #    error PROTOC_EXECUTABLE definition must be set and point to the valid protoc executable
 #  endif
@@ -40,7 +45,7 @@ constexpr QLatin1StringView allow_proto3_optional;
 
 constexpr QLatin1StringView CmdLineGeneratedDir("cmd_line_generated");
 
-#endif // QT_CONFIG(process)
+#endif // !defined(SKIP_COMMAND_LINE_TESTS)
 
 #  ifndef BINARY_DIR
 #    error BINARY_DIR definition must be set
@@ -68,7 +73,7 @@ private Q_SLOTS:
     void cmakeGenerated_data();
     void cmakeGenerated();
 
-#if QT_CONFIG(process)
+#if !defined(SKIP_COMMAND_LINE_TESTS)
     //! Test command-line call of qtprotobufgen
     void cmdLineGenerated_data();
     void cmdLineGenerated();
@@ -85,7 +90,7 @@ void qtprotobufgenTest::initTestCase()
 {
     initPaths(BinaryDir, CMakeGeneratedDir, CmdLineGeneratedDir);
     QVERIFY(!cmakeGeneratedPath().isEmpty());
-#if QT_CONFIG(process)
+#if !defined(SKIP_COMMAND_LINE_TESTS)
     QVERIFY(!cmdLineGeneratedPath().isEmpty());
 #endif
     QVERIFY(protocolCompilerAvailableToRun(ProtocPath));
@@ -117,7 +122,7 @@ void qtprotobufgenTest::cmakeGenerated()
                     cmakeGeneratedPath() + '/'_L1 + testName + '/'_L1 + filePath);
 }
 
-#if QT_CONFIG(process)
+#if !defined(SKIP_COMMAND_LINE_TESTS)
 void qtprotobufgenTest::cmdLineGenerated_data()
 {
     QTest::addColumn<QString>("directory");
@@ -293,7 +298,7 @@ void qtprotobufgenTest::cmdLineMutableGetterConflicts()
     QVERIFY2(process.exitCode() == 1, msgProcessFailed(process).constData());
 }
 
-#endif // QT_CONFIG(process)
+#endif // !defined(SKIP_COMMAND_LINE_TESTS)
 
 void qtprotobufgenTest::cleanupTestCase()
 {
