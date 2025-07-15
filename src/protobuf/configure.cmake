@@ -44,6 +44,7 @@ int main(void)
 qt_config_compile_test(libprotoc
     LIBRARIES
         protobuf::libprotoc
+        protobuf::libprotobuf
     CODE
 "#include <google/protobuf/compiler/plugin.h>
 
