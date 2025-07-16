@@ -307,7 +307,7 @@ public:
     }
 
 // context slot handlers:
-    bool cancel();
+    void cancel();
     void writesDone();
     void writeMessage(QByteArrayView data);
     void deadlineTimeout();
@@ -443,8 +443,10 @@ Http2Handler::Http2Handler(const std::shared_ptr<QGrpcOperationContext> &operati
       m_endStreamAtFirstData(endStream)
 {
     auto *channelOpPtr = operation.get();
-    QObject::connect(channelOpPtr, &QGrpcOperationContext::cancelRequested, this,
-                     &Http2Handler::cancel);
+    QObject::connect(channelOpPtr, &QGrpcOperationContext::cancelRequested, this, [this] {
+        cancel();
+        deleteLater();
+    });
     QObject::connect(channelOpPtr, &QGrpcOperationContext::writesDoneRequested, this,
                      &Http2Handler::writesDone);
     if (!m_endStreamAtFirstData) {
@@ -700,17 +702,20 @@ void Http2Handler::processQueue()
     m_stream->sendDATA(nextMessage, closeStream);
 }
 
-bool Http2Handler::cancel()
+void Http2Handler::cancel()
 {
-    if (m_state >= State::Cancelled || !m_stream)
-        return false;
+    if (m_state >= State::Cancelled)
+        return;
     m_state = State::Cancelled;
 
     // Client cancelled the stream before the deadline exceeded.
     m_deadlineTimer.stop();
 
     // Immediate cancellation by sending the RST_STREAM frame.
-    return m_stream->sendRST_STREAM(Http2::Http2Error::CANCEL);
+    if (m_stream && !m_stream->sendRST_STREAM(Http2::Http2Error::CANCEL)) {
+        qGrpcDebug("Failed cancellation on stream: %p, Handler::state: %s", m_stream.get(),
+                   QDebug::toBytes(m_state).data());
+    }
 }
 
 void Http2Handler::writesDone()
@@ -735,14 +740,9 @@ void Http2Handler::deadlineTimeout()
         qGrpcWarning("Operation expired on deadline timeout");
         return;
     }
-    // cancel the stream by sending the RST_FRAME and report
-    // the status back to our user.
-    if (cancel()) {
-        emit m_operation.lock()->finished({ StatusCode::DeadlineExceeded,
-                                            "Deadline Exceeded" });
-    } else {
-        qGrpcWarning("Cancellation failed on deadline timeout.");
-    }
+    cancel();
+    emit m_operation.lock()->finished({ StatusCode::DeadlineExceeded, "Deadline Exceeded" });
+    deleteLater();
 }
 
 void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase phase)
