@@ -417,8 +417,10 @@ Http2Handler::Http2Handler(const std::shared_ptr<QGrpcOperationContext> &operati
         QObject::connect(channelOpPtr, &QGrpcOperationContext::writeMessageRequested, this,
                          &Http2Handler::writeMessage);
     }
+
     QObject::connect(channelOpPtr, &QGrpcOperationContext::finished, &m_deadlineTimer,
                      &QTimer::stop);
+    m_deadlineTimer.setSingleShot(true);
 
     writeMessage(channelOpPtr->argument());
 }
@@ -517,16 +519,6 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
     QObject::connect(m_stream.get(), &QHttp2Stream::uploadFinished, this,
                      &Http2Handler::processQueue);
 
-    std::optional<std::chrono::milliseconds> deadline;
-    if (auto dt = channelOpPtr->callOptions().deadlineTimeout())
-        deadline = dt;
-    else if (auto chdt = channel()->channelOptions().deadlineTimeout())
-        deadline = chdt;
-    if (deadline) {
-        // We have an active stream and a deadline. It's time to start the timer.
-        QObject::connect(&m_deadlineTimer, &QTimer::timeout, this, &Http2Handler::deadlineTimeout);
-        m_deadlineTimer.start(*deadline);
-    }
 }
 
 QGrpcOperationContext *Http2Handler::operation() const
@@ -643,6 +635,16 @@ void Http2Handler::sendInitialRequest()
     m_state = State::RequestHeadersSent;
     m_initialHeaders.clear();
     processQueue();
+
+    std::optional<std::chrono::milliseconds> deadline = operation()->callOptions().deadlineTimeout();
+    if (!deadline)
+        deadline = channel()->channelOptions().deadlineTimeout();
+    if (deadline) {
+        // We have an active stream, a deadline and the initial headers have
+        // just been sent. It's time to start the timer.
+        connect(&m_deadlineTimer, &QTimer::timeout, this, &Http2Handler::deadlineTimeout);
+        m_deadlineTimer.start(*deadline);
+    }
 }
 
 // The core logic for sending the already serialized data through the HTTP/2 stream.
