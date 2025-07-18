@@ -232,7 +232,14 @@ class Http2Handler : public QObject
     // Q_OBJECT macro is not needed and adds unwanted overhead.
 
 public:
-    enum State : uint8_t { Active, Cancelled, Finished };
+    enum class State : uint8_t {
+        Idle,
+        RequestHeadersSent,
+        Active,
+        // Endpoints
+        Cancelled,
+        Finished,
+    };
 
     explicit Http2Handler(const std::shared_ptr<QGrpcOperationContext> &operation,
                           QGrpcHttp2ChannelPrivate *parent, bool endStream);
@@ -270,8 +277,9 @@ private:
     QQueue<QByteArray> m_queue;
     QPointer<QHttp2Stream> m_stream;
     ExpectedData m_expectedData;
-    State m_handlerState = Active;
+    State m_state = State::Idle;
     const bool m_endStreamAtFirstData;
+    bool m_writesDoneSent = false;
     QTimer m_deadlineTimer;
 
     Q_DISABLE_COPY_MOVE(Http2Handler)
@@ -406,8 +414,9 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
     m_stream = stream_;
 
     QObject::connect(m_stream.get(), &QHttp2Stream::headersReceived, channelOpPtr,
-                     [channelOpPtr, this](const HPack::HttpHeader &headers,
-                                                         bool endStream) {
+                     [channelOpPtr, this](const HPack::HttpHeader &headers, bool endStream) {
+                         m_state = State::Active;
+
                          auto md = channelOpPtr->serverMetadata();
                          QtGrpc::StatusCode statusCode = StatusCode::Ok;
                          QString statusMessage;
@@ -424,7 +433,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                          channelOpPtr->setServerMetadata(std::move(md));
 
                          if (endStream) {
-                             if (m_handlerState != Cancelled) {
+                             if (m_state != State::Cancelled) {
                                  emit channelOpPtr->finished(
                                      QGrpcStatus{ statusCode,statusMessage });
                              }
@@ -446,7 +455,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
 
     QObject::connect(m_stream.get(), &QHttp2Stream::dataReceived, channelOpPtr,
                      [channelOpPtr, this](const QByteArray &data, bool endStream) {
-                         if (m_handlerState != Cancelled) {
+                         if (m_state != State::Cancelled) {
                              m_expectedData.container.append(data);
 
                              if (!m_expectedData.updateExpectedSize())
@@ -468,7 +477,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                                      return;
                              }
                              if (endStream) {
-                                 m_handlerState = Finished;
+                                 m_state = State::Finished;
                                  emit channelOpPtr->finished({});
                                  channelPriv()->deleteHandler(this);
                              }
@@ -560,7 +569,7 @@ QGrpcHttp2Channel *Http2Handler::channel() const
 // or from the user in client/bidirectional streaming RPCs.
 void Http2Handler::writeMessage(QByteArrayView data)
 {
-    if (m_handlerState != Active || isStreamClosedForSending()) {
+    if (m_writesDoneSent || m_state > State::Active || isStreamClosedForSending()) {
         qGrpcDebug("Attempt sending data to the ended stream");
         return;
     }
@@ -586,14 +595,17 @@ void Http2Handler::sendInitialRequest()
 {
     Q_ASSERT(!m_initialHeaders.empty());
     Q_ASSERT(m_stream);
+    Q_ASSERT(m_state == State::Idle);
 
     if (!m_stream->sendHEADERS(m_initialHeaders, false)) {
+        m_state = State::Finished;
         operationContextAsyncError(operation(),
                                    QGrpcStatus{
                                        StatusCode::Unavailable,
                                        tr("Unable to send initial headers to an HTTP/2 stream") });
         return;
     }
+    m_state = State::RequestHeadersSent;
     m_initialHeaders.clear();
     processQueue();
 }
@@ -619,9 +631,9 @@ void Http2Handler::processQueue()
 
 bool Http2Handler::cancel()
 {
-    if (m_handlerState != Active || !m_stream)
+    if (m_state >= State::Cancelled || !m_stream)
         return false;
-    m_handlerState = Cancelled;
+    m_state = State::Cancelled;
 
     // Client cancelled the stream before the deadline exceeded.
     m_deadlineTimer.stop();
@@ -632,10 +644,9 @@ bool Http2Handler::cancel()
 
 void Http2Handler::writesDone()
 {
-    if (m_handlerState != Active)
+    if (m_writesDoneSent || m_state > State::Active)
         return;
-
-    m_handlerState = Finished;
+    m_writesDoneSent = true;
 
     // Stream is already (half)closed, skip sending the DATA frame with the end-of-stream flag.
     if (isStreamClosedForSending())
