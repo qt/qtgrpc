@@ -261,13 +261,12 @@ public:
     void deadlineTimeout();
 
 private:
-    void prepareInitialRequest(QGrpcOperationContext *operationContext,
-                               QGrpcHttp2ChannelPrivate *channel);
+    [[nodiscard]] HPack::HttpHeader constructInitialHeaders() const;
     [[nodiscard]] QGrpcHttp2ChannelPrivate *channelPriv() const;
     [[nodiscard]] QGrpcHttp2Channel *channel() const;
 
-    HPack::HttpHeader m_initialHeaders;
     std::weak_ptr<QGrpcOperationContext> m_operation;
+    HPack::HttpHeader m_initialHeaders;
     QQueue<QByteArray> m_queue;
     QPointer<QHttp2Stream> m_stream;
     ExpectedData m_expectedData;
@@ -368,7 +367,8 @@ private:
 
 Http2Handler::Http2Handler(const std::shared_ptr<QGrpcOperationContext> &operation,
                            QGrpcHttp2ChannelPrivate *parent, bool endStream)
-    : QObject(parent), m_operation(operation), m_endStreamAtFirstData(endStream)
+    : QObject(parent), m_operation(operation), m_initialHeaders(constructInitialHeaders()),
+      m_endStreamAtFirstData(endStream)
 {
     auto *channelOpPtr = operation.get();
     QObject::connect(channelOpPtr, &QGrpcOperationContext::cancelRequested, this,
@@ -381,7 +381,8 @@ Http2Handler::Http2Handler(const std::shared_ptr<QGrpcOperationContext> &operati
     }
     QObject::connect(channelOpPtr, &QGrpcOperationContext::finished, &m_deadlineTimer,
                      &QTimer::stop);
-    prepareInitialRequest(channelOpPtr, parent);
+
+    writeMessage(channelOpPtr->argument());
 }
 
 Http2Handler::~Http2Handler()
@@ -496,10 +497,9 @@ QGrpcOperationContext *Http2Handler::operation() const
     return m_operation.lock().get();
 }
 
-// Prepares the initial headers and enqueues the initial message.
+// Builds HTTP/2 headers for the initial gRPC request.
 // The headers are sent once the HTTP/2 connection is established.
-void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext,
-                                         QGrpcHttp2ChannelPrivate *channel)
+HPack::HttpHeader Http2Handler::constructInitialHeaders() const
 {
     const static QByteArray AuthorityHeader(":authority");
     const static QByteArray MethodHeader(":method");
@@ -513,10 +513,13 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
     const static QByteArray GrpcAcceptEncodingHeader("grpc-accept-encoding");
     const static QByteArray GrpcAcceptEncodingValue("identity,deflate,gzip");
 
-    const auto &channelOptions = channel->q_ptr->channelOptions();
+    const auto &channelOptions = channel()->channelOptions();
+    const auto *operationContext = operation();
+    const auto *channel = channelPriv();
+
     QByteArray service{ operationContext->service() };
     QByteArray method{ operationContext->method() };
-    m_initialHeaders = HPack::HttpHeader{
+    auto headers = HPack::HttpHeader{
         { AuthorityHeader,          channel->authorityHeader()               },
         { MethodHeader,             MethodValue                              },
         { PathHeader,               QByteArray('/' + service + '/' + method) },
@@ -527,21 +530,21 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
         { TEHeader,                 TEValue                                  },
     };
 
-    auto iterateMetadata = [this](const auto &metadata) {
+    auto iterateMetadata = [&headers](const auto &metadata) {
         for (const auto &[key, value] : metadata.asKeyValueRange()) {
             const auto lowerKey = key.toLower();
             if (lowerKey == AuthorityHeader || lowerKey == MethodHeader || lowerKey == PathHeader
                 || lowerKey == SchemeHeader || lowerKey == ContentTypeHeader) {
                 continue;
             }
-            m_initialHeaders.emplace_back(lowerKey, value);
+            headers.emplace_back(lowerKey, value);
         }
     };
 
     iterateMetadata(channelOptions.metadata());
     iterateMetadata(operationContext->callOptions().metadata());
 
-    writeMessage(operationContext->argument());
+    return headers;
 }
 
 QGrpcHttp2ChannelPrivate *Http2Handler::channelPriv() const
