@@ -273,6 +273,8 @@ public:
 private:
     void prepareInitialRequest(QGrpcOperationContext *operationContext,
                                QGrpcHttp2ChannelPrivate *channel);
+    [[nodiscard]] QGrpcHttp2ChannelPrivate *channelPriv() const;
+    [[nodiscard]] QGrpcHttp2Channel *channel() const;
 
     HPack::HttpHeader m_initialHeaders;
     std::weak_ptr<QGrpcOperationContext> m_operation;
@@ -412,9 +414,8 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
     auto *channelOpPtr = operation();
     m_stream = stream_;
 
-    auto *parentChannel = qobject_cast<QGrpcHttp2ChannelPrivate *>(parent());
     QObject::connect(m_stream.get(), &QHttp2Stream::headersReceived, channelOpPtr,
-                     [channelOpPtr, parentChannel, this](const HPack::HttpHeader &headers,
+                     [channelOpPtr, this](const HPack::HttpHeader &headers,
                                                          bool endStream) {
                          auto md = channelOpPtr->serverMetadata();
                          QtGrpc::StatusCode statusCode = StatusCode::Ok;
@@ -436,25 +437,24 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                                  emit channelOpPtr->finished(
                                      QGrpcStatus{ statusCode,statusMessage });
                              }
-                             parentChannel->deleteHandler(this);
+                             channelPriv()->deleteHandler(this);
                          }
                      });
 
-    Q_ASSERT(parentChannel != nullptr);
     QObject::connect(
-        m_stream.get(), &QHttp2Stream::errorOccurred, parentChannel,
-        [parentChannel, this](quint32 http2ErrorCode, const QString &errorString) {
+        m_stream.get(), &QHttp2Stream::errorOccurred, channelPriv(),
+        [this](quint32 http2ErrorCode, const QString &errorString) {
             if (!m_operation.expired()) {
                 auto channelOp = m_operation.lock();
                 emit channelOp->finished(QGrpcStatus{ http2ErrorToStatusCode(http2ErrorCode),
                                                       errorString });
             }
-            parentChannel->deleteHandler(this);
+            channelPriv()->deleteHandler(this);
         },
         Qt::SingleShotConnection);
 
     QObject::connect(m_stream.get(), &QHttp2Stream::dataReceived, channelOpPtr,
-                     [channelOpPtr, parentChannel, this](const QByteArray &data, bool endStream) {
+                     [channelOpPtr, this](const QByteArray &data, bool endStream) {
                          if (m_handlerState != Cancelled) {
                              m_expectedData.container.append(data);
 
@@ -479,7 +479,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                              if (endStream) {
                                  m_handlerState = Finished;
                                  emit channelOpPtr->finished({});
-                                 parentChannel->deleteHandler(this);
+                                 channelPriv()->deleteHandler(this);
                              }
                          }
                      });
@@ -488,10 +488,10 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                      &Http2Handler::processQueue);
 
     std::optional<std::chrono::milliseconds> deadline;
-    if (channelOpPtr->callOptions().deadlineTimeout())
-        deadline = channelOpPtr->callOptions().deadlineTimeout();
-    else if (parentChannel->q_ptr->channelOptions().deadlineTimeout())
-        deadline = parentChannel->q_ptr->channelOptions().deadlineTimeout();
+    if (auto dt = channelOpPtr->callOptions().deadlineTimeout())
+        deadline = dt;
+    else if (auto chdt = channel()->channelOptions().deadlineTimeout())
+        deadline = chdt;
     if (deadline) {
         // We have an active stream and a deadline. It's time to start the timer.
         QObject::connect(&m_deadlineTimer, &QTimer::timeout, this, &Http2Handler::deadlineTimeout);
@@ -557,6 +557,15 @@ void Http2Handler::prepareInitialRequest(QGrpcOperationContext *operationContext
     iterateMetadata(operationContext->callOptions().metadata(QtGrpc::MultiValue));
 
     writeMessage(operationContext->argument());
+}
+
+QGrpcHttp2ChannelPrivate *Http2Handler::channelPriv() const
+{
+    return qobject_cast<QGrpcHttp2ChannelPrivate *>(this->parent());
+}
+QGrpcHttp2Channel *Http2Handler::channel() const
+{
+    return channelPriv()->q_ptr;
 }
 
 // Slot to enqueue a writeMessage request, either from the initial message
