@@ -34,6 +34,9 @@
 #include <QtCore/qpointer.h>
 #include <QtCore/qqueue.h>
 #include <QtCore/qtimer.h>
+#include <QtCore/qvarlengtharray.h>
+
+#include <QtCore/q20algorithm.h>
 
 #include <functional>
 #include <optional>
@@ -229,7 +232,7 @@ struct ExpectedData
 // Each instance corresponds to an RPC initiated by the user.
 class Http2Handler : public QObject
 {
-    // Q_OBJECT macro is not needed and adds unwanted overhead.
+    Q_OBJECT
 
 public:
     enum class State : uint8_t {
@@ -295,7 +298,6 @@ public:
     void processOperation(const std::shared_ptr<QGrpcOperationContext> &operationContext,
                           bool endStream = false);
 
-    void deleteHandler(Http2Handler *handler);
     [[nodiscard]] bool isLocalSocket() const
     {
 #if QT_CONFIG(localserver)
@@ -352,11 +354,29 @@ private:
         return typedSocket;
     }
 
+    template <typename Projection = q20::identity>
+    void for_each_non_expired_handler(Projection proj)
+    {
+        QVarLengthArray<QObject *> expiredHandler;
+        for (QObject *child : children()) {
+            auto *handler = qobject_cast<Http2Handler *>(child);
+            if (!handler)
+                continue;
+            if (handler->expired()) {
+                expiredHandler.push_back(handler);
+                continue;
+            }
+            std::invoke(std::forward<Projection>(proj), handler);
+        }
+        // Perform deletions after the loop to avoid modifying the children
+        // list during iteration. Delete in reverse order to avoid
+        // quadratic-time updates in QObject's children list.
+        qDeleteAll(expiredHandler.crbegin(), expiredHandler.crend());
+    }
+
     std::unique_ptr<QIODevice> m_socket = nullptr;
     bool m_isInsideSocketErrorOccurred = false;
     QHttp2Connection *m_connection = nullptr;
-    QList<Http2Handler *> m_activeHandlers;
-    QList<Http2Handler *> m_pendingHandlers;
 #if QT_CONFIG(localserver)
     bool m_isLocalSocket = false;
 #endif
@@ -437,7 +457,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                                  emit channelOpPtr->finished(
                                      QGrpcStatus{ statusCode,statusMessage });
                              }
-                             channelPriv()->deleteHandler(this);
+                             deleteLater();
                          }
                      });
 
@@ -449,7 +469,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                 emit channelOp->finished(QGrpcStatus{ http2ErrorToStatusCode(http2ErrorCode),
                                                       errorString });
             }
-            channelPriv()->deleteHandler(this);
+            deleteLater();
         },
         Qt::SingleShotConnection);
 
@@ -479,7 +499,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                              if (endStream) {
                                  m_state = State::Finished;
                                  emit channelOpPtr->finished({});
-                                 channelPriv()->deleteHandler(this);
+                                 deleteLater();
                              }
                          }
                      });
@@ -853,12 +873,8 @@ void QGrpcHttp2ChannelPrivate::processOperation(const std::shared_ptr<QGrpcOpera
     if (m_connection)
         createHttp2Stream(handler);
 
-    if (m_state == ConnectionState::SettingsReceived) {
+    if (m_state == ConnectionState::SettingsReceived)
         handler->sendInitialRequest();
-        m_activeHandlers.push_back(handler);
-    } else {
-        m_pendingHandlers.push_back(handler);
-    }
 
     if (m_state == ConnectionState::Error) {
         Q_ASSERT_X(m_reconnectFunction, "QGrpcHttp2ChannelPrivate::processOperation",
@@ -902,33 +918,14 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
             return;
         }
         m_state = ConnectionState::SettingsReceived;
-
-        m_activeHandlers.reserve(m_activeHandlers.size() + m_pendingHandlers.size());
-        for (auto *handler : m_pendingHandlers) {
-            if (handler->expired()) {
-                delete handler;
-                continue;
-            }
-            handler->sendInitialRequest();
-            m_activeHandlers.append(handler);
-        }
-        m_pendingHandlers.clear();
+        for_each_non_expired_handler([](Http2Handler *handler) { handler->sendInitialRequest(); });
     });
-    for (auto *handler : m_pendingHandlers) {
-        if (handler->expired()) {
-            delete handler;
-            continue;
-        }
-        createHttp2Stream(handler);
-    }
+
+    for_each_non_expired_handler([this](Http2Handler *handler) { createHttp2Stream(handler); });
 }
 
 void QGrpcHttp2ChannelPrivate::handleSocketError()
 {
-    qDeleteAll(m_activeHandlers);
-    m_activeHandlers.clear();
-    qDeleteAll(m_pendingHandlers);
-    m_pendingHandlers.clear();
     delete m_connection;
     m_connection = nullptr;
     m_state = ConnectionState::Error;
@@ -966,15 +963,6 @@ void QGrpcHttp2ChannelPrivate::createHttp2Stream(Http2Handler *handler)
         return;
     }
     handler->attachStream(streamAttempt.unwrap());
-}
-
-void QGrpcHttp2ChannelPrivate::deleteHandler(Http2Handler *handler)
-{
-    const auto it = std::find(m_activeHandlers.constBegin(), m_activeHandlers.constEnd(), handler);
-    if (it == m_activeHandlers.constEnd())
-        return;
-    handler->deleteLater();
-    m_activeHandlers.erase(it);
 }
 
 ///
