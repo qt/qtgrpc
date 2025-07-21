@@ -375,7 +375,7 @@ private:
 
     void ensureSchemeIsValid(QLatin1String expected);
 
-    void createHttp2Stream(Http2Handler *handler);
+    bool createHttp2Stream(Http2Handler *handler);
     void createHttp2Connection();
     void handleSocketError();
 
@@ -1032,8 +1032,8 @@ void QGrpcHttp2ChannelPrivate::processOperation(const std::shared_ptr<QGrpcOpera
 
     auto *handler = new Http2Handler(operationContext, this, endStream);
 
-    if (m_connection)
-        createHttp2Stream(handler);
+    if (m_connection && !createHttp2Stream(handler))
+        return;
 
     if (m_state == ConnectionState::SettingsReceived)
         handler->sendInitialRequest();
@@ -1103,7 +1103,7 @@ void QGrpcHttp2ChannelPrivate::ensureSchemeIsValid(QLatin1String expected)
     }
 }
 
-void QGrpcHttp2ChannelPrivate::createHttp2Stream(Http2Handler *handler)
+bool QGrpcHttp2ChannelPrivate::createHttp2Stream(Http2Handler *handler)
 {
     Q_ASSERT(handler != nullptr);
 
@@ -1112,7 +1112,7 @@ void QGrpcHttp2ChannelPrivate::createHttp2Stream(Http2Handler *handler)
         operationContextAsyncError(channelOpPtr,
                                    QGrpcStatus{ StatusCode::Unavailable,
                                                 tr("Unable to establish an HTTP/2 connection") });
-        return;
+        return false;
     }
 
     const auto streamAttempt = m_connection->createStream();
@@ -1122,9 +1122,10 @@ void QGrpcHttp2ChannelPrivate::createHttp2Stream(Http2Handler *handler)
                                        StatusCode::Unavailable,
                                        tr("Unable to create an HTTP/2 stream (%1)")
                                            .arg(QDebug::toString(streamAttempt.error())) });
-        return;
+        return false;
     }
     handler->attachStream(streamAttempt.unwrap());
+    return true;
 }
 
 ///
