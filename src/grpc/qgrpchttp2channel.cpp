@@ -168,10 +168,14 @@ constexpr QLatin1String HttpScheme("http");
 constexpr QLatin1String HttpsScheme("https");
 #endif
 
+const QByteArray HttpStatusHeader(":status");
 const QByteArray ContentTypeHeader("content-type");
 const QByteArray GrpcStatusHeader("grpc-status");
 const QByteArray GrpcStatusMessageHeader("grpc-message");
 const QByteArray DefaultContentType("application/grpc");
+const QByteArray GrpcStatusDetailsHeader("grpc-status-details-bin");
+const QByteArray GrpcAcceptEncodingHeader("grpc-accept-encoding");
+const QByteArray GrpcEncodingHeader("grpc-encoding");
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
 
 // This HTTP/2 Error Codes to QGrpcStatus::StatusCode mapping should be kept in sync
@@ -209,6 +213,30 @@ constexpr StatusCode http2ErrorToStatusCode(const quint32 http2Error)
     return StatusCode::Internal;
 }
 
+// Ref: https://github.com/grpc/grpc/blob/master/doc/http-grpc-status-mapping.md
+constexpr StatusCode http2StatusToStatusCode(const int status)
+{
+    switch (status) {
+    case 200:
+        return StatusCode::Ok;
+    case 400:
+        return StatusCode::Internal;
+    case 401:
+        return StatusCode::Unauthenticated;
+    case 403:
+        return StatusCode::PermissionDenied;
+    case 404:
+        return StatusCode::Unimplemented;
+    case 429:
+    case 502:
+    case 503:
+    case 504:
+        return StatusCode::Unavailable;
+    default:
+        return StatusCode::Unknown;
+    }
+}
+
 // Sends the errorOccured and finished signals asynchronously to make sure user
 // connections work correctly.
 void operationContextAsyncError(QGrpcOperationContext *operationContext, const QGrpcStatus &status)
@@ -244,6 +272,9 @@ class Http2Handler : public QObject
 {
     Q_OBJECT
 
+    enum class HeaderPhase { Invalid, Initial, Trailers, TrailersOnly };
+    Q_ENUM(HeaderPhase);
+
 public:
     enum class State : uint8_t {
         Idle,
@@ -253,6 +284,7 @@ public:
         Cancelled,
         Finished,
     };
+    Q_ENUM(State);
 
     explicit Http2Handler(const std::shared_ptr<QGrpcOperationContext> &operation,
                           QGrpcHttp2ChannelPrivate *parent, bool endStream);
@@ -279,6 +311,8 @@ public:
     void writesDone();
     void writeMessage(QByteArrayView data);
     void deadlineTimeout();
+
+    void handleHeaders(const HPack::HttpHeader &headers, HeaderPhase phase);
 
 private:
     [[nodiscard]] HPack::HttpHeader constructInitialHeaders() const;
@@ -446,31 +480,32 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
     m_stream = stream_;
 
     QObject::connect(m_stream.get(), &QHttp2Stream::headersReceived, channelOpPtr,
-                     [channelOpPtr, this](const HPack::HttpHeader &headers, bool endStream) {
-                         m_state = State::Active;
-
-                         auto md = channelOpPtr->serverMetadata();
-                         QtGrpc::StatusCode statusCode = StatusCode::Ok;
-                         QString statusMessage;
-                         for (const auto &header : headers) {
-                             md.insert(header.name, header.value);
-                             if (header.name == GrpcStatusHeader) {
-                                 statusCode = static_cast<
-                                     StatusCode>(QString::fromLatin1(header.value).toShort());
-                             } else if (header.name == GrpcStatusMessageHeader) {
-                                 statusMessage = QString::fromUtf8(header.value);
-                             }
-                         }
-
-                         channelOpPtr->setServerMetadata(std::move(md));
-
-                         if (endStream) {
-                             if (m_state != State::Cancelled) {
-                                 emit channelOpPtr->finished(
-                                     QGrpcStatus{ statusCode,statusMessage });
-                             }
+                     [this](const HPack::HttpHeader &headers, bool endStream) mutable {
+                         if (m_state >= State::Cancelled) {
+                             // In case we are Cancelled or Finished, a
+                             // finished has been emitted already and the
+                             // Handler should get deleted here.
                              deleteLater();
+                             return;
                          }
+
+                         HeaderPhase phase = HeaderPhase::Invalid;
+                         if (m_state == State::RequestHeadersSent && endStream)
+                             phase = HeaderPhase::TrailersOnly;
+                         else if (m_state == State::RequestHeadersSent && !endStream)
+                             phase = HeaderPhase::Initial;
+                         else if (m_state == State::Active && endStream) {
+                             phase = HeaderPhase::Trailers;
+                         } else {
+                             qGrpcWarning("Unexcpected HEADERS received in phase: %s, endStream: "
+                                          "%u, Handler::state: %s",
+                                          QDebug::toString(phase).toStdString().data(), endStream,
+                                          QDebug::toString(m_state).toStdString().data());
+                             return;
+                         }
+
+                         m_state = State::Active;
+                         handleHeaders(headers, phase);
                      });
 
     QObject::connect(
@@ -541,7 +576,6 @@ HPack::HttpHeader Http2Handler::constructInitialHeaders() const
     const static QByteArray TEHeader("te");
     const static QByteArray TEValue("trailers");
     const static QByteArray GrpcServiceNameHeader("service-name");
-    const static QByteArray GrpcAcceptEncodingHeader("grpc-accept-encoding");
     const static QByteArray GrpcAcceptEncodingValue("identity,deflate,gzip");
     const static QByteArray UserAgentHeader("user-agent");
     const static QByteArray UserAgentValue("grpc-c++-qtgrpc/"_ba + QT_VERSION_STR + " ("_ba
@@ -708,6 +742,132 @@ void Http2Handler::deadlineTimeout()
                                             "Deadline Exceeded" });
     } else {
         qGrpcWarning("Cancellation failed on deadline timeout.");
+    }
+}
+
+void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase phase)
+{
+    // ABNF syntax: Rule, [Optional-Rule], *Variable-Repetition
+    // Response-Headers → HTTPStatus [GrpcEncoding] [GrpcAcceptEncoding]
+    //                    ContentType *Custom-Metadata
+    // Trailers      → GrpcStatus [GrpcStatusMessage] [GrpcStatusDetails] *Custom-Metadata
+    // Trailers-Only → HTTPStatus ContentType Trailers
+    //
+    // It's either Response-Headers + Trailers OR Trailers-Only for calls that
+    // produce an immediate error. Any Trailers phase will finish the RPC.
+    Q_ASSERT(phase != HeaderPhase::Invalid);
+    struct HeaderValidation
+    {
+        const bool requireHttpStatus : 1;
+        const bool requireContentType : 1;
+        const bool requireGrpcStatus : 1;
+        bool hasHttpStatus : 1;
+        bool hasContentType : 1;
+        bool hasGrpcStatus : 1;
+    };
+
+    auto ctx = m_operation.lock();
+    if (!ctx)
+        return;
+
+    HeaderValidation validation{
+        (phase != HeaderPhase::Trailers),
+        (phase != HeaderPhase::Trailers),
+        (phase != HeaderPhase::Initial),
+        false,
+        false,
+        false,
+    };
+
+    QHash<QByteArray, QByteArray> metadata;
+    std::optional<QtGrpc::StatusCode> statusCode;
+    QString statusMessage;
+
+    for (const auto &[k, v] : headers) {
+        if (validation.requireHttpStatus && k == HttpStatusHeader) {
+            if (const auto status = v.toInt(); status != 200) {
+                ctx->finished({ http2StatusToStatusCode(status),
+                                "Received HTTP/2 status: %1"_L1.arg(v) });
+                deleteLater();
+                return;
+            }
+            validation.hasHttpStatus = true;
+        } else if (validation.requireContentType && k == ContentTypeHeader) {
+            if (!v.toLower().startsWith(DefaultContentType)) {
+                ctx->finished({ StatusCode::Internal, "Unexpected content-type: %1"_L1.arg(v) });
+                deleteLater();
+                return;
+            }
+            validation.hasContentType = true;
+        } else if (validation.requireGrpcStatus && k == GrpcStatusHeader) {
+            bool ok;
+            const auto parsed = v.toShort(&ok);
+            if (!ok) {
+                ctx->finished({ StatusCode::Internal,
+                                "Failed to parse gRPC-status: %1"_L1.arg(v) });
+                deleteLater();
+                return;
+            }
+            statusCode = static_cast<StatusCode>(parsed);
+            validation.hasGrpcStatus = true;
+        } else if (validation.requireGrpcStatus && k == GrpcStatusMessageHeader) {
+            // Allowed optional headers
+            statusMessage = QString::fromUtf8(v);
+        } else if (validation.requireGrpcStatus && k == GrpcStatusDetailsHeader) {
+            // Allowed optional headers
+            // TODO: Implement status-details - QTBUG-138362
+        } else if (phase == HeaderPhase::Initial
+                   && (k == GrpcEncodingHeader || k == GrpcAcceptEncodingHeader)) {
+            // Allowed optional headers
+            // TODO: Implement compression handling - QTBUG-129286
+        } else if (k.startsWith(':')) {
+            qGrpcDebug("Received unhandled HTTP/2 pseudo-header: { key: '%s', value: '%s' } in "
+                       "phase: %s",
+                       k.data(), v.data(), QDebug::toBytes(phase).data());
+        } else if (k.startsWith("grpc-")) {
+            qGrpcWarning("Received unexcpected gRPC-reserved header: { key: %s, value: %s } in "
+                         "phase: %s",
+                         k.data(), v.data(), QDebug::toBytes(phase).data());
+        }
+
+        metadata.insert(k, v);
+    }
+
+    if (validation.requireHttpStatus && !validation.hasHttpStatus) {
+        ctx->finished({ StatusCode::Internal,
+                        "Missing valid '%1' header"_L1.arg(HttpStatusHeader) });
+        deleteLater();
+        return;
+    }
+
+    if (validation.requireContentType && !validation.hasContentType) {
+        ctx->finished({ StatusCode::Internal,
+                        "Missing valid '%1' header"_L1.arg(ContentTypeHeader) });
+        deleteLater();
+        return;
+    }
+
+    if (validation.requireGrpcStatus && !validation.hasGrpcStatus) {
+        ctx->finished({ StatusCode::Internal, "Missing status code in trailers"_L1 });
+        deleteLater();
+        return;
+    }
+
+    switch (phase) {
+    case HeaderPhase::Initial:
+        ctx->setServerMetadata(std::move(metadata));
+        break;
+    case HeaderPhase::TrailersOnly:
+        [[fallthrough]];
+    case HeaderPhase::Trailers: {
+        auto md = ctx->serverMetadata();
+        md.insert(metadata);
+        ctx->setServerMetadata(std::move(md));
+        ctx->finished({ *statusCode, statusMessage });
+        deleteLater();
+    }   break;
+    default:
+        Q_UNREACHABLE();
     }
 }
 
