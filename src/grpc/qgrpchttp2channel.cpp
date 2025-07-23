@@ -1124,15 +1124,9 @@ void QGrpcHttp2ChannelPrivate::ensureSchemeIsValid(QLatin1String expected)
 bool QGrpcHttp2ChannelPrivate::createHttp2Stream(Http2Handler *handler)
 {
     Q_ASSERT(handler != nullptr);
+    Q_ASSERT(m_connection);
 
     auto *channelOpPtr = handler->operation();
-    if (!m_connection) {
-        operationContextAsyncError(channelOpPtr,
-                                   QGrpcStatus{ StatusCode::Unavailable,
-                                                tr("Unable to establish an HTTP/2 connection") });
-        return false;
-    }
-
     const auto streamAttempt = m_connection->createStream();
     if (!streamAttempt.ok()) {
         operationContextAsyncError(channelOpPtr,
