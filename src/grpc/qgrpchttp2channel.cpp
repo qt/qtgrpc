@@ -385,7 +385,18 @@ private:
 
     bool createHttp2Stream(Http2Handler *handler);
     void createHttp2Connection();
-    void handleSocketError();
+
+#if QT_CONFIG(localserver)
+    void handleLocalSocketError(QLocalSocket::LocalSocketError error)
+    {
+        handleSocketError(QDebug::toBytes(error));
+    }
+#endif
+    void handleAbstractSocketError(QAbstractSocket::SocketError error)
+    {
+        handleSocketError(QDebug::toBytes(error));
+    }
+    void handleSocketError(const QByteArray &errorCode);
 
     template <typename T>
     T *initSocket()
@@ -546,7 +557,6 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
 
     QObject::connect(m_stream.get(), &QHttp2Stream::uploadFinished, this,
                      &Http2Handler::processQueue);
-
 }
 
 // Builds HTTP/2 headers for the initial gRPC request.
@@ -930,13 +940,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         QObject::connect(localSocket, &QLocalSocket::connected, this,
                          &QGrpcHttp2ChannelPrivate::createHttp2Connection);
         QObject::connect(localSocket, &QLocalSocket::errorOccurred, this,
-                         [this](QLocalSocket::LocalSocketError error) {
-                             qGrpcDebug()
-                                 << "Error occurred(" << error << "):"
-                                 << static_cast<QLocalSocket *>(m_socket.get())->errorString()
-                                 << hostUri;
-                             handleSocketError();
-                         });
+                         &QGrpcHttp2ChannelPrivate::handleLocalSocketError);
+
         m_reconnectFunction = [localSocket, this] {
             localSocket->connectToServer(hostUri.host() + hostUri.path());
         };
@@ -967,13 +972,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         QObject::connect(sslSocket, &QSslSocket::encrypted, this,
                          &QGrpcHttp2ChannelPrivate::createHttp2Connection);
         QObject::connect(sslSocket, &QAbstractSocket::errorOccurred, this,
-                         [this](QAbstractSocket::SocketError error) {
-                             qDebug()
-                                 << "Error occurred(" << error << "):"
-                                 << static_cast<QAbstractSocket *>(m_socket.get())->errorString()
-                                 << hostUri;
-                             handleSocketError();
-                         });
+                         &QGrpcHttp2ChannelPrivate::handleAbstractSocketError);
+
         m_reconnectFunction = [sslSocket, this] {
             sslSocket->connectToHostEncrypted(hostUri.host(), static_cast<quint16>(hostUri.port()));
         };
@@ -991,13 +991,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         QObject::connect(httpSocket, &QAbstractSocket::connected, this,
                          &QGrpcHttp2ChannelPrivate::createHttp2Connection);
         QObject::connect(httpSocket, &QAbstractSocket::errorOccurred, this,
-                         [this](QAbstractSocket::SocketError error) {
-                             qGrpcDebug()
-                                 << "Error occurred(" << error << "):"
-                                 << static_cast<QAbstractSocket *>(m_socket.get())->errorString()
-                                 << hostUri;
-                             handleSocketError();
-                         });
+                         &QGrpcHttp2ChannelPrivate::handleAbstractSocketError);
+
         m_reconnectFunction = [httpSocket, this] {
             httpSocket->connectToHost(hostUri.host(), static_cast<quint16>(hostUri.port()));
         };
@@ -1096,8 +1091,9 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
     for_each_non_expired_handler([this](Http2Handler *handler) { createHttp2Stream(handler); });
 }
 
-void QGrpcHttp2ChannelPrivate::handleSocketError()
+void QGrpcHttp2ChannelPrivate::handleSocketError(const QByteArray &errorCode)
 {
+    qGrpcDebug() << "Error occurred(" << errorCode << "):" << m_socket->errorString() << hostUri;
     delete m_connection;
     m_connection = nullptr;
     m_state = ConnectionState::Error;
