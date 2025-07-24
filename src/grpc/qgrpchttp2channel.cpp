@@ -501,6 +501,8 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                              // In case we are Cancelled or Finished, a
                              // finished has been emitted already and the
                              // Handler should get deleted here.
+                             qCDebug(lcStream, "[%p] Ignoring headers - already closed (state=%s)",
+                                     this, QDebug::toBytes(m_state).constData());
                              deleteLater();
                              return;
                          }
@@ -698,6 +700,8 @@ void Http2Handler::sendInitialRequest()
         connect(&m_deadlineTimer, &QTimer::timeout, this, &Http2Handler::deadlineTimeout);
         m_deadlineTimer.start(*deadline);
     }
+    qCDebug(lcStream, "[%p] Sending initial request (deadline=%s)", this,
+            deadline ? qPrintable(QString::number(deadline->count()) + " ms"_L1) : "None");
 }
 
 // The core logic for sending the already serialized data through the HTTP/2 stream.
@@ -708,8 +712,11 @@ void Http2Handler::processQueue()
     if (!m_stream)
         return;
 
-    if (m_stream->isUploadingDATA())
+    if (m_stream->isUploadingDATA()) {
+        qCDebug(lcStream, "[%p] Stream busy uploading (queue size=%" PRIdQSIZETYPE ")", this,
+                m_queue.size());
         return;
+    }
 
     if (m_queue.isEmpty())
         return;
@@ -741,6 +748,7 @@ void Http2Handler::cancelWithStatus(const QGrpcStatus &status)
 {
     if (m_state >= State::Cancelled)
         return;
+    qCDebug(lcStream, "[%p] Cancelling (state=%s)", this, QDebug::toBytes(m_state).data());
     m_state = State::Cancelled;
 
     // Client cancelled the stream before the deadline exceeded.
@@ -759,6 +767,8 @@ void Http2Handler::writesDone()
     if (m_writesDoneSent || m_state > State::Active)
         return;
     m_writesDoneSent = true;
+
+    qCDebug(lcStream, "[%p] Writes done received (streamClosed=%d)", this, isStreamClosedForSending());
 
     // Stream is already (half)closed, skip sending the DATA frame with the end-of-stream flag.
     if (isStreamClosedForSending())
@@ -957,7 +967,9 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
                          &QGrpcHttp2ChannelPrivate::handleLocalSocketError);
 
         m_reconnectFunction = [localSocket, this] {
-            localSocket->connectToServer(hostUri.host() + hostUri.path());
+            const auto name = hostUri.host() + hostUri.path();
+            qCDebug(lcChannel, "[%p] Connecting to local socket at: %s", this, qPrintable(name));
+            localSocket->connectToServer(name);
         };
     } else
 #endif
@@ -989,6 +1001,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
                          &QGrpcHttp2ChannelPrivate::handleAbstractSocketError);
 
         m_reconnectFunction = [sslSocket, this] {
+            qCDebug(lcChannel, "[%p] Connecting to SSL endpoint at: %s:%d", this,
+                    qPrintable(hostUri.host()), hostUri.port());
             sslSocket->connectToHostEncrypted(hostUri.host(), static_cast<quint16>(hostUri.port()));
         };
     } else
@@ -1008,6 +1022,8 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
                          &QGrpcHttp2ChannelPrivate::handleAbstractSocketError);
 
         m_reconnectFunction = [httpSocket, this] {
+            qCDebug(lcChannel, "[%p] Connecting to TCP endpoint at: %s:%d", this,
+                    qPrintable(hostUri.host()), hostUri.port());
             httpSocket->connectToHost(hostUri.host(), static_cast<quint16>(hostUri.port()));
         };
     }
@@ -1032,6 +1048,8 @@ void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operation
 
     // Send the finished signals asynchronously, so user connections work correctly.
     if (!m_socket->isWritable() && m_state == ConnectionState::Connected) {
+        qCWarning(lcChannel, "[%p] Socket not writable for operation to %s (error=%s)", this,
+                  qPrintable(hostUri.toString()), qPrintable(m_socket->errorString()));
         QTimer::singleShot(0, operationContext,
                            [operationContext, err = m_socket->errorString()]() {
                                emit operationContext->finished({ StatusCode::Unavailable, err });
@@ -1068,6 +1086,7 @@ void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operation
             m_reconnectFunction();
         }
         m_state = ConnectionState::Connecting;
+        qCDebug(lcChannel, "[%p] State changed to 'Connecting'. Reconnection initiated.", this);
     }
 }
 
@@ -1092,7 +1111,10 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
     Q_ASSERT_X(m_connection, "QGrpcHttp2ChannelPrivate", "Unable to create the HTTP/2 connection");
     QObject::connect(m_socket.get(), &QAbstractSocket::readyRead, m_connection,
                      &QHttp2Connection::handleReadyRead);
+
     m_state = ConnectionState::Connected;
+    qCDebug(lcChannel, "[%p] Created new HTTP/2 connection to %s", this,
+            qPrintable(hostUri.toString()));
 
     QObject::connect(m_connection, &QHttp2Connection::settingsFrameReceived, this, [this] {
         if (m_state == ConnectionState::SettingsReceived) {
@@ -1102,6 +1124,7 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
             return;
         }
         m_state = ConnectionState::SettingsReceived;
+        qCDebug(lcChannel, "[%p] SETTINGS frame received. Connection ready for use.", this);
         for_each_non_expired_handler([](Http2Handler *handler) { handler->sendInitialRequest(); });
     });
 
