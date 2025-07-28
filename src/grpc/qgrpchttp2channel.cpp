@@ -368,22 +368,19 @@ private:
     template <typename T>
     void connectErrorHandler(T *socket, Http2Handler *handler)
     {
-        QObject::connect(socket, &T::errorOccurred, handler,
-                         [this, handler](auto error) {
-                             if (m_isInsideSocketErrorOccurred) {
-                                 qCCritical(lcChannel,
-                                            "[%p] Socket errorOccurred signal triggered while "
-                                            "already handling an error",
-                                            this);
-                                 return;
-                             }
-                             m_isInsideSocketErrorOccurred = true;
-                             auto reset = qScopeGuard([this]() {
-                                 m_isInsideSocketErrorOccurred = false;
-                             });
-                             emit handler->finish({ StatusCode::Unavailable,
-                                                    tr("Network error occurred: %1").arg(error) });
-                         });
+        connect(socket, &T::errorOccurred, handler, [this, handler](auto error) {
+            if (m_isInsideSocketErrorOccurred) {
+                qCCritical(lcChannel,
+                           "[%p] Socket errorOccurred signal triggered while "
+                           "already handling an error",
+                           this);
+                return;
+            }
+            m_isInsideSocketErrorOccurred = true;
+            auto reset = qScopeGuard([this]() { m_isInsideSocketErrorOccurred = false; });
+            emit handler->finish({ StatusCode::Unavailable,
+                                   tr("Network error occurred: %1").arg(error) });
+        });
     }
 
     void ensureSchemeIsValid(QLatin1String expected);
@@ -459,18 +456,15 @@ Http2Handler::Http2Handler(QGrpcHttp2ChannelPrivate *parent, QGrpcOperationConte
     // If the context (lifetime bound to the user) is destroyed, this handler
     // can no longer perform any meaningful work. We allow it to be deleted;
     // QHttp2Stream will handle any outstanding cancellations appropriately.
-    QObject::connect(context, &QGrpcOperationContext::destroyed, this,
-                     &Http2Handler::deleteLater);
-    QObject::connect(context, &QGrpcOperationContext::cancelRequested, this,
-                     &Http2Handler::cancel);
-    QObject::connect(context, &QGrpcOperationContext::writesDoneRequested, this,
-                     &Http2Handler::writesDone);
+    connect(context, &QGrpcOperationContext::destroyed, this, &Http2Handler::deleteLater);
+    connect(context, &QGrpcOperationContext::cancelRequested, this, &Http2Handler::cancel);
+    connect(context, &QGrpcOperationContext::writesDoneRequested, this, &Http2Handler::writesDone);
     if (!m_endStreamAtFirstData) {
-        QObject::connect(context, &QGrpcOperationContext::writeMessageRequested, this,
-                         &Http2Handler::writeMessage);
+        connect(context, &QGrpcOperationContext::writeMessageRequested, this,
+                &Http2Handler::writeMessage);
     }
 
-    QObject::connect(context, &QGrpcOperationContext::finished, &m_deadlineTimer, &QTimer::stop);
+    connect(context, &QGrpcOperationContext::finished, &m_deadlineTimer, &QTimer::stop);
     m_deadlineTimer.setSingleShot(true);
 
     writeMessage(context->argument());
@@ -495,79 +489,76 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
 
     m_stream = stream_;
 
-    QObject::connect(m_stream.get(), &QHttp2Stream::headersReceived, this,
-                     [this](const HPack::HttpHeader &headers, bool endStream) mutable {
-                         if (m_state >= State::Cancelled) {
-                             // In case we are Cancelled or Finished, a
-                             // finished has been emitted already and the
-                             // Handler should get deleted here.
-                             qCDebug(lcStream, "[%p] Ignoring headers - already closed (state=%s)",
-                                     this, QDebug::toBytes(m_state).constData());
-                             deleteLater();
-                             return;
-                         }
+    connect(m_stream.get(), &QHttp2Stream::headersReceived, this,
+            [this](const HPack::HttpHeader &headers, bool endStream) mutable {
+                if (m_state >= State::Cancelled) {
+                    // In case we are Cancelled or Finished, a
+                    // finished has been emitted already and the
+                    // Handler should get deleted here.
+                    qCDebug(lcStream, "[%p] Ignoring headers - already closed (state=%s)", this,
+                            QDebug::toBytes(m_state).constData());
+                    deleteLater();
+                    return;
+                }
 
-                         HeaderPhase phase = HeaderPhase::Invalid;
-                         if (m_state == State::RequestHeadersSent && endStream)
-                             phase = HeaderPhase::TrailersOnly;
-                         else if (m_state == State::RequestHeadersSent && !endStream)
-                             phase = HeaderPhase::Initial;
-                         else if (m_state == State::Active && endStream) {
-                             phase = HeaderPhase::Trailers;
-                         } else {
-                             qCWarning(lcStream,
-                                       "[%p] Received unexcpected %s HEADERS (state=%s, "
-                                       "endStream=%d)",
-                                       this, QDebug::toBytes(phase).constData(),
-                                       QDebug::toBytes(m_state).constData(), endStream);
-                             return;
-                         }
+                HeaderPhase phase = HeaderPhase::Invalid;
+                if (m_state == State::RequestHeadersSent && endStream)
+                    phase = HeaderPhase::TrailersOnly;
+                else if (m_state == State::RequestHeadersSent && !endStream)
+                    phase = HeaderPhase::Initial;
+                else if (m_state == State::Active && endStream) {
+                    phase = HeaderPhase::Trailers;
+                } else {
+                    qCWarning(lcStream,
+                              "[%p] Received unexcpected %s HEADERS (state=%s, "
+                              "endStream=%d)",
+                              this, QDebug::toBytes(phase).constData(),
+                              QDebug::toBytes(m_state).constData(), endStream);
+                    return;
+                }
 
-                         m_state = State::Active;
-                         handleHeaders(headers, phase);
-                     });
+                m_state = State::Active;
+                handleHeaders(headers, phase);
+            });
 
-    QObject::connect(
+    connect(
         m_stream.get(), &QHttp2Stream::errorOccurred, this,
         [this](quint32 http2ErrorCode, const QString &errorString) {
             finish({ http2ErrorToStatusCode(http2ErrorCode), errorString });
         },
         Qt::SingleShotConnection);
 
-    QObject::connect(m_stream.get(), &QHttp2Stream::dataReceived, m_context.get(),
-                     [this](const QByteArray &data, bool endStream) {
-                         if (m_state == State::Cancelled)
-                             return;
+    connect(m_stream.get(), &QHttp2Stream::dataReceived, m_context.get(),
+            [this](const QByteArray &data, bool endStream) {
+                if (m_state == State::Cancelled)
+                    return;
 
-                         m_expectedData.container.append(data);
+                m_expectedData.container.append(data);
 
-                         if (!m_expectedData.updateExpectedSize())
-                             return;
+                if (!m_expectedData.updateExpectedSize())
+                    return;
 
-                         while (m_expectedData.container.size() >= m_expectedData.expectedSize) {
-                            qCDebug(lcStream,
-                                    "[%p] About to process message (receivedSize=%" PRIdQSIZETYPE ", "
-                                    "expectedSize=%" PRIdQSIZETYPE ", containerSize=%" PRIdQSIZETYPE ")",
-                                    this, data.size(), m_expectedData.expectedSize,
+                while (m_expectedData.container.size() >= m_expectedData.expectedSize) {
+                    qCDebug(lcStream,
+                            "[%p] About to process message (receivedSize=%" PRIdQSIZETYPE ", "
+                            "expectedSize=%" PRIdQSIZETYPE ", containerSize=%" PRIdQSIZETYPE ")",
+                            this, data.size(), m_expectedData.expectedSize,
                             m_expectedData.container.size());
-                             const auto len = m_expectedData.expectedSize
-                                 - GrpcMessageSizeHeaderSize;
-                             const auto msg = m_expectedData.container
-                                                  .mid(GrpcMessageSizeHeaderSize, len);
-                             emit m_context->messageReceived(msg);
+                    const auto len = m_expectedData.expectedSize - GrpcMessageSizeHeaderSize;
+                    const auto msg = m_expectedData.container.mid(GrpcMessageSizeHeaderSize, len);
+                    emit m_context->messageReceived(msg);
 
-                             m_expectedData.container.remove(0, m_expectedData.expectedSize);
-                             m_expectedData.expectedSize = 0;
-                             if (!m_expectedData.updateExpectedSize())
-                                 return;
-                         }
+                    m_expectedData.container.remove(0, m_expectedData.expectedSize);
+                    m_expectedData.expectedSize = 0;
+                    if (!m_expectedData.updateExpectedSize())
+                        return;
+                }
 
-                         if (endStream)
-                             finish({});
-                     });
+                if (endStream)
+                    finish({});
+            });
 
-    QObject::connect(m_stream.get(), &QHttp2Stream::uploadFinished, this,
-                     &Http2Handler::processQueue);
+    connect(m_stream.get(), &QHttp2Stream::uploadFinished, this, &Http2Handler::processQueue);
 }
 
 // Builds HTTP/2 headers for the initial gRPC request.
@@ -961,10 +952,10 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
           localSocket->setSocketOptions(QLocalSocket::AbstractNamespaceOption);
         m_isLocalSocket = true;
 
-        QObject::connect(localSocket, &QLocalSocket::connected, this,
-                         &QGrpcHttp2ChannelPrivate::createHttp2Connection);
-        QObject::connect(localSocket, &QLocalSocket::errorOccurred, this,
-                         &QGrpcHttp2ChannelPrivate::handleLocalSocketError);
+        connect(localSocket, &QLocalSocket::connected, this,
+                &QGrpcHttp2ChannelPrivate::createHttp2Connection);
+        connect(localSocket, &QLocalSocket::errorOccurred, this,
+                &QGrpcHttp2ChannelPrivate::handleLocalSocketError);
 
         m_reconnectFunction = [localSocket, this] {
             const auto name = hostUri.host() + hostUri.path();
@@ -995,10 +986,10 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
             sslSocket->setSslConfiguration(defautlSslConfig);
         }
 
-        QObject::connect(sslSocket, &QSslSocket::encrypted, this,
-                         &QGrpcHttp2ChannelPrivate::createHttp2Connection);
-        QObject::connect(sslSocket, &QAbstractSocket::errorOccurred, this,
-                         &QGrpcHttp2ChannelPrivate::handleAbstractSocketError);
+        connect(sslSocket, &QSslSocket::encrypted, this,
+                &QGrpcHttp2ChannelPrivate::createHttp2Connection);
+        connect(sslSocket, &QAbstractSocket::errorOccurred, this,
+                &QGrpcHttp2ChannelPrivate::handleAbstractSocketError);
 
         m_reconnectFunction = [sslSocket, this] {
             qCDebug(lcChannel, "[%p] Connecting to SSL endpoint at: %s:%d", this,
@@ -1016,10 +1007,10 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
             nonDefaultPort = hostUri.port() != 80;
         }
 
-        QObject::connect(httpSocket, &QAbstractSocket::connected, this,
-                         &QGrpcHttp2ChannelPrivate::createHttp2Connection);
-        QObject::connect(httpSocket, &QAbstractSocket::errorOccurred, this,
-                         &QGrpcHttp2ChannelPrivate::handleAbstractSocketError);
+        connect(httpSocket, &QAbstractSocket::connected, this,
+                &QGrpcHttp2ChannelPrivate::createHttp2Connection);
+        connect(httpSocket, &QAbstractSocket::errorOccurred, this,
+                &QGrpcHttp2ChannelPrivate::handleAbstractSocketError);
 
         m_reconnectFunction = [httpSocket, this] {
             qCDebug(lcChannel, "[%p] Connecting to TCP endpoint at: %s:%d", this,
@@ -1109,14 +1100,14 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
     m_connection = QHttp2Connection::createDirectConnection(m_socket.get(), {});
 
     Q_ASSERT_X(m_connection, "QGrpcHttp2ChannelPrivate", "Unable to create the HTTP/2 connection");
-    QObject::connect(m_socket.get(), &QAbstractSocket::readyRead, m_connection,
-                     &QHttp2Connection::handleReadyRead);
+    connect(m_socket.get(), &QAbstractSocket::readyRead, m_connection,
+            &QHttp2Connection::handleReadyRead);
 
     m_state = ConnectionState::Connected;
     qCDebug(lcChannel, "[%p] Created new HTTP/2 connection to %s", this,
             qPrintable(hostUri.toString()));
 
-    QObject::connect(m_connection, &QHttp2Connection::settingsFrameReceived, this, [this] {
+    connect(m_connection, &QHttp2Connection::settingsFrameReceived, this, [this] {
         if (m_state == ConnectionState::SettingsReceived) {
             qCWarning(lcChannel,
                       "[%p] Unexpected SETTINGS frame received multiple times in this session.",
