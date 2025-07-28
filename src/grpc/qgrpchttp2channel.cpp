@@ -266,7 +266,7 @@ public:
     };
     Q_ENUM(State);
 
-    explicit Http2Handler(QGrpcOperationContext *operation, QGrpcHttp2ChannelPrivate *parent,
+    explicit Http2Handler(QGrpcHttp2ChannelPrivate *parent, QGrpcOperationContext *context,
                           bool endStream);
     ~Http2Handler() override;
 
@@ -278,7 +278,7 @@ public:
     void asyncFinish(const QGrpcStatus &status);
     void cancelWithStatus(const QGrpcStatus &status);
 
-    [[nodiscard]] bool expired() const { return !m_operation; }
+    [[nodiscard]] bool expired() const { return !m_context; }
 
     [[nodiscard]] bool isStreamClosedForSending() const
     {
@@ -306,7 +306,7 @@ private:
     [[nodiscard]] QGrpcHttp2Channel *channel() const;
     [[nodiscard]] bool handleContextExpired();
 
-    QPointer<QGrpcOperationContext> m_operation;
+    QPointer<QGrpcOperationContext> m_context;
     HPack::HttpHeader m_initialHeaders;
     QQueue<QByteArray> m_queue;
     QPointer<QHttp2Stream> m_stream;
@@ -421,29 +421,29 @@ private:
 /// ## Http2Handler Implementations
 ///
 
-Http2Handler::Http2Handler(QGrpcOperationContext *operation, QGrpcHttp2ChannelPrivate *parent,
+Http2Handler::Http2Handler(QGrpcHttp2ChannelPrivate *parent, QGrpcOperationContext *context,
                            bool endStream)
-    : QObject(parent), m_operation(operation), m_initialHeaders(constructInitialHeaders()),
+    : QObject(parent), m_context(context), m_initialHeaders(constructInitialHeaders()),
       m_endStreamAtFirstData(endStream)
 {
     // If the context (lifetime bound to the user) is destroyed, this handler
     // can no longer perform any meaningful work. We allow it to be deleted;
     // QHttp2Stream will handle any outstanding cancellations appropriately.
-    QObject::connect(operation, &QGrpcOperationContext::destroyed, this,
+    QObject::connect(context, &QGrpcOperationContext::destroyed, this,
                      &Http2Handler::deleteLater);
-    QObject::connect(operation, &QGrpcOperationContext::cancelRequested, this,
+    QObject::connect(context, &QGrpcOperationContext::cancelRequested, this,
                      &Http2Handler::cancel);
-    QObject::connect(operation, &QGrpcOperationContext::writesDoneRequested, this,
+    QObject::connect(context, &QGrpcOperationContext::writesDoneRequested, this,
                      &Http2Handler::writesDone);
     if (!m_endStreamAtFirstData) {
-        QObject::connect(operation, &QGrpcOperationContext::writeMessageRequested, this,
+        QObject::connect(context, &QGrpcOperationContext::writeMessageRequested, this,
                          &Http2Handler::writeMessage);
     }
 
-    QObject::connect(operation, &QGrpcOperationContext::finished, &m_deadlineTimer, &QTimer::stop);
+    QObject::connect(context, &QGrpcOperationContext::finished, &m_deadlineTimer, &QTimer::stop);
     m_deadlineTimer.setSingleShot(true);
 
-    writeMessage(operation->argument());
+    writeMessage(context->argument());
 }
 
 Http2Handler::~Http2Handler()
@@ -501,7 +501,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
         },
         Qt::SingleShotConnection);
 
-    QObject::connect(m_stream.get(), &QHttp2Stream::dataReceived, m_operation.get(),
+    QObject::connect(m_stream.get(), &QHttp2Stream::dataReceived, m_context.get(),
                      [this](const QByteArray &data, bool endStream) {
                          if (m_state != State::Cancelled) {
                              m_expectedData.container.append(data);
@@ -514,7 +514,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                                  qGrpcDebug() << "Full data received:" << data.size()
                                               << "dataContainer:" << m_expectedData.container.size()
                                               << "capacity:" << m_expectedData.expectedSize;
-                                 emit m_operation
+                                 emit m_context
                                      ->messageReceived(m_expectedData.container
                                                            .mid(GrpcMessageSizeHeaderSize,
                                                                 m_expectedData.expectedSize
@@ -553,8 +553,8 @@ HPack::HttpHeader Http2Handler::constructInitialHeaders() const
     const auto &channelOptions = channel()->channelOptions();
     const auto *channel = channelPriv();
 
-    QByteArray service{ m_operation->service() };
-    QByteArray method{ m_operation->method() };
+    QByteArray service{ m_context->service() };
+    QByteArray method{ m_context->method() };
     auto headers = HPack::HttpHeader{
         { AuthorityHeader,          channel->authorityHeader()               },
         { MethodHeader,             MethodValue                              },
@@ -578,7 +578,7 @@ HPack::HttpHeader Http2Handler::constructInitialHeaders() const
     };
 
     iterateMetadata(channelOptions.metadata());
-    iterateMetadata(m_operation->callOptions().metadata());
+    iterateMetadata(m_context->callOptions().metadata());
 
     return headers;
 }
@@ -594,7 +594,7 @@ QGrpcHttp2Channel *Http2Handler::channel() const
 
 bool Http2Handler::handleContextExpired()
 {
-    if (m_operation)
+    if (m_context)
         return false;
     m_state = State::Cancelled;
     deleteLater(); // m_stream will sendRST_STREAM on destruction
@@ -642,8 +642,7 @@ void Http2Handler::sendInitialRequest()
     m_initialHeaders.clear();
     processQueue();
 
-    std::optional<std::chrono::milliseconds> deadline = m_operation->callOptions()
-                                                            .deadlineTimeout();
+    std::optional<std::chrono::milliseconds> deadline = m_context->callOptions().deadlineTimeout();
     if (!deadline)
         deadline = channel()->channelOptions().deadlineTimeout();
     if (deadline) {
@@ -681,14 +680,14 @@ void Http2Handler::finish(const QGrpcStatus &status)
         return;
     if (m_state != State::Cancelled) // don't overwrite the Cancelled state
         m_state = State::Finished;
-    emit m_operation->finished(status);
+    emit m_context->finished(status);
     deleteLater();
 }
 void Http2Handler::asyncFinish(const QGrpcStatus &status)
 {
     if (handleContextExpired())
         return;
-    QTimer::singleShot(0, m_operation.get(), [this, status]() { finish(status); });
+    QTimer::singleShot(0, m_context.get(), [this, status]() { finish(status); });
 }
 
 void Http2Handler::cancelWithStatus(const QGrpcStatus &status)
@@ -822,16 +821,16 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
 
     switch (phase) {
     case HeaderPhase::Initial:
-        m_operation->setServerMetadata(std::move(metadata));
+        m_context->setServerMetadata(std::move(metadata));
         break;
     case HeaderPhase::TrailersOnly:
         [[fallthrough]];
     case HeaderPhase::Trailers: {
-        auto md = m_operation->serverMetadata();
+        auto md = m_context->serverMetadata();
         md.insert(metadata);
-        m_operation->setServerMetadata(std::move(md));
+        m_context->setServerMetadata(std::move(md));
         finish({ *statusCode, statusMessage });
-    }   break;
+    } break;
     default:
         Q_UNREACHABLE();
     }
@@ -1000,7 +999,7 @@ void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operation
         return;
     }
 
-    auto *handler = new Http2Handler(operationContext, this, endStream);
+    auto *handler = new Http2Handler(this, operationContext, endStream);
 
 #if QT_CONFIG(localserver)
     if (m_isLocalSocket) {
