@@ -152,6 +152,9 @@ using namespace QtGrpc;
 
 namespace {
 
+Q_LOGGING_CATEGORY(lcChannel, "qt.grpc.channel.http2")
+Q_LOGGING_CATEGORY(lcStream, "qt.grpc.channel.http2.stream")
+
 constexpr QLatin1String UnixScheme("unix");
 constexpr QLatin1String HttpScheme("http");
 constexpr QLatin1String HttpsScheme("https");
@@ -352,8 +355,10 @@ private:
         QObject::connect(socket, &T::errorOccurred, handler,
                          [this, handler](auto error) {
                              if (m_isInsideSocketErrorOccurred) {
-                                 qGrpcCritical("Socket errorOccurred signal triggered while "
-                                               "already handling an error");
+                                 qCCritical(lcChannel,
+                                            "[%p] Socket errorOccurred signal triggered while "
+                                            "already handling an error",
+                                            this);
                                  return;
                              }
                              m_isInsideSocketErrorOccurred = true;
@@ -492,10 +497,11 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                          else if (m_state == State::Active && endStream) {
                              phase = HeaderPhase::Trailers;
                          } else {
-                             qGrpcWarning("Unexcpected HEADERS received in phase: %s, endStream: "
-                                          "%u, Handler::state: %s",
-                                          QDebug::toString(phase).toStdString().data(), endStream,
-                                          QDebug::toString(m_state).toStdString().data());
+                             qCWarning(lcStream,
+                                       "[%p] Received unexcpected %s HEADERS (state=%s, "
+                                       "endStream=%d)",
+                                       this, qPrintable(QDebug::toString(phase)),
+                                       qPrintable(QDebug::toString(m_state)), endStream);
                              return;
                          }
 
@@ -521,9 +527,11 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                              return;
 
                          while (m_expectedData.container.size() >= m_expectedData.expectedSize) {
-                             qGrpcDebug() << "Full data received:" << data.size()
-                                          << "dataContainer:" << m_expectedData.container.size()
-                                          << "capacity:" << m_expectedData.expectedSize;
+                            qCDebug(lcStream,
+                                    "[%p] About to process message (receivedSize=%" PRIdQSIZETYPE ", "
+                                    "expectedSize=%" PRIdQSIZETYPE ", containerSize=%" PRIdQSIZETYPE ")",
+                                    this, data.size(), m_expectedData.expectedSize,
+                            m_expectedData.container.size());
                              const auto len = m_expectedData.expectedSize
                                  - GrpcMessageSizeHeaderSize;
                              const auto msg = m_expectedData.container
@@ -615,7 +623,9 @@ bool Http2Handler::handleContextExpired()
 void Http2Handler::writeMessage(QByteArrayView data)
 {
     if (m_writesDoneSent || m_state > State::Active || isStreamClosedForSending()) {
-        qGrpcDebug("Attempt sending data to the ended stream");
+        qCDebug(lcStream, "[%p] Cannot write message (state=%s, writesDone=%d, streamClosed=%d)",
+                this, qPrintable(QDebug::toString(m_state)), m_writesDoneSent,
+                isStreamClosedForSending());
         return;
     }
 
@@ -717,8 +727,7 @@ void Http2Handler::cancelWithStatus(const QGrpcStatus &status)
 
     // Immediate cancellation by sending the RST_STREAM frame.
     if (m_stream && !m_stream->sendRST_STREAM(Http2::Http2Error::CANCEL)) {
-        qGrpcDebug("Failed cancellation on stream: %p, Handler::state: %s", m_stream.get(),
-                   QDebug::toBytes(m_state).data());
+        qCDebug(lcStream, "[%p] Failed cancellation (stream=%p)", this, m_stream.get());
     }
 
     finish(status);
@@ -808,13 +817,15 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
             // Allowed optional headers
             // TODO: Implement compression handling - QTBUG-129286
         } else if (k.startsWith(':')) {
-            qGrpcDebug("Received unhandled HTTP/2 pseudo-header: { key: '%s', value: '%s' } in "
-                       "phase: %s",
-                       k.data(), v.data(), QDebug::toBytes(phase).data());
+            qCWarning(lcStream,
+                      "[%p] Received unhandled HTTP/2 pseudo-header: { key: '%s', value: '%s' } "
+                      "in phase: %s",
+                      this, k.data(), v.data(), qPrintable(QDebug::toString(phase)));
         } else if (k.startsWith("grpc-")) {
-            qGrpcWarning("Received unexcpected gRPC-reserved header: { key: %s, value: %s } in "
-                         "phase: %s",
-                         k.data(), v.data(), QDebug::toBytes(phase).data());
+            qCWarning(lcStream,
+                      "[%p] Received unexcpected gRPC-reserved header: { key: %s, value: %s } "
+                      "in phase: %s",
+                      this, k.data(), v.data(), qPrintable(QDebug::toString(phase)));
         }
 
         metadata.insert(k, v);
@@ -875,8 +886,11 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
             } else if (it.value() == "application/grpc+proto" || it.value() == DefaultContentType) {
                 channelOptions.setSerializationFormat(SerializationFormat::Protobuf);
             } else {
-                qGrpcWarning() << "Cannot choose the serializer for " << ContentTypeHeader
-                               << it.value() << ". Using protobuf format as the default one.";
+                qCWarning(lcChannel,
+                          "[%p] Unable to determine serializer for entry { key: %s, value: %s }. "
+                          "Defaulting to format '%s'",
+                          this, it.key().data(), it.value().data(),
+                          qPrintable(QDebug::toString(SerializationFormat::Default)));
                 channelOptions.setSerializationFormat(SerializationFormat::Default);
             }
             q_ptr->setChannelOptions(channelOptions);
@@ -898,11 +912,10 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
     }
 
     if (warnAboutFormatConflict) {
-        qGrpcWarning()
-            << "Manually specified serialization format '%1' doesn't match the %2 header value "
-               "'%3'"_L1.arg(QString::fromLatin1(contentTypeFromOptions),
-                             QString::fromLatin1(ContentTypeHeader),
-                             QString::fromLatin1(it.value()));
+        qCWarning(lcChannel,
+                  "[%p] Manually specified serialization format '%s' does not "
+                  "match metadata entry { key: %s, value: %s }",
+                  this, contentTypeFromOptions.data(), it.key().data(), it.value().data());
     }
 
     bool nonDefaultPort = false;
@@ -1022,7 +1035,8 @@ void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operation
         Q_ASSERT_X(m_reconnectFunction, "QGrpcHttp2ChannelPrivate::processOperation",
                    "Socket reconnection function is not defined.");
         if (m_isInsideSocketErrorOccurred) {
-            qGrpcWarning("Inside socket error handler. Reconnect deferred to event loop.");
+            qCWarning(lcChannel,
+                      "[%p] Inside socket error handler. Reconnect deferred to event loop.", this);
             QTimer::singleShot(0, [this]{ m_reconnectFunction(); });
         } else {
             m_reconnectFunction();
@@ -1056,7 +1070,9 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
 
     QObject::connect(m_connection, &QHttp2Connection::settingsFrameReceived, this, [this] {
         if (m_state == ConnectionState::SettingsReceived) {
-            qGrpcWarning("Unexpected SETTINGS frame received multiple times in this session.");
+            qCWarning(lcChannel,
+                      "[%p] Unexpected SETTINGS frame received multiple times in this session.",
+                      this);
             return;
         }
         m_state = ConnectionState::SettingsReceived;
@@ -1068,7 +1084,9 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
 
 void QGrpcHttp2ChannelPrivate::handleSocketError(const QByteArray &errorCode)
 {
-    qGrpcDebug() << "Error occurred(" << errorCode << "):" << m_socket->errorString() << hostUri;
+    qCDebug(lcChannel, "[%p] Socket error occurred (code=%s, details=%s, hostUri=%s)", this,
+            errorCode.constData(), qPrintable(m_socket->errorString()),
+            qPrintable(hostUri.toString()));
     delete m_connection;
     m_connection = nullptr;
     m_state = ConnectionState::Error;
@@ -1077,9 +1095,8 @@ void QGrpcHttp2ChannelPrivate::handleSocketError(const QByteArray &errorCode)
 void QGrpcHttp2ChannelPrivate::ensureSchemeIsValid(QLatin1String expected)
 {
     if (hostUri.scheme() != expected) {
-        qGrpcWarning("Unsupported transport protocol scheme '%s'. Fall back to '%s'.",
-                     qPrintable(hostUri.scheme()),
-                     qPrintable(expected));
+        qCWarning(lcChannel, "[%p] Unsupported transport protocol scheme '%s'. Fall back to '%s'.",
+                  this, qPrintable(hostUri.scheme()), qPrintable(expected));
         hostUri.setScheme(expected);
     }
 }
