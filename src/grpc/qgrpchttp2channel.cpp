@@ -528,31 +528,32 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
 
     QObject::connect(m_stream.get(), &QHttp2Stream::dataReceived, m_context.get(),
                      [this](const QByteArray &data, bool endStream) {
-                         if (m_state != State::Cancelled) {
-                             m_expectedData.container.append(data);
+                         if (m_state == State::Cancelled)
+                             return;
 
+                         m_expectedData.container.append(data);
+
+                         if (!m_expectedData.updateExpectedSize())
+                             return;
+
+                         while (m_expectedData.container.size() >= m_expectedData.expectedSize) {
+                             qGrpcDebug() << "Full data received:" << data.size()
+                                          << "dataContainer:" << m_expectedData.container.size()
+                                          << "capacity:" << m_expectedData.expectedSize;
+                             const auto len = m_expectedData.expectedSize
+                                 - GrpcMessageSizeHeaderSize;
+                             const auto msg = m_expectedData.container
+                                                  .mid(GrpcMessageSizeHeaderSize, len);
+                             emit m_context->messageReceived(msg);
+
+                             m_expectedData.container.remove(0, m_expectedData.expectedSize);
+                             m_expectedData.expectedSize = 0;
                              if (!m_expectedData.updateExpectedSize())
                                  return;
-
-                             while (m_expectedData.container.size()
-                                    >= m_expectedData.expectedSize) {
-                                 qGrpcDebug() << "Full data received:" << data.size()
-                                              << "dataContainer:" << m_expectedData.container.size()
-                                              << "capacity:" << m_expectedData.expectedSize;
-                                 emit m_context
-                                     ->messageReceived(m_expectedData.container
-                                                           .mid(GrpcMessageSizeHeaderSize,
-                                                                m_expectedData.expectedSize
-                                                                    - GrpcMessageSizeHeaderSize));
-                                 m_expectedData.container.remove(0, m_expectedData.expectedSize);
-                                 m_expectedData.expectedSize = 0;
-                                 if (!m_expectedData.updateExpectedSize())
-                                     return;
-                             }
-
-                             if (endStream)
-                                 finish({});
                          }
+
+                         if (endStream)
+                             finish({});
                      });
 
     QObject::connect(m_stream.get(), &QHttp2Stream::uploadFinished, this,
