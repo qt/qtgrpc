@@ -25,7 +25,6 @@ namespace {
 #  ifndef PROTOC_EXECUTABLE
 #    error PROTOC_EXECUTABLE definition must be set and point to the valid protoc executable
 #  endif
-constexpr QLatin1StringView ProtocPath(PROTOC_EXECUTABLE);
 
 #  ifndef PROTOC_PLUGIN
 #    error PROTOC_PLUGIN definition must be set and point to the valid protoc plugin
@@ -38,6 +37,7 @@ constexpr QLatin1StringView OutKey(" --qtgrpc_out=");
 constexpr QLatin1StringView IncludeKey(" -I");
 #endif
 
+constexpr QLatin1StringView ProtocPath(PROTOC_EXECUTABLE);
 constexpr QLatin1StringView CmdLineGeneratedDir("cmd_line_generated");
 
 #ifndef BINARY_DIR
