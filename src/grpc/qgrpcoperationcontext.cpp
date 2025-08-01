@@ -103,8 +103,9 @@ QT_BEGIN_NAMESPACE
     This signal is emitted by QGrpcOperation when requesting cancellation of the
     communication.
 
-    The channel is expected to connect its cancellation logic to this signal and
-    attempt to cancel the RPC and return immediately. Successful cancellation
+    The channel is expected to connect its cancellation logic to this signal
+    and attempt to cancel the RPC and finish it with a
+    \l{QtGrpc::StatusCode::}{Cancelled} status code. Successful cancellation
     cannot be guaranteed. Further processing of the data received from a
     channel is not required and should be avoided.
 
