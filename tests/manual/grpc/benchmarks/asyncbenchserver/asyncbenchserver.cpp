@@ -77,10 +77,10 @@ public:
                 new BiDiStreaming(cq.get(), &mService);
             }
         }
-        // Two threads per CQ for reducing bursts in queries.
+
         for (auto& cq : mCompletionQueues) {
-            mThreads.emplace_back([this, cq = cq.get()] { processRPCs(cq); });
-            // mThreads.emplace_back([this, cq = cq.get()] { processRPCs(cq); });
+            mThreads.emplace_back([cq = cq.get()] { processRPCs(cq); });
+            // Add more threads for parallel RPC processing.
         }
     }
 

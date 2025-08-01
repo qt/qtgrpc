@@ -233,7 +233,7 @@ void QtGrpcClientBenchmark::bidiStreaming()
     });
 
     QObject::connect(streamPtr, &QGrpcBidiStream::messageReceived, this,
-                     [this, stream = streamPtr, &response, &request, &benchData]() {
+                     [this, stream = streamPtr, &response, &benchData]() {
                          if (stream->read(&response)) {
                              if (response.hasPayload())
                                  benchData.receivedBytes += response.payload().size();
