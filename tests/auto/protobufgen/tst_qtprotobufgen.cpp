@@ -26,7 +26,6 @@ namespace {
 #  ifndef PROTOC_EXECUTABLE
 #    error PROTOC_EXECUTABLE definition must be set and point to the valid protoc executable
 #  endif
-constexpr QLatin1StringView ProtocPath(PROTOC_EXECUTABLE);
 
 #  ifndef PROTOC_PLUGIN
 #    error PROTOC_PLUGIN definition must be set and point to the valid protoc plugin
@@ -43,9 +42,10 @@ const QLatin1StringView allow_proto3_optional(" --experimental_allow_proto3_opti
 constexpr QLatin1StringView allow_proto3_optional;
 #  endif // ALLOW_PROTO3_OPTIONAL
 
-constexpr QLatin1StringView CmdLineGeneratedDir("cmd_line_generated");
-
 #endif // !defined(SKIP_COMMAND_LINE_TESTS)
+
+constexpr QLatin1StringView ProtocPath(PROTOC_EXECUTABLE);
+constexpr QLatin1StringView CmdLineGeneratedDir("cmd_line_generated");
 
 #  ifndef BINARY_DIR
 #    error BINARY_DIR definition must be set
