@@ -322,7 +322,7 @@ void AsyncGrpcClientBenchmark::bidiStreaming()
         }
         return false;
     };
-    call->callHandler = [this, call](bool ok) {
+    call->callHandler = [call](bool ok) {
         if (ok) {
             call->stream->Finish(&call->status, &call->finishHandler);
             call->stream->Read(&call->response, &call->readHandler);
