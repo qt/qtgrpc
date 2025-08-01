@@ -276,6 +276,7 @@ public:
 
     void finish(const QGrpcStatus &status);
     void asyncFinish(const QGrpcStatus &status);
+    void cancelWithStatus(const QGrpcStatus &status);
 
     [[nodiscard]] bool expired() const { return !m_operation; }
 
@@ -289,10 +290,13 @@ public:
     }
 
 // context slot handlers:
-    void cancel();
+    void cancel() { cancelWithStatus({ StatusCode::Cancelled, tr("Cancelled by client") }); }
     void writesDone();
     void writeMessage(QByteArrayView data);
-    void deadlineTimeout();
+    void deadlineTimeout()
+    {
+        cancelWithStatus({ StatusCode::DeadlineExceeded, tr("Deadline exceeded") });
+    }
 
     void handleHeaders(const HPack::HttpHeader &headers, HeaderPhase phase);
 
@@ -427,10 +431,8 @@ Http2Handler::Http2Handler(QGrpcOperationContext *operation, QGrpcHttp2ChannelPr
     // QHttp2Stream will handle any outstanding cancellations appropriately.
     QObject::connect(operation, &QGrpcOperationContext::destroyed, this,
                      &Http2Handler::deleteLater);
-    QObject::connect(operation, &QGrpcOperationContext::cancelRequested, this, [this] {
-        cancel();
-        deleteLater();
-    });
+    QObject::connect(operation, &QGrpcOperationContext::cancelRequested, this,
+                     &Http2Handler::cancel);
     QObject::connect(operation, &QGrpcOperationContext::writesDoneRequested, this,
                      &Http2Handler::writesDone);
     if (!m_endStreamAtFirstData) {
@@ -689,7 +691,7 @@ void Http2Handler::asyncFinish(const QGrpcStatus &status)
     QTimer::singleShot(0, m_operation.get(), [this, status]() { finish(status); });
 }
 
-void Http2Handler::cancel()
+void Http2Handler::cancelWithStatus(const QGrpcStatus &status)
 {
     if (m_state >= State::Cancelled)
         return;
@@ -703,6 +705,8 @@ void Http2Handler::cancel()
         qGrpcDebug("Failed cancellation on stream: %p, Handler::state: %s", m_stream.get(),
                    QDebug::toBytes(m_state).data());
     }
+
+    finish(status);
 }
 
 void Http2Handler::writesDone()
@@ -717,14 +721,6 @@ void Http2Handler::writesDone()
 
     m_queue.enqueue({});
     processQueue();
-}
-
-void Http2Handler::deadlineTimeout()
-{
-    Q_ASSERT_X(m_stream, "onDeadlineTimeout", "stream is not available");
-
-    cancel();
-    finish({ StatusCode::DeadlineExceeded, "Deadline Exceeded" });
 }
 
 void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase phase)
