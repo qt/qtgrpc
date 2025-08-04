@@ -113,7 +113,7 @@
     Furthermore, the \c qtprotobufgen tool in Qt \QtVersion may contain third
     party modules under the following permissive licenses:
 
-    \generatelist{groupsbymodule attributions-qtprotobuf-tools}
+    \annotatedlist attributions-qtprotobuf-tools
 */
 
 /*!
