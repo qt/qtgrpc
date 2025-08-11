@@ -4,7 +4,7 @@
 /*!
     \example chat
     \ingroup qtgrpc-examples
-    \examplecategory {Application Examples}
+    \examplecategory {Networking}
     \meta tag {network,protobuf,grpc,serialization,tcp,ssl,tls,quick}
     \title QtGrpc Chat
     \brief A chat application to share messages of any kind in a chat room.
