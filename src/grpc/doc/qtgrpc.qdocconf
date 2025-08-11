@@ -56,7 +56,9 @@ navigation.qmltypespage = "Qt GRPC QML Types"
 navigation.toctitles = "Qt GRPC module topics"
 navigation.toctitles.inclusive = false
 
-manifestmeta.highlighted.names = "QtGrpc/Magic 8 Ball"
+manifestmeta.highlighted.names = \
+               "QtGrpc/Magic 8 Ball" \
+               "QtGrpc/QtGrpc Chat"
 
 tagfile                 = qtgrpc.tags
 
