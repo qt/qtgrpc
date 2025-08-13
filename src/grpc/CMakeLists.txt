@@ -4,7 +4,7 @@
 qt_internal_add_module(Grpc
     SOURCES
         qgrpcoperation.h qgrpcoperation_p.h qgrpcoperation.cpp
-        qgrpcoperationcontext.h qgrpcoperationcontext.cpp
+        qgrpcoperationcontext.h qgrpcoperationcontext_p.h qgrpcoperationcontext.cpp
         qgrpccallreply.h qgrpccallreply.cpp
         qgrpcstream.h qgrpcstream.cpp
         qgrpcstatus.h qgrpcstatus.cpp
