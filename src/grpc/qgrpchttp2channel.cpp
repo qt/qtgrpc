@@ -351,24 +351,6 @@ public:
 private:
     enum ConnectionState { Connecting = 0, Connected, SettingsReceived, Error };
 
-    template <typename T>
-    void connectErrorHandler(T *socket, Http2Handler *handler)
-    {
-        connect(socket, &T::errorOccurred, handler, [this, handler](auto error) {
-            if (m_isInsideSocketErrorOccurred) {
-                qCCritical(lcChannel,
-                           "[%p] Socket errorOccurred signal triggered while "
-                           "already handling an error",
-                           this);
-                return;
-            }
-            m_isInsideSocketErrorOccurred = true;
-            auto reset = qScopeGuard([this]() { m_isInsideSocketErrorOccurred = false; });
-            emit handler->finish({ StatusCode::Unavailable,
-                                   tr("Network error occurred: %1").arg(error) });
-        });
-    }
-
     void ensureSchemeIsValid(QLatin1String expected);
 
     bool createHttp2Stream(Http2Handler *handler);
@@ -1018,17 +1000,6 @@ void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operation
     }
 
     auto *handler = new Http2Handler(this, operationContext, endStream);
-
-#if QT_CONFIG(localserver)
-    if (m_isLocalSocket) {
-        connectErrorHandler<QLocalSocket>(static_cast<QLocalSocket *>(m_socket.get()), handler);
-    } else
-#endif
-    {
-        connectErrorHandler<QAbstractSocket>(static_cast<QAbstractSocket *>(m_socket.get()),
-                                             handler);
-    }
-
     if (m_connection && !createHttp2Stream(handler))
         return;
 
@@ -1093,6 +1064,20 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
 
 void QGrpcHttp2ChannelPrivate::handleSocketError(const QByteArray &errorCode)
 {
+    for_each_non_expired_handler([this, &errorCode](Http2Handler *handler) {
+        if (m_isInsideSocketErrorOccurred) {
+            qCCritical(lcChannel,
+                        "[%p] Socket errorOccurred signal triggered while "
+                        "already handling an error",
+                        this);
+            return;
+        }
+        m_isInsideSocketErrorOccurred = true;
+        auto reset = qScopeGuard([this]() { m_isInsideSocketErrorOccurred = false; });
+        emit handler->finish({ StatusCode::Unavailable,
+                                tr("Network error occurred: %1").arg(errorCode) });
+    });
+
     qCDebug(lcChannel, "[%p] Socket error occurred (code=%s, details=%s, hostUri=%s)", this,
             errorCode.constData(), qPrintable(m_socket->errorString()),
             qPrintable(hostUri.toString()));
