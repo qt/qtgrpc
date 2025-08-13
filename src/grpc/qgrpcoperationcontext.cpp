@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QtGrpc/private/qgrpccommonoptions_p.h>
-#include <QtGrpc/qgrpccalloptions.h>
+#include <QtGrpc/private/qgrpcoperationcontext_p.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
 #include <QtGrpc/qgrpcstatus.h>
 
@@ -141,31 +141,6 @@ QT_BEGIN_NAMESPACE
     \sa QGrpcClientStream::writesDone
     \sa QGrpcBidiStream::writesDone
 */
-
-class QGrpcOperationContextPrivate : public QObjectPrivate
-{
-    Q_DECLARE_PUBLIC(QGrpcOperationContext)
-public:
-    QGrpcOperationContextPrivate(QLatin1StringView method_, QLatin1StringView service_,
-                                 QByteArrayView argument_, QGrpcCallOptions options_,
-                                 std::shared_ptr<QAbstractProtobufSerializer> &&serializer_)
-        : method(method_), service(service_), argument(argument_.toByteArray()),
-          options(std::move(options_)), serializer(std::move(serializer_))
-    {
-    }
-
-    QLatin1StringView method;
-    QLatin1StringView service;
-    QByteArray argument;
-    QGrpcCallOptions options;
-    std::shared_ptr<QAbstractProtobufSerializer> serializer;
-    QMetaType responseMetaType;
-    QMultiHash<QByteArray, QByteArray> serverInitialMetadata;
-#if QT_DEPRECATED_SINCE(6, 13)
-    QHash<QByteArray, QByteArray> deprServerInitialMetadata;
-#endif
-    QMultiHash<QByteArray, QByteArray> serverTrailingMetadata;
-};
 
 /*!
     \internal
