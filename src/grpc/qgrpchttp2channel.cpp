@@ -345,14 +345,6 @@ public:
 
     void processOperation(QGrpcOperationContext *operationContext, bool endStream = false);
 
-    [[nodiscard]] bool isLocalSocket() const
-    {
-#if QT_CONFIG(localserver)
-        return m_isLocalSocket;
-#else
-        return false;
-#endif
-    }
     [[nodiscard]] const QByteArray &contentType() const { return m_contentType; }
 
     [[nodiscard]] const QByteArray &authorityHeader() const { return m_authorityHeader; }
@@ -414,9 +406,6 @@ private:
     std::unique_ptr<QIODevice> m_socket = nullptr;
     bool m_isInsideSocketErrorOccurred = false;
     QHttp2Connection *m_connection = nullptr;
-#if QT_CONFIG(localserver)
-    bool m_isLocalSocket = false;
-#endif
     QByteArray m_contentType;
     ConnectionState m_state = Connecting;
     std::function<void()> m_reconnectFunction;
@@ -932,7 +921,6 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         auto *localSocket = initSocket<QLocalSocket>();
         if (scheme == UnixAbstractScheme)
           localSocket->setSocketOptions(QLocalSocket::AbstractNamespaceOption);
-        m_isLocalSocket = true;
 
         connect(localSocket, &QLocalSocket::connected, this,
                 &QGrpcHttp2ChannelPrivate::createHttp2Connection);
