@@ -421,7 +421,6 @@ Http2Handler::Http2Handler(QGrpcHttp2ChannelPrivate *parent, QGrpcOperationConte
                 &Http2Handler::writeMessage);
     }
 
-    connect(context, &QGrpcOperationContext::finished, &m_deadlineTimer, &QTimer::stop);
     m_deadlineTimer.setSingleShot(true);
 
     writeMessage(context->argument());
@@ -670,6 +669,7 @@ void Http2Handler::finish(const QGrpcStatus &status)
         return;
     if (m_state != State::Cancelled) // don't overwrite the Cancelled state
         m_state = State::Finished;
+    m_deadlineTimer.stop();
     emit m_context->finished(status);
     deleteLater();
 }
@@ -686,9 +686,6 @@ void Http2Handler::cancelWithStatus(const QGrpcStatus &status)
         return;
     qCDebug(lcStream, "[%p] Cancelling (state=%s)", this, QDebug::toBytes(m_state).data());
     m_state = State::Cancelled;
-
-    // Client cancelled the stream before the deadline exceeded.
-    m_deadlineTimer.stop();
 
     // Immediate cancellation by sending the RST_STREAM frame.
     if (m_stream && !m_stream->sendRST_STREAM(Http2::Http2Error::CANCEL)) {
