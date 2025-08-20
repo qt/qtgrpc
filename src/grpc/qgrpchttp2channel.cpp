@@ -1036,12 +1036,8 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
             qPrintable(hostUri.toString()));
 
     connect(m_connection, &QHttp2Connection::settingsFrameReceived, this, [this] {
-        if (m_state == ConnectionState::SettingsReceived) {
-            qCWarning(lcChannel,
-                      "[%p] Unexpected SETTINGS frame received multiple times in this session.",
-                      this);
+        if (m_state == ConnectionState::SettingsReceived)
             return;
-        }
         m_state = ConnectionState::SettingsReceived;
         qCDebug(lcChannel, "[%p] SETTINGS frame received. Connection ready for use.", this);
         for_each_non_expired_handler([](Http2Handler *handler) { handler->sendInitialRequest(); });
