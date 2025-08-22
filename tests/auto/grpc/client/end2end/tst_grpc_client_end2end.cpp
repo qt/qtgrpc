@@ -17,6 +17,7 @@
 #include <QtTest/qtest.h>
 
 #include <QtCore/qbytearray.h>
+#include <QtCore/qdatetime.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qtimer.h>
 
@@ -74,6 +75,7 @@ private Q_SLOTS:
     void clientMetadataReceived();
     void serverMetadataReceived_data() const;
     void serverMetadataReceived();
+    void serverInitialMetadataEmitted();
 
     void bidiStreamsInOrder();
 
@@ -317,6 +319,63 @@ void QtGrpcClientEnd2EndTest::serverMetadataReceived()
     QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
     QVERIFY(finishedSpy.isValid());
     QVERIFY(finishedSpy.wait());
+}
+
+void QtGrpcClientEnd2EndTest::serverInitialMetadataEmitted()
+{
+    // Setup Server-side handling
+    struct ServerData
+    {
+        grpc::ServerAsyncResponseWriter<None> op{ &ctx };
+        grpc::ServerContext ctx;
+
+        Event request;
+        None response;
+    };
+    auto *data = new ServerData;
+    data->ctx.AddInitialMetadata("initial", "value");
+    data->ctx.AddTrailingMetadata("trailing", "value");
+
+    CallbackTag *callHandler = new CallbackTag([&](bool ok) {
+        QVERIFY(ok);
+        data->op.SendInitialMetadata(new CallbackTag([&](bool ok) {
+            QVERIFY(ok);
+            // Wait one second before emitting finished.
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            data->op.Finish(data->response, grpc::Status::OK, new DeleteTag<ServerData>(data));
+            return CallbackTag::Delete;
+        }));
+        return CallbackTag::Delete;
+    });
+    m_service->RequestPush(&data->ctx, &data->request, &data->op, m_server->cq(), m_server->cq(),
+                           callHandler);
+
+    // Setup Client-side call
+    QDateTime initialMetadataTime;
+    QDateTime finishedTime;
+    auto call = m_client->Push(qt::Event{}, QGrpcCallOptions{}.setFilterServerMetadata(true));
+    QVERIFY(call);
+
+    connect(call.get(), &QGrpcOperation::finished, this, [&](const QGrpcStatus &status) {
+        finishedTime = QDateTime::currentDateTime();
+        QVERIFY(status.isOk());
+        QCOMPARE_EQ(call->serverTrailingMetadata().size(), 1);
+    });
+    connect(call.get(), &QGrpcOperation::serverInitialMetadataReceived, this, [&]() {
+        initialMetadataTime = QDateTime::currentDateTime();
+        QCOMPARE_EQ(call->serverInitialMetadata().size(), 1);
+    });
+    QVERIFY(m_server->startAsyncProcessing());
+
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    QSignalSpy initialMetadataSpy(call.get(), &QGrpcOperation::serverInitialMetadataReceived);
+    QVERIFY(initialMetadataSpy.isValid());
+
+    finishedSpy.wait();
+
+    QCOMPARE_EQ(initialMetadataSpy.count(), 1);
+    QCOMPARE_LT(initialMetadataTime, finishedTime);
 }
 
 void QtGrpcClientEnd2EndTest::bidiStreamsInOrder()

@@ -143,6 +143,15 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
+    \fn void QGrpcOperationContext::serverInitialMetadataReceived()
+
+    \include qgrpcoperation.cpp serverInitialMetadataReceived
+
+    \sa QGrpcOperation::serverInitialMetadataReceived
+    \sa QGrpcBidiStream::writesDone
+*/
+
+/*!
     \internal
 
     Constructs an operation context with \a method and \a service name. The
@@ -284,12 +293,11 @@ QGrpcOperationContext::serverInitialMetadata() const & noexcept
 void QGrpcOperationContext::setServerInitialMetadata(QMultiHash<QByteArray, QByteArray> &&metadata)
 {
     Q_D(QGrpcOperationContext);
-    if (d->serverInitialMetadata == metadata)
-        return;
     d->serverInitialMetadata = std::move(metadata);
 #if QT_DEPRECATED_SINCE(6, 13)
     d->deprServerInitialMetadata = QtGrpcPrivate::toHash(d->serverInitialMetadata);
 #endif
+    emit serverInitialMetadataReceived();
 }
 
 /*!

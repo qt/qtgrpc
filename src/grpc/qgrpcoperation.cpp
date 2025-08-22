@@ -57,6 +57,23 @@ QGrpcOperationPrivate::~QGrpcOperationPrivate()
 */
 
 /*!
+    \fn void QGrpcOperation::serverInitialMetadataReceived()
+    \since 6.11
+
+//![serverInitialMetadataReceived]
+    This signal is emitted when the server responds with its initial metadata.
+    Initial metadata from the server is sent to the client before the initial
+    response of an RPC.
+
+    After this signal is received, you can access the \l{serverInitialMetadata}.
+//![serverInitialMetadataReceived]
+
+    \include qtgrpc-shared.qdocinc http2-metadata-note
+
+    \sa serverInitialMetadata()
+*/
+
+/*!
     \internal
 
     Constructs a QGrpcOperation using \a operationContext to communicate
@@ -77,6 +94,12 @@ QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationC
                     &QGrpcOperation::onFinished);
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'finished' signal");
+
+    valid = connect(d->operationContext.get(),
+                    &QGrpcOperationContext::serverInitialMetadataReceived, this,
+                    &QGrpcOperation::serverInitialMetadataReceived);
+    Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
+               "Unable to make connection to the 'serverInitialMetadataReceived' signal");
 }
 
 /*!

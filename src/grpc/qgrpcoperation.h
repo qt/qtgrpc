@@ -59,6 +59,7 @@ public:
 
 Q_SIGNALS:
     void finished(const QGrpcStatus &status);
+    void serverInitialMetadataReceived();
 
 public Q_SLOTS:
     void cancel();
