@@ -350,7 +350,6 @@ public:
     [[nodiscard]] const QByteArray &authorityHeader() const { return m_authorityHeader; }
     [[nodiscard]] const QByteArray &schemeHeader() const { return m_schemeHeader; }
 
-    std::shared_ptr<QAbstractProtobufSerializer> serializer;
     QUrl hostUri;
     QGrpcHttp2Channel *q_ptr = nullptr;
 
