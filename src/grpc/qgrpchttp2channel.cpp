@@ -443,6 +443,8 @@ Http2Handler::Http2Handler(QGrpcHttp2ChannelPrivate *parent, QGrpcOperationConte
 
 Http2Handler::~Http2Handler()
 {
+    qCDebug(lcStream, "[%p] Destroying Http2Handler (state=%s, stream=%p)", this,
+            QDebug::toBytes(m_state).constData(), m_stream.get());
     if (m_stream) {
         QHttp2Stream *streamPtr = m_stream.get();
         m_stream.clear();
@@ -495,6 +497,8 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
     connect(
         m_stream.get(), &QHttp2Stream::errorOccurred, this,
         [this](quint32 http2ErrorCode, const QString &errorString) {
+            qCDebug(lcStream, "[%p] Stream errorOccurred (state=%s)", this,
+                    QDebug::toBytes(m_state).constData());
             finish({ http2ErrorToStatusCode(http2ErrorCode), errorString });
         },
         Qt::SingleShotConnection);
@@ -716,7 +720,8 @@ void Http2Handler::cancelWithStatus(const QGrpcStatus &status)
 
     // Immediate cancellation by sending the RST_STREAM frame.
     if (m_stream && !m_stream->sendRST_STREAM(Http2::Http2Error::CANCEL)) {
-        qCDebug(lcStream, "[%p] Failed cancellation (stream=%p)", this, m_stream.get());
+        qCWarning(lcStream, "[%p] Failed cancellation (stream=%p, stream::state=%s)", this,
+                  m_stream.get(), QDebug::toBytes(m_stream->state()).constData());
     }
 
     finish(status);
