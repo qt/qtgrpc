@@ -46,8 +46,10 @@ public:
 
     [[nodiscard]] const QMultiHash<QByteArray, QByteArray> &
     serverInitialMetadata() const & noexcept;
+    void serverInitialMetadata() const && = delete;
     [[nodiscard]] const QMultiHash<QByteArray, QByteArray> &
     serverTrailingMetadata() const & noexcept;
+    void serverTrailingMetadata() const && = delete;
 
     [[nodiscard]] QLatin1StringView method() const noexcept;
 
