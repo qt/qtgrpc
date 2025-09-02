@@ -92,8 +92,8 @@ void qtprotobufgenTest::initTestCase()
     QVERIFY(!cmakeGeneratedPath().isEmpty());
 #if !defined(SKIP_COMMAND_LINE_TESTS)
     QVERIFY(!cmdLineGeneratedPath().isEmpty());
-#endif
     QVERIFY(protocolCompilerAvailableToRun(ProtocPath));
+#endif
 }
 
 void qtprotobufgenTest::cmakeGenerated_data()
