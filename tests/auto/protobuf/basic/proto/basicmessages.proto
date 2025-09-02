@@ -38,6 +38,10 @@ message SimpleStringMessage {
     string testFieldString = 6;
 }
 
+message SimpleStringMessageClone {
+    string testFieldString = 1;
+}
+
 message SimpleFloatMessage {
     float testFieldFloat = 7;
 }

@@ -23,6 +23,40 @@ static std::string nullTerminate(QLatin1StringView l1) noexcept
 }
 
 /*!
+    \since 6.11
+    \fn template <class To> To qprotobufmessage_cast(QProtobufMessage *from)
+    \fn template <class To> To qprotobufmessage_cast(const QProtobufMessage *from)
+    \relates QProtobufMessage
+
+    Returns the given \a from object cast to pointer type \c To if the object is
+    of type \c To (or a subclass); otherwise returns \nullptr. If \a from is
+    \nullptr, this function also returns \nullptr.
+
+    The template argument \c To must be a pointer to a class that inherits from
+    QProtobufMessage and is declared with the \l Q_PROTOBUF_OBJECT macro.
+
+    Example:
+    \code
+    QProtobufMessage *message = new myproject::MySpecificMessage();
+
+    // Cast to its own type (success)
+    auto *specific = qprotobufmessage_cast<myproject::MySpecificMessage *>(message);
+    // specific is a valid pointer
+
+    // Cast to an unrelated type (failure)
+    auto *another = qprotobufmessage_cast<myproject::AnotherMessage *>(message);
+    // another is nullptr
+    \endcode
+
+    This function behaves similarly to the standard C++ \c dynamic_cast(), with
+    the advantages that it doesn't require RTTI support and works across
+    dynamic library boundaries.
+
+    \warning If the type pointed to by \c To is not declared with the
+    Q_PROTOBUF_OBJECT macro, this function's return value is undefined.
+*/
+
+/*!
     \class QProtobufMessage
     \inmodule QtProtobuf
 
@@ -192,6 +226,20 @@ bool comparesEqual(const QProtobufMessage &lhs, const QProtobufMessage &rhs) noe
     if (lhs.d_ptr == rhs.d_ptr)
         return true;
     return lhs.d_func()->unknownEntries == rhs.d_func()->unknownEntries;
+}
+
+/*!
+    \internal
+    \since 6.11
+    Returns a pointer to the meta-object for this message instance. The
+    meta-object provides run-time type information for dynamic operations.
+
+    \sa qprotobufmessage_cast()
+*/
+const QMetaObject *QProtobufMessage::metaObject() const
+{
+    Q_D(const QProtobufMessage);
+    return d->metaObject;
 }
 
 namespace QtProtobufPrivate {

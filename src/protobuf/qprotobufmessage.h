@@ -28,6 +28,8 @@ using QProtobufMessagePointer = std::unique_ptr<QProtobufMessage, QProtobufMessa
 
 namespace QtProtobufPrivate {
 struct QProtobufPropertyOrdering;
+template <class To, class From>
+[[nodiscard]] To qprotobufmessage_cast_helper(From *msg) noexcept;
 }
 
 class QProtobufMessagePrivate;
@@ -70,9 +72,12 @@ protected:
         d_ptr.swap(other.d_ptr);
     }
 private:
+    Q_PROTOBUF_EXPORT const QMetaObject *metaObject() const;
     friend Q_PROTOBUF_EXPORT bool comparesEqual(const QProtobufMessage &lhs,
                                                 const QProtobufMessage &rhs) noexcept;
     Q_DECLARE_EQUALITY_COMPARABLE(QProtobufMessage);
+    template <class To, class From>
+    friend To QtProtobufPrivate::qprotobufmessage_cast_helper(From *msg) noexcept;
 
     friend struct QProtobufMessageDeleter;
 
@@ -98,6 +103,39 @@ private:
     Q_DECLARE_PRIVATE(QProtobufMapEntryBase)
     Q_DISABLE_COPY_MOVE(QProtobufMapEntryBase)
 };
+
+namespace QtProtobufPrivate {
+
+template <class To, class From>
+To qprotobufmessage_cast_helper(From *msg) noexcept
+{
+    static_assert(std::is_pointer_v<To>,
+                  "qprotomessage_cast requires the target to be a pointer type.");
+
+    using ToType = std::remove_cv_t<std::remove_pointer_t<To>>;
+    static_assert(std::is_base_of_v<QProtobufMessage, ToType>,
+                  "qprotobufmessage_cast requires the target type to be a subclass of "
+                  "QProtobufMessage");
+    if (msg && msg->metaObject() == &ToType::staticMetaObject)
+        return static_cast<To>(msg);
+    return nullptr;
+}
+
+} // namespace QtProtobufPrivate
+
+template <class To>
+[[nodiscard]] To qprotobufmessage_cast(QProtobufMessage *from)
+{
+    return QtProtobufPrivate::qprotobufmessage_cast_helper<To>(from);
+}
+
+template <class To>
+[[nodiscard]] To qprotobufmessage_cast(const QProtobufMessage *from)
+{
+    static_assert(std::is_const_v<std::remove_pointer_t<To>>,
+                  "qprotobufmessage_cast cannot cast away constness (use const_cast)");
+    return QtProtobufPrivate::qprotobufmessage_cast_helper<To>(from);
+}
 
 template <typename Key, typename Value>
 class QProtobufMapEntry : public QProtobufMapEntryBase
