@@ -183,13 +183,12 @@ const QHash<QByteArray, QByteArray> &QGrpcOperation::metadata() const & noexcept
     established. It may include key-value pairs that provide context for the
     call.
 
-    \note For \l {QGrpcHttp2Channel} {HTTP/2 channels}, this is delivered
-    via response headers.
+    \include qtgrpc-shared.qdocinc http2-metadata-note
 //! [serverInitialMetadata]
 
     The metadata may contain multiple entries under the same key.
 
-    \sa serverTrailingMetadata()
+    \sa serverInitialMetadataReceived() serverTrailingMetadata()
 */
 const QMultiHash<QByteArray, QByteArray> &QGrpcOperation::serverInitialMetadata() const & noexcept
 {
@@ -208,11 +207,12 @@ const QMultiHash<QByteArray, QByteArray> &QGrpcOperation::serverInitialMetadata(
     have been sent and just before the RPC completes. It may include key-value
     pairs providing additional context about the completed call.
 
-    \note For \l {QGrpcHttp2Channel} {HTTP/2 channels}, this is delivered
-    via response trailers.
+    \include qtgrpc-shared.qdocinc http2-metadata-note
 //! [serverTrailingMetadata]
 
     The metadata may contain multiple entries under the same key.
+
+    \sa serverInitialMetadata()
 */
 const QMultiHash<QByteArray, QByteArray> &QGrpcOperation::serverTrailingMetadata() const & noexcept
 {
