@@ -67,23 +67,14 @@ QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationC
     : QObject(*new QGrpcOperationPrivate(std::move(operationContext)), parent)
 {
     Q_D(QGrpcOperation);
-    [[maybe_unused]] bool valid = QObject::connect(d->operationContext.get(),
-                                                   &QGrpcOperationContext::messageReceived, this,
-                                                   [this](const QByteArray &data) {
-                                                       Q_D(QGrpcOperation);
-                                                       d->data = data;
-                                                   });
+    [[maybe_unused]] bool valid = false;
+    valid = connect(d->operationContext.get(), &QGrpcOperationContext::messageReceived, this,
+                    &QGrpcOperation::onMessageReceived);
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'messageReceived' signal");
 
-    valid = QObject::connect(d->operationContext.get(), &QGrpcOperationContext::finished, this,
-                             [this](const QGrpcStatus &status) {
-                                 if (!isFinished()) {
-                                     Q_D(QGrpcOperation);
-                                     d->isFinished.storeRelaxed(true);
-                                     emit this->finished(status);
-                                 }
-                             });
+    valid = connect(d->operationContext.get(), &QGrpcOperationContext::finished, this,
+                    &QGrpcOperation::onFinished);
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'finished' signal");
 }
@@ -250,6 +241,21 @@ const QGrpcOperationContext &QGrpcOperation::context() const & noexcept
 {
     Q_D(const QGrpcOperation);
     return *d->operationContext;
+}
+
+void QGrpcOperation::onMessageReceived(const QByteArray &data)
+{
+    Q_D(QGrpcOperation);
+    d->data = data;
+}
+
+void QGrpcOperation::onFinished(const QGrpcStatus &status)
+{
+    Q_D(QGrpcOperation);
+    if (isFinished())
+        return;
+    d->isFinished.storeRelaxed(true);
+    emit finished(status);
 }
 
 bool QGrpcOperation::event(QEvent *event)

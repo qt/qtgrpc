@@ -73,6 +73,10 @@ protected:
     void context() const && = delete;
 
 private:
+    void onMessageReceived(const QByteArray &data);
+    void onFinished(const QGrpcStatus &status);
+
+private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
     Q_DECLARE_PRIVATE(QGrpcOperation)
 
