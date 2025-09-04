@@ -1,13 +1,19 @@
 // Copyright (C) 2025 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
+#include <QtTest/private/qcomparisontesthelper_p.h>
 #include <QtTest/qtest.h>
 
+#include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qtgrpcnamespace.h>
 
+#if QT_CONFIG(ssl)
+#  include <QtNetwork/qsslconfiguration.h>
+#endif
+
 #include <QtCore/qdebug.h>
-#include <QtCore/qstring.h>
 #include <QtCore/qhash.h>
+#include <QtCore/qstring.h>
 
 using namespace std::chrono_literals;
 
@@ -252,5 +258,34 @@ QT_WARNING_POP
 
         std::unique_ptr<char[]> ustr(QTest::toString(o));
         QCOMPARE_EQ(storage, QString::fromUtf8(ustr.get()));
+    }
+    void comparesEqual() const
+    {
+        QTestPrivate::testEqualityOperatorsCompile<T>();
+        T o1;
+        T o2 = o1;
+
+        QT_TEST_EQUALITY_OPS(o1, o2, true);
+        auto updateComparisonCheck = [&] {
+            QT_TEST_EQUALITY_OPS(o1, o2, false);
+            o2 = o1;
+            QT_TEST_EQUALITY_OPS(o1, o2, true);
+        };
+
+        o1.addMetadata("new", "value");
+        updateComparisonCheck();
+        o1.setDeadlineTimeout(1s);
+        updateComparisonCheck();
+        o1.setFilterServerMetadata(true);
+        updateComparisonCheck();
+
+        if constexpr (std::is_same_v<T, QGrpcChannelOptions>) {
+            o1.setSerializationFormat(QtGrpc::SerializationFormat::Protobuf);
+            updateComparisonCheck();
+#if QT_CONFIG(ssl)
+            o1.setSslConfiguration(QSslConfiguration::defaultConfiguration());
+            updateComparisonCheck();
+#endif
+        }
     }
 };

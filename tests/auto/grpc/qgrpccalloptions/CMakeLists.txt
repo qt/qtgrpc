@@ -15,5 +15,6 @@ qt_internal_add_test(tst_qgrpccalloptions
     LIBRARIES
         Qt::Core
         Qt::Test
+        Qt::TestPrivate
         Qt::Grpc
 )

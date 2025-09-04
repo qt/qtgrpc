@@ -11,6 +11,7 @@
 #  include <QtNetwork/qsslconfiguration.h>
 #endif
 
+#include <QtCore/qcompare.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qshareddata.h>
 #include <QtCore/qstringfwd.h>
@@ -85,6 +86,10 @@ public:
 
 private:
     QExplicitlySharedDataPointer<QGrpcChannelOptionsPrivate> d_ptr;
+
+    friend Q_GRPC_EXPORT bool comparesEqual(const QGrpcChannelOptions &lhs,
+                                            const QGrpcChannelOptions &rhs);
+    Q_DECLARE_EQUALITY_COMPARABLE_NON_NOEXCEPT(QGrpcChannelOptions)
 
 #ifndef QT_NO_DEBUG_STREAM
     friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts);

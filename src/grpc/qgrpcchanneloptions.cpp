@@ -19,6 +19,7 @@ using namespace QtGrpc;
     \class QGrpcChannelOptions
     \inmodule QtGrpc
     \since 6.6
+    \compares equality
     \brief The QGrpcChannelOptions class offers various options for fine-tuning
     a gRPC channel.
 
@@ -379,6 +380,18 @@ std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const
     return d->sslConfiguration;
 }
 #endif
+
+bool comparesEqual(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rhs)
+{
+    return lhs.deadlineTimeout() == rhs.deadlineTimeout()
+        && lhs.filterServerMetadata() == rhs.filterServerMetadata()
+        && lhs.metadata(QtGrpc::MultiValue) == rhs.metadata(QtGrpc::MultiValue)
+        && lhs.serializationFormat() == rhs.serializationFormat()
+#if QT_CONFIG(ssl)
+        && lhs.sslConfiguration() == rhs.sslConfiguration()
+#endif
+        ;
+}
 
 #ifndef QT_NO_DEBUG_STREAM
 /*!

@@ -16,6 +16,7 @@ using namespace Qt::StringLiterals;
 /*!
     \class QGrpcCallOptions
     \inmodule QtGrpc
+    \compares equality
     \brief The QGrpcCallOptions class offers various options for fine-tuning
     individual RPCs.
     \since 6.6
@@ -297,6 +298,13 @@ QGrpcCallOptions &QGrpcCallOptions::setFilterServerMetadata(bool value)
     Q_D(QGrpcCallOptions);
     d->setFilterServerMetadata(value);
     return *this;
+}
+
+bool comparesEqual(const QGrpcCallOptions &lhs, const QGrpcCallOptions &rhs)
+{
+    return lhs.deadlineTimeout() == rhs.deadlineTimeout()
+        && lhs.filterServerMetadata() == rhs.filterServerMetadata()
+        && lhs.metadata(QtGrpc::MultiValue) == rhs.metadata(QtGrpc::MultiValue);
 }
 
 #ifndef QT_NO_DEBUG_STREAM

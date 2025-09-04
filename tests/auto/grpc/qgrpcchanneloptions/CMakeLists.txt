@@ -15,5 +15,6 @@ qt_internal_add_test(tst_qgrpcchanneloptions
     LIBRARIES
         Qt::Core
         Qt::Test
+        Qt::TestPrivate
         Qt::Grpc
 )

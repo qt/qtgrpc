@@ -26,6 +26,7 @@ private Q_SLOTS:
     void propertyDeadline() const { common.propertyDeadline(); }
     void propertyFilterServerMetadata() const { common.propertyFilterServerMetadata(); }
     void streamsToDebug() const { common.streamsToDebug(); }
+    void comparesEqual() const { common.comparesEqual(); }
 
     void propertySerializationFormat() const;
 #if QT_CONFIG(ssl)

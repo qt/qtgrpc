@@ -7,6 +7,7 @@
 #include <QtGrpc/qtgrpcglobal.h>
 #include <QtGrpc/qtgrpcnamespace.h>
 
+#include <QtCore/qcompare.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qshareddata.h>
 #include <QtCore/qstringfwd.h>
@@ -69,6 +70,10 @@ public:
 
 private:
     QExplicitlySharedDataPointer<QGrpcCallOptionsPrivate> d_ptr;
+
+    friend Q_GRPC_EXPORT bool comparesEqual(const QGrpcCallOptions &lhs,
+                                            const QGrpcCallOptions &rhs);
+    Q_DECLARE_EQUALITY_COMPARABLE_NON_NOEXCEPT(QGrpcCallOptions)
 
 #ifndef QT_NO_DEBUG_STREAM
     friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts);

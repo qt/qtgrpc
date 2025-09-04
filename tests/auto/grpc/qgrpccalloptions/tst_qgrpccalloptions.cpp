@@ -23,6 +23,7 @@ private Q_SLOTS:
     void propertyDeadline() const { common.propertyDeadline(); }
     void propertyFilterServerMetadata() const { common.propertyFilterServerMetadata(); }
     void streamsToDebug() const { common.streamsToDebug(); }
+    void comparesEqual() const { common.comparesEqual(); }
 
 private:
     GrpcCommonOptionsTest<QGrpcCallOptions> common;
