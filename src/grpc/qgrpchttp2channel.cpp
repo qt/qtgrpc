@@ -1036,7 +1036,7 @@ QUrl QGrpcHttp2ChannelPrivate::sanitizeHostUri(const QUrl &rawUri,
         if (rawUri.scheme() != expected) {
             qCWarning(lcChannel,
                       "[%p] Unsupported transport protocol scheme '%s'. Fall back to '%s'.", this,
-                      qPrintable(hostUri.scheme()), qPrintable(expected));
+                      qPrintable(rawUri.scheme()), qPrintable(expected));
             sanitizedUri.setScheme(expected);
         }
     };
