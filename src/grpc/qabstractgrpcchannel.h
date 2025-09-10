@@ -1,6 +1,6 @@
 // Copyright (C) 2022 The Qt Company Ltd.
 // Copyright (C) 2019 Alexey Edelev <semlanik@gmail.com>
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #ifndef QABSTRACTGRPCCHANNEL_H
 #define QABSTRACTGRPCCHANNEL_H

@@ -47,16 +47,6 @@
             "": {
                 "comment": "Default",
                 "file type": "tools and utils",
-                "spdx": ["LicenseRef-Qt-Commercial"]
-            },
-            "tests/.*./*.py": {
-                "comment": "Default",
-                "file type": "test",
-                "spdx": ["LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0"]
-            },
-            "tests/.*./*.sh": {
-                "comment": "Default",
-                "file type": "test",
                 "spdx": ["LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0"]
             },
             "(.*)(examples/|snippets/)": {
@@ -86,19 +76,14 @@
             "": {
                 "comment": "Default",
                 "file type": "module and plugin",
-                "spdx": ["LicenseRef-Qt-Commercial"]
+                "spdx": ["LicenseRef-Qt-Commercial OR GPL-3.0-only"]
             },
             "src/protobufqttypes/": {
                 "comment": "Qt Protobuf module",
                 "file type": "module and plugin",
-                "spdx": ["LicenseRef-Qt-Commercial"]
+                "spdx": ["LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only"]
             },
             "src/protobuf/": {
-                "comment": "Qt Protobuf module",
-                "file type": "module and plugin",
-                "spdx": ["LicenseRef-Qt-Commercial"]
-            },
-            "src/protobuf/doc/QtProtobufDoc": {
                 "comment": "Qt Protobuf module",
                 "file type": "module and plugin",
                 "spdx": ["LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only"]
@@ -106,17 +91,17 @@
             "src/protobufquick/": {
                 "comment": "Qt ProtobufQuick module",
                 "file type": "module and plugin",
-                "spdx": ["LicenseRef-Qt-Commercial"]
+                "spdx": ["LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only"]
             },
             "src/wellknown/": {
                 "comment": "Qt Protobuf module",
                 "file type": "module and plugin",
-                "spdx": ["LicenseRef-Qt-Commercial"]
+                "spdx": ["LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only"]
             },
             "src/tools/": {
                 "comment": "Default",
                 "file type": "tools and utils",
-                "spdx": ["LicenseRef-Qt-Commercial"]
+                "spdx": ["LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0"]
             },
             "tests/": {
                 "comment": "Default",

@@ -1,6 +1,6 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // Copyright (C) 2020 Alexey Edelev <semlanik@gmail.com>, Tatyana Borisova <tanusshhka@mail.ru>
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 
 #include "messagedeclarationprinter.h"
 #include "utils.h"
