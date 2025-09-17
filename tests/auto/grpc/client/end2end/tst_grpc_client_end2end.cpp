@@ -77,6 +77,9 @@ private Q_SLOTS:
 
     void bidiStreamsInOrder();
 
+    void clientHandlesCompression_data() const;
+    void clientHandlesCompression();
+
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
     {
@@ -431,6 +434,93 @@ void QtGrpcClientEnd2EndTest::bidiStreamsInOrder()
     QVERIFY(m_server->startAsyncProcessing());
 
     QSignalSpy finishedSpy(stream.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    QVERIFY(finishedSpy.wait());
+}
+
+void QtGrpcClientEnd2EndTest::clientHandlesCompression_data() const
+{
+    QTest::addColumn<grpc_compression_algorithm>("compressionAlgo");
+    QTest::addRow("compress(None)") << GRPC_COMPRESS_NONE;
+    QTest::addRow("compress(Deflate)") << GRPC_COMPRESS_DEFLATE;
+    QTest::addRow("compress(Gzip)") << GRPC_COMPRESS_GZIP;
+}
+
+void QtGrpcClientEnd2EndTest::clientHandlesCompression()
+{
+    QFETCH(const grpc_compression_algorithm, compressionAlgo);
+
+    class SubscribeListHandler : public AbstractRpcTag
+    {
+    public:
+        SubscribeListHandler(EventHub::AsyncService &service_,
+                             const grpc_compression_algorithm compressionAlgo_)
+            : op(&context()), service(service_), compressionAlgo(compressionAlgo_)
+        {
+            context().set_compression_algorithm(compressionAlgo);
+            context().set_compression_level(GRPC_COMPRESS_LEVEL_HIGH);
+            // create some 'compressable' data. Try to make it more complex
+            // as compression is not guaranteed to actually be applied.
+            for (size_t i = 0; i < 100; ++i) {
+                const auto v = i % 10;
+                Event ev;
+                ev.set_name("server;server;" + std::to_string(v));
+                ev.set_number(v);
+                response.mutable_events()->Add(std::move(ev));
+            }
+        }
+        void start(grpc::ServerCompletionQueue *cq) override
+        {
+            service.RequestSubscribeList(&context(), &request, &op, cq, cq, this);
+        }
+        void process(bool ok) override
+        {
+            QVERIFY(ok);
+            if (index >= responseCount) {
+                op.Finish(grpc::Status::OK, new VoidTag());
+                return;
+            }
+            grpc::WriteOptions wopts;
+            // Enable and disable the compression per-message
+            if (index % 2 == 0)
+                wopts.set_no_compression();
+            op.Write(response, wopts, this);
+            ++index;
+        }
+
+        grpc::ServerAsyncWriter<EventList> op;
+        EventHub::AsyncService &service;
+        None request;
+        EventList response;
+
+        size_t index = 0;
+        const grpc_compression_algorithm compressionAlgo;
+        const size_t responseCount = 20;
+    };
+
+    SubscribeListHandler handler(*m_service, compressionAlgo);
+    m_server->startRpcTag(handler);
+
+    auto call = m_client->SubscribeList(qt::None{});
+    QVERIFY(call);
+
+    connect(call.get(), &QGrpcOperation::finished, this,
+            [&](const QGrpcStatus &status) { QCOMPARE(status.code(), QtGrpc::StatusCode::Ok); });
+    connect(call.get(), &QGrpcServerStream::messageReceived, this, [&] {
+        auto response = call->read<qt::EventList>();
+        QVERIFY(response);
+        QCOMPARE_EQ(response->events().size(), handler.response.events().size());
+        for (int i = 0; i < response->events().size(); ++i) {
+            const auto &next = response->events().at(i);
+            const auto &baseline = handler.response.events().at(i);
+            QCOMPARE_EQ(next.name(), QString::fromStdString(baseline.name()));
+            QCOMPARE_EQ(next.number(), baseline.number());
+        }
+    });
+
+    QVERIFY(m_server->startAsyncProcessing());
+
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
     QVERIFY(finishedSpy.isValid());
     QVERIFY(finishedSpy.wait());
 }

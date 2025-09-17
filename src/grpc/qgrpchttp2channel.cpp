@@ -16,6 +16,7 @@
 
 #include <QtNetwork/private/hpack_p.h>
 #include <QtNetwork/private/http2protocol_p.h>
+#include <QtNetwork/private/qdecompresshelper_p.h>
 #include <QtNetwork/private/qhttp2connection_p.h>
 #if QT_CONFIG(localserver)
 #  include <QtNetwork/qlocalsocket.h>
@@ -178,6 +179,7 @@ const QByteArray GrpcStatusMessageHeader("grpc-message");
 const QByteArray DefaultContentType("application/grpc");
 const QByteArray GrpcStatusDetailsHeader("grpc-status-details-bin");
 const QByteArray GrpcAcceptEncodingHeader("grpc-accept-encoding");
+const QByteArray GrpcAcceptEncodingValue("identity,deflate,gzip");
 const QByteArray GrpcEncodingHeader("grpc-encoding");
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
 
@@ -362,6 +364,8 @@ private:
     QQueue<QByteArray> m_queue;
     QPointer<QHttp2Stream> m_stream;
     GrpcDataParser m_grpcDataParser;
+    QByteArray m_negotiatedEncoding;
+    std::unique_ptr<QDecompressHelper> m_decompressor;
     State m_state = State::Idle;
     const bool m_endStreamAtFirstData;
     bool m_writesDoneSent = false;
@@ -537,13 +541,41 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
 
                 m_grpcDataParser.feed(data);
                 while (auto frame = m_grpcDataParser.parseNextFrame()) {
+                    QByteArray finalPayload;
+
+                    if (frame->isCompressed) {
+                        if (!m_decompressor || m_negotiatedEncoding.isEmpty()) {
+                            finish({ QtGrpc::StatusCode::Internal,
+                                     "Protocol error: received compressed message "
+                                     "but no encoding was negotiated." });
+                            return;
+                        }
+                        m_decompressor->feed(std::move(frame->payload));
+                        // Read all decompressed data for this single message.
+                        while (m_decompressor->hasData()) {
+                            char buffer[4096];
+                            qsizetype bytesRead = m_decompressor->read(buffer, sizeof(buffer));
+                            if (bytesRead < 0) {
+                                finish({ QtGrpc::StatusCode::Internal,
+                                         "Decompression failed: %1"_L1
+                                             .arg(m_decompressor->errorString()) });
+                                return;
+                            }
+                            finalPayload.append(buffer, bytesRead);
+                        }
+                        m_decompressor->clear();
+                        m_decompressor->setEncoding(m_negotiatedEncoding);
+                    } else {
+                        finalPayload = std::move(frame->payload);
+                    }
+
                     qCDebug(lcStream,
                             "[%p] Processed gRPC message (compressed=%s, "
                             "payloadSize=%" PRIdQSIZETYPE ", bufferRemaining=%" PRIdQSIZETYPE ")",
-                            this, frame->isCompressed ? "true" : "false", frame->payload.size(),
+                            this, frame->isCompressed ? "true" : "false", finalPayload.size(),
                             m_grpcDataParser.bytesAvailable());
 
-                    emit m_context->messageReceived(frame->payload);
+                    emit m_context->messageReceived(finalPayload);
                 }
 
                 if (endStream) {
@@ -573,7 +605,6 @@ HPack::HttpHeader Http2Handler::constructInitialHeaders() const
     const static QByteArray TEHeader("te");
     const static QByteArray TEValue("trailers");
     const static QByteArray GrpcServiceNameHeader("service-name");
-    const static QByteArray GrpcAcceptEncodingValue("identity,deflate,gzip");
     const static QByteArray UserAgentHeader("user-agent");
     const static QByteArray UserAgentValue("grpc-c++-qtgrpc/"_ba + QT_VERSION_STR + " ("_ba
                                     + QSysInfo::productType().toUtf8() + '/'
@@ -832,10 +863,28 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
         } else if (validation.requireGrpcStatus && k == GrpcStatusDetailsHeader) {
             // Allowed optional headers
             // TODO: Implement status-details - QTBUG-138362
-        } else if (phase == HeaderPhase::Initial
-                   && (k == GrpcEncodingHeader || k == GrpcAcceptEncodingHeader)) {
+        } else if (phase == HeaderPhase::Initial && k == GrpcEncodingHeader) {
             // Allowed optional headers
-            // TODO: Implement compression handling - QTBUG-129286
+            if (v == "identity"_ba)
+                continue;
+            if (!GrpcAcceptEncodingValue.contains(v)
+                || !QDecompressHelper::isSupportedEncoding(v)) {
+                finish({ StatusCode::Internal,
+                         "Server responded with an unsupported compression algorithm: %1"_L1
+                             .arg(v) });
+                return;
+            }
+            // Create and configure the decompressor for this stream.
+            m_decompressor = std::make_unique<QDecompressHelper>();
+            if (!m_decompressor->setEncoding(v)) {
+                finish({ StatusCode::Internal,
+                         "Failed to initialize decompressor for algorithm: %1"_L1.arg(v) });
+                return;
+            }
+            m_negotiatedEncoding = v;
+        } else if (phase == HeaderPhase::Initial && k == GrpcAcceptEncodingHeader) {
+            // Allowed optional headers
+            // TODO: Implement client-side (request) compression handling - QTBUG-140235
         } else if (k.startsWith(':')) {
             qCWarning(lcStream,
                       "[%p] Received unhandled HTTP/2 pseudo-header: { key: '%s', value: '%s' } "
