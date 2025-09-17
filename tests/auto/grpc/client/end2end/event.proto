@@ -13,3 +13,7 @@ message Event {
     string name = 2;
     uint64 number = 3;
 }
+
+message EventList {
+    repeated Event events = 1;
+}

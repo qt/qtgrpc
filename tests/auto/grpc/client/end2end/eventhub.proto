@@ -10,6 +10,7 @@ message None {}
 service EventHub {
     rpc Push(Event) returns (None) {}
     rpc Subscribe(None) returns (stream Event) {}
+    rpc SubscribeList(None) returns (stream EventList) {}
     rpc Notify(stream Event) returns (None) {}
     rpc Exchange(stream Event) returns (stream Event) {}
 }
