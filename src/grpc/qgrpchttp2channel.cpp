@@ -252,21 +252,48 @@ bool hasSslConfiguration(const QGrpcChannelOptions &opts)
 
 } // namespace
 
-struct ExpectedData
+class GrpcDataParser
 {
-    qsizetype expectedSize = 0;
-    QByteArray container;
-
-    bool updateExpectedSize()
+public:
+    struct Frame
     {
-        if (expectedSize == 0) {
-            if (container.size() < GrpcMessageSizeHeaderSize)
-                return false;
-            expectedSize = qFromBigEndian<quint32>(container.data() + 1)
-                + GrpcMessageSizeHeaderSize;
+        Frame(QByteArray &&payload, bool isCompressed)
+            : payload(std::move(payload)), isCompressed(isCompressed)
+        {
         }
-        return true;
+        QByteArray payload;
+        bool isCompressed = false;
+    };
+    // Parses the next complete gRPC frame from the buffer. Removes the frame
+    // on success, or returns std::nullopt if incomplete.
+    std::optional<Frame> parseNextFrame()
+    {
+        static constexpr qsizetype FlagOffset = 0;
+        static constexpr qsizetype LengthOffset = 1;
+
+        std::optional<Frame> out;
+        if (container.size() < GrpcMessageSizeHeaderSize)
+            return out;
+
+        // Parse length (big endian, 4 bytes after flag)
+        const auto messageLength = qFromBigEndian<
+            quint32>(reinterpret_cast<const uchar *>(container.constData() + LengthOffset));
+        const qsizetype frameSize = GrpcMessageSizeHeaderSize + messageLength;
+
+        if (container.size() < frameSize)
+            return out; // Incomplete frame in buffer. Wait for more data
+
+        out.emplace(container.mid(GrpcMessageSizeHeaderSize, messageLength),
+                    container.at(FlagOffset) != 0);
+        container.remove(0, frameSize);
+        return out;
     }
+
+    void feed(const QByteArray &data) { container.append(data); }
+    qsizetype bytesAvailable() const { return container.size(); }
+
+private:
+    QByteArray container;
 };
 
 // The Http2Handler manages an individual RPC over the HTTP/2 channel.
@@ -334,7 +361,7 @@ private:
     HPack::HttpHeader m_initialHeaders;
     QQueue<QByteArray> m_queue;
     QPointer<QHttp2Stream> m_stream;
-    ExpectedData m_expectedData;
+    GrpcDataParser m_grpcDataParser;
     State m_state = State::Idle;
     const bool m_endStreamAtFirstData;
     bool m_writesDoneSent = false;
@@ -508,25 +535,15 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                 if (m_state == State::Cancelled)
                     return;
 
-                m_expectedData.container.append(data);
-
-                if (!m_expectedData.updateExpectedSize())
-                    return;
-
-                while (m_expectedData.container.size() >= m_expectedData.expectedSize) {
+                m_grpcDataParser.feed(data);
+                while (auto frame = m_grpcDataParser.parseNextFrame()) {
                     qCDebug(lcStream,
-                            "[%p] About to process message (receivedSize=%" PRIdQSIZETYPE ", "
-                            "expectedSize=%" PRIdQSIZETYPE ", containerSize=%" PRIdQSIZETYPE ")",
-                            this, data.size(), m_expectedData.expectedSize,
-                            m_expectedData.container.size());
-                    const auto len = m_expectedData.expectedSize - GrpcMessageSizeHeaderSize;
-                    const auto msg = m_expectedData.container.mid(GrpcMessageSizeHeaderSize, len);
-                    emit m_context->messageReceived(msg);
+                            "[%p] Processed gRPC message (compressed=%s, "
+                            "payloadSize=%" PRIdQSIZETYPE ", bufferRemaining=%" PRIdQSIZETYPE ")",
+                            this, frame->isCompressed ? "true" : "false", frame->payload.size(),
+                            m_grpcDataParser.bytesAvailable());
 
-                    m_expectedData.container.remove(0, m_expectedData.expectedSize);
-                    m_expectedData.expectedSize = 0;
-                    if (!m_expectedData.updateExpectedSize())
-                        return;
+                    emit m_context->messageReceived(frame->payload);
                 }
 
                 if (endStream)
