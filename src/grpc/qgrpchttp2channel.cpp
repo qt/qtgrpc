@@ -546,8 +546,15 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                     emit m_context->messageReceived(frame->payload);
                 }
 
-                if (endStream)
+                if (endStream) {
+                    if (const auto bytes = m_grpcDataParser.bytesAvailable()) {
+                        finish({ QtGrpc::StatusCode::DataLoss,
+                                 "Unexcpected end of stream with %1 bytes remaining"_L1
+                                     .arg(QString::number(bytes)) });
+                        return;
+                    }
                     finish({});
+                }
             });
 
     connect(m_stream.get(), &QHttp2Stream::uploadFinished, this, &Http2Handler::processQueue);
