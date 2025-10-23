@@ -36,12 +36,18 @@ QT_BEGIN_NAMESPACE
 /*!
     \internal
 
-    Constructs a QGrpcServerStream using \a operationContext to communicate
-    with the underlying channel and sets \a parent as the owner.
+    Constructs a new QGrpcServerStream from QGrpcClientBase.
+
+    This is indirectly called by the generated client interface.
+
+    \sa QGrpcClientBase::serverStream QAbstractGrpcChannel::serverStream
 */
-QGrpcServerStream::QGrpcServerStream(std::shared_ptr<QGrpcOperationContext> operationContext,
-                                     QObject *parent)
-    : QGrpcOperation(std::move(operationContext), parent)
+QGrpcServerStream::QGrpcServerStream(const QLatin1StringView service,
+                                     const QLatin1StringView method,
+                                     const QGrpcCallOptions &options,
+                                     const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                                     PrivateConstructor /* unused */)
+    : QGrpcOperation({ service, method, QtGrpc::RpcType::ServerStreaming }, options, channel)
 {
     QObject::connect(&QGrpcOperation::context(), &QGrpcOperationContext::messageReceived, this,
                      &QGrpcServerStream::messageReceived);
@@ -76,12 +82,18 @@ bool QGrpcServerStream::event(QEvent *event)
 /*!
     \internal
 
-    Constructs a QGrpcServerStream using \a operationContext to communicate
-    with the underlying channel and sets \a parent as the owner.
+    Constructs a new QGrpcClientStream from QGrpcClientBase.
+
+    This is indirectly called by the generated client interface.
+
+    \sa QGrpcClientBase::clientStream QAbstractGrpcChannel::clientStream
 */
-QGrpcClientStream::QGrpcClientStream(std::shared_ptr<QGrpcOperationContext> operationContext,
-                                     QObject *parent)
-    : QGrpcOperation(std::move(operationContext), parent)
+QGrpcClientStream::QGrpcClientStream(const QLatin1StringView service,
+                                     const QLatin1StringView method,
+                                     const QGrpcCallOptions &options,
+                                     const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                                     PrivateConstructor /* unused */)
+    : QGrpcOperation({ service, method, QtGrpc::RpcType::ClientStreaming }, options, channel)
 {
 }
 
@@ -144,12 +156,17 @@ bool QGrpcClientStream::event(QEvent *event)
 /*!
     \internal
 
-    Constructs a QGrpcBidiStream using \a operationContext to communicate
-    with the underlying channel and sets \a parent as the owner.
+    Constructs a new QGrpcBidiStream from QGrpcClientBase.
+
+    This is indirectly called by the generated client interface.
+
+    \sa QGrpcClientBase::bidiStream QAbstractGrpcChannel::bidiStream
 */
-QGrpcBidiStream::QGrpcBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext,
-                                 QObject *parent)
-    : QGrpcOperation(std::move(operationContext), parent)
+QGrpcBidiStream::QGrpcBidiStream(const QLatin1StringView service, const QLatin1StringView method,
+                                 const QGrpcCallOptions &options,
+                                 const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                                 PrivateConstructor /* unused */)
+    : QGrpcOperation({ service, method, QtGrpc::RpcType::BidiStreaming }, options, channel)
 {
     QObject::connect(&QGrpcOperation::context(), &QGrpcOperationContext::messageReceived,
                      this, &QGrpcBidiStream::messageReceived);

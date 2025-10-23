@@ -4,6 +4,7 @@
 
 #include <QtGrpc/private/qgrpcoperation_p.h>
 #include <QtGrpc/private/qtgrpclogging_p.h>
+#include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
 
@@ -76,30 +77,42 @@ QGrpcOperationPrivate::~QGrpcOperationPrivate()
 /*!
     \internal
 
-    Constructs a QGrpcOperation using \a operationContext to communicate
-    with the underlying channel and sets \a parent as the owner.
+    Constructs a QGrpcOperation from its subclass.
+
+    This is indirectly called by the generated client interface.
 */
-QGrpcOperation::QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationContext,
-                               QObject *parent)
-    : QObject(*new QGrpcOperationPrivate(std::move(operationContext)), parent)
+QGrpcOperation::QGrpcOperation(QtGrpc::RpcDescriptor descriptor, const QGrpcCallOptions &options,
+                               const std::weak_ptr<QAbstractGrpcChannel> &channel)
+    : QObject(*new QGrpcOperationPrivate())
 {
     Q_D(QGrpcOperation);
+
+    const auto lockedChannel = channel.lock();
+    d->operationContext = new QGrpcOperationContext(std::move(descriptor), options,
+                                                    lockedChannel ? lockedChannel->serializer()
+                                                                  : nullptr,
+                                                    this,
+                                                    QGrpcOperationContext::PrivateConstructor{});
+
     [[maybe_unused]] bool valid = false;
-    valid = connect(d->operationContext.get(), &QGrpcOperationContext::messageReceived, this,
+    valid = connect(d->operationContext, &QGrpcOperationContext::messageReceived, this,
                     &QGrpcOperation::onMessageReceived);
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'messageReceived' signal");
 
-    valid = connect(d->operationContext.get(), &QGrpcOperationContext::finished, this,
+    valid = connect(d->operationContext, &QGrpcOperationContext::finished, this,
                     &QGrpcOperation::onFinished);
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'finished' signal");
 
-    valid = connect(d->operationContext.get(),
-                    &QGrpcOperationContext::serverInitialMetadataReceived, this,
-                    &QGrpcOperation::serverInitialMetadataReceived);
+    valid = connect(d->operationContext, &QGrpcOperationContext::serverInitialMetadataReceived,
+                    this, &QGrpcOperation::serverInitialMetadataReceived);
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'serverInitialMetadataReceived' signal");
+
+    // TODO: Let QGrpcOperation handle misbehavior in channel, serializer, thread ...
+    // so that finished will be _always_ emitted for a RPC.
+    d->channel = channel;
 }
 
 /*!

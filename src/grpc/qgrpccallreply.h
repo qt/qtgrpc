@@ -16,16 +16,22 @@
 
 QT_BEGIN_NAMESPACE
 
+class QAbstractGrpcChannel;
+
 class Q_GRPC_EXPORT QGrpcCallReply final : public QGrpcOperation
 {
     Q_OBJECT
+    QT_DEFINE_TAG_STRUCT(PrivateConstructor);
 
 public:
-    explicit QGrpcCallReply(std::shared_ptr<QGrpcOperationContext> operationContext);
+    explicit QGrpcCallReply(const QLatin1StringView service, const QLatin1StringView method,
+                            const QGrpcCallOptions &options,
+                            const std::weak_ptr<QAbstractGrpcChannel> &channel, PrivateConstructor);
     ~QGrpcCallReply() override;
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcCallReply)
+    friend class QGrpcClientBasePrivate;
 
 public:
     bool event(QEvent *event) override;

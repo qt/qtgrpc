@@ -88,15 +88,16 @@ public:
         if (!isReady())
             return {};
 
-        const auto argData = trySerialize(arg);
+        auto argData = trySerialize(arg);
         if (!argData)
             return {};
 
-        using ChannelFn = std::unique_ptr<T> (QAbstractGrpcChannel::*)(QLatin1StringView,
-                                                                       QLatin1StringView,
-                                                                       QByteArrayView,
-                                                                       const QGrpcCallOptions &);
-        constexpr ChannelFn initializer = [&]() -> ChannelFn {
+        typename T::PrivateConstructor tag;
+        auto operation = std::make_unique<T>(service, method, options, channel, tag);
+        auto *operation_p = QGrpcOperationPrivate::get(operation.get());
+
+        using ChannelFn = void (QAbstractGrpcChannel::*)(QGrpcOperationContext *, QByteArray &&);
+        constexpr ChannelFn startRpcFunction = [&]() -> ChannelFn {
             if constexpr (std::is_same_v<T, QGrpcServerStream>) {
                 return &QAbstractGrpcChannel::serverStream;
             } else if constexpr (std::is_same_v<T, QGrpcClientStream>) {
@@ -110,8 +111,7 @@ public:
             }
         }();
 
-        std::unique_ptr<T> operation = ((*channel).*(initializer))(method, service, *argData,
-                                                                   options);
+        ((*channel).*(startRpcFunction))(operation_p->operationContext, std::move(*argData));
 
         if constexpr (IsStream<T>)
             addStream(operation.get());

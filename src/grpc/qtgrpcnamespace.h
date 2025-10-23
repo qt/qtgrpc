@@ -11,6 +11,7 @@
 #include <QtGrpc/qtgrpcexports.h>
 
 #include <QtCore/qtmetamacros.h>
+#include <QtCore/qlatin1stringview.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -46,6 +47,20 @@ enum class StatusCode : quint8 {
     Unauthenticated = 16,
 };
 Q_ENUM_NS(StatusCode)
+
+enum class RpcType : quint8 {
+    UnaryCall,
+    ServerStreaming,
+    ClientStreaming,
+    BidiStreaming,
+};
+
+struct RpcDescriptor
+{
+    const QLatin1StringView service;
+    const QLatin1StringView method;
+    const RpcType type;
+};
 
 // ### Qt7: remove QHash metadata interfaces.
 inline QT_DEFINE_TAG(MultiValue);

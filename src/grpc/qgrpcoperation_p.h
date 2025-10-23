@@ -23,7 +23,6 @@
 #include <QtCore/qbytearray.h>
 
 #include <memory>
-#include <utility>
 
 QT_BEGIN_NAMESPACE
 
@@ -31,14 +30,11 @@ class QGrpcOperationPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGrpcOperation)
 public:
-    explicit QGrpcOperationPrivate(std::shared_ptr<QGrpcOperationContext> &&operationContext_)
-        : operationContext(std::move(operationContext_))
-    {
-    }
     ~QGrpcOperationPrivate() override;
 
     QByteArray data;
-    std::shared_ptr<QGrpcOperationContext> operationContext;
+    std::weak_ptr<QAbstractGrpcChannel> channel;
+    QGrpcOperationContext *operationContext = nullptr;
     QAtomicInteger<bool> isFinished{ false };
 
     static const QGrpcOperationPrivate *get(const QGrpcOperation *op) { return op->d_func(); }

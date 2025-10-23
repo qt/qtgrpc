@@ -7,6 +7,7 @@
 
 #include <QtGrpc/qgrpcstatus.h>
 #include <QtGrpc/qtgrpcglobal.h>
+#include <QtGrpc/qtgrpcnamespace.h>
 
 #include <QtProtobuf/qtprotobuftypes.h>
 
@@ -21,6 +22,8 @@ QT_BEGIN_NAMESPACE
 
 class QGrpcOperationContext;
 class QGrpcOperationPrivate;
+class QAbstractGrpcChannel;
+class QGrpcCallOptions;
 
 class Q_GRPC_EXPORT QGrpcOperation : public QObject
 {
@@ -65,8 +68,8 @@ public Q_SLOTS:
     void cancel();
 
 protected:
-    explicit QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationContext,
-                            QObject *parent = nullptr);
+    explicit QGrpcOperation(QtGrpc::RpcDescriptor descriptor, const QGrpcCallOptions &options,
+                            const std::weak_ptr<QAbstractGrpcChannel> &channel);
 
     [[nodiscard]] const QGrpcOperationContext &context() const & noexcept;
     [[nodiscard]] QGrpcOperationContext &context() & noexcept

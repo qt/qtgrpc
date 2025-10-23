@@ -83,6 +83,54 @@
 */
 
 /*!
+    \since 6.11
+    \enum QtGrpc::RpcType
+
+    \brief Describes the type of the RPC (Remote Procedure Call).
+
+    This enum specifies the communication pattern used by a gRPC method.
+
+    \value UnaryCall uses the QGrpcCallReply handler.
+
+    \value ServerStreaming uses the QGrpcServerStream handler.
+
+    \value ClientStreaming uses the QGrpcClientStream handler.
+
+    \value BidiStreaming uses the QGrpcBidiStream handler.
+
+    \sa QtGrpc::RpcDescriptor
+*/
+
+/*!
+    \since 6.11
+    \struct QtGrpc::RpcDescriptor
+    \inmodule QtGrpc
+    \inheaderfile QtGrpcNamespace
+
+    \brief Describes a gRPC method with its service name, method name,
+    and RPC type.
+
+    The RpcDescriptor struct holds identifying information about a gRPC
+    method used to initiate and describe RPC calls. It allows QtGrpc to
+    associate each operation with its service, method, and communication
+    pattern.
+
+    \sa QtGrpc::RpcType
+*/
+/*!
+    \variable QtGrpc::RpcDescriptor::service
+    The name of the gRPC service this method belongs to.
+*/
+/*!
+    \variable QtGrpc::RpcDescriptor::method
+    The name of the gRPC method within the service.
+*/
+/*!
+    \variable QtGrpc::RpcDescriptor::type
+    The type of RPC, as defined by \l QtGrpc::RpcType.
+*/
+
+/*!
     \since 6.10
     \struct QtGrpc::MultiValue_t
     \inmodule QtGrpc

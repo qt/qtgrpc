@@ -3,6 +3,7 @@
 
 #include <QtGrpc/private/qgrpccommonoptions_p.h>
 #include <QtGrpc/private/qgrpcoperationcontext_p.h>
+#include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
 #include <QtGrpc/qgrpcstatus.h>
 
@@ -154,19 +155,34 @@ QT_BEGIN_NAMESPACE
 /*!
     \internal
 
-    Constructs an operation context with \a method and \a service name. The
-    initial serialized message \a arg is used to start a call with the \a
-    options and the selected \a serializer used for the RPC.
+    Constructs an operation context with the given \a descriptor, \a options,
+    and \a serializer. The \a parent is the QGrpcOperation that owns this
+    context.
 
-    \note This class can only be constructed by QAbstractGrpcChannel.
+    \note This class can only be constructed by its parent QGrpcOperation.
 */
-QGrpcOperationContext::QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
+QGrpcOperationContext::QGrpcOperationContext(QtGrpc::RpcDescriptor descriptor,
                                              const QGrpcCallOptions &options,
                                              std::shared_ptr<QAbstractProtobufSerializer>
                                                  serializer,
-                                             PrivateConstructor /*unused*/)
-    : QObject(*new QGrpcOperationContextPrivate(method, service, options, std::move(serializer)))
+                                             QGrpcOperation *parent, PrivateConstructor /*unused*/)
+    : QObject(*new QGrpcOperationContextPrivate(std::move(descriptor), options,
+                                                std::move(serializer)),
+              parent)
 {
+    using namespace QtGrpc;
+    Q_D(const QGrpcOperationContext);
+    const auto type = d->descriptor.type;
+    if (type == RpcType::UnaryCall || type == RpcType::ServerStreaming) {
+        connect(this, &QGrpcOperationContext::writeMessageRequested, this, []() {
+            Q_ASSERT_X(false, "QGrpcOperationContext::writeMessageRequested",
+                       "This signal is disallowed for unary and server-streaming operations");
+        });
+        connect(this, &QGrpcOperationContext::writesDoneRequested, this, []() {
+            Q_ASSERT_X(false, "QGrpcOperationContext::writesDoneRequested",
+                       "This signal is disallowed for unary and server-streaming operations");
+        });
+    }
 }
 
 /*!
@@ -181,7 +197,7 @@ QGrpcOperationContext::~QGrpcOperationContext() = default;
 QLatin1StringView QGrpcOperationContext::method() const noexcept
 {
     Q_D(const QGrpcOperationContext);
-    return d->method;
+    return d->descriptor.method;
 }
 
 /*!
@@ -190,7 +206,7 @@ QLatin1StringView QGrpcOperationContext::method() const noexcept
 QLatin1StringView QGrpcOperationContext::service() const noexcept
 {
     Q_D(const QGrpcOperationContext);
-    return d->service;
+    return d->descriptor.service;
 }
 
 #if QT_DEPRECATED_SINCE(6, 11)

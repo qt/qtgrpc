@@ -30,14 +30,17 @@ using namespace Qt::StringLiterals;
 /*!
     \internal
 
-    Constructs a new QGrpcCallReply from an \a operationContext.
+    Constructs a new QGrpcCallReply from the QGrpcClientBase.
 
-    This is usually called by the generated client interface.
+    This is indirectly called by the generated client interface.
 
     \sa QGrpcClientBase::call QAbstractGrpcChannel::call
 */
-QGrpcCallReply::QGrpcCallReply(std::shared_ptr<QGrpcOperationContext> operationContext)
-    : QGrpcOperation(std::move(operationContext))
+QGrpcCallReply::QGrpcCallReply(const QLatin1StringView service, const QLatin1StringView method,
+                               const QGrpcCallOptions &options,
+                               const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                               PrivateConstructor /* unused */)
+    : QGrpcOperation({ service, method, QtGrpc::RpcType::UnaryCall }, options, channel)
 {
 }
 

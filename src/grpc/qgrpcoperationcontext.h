@@ -5,6 +5,7 @@
 #define QGRPCOPERATIONCONTEXT_H
 
 #include <QtGrpc/qtgrpcglobal.h>
+#include <QtGrpc/qtgrpcnamespace.h>
 
 #include <QtProtobuf/qabstractprotobufserializer.h>
 
@@ -20,6 +21,7 @@ QT_BEGIN_NAMESPACE
 class QGrpcCallOptions;
 class QGrpcOperationContextPrivate;
 class QGrpcStatus;
+class QGrpcOperation;
 
 class Q_GRPC_EXPORT QGrpcOperationContext final : public QObject
 {
@@ -27,10 +29,10 @@ class Q_GRPC_EXPORT QGrpcOperationContext final : public QObject
     QT_DEFINE_TAG_STRUCT(PrivateConstructor);
 
 public:
-    explicit QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
+    explicit QGrpcOperationContext(QtGrpc::RpcDescriptor description,
                                    const QGrpcCallOptions &options,
                                    std::shared_ptr<QAbstractProtobufSerializer> serializer,
-                                   PrivateConstructor);
+                                   QGrpcOperation *parent, PrivateConstructor);
     ~QGrpcOperationContext() override;
 
     [[nodiscard]] QLatin1StringView method() const noexcept;
@@ -84,7 +86,7 @@ private:
     Q_DISABLE_COPY_MOVE(QGrpcOperationContext)
     Q_DECLARE_PRIVATE(QGrpcOperationContext)
 
-    friend class QAbstractGrpcChannel;
+    friend class QGrpcOperation;
 
 public:
     bool event(QEvent *event) override;
