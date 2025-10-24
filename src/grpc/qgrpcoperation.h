@@ -71,6 +71,8 @@ protected:
         return const_cast<QGrpcOperationContext &>(std::as_const(*this).context());
     }
     void context() const && = delete;
+    void writeMessage(const QProtobufMessage &message);
+    void writesDone();
 
 private:
     void onMessageReceived(const QByteArray &data);

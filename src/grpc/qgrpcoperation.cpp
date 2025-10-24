@@ -243,6 +243,19 @@ const QGrpcOperationContext &QGrpcOperation::context() const & noexcept
     return *d->operationContext;
 }
 
+void QGrpcOperation::writeMessage(const QProtobufMessage &message)
+{
+    Q_D(const QGrpcOperation);
+    auto messageData = d->operationContext->serializer()->serialize(&message);
+    emit d->operationContext->writeMessageRequested(messageData);
+}
+
+void QGrpcOperation::writesDone()
+{
+    Q_D(const QGrpcOperation);
+    emit d->operationContext->writesDoneRequested();
+}
+
 void QGrpcOperation::onMessageReceived(const QByteArray &data)
 {
     Q_D(QGrpcOperation);
