@@ -15,6 +15,8 @@
 // We mean it.
 //
 
+#include <QtGrpc/private/qabstractgrpcchannel_p.h>
+#include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
 
@@ -23,6 +25,7 @@
 #include <QtCore/qbytearray.h>
 
 #include <memory>
+#include <optional>
 
 QT_BEGIN_NAMESPACE
 
@@ -30,14 +33,24 @@ class QGrpcOperationPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGrpcOperation)
 public:
+    enum class State : quint8 {
+        Invalid,
+        Valid,
+        Finished,
+    };
+
     ~QGrpcOperationPrivate() override;
 
     QByteArray data;
     std::weak_ptr<QAbstractGrpcChannel> channel;
     QGrpcOperationContext *operationContext = nullptr;
-    QAtomicInteger<bool> isFinished{ false };
+    State state = State::Invalid;
 
     static const QGrpcOperationPrivate *get(const QGrpcOperation *op) { return op->d_func(); }
+    static QGrpcOperationPrivate *get(QGrpcOperation *op) { return op->d_func(); }
+
+    void asyncFinishInvalid(QGrpcStatus &&status);
+    std::optional<QByteArray> serializeInitialMessage(const QProtobufMessage &message);
 };
 
 QT_END_NAMESPACE

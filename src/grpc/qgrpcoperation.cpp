@@ -18,6 +18,31 @@ QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
 
+void QGrpcOperationPrivate::asyncFinishInvalid(QGrpcStatus &&status)
+{
+    Q_ASSERT(!status.isOk());
+    Q_Q(QGrpcOperation);
+    state = State::Invalid;
+    QMetaObject::invokeMethod(
+        q,
+        [qPtr = QPointer(q), s = std::move(status)] {
+            if (!qPtr)
+                return;
+            qPtr->onFinished(s);
+        },
+        Qt::QueuedConnection);
+}
+
+std::optional<QByteArray>
+QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
+{
+    const auto serializer = operationContext->serializer();
+    Q_ASSERT(state == State::Valid);
+    Q_ASSERT(serializer);
+
+    return serializer->serialize(&message);
+}
+
 QGrpcOperationPrivate::~QGrpcOperationPrivate()
     = default;
 
@@ -110,9 +135,25 @@ QGrpcOperation::QGrpcOperation(QtGrpc::RpcDescriptor descriptor, const QGrpcCall
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'serverInitialMetadataReceived' signal");
 
-    // TODO: Let QGrpcOperation handle misbehavior in channel, serializer, thread ...
-    // so that finished will be _always_ emitted for a RPC.
+    if (!lockedChannel) {
+        d->asyncFinishInvalid({ QtGrpc::StatusCode::Aborted, tr("Channel is not available") });
+        return;
+    }
     d->channel = channel;
+
+    if (!d->operationContext->serializer()) {
+        d->asyncFinishInvalid({ QtGrpc::StatusCode::Aborted, tr("Serializer is not available") });
+        return;
+    }
+
+    auto *chPriv = QAbstractGrpcChannelPrivate::get(lockedChannel.get());
+    Q_ASSERT(chPriv);
+    if (chPriv->threadId != QThread::currentThreadId()) {
+        d->asyncFinishInvalid({ QtGrpc::StatusCode::Aborted, tr("RPC started from wrong thread") });
+        return;
+    }
+
+    d->state = QGrpcOperationPrivate::State::Valid;
 }
 
 /*!
@@ -150,9 +191,13 @@ bool QGrpcOperation::read(QProtobufMessage *message) const
 {
     Q_ASSERT_X(message != nullptr, "QGrpcOperation::read",
                "Can't read to nullptr QProtobufMessage");
+
     Q_D(const QGrpcOperation);
     const auto ser = d->operationContext->serializer();
-    Q_ASSERT_X(ser, "QGrpcOperation", "The serializer is null");
+    if (!ser) {
+        qGrpcWarning("Serializer unavailable");
+        return false;
+    }
 
     if (auto responseMetaType = d->operationContext->responseMetaType(); responseMetaType.isValid()
         && QProtobufMessagePrivate::get(message)->metaObject != responseMetaType.metaObject()) {
@@ -263,7 +308,7 @@ QLatin1StringView QGrpcOperation::method() const noexcept
 bool QGrpcOperation::isFinished() const noexcept
 {
     Q_D(const QGrpcOperation);
-    return d->isFinished.loadRelaxed();
+    return d->state == QGrpcOperationPrivate::State::Finished;
 }
 
 /*!
@@ -290,7 +335,7 @@ void QGrpcOperation::onFinished(const QGrpcStatus &status)
     Q_D(QGrpcOperation);
     if (isFinished())
         return;
-    d->isFinished.storeRelaxed(true);
+    d->state = QGrpcOperationPrivate::State::Finished;
     emit finished(status);
 }
 

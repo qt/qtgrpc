@@ -6,18 +6,11 @@
 #include <QtGrpc/private/qgrpcoperation_p.h>
 #include <QtGrpc/private/qtgrpclogging_p.h>
 #include <QtGrpc/qgrpcclientbase.h>
-#include <QtGrpc/qgrpcoperation.h>
-
-#include <QtProtobuf/qprotobufmessage.h>
-#include <QtProtobuf/qprotobufserializer.h>
 
 #include <QtCore/private/qminimalflatset_p.h>
 #include <QtCore/private/qobject_p.h>
 #include <QtCore/qbytearray.h>
 #include <QtCore/qlatin1stringview.h>
-
-#include <optional>
-#include <type_traits>
 
 QT_BEGIN_NAMESPACE
 
@@ -54,17 +47,6 @@ QT_BEGIN_NAMESPACE
     \sa attachChannel()
 */
 
-namespace {
-template <typename Operation>
-inline constexpr bool IsStream = false;
-template <>
-inline constexpr bool IsStream<QGrpcServerStream> = true;
-template <>
-inline constexpr bool IsStream<QGrpcClientStream> = true;
-template <>
-inline constexpr bool IsStream<QGrpcBidiStream> = true;
-}
-
 class QGrpcClientBasePrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGrpcClientBase)
@@ -72,29 +54,23 @@ public:
     explicit QGrpcClientBasePrivate(QLatin1StringView service) : service(service) { }
 
     void addStream(QGrpcOperation *stream);
-    std::optional<QByteArray> trySerialize(const QProtobufMessage &arg) const;
-    bool isReady() const;
-
-    std::shared_ptr<QAbstractProtobufSerializer> serializer() const
-    {
-        return channel ? channel->serializer() : nullptr;
-    }
 
     template <typename T>
     [[nodiscard]] std::unique_ptr<T> initOperation(QLatin1StringView method,
                                                    const QProtobufMessage &arg,
                                                    const QGrpcCallOptions &options)
     {
-        if (!isReady())
-            return {};
-
-        auto argData = trySerialize(arg);
-        if (!argData)
-            return {};
-
         typename T::PrivateConstructor tag;
         auto operation = std::make_unique<T>(service, method, options, channel, tag);
         auto *operation_p = QGrpcOperationPrivate::get(operation.get());
+
+        if (operation_p->state != QGrpcOperationPrivate::State::Valid)
+            return operation;
+
+        auto argData = operation_p->serializeInitialMessage(arg);
+        if (!argData)
+            return operation;
+        Q_ASSERT(operation_p->state == QGrpcOperationPrivate::State::Valid);
 
         using ChannelFn = void (QAbstractGrpcChannel::*)(QGrpcOperationContext *, QByteArray &&);
         constexpr ChannelFn startRpcFunction = [&]() -> ChannelFn {
@@ -112,9 +88,8 @@ public:
         }();
 
         ((*channel).*(startRpcFunction))(operation_p->operationContext, std::move(*argData));
+        addStream(operation.get());
 
-        if constexpr (IsStream<T>)
-            addStream(operation.get());
         return operation;
     }
 
@@ -144,30 +119,6 @@ void QGrpcClientBasePrivate::addStream(QGrpcOperation *grpcStream)
         Qt::SingleShotConnection);
     const auto it = activeStreams.insert(grpcStream);
     Q_ASSERT(it.second);
-}
-
-std::optional<QByteArray> QGrpcClientBasePrivate::trySerialize(const QProtobufMessage &arg) const
-{
-    if (auto s = serializer())
-        return s->serialize(&arg);
-
-    qGrpcWarning("Serializing failed. Serializer is not ready");
-    return std::nullopt;
-}
-
-bool QGrpcClientBasePrivate::isReady() const
-{
-    Q_Q(const QGrpcClientBase);
-    if (q->thread() != QThread::currentThread()) {
-        qGrpcWarning("QtGrpc doesn't support invocation from a different thread");
-        return false;
-    }
-
-    if (!channel) {
-        qGrpcWarning("No channel(s) attached");
-        return false;
-    }
-    return true;
 }
 
 /*!
@@ -210,6 +161,7 @@ bool QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channe
         assert(stream != nullptr);
         stream->cancel();
     }
+    Q_ASSERT(d->activeStreams.isEmpty());
 
     d->channel = std::move(channel);
     emit channelChanged();

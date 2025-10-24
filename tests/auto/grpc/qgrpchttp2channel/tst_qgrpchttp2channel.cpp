@@ -48,7 +48,9 @@ class QGrpcHttp2ChannelTest : public QObject
 private Q_SLOTS:
     void checkMethodsGeneration();
     void attachChannelThreadTest();
-    void rpcThreadTest();
+    void noChannelCallAborts();
+    void noSerializerCallAborts();
+    void rpcFromThreadAborts();
     void serializationFormat();
     void serializationFormatWithHeaders();
 };
@@ -79,24 +81,68 @@ void QGrpcHttp2ChannelTest::attachChannelThreadTest()
     QVERIFY(client.attachChannel(std::make_shared<QGrpcHttp2Channel>(QUrl())));
 }
 
-void QGrpcHttp2ChannelTest::rpcThreadTest()
+void QGrpcHttp2ChannelTest::noChannelCallAborts()
+{
+    TestService::Client client;
+    auto call = client.testMethod(qtgrpc::tests::SimpleStringMessage{});
+    QVERIFY(call);
+    connect(call.get(), &QGrpcOperation::finished, call.get(), [&](const QGrpcStatus &status) {
+        QCOMPARE_EQ(status.code(), QtGrpc::StatusCode::Aborted);
+        QVERIFY(!call->read<qtgrpc::tests::SimpleStringMessage>());
+        QVERIFY(call->serverInitialMetadata().isEmpty());
+        QVERIFY(call->serverTrailingMetadata().isEmpty());
+    });
+    QSignalSpy spy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(spy.isValid());
+    QVERIFY(spy.wait());
+}
+
+void QGrpcHttp2ChannelTest::noSerializerCallAborts()
+{
+    struct ChannelNoSerializer : public QAbstractGrpcChannel
+    {
+        ~ChannelNoSerializer() override = default;
+        std::shared_ptr<QAbstractProtobufSerializer> serializer() const override { return nullptr; }
+        void call(QGrpcOperationContext *, QByteArray &&) override { }
+        void serverStream(QGrpcOperationContext *, QByteArray &&) override { }
+        void clientStream(QGrpcOperationContext *, QByteArray &&) override { }
+        void bidiStream(QGrpcOperationContext *, QByteArray &&) override { }
+    };
+
+    TestService::Client client;
+    QVERIFY(client.attachChannel(std::make_shared<ChannelNoSerializer>()));
+    auto call = client.testMethod(qtgrpc::tests::SimpleStringMessage{});
+    QVERIFY(call);
+    connect(call.get(), &QGrpcOperation::finished, call.get(), [&](const QGrpcStatus &status) {
+        QCOMPARE_EQ(status.code(), QtGrpc::StatusCode::Aborted);
+        QVERIFY(!call->read<qtgrpc::tests::SimpleStringMessage>());
+        QVERIFY(call->serverInitialMetadata().isEmpty());
+        QVERIFY(call->serverTrailingMetadata().isEmpty());
+    });
+    QSignalSpy spy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(spy.isValid());
+    QVERIFY(spy.wait());
+}
+
+void QGrpcHttp2ChannelTest::rpcFromThreadAborts()
 {
     TestService::Client client;
     client.attachChannel(std::make_shared<QGrpcHttp2Channel>(QUrl()));
 
     std::unique_ptr<QThread> thread(QThread::create([&] {
-        QVERIFY(!client.testMethod(qtgrpc::tests::SimpleStringMessage()));
-        QVERIFY(!client.testMethodServerStream(qtgrpc::tests::SimpleStringMessage()));
-        QVERIFY(!client.testMethodClientStream(qtgrpc::tests::SimpleStringMessage()));
-        QVERIFY(!client.testMethodBiStream(qtgrpc::tests::SimpleStringMessage()));
+        auto call = client.testMethod(qtgrpc::tests::SimpleStringMessage{});
+        QVERIFY(call);
+        connect(call.get(), &QGrpcOperation::finished, call.get(), [&](const QGrpcStatus &status) {
+            QCOMPARE_EQ(status.code(), QtGrpc::StatusCode::Aborted);
+            QVERIFY(call->serverInitialMetadata().isEmpty());
+            QVERIFY(call->serverTrailingMetadata().isEmpty());
+        });
+        QSignalSpy spy(call.get(), &QGrpcOperation::finished);
+        QVERIFY(spy.isValid());
+        QVERIFY(spy.wait());
     }));
     thread->start();
     thread->wait();
-
-    QVERIFY(client.testMethod(qtgrpc::tests::SimpleStringMessage()));
-    QVERIFY(client.testMethodServerStream(qtgrpc::tests::SimpleStringMessage()));
-    QVERIFY(client.testMethodClientStream(qtgrpc::tests::SimpleStringMessage()));
-    QVERIFY(client.testMethodBiStream(qtgrpc::tests::SimpleStringMessage()));
 }
 
 void QGrpcHttp2ChannelTest::serializationFormat()

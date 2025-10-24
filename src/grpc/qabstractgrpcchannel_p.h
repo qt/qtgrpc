@@ -15,6 +15,7 @@
 // We mean it.
 //
 
+#include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
 
 #include <QtCore/qnamespace.h>
@@ -31,6 +32,12 @@ public:
     }
     const Qt::HANDLE threadId;
     QGrpcChannelOptions channelOptions;
+
+    static const QAbstractGrpcChannelPrivate *get(const QAbstractGrpcChannel *ch)
+    {
+        return ch->d_func();
+    }
+    static QAbstractGrpcChannelPrivate *get(QAbstractGrpcChannel *ch) { return ch->d_func(); }
 };
 
 QT_END_NAMESPACE

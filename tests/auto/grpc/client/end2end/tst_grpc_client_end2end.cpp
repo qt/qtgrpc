@@ -82,6 +82,8 @@ private Q_SLOTS:
     void clientHandlesCompression_data() const;
     void clientHandlesCompression();
 
+    void channelChangeCancelsInFlightRPCs();
+
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
     {
@@ -606,6 +608,55 @@ void QtGrpcClientEnd2EndTest::clientHandlesCompression()
     QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
     QVERIFY(finishedSpy.isValid());
     QVERIFY(finishedSpy.wait());
+}
+
+void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs()
+{
+    EmptyGuard emptyGuard;
+    struct ServerData
+    {
+        grpc::ServerAsyncResponseWriter<None> op{ &ctx };
+        grpc::ServerContext ctx;
+
+        Event request;
+        None response;
+        bool notifyWhenDone = false;
+    };
+    auto data = std::make_shared<ServerData>();
+    data->ctx.AsyncNotifyWhenDone(new CallbackTag([&](bool ok) {
+        QVERIFY(ok);
+        // QVERIFY(data->ctx.IsCancelled()); // TODO: should this be true?
+        data->notifyWhenDone = true;
+        return CallbackTag::Delete;
+        }, &emptyGuard));
+    CallbackTag *callHandler = new CallbackTag([&](bool ok) {
+        QVERIFY(ok);
+        return CallbackTag::Delete;
+    }, &emptyGuard);
+    m_service->RequestPush(&data->ctx, &data->request, &data->op, m_server->cq(), m_server->cq(),
+                           callHandler);
+
+    auto call = m_client->Push(qt::Event{});
+    QVERIFY(call);
+
+    connect(call.get(), &QGrpcOperation::finished, this, [&](const QGrpcStatus &status) {
+        QCOMPARE_EQ(status.code(), QtGrpc::StatusCode::Cancelled);
+    });
+    QVERIFY(m_server->startAsyncProcessing());
+
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
+    QSignalSpy channelChangedSpy(m_client.get(), &QGrpcClientBase::channelChanged);
+    QVERIFY(finishedSpy.isValid());
+    QVERIFY(channelChangedSpy.isValid());
+
+    QTimer::singleShot(100, [&]{
+        auto uri = static_cast<QGrpcHttp2Channel*>(m_client->channel().get())->hostUri();
+        m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(uri));
+    });
+
+    finishedSpy.wait();
+    QCOMPARE_EQ(channelChangedSpy.count(), 1);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(data->notifyWhenDone, true, 5s);
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)
