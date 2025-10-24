@@ -109,8 +109,7 @@ QGrpcClientStream::~QGrpcClientStream() = default;
 */
 void QGrpcClientStream::writeMessage(const QProtobufMessage &message)
 {
-    QByteArray data = QGrpcOperation::context().serializer()->serialize(&message);
-    emit QGrpcOperation::context().writeMessageRequested(data);
+    QGrpcOperation::writeMessage(message);
 }
 
 /*!
@@ -122,7 +121,7 @@ void QGrpcClientStream::writeMessage(const QProtobufMessage &message)
 */
 void QGrpcClientStream::writesDone()
 {
-    emit QGrpcOperation::context().writesDoneRequested();
+    QGrpcOperation::writesDone();
 }
 
 bool QGrpcClientStream::event(QEvent *event)
@@ -182,8 +181,7 @@ QGrpcBidiStream::~QGrpcBidiStream() = default;
 */
 void QGrpcBidiStream::writeMessage(const QProtobufMessage &message)
 {
-    QByteArray data = QGrpcOperation::context().serializer()->serialize(&message);
-    emit QGrpcOperation::context().writeMessageRequested(data);
+    QGrpcOperation::writeMessage(message);
 }
 
 /*!
@@ -192,7 +190,7 @@ void QGrpcBidiStream::writeMessage(const QProtobufMessage &message)
 */
 void QGrpcBidiStream::writesDone()
 {
-    emit QGrpcOperation::context().writesDoneRequested();
+    QGrpcOperation::writesDone();
 }
 
 bool QGrpcBidiStream::event(QEvent *event)
