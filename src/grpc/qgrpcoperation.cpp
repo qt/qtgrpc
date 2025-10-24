@@ -189,8 +189,10 @@ QGrpcOperation::~QGrpcOperation() = default;
 */
 bool QGrpcOperation::read(QProtobufMessage *message) const
 {
-    Q_ASSERT_X(message != nullptr, "QGrpcOperation::read",
-               "Can't read to nullptr QProtobufMessage");
+    if (!message) {
+        qGrpcWarning("Read called on nullptr message");
+        return false;
+    }
 
     Q_D(const QGrpcOperation);
     const auto ser = d->operationContext->serializer();
