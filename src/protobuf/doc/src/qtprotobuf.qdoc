@@ -178,14 +178,18 @@
     Following steps are required to start \c {Magic 8 Ball} example:
     \list
         \li Find \l {Magic 8 Ball} in \c Examples section:
-            \image qt-creator.webp
+            \image qt-creator.webp {Screenshot showing the Qt Creator home
+                   menu, in examples section with "magic" typed in the
+                   search bar and shows the examples with this name}
         \li Choose MSVC-based building kit from Qt-creator configuration
             settings:
-            \image msvc-kit.webp
-        \li Add the paths to the installed \c Protobuf and \c \gRPC packages
+            \image msvc-kit.webp {Screenshot showing the msvc kit that
+                   built the project}
+        \li Add the paths to the installed Protobuf and \gRPC packages
             to the \c CMAKE_PREFIX_PATH environment variable inside
             \c {Initial Configuration} settings block:
-            \image path-env-variable.webp
+            \image path-env-variable.webp {Screenshot showing the build
+                   options from qt creator with the msvc kit}
         \li Build and Run.
     \endlist
 */
