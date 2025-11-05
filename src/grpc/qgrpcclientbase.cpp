@@ -44,6 +44,16 @@ QT_BEGIN_NAMESPACE
     Indicates that a new channel got attached to the client.
 */
 
+/*!
+    \property QGrpcClientBase::channel
+    \since 6.7
+
+    This property holds the channel attached to this client. The channel is used
+    as the transport layer for gRPC operations.
+
+    \sa attachChannel()
+*/
+
 namespace {
 template <typename Operation>
 inline constexpr bool IsStream = false;
