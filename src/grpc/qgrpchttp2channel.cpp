@@ -319,7 +319,7 @@ public:
     Q_ENUM(State);
 
     explicit Http2Handler(QGrpcHttp2ChannelPrivate *parent, QGrpcOperationContext *context,
-                          bool endStream);
+                          QByteArray &&messageData, bool endStream);
     ~Http2Handler() override;
 
     void sendInitialRequest();
@@ -384,7 +384,8 @@ public:
     explicit QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Channel *q);
     ~QGrpcHttp2ChannelPrivate() override = default;
 
-    void processOperation(QGrpcOperationContext *operationContext, bool endStream = false);
+    void processOperation(QGrpcOperationContext *operationContext, QByteArray &&data,
+                          bool endStream = false);
 
     QGrpcHttp2Channel *q_ptr = nullptr;
     const SocketType socketType;
@@ -452,7 +453,7 @@ private:
 ///
 
 Http2Handler::Http2Handler(QGrpcHttp2ChannelPrivate *parent, QGrpcOperationContext *context,
-                           bool endStream)
+                           QByteArray &&messageData, bool endStream)
     : QObject(parent), m_context(context), m_initialHeaders(constructInitialHeaders()),
       m_endStreamAtFirstData(endStream), m_filterServerMetadata(constructFilterServerMetadata())
 {
@@ -469,7 +470,7 @@ Http2Handler::Http2Handler(QGrpcHttp2ChannelPrivate *parent, QGrpcOperationConte
 
     m_deadlineTimer.setSingleShot(true);
 
-    writeMessage(context->argument());
+    writeMessage(std::move(messageData));
 }
 
 Http2Handler::~Http2Handler()
@@ -1026,7 +1027,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
 }
 
 void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operationContext,
-                                                bool endStream)
+                                                QByteArray &&messageData, bool endStream)
 {
     Q_ASSERT_X(operationContext != nullptr, "QGrpcHttp2ChannelPrivate::processOperation",
                "operation context is nullptr.");
@@ -1042,7 +1043,7 @@ void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operation
         return;
     }
 
-    auto *handler = new Http2Handler(this, operationContext, endStream);
+    auto *handler = new Http2Handler(this, operationContext, std::move(messageData), endStream);
     if (m_connection && !createHttp2Stream(handler))
         return;
 
@@ -1292,36 +1293,39 @@ QUrl QGrpcHttp2Channel::hostUri() const
     \internal
     Initiates a unary \gRPC call.
 */
-void QGrpcHttp2Channel::call(std::shared_ptr<QGrpcOperationContext> operationContext)
+void QGrpcHttp2Channel::call(QGrpcOperationContext *operationContext, QByteArray &&messageData)
 {
-    d_ptr->processOperation(operationContext.get(), true);
+    d_ptr->processOperation(operationContext, std::move(messageData), true);
 }
 
 /*!
     \internal
     Initiates a server-side \gRPC stream.
 */
-void QGrpcHttp2Channel::serverStream(std::shared_ptr<QGrpcOperationContext> operationContext)
+void QGrpcHttp2Channel::serverStream(QGrpcOperationContext *operationContext,
+                                     QByteArray &&messageData)
 {
-    d_ptr->processOperation(operationContext.get(), true);
+    d_ptr->processOperation(operationContext, std::move(messageData), true);
 }
 
 /*!
     \internal
     Initiates a client-side \gRPC stream.
 */
-void QGrpcHttp2Channel::clientStream(std::shared_ptr<QGrpcOperationContext> operationContext)
+void QGrpcHttp2Channel::clientStream(QGrpcOperationContext *operationContext,
+                                     QByteArray &&messageData)
 {
-    d_ptr->processOperation(operationContext.get());
+    d_ptr->processOperation(operationContext, std::move(messageData), false);
 }
 
 /*!
     \internal
     Initiates a bidirectional \gRPC stream.
 */
-void QGrpcHttp2Channel::bidiStream(std::shared_ptr<QGrpcOperationContext> operationContext)
+void QGrpcHttp2Channel::bidiStream(QGrpcOperationContext *operationContext,
+                                   QByteArray &&messageData)
 {
-    d_ptr->processOperation(operationContext.get());
+    d_ptr->processOperation(operationContext, std::move(messageData), false);
 }
 
 /*!

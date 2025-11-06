@@ -45,10 +45,12 @@ protected:
     explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
 
 private:
-    virtual void call(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
-    virtual void serverStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
-    virtual void clientStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
-    virtual void bidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0;
+    virtual void call(QGrpcOperationContext *operationContext, QByteArray &&messageData) = 0;
+    virtual void serverStream(QGrpcOperationContext *operationContext,
+                              QByteArray &&messageData) = 0;
+    virtual void clientStream(QGrpcOperationContext *operationContext,
+                              QByteArray &&messageData) = 0;
+    virtual void bidiStream(QGrpcOperationContext *operationContext, QByteArray &&messageData) = 0;
 
 private:
     std::unique_ptr<QGrpcCallReply> call(QLatin1StringView method, QLatin1StringView service,

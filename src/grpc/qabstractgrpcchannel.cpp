@@ -35,7 +35,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual void QAbstractGrpcChannel::call(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
+    \fn virtual void QAbstractGrpcChannel::call(QGrpcOperationContext *operationContext, QByteArray &&messageData) = 0
     \since 6.7
 
 //! [abstract-rpc-desc]
@@ -44,8 +44,9 @@ QT_BEGIN_NAMESPACE
     communicate with the corresponding RPC handler, which is a derived type of
     the QGrpcOperation object.
 
-    This function should start the corresponding RPC on the channel side. The
-    implementation must be asynchronous and must not block the calling thread.
+    This function should start the corresponding RPC on the channel side with
+    the serialized \a messageData. The implementation must be asynchronous and
+    must not block the calling thread.
 
     \note It is the channel's responsibility to support and restrict the subset
     of features that its RPC type allows.
@@ -53,21 +54,21 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn virtual void QAbstractGrpcChannel::serverStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
+    \fn virtual void QAbstractGrpcChannel::serverStream(QGrpcOperationContext *operationContext, QByteArray &&messageData) = 0
     \since 6.7
 
     \include qabstractgrpcchannel.cpp abstract-rpc-desc
 */
 
 /*!
-    \fn virtual void QAbstractGrpcChannel::clientStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
+    \fn virtual void QAbstractGrpcChannel::clientStream(QGrpcOperationContext *operationContext, QByteArray &&messageData) = 0
     \since 6.7
 
     \include qabstractgrpcchannel.cpp abstract-rpc-desc
 */
 
 /*!
-    \fn virtual void QAbstractGrpcChannel::bidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) = 0
+    \fn virtual void QAbstractGrpcChannel::bidiStream(QGrpcOperationContext *operationContext, QByteArray &&messageData) = 0
     \since 6.7
 
     \include qabstractgrpcchannel.cpp abstract-rpc-desc
@@ -168,7 +169,7 @@ std::unique_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
                      });
 
     auto reply = std::make_unique<QGrpcCallReply>(operationContext);
-    call(std::move(operationContext));
+    call(operationContext.get(), arg.toByteArray());
 
     return reply;
 }
@@ -194,7 +195,7 @@ QAbstractGrpcChannel::serverStream(QLatin1StringView method, QLatin1StringView s
                      });
 
     auto stream = std::make_unique<QGrpcServerStream>(operationContext);
-    serverStream(std::move(operationContext));
+    serverStream(operationContext.get(), arg.toByteArray());
 
     return stream;
 }
@@ -212,7 +213,7 @@ QAbstractGrpcChannel::clientStream(QLatin1StringView method, QLatin1StringView s
                                QGrpcOperationContext::PrivateConstructor());
 
     auto stream = std::make_unique<QGrpcClientStream>(operationContext);
-    clientStream(std::move(operationContext));
+    clientStream(operationContext.get(), arg.toByteArray());
 
     return stream;
 }
@@ -231,7 +232,7 @@ std::unique_ptr<QGrpcBidiStream> QAbstractGrpcChannel::bidiStream(QLatin1StringV
                                QGrpcOperationContext::PrivateConstructor());
 
     auto stream = std::make_unique<QGrpcBidiStream>(operationContext);
-    bidiStream(std::move(operationContext));
+    bidiStream(operationContext.get(), arg.toByteArray());
 
     return stream;
 }

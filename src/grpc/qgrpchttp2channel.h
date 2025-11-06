@@ -7,6 +7,7 @@
 
 #include <QtGrpc/qabstractgrpcchannel.h>
 
+#include <QtCore/qstringfwd.h>
 #include <QtCore/qtclasshelpermacros.h>
 #include <QtCore/qurl.h>
 
@@ -29,10 +30,10 @@ public:
     [[nodiscard]] QUrl hostUri() const;
 
 private:
-    void call(std::shared_ptr<QGrpcOperationContext> operationContext) override;
-    void serverStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
-    void clientStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
-    void bidiStream(std::shared_ptr<QGrpcOperationContext> operationContext) override;
+    void call(QGrpcOperationContext *operationContext, QByteArray &&messageData) override;
+    void serverStream(QGrpcOperationContext *operationContext, QByteArray &&messageData) override;
+    void clientStream(QGrpcOperationContext *operationContext, QByteArray &&messageData) override;
+    void bidiStream(QGrpcOperationContext *operationContext, QByteArray &&messageData) override;
 
     [[nodiscard]] std::shared_ptr<QAbstractProtobufSerializer> serializer() const override;
 
