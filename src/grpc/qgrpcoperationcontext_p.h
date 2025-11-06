@@ -31,16 +31,15 @@ class QGrpcOperationContextPrivate : public QObjectPrivate
     Q_DECLARE_PUBLIC(QGrpcOperationContext)
 public:
     QGrpcOperationContextPrivate(QLatin1StringView method_, QLatin1StringView service_,
-                                 QByteArrayView argument_, QGrpcCallOptions options_,
+                                 QGrpcCallOptions options_,
                                  std::shared_ptr<QAbstractProtobufSerializer> &&serializer_)
-        : method(method_), service(service_), argument(argument_.toByteArray()),
-          options(std::move(options_)), serializer(std::move(serializer_))
+        : method(method_), service(service_), options(std::move(options_)),
+          serializer(std::move(serializer_))
     {
     }
 
     QLatin1StringView method;
     QLatin1StringView service;
-    QByteArray argument;
     QGrpcCallOptions options;
     std::shared_ptr<QAbstractProtobufSerializer> serializer;
     QMetaType responseMetaType;

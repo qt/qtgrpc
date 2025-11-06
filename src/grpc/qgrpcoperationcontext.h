@@ -28,14 +28,18 @@ class Q_GRPC_EXPORT QGrpcOperationContext final : public QObject
 
 public:
     explicit QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
-                                   QByteArrayView argument, const QGrpcCallOptions &options,
+                                   const QGrpcCallOptions &options,
                                    std::shared_ptr<QAbstractProtobufSerializer> serializer,
                                    PrivateConstructor);
     ~QGrpcOperationContext() override;
 
     [[nodiscard]] QLatin1StringView method() const noexcept;
     [[nodiscard]] QLatin1StringView service() const noexcept;
+
+#if QT_DEPRECATED_SINCE(6, 11)
+    QT_DEPRECATED_VERSION_X_6_11("Use new QAbstractGrpcChannel virtual RPC methods")
     [[nodiscard]] QByteArrayView argument() const noexcept;
+#endif // QT_DEPRECATED_SINCE(6, 11)
 
     void callOptions() const && = delete;
     [[nodiscard]] const QGrpcCallOptions &callOptions() const & noexcept;

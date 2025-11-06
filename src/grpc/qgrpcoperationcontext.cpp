@@ -161,12 +161,11 @@ QT_BEGIN_NAMESPACE
     \note This class can only be constructed by QAbstractGrpcChannel.
 */
 QGrpcOperationContext::QGrpcOperationContext(QLatin1StringView method, QLatin1StringView service,
-                                             QByteArrayView arg, const QGrpcCallOptions &options,
+                                             const QGrpcCallOptions &options,
                                              std::shared_ptr<QAbstractProtobufSerializer>
                                                  serializer,
                                              PrivateConstructor /*unused*/)
-    : QObject(*new QGrpcOperationContextPrivate(method, service, arg, options,
-                                                std::move(serializer)))
+    : QObject(*new QGrpcOperationContextPrivate(method, service, options, std::move(serializer)))
 {
 }
 
@@ -194,14 +193,16 @@ QLatin1StringView QGrpcOperationContext::service() const noexcept
     return d->service;
 }
 
+#if QT_DEPRECATED_SINCE(6, 11)
 /*!
-    Returns the serialized argument that is utilized by this operation-context.
+    \deprecated [6.11] Use the new QAbstractGrpcChannel virtual RPC methods instead.
+    Returns an empty QByteArrayView.
 */
 QByteArrayView QGrpcOperationContext::argument() const noexcept
 {
-    Q_D(const QGrpcOperationContext);
-    return d->argument;
+    return {};
 }
+#endif // QT_DEPRECATED_SINCE(6, 11)
 
 /*!
     Returns the call options that is utilized by this operation-context.

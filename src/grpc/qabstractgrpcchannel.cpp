@@ -157,7 +157,7 @@ std::unique_ptr<QGrpcCallReply> QAbstractGrpcChannel::call(QLatin1StringView met
                                                            const QGrpcCallOptions &options)
 {
     auto operationContext = std::make_shared<
-        QGrpcOperationContext>(method, service, arg, options, serializer(),
+        QGrpcOperationContext>(method, service, options, serializer(),
                                QGrpcOperationContext::PrivateConstructor());
 
     QObject::connect(operationContext.get(), &QGrpcOperationContext::writeMessageRequested,
@@ -183,7 +183,7 @@ QAbstractGrpcChannel::serverStream(QLatin1StringView method, QLatin1StringView s
                                    QByteArrayView arg, const QGrpcCallOptions &options)
 {
     auto operationContext = std::make_shared<
-        QGrpcOperationContext>(method, service, arg, options, serializer(),
+        QGrpcOperationContext>(method, service, options, serializer(),
                                QGrpcOperationContext::PrivateConstructor());
 
     QObject::connect(operationContext.get(), &QGrpcOperationContext::writeMessageRequested,
@@ -209,7 +209,7 @@ QAbstractGrpcChannel::clientStream(QLatin1StringView method, QLatin1StringView s
                                    QByteArrayView arg, const QGrpcCallOptions &options)
 {
     auto operationContext = std::make_shared<
-        QGrpcOperationContext>(method, service, arg, options, serializer(),
+        QGrpcOperationContext>(method, service, options, serializer(),
                                QGrpcOperationContext::PrivateConstructor());
 
     auto stream = std::make_unique<QGrpcClientStream>(operationContext);
@@ -228,7 +228,7 @@ std::unique_ptr<QGrpcBidiStream> QAbstractGrpcChannel::bidiStream(QLatin1StringV
                                                                   const QGrpcCallOptions &options)
 {
     auto operationContext = std::make_shared<
-        QGrpcOperationContext>(method, service, arg, options, serializer(),
+        QGrpcOperationContext>(method, service, options, serializer(),
                                QGrpcOperationContext::PrivateConstructor());
 
     auto stream = std::make_unique<QGrpcBidiStream>(operationContext);
