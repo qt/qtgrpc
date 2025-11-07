@@ -701,6 +701,10 @@ void Http2Handler::sendInitialRequest()
 {
     Q_ASSERT(!m_initialHeaders.empty());
     Q_ASSERT(m_stream);
+    if (m_state >= State::Cancelled) {
+        qCDebug(lcStream, "[%p] Stream finished before sending the initial request", this);
+        return;
+    }
     Q_ASSERT(m_state == State::Idle);
 
     if (!m_stream->sendHEADERS(m_initialHeaders, false)) {
@@ -768,15 +772,20 @@ void Http2Handler::asyncFinish(const QGrpcStatus &status)
 
 void Http2Handler::cancelWithStatus(const QGrpcStatus &status)
 {
-    if (m_state >= State::Cancelled)
+    if (m_state >= State::Cancelled) {
+        qCWarning(lcStream, "[%p] Cannot cancel stream in state=%s", this,
+                  QDebug::toBytes(m_state).data());
         return;
+    }
     qCDebug(lcStream, "[%p] Cancelling (state=%s)", this, QDebug::toBytes(m_state).data());
     m_state = State::Cancelled;
 
-    // Immediate cancellation by sending the RST_STREAM frame.
-    if (m_stream && !m_stream->sendRST_STREAM(Http2::Http2Error::CANCEL)) {
-        qCWarning(lcStream, "[%p] Failed cancellation (stream=%p, stream::state=%s)", this,
-                  m_stream.get(), QDebug::toBytes(m_stream->state()).constData());
+    if (m_stream && m_stream->state() != QHttp2Stream::State::Idle) {
+        // Immediate cancellation by sending the RST_STREAM frame.
+        if (!m_stream->sendRST_STREAM(Http2::Http2Error::CANCEL)) {
+            qCWarning(lcStream, "[%p] Failed cancellation (stream=%p, stream::state=%s)", this,
+                      m_stream.get(), QDebug::toBytes(m_stream->state()).constData());
+        }
     }
 
     finish(status);
