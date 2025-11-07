@@ -1,10 +1,17 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
+# Find OpenSSL first since it's a transitive dependency that may not be available in CONFIG mode
+find_package(OpenSSL)
+
+set(_qt_grpc_backup_prefer_config ${CMAKE_FIND_PACKAGE_PREFER_CONFIG})
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 find_package(Protobuf)
 find_package(gRPC)
+
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${_qt_grpc_backup_prefer_config})
+unset(_qt_grpc_backup_prefer_config)
 
 if(CMAKE_CROSSCOMPILING)
     find_program(grpc_cpp_plugin grpc_cpp_plugin NO_CACHE)

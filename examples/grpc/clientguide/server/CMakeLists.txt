@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Find OpenSSL first since it's a transitive dependency that may not be available in CONFIG mode
+find_package(OpenSSL)
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 find_package(protobuf)
