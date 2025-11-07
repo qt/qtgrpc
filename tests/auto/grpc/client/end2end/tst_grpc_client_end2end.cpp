@@ -82,6 +82,7 @@ private Q_SLOTS:
     void clientHandlesCompression_data() const;
     void clientHandlesCompression();
 
+    void channelChangeCancelsInFlightRPCs_data() const;
     void channelChangeCancelsInFlightRPCs();
 
 private:
@@ -610,9 +611,17 @@ void QtGrpcClientEnd2EndTest::clientHandlesCompression()
     QVERIFY(finishedSpy.wait());
 }
 
+void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs_data() const
+{
+    QTest::addColumn<int>("triggerCancellationDelay");
+    QTest::addRow("Active") << 150;
+    QTest::addRow("Idle") << 0;
+}
+
 void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs()
 {
-    EmptyGuard emptyGuard;
+    QFETCH(const int, triggerCancellationDelay);
+    auto processor = m_server->createProcessor();
     struct ServerData
     {
         grpc::ServerAsyncResponseWriter<None> op{ &ctx };
@@ -622,19 +631,26 @@ void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs()
         None response;
         bool notifyWhenDone = false;
     };
-    auto data = std::make_shared<ServerData>();
-    data->ctx.AsyncNotifyWhenDone(new CallbackTag([&](bool ok) {
-        QVERIFY(ok);
-        // QVERIFY(data->ctx.IsCancelled()); // TODO: should this be true?
-        data->notifyWhenDone = true;
-        return CallbackTag::Delete;
-        }, &emptyGuard));
-    CallbackTag *callHandler = new CallbackTag([&](bool ok) {
-        QVERIFY(ok);
-        return CallbackTag::Delete;
-    }, &emptyGuard);
-    m_service->RequestPush(&data->ctx, &data->request, &data->op, m_server->cq(), m_server->cq(),
-                           callHandler);
+    auto data = std::make_unique<ServerData>();
+
+    if (triggerCancellationDelay) {
+        data->ctx.AsyncNotifyWhenDone(new CallbackTag(
+            [&](bool ok) {
+                QVERIFY(ok);
+                // QVERIFY(data->ctx.IsCancelled()); // TODO: should this be true?
+                data->notifyWhenDone = true;
+                return CallbackTag::Delete;
+            },
+            processor.get()));
+        CallbackTag *callHandler = new CallbackTag(
+            [&](bool ok) {
+                QVERIFY(ok);
+                return CallbackTag::Delete;
+            },
+            processor.get());
+        m_service->RequestPush(&data->ctx, &data->request, &data->op, m_server->cq(),
+                               m_server->cq(), callHandler);
+    }
 
     auto call = m_client->Push(qt::Event{});
     QVERIFY(call);
@@ -642,21 +658,21 @@ void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs()
     connect(call.get(), &QGrpcOperation::finished, this, [&](const QGrpcStatus &status) {
         QCOMPARE_EQ(status.code(), QtGrpc::StatusCode::Cancelled);
     });
-    QVERIFY(m_server->startAsyncProcessing());
 
     QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
     QSignalSpy channelChangedSpy(m_client.get(), &QGrpcClientBase::channelChanged);
     QVERIFY(finishedSpy.isValid());
     QVERIFY(channelChangedSpy.isValid());
 
-    QTimer::singleShot(100, [&]{
-        auto uri = static_cast<QGrpcHttp2Channel*>(m_client->channel().get())->hostUri();
+    QTimer::singleShot(triggerCancellationDelay, [&] {
+        auto uri = static_cast<QGrpcHttp2Channel *>(m_client->channel().get())->hostUri();
         m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(uri));
     });
 
     finishedSpy.wait();
     QCOMPARE_EQ(channelChangedSpy.count(), 1);
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(data->notifyWhenDone, true, 5s);
+    if (triggerCancellationDelay)
+        QTRY_COMPARE_EQ_WITH_TIMEOUT(data->notifyWhenDone, true, 5s);
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)
