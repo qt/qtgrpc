@@ -200,6 +200,12 @@ QGrpcClientBase::~QGrpcClientBase() = default;
 bool QGrpcClientBase::attachChannel(std::shared_ptr<QAbstractGrpcChannel> channel)
 {
     Q_D(QGrpcClientBase);
+
+    if (channel == d->channel) {
+        qGrpcWarning("Refusing to attach channel. The same channel is already assigned.");
+        return false;
+    }
+
     // channel is not a QObject so we compare against the threadId set on construction.
     if (channel->d_func()->threadId != QThread::currentThreadId()) {
         qGrpcWarning("QtGrpc doesn't allow attaching the channel from a different thread");
