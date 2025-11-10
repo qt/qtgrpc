@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "mockserver.h"
+
 #include <grpcpp/completion_queue.h>
 #include <grpcpp/server_context.h>
 
@@ -12,16 +14,22 @@
 class AbstractTag
 {
 public:
-    explicit AbstractTag() = default;
-    virtual ~AbstractTag() = default;
+    explicit AbstractTag(TagProcessor *processor_) : processor(processor_)
+    {
+        processor->registerTag(this);
+    }
+    virtual ~AbstractTag() { processor->unregisterTag(this); }
 
     AbstractTag(const AbstractTag &) = delete;
     AbstractTag &operator=(const AbstractTag &) = delete;
 
-    AbstractTag(AbstractTag &&) = default;
-    AbstractTag &operator=(AbstractTag &&) = default;
+    AbstractTag(AbstractTag &&) = delete;
+    AbstractTag &operator=(AbstractTag &&) = delete;
 
     virtual void process(bool ok) = 0;
+
+protected:
+    TagProcessor *processor;
 };
 
 class CallbackTag : public AbstractTag
@@ -29,7 +37,11 @@ class CallbackTag : public AbstractTag
 public:
     enum Operation { Proceed, Delete };
     using Function = std::function<Operation(bool)>;
-    explicit CallbackTag(Function fn) : mFn(std::move(fn)) { }
+
+    explicit CallbackTag(Function fn, TagProcessor *processor_)
+        : AbstractTag(processor_), mFn(std::move(fn))
+    {
+    }
     void process(bool ok) override
     {
         if (mFn(ok) == Delete)
@@ -43,18 +55,27 @@ private:
 class VoidTag final : public CallbackTag
 {
 public:
-    VoidTag() : CallbackTag([](bool) { return Delete; }) { }
+    VoidTag(TagProcessor *processor_) : CallbackTag([](bool) { return Delete; }, processor_) { }
 };
 
+// TODO: gRPC 1.50.1 on windows has faulty lifetime management and still uses
+// the context post completion in the interceptors. This should be fixed in
+// newer versions. Remove this when upgrading to favor stack based lifetime
+// management in testcases.
 template <typename Data>
 class DeleteTag final : public CallbackTag
 {
 public:
-    explicit DeleteTag(Data *data) : CallbackTag([](bool) { return Delete; }), data(data)
+    explicit DeleteTag(Data *data, TagProcessor *processor_)
+        : CallbackTag([](bool) { return Delete; }, processor_), data(data)
     {
         assert(this->data);
     }
-    ~DeleteTag() { delete data; }
+    ~DeleteTag()
+    {
+        delete data;
+        data = nullptr;
+    }
 
 private:
     Data *data;
@@ -63,13 +84,15 @@ private:
 class AbstractRpcTag : public AbstractTag
 {
 public:
-    AbstractRpcTag()
+    AbstractRpcTag(TagProcessor *processor_) : AbstractTag(processor_)
     {
-        mContext.AsyncNotifyWhenDone(new CallbackTag([this](bool ok) {
-            if (ok && mContext.IsCancelled())
-                mIsCancelled = true;
-            return CallbackTag::Delete;
-        }));
+        mContext.AsyncNotifyWhenDone(new CallbackTag(
+            [this](bool ok) {
+                if (ok && mContext.IsCancelled())
+                    mIsCancelled = true;
+                return CallbackTag::Delete;
+            },
+            processor));
     }
 
     virtual void start(grpc::ServerCompletionQueue *cq) = 0;

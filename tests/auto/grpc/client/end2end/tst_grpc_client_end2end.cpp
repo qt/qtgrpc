@@ -151,7 +151,6 @@ void QtGrpcClientEnd2EndTest::init()
 void QtGrpcClientEnd2EndTest::cleanup()
 {
     m_client.reset();
-    QVERIFY(m_server->stopAsyncProcessing());
 }
 
 void QtGrpcClientEnd2EndTest::clientMetadataReceived_data() const
@@ -179,6 +178,7 @@ void QtGrpcClientEnd2EndTest::clientMetadataReceived()
     QFETCH(const MultiHash, channelMetadata);
 
     // Setup Server-side handling
+    auto processor = m_server->createProcessor();
     struct ServerData
     {
         grpc::ServerAsyncResponseWriter<None> op{ &ctx };
@@ -187,37 +187,43 @@ void QtGrpcClientEnd2EndTest::clientMetadataReceived()
         Event request;
         None response;
     };
-    auto *data = new ServerData;
+    ServerData *data = new ServerData;
 
-    CallbackTag *callHandler = new CallbackTag([&](bool ok) {
-        QVERIFY(ok);
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
 
-        const std::multimap<grpc::string_ref, grpc::string_ref>
-            &receivedMd = data->ctx.client_metadata();
-        auto mergedMd = channelMetadata;
-        mergedMd.unite(callMetadata);
+            const std::multimap<grpc::string_ref, grpc::string_ref>
+                &receivedMd = data->ctx.client_metadata();
+            auto mergedMd = channelMetadata;
+            mergedMd.unite(callMetadata);
 
-        for (auto it = mergedMd.cbegin(); it != mergedMd.cend(); ++it) {
-            // Check that each key-value pair sent by the client exists on the server
-            auto serverRange = receivedMd.equal_range(it.key().toStdString());
-            auto clientRange = mergedMd.equal_range(it.key());
+            for (auto it = mergedMd.cbegin(); it != mergedMd.cend(); ++it) {
+                // Check that each key-value pair sent by the client exists on the server
+                auto serverRange = receivedMd.equal_range(it.key().toStdString());
+                auto clientRange = mergedMd.equal_range(it.key());
 
-            QCOMPARE_EQ(std::distance(serverRange.first, serverRange.second),
-                        std::distance(clientRange.first, clientRange.second));
-            while (clientRange.first != clientRange.second) {
-                // Look for the exact entry in the server range. The order may
-                // be changed but it must be present.
-                const auto it = std::find_if(serverRange.first, serverRange.second, [&](auto it) {
-                    return it.first == clientRange.first.key().toStdString()
-                        && it.second == clientRange.first.value().toStdString();
-                });
-                QVERIFY(it != serverRange.second);
-                std::advance(clientRange.first, 1);
+                QCOMPARE_EQ(std::distance(serverRange.first, serverRange.second),
+                            std::distance(clientRange.first, clientRange.second));
+                while (clientRange.first != clientRange.second) {
+                    // Look for the exact entry in the server range. The order may
+                    // be changed but it must be present.
+                    const auto it = std::find_if(serverRange.first, serverRange.second,
+                                                 [&](auto it) {
+                                                     return it.first
+                                                         == clientRange.first.key().toStdString()
+                                                         && it.second
+                                                         == clientRange.first.value().toStdString();
+                                                 });
+                    QVERIFY(it != serverRange.second);
+                    std::advance(clientRange.first, 1);
+                }
             }
-        }
-        data->op.Finish(data->response, grpc::Status::OK, new DeleteTag<ServerData>(data));
-        return CallbackTag::Delete;
-    });
+            data->op.Finish(data->response, grpc::Status::OK,
+                            new DeleteTag<ServerData>(data, processor.get()));
+            return CallbackTag::Delete;
+        },
+        processor.get());
     m_service->RequestPush(&data->ctx, &data->request, &data->op, m_server->cq(), m_server->cq(),
                            callHandler);
 
@@ -231,8 +237,6 @@ void QtGrpcClientEnd2EndTest::clientMetadataReceived()
         auto response = call->read<qt::None>();
         QVERIFY(response.has_value());
     });
-
-    QVERIFY(m_server->startAsyncProcessing());
 
     QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
     QVERIFY(finishedSpy.isValid());
@@ -267,6 +271,7 @@ void QtGrpcClientEnd2EndTest::serverMetadataReceived()
     QFETCH(const MultiHash, expectedTrailingMd);
 
     // Setup Server-side handling
+    auto processor = m_server->createProcessor();
     struct ServerData
     {
         grpc::ServerAsyncResponseWriter<None> op{ &ctx };
@@ -275,18 +280,21 @@ void QtGrpcClientEnd2EndTest::serverMetadataReceived()
         Event request;
         None response;
     };
-    auto *data = new ServerData;
+    ServerData *data = new ServerData;
 
     for (auto it = expectedInitialMd.cbegin(); it != expectedInitialMd.cend(); ++it)
         data->ctx.AddInitialMetadata(it.key().toStdString(), it.value().toStdString());
     for (auto it = expectedTrailingMd.cbegin(); it != expectedTrailingMd.cend(); ++it)
         data->ctx.AddTrailingMetadata(it.key().toStdString(), it.value().toStdString());
 
-    CallbackTag *callHandler = new CallbackTag([&](bool ok) {
-        QVERIFY(ok);
-        data->op.Finish(data->response, grpc::Status::OK, new DeleteTag<ServerData>(data));
-        return CallbackTag::Delete;
-    });
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Finish(data->response, grpc::Status::OK,
+                            new DeleteTag<ServerData>(data, processor.get()));
+            return CallbackTag::Delete;
+        },
+        processor.get());
     m_service->RequestPush(&data->ctx, &data->request, &data->op, m_server->cq(), m_server->cq(),
                            callHandler);
 
@@ -317,7 +325,6 @@ void QtGrpcClientEnd2EndTest::serverMetadataReceived()
                 QVERIFY(trailingMd.contains(it.key(), it.value()));
         }
     });
-    QVERIFY(m_server->startAsyncProcessing());
 
     QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
     QVERIFY(finishedSpy.isValid());
@@ -327,6 +334,7 @@ void QtGrpcClientEnd2EndTest::serverMetadataReceived()
 void QtGrpcClientEnd2EndTest::serverInitialMetadataEmitted()
 {
     // Setup Server-side handling
+    auto processor = m_server->createProcessor();
     struct ServerData
     {
         grpc::ServerAsyncResponseWriter<None> op{ &ctx };
@@ -335,21 +343,26 @@ void QtGrpcClientEnd2EndTest::serverInitialMetadataEmitted()
         Event request;
         None response;
     };
-    auto *data = new ServerData;
+    ServerData *data = new ServerData;
     data->ctx.AddInitialMetadata("initial", "value");
     data->ctx.AddTrailingMetadata("trailing", "value");
 
-    CallbackTag *callHandler = new CallbackTag([&](bool ok) {
-        QVERIFY(ok);
-        data->op.SendInitialMetadata(new CallbackTag([&](bool ok) {
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
             QVERIFY(ok);
-            // Wait one second before emitting finished.
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-            data->op.Finish(data->response, grpc::Status::OK, new DeleteTag<ServerData>(data));
+            data->op.SendInitialMetadata(new CallbackTag(
+                [&](bool ok) {
+                    QVERIFY(ok);
+                    // Wait one second before emitting finished.
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    data->op.Finish(data->response, grpc::Status::OK,
+                                    new DeleteTag<ServerData>(data, processor.get()));
+                    return CallbackTag::Delete;
+                },
+                processor.get()));
             return CallbackTag::Delete;
-        }));
-        return CallbackTag::Delete;
-    });
+        },
+        processor.get());
     m_service->RequestPush(&data->ctx, &data->request, &data->op, m_server->cq(), m_server->cq(),
                            callHandler);
 
@@ -368,7 +381,6 @@ void QtGrpcClientEnd2EndTest::serverInitialMetadataEmitted()
         initialMetadataTime = QDateTime::currentDateTime();
         QCOMPARE_EQ(call->serverInitialMetadata().size(), 1);
     });
-    QVERIFY(m_server->startAsyncProcessing());
 
     QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
     QVERIFY(finishedSpy.isValid());
@@ -386,6 +398,7 @@ void QtGrpcClientEnd2EndTest::bidiStreamsInOrder()
     constexpr auto SleepTime = std::chrono::milliseconds(5);
 
     // Setup Server-side handling
+    auto processor = m_server->createProcessor();
     struct ServerData
     {
         grpc::ServerAsyncReaderWriter<Event, Event> op{ &ctx };
@@ -404,51 +417,59 @@ void QtGrpcClientEnd2EndTest::bidiStreamsInOrder()
             response.set_name("server-" + std::to_string(response.number()));
         }
     };
-    auto *data = new ServerData;
+    ServerData *data = new ServerData;
 
-    CallbackTag *reader = new CallbackTag([&, current = 1u](bool ok) mutable {
-        if (!ok) {
-            data->readerDone = true;
-            if (data->writerDone)
-                data->op.Finish(grpc::Status::OK, new DeleteTag<ServerData>(data));
+    CallbackTag *reader = new CallbackTag(
+        [&, current = 1u](bool ok) mutable {
+            if (!ok) {
+                data->readerDone = true;
+                if (data->writerDone)
+                    data->op.Finish(grpc::Status::OK,
+                                    new DeleteTag<ServerData>(data, processor.get()));
+                return CallbackTag::Delete;
+            }
+            QCOMPARE_EQ(data->request.type(), Event::CLIENT);
+            QCOMPARE_EQ(data->request.number(), current);
+            std::string name = "client-" + std::to_string(current);
+            QCOMPARE_EQ(data->request.name(), name);
+            ++current;
+
+            data->op.Read(&data->request, reader);
+            return CallbackTag::Proceed;
+        },
+        processor.get());
+    CallbackTag *writer = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            if (data->response.number() >= data->count) {
+                data->writerDone = true;
+                if (data->readerDone)
+                    data->op.Finish(grpc::Status::OK,
+                                    new DeleteTag<ServerData>(data, processor.get()));
+                return CallbackTag::Delete;
+            }
+            std::this_thread::sleep_for(SleepTime);
+            data->updateResponse();
+            data->op.Write(data->response, writer);
+            return CallbackTag::Proceed;
+        },
+        processor.get());
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            const auto &md = data->ctx.client_metadata();
+            const auto countIt = md.find("call-count");
+            QVERIFY(countIt != md.cend());
+            data->count = std::stoul(std::string(countIt->second.data(), countIt->second.length()));
+            QCOMPARE_GT(data->count, 0);
+
+            data->op.Read(&data->request, reader);
+            data->updateResponse();
+            data->op.Write(data->response, writer);
+
             return CallbackTag::Delete;
-        }
-        QCOMPARE_EQ(data->request.type(), Event::CLIENT);
-        QCOMPARE_EQ(data->request.number(), current);
-        std::string name = "client-" + std::to_string(current);
-        QCOMPARE_EQ(data->request.name(), name);
-        ++current;
-
-        data->op.Read(&data->request, reader);
-        return CallbackTag::Proceed;
-    });
-    CallbackTag *writer = new CallbackTag([&](bool ok) {
-        QVERIFY(ok);
-        if (data->response.number() >= data->count) {
-            data->writerDone = true;
-            if (data->readerDone)
-                data->op.Finish(grpc::Status::OK, new DeleteTag<ServerData>(data));
-            return CallbackTag::Delete;
-        }
-        std::this_thread::sleep_for(SleepTime);
-        data->updateResponse();
-        data->op.Write(data->response, writer);
-        return CallbackTag::Proceed;
-    });
-    CallbackTag *callHandler = new CallbackTag([&](bool ok) {
-        QVERIFY(ok);
-        const auto &md = data->ctx.client_metadata();
-        const auto countIt = md.find("call-count");
-        QVERIFY(countIt != md.cend());
-        data->count = std::stoul(std::string(countIt->second.data(), countIt->second.length()));
-        QCOMPARE_GT(data->count, 0);
-
-        data->op.Read(&data->request, reader);
-        data->updateResponse();
-        data->op.Write(data->response, writer);
-
-        return CallbackTag::Delete;
-    });
+        },
+        processor.get());
     m_service->RequestExchange(&data->ctx, &data->op, m_server->cq(), m_server->cq(), callHandler);
 
     // Client bidi stream
@@ -490,8 +511,6 @@ void QtGrpcClientEnd2EndTest::bidiStreamsInOrder()
     });
     delayedWriter.start(SleepTime);
 
-    QVERIFY(m_server->startAsyncProcessing());
-
     QSignalSpy finishedSpy(stream.get(), &QGrpcOperation::finished);
     QVERIFY(finishedSpy.isValid());
     QVERIFY(finishedSpy.wait());
@@ -508,13 +527,16 @@ void QtGrpcClientEnd2EndTest::clientHandlesCompression_data() const
 void QtGrpcClientEnd2EndTest::clientHandlesCompression()
 {
     QFETCH(const grpc_compression_algorithm, compressionAlgo);
+    EventList serverResponses;
 
     class SubscribeListHandler : public AbstractRpcTag
     {
     public:
-        SubscribeListHandler(EventHub::AsyncService &service_,
-                             const grpc_compression_algorithm compressionAlgo_)
-            : op(&context()), service(service_), compressionAlgo(compressionAlgo_)
+        SubscribeListHandler(EventList &responses_, EventHub::AsyncService &service_,
+                             const grpc_compression_algorithm compressionAlgo_,
+                             TagProcessor *processor)
+            : AbstractRpcTag(processor), op(&context()), service(service_), responses(responses_),
+              compressionAlgo(compressionAlgo_)
         {
             context().set_compression_algorithm(compressionAlgo);
             context().set_compression_level(GRPC_COMPRESS_LEVEL_HIGH);
@@ -525,7 +547,7 @@ void QtGrpcClientEnd2EndTest::clientHandlesCompression()
                 Event ev;
                 ev.set_name("server;server;" + std::to_string(v));
                 ev.set_number(v);
-                response.mutable_events()->Add(std::move(ev));
+                responses.mutable_events()->Add(std::move(ev));
             }
         }
         void start(grpc::ServerCompletionQueue *cq) override
@@ -536,28 +558,32 @@ void QtGrpcClientEnd2EndTest::clientHandlesCompression()
         {
             QVERIFY(ok);
             if (index >= responseCount) {
-                op.Finish(grpc::Status::OK, new VoidTag());
+                op.Finish(grpc::Status::OK, new DeleteTag<SubscribeListHandler>(this, processor));
                 return;
             }
+
             grpc::WriteOptions wopts;
             // Enable and disable the compression per-message
             if (index % 2 == 0)
                 wopts.set_no_compression();
-            op.Write(response, wopts, this);
+            op.Write(responses, wopts, this);
             ++index;
         }
 
         grpc::ServerAsyncWriter<EventList> op;
         EventHub::AsyncService &service;
+
         None request;
-        EventList response;
+        EventList &responses;
 
         size_t index = 0;
         const grpc_compression_algorithm compressionAlgo;
         const size_t responseCount = 20;
     };
 
-    SubscribeListHandler handler(*m_service, compressionAlgo);
+    auto processor = m_server->createProcessor();
+    SubscribeListHandler *handler = new SubscribeListHandler(serverResponses, *m_service,
+                                                             compressionAlgo, processor.get());
     m_server->startRpcTag(handler);
 
     auto call = m_client->SubscribeList(qt::None{});
@@ -568,16 +594,14 @@ void QtGrpcClientEnd2EndTest::clientHandlesCompression()
     connect(call.get(), &QGrpcServerStream::messageReceived, this, [&] {
         auto response = call->read<qt::EventList>();
         QVERIFY(response);
-        QCOMPARE_EQ(response->events().size(), handler.response.events().size());
+        QCOMPARE_EQ(response->events().size(), serverResponses.events().size());
         for (int i = 0; i < response->events().size(); ++i) {
             const auto &next = response->events().at(i);
-            const auto &baseline = handler.response.events().at(i);
+            const auto &baseline = serverResponses.events().at(i);
             QCOMPARE_EQ(next.name(), QString::fromStdString(baseline.name()));
             QCOMPARE_EQ(next.number(), baseline.number());
         }
     });
-
-    QVERIFY(m_server->startAsyncProcessing());
 
     QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
     QVERIFY(finishedSpy.isValid());

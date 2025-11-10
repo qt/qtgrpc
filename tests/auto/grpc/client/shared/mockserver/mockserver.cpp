@@ -2,9 +2,84 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "mockserver.h"
+#include "tags.h"
+
+#include <QtTest/qtest.h>
 
 #include <grpcpp/alarm.h>
 #include <grpcpp/server_builder.h>
+
+using namespace std::chrono_literals;
+
+TagProcessor::TagProcessor(MockServer *server)
+    : mServer(server)
+{
+    QVERIFY(mServer);
+    QVERIFY(mServer->cq());
+    mThread = std::thread(&TagProcessor::processLoop, this);
+}
+
+TagProcessor::~TagProcessor()
+{
+    QVERIFY(waitForTagCompletion(5s));
+
+    mRunning.store(false);
+    wakeCQ();
+
+    if (mThread.joinable())
+        mThread.join();
+
+    drainTags();
+}
+
+void TagProcessor::processLoop()
+{
+    while (mRunning.load(std::memory_order_acquire)) {
+        mServer->processTag();
+    }
+}
+
+void TagProcessor::registerTag(AbstractTag *tag)
+{
+    std::scoped_lock lock(mMutex);
+    const auto it = mActiveTags.insert(tag);
+    QVERIFY(it.second);
+}
+
+void TagProcessor::unregisterTag(AbstractTag *tag)
+{
+    std::scoped_lock lock(mMutex);
+    const auto erased = mActiveTags.erase(tag);
+    QCOMPARE_EQ(erased, 1);
+    if (mActiveTags.empty())
+        mCv.notify_all();
+}
+
+size_t TagProcessor::activeTagCount() const noexcept
+{
+    std::scoped_lock lock(mMutex);
+    return mActiveTags.size();
+}
+
+bool TagProcessor::waitForTagCompletion(std::chrono::milliseconds deadline) noexcept
+{
+    std::unique_lock lock(mMutex);
+    return mCv.wait_for(lock, deadline, [this] { return mActiveTags.empty(); });
+}
+
+void TagProcessor::wakeCQ()
+{
+    auto *tag = new VoidTag(this);
+    auto *alarm = new grpc::Alarm();
+    alarm->Set(mServer->cq(), gpr_now(GPR_CLOCK_REALTIME), tag);
+}
+
+void TagProcessor::drainTags()
+{
+    QVERIFY(!mRunning);
+    while (mServer->processTag(50))
+        ;
+}
 
 MockServer::MockServer() = default;
 MockServer::~MockServer()
@@ -35,10 +110,7 @@ bool MockServer::start(std::vector<ListeningPort> ports, std::vector<grpc::Servi
 bool MockServer::stop()
 {
     State currentState = mState.load();
-    if (currentState == State::Processing)
-        stopAsyncProcessing();
-
-    if (currentState != State::Started && currentState != State::Processing)
+    if (currentState != State::Started && currentState != State::ShuttingDown)
         return currentState == State::Stopped;
 
     mState = State::ShuttingDown;
@@ -63,9 +135,8 @@ bool MockServer::stop()
 bool MockServer::processTag(int timeoutMs)
 {
     State currentState = mState.load();
-    if (currentState != State::Processing && currentState != State::Started) {
+    if (currentState != State::Started)
         return false;
-    }
 
     void *rawTag = nullptr;
     bool ok = false;
@@ -80,33 +151,6 @@ bool MockServer::processTag(int timeoutMs)
     }
 
     return false;
-}
-
-bool MockServer::startAsyncProcessing(int timeoutMs)
-{
-    if (!transitionState(State::Started, State::Processing))
-        return false;
-
-    mProcessingThread = std::thread([this, timeoutMs] {
-        while (mState.load(std::memory_order_acquire) == State::Processing) {
-            processTag(timeoutMs);
-        }
-    });
-    return true;
-}
-
-bool MockServer::stopAsyncProcessing()
-{
-    if (!transitionState(State::Processing, State::Started))
-        return false;
-
-    if (mProcessingThread.joinable()) {
-        grpc::Alarm alarm;
-        // Trigger an event so that the processing loop detects the change.
-        alarm.Set(mCQ.get(), gpr_now(gpr_clock_type::GPR_CLOCK_REALTIME), new VoidTag());
-        mProcessingThread.join();
-    }
-    return true;
 }
 
 MockServer &MockServer::step(int timeoutMs)
@@ -124,6 +168,17 @@ bool MockServer::waitForAllSteps()
     }
     mFutures.clear();
     return true;
+}
+
+void MockServer::startRpcTag(AbstractRpcTag *tag)
+{
+    QVERIFY(tag);
+    tag->start(mCQ.get());
+}
+
+std::unique_ptr<TagProcessor> MockServer::createProcessor()
+{
+    return std::make_unique<TagProcessor>(this);
 }
 
 bool MockServer::transitionState(State from, State to)
