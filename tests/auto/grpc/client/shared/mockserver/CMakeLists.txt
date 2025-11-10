@@ -30,5 +30,6 @@ target_link_libraries(grpc_mock_server
     PUBLIC
         protobuf::libprotobuf
         gRPC::grpc++
+        Qt::Test
 )
 

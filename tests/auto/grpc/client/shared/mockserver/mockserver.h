@@ -3,23 +3,56 @@
 
 #pragma once
 
-#include "tags.h"
 #include "certificates.h"
 
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/security/server_credentials.h>
 
+#include <future>
 #include <memory>
 #include <string>
-#include <vector>
 #include <thread>
-#include <future>
+#include <unordered_set>
+#include <vector>
 
 struct ListeningPort
 {
     std::string addressUri;
     std::shared_ptr<grpc::ServerCredentials> creds;
     int selectedPort = -1;
+};
+
+class MockServer;
+class AbstractTag;
+class AbstractRpcTag;
+
+class TagProcessor
+{
+public:
+    explicit TagProcessor(MockServer *server);
+    ~TagProcessor();
+
+    TagProcessor(const TagProcessor &) = delete;
+    TagProcessor &operator=(const TagProcessor &) = delete;
+
+    void registerTag(AbstractTag *tag);
+    void unregisterTag(AbstractTag *tag);
+
+    [[nodiscard]] size_t activeTagCount() const noexcept;
+    [[nodiscard]] bool waitForTagCompletion(std::chrono::milliseconds deadline) noexcept;
+
+private:
+    void processLoop();
+    void wakeCQ();
+    void drainTags();
+
+    MockServer *mServer;
+    std::atomic_bool mRunning = true;
+    std::thread mThread;
+
+    mutable std::mutex mMutex;
+    std::condition_variable mCv;
+    std::unordered_set<AbstractTag *> mActiveTags;
 };
 
 class MockServer
@@ -29,7 +62,6 @@ public:
         Stopped,
         Starting,
         Started,
-        Processing,
         ShuttingDown,
     };
 
@@ -43,13 +75,13 @@ public:
     bool stop();
 
     bool processTag(int timeoutMs = -1);
-    bool startAsyncProcessing(int timeoutMs = -1);
-    bool stopAsyncProcessing();
 
-    void startRpcTag(AbstractRpcTag &tag) { tag.start(mCQ.get()); }
+    void startRpcTag(AbstractRpcTag *tag);
 
     MockServer &step(int timeoutMs = -1);
     bool waitForAllSteps();
+
+    std::unique_ptr<TagProcessor> createProcessor();
 
 private:
     bool transitionState(State from, State to);
@@ -58,6 +90,7 @@ private:
     std::unique_ptr<grpc::Server> mServer;
     std::unique_ptr<grpc::ServerCompletionQueue> mCQ;
     std::vector<std::future<bool>> mFutures;
-    std::thread mProcessingThread;
     std::atomic<State> mState = State::Stopped;
 };
+
+#include "tags.h"
