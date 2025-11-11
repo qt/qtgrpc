@@ -130,6 +130,29 @@ void Any::registerTypes()
 */
 
 /*!
+    \property QtProtobuf::Any::typeUrl
+
+    This property holds the type URL of the Any object. The URL is meant as a hint
+    for what the contained data really is.
+
+    \note Qt has no support for dynamically obtaining any potential recipes for
+    deconstructing types and simply uses the type URL to verify that types
+    passed as T to \c{as<T>()} are of the correct type.
+
+    \sa value
+*/
+
+/*!
+    \property QtProtobuf::Any::value
+
+    This property holds the raw bytes that make up the value stored in the Any object.
+
+    Consult typeUrl to determine how to interpret these bytes.
+
+    \sa typeUrl
+*/
+
+/*!
     Constructs a defaulted, empty, instance of Any.
 */
 Any::Any()
