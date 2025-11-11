@@ -64,6 +64,10 @@ depends += qtdoc qtcore qtgui qtcmake qtgrpc qtwidgets qtqml qtquick qtquickcont
                            ../../protobufqttypes \
                            ../../wellknown
 
+# Exclude auto-generated Protocol Buffer wrapper headers
+excludedirs += ../../wellknown/.tmp/google/protobuf
+internalfilepatterns = wrappers.qpb.h
+
 # Add additional documentation dirs
 sourcedirs  += ../../tools/doc
 
