@@ -12,6 +12,8 @@
 #include <QtTest/QtTest>
 #include <private/qtenvironmentvariables_p.h>
 
+using namespace Qt::StringLiterals;
+
 constexpr char conversionErrorMessage[] = "Qt Proto Type conversion error.";
 
 const QTime testTime = QTime(7, 30, 18, 321);
@@ -593,9 +595,10 @@ void QtProtobufQtTypesQtCoreTest::qVersionNumber()
 
 void QtProtobufQtTypesQtCoreTest::nestedQUrlMessageDefined()
 {
+    const QUrl url{u"http://qt.io"_s};
     NestedQUrlMessage::QUrlMessage msg;
-    msg.setTestField({"http://qt.io"});
-    QCOMPARE(msg.testField(), QUrl{"http://qt.io"});
+    msg.setTestField(url);
+    QCOMPARE(msg.testField(), url);
 }
 
 QTEST_MAIN(QtProtobufQtTypesQtCoreTest)
