@@ -15,6 +15,7 @@
 // We mean it.
 //
 
+#include <QtGrpc/private/qgrpcinterceptorengine_p.h>
 #include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
 
@@ -26,12 +27,14 @@ QT_BEGIN_NAMESPACE
 class QAbstractGrpcChannelPrivate
 {
 public:
-    explicit QAbstractGrpcChannelPrivate(const QGrpcChannelOptions &options)
-        : threadId(QThread::currentThreadId()), channelOptions(options)
+    explicit QAbstractGrpcChannelPrivate(const QGrpcChannelOptions &options,
+                                         QAbstractGrpcChannel *parent)
+        : threadId(QThread::currentThreadId()), channelOptions(options), interceptorEngine(*parent)
     {
     }
     const Qt::HANDLE threadId;
     QGrpcChannelOptions channelOptions;
+    QGrpcInterceptorEngine interceptorEngine;
 
     static const QAbstractGrpcChannelPrivate *get(const QAbstractGrpcChannel *ch)
     {

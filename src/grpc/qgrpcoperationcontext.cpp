@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QtGrpc/private/qgrpccommonoptions_p.h>
+#include <QtGrpc/private/qgrpcoperation_p.h>
 #include <QtGrpc/private/qgrpcoperationcontext_p.h>
 #include <QtGrpc/qgrpcoperation.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
@@ -209,6 +210,12 @@ QLatin1StringView QGrpcOperationContext::service() const noexcept
     return d->descriptor.service;
 }
 
+QtGrpc::RpcDescriptor QGrpcOperationContext::descriptor() const noexcept
+{
+    Q_D(const QGrpcOperationContext);
+    return d->descriptor;
+}
+
 #if QT_DEPRECATED_SINCE(6, 11)
 /*!
     \deprecated [6.11] Use the new QAbstractGrpcChannel virtual RPC methods instead.
@@ -310,6 +317,11 @@ QGrpcOperationContext::serverInitialMetadata() const & noexcept
 void QGrpcOperationContext::setServerInitialMetadata(QMultiHash<QByteArray, QByteArray> &&metadata)
 {
     Q_D(QGrpcOperationContext);
+    if (auto channel = operation().d_func()->channel.lock()) {
+        auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
+        if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::InitialMetadata))
+            engine.onInitialMetadata(*this, metadata);
+    }
     d->serverInitialMetadata = std::move(metadata);
 #if QT_DEPRECATED_SINCE(6, 13)
     d->deprServerInitialMetadata = QtGrpcPrivate::toHash(d->serverInitialMetadata);
@@ -343,6 +355,11 @@ QGrpcOperationContext::serverTrailingMetadata() const & noexcept
 void QGrpcOperationContext::setServerTrailingMetadata(QMultiHash<QByteArray, QByteArray> &&metadata)
 {
     Q_D(QGrpcOperationContext);
+    if (auto channel = operation().d_func()->channel.lock()) {
+        auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
+        if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::TrailingMetadata))
+            engine.onTrailingMetadata(*this, metadata);
+    }
     if (d->serverTrailingMetadata == metadata)
         return;
     d->serverTrailingMetadata = std::move(metadata);
@@ -364,6 +381,14 @@ void QGrpcOperationContext::setResponseMetaType(QMetaType metaType)
 {
     Q_D(QGrpcOperationContext);
     d->responseMetaType = metaType;
+}
+
+const QGrpcOperation &QGrpcOperationContext::operation() const
+{
+    // Guaranteed by construction & parent<>child relationship
+    const auto *p = parent();
+    Q_ASSERT(p);
+    return static_cast<const QGrpcOperation &>(*p);
 }
 
 // For future extensions

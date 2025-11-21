@@ -18,6 +18,8 @@ qt_internal_add_module(Grpc
         qtgrpclogging_p.h qtgrpclogging.cpp
         qtgrpcnamespace.h
         qgrpcserializationformat.h qgrpcserializationformat.cpp
+        qgrpcinterceptor.h qgrpcinterceptor.cpp
+        qgrpcinterceptorengine_p.h
     LIBRARIES
         Qt::CorePrivate
         Qt::NetworkPrivate

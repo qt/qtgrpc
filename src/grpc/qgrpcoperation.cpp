@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QtGrpc/private/qgrpcoperation_p.h>
+#include <QtGrpc/private/qgrpcoperationcontext_p.h>
 #include <QtGrpc/private/qtgrpclogging_p.h>
 #include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpc/qgrpcoperation.h>
@@ -17,6 +18,9 @@
 QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
+
+QGrpcOperationPrivate::~QGrpcOperationPrivate()
+    = default;
 
 void QGrpcOperationPrivate::asyncFinishInvalid(QGrpcStatus &&status)
 {
@@ -37,14 +41,42 @@ std::optional<QByteArray>
 QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
 {
     const auto serializer = operationContext->serializer();
+    auto ch = channel.lock();
+
     Q_ASSERT(state == State::Valid);
     Q_ASSERT(serializer);
+    Q_ASSERT(ch.get()); // This function should only be called if the channel is valid
+
+    auto &interceptorEngine = QAbstractGrpcChannelPrivate::get(ch.get())->interceptorEngine;
+
+    if (interceptorEngine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::Start)) {
+        auto mt = QProtobufMessagePrivate::get(&message)->metaObject->metaType();
+        auto *interceptedMessage = static_cast<QProtobufMessage *>(mt.create(&message));
+        Q_ASSERT(interceptedMessage);
+        const QScopeGuard mtGuard([mt = std::move(mt), interceptedMessage] {
+            mt.destroy(interceptedMessage);
+        });
+        const auto continuation = interceptorEngine.onStart(operationContext->descriptor(),
+                                                            *interceptedMessage,
+                                                            operationContext->d_func()->options);
+        if (continuation == QGrpcStartInterceptor::Drop) {
+            Q_Q(QGrpcOperation);
+            QMetaObject::invokeMethod(
+                q,
+                [qPtr = QPointer(q)] {
+                    if (!qPtr)
+                        return;
+                    emit qPtr->finished({ QtGrpc::StatusCode::Aborted,
+                                          "Interceptors dropped the call" });
+                },
+                Qt::QueuedConnection);
+            return {};
+        }
+        return serializer->serialize(interceptedMessage);
+    }
 
     return serializer->serialize(&message);
 }
-
-QGrpcOperationPrivate::~QGrpcOperationPrivate()
-    = default;
 
 /*!
     \class QGrpcOperation
@@ -226,6 +258,14 @@ void QGrpcOperation::cancel()
     if (isFinished())
         return;
     Q_D(QGrpcOperation);
+    auto channel = d->channel.lock();
+    if (!channel) {
+        qGrpcCritical("cancel received without active channel");
+        return;
+    }
+    auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
+    if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::Cancel))
+        engine.onCancel(*d->operationContext);
     emit d->operationContext->cancelRequested();
 }
 
@@ -328,14 +368,43 @@ const QGrpcOperationContext &QGrpcOperation::context() const & noexcept
 
 void QGrpcOperation::writeMessage(const QProtobufMessage &message)
 {
-    Q_D(const QGrpcOperation);
-    auto messageData = d->operationContext->serializer()->serialize(&message);
+    Q_D(QGrpcOperation);
+
+    auto channel = d->channel.lock();
+    if (!channel) {
+        qGrpcCritical("writeMessage received without active channel");
+        return;
+    }
+
+    QByteArray messageData;
+    auto serializer = d->operationContext->serializer();
+    auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
+
+    if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::WriteMessage)) {
+        auto mt = QProtobufMessagePrivate::get(&message)->metaObject->metaType();
+        auto *interceptedMessage = static_cast<QProtobufMessage *>(mt.create(&message));
+        Q_ASSERT(interceptedMessage);
+        engine.onWriteMessage(*d->operationContext, *interceptedMessage);
+        messageData = serializer->serialize(interceptedMessage);
+        mt.destroy(interceptedMessage);
+    } else {
+        messageData = serializer->serialize(&message);
+    }
+
     emit d->operationContext->writeMessageRequested(messageData);
 }
 
 void QGrpcOperation::writesDone()
 {
-    Q_D(const QGrpcOperation);
+    Q_D(QGrpcOperation);
+    auto channel = d->channel.lock();
+    if (!channel) {
+        qGrpcCritical("writesDone received without active channel");
+        return;
+    }
+    auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
+    if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::WritesDone))
+        engine.onWritesDone(*d->operationContext);
     emit d->operationContext->writesDoneRequested();
 }
 
@@ -343,6 +412,16 @@ void QGrpcOperation::onMessageReceived(const QByteArray &data)
 {
     Q_D(QGrpcOperation);
     d->data = data;
+
+    auto channel = d->channel.lock();
+    if (!channel) {
+        qGrpcCritical("message received without active channel");
+        return;
+    }
+
+    auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
+    if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::MessageReceived))
+        engine.onMessageReceived(*d->operationContext, d->data);
 }
 
 void QGrpcOperation::onFinished(const QGrpcStatus &status)
@@ -351,6 +430,17 @@ void QGrpcOperation::onFinished(const QGrpcStatus &status)
     if (isFinished())
         return;
     d->state = QGrpcOperationPrivate::State::Finished;
+
+    if (auto ch = d->channel.lock()) {
+        auto &engine = QAbstractGrpcChannelPrivate::get(ch.get())->interceptorEngine;
+        if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::Finished)) {
+            auto interceptedStatus = status;
+            engine.onFinished(*d->operationContext, interceptedStatus);
+            emit finished(interceptedStatus);
+            return;
+        }
+    }
+
     emit finished(status);
 }
 

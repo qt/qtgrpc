@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <QtGrpc/private/qabstractgrpcchannel_p.h>
-#include <QtGrpc/qabstractgrpcchannel.h>
 #include <QtGrpc/qgrpccalloptions.h>
 #include <QtGrpc/qgrpccallreply.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
@@ -13,6 +12,8 @@
 #include <QtCore/qlatin1stringview.h>
 
 QT_BEGIN_NAMESPACE
+
+using QtGrpcPrivate::InterceptorCapabilityBinding;
 
 /*!
     \class QAbstractGrpcChannel
@@ -78,7 +79,7 @@ QT_BEGIN_NAMESPACE
     Default-constructs the QAbstractGrpcChannel.
 */
 QAbstractGrpcChannel::QAbstractGrpcChannel()
-    : d_ptr(std::make_unique<QAbstractGrpcChannelPrivate>(QGrpcChannelOptions{}))
+    : d_ptr(std::make_unique<QAbstractGrpcChannelPrivate>(QGrpcChannelOptions{}, this))
 {
 }
 
@@ -97,7 +98,7 @@ QAbstractGrpcChannel::QAbstractGrpcChannel(QAbstractGrpcChannelPrivate &dd) : d_
     Constructs the QAbstractGrpcChannel using the specified \a options.
 */
 QAbstractGrpcChannel::QAbstractGrpcChannel(const QGrpcChannelOptions &options)
-    : d_ptr(std::make_unique<QAbstractGrpcChannelPrivate>(options))
+    : d_ptr(std::make_unique<QAbstractGrpcChannelPrivate>(options, this))
 {
 }
 
@@ -139,6 +140,25 @@ void QAbstractGrpcChannel::setChannelOptions(QGrpcChannelOptions &&options)
 {
     Q_D(QAbstractGrpcChannel);
     d->channelOptions = std::move(options);
+}
+
+void QAbstractGrpcChannel::removeAllInterceptors()
+{
+    Q_D(QAbstractGrpcChannel);
+    d->interceptorEngine.removeAllInterceptors();
+}
+
+void QAbstractGrpcChannel::addInterceptorImpl(void *interceptor,
+                                              QSpan<const InterceptorCapabilityBinding> bindings)
+{
+    Q_D(QAbstractGrpcChannel);
+    d->interceptorEngine.addInterceptor(interceptor, bindings);
+}
+
+bool QAbstractGrpcChannel::removeInterceptorImpl(void *interceptor)
+{
+    Q_D(QAbstractGrpcChannel);
+    return d->interceptorEngine.removeInterceptor(interceptor);
 }
 
 QT_END_NAMESPACE

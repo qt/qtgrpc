@@ -87,6 +87,7 @@ private:
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperation)
     Q_DECLARE_PRIVATE(QGrpcOperation)
+    friend class QGrpcOperationContext;
 
 public:
     bool event(QEvent *event) override;

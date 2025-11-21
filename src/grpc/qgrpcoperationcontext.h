@@ -37,6 +37,7 @@ public:
 
     [[nodiscard]] QLatin1StringView method() const noexcept;
     [[nodiscard]] QLatin1StringView service() const noexcept;
+    QtGrpc::RpcDescriptor descriptor() const noexcept;
 
 #if QT_DEPRECATED_SINCE(6, 11)
     QT_DEPRECATED_VERSION_X_6_11("Use new QAbstractGrpcChannel virtual RPC methods")
@@ -86,7 +87,14 @@ private:
     Q_DISABLE_COPY_MOVE(QGrpcOperationContext)
     Q_DECLARE_PRIVATE(QGrpcOperationContext)
 
+    [[nodiscard]] const QGrpcOperation &operation() const;
+    [[nodiscard]] QGrpcOperation &operation()
+    {
+        return const_cast<QGrpcOperation &>(std::as_const(*this).operation());
+    }
+
     friend class QGrpcOperation;
+    friend class QGrpcOperationPrivate;
 
 public:
     bool event(QEvent *event) override;

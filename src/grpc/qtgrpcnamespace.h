@@ -10,8 +10,9 @@
 
 #include <QtGrpc/qtgrpcexports.h>
 
-#include <QtCore/qtmetamacros.h>
+#include <QtCore/qcompare.h>
 #include <QtCore/qlatin1stringview.h>
+#include <QtCore/qtmetamacros.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -60,6 +61,13 @@ struct RpcDescriptor
     const QLatin1StringView service;
     const QLatin1StringView method;
     const RpcType type;
+
+private:
+    friend bool comparesEqual(const RpcDescriptor &lhs, const RpcDescriptor &rhs) noexcept
+    {
+        return lhs.service == rhs.service && lhs.method == rhs.method && lhs.type == rhs.type;
+    }
+    Q_DECLARE_EQUALITY_COMPARABLE(RpcDescriptor)
 };
 
 // ### Qt7: remove QHash metadata interfaces.
