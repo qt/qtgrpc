@@ -1249,8 +1249,10 @@ bool QGrpcHttp2ChannelPrivate::createHttp2Stream(Http2Handler *handler)
 {
     Q_ASSERT(handler != nullptr);
     Q_ASSERT(m_connection);
-
-    const auto streamAttempt = m_connection->createStream();
+    constexpr QHttp2Stream::Configuration StreamConfiguration = {
+        false, // useDownloadBuffer
+    };
+    const auto streamAttempt = m_connection->createStream(StreamConfiguration);
     if (!streamAttempt.ok()) {
         handler->asyncFinish({ StatusCode::Unavailable,
                                tr("Unable to create an HTTP/2 stream (%1)")
