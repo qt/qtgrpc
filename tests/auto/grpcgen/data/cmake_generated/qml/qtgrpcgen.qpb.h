@@ -34,7 +34,7 @@ class IntMessage : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTGRPCGEN_QML_EXPORT)
     QML_VALUE_TYPE(intMessage)
-    Q_PROPERTY(QtProtobuf::sint32 field READ field WRITE setField SCRIPTABLE true)
+    Q_PROPERTY(QtProtobuf::sint32 field READ field WRITE setField SCRIPTABLE true FINAL)
 
 public:
     using QtProtobufFieldEnum = IntMessage_QtProtobufNested::QtProtobufFieldEnum;
