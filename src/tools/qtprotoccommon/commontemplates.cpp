@@ -228,43 +228,43 @@ const char *CommonTemplates::CopyConstructorMessageDataDefinitionTemplate()
 const char *CommonTemplates::PropertyTemplate()
 {
     return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
-           "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
+           "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
 }
 const char *CommonTemplates::PropertyRepeatedTemplate()
 {
     return "Q_PROPERTY($property_list_type$ $property_name$ READ $property_name$ WRITE "
-           "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
+           "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
 }
 const char *CommonTemplates::PropertyRepeatedMessageTemplate()
 {
     return "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
-           "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
+           "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
 }
 const char *CommonTemplates::PropertyMessageTemplate()
 {
     return "Q_PROPERTY($property_type$ *$property_name$_p READ $property_name$_p WRITE "
-           "set$property_name_cap$_p SCRIPTABLE false)\n";
+           "set$property_name_cap$_p SCRIPTABLE false FINAL)\n";
 }
 const char *CommonTemplates::PropertyQmlMessageTemplate()
 {
     return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
-           "set$property_name_cap$)\n";
+           "set$property_name_cap$ FINAL)\n";
 }
 
 const char *CommonTemplates::PropertyOneofTemplate()
 {
     return "Q_PROPERTY($property_type$ $property_name$ "
-           "READ $property_name$_p WRITE set$property_name_cap$_p)\n";
+           "READ $property_name$_p WRITE set$property_name_cap$_p FINAL)\n";
 }
 const char *CommonTemplates::PropertyOneofMessageTemplate()
 {
     return "Q_PROPERTY($property_type$ *$property_name$_p "
-           "READ $property_name$_p WRITE set$property_name_cap$_p SCRIPTABLE false)\n";
+           "READ $property_name$_p WRITE set$property_name_cap$_p SCRIPTABLE false FINAL)\n";
 }
 const char *CommonTemplates::PropertyHasFieldTemplate()
 {
     return "Q_PROPERTY(bool has$property_name_cap$ "
-           "READ has$property_name_cap$)\n";
+           "READ has$property_name_cap$ FINAL)\n";
 }
 
 const char *CommonTemplates::ConstructorMessageDeclarationTemplate()
