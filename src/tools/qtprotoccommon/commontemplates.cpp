@@ -186,7 +186,8 @@ const char *CommonTemplates::EnumClassForwardDeclarationTemplate()
 
 const char *CommonTemplates::ClassMessageQmlBeginDeclarationTemplate()
 {
-    return "    QML_VALUE_TYPE($classname_low_case$)\n";
+    return "    QML_STRUCTURED_VALUE\n"
+           "    QML_VALUE_TYPE($classname_low_case$)\n";
 }
 
 const char *CommonTemplates::ClassMessageBeginDeclarationTemplate()
