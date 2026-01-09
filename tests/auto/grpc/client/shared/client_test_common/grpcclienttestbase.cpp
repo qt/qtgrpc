@@ -55,17 +55,21 @@ void GrpcClientTestBase::initTestCase_data()
 #if QT_CONFIG(ssl)
     if (m_channels.testFlag(Channel::Ssl)) {
         QFile caCerificateFile(":/assets/cert.pem");
-        QVERIFY2(caCerificateFile.open(QFile::ReadOnly), "Unable to open ssl ca certificate file");
-        QSslConfiguration sslConfig;
-        QSslCertificate caCert(caCerificateFile.readAll());
-        sslConfig.setProtocol(QSsl::TlsV1_2);
-        sslConfig.addCaCertificate(caCert);
-        sslConfig.setAllowedNextProtocols({ QByteArray("h2") });
-        QTest::newRow("Http2ClientSSL")
-            << QFlags{ Channel::Qt, Channel::Ssl }
-            << std::shared_ptr<QAbstractGrpcChannel>(
-                   new QGrpcHttp2Channel(QUrl("https://localhost:50052", QUrl::StrictMode),
-                                         QGrpcChannelOptions{}.setSslConfiguration(sslConfig)));
+        if (caCerificateFile.open(QFile::ReadOnly)) {
+            QSslConfiguration sslConfig;
+            QSslCertificate caCert(caCerificateFile.readAll());
+            sslConfig.setProtocol(QSsl::TlsV1_2);
+            sslConfig.addCaCertificate(caCert);
+            sslConfig.setAllowedNextProtocols({ QByteArray("h2") });
+            QTest::newRow("Http2ClientSSL")
+                << QFlags{ Channel::Qt, Channel::Ssl }
+                << std::shared_ptr<QAbstractGrpcChannel>(
+                    new QGrpcHttp2Channel(QUrl("https://localhost:50052", QUrl::StrictMode),
+                                            QGrpcChannelOptions{}.setSslConfiguration(sslConfig)));
+        } else {
+            qDebug() << "Unable to open ssl ca certificate file for testing. Check the openssl"
+                " executable in your system and rebuild the test.";
+        }
     }
 
     if (m_channels.testFlag(Channel::SslNoCredentials)) {

@@ -353,27 +353,29 @@ void TestServer::run(qint64 latency)
     TestServiceServiceImpl service(latency);
 
     grpc::ServerBuilder builder;
-    QFile cfile(":/assets/cert.pem");
-    if (!cfile.open(QFile::ReadOnly)) {
-        qDebug() << "Unable to open SSL certificate. Test lacks resources.";
-        return;
-    }
-    QString cert = cfile.readAll();
-
-    QFile kfile(":/assets/key.pem");
-    if (!kfile.open(QFile::ReadOnly)){
-        qDebug() << "Unable to open SSL key. Test lacks resources.";
-        return;
-    }
-    QString key = kfile.readAll();
-
-    grpc::SslServerCredentialsOptions opts(GRPC_SSL_DONT_REQUEST_CLIENT_CERTIFICATE);
-    opts.pem_key_cert_pairs.push_back({ key.toStdString(), cert.toStdString() });
 
     QString httpURI("127.0.0.1:50051");
     builder.AddListeningPort(httpURI.toStdString(), grpc::InsecureServerCredentials());
+
     QString httpsURI("127.0.0.1:50052");
-    builder.AddListeningPort(httpsURI.toStdString(), grpc::SslServerCredentials(opts));
+    if (QFile cfile(":/assets/cert.pem"); cfile.open(QFile::ReadOnly)) {
+        QString cert = cfile.readAll();
+
+        if (QFile kfile(":/assets/key.pem"); kfile.open(QFile::ReadOnly)) {
+            QString key = kfile.readAll();
+
+            grpc::SslServerCredentialsOptions opts(GRPC_SSL_DONT_REQUEST_CLIENT_CERTIFICATE);
+            opts.pem_key_cert_pairs.push_back({ key.toStdString(), cert.toStdString() });
+
+            builder.AddListeningPort(httpsURI.toStdString(), grpc::SslServerCredentials(opts));
+        } else {
+            qDebug() << "Unable to open SSL key. Test lacks resources.";
+            httpsURI = "";
+        }
+    } else {
+        qDebug() << "Unable to open SSL cert. Test lacks resources.";
+        httpsURI = "";
+    }
 #ifndef Q_OS_WINDOWS
     QString unixUri("unix:///tmp/qtgrpc_test.sock");
     builder.AddListeningPort(unixUri.toStdString(), grpc::InsecureServerCredentials());

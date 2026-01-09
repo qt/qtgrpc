@@ -36,17 +36,19 @@ target_link_libraries(tst_grpc_client_test_common PRIVATE
     Qt::Grpc
 )
 
-set(ssl_cert "${CMAKE_CURRENT_LIST_DIR}/../test_server/assets/cert.pem")
+get_target_property(grpc_testserver_bin_dir grpc_testserver BINARY_DIR)
+set(ssl_cert "${grpc_testserver_bin_dir}/assets/cert.pem")
 
-set_source_files_properties(${ssl_cert}
-    PROPERTIES QT_RESOURCE_ALIAS assets/cert.pem)
+if(EXISTS "${ssl_cert}")
+    set_source_files_properties(${ssl_cert}
+        PROPERTIES QT_RESOURCE_ALIAS assets/cert.pem)
 
-qt_add_resources(tst_grpc_client_test_common
-    "keys"
-    PREFIX
-        "/"
-    FILES
-        ${ssl_cert}
-)
-
+    qt_add_resources(tst_grpc_client_test_common
+        "keys"
+        PREFIX
+            "/"
+        FILES
+            ${ssl_cert}
+    )
+endif()
 qt_autogen_tools_initial_setup(tst_grpc_client_test_common)

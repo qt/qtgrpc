@@ -10,6 +10,39 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 find_package(Protobuf)
 find_package(gRPC)
 
+# Renew certificates at each test build
+find_program(openssl NAMES openssl openssl.exe)
+set(certificates_output_dir "${CMAKE_CURRENT_BINARY_DIR}/assets")
+file(REMOVE
+    "${certificates_output_dir}/key.pem"
+    "${certificates_output_dir}/cert.pem"
+)
+if(NOT openssl)
+    message(WARNING "Unable to generate openssl certificates. 'openssl' "
+        "executable is not found.")
+else()
+    message("Generate: ${certificates_output_dir}/key.pem"
+        " ${certificates_output_dir}/cert.pem")
+
+    file(MAKE_DIRECTORY "${certificates_output_dir}")
+    execute_process(
+        COMMAND
+            "${openssl}" req
+            -x509
+            -newkey rsa:4096
+            -days 365
+            -nodes
+            -keyout key.pem
+            -out cert.pem
+            -subj "/C=DE/ST=Berlin/L=Berlin/O=The Qt Company GmbH/OU=RnD/CN=localhost/emailAddress=dennis.oberst@qt.io"
+        WORKING_DIRECTORY
+            "${certificates_output_dir}"
+        OUTPUT_QUIET
+        ERROR_QUIET
+    )
+endif()
+
+
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${_qt_grpc_backup_prefer_config})
 unset(_qt_grpc_backup_prefer_config)
 
@@ -91,19 +124,22 @@ target_link_libraries(grpc_testserverrunner
         Qt6::Core
 )
 
-set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/assets/cert.pem"
-    PROPERTIES QT_RESOURCE_ALIAS assets/cert.pem)
-set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/assets/key.pem"
-    PROPERTIES QT_RESOURCE_ALIAS assets/key.pem)
+if(EXISTS "${certificates_output_dir}/key.pem" AND
+   EXISTS "${certificates_output_dir}/cert.pem")
+    set_source_files_properties("${certificates_output_dir}/cert.pem"
+        PROPERTIES QT_RESOURCE_ALIAS assets/cert.pem)
+    set_source_files_properties("${certificates_output_dir}/key.pem"
+        PROPERTIES QT_RESOURCE_ALIAS assets/key.pem)
 
-qt_add_resources(grpc_testserverrunner
-    "keys"
-    PREFIX
-        "/"
-    FILES
-        "${CMAKE_CURRENT_LIST_DIR}/assets/cert.pem"
-        "${CMAKE_CURRENT_LIST_DIR}/assets/key.pem"
-)
+    qt_add_resources(grpc_testserverrunner
+        "keys"
+        PREFIX
+            "/"
+        FILES
+            "${certificates_output_dir}/cert.pem"
+            "${certificates_output_dir}/key.pem"
+    )
+endif()
 
 qt_internal_add_executable(grpc_testserver
     SOURCES
