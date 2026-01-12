@@ -182,7 +182,7 @@ const QHash<QByteArray, QByteArray> &QGrpcOperation::metadata() const & noexcept
 
     The metadata may contain multiple entries under the same key.
 
-    \sa serverInitialMetadataReceived() serverTrailingMetadata()
+    \sa serverTrailingMetadata()
 */
 const QMultiHash<QByteArray, QByteArray> &QGrpcOperation::serverInitialMetadata() const & noexcept
 {
