@@ -33,7 +33,7 @@ public:
         QGrpcChannelOptions opts;
         const auto address = QString::fromStdString(getTransportAddress(transport));
         if (transport == "https") {
-            uri = QString("https://") + address;
+            uri = QUrl("https://"_L1 + address);
             QSslCertificate crt(QByteArray(SslRootKey.data(), SslRootKey.size()));
             QSslConfiguration sslConfig;
             sslConfig.setProtocol(QSsl::TlsV1_2OrLater);
@@ -41,9 +41,9 @@ public:
             sslConfig.setAllowedNextProtocols({ "h2" });
             opts.setSslConfiguration(sslConfig);
         } else if (transport == "http") {
-            uri = QString("http://") + address;
+            uri = QUrl("http://"_L1 + address);
         } else {
-            uri = address;
+            uri = QUrl(address);
         }
 
         mClient.attachChannel(std::make_shared<QGrpcHttp2Channel>(std::move(uri), opts));
