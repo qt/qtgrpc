@@ -109,13 +109,7 @@ namespace QtProtobufPrivate {
 template <class To, class From>
 To qprotobufmessage_cast_helper(From *msg) noexcept
 {
-    static_assert(std::is_pointer_v<To>,
-                  "qprotomessage_cast requires the target to be a pointer type.");
-
     using ToType = std::remove_cv_t<std::remove_pointer_t<To>>;
-    static_assert(std::is_base_of_v<QProtobufMessage, ToType>,
-                  "qprotobufmessage_cast requires the target type to be a subclass of "
-                  "QProtobufMessage");
     if (msg && msg->metaObject() == &ToType::staticMetaObject)
         return static_cast<To>(msg);
     return nullptr;
@@ -126,12 +120,19 @@ To qprotobufmessage_cast_helper(From *msg) noexcept
 template <class To>
 [[nodiscard]] To qprotobufmessage_cast(QProtobufMessage *from)
 {
-    return QtProtobufPrivate::qprotobufmessage_cast_helper<To>(from);
+    using ConstTo = std::add_pointer_t<std::add_const_t<std::remove_pointer_t<To>>>;
+    auto fromCasted = qprotobufmessage_cast<ConstTo>(static_cast<const QProtobufMessage *>(from));
+    return const_cast<To>(fromCasted);
 }
 
 template <class To>
 [[nodiscard]] To qprotobufmessage_cast(const QProtobufMessage *from)
 {
+    static_assert(std::is_pointer_v<To>,
+                  "qprotobufmessage_cast requires the target to be a pointer type.");
+    static_assert(std::is_base_of_v<QProtobufMessage, std::remove_cv_t<std::remove_pointer_t<To>>>,
+                  "qprotobufmessage_cast requires the target type to be a subclass of "
+                  "QProtobufMessage");
     static_assert(std::is_const_v<std::remove_pointer_t<To>>,
                   "qprotobufmessage_cast cannot cast away constness (use const_cast)");
     return QtProtobufPrivate::qprotobufmessage_cast_helper<To>(from);
