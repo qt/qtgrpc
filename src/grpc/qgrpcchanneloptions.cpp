@@ -427,6 +427,7 @@ QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
     debug.nospace().noquote();
     debug << "QGrpcChannelOptions(deadline: " << chOpts.deadlineTimeout()
           << ", metadata: " << chOpts.metadata(QtGrpc::MultiValue)
+          << ", filterServerMetadata: " << chOpts.filterServerMetadata()
           << ", serializationFormat: " << chOpts.serializationFormat().suffix()
           << ", sslConfiguration: ";
 #  if QT_CONFIG(ssl)
