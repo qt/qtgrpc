@@ -319,7 +319,8 @@ QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts)
     const QDebugStateSaver save(debug);
     debug.nospace().noquote();
     debug << "QGrpcCallOptions(deadline: " << callOpts.deadlineTimeout()
-          << ", metadata: " << callOpts.metadata(QtGrpc::MultiValue) << ')';
+          << ", metadata: " << callOpts.metadata(QtGrpc::MultiValue) << ", filterServerMetadata: "
+          << callOpts.filterServerMetadata() << ')';
     return debug;
 }
 #endif
