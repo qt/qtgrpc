@@ -381,6 +381,13 @@ std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const
 }
 #endif
 
+/*
+//! [compares]
+    Returns \c true if the \l{deadlineTimeout}, \l{filterServerMetadata},
+    \l{metadata(QtGrpc::MultiValue_t)}, \l{serializationFormat} and
+    \l{sslConfiguration} in \a lhs and \a rhs are
+//! [compares]
+*/
 bool comparesEqual(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rhs)
 {
     return lhs.deadlineTimeout() == rhs.deadlineTimeout()
@@ -392,6 +399,20 @@ bool comparesEqual(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rh
 #endif
         ;
 }
+
+/*!
+    \since 6.11
+    \fn bool QGrpcChannelOptions::operator==(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rhs)
+    \include qgrpcchanneloptions.cpp compares
+    equal.
+*/
+
+/*!
+    \since 6.11
+    \fn bool QGrpcChannelOptions::operator!=(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rhs)
+    \include qgrpcchanneloptions.cpp compares
+    not equal.
+*/
 
 #ifndef QT_NO_DEBUG_STREAM
 /*!
