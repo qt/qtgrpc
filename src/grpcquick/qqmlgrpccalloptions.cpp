@@ -23,11 +23,6 @@ public:
     QMetaObject::Connection metadataUpdateConnection;
 };
 
-/*!
-    \class QQmlGrpcCallOptions
-    \internal
-*/
-
 QQmlGrpcCallOptions::QQmlGrpcCallOptions(QObject *parent)
     : QObject(*(new QQmlGrpcCallOptionsPrivate), parent)
 {
@@ -35,15 +30,6 @@ QQmlGrpcCallOptions::QQmlGrpcCallOptions(QObject *parent)
 
 QQmlGrpcCallOptions::~QQmlGrpcCallOptions() = default;
 
-/*!
-    \property QtGrpcQuickPrivate::QQmlGrpcCallOptions::deadlineTimeout
-
-    This property holds the deadline timeout for the gRPC call in milliseconds.
-    The deadline specifies how long the client is willing to wait for a reply
-    from the server. If the deadline is exceeded, the call will be canceled.
-
-    The default value is \c 0, which means no deadline is set.
-*/
 qint64 QQmlGrpcCallOptions::deadlineTimeout() const
 {
     Q_D(const QQmlGrpcCallOptions);
@@ -65,13 +51,6 @@ const QGrpcCallOptions &QQmlGrpcCallOptions::options() const & noexcept
     return d->options;
 }
 
-/*!
-    \property QtGrpcQuickPrivate::QQmlGrpcCallOptions::metadata
-
-    This property holds the metadata to be sent with the gRPC call. Metadata
-    consists of key-value pairs that are sent as HTTP/2 headers in the gRPC
-    request.
-*/
 QQmlGrpcMetadata *QQmlGrpcCallOptions::metadata() const
 {
     Q_D(const QQmlGrpcCallOptions);
