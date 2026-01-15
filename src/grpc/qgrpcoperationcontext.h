@@ -81,7 +81,7 @@ Q_SIGNALS:
     void writeMessageRequested(const QByteArray &data);
     void writesDoneRequested();
     // Internal signals of this class.
-    void serverInitialMetadataReceived();
+    void serverInitialMetadataReceived(QPrivateSignal);
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcOperationContext)

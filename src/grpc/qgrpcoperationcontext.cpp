@@ -326,7 +326,7 @@ void QGrpcOperationContext::setServerInitialMetadata(QMultiHash<QByteArray, QByt
 #if QT_DEPRECATED_SINCE(6, 13)
     d->deprServerInitialMetadata = QtGrpcPrivate::toHash(d->serverInitialMetadata);
 #endif
-    emit serverInitialMetadataReceived();
+    emit serverInitialMetadataReceived(QPrivateSignal{});
 }
 
 /*!
