@@ -32,7 +32,7 @@ void QGrpcOperationPrivate::asyncFinishInvalid(QGrpcStatus &&status)
         [qPtr = QPointer(q), s = std::move(status)] {
             if (!qPtr)
                 return;
-            qPtr->onFinished(s);
+            emit qPtr->context().finished(s);
         },
         Qt::QueuedConnection);
 }
@@ -153,12 +153,46 @@ QGrpcOperation::QGrpcOperation(QtGrpc::RpcDescriptor descriptor, const QGrpcCall
 
     [[maybe_unused]] bool valid = false;
     valid = connect(d->operationContext, &QGrpcOperationContext::messageReceived, this,
-                    &QGrpcOperation::onMessageReceived);
+                    [this](const QByteArray &data) {
+                        Q_D(QGrpcOperation);
+                        d->data = data;
+
+                        auto channel = d->channel.lock();
+                        if (!channel) {
+                            qGrpcCritical("message received without active channel");
+                            return;
+                        }
+
+                        auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())
+                                           ->interceptorEngine;
+                        if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::
+                                                     MessageReceived))
+                            engine.onMessageReceived(*d->operationContext, d->data);
+                    });
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'messageReceived' signal");
 
     valid = connect(d->operationContext, &QGrpcOperationContext::finished, this,
-                    &QGrpcOperation::onFinished);
+                    [this](const QGrpcStatus &status) {
+                        Q_D(QGrpcOperation);
+                        if (isFinished())
+                            return;
+                        d->state = QGrpcOperationPrivate::State::Finished;
+
+                        if (auto ch = d->channel.lock()) {
+                            auto &engine = QAbstractGrpcChannelPrivate::get(ch.get())
+                                               ->interceptorEngine;
+                            if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::
+                                                         Finished)) {
+                                auto interceptedStatus = status;
+                                engine.onFinished(*d->operationContext, interceptedStatus);
+                                emit finished(interceptedStatus);
+                                return;
+                            }
+                        }
+
+                        emit finished(status);
+                    });
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
                "Unable to make connection to the 'finished' signal");
 
@@ -406,42 +440,6 @@ void QGrpcOperation::writesDone()
     if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::WritesDone))
         engine.onWritesDone(*d->operationContext);
     emit d->operationContext->writesDoneRequested();
-}
-
-void QGrpcOperation::onMessageReceived(const QByteArray &data)
-{
-    Q_D(QGrpcOperation);
-    d->data = data;
-
-    auto channel = d->channel.lock();
-    if (!channel) {
-        qGrpcCritical("message received without active channel");
-        return;
-    }
-
-    auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
-    if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::MessageReceived))
-        engine.onMessageReceived(*d->operationContext, d->data);
-}
-
-void QGrpcOperation::onFinished(const QGrpcStatus &status)
-{
-    Q_D(QGrpcOperation);
-    if (isFinished())
-        return;
-    d->state = QGrpcOperationPrivate::State::Finished;
-
-    if (auto ch = d->channel.lock()) {
-        auto &engine = QAbstractGrpcChannelPrivate::get(ch.get())->interceptorEngine;
-        if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::Finished)) {
-            auto interceptedStatus = status;
-            engine.onFinished(*d->operationContext, interceptedStatus);
-            emit finished(interceptedStatus);
-            return;
-        }
-    }
-
-    emit finished(status);
 }
 
 bool QGrpcOperation::event(QEvent *event)
