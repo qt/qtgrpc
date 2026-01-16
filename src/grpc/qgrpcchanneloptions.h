@@ -23,6 +23,7 @@
 
 QT_BEGIN_NAMESPACE
 
+class QDataStream;
 class QDebug;
 class QVariant;
 class QGrpcSerializationFormat;
@@ -91,8 +92,15 @@ private:
                                             const QGrpcChannelOptions &rhs);
     Q_DECLARE_EQUALITY_COMPARABLE_NON_NOEXCEPT(QGrpcChannelOptions)
 
+    friend size_t qHash(const QGrpcChannelOptions &key) = delete;
+    friend size_t qHash(const QGrpcChannelOptions &key, size_t seed) = delete;
+
 #ifndef QT_NO_DEBUG_STREAM
     friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts);
+#endif
+#ifndef QT_NO_DATASTREAM
+    friend QDataStream &operator<<(QDataStream &out, const QGrpcChannelOptions &chOpts) = delete;
+    friend QDataStream &operator>>(QDataStream &in, QGrpcChannelOptions &chOpts) = delete;
 #endif
 
     Q_DECLARE_PRIVATE(QGrpcChannelOptions)
