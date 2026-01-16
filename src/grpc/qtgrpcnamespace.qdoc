@@ -106,6 +106,7 @@
     \struct QtGrpc::RpcDescriptor
     \inmodule QtGrpc
     \inheaderfile QtGrpcNamespace
+    \compares equality
 
     \brief Describes a gRPC method with its service name, method name,
     and RPC type.
@@ -128,6 +129,16 @@
 /*!
     \variable QtGrpc::RpcDescriptor::type
     The type of RPC, as defined by \l QtGrpc::RpcType.
+*/
+
+/*!
+    \fn bool QtGrpc::RpcDescriptor::operator==(const QtGrpc::RpcDescriptor &lhs, const QtGrpc::RpcDescriptor &rhs) noexcept
+    Returns \c true if the \l{service}, \l{method} and \l{type} in \a lhs and \a rhs are equal.
+*/
+
+/*!
+    \fn size_t QtGrpc::RpcDescriptor::qHash(const QtGrpc::RpcDescriptor &key, size_t seed) noexcept
+    \qhash{RpcDescriptor}
 */
 
 /*!

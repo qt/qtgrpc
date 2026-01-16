@@ -11,12 +11,16 @@
 #include <QtGrpc/qtgrpcexports.h>
 
 #include <QtCore/qcompare.h>
+#include <QtCore/qhashfunctions.h>
 #include <QtCore/qlatin1stringview.h>
+#include <QtCore/qmetatype.h>
 #include <QtCore/qtmetamacros.h>
 
 QT_BEGIN_NAMESPACE
 
 struct QMetaObject;
+class QDataStream;
+class QDebug;
 
 namespace QtGrpc {
 Q_NAMESPACE_EXPORT(Q_GRPC_EXPORT)
@@ -55,6 +59,7 @@ enum class RpcType : quint8 {
     ClientStreaming,
     BidiStreaming,
 };
+Q_ENUM_NS(RpcType)
 
 struct RpcDescriptor
 {
@@ -68,6 +73,20 @@ private:
         return lhs.service == rhs.service && lhs.method == rhs.method && lhs.type == rhs.type;
     }
     Q_DECLARE_EQUALITY_COMPARABLE(RpcDescriptor)
+
+    constexpr friend size_t qHash(const RpcDescriptor &key, size_t seed = 0) noexcept
+    {
+        return qHashMulti(seed, key.service, key.method, key.type);
+    }
+
+#ifndef QT_NO_DEBUG_STREAM
+    friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const RpcDescriptor &description);
+#endif
+#ifndef QT_NO_DATASTREAM
+    // prevent users from implementing their own, as the data-members don't qualify for it.
+    friend QDataStream &operator<<(QDataStream &, const RpcDescriptor &) = delete;
+    friend QDataStream &operator>>(QDataStream &, RpcDescriptor &) = delete;
+#endif
 };
 
 // ### Qt7: remove QHash metadata interfaces.
