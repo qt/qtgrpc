@@ -19,6 +19,7 @@
 
 QT_BEGIN_NAMESPACE
 
+class QDataStream;
 class QDebug;
 class QVariant;
 
@@ -75,8 +76,15 @@ private:
                                             const QGrpcCallOptions &rhs);
     Q_DECLARE_EQUALITY_COMPARABLE_NON_NOEXCEPT(QGrpcCallOptions)
 
+    friend size_t qHash(const QGrpcCallOptions &) = delete;
+    friend size_t qHash(const QGrpcCallOptions &, size_t) = delete;
+
 #ifndef QT_NO_DEBUG_STREAM
     friend Q_GRPC_EXPORT QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts);
+#endif
+#ifndef QT_NO_DATASTREAM
+    friend QDataStream &operator<<(QDataStream &, const QGrpcCallOptions &) = delete;
+    friend QDataStream &operator>>(QDataStream &, QGrpcCallOptions &) = delete;
 #endif
 
     Q_DECLARE_PRIVATE(QGrpcCallOptions)
