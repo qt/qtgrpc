@@ -16,7 +16,7 @@ qt_internal_add_module(Grpc
         qgrpcchanneloptions.h qgrpcchanneloptions.cpp
         qtgrpcglobal.h
         qtgrpclogging_p.h qtgrpclogging.cpp
-        qtgrpcnamespace.h
+        qtgrpcnamespace.h qtgrpcnamespace.cpp
         qgrpcserializationformat.h qgrpcserializationformat.cpp
         qgrpcinterceptor.h qgrpcinterceptor.cpp
         qgrpcinterceptorengine_p.h
