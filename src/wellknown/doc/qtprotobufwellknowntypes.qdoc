@@ -60,7 +60,7 @@
         }
     \endcode
 
-    To use the types listed you must link with the QtProtobuf WellKnownTypes
+    To use the types listed you must link with the \c ProtobufWellKnownTypes
     library by adding the following line to your \e{CMakeLists.txt} file:
     \badcode
         target_link_libraries(YourTargetName PRIVATE Qt::ProtobufWellKnownTypes)
