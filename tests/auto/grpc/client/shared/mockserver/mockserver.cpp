@@ -69,8 +69,8 @@ bool TagProcessor::waitForTagCompletion(std::chrono::milliseconds deadline) noex
 
 void TagProcessor::wakeCQ()
 {
-    auto *tag = new VoidTag(this);
     auto *alarm = new grpc::Alarm();
+    auto *tag = new DeleteTag<grpc::Alarm>(alarm, this);
     alarm->Set(mServer->cq(), gpr_now(GPR_CLOCK_REALTIME), tag);
 }
 
