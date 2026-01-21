@@ -14,6 +14,10 @@ class QtProtobufDurationTest : public QObject
     void setupCommonData();
 
 private Q_SLOTS:
+    void validDuration_data();
+    void validDuration();
+    void invalidDuration_data();
+    void invalidDuration();
     void serializeJson_data();
     void serializeJson();
     void serializeJsonOutOfRange_data();
@@ -76,6 +80,54 @@ void QtProtobufDurationTest::setupCommonData()
     QTest::addRow("Nanos max") << 0ll << 999999999 << QString("0.999999999s"_L1);
     QTest::addRow("Seconds min") << -315576000000ll << 0 << QString("-315576000000s"_L1);
     QTest::addRow("Seconds max") << 315576000000ll << 0 << QString("315576000000s"_L1);
+}
+
+void QtProtobufDurationTest::validDuration_data()
+{
+    QTest::addColumn<qint64>("seconds");
+    QTest::addColumn<qint32>("nanos");
+    QTest::addColumn<QString>("result");
+
+    // Common data has only valid ranges and sign compositions.
+    setupCommonData();
+}
+
+void QtProtobufDurationTest::validDuration()
+{
+    QFETCH(qint64, seconds);
+    QFETCH(qint32, nanos);
+
+    google::protobuf::Duration duration;
+    duration.setSeconds(seconds);
+    duration.setNanos(nanos);
+    QVERIFY(duration.isValid());
+    QVERIFY(google::protobuf::Duration::isValid(seconds, nanos));
+}
+
+void QtProtobufDurationTest::invalidDuration_data()
+{
+    QTest::addColumn<qint64>("seconds");
+    QTest::addColumn<qint32>("nanos");
+    QTest::addRow("Positive seconds, negative nanos")
+        << 123ll << -123;
+    QTest::addRow("Negative seconds, positive nanos")
+        << -123ll << 123;
+    QTest::addRow("Nanoseconds too large") << 0ll << 1000000000;
+    QTest::addRow("Nanoseconds too small") << 0ll << -1000000000;
+    QTest::addRow("Seconds too large") << -315576000001ll << 0;
+    QTest::addRow("Seconds too small") << 315576000001ll << 0;
+}
+
+void QtProtobufDurationTest::invalidDuration()
+{
+    QFETCH(qint64, seconds);
+    QFETCH(qint32, nanos);
+
+    google::protobuf::Duration duration;
+    duration.setSeconds(seconds);
+    duration.setNanos(nanos);
+    QVERIFY(!duration.isValid());
+    QVERIFY(!google::protobuf::Duration::isValid(seconds, nanos));
 }
 
 void QtProtobufDurationTest::serializeJson_data()

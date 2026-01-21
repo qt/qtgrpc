@@ -75,20 +75,6 @@ bool deserializeProtobufWellKnownTimestamp(QProtobufMessage *message, const QJso
     return true;
 }
 
-bool checkDurationRanges(qint64 seconds, qint32 nanos)
-{
-    if (nanos > 999'999'999 || nanos < -999'999'999) {
-        qProtoWarning("The input nanoseconds are out of range: %d", nanos);
-        return false;
-    }
-
-    if (seconds > 315'576'000'000 || seconds < -315'576'000'000) {
-        qProtoWarning("The input nanoseconds are out of range: %lld", seconds);
-        return false;
-    }
-    return true;
-}
-
 QJsonValue serializeProtobufWellKnownDuration(const QProtobufMessage *message)
 {
     qint64 seconds = 0;
@@ -108,12 +94,7 @@ QJsonValue serializeProtobufWellKnownDuration(const QProtobufMessage *message)
         return {QJsonValue::Undefined};
     }
 
-    if (seconds != 0 && nanos != 0 && (seconds ^ qint64(nanos)) < 0 ) {
-        qProtoWarning("Duration seconds and nanos must have the same sign");
-        return {QJsonValue::Undefined};
-    }
-
-    if (!checkDurationRanges(seconds, nanos))
+    if (!google::protobuf::Duration::isValid(seconds, nanos))
         return {QJsonValue::Undefined};
 
     // Reserve the maximum possible number of bytes that can be used by duration string:
@@ -173,7 +154,7 @@ bool deserializeProtobufWellKnownDuration(QProtobufMessage *message, const QJson
     auto seconds = match.captured(2).toLongLong();
     qint32 nanos = nanosString.toInt();
 
-    if (!checkDurationRanges(seconds, nanos))
+    if (!google::protobuf::Duration::isValid(seconds, nanos))
         return false;
 
     if (nanos != 0)

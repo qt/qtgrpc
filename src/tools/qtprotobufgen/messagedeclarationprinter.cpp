@@ -483,6 +483,10 @@ void MessageDeclarationPrinter::printPublicExtras()
         static const std::string exportMacro = common::buildExportMacro();
         m_printer->Print({ { "export_macro", exportMacro } },
                          CommonTemplates::QDateTimeExtrasTemplate());
+    } else if (m_descriptor->full_name() == "google.protobuf.Duration") {
+        static const std::string exportMacro = common::buildExportMacro();
+        m_printer->Print({ { "export_macro", exportMacro } },
+                         CommonTemplates::DurationExtrasTemplate());
     }
 }
 

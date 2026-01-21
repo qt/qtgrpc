@@ -167,6 +167,7 @@ public:
     static const char *QmlRegisterMessageTypeTemplate();
 
     static const char *QDateTimeExtrasTemplate();
+    static const char *DurationExtrasTemplate();
 
     static const char *ProtoFileSuffix();
     static const char *HeaderSuffix();

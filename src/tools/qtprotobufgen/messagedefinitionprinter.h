@@ -43,7 +43,7 @@ private:
     void printComparisonOperators();
     void printGetters();
     void printDestructor();
-
+    void printPrivateDurationExtras();
     void printPublicExtras();
 
     void printClassDefinitionPrivate();

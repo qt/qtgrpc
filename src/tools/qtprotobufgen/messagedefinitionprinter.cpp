@@ -119,7 +119,7 @@ void MessageDefinitionPrinter::printClassDefinitionPrivate()
         });
         m_printer->Print(scopeNamespaces, CommonTemplates::NamespaceClosingTemplate());
     }
-
+    printPrivateDurationExtras();
     printDataClass();
 
     printDestructor();
@@ -529,6 +529,39 @@ void MessageDefinitionPrinter::printDestructor()
     m_printer->Print(m_typeMap, "$classname$::~$classname$() = default;\n\n");
 }
 
+void MessageDefinitionPrinter::printPrivateDurationExtras()
+{
+    if (m_descriptor->full_name() == "google.protobuf.Duration") {
+        m_printer->Print(
+            "constexpr qint64 SecondsRange = 315'576'000'000LL;\n"
+            "constexpr qint32 NanosRange = 999'999'999;\n"
+            "static constexpr bool checkDurationRange(qint64 seconds, qint32 nanos) noexcept\n"
+            "{\n"
+            "    if (seconds > SecondsRange || seconds < -SecondsRange) {\n"
+            "        qWarning(\"Invalid Duration: seconds=%lld out of range [-%lld, +%lld]\",\n"
+            "                 seconds, SecondsRange, -SecondsRange);\n"
+            "        return false;\n"
+            "    }\n"
+            "    if (nanos > NanosRange || nanos < -NanosRange) {\n"
+            "        qWarning(\"Invalid Duration: nanos=%d out of range [-%d, +%d]\",\n"
+            "                 nanos, NanosRange, -NanosRange);\n"
+            "        return false;\n"
+            "    }\n"
+            "    return true;\n"
+            "}\n"
+            "static constexpr bool checkSignMatch(qint64 seconds, qint32 nanos) noexcept\n"
+            "{\n"
+            "    const bool isSignMatch = !(seconds != 0 && nanos != 0 \n"
+            "        && (seconds ^ qint64(nanos)) < 0);\n"
+            "    if (!isSignMatch) {\n"
+            "        qWarning(\"Invalid sign between seconds = %lld and nanos = %d\",\n"
+            "                 seconds, nanos);\n"
+            "    }\n"
+            "    return isSignMatch;\n"
+            "}\n\n");
+    }
+}
+
 void MessageDefinitionPrinter::printPublicExtras()
 {
     if (m_descriptor->full_name() == "google.protobuf.Timestamp") {
@@ -544,6 +577,12 @@ void MessageDefinitionPrinter::printPublicExtras()
                 "{\n"
                 "    return QDateTime::fromMSecsSinceEpoch(\n"
                 "            seconds() * 1000 + nanos() / 1000000, QTimeZone(QTimeZone::UTC));\n"
+                "}\n\n");
+    } else if (m_descriptor->full_name() == "google.protobuf.Duration") {
+        m_printer->Print(
+                "bool Duration::isValid(QtProtobuf::int64 seconds, QtProtobuf::int32 nanos)\n"
+                "{\n"
+                "    return checkDurationRange(seconds, nanos) && checkSignMatch(seconds, nanos);\n"
                 "}\n\n");
     }
 }
