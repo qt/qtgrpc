@@ -975,6 +975,13 @@ const char *CommonTemplates::QDateTimeExtrasTemplate()
            "$export_macro$QDateTime toDateTime() const;\n";
 }
 
+const char *CommonTemplates::DurationExtrasTemplate()
+{
+    return "\n$export_macro$static bool isValid(QtProtobuf::int64 seconds, "
+           "QtProtobuf::int32 nanos);\n"
+           "bool isValid() const { return isValid(seconds(), nanos()); }\n";
+}
+
 // Those marked "Limited" have limited usage in QML, since QML only supports signed integers.
 // See https://doc.qt.io/qt-6/qtqml-typesystem-valuetypes.html for types that are supported by the
 // QML JS engine.
