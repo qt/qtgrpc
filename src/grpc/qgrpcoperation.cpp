@@ -49,7 +49,7 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
 
     auto &interceptorEngine = QAbstractGrpcChannelPrivate::get(ch.get())->interceptorEngine;
 
-    if (interceptorEngine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::Start)) {
+    if (interceptorEngine.hasHandlerFor(QtGrpc::InterceptorCapability::Start)) {
         auto mt = QProtobufMessagePrivate::get(&message)->metaObject->metaType();
         auto *interceptedMessage = static_cast<QProtobufMessage *>(mt.create(&message));
         Q_ASSERT(interceptedMessage);
@@ -165,8 +165,7 @@ QGrpcOperation::QGrpcOperation(QtGrpc::RpcDescriptor descriptor, const QGrpcCall
 
                         auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())
                                            ->interceptorEngine;
-                        if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::
-                                                     MessageReceived))
+                        if (engine.hasHandlerFor(QtGrpc::InterceptorCapability::MessageReceived))
                             engine.onMessageReceived(*d->operationContext, d->data);
                     });
     Q_ASSERT_X(valid, "QGrpcOperation::QGrpcOperation",
@@ -182,8 +181,7 @@ QGrpcOperation::QGrpcOperation(QtGrpc::RpcDescriptor descriptor, const QGrpcCall
                         if (auto ch = d->channel.lock()) {
                             auto &engine = QAbstractGrpcChannelPrivate::get(ch.get())
                                                ->interceptorEngine;
-                            if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::
-                                                         Finished)) {
+                            if (engine.hasHandlerFor(QtGrpc::InterceptorCapability::Finished)) {
                                 auto interceptedStatus = status;
                                 engine.onFinished(*d->operationContext, interceptedStatus);
                                 emit finished(interceptedStatus);
@@ -298,7 +296,7 @@ void QGrpcOperation::cancel()
         return;
     }
     auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
-    if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::Cancel))
+    if (engine.hasHandlerFor(QtGrpc::InterceptorCapability::Cancel))
         engine.onCancel(*d->operationContext);
     emit d->operationContext->cancelRequested();
 }
@@ -414,7 +412,7 @@ void QGrpcOperation::writeMessage(const QProtobufMessage &message)
     auto serializer = d->operationContext->serializer();
     auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
 
-    if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::WriteMessage)) {
+    if (engine.hasHandlerFor(QtGrpc::InterceptorCapability::WriteMessage)) {
         auto mt = QProtobufMessagePrivate::get(&message)->metaObject->metaType();
         auto *interceptedMessage = static_cast<QProtobufMessage *>(mt.create(&message));
         Q_ASSERT(interceptedMessage);
@@ -437,7 +435,7 @@ void QGrpcOperation::writesDone()
         return;
     }
     auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
-    if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::WritesDone))
+    if (engine.hasHandlerFor(QtGrpc::InterceptorCapability::WritesDone))
         engine.onWritesDone(*d->operationContext);
     emit d->operationContext->writesDoneRequested();
 }

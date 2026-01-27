@@ -32,6 +32,7 @@ public:
         : threadId(QThread::currentThreadId()), channelOptions(options), interceptorEngine(*parent)
     {
     }
+
     const Qt::HANDLE threadId;
     QGrpcChannelOptions channelOptions;
     QGrpcInterceptorEngine interceptorEngine;

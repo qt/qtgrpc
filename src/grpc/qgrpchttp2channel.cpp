@@ -7,6 +7,7 @@
 #include <QtGrpc/qgrpccalloptions.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qgrpchttp2channel.h>
+#include <QtGrpc/qgrpcinterceptorchain.h>
 #include <QtGrpc/qgrpcoperationcontext.h>
 #include <QtGrpc/qgrpcserializationformat.h>
 #include <QtGrpc/qgrpcstatus.h>
@@ -1283,6 +1284,19 @@ QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri)
 */
 QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri, const QGrpcChannelOptions &options)
     : QAbstractGrpcChannel(options),
+      d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, this))
+{
+}
+
+QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri, QGrpcInterceptorChain interceptorChain)
+    : QAbstractGrpcChannel(std::move(interceptorChain)),
+      d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, this))
+{
+}
+
+QGrpcHttp2Channel::QGrpcHttp2Channel(const QUrl &hostUri, const QGrpcChannelOptions &options,
+                                     QGrpcInterceptorChain interceptorChain)
+    : QAbstractGrpcChannel(options, std::move(interceptorChain)),
       d_ptr(std::make_unique<QGrpcHttp2ChannelPrivate>(hostUri, this))
 {
 }
