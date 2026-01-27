@@ -13,8 +13,6 @@
 
 QT_BEGIN_NAMESPACE
 
-using QtGrpcPrivate::InterceptorCapabilityBinding;
-
 /*!
     \class QAbstractGrpcChannel
     \inmodule QtGrpc
@@ -102,6 +100,21 @@ QAbstractGrpcChannel::QAbstractGrpcChannel(const QGrpcChannelOptions &options)
 {
 }
 
+QAbstractGrpcChannel::QAbstractGrpcChannel(QGrpcInterceptorChain interceptorChain)
+    : QAbstractGrpcChannel()
+{
+    Q_D(QAbstractGrpcChannel);
+    d->interceptorEngine.setInterceptorChain(std::move(interceptorChain));
+}
+
+QAbstractGrpcChannel::QAbstractGrpcChannel(const QGrpcChannelOptions &options,
+                                           QGrpcInterceptorChain interceptorChain)
+    : QAbstractGrpcChannel(options)
+{
+    Q_D(QAbstractGrpcChannel);
+    d->interceptorEngine.setInterceptorChain(std::move(interceptorChain));
+}
+
 /*!
     Destroys the QAbstractGrpcChannel.
 */
@@ -142,23 +155,10 @@ void QAbstractGrpcChannel::setChannelOptions(QGrpcChannelOptions &&options)
     d->channelOptions = std::move(options);
 }
 
-void QAbstractGrpcChannel::removeAllInterceptors()
+const QGrpcInterceptorChain &QAbstractGrpcChannel::interceptorChain() const & noexcept
 {
-    Q_D(QAbstractGrpcChannel);
-    d->interceptorEngine.removeAllInterceptors();
-}
-
-void QAbstractGrpcChannel::addInterceptorImpl(void *interceptor,
-                                              QSpan<const InterceptorCapabilityBinding> bindings)
-{
-    Q_D(QAbstractGrpcChannel);
-    d->interceptorEngine.addInterceptor(interceptor, bindings);
-}
-
-bool QAbstractGrpcChannel::removeInterceptorImpl(void *interceptor)
-{
-    Q_D(QAbstractGrpcChannel);
-    return d->interceptorEngine.removeInterceptor(interceptor);
+    Q_D(const QAbstractGrpcChannel);
+    return d->interceptorEngine.interceptorChain();
 }
 
 QT_END_NAMESPACE

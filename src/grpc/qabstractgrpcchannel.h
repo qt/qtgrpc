@@ -9,7 +9,6 @@
 #include <QtGrpc/qtgrpcglobal.h>
 
 #include <QtCore/qmetatype.h>
-#include <QtCore/qspan.h>
 #include <QtCore/qstringfwd.h>
 #include <QtCore/qtclasshelpermacros.h>
 
@@ -26,6 +25,7 @@ class QGrpcCallOptions;
 class QGrpcClientBase;
 class QGrpcClientStream;
 class QGrpcServerStream;
+class QGrpcInterceptorChain;
 
 class QAbstractGrpcChannelPrivate;
 class Q_GRPC_EXPORT QAbstractGrpcChannel
@@ -41,28 +41,15 @@ public:
     void setChannelOptions(const QGrpcChannelOptions &options);
     void setChannelOptions(QGrpcChannelOptions &&options);
 
-    template <typename T, QtGrpcPrivate::if_interceptor<T> = true>
-    bool addInterceptor(T *interceptor)
-    {
-        if (!interceptor)
-            return false;
-        auto bindings = QtGrpcPrivate::InterceptorCapabilityBinding::extractFrom(interceptor);
-        addInterceptorImpl(interceptor, bindings);
-        return true;
-    }
-
-    template <typename T, QtGrpcPrivate::if_interceptor<T> = true>
-    bool removeInterceptor(T *interceptor)
-    {
-        return removeInterceptorImpl(interceptor);
-    }
-
-    void removeAllInterceptors();
+    [[nodiscard]] const QGrpcInterceptorChain &interceptorChain() const & noexcept;
 
 protected:
     QAbstractGrpcChannel();
     explicit QAbstractGrpcChannel(QAbstractGrpcChannelPrivate &dd);
     explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options);
+    explicit QAbstractGrpcChannel(QGrpcInterceptorChain interceptorChain);
+    explicit QAbstractGrpcChannel(const QGrpcChannelOptions &options,
+                                  QGrpcInterceptorChain interceptorChain);
 
 private:
     virtual void call(QGrpcOperationContext *operationContext, QByteArray &&messageData) = 0;
@@ -71,10 +58,6 @@ private:
     virtual void clientStream(QGrpcOperationContext *operationContext,
                               QByteArray &&messageData) = 0;
     virtual void bidiStream(QGrpcOperationContext *operationContext, QByteArray &&messageData) = 0;
-
-    void addInterceptorImpl(void *interceptor,
-                            QSpan<const QtGrpcPrivate::InterceptorCapabilityBinding> bindings);
-    bool removeInterceptorImpl(void *interceptor);
 
 private:
     friend class QGrpcClientBase;

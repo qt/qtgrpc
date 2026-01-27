@@ -25,6 +25,9 @@ class Q_GRPC_EXPORT QGrpcHttp2Channel final : public QAbstractGrpcChannel
 public:
     explicit QGrpcHttp2Channel(const QUrl &hostUri);
     explicit QGrpcHttp2Channel(const QUrl &hostUri, const QGrpcChannelOptions &options);
+    explicit QGrpcHttp2Channel(const QUrl &hostUri, QGrpcInterceptorChain interceptorChain);
+    explicit QGrpcHttp2Channel(const QUrl &hostUri, const QGrpcChannelOptions &options,
+                               QGrpcInterceptorChain interceptorChain);
     ~QGrpcHttp2Channel() override;
 
     [[nodiscard]] QUrl hostUri() const;

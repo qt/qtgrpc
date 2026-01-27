@@ -8,6 +8,13 @@ if(NOT QT_BUILD_STANDALONE_TESTS AND NOT QT_BUILDING_QT)
     include("../shared/mockserver/CMakeLists.txt")
 endif()
 
+qt_internal_add_test(tst_grpc_interceptorchain
+    SOURCES
+        tst_grpc_interceptorchain.cpp
+    LIBRARIES
+        Qt::Grpc
+)
+
 if (NOT TARGET grpc_mock_server)
     message(WARNING "Dependencies of 'tst_grpc_client_interceptors' not found. Skipping.")
     return()
@@ -66,3 +73,4 @@ protobuf_generate(
 target_include_directories(tst_grpc_client_interceptors PRIVATE
     "${proto_out_include}"
 )
+

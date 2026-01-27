@@ -9,7 +9,7 @@ using namespace QtGrpc;
 using QtGrpcPrivate::InterceptorTypes;
 
 static_assert(InterceptorTypes::size <= std::numeric_limits<
-                  std::underlying_type_t<QtGrpcPrivate::InterceptorCapability>>::digits,
+                  std::underlying_type_t<QtGrpc::InterceptorCapability>>::digits,
               "Interceptors exceed the capability limit!");
 
 QT_BEGIN_NAMESPACE

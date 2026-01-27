@@ -1,6 +1,7 @@
 // Copyright (C) 2025 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
+#include "interceptor_helper.h"
 #include <mockserver.h>
 
 #include <proto/server/interceptor1.grpc.pb.h>
@@ -14,8 +15,9 @@
 #include <proto/client/interceptor1_client.grpc.qpb.h>
 #include <proto/client/interceptor2_client.grpc.qpb.h>
 
+#include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qgrpchttp2channel.h>
-#include <QtGrpc/qgrpcinterceptor.h>
+#include <QtGrpc/qgrpcinterceptorchain.h>
 
 #include <QtProtobuf/qprotobufmessage.h>
 #include <QtProtobuf/qprotobufserializer.h>
@@ -25,6 +27,9 @@
 
 #include <QtCore/qtimer.h>
 
+#include <string>
+#include <vector>
+
 #undef QTEST_FAIL_ACTION
 #define QTEST_FAIL_ACTION                         \
     do {                                          \
@@ -33,173 +38,6 @@
     } while (0)
 
 using namespace Qt::Literals::StringLiterals;
-using Capability = QtGrpcPrivate::InterceptorCapability;
-
-namespace {
-
-struct InterceptorCall
-{
-    QByteArray name;
-    Capability capability;
-
-    bool operator==(const InterceptorCall &other) const
-    {
-        return other.name == name && other.capability == capability;
-    }
-
-    friend QDebug operator<<(QDebug debug, const InterceptorCall &call)
-    {
-        const QDebugStateSaver save(debug);
-        debug.nospace() << "{ name: " << call.name
-                        << ", capability: " << qToUnderlying(call.capability) << " }";
-        return debug;
-    }
-};
-
-inline QList<InterceptorCall> CallLog = {};
-
-class LoggingInterceptor : public QGrpcStartInterceptor,
-                           public QGrpcInitialMetadataInterceptor,
-                           public QGrpcMessageReceivedInterceptor,
-                           public QGrpcWriteMessageInterceptor,
-                           public QGrpcWritesDoneInterceptor,
-                           public QGrpcTrailingMetadataInterceptor,
-                           public QGrpcFinishedInterceptor,
-                           public QGrpcCancelInterceptor
-{
-public:
-    explicit LoggingInterceptor(QByteArray name) : m_name(std::move(name)) { }
-
-    Continuation onStart(QGrpcInterceptionContext &, QProtobufMessage &,
-                         QGrpcCallOptions &) override
-    {
-        CallLog.push_back({ m_name, Capability::Start });
-        return Continuation::Proceed;
-    }
-
-    void onInitialMetadata(QGrpcInterceptionContext &,
-                           QMultiHash<QByteArray, QByteArray> &) override
-    {
-        CallLog.push_back({ m_name, Capability::InitialMetadata });
-    }
-
-    void onMessageReceived(QGrpcInterceptionContext &, QByteArray &) override
-    {
-        CallLog.push_back({ m_name, Capability::MessageReceived });
-    }
-
-    void onWriteMessage(QGrpcInterceptionContext &, QProtobufMessage &) override
-    {
-        CallLog.push_back({ m_name, Capability::WriteMessage });
-    }
-
-    void onWritesDone(QGrpcInterceptionContext &) override
-    {
-        CallLog.push_back({ m_name, Capability::WritesDone });
-    }
-
-    void onTrailingMetadata(QGrpcInterceptionContext &,
-                            QMultiHash<QByteArray, QByteArray> &) override
-    {
-        CallLog.push_back({ m_name, Capability::TrailingMetadata });
-    }
-
-    void onFinished(QGrpcInterceptionContext &, QGrpcStatus &) override
-    {
-        CallLog.push_back({ m_name, Capability::Finished });
-    }
-
-    void onCancel(QGrpcInterceptionContext &) override
-    {
-        CallLog.push_back({ m_name, Capability::Cancel });
-    }
-
-protected:
-    QByteArray m_name;
-};
-
-class PartialInterceptor : public QGrpcStartInterceptor, public QGrpcFinishedInterceptor
-{
-public:
-    explicit PartialInterceptor(QByteArray name) : m_name(std::move(name)) { }
-
-    Continuation onStart(QGrpcInterceptionContext &, QProtobufMessage &,
-                         QGrpcCallOptions &) override
-    {
-        CallLog.push_back({ m_name, Capability::Start });
-        return Continuation::Proceed;
-    }
-
-    void onFinished(QGrpcInterceptionContext &, QGrpcStatus &) override
-    {
-        CallLog.push_back({ m_name, Capability::Finished });
-    }
-
-private:
-    QByteArray m_name;
-};
-
-class DroppingInterceptor : public QGrpcStartInterceptor
-{
-public:
-    using Predicate = std::function<Continuation(QtGrpc::RpcDescriptor)>;
-
-    explicit DroppingInterceptor(QByteArray name, Predicate shouldDrop)
-        : m_name(std::move(name)), m_shouldDrop(std::move(shouldDrop))
-    {
-    }
-
-    Continuation onStart(QGrpcInterceptionContext &ctx,
-                         QProtobufMessage &, QGrpcCallOptions &) override
-    {
-        CallLog.push_back({ m_name, Capability::Start });
-        return m_shouldDrop(ctx.descriptor());
-    }
-
-private:
-    QByteArray m_name;
-    Predicate m_shouldDrop;
-};
-
-class ContextVerifyingInterceptor : public QGrpcStartInterceptor,
-                                    public QGrpcInitialMetadataInterceptor,
-                                    public QGrpcFinishedInterceptor
-{
-public:
-    explicit ContextVerifyingInterceptor(QByteArray name) : m_name(std::move(name)) { }
-
-    Continuation onStart(QGrpcInterceptionContext &context,
-                         QProtobufMessage &, QGrpcCallOptions &) override
-    {
-        CallLog.push_back({ m_name, Capability::Start });
-        capturedDescriptor1 = std::make_unique<QtGrpc::RpcDescriptor>(context.descriptor());
-        return Continuation::Proceed;
-    }
-
-    void onInitialMetadata(QGrpcInterceptionContext &context,
-                           QMultiHash<QByteArray, QByteArray> &) override
-    {
-        CallLog.push_back({ m_name, Capability::InitialMetadata });
-        capturedDescriptor2 = std::make_unique<QtGrpc::RpcDescriptor>(context.descriptor());
-    }
-
-    void onFinished(QGrpcInterceptionContext &context, QGrpcStatus &) override
-    {
-        capturedCallOptions = context.callOptions();
-        capturedDescriptor3 = std::make_unique<QtGrpc::RpcDescriptor>(context.descriptor());
-        CallLog.push_back({ m_name, Capability::Finished });
-    }
-
-    std::unique_ptr<QtGrpc::RpcDescriptor> capturedDescriptor1;
-    std::unique_ptr<QtGrpc::RpcDescriptor> capturedDescriptor2;
-    std::unique_ptr<QtGrpc::RpcDescriptor> capturedDescriptor3;
-    QGrpcCallOptions capturedCallOptions;
-
-private:
-    QByteArray m_name;
-};
-
-} // namespace
 
 class QtGrpcClientInterceptorsTest : public QObject
 {
@@ -215,10 +53,11 @@ public:
         };
     }
 
-    static std::shared_ptr<QGrpcHttp2Channel> createChannel()
+    static std::shared_ptr<QGrpcHttp2Channel> createChannel(QGrpcInterceptorChain interceptors)
     {
-        return std::make_shared<QGrpcHttp2Channel>(QUrl("http://"
-                                                        + QString::fromStdString(serverAddress())));
+        QUrl url("http://"_L1 + QString::fromStdString(serverAddress()));
+        return std::make_shared<QGrpcHttp2Channel>(url, QGrpcChannelOptions{},
+                                                   std::move(interceptors));
     }
 
 private Q_SLOTS:
@@ -254,10 +93,7 @@ private Q_SLOTS:
 
     void interceptionContextAccessors();
 
-    void sharedBetweenChannels();
     void addInterceptorVariations();
-    void removeInterceptor_data();
-    void removeInterceptor();
     void removeAllInterceptorsMultiple();
 
 private:
@@ -409,11 +245,10 @@ void QtGrpcClientInterceptorsTest::unaryCallOrder()
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
-    auto channel = createChannel();
-    auto interceptorA = std::make_unique<LoggingInterceptor>("A");
-    auto interceptorB = std::make_unique<LoggingInterceptor>("B");
-    QVERIFY(channel->addInterceptor(interceptorA.get()));
-    QVERIFY(channel->addInterceptor(interceptorB.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("A")));
+    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("B")));
+    auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
 
     auto reply = m_client1.Unary(qt::tst::i1::CallMessage{});
@@ -443,11 +278,11 @@ void QtGrpcClientInterceptorsTest::bidiStreamCallOrder()
     auto processor = m_server->createProcessor();
     setupBidiStreamEcho(processor);
 
-    auto channel = createChannel();
     auto interceptorA = std::make_unique<LoggingInterceptor>("A");
     auto interceptorB = std::make_unique<LoggingInterceptor>("B");
-    QVERIFY(channel->addInterceptor(interceptorA.get()));
-    QVERIFY(channel->addInterceptor(interceptorB.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.set(std::move(interceptorA), std::move(interceptorB)));
+    auto channel = createChannel(std::move(interceptors));
     m_client2.attachChannel(channel);
 
     qt::tst::i2::StreamMessage msg;
@@ -497,11 +332,10 @@ void QtGrpcClientInterceptorsTest::clientStreamCallOrder()
     auto processor = m_server->createProcessor();
     setupClientStreamSink(processor, cancelled);
 
-    auto channel = createChannel();
-    auto interceptorA = std::make_unique<LoggingInterceptor>("A");
-    auto interceptorB = std::make_unique<LoggingInterceptor>("B");
-    QVERIFY(channel->addInterceptor(interceptorA.get()));
-    QVERIFY(channel->addInterceptor(interceptorB.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.set(std::make_unique<LoggingInterceptor>("A"),
+                             std::make_unique<LoggingInterceptor>("B")));
+    auto channel = createChannel(std::move(interceptors));
     m_client2.attachChannel(channel);
 
     auto stream = m_client2.ClientStream(qt::tst::i2::StreamMessage{});
@@ -543,11 +377,12 @@ void QtGrpcClientInterceptorsTest::failedCallOrder()
     auto processor = m_server->createProcessor();
     setupUnaryError(processor, grpc::CANCELLED);
 
-    auto channel = createChannel();
     auto interceptorA = std::make_unique<LoggingInterceptor>("A");
     auto interceptorB = std::make_unique<LoggingInterceptor>("B");
-    QVERIFY(channel->addInterceptor(interceptorA.get()));
-    QVERIFY(channel->addInterceptor(interceptorB.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.add(std::move(interceptorA)));
+    QVERIFY(interceptors.add(std::move(interceptorB)));
+    auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
 
     auto reply = m_client1.Unary(qt::tst::i1::CallMessage{});
@@ -578,11 +413,10 @@ void QtGrpcClientInterceptorsTest::cancelledCallOrder()
     auto processor = m_server->createProcessor();
     setupClientStreamSink(processor, serverCancelled);
 
-    auto channel = createChannel();
-    auto interceptorA = std::make_unique<LoggingInterceptor>("A");
-    auto interceptorB = std::make_unique<LoggingInterceptor>("B");
-    QVERIFY(channel->addInterceptor(interceptorA.get()));
-    QVERIFY(channel->addInterceptor(interceptorB.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.set(std::make_unique<LoggingInterceptor>("A"),
+                             std::make_unique<LoggingInterceptor>("B")));
+    auto channel = createChannel(std::move(interceptors));
     m_client2.attachChannel(channel);
 
     auto stream = m_client2.ClientStream(qt::tst::i2::StreamMessage{});
@@ -622,11 +456,10 @@ void QtGrpcClientInterceptorsTest::partialCapabilities()
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
-    auto channel = createChannel();
-    auto partialInterceptor = std::make_unique<PartialInterceptor>("Partial");
-    auto fullInterceptor = std::make_unique<LoggingInterceptor>("Full");
-    QVERIFY(channel->addInterceptor(partialInterceptor.get()));
-    QVERIFY(channel->addInterceptor(fullInterceptor.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.set(std::make_unique<PartialInterceptor>("Partial"),
+                             std::make_unique<LoggingInterceptor>("Full")));
+    auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
 
     auto reply = m_client1.Unary(qt::tst::i1::CallMessage{});
@@ -652,7 +485,6 @@ void QtGrpcClientInterceptorsTest::onStartDrop()
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
-    auto channel = createChannel();
     auto dropper = std::make_unique<DroppingInterceptor>("Drop", [](QtGrpc::RpcDescriptor desc) {
         if (desc.service == "tst.i1.Interceptor"_L1 && desc.method == "Unary"_L1
             && desc.type == QtGrpc::RpcType::UnaryCall) {
@@ -661,8 +493,9 @@ void QtGrpcClientInterceptorsTest::onStartDrop()
         return QGrpcStartInterceptor::Continuation::Drop;
     });
     auto logger = std::make_unique<LoggingInterceptor>("After");
-    QVERIFY(channel->addInterceptor(dropper.get()));
-    QVERIFY(channel->addInterceptor(logger.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.set(std::move(dropper), std::move(logger)));
+    auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
     m_client2.attachChannel(channel);
 
@@ -712,7 +545,6 @@ void QtGrpcClientInterceptorsTest::onStartDropFromSecond()
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
-    auto channel = createChannel();
     auto first = std::make_unique<LoggingInterceptor>("First");
     QGrpcStartInterceptor::Continuation continuation = QGrpcStartInterceptor::Continuation::Drop;
     auto dropper = std::make_unique<DroppingInterceptor>("Drop", [&continuation](QtGrpc::RpcDescriptor) {
@@ -720,9 +552,11 @@ void QtGrpcClientInterceptorsTest::onStartDropFromSecond()
                                                          });
     auto third = std::make_unique<LoggingInterceptor>("Proceed");
 
-    QVERIFY(channel->addInterceptor(first.get()));
-    QVERIFY(channel->addInterceptor(dropper.get()));
-    QVERIFY(channel->addInterceptor(third.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.add(std::move(first)));
+    QVERIFY(interceptors.add(std::move(dropper)));
+    QVERIFY(interceptors.add(std::move(third)));
+    auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
 
     const auto makeCall = [this](QtGrpc::StatusCode expectedCode) {
@@ -861,11 +695,11 @@ void QtGrpcClientInterceptorsTest::modifyArguments()
         QByteArray m_name;
     };
 
-    auto channel = createChannel();
     auto modifyingInterceptor1 = std::make_unique<ModifyingInterceptor>("i1");
     auto modifyingInterceptor2 = std::make_unique<ModifyingInterceptor>("i2");
-    QVERIFY(channel->addInterceptor(modifyingInterceptor1.get()));
-    QVERIFY(channel->addInterceptor(modifyingInterceptor2.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.set(std::move(modifyingInterceptor1), std::move(modifyingInterceptor2)));
+    auto channel = createChannel(std::move(interceptors));
     m_client2.attachChannel(channel);
 
     QGrpcCallOptions opts;
@@ -902,13 +736,15 @@ void QtGrpcClientInterceptorsTest::interceptionContextAccessors()
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
-    auto interceptor = std::make_unique<ContextVerifyingInterceptor>("Ctx");
-    auto channel = createChannel();
-    QVERIFY(channel->addInterceptor(interceptor.get()));
-
     QGrpcCallOptions opts;
     opts.addMetadata("test-key", "test-value");
     opts.setDeadlineTimeout(std::chrono::seconds(30));
+
+    QGrpcInterceptorChain interceptors;
+    auto interceptor = std::make_unique<ContextVerifyingInterceptor>("Ctx");
+    const auto *interceptorPtr = interceptor.get();
+    QVERIFY(interceptors.add(std::move(interceptor)));
+    auto channel = createChannel(std::move(interceptors));
 
     m_client1.attachChannel(channel);
     auto reply = m_client1.Unary(qt::tst::i1::CallMessage{}, opts);
@@ -917,66 +753,16 @@ void QtGrpcClientInterceptorsTest::interceptionContextAccessors()
     QSignalSpy finishedSpy(reply.get(), &QGrpcCallReply::finished);
     QVERIFY(finishedSpy.wait());
 
-    QCOMPARE(interceptor->capturedDescriptor1->service, "tst.i1.Interceptor"_L1);
-    QCOMPARE(interceptor->capturedDescriptor1->method, "Unary"_L1);
-    QCOMPARE(interceptor->capturedDescriptor1->type, QtGrpc::RpcType::UnaryCall);
+    QCOMPARE(interceptorPtr->capturedDescriptor1->service, "tst.i1.Interceptor"_L1);
+    QCOMPARE(interceptorPtr->capturedDescriptor1->method, "Unary"_L1);
+    QCOMPARE(interceptorPtr->capturedDescriptor1->type, QtGrpc::RpcType::UnaryCall);
 
-    QCOMPARE_EQ(*interceptor->capturedDescriptor1, *interceptor->capturedDescriptor2);
-    QCOMPARE_EQ(*interceptor->capturedDescriptor1, *interceptor->capturedDescriptor3);
+    QCOMPARE_EQ(*interceptorPtr->capturedDescriptor1, *interceptorPtr->capturedDescriptor2);
+    QCOMPARE_EQ(*interceptorPtr->capturedDescriptor1, *interceptorPtr->capturedDescriptor3);
 
-    QCOMPARE_EQ(interceptor->capturedCallOptions.deadlineTimeout(), opts.deadlineTimeout());
-    QCOMPARE_EQ(interceptor->capturedCallOptions.metadata(QtGrpc::MultiValue),
+    QCOMPARE_EQ(interceptorPtr->capturedCallOptions.deadlineTimeout(), opts.deadlineTimeout());
+    QCOMPARE_EQ(interceptorPtr->capturedCallOptions.metadata(QtGrpc::MultiValue),
                 opts.metadata(QtGrpc::MultiValue));
-}
-
-void QtGrpcClientInterceptorsTest::sharedBetweenChannels()
-{
-    auto processor = m_server->createProcessor();
-
-    // Setup two unary handlers
-    auto *data1 = new UnaryHandler;
-    auto *data2 = new UnaryHandler;
-
-    auto setupHandler = [&processor, this](UnaryHandler *d) {
-        auto *h = new CallbackTag(
-            [d, &processor](bool ok) {
-                QVERIFY(ok);
-                d->op.Finish(d->response, grpc::Status::OK,
-                             new DeleteTag<UnaryHandler>(d, processor.get()));
-                return CallbackTag::Delete;
-            },
-            processor.get());
-        m_service1->RequestUnary(&d->ctx, &d->request, &d->op, m_server->cq(), m_server->cq(), h);
-    };
-    setupHandler(data1);
-    setupHandler(data2);
-
-    // Same interceptors shared between two channels
-    auto shared = std::make_unique<LoggingInterceptor>("Shared");
-
-    auto channel1 = createChannel();
-    QVERIFY(channel1->addInterceptor(shared.get()));
-    qt::tst::i1::Interceptor::Client client1;
-    client1.attachChannel(channel1);
-
-    auto channel2 = createChannel();
-    QVERIFY(channel2->addInterceptor(shared.get()));
-    qt::tst::i1::Interceptor::Client client2;
-    client2.attachChannel(channel2);
-
-    auto reply1 = client1.Unary(qt::tst::i1::CallMessage{});
-    auto reply2 = client2.Unary(qt::tst::i1::CallMessage{});
-    QVERIFY(reply1);
-    QVERIFY(reply2);
-
-    QSignalSpy spy1(reply1.get(), &QGrpcCallReply::finished);
-    QSignalSpy spy2(reply2.get(), &QGrpcCallReply::finished);
-
-    QVERIFY(spy1.wait());
-    QTRY_COMPARE(spy2.count(), 1);
-
-    // 5 stages per call * 2 calls = 10 entries
-    QCOMPARE(CallLog.size(), 10);
 }
 
 void QtGrpcClientInterceptorsTest::addInterceptorVariations()
@@ -984,17 +770,12 @@ void QtGrpcClientInterceptorsTest::addInterceptorVariations()
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
-    auto channel = createChannel();
-
-    auto singleInterceptor = std::make_unique<LoggingInterceptor>("Single");
-    auto loggingInterceptor1 = std::make_unique<LoggingInterceptor>("V1");
-    auto loggingInterceptor2 = std::make_unique<LoggingInterceptor>("V2");
-    auto loggingInterceptor3 = std::make_unique<LoggingInterceptor>("V3");
-
-    QVERIFY(channel->addInterceptor(singleInterceptor.get()));
-    QVERIFY(channel->addInterceptor(loggingInterceptor1.get()));
-    QVERIFY(channel->addInterceptor(loggingInterceptor2.get()));
-    QVERIFY(channel->addInterceptor(loggingInterceptor3.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("Single")));
+    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("V1")));
+    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("V2")));
+    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("V3")));
+    auto channel = createChannel(std::move(interceptors));
 
     m_client1.attachChannel(channel);
 
@@ -1012,121 +793,19 @@ void QtGrpcClientInterceptorsTest::addInterceptorVariations()
     QCOMPARE(startOrder, QByteArrayList({ "Single", "V1", "V2", "V3" }));
 }
 
-void QtGrpcClientInterceptorsTest::removeInterceptor_data()
-{
-    QTest::addColumn<QByteArrayList>("initial");
-    QTest::addColumn<QByteArrayList>("toRemove");
-    QTest::addColumn<int>("expectedSuccessCount");
-    QTest::addColumn<QByteArrayList>("expectedRemaining");
-
-    QTest::addRow("removeFirst")
-        << QByteArrayList{ "A", "B", "C" }
-        << QByteArrayList{ "A" }
-        << 1
-        << QByteArrayList{ "B", "C" };
-
-    QTest::addRow("removeMiddle")
-        << QByteArrayList{ "A", "B", "C" }
-        << QByteArrayList{ "B" }
-        << 1
-        << QByteArrayList{ "A", "C" };
-
-    QTest::addRow("removeLast")
-        << QByteArrayList{ "A", "B", "C" }
-        << QByteArrayList{ "C" }
-        << 1
-        << QByteArrayList{ "A", "B" };
-
-    QTest::addRow("removeFirstAndLast")
-        << QByteArrayList{ "A", "B", "C", "D", "E" }
-        << QByteArrayList{ "A", "E" }
-        << 2
-        << QByteArrayList{ "B", "C", "D" };
-
-    QTest::addRow("removeNonExistent")
-        << QByteArrayList{ "A", "B" }
-        << QByteArrayList{ "X" }
-        << 0
-        << QByteArrayList{ "A", "B" };
-
-    QTest::addRow("removeSameTwice")
-        << QByteArrayList{ "A", "B", "C" }
-        << QByteArrayList{ "B", "B" }
-        << 1
-        << QByteArrayList{ "A", "C" };
-
-    QTest::addRow("removeFromEmpty")
-        << QByteArrayList{}
-        << QByteArrayList{ "A" }
-        << 0
-        << QByteArrayList{};
-}
-
-void QtGrpcClientInterceptorsTest::removeInterceptor()
-{
-    QFETCH(const QByteArrayList, initial);
-    QFETCH(const QByteArrayList, toRemove);
-    QFETCH(const int, expectedSuccessCount);
-    QFETCH(const QByteArrayList, expectedRemaining);
-
-    auto processor = m_server->createProcessor();
-    setupUnaryEcho(processor);
-
-    QHash<QByteArray, std::shared_ptr<LoggingInterceptor>> interceptors;
-    for (const auto &name : initial + toRemove) {
-        if (!interceptors.contains(name))
-            interceptors[name] = std::make_shared<LoggingInterceptor>(name);
-    }
-
-    auto channel = createChannel();
-
-    for (const auto &name : initial)
-        QVERIFY(channel->addInterceptor(interceptors[name].get()));
-
-    int successCount = 0;
-    for (const auto &name : toRemove) {
-        if (channel->removeInterceptor(interceptors[name].get()))
-            ++successCount;
-    }
-
-    QCOMPARE(successCount, expectedSuccessCount);
-
-    LoggingInterceptor *nullInterceptor = nullptr;
-    QVERIFY(!channel->removeInterceptor(nullInterceptor));
-
-    m_client1.attachChannel(channel);
-
-    auto reply = m_client1.Unary(qt::tst::i1::CallMessage{});
-    QVERIFY(reply);
-
-    QSignalSpy finishedSpy(reply.get(), &QGrpcCallReply::finished);
-    QVERIFY(finishedSpy.wait());
-
-    QByteArrayList actualRemaining;
-    for (const auto &call : std::as_const(CallLog)) {
-        if (call.capability == Capability::Start)
-            actualRemaining.append(call.name);
-    }
-    QCOMPARE(actualRemaining, expectedRemaining);
-}
-
 void QtGrpcClientInterceptorsTest::removeAllInterceptorsMultiple()
 {
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
-    auto channel = createChannel();
-    auto interceptorA = std::make_unique<LoggingInterceptor>("A");
-    auto interceptorB = std::make_unique<LoggingInterceptor>("B");
-    QVERIFY(channel->addInterceptor(interceptorA.get()));
-    QVERIFY(channel->addInterceptor(interceptorB.get()));
+    QGrpcInterceptorChain interceptors;
+    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("A")));
+    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("B")));
+    interceptors.clear();
 
-    channel->removeAllInterceptors();
-    channel->removeAllInterceptors();
+    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("New")));
 
-    auto interceptorNew = std::make_unique<LoggingInterceptor>("New");
-    QVERIFY(channel->addInterceptor(interceptorNew.get()));
-
+    auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
 
     auto reply = m_client1.Unary(qt::tst::i1::CallMessage{});

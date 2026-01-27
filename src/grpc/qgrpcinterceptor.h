@@ -130,11 +130,10 @@ struct Q_GRPC_EXPORT QGrpcCancelInterceptor
     virtual void onCancel(QGrpcInterceptionContext &context) = 0;
 };
 
-namespace QtGrpcPrivate {
+namespace QtGrpc {
 // clang-format off
 
 // Stable mapping of interceptor types to bit flags.
-// WARNING: Do not reorder or modify existing values. Append only.
 enum class InterceptorCapability : quint64 {
     Start            = 0x01,
     InitialMetadata  = 0x02,
@@ -144,8 +143,13 @@ enum class InterceptorCapability : quint64 {
     TrailingMetadata = 0x20,
     Finished         = 0x40,
     Cancel           = 0x80,
+    // WARNING: Do not reorder or modify existing values. Append only.
 };
 Q_DECLARE_FLAGS(InterceptorCapabilities, InterceptorCapability)
+
+} // namespace QtGrpc
+
+namespace QtGrpcPrivate {
 
 template <typename... Ts>
 struct TypeList
@@ -204,13 +208,13 @@ enum class InterceptionFlow : uint8_t {
 template <typename T>
 struct InterceptorInfo;
 
-#define QGRPC_INTERCEPTOR_INFO(Type, Cap, Method, Flow)                \
-    template <>                                                        \
-    struct InterceptorInfo<Type>                                       \
-    {                                                                  \
-        static constexpr auto capability = InterceptorCapability::Cap; \
-        static constexpr auto method = &Type::Method;                  \
-        static constexpr auto flow = InterceptionFlow::Flow;           \
+#define QGRPC_INTERCEPTOR_INFO(Type, Cap, Method, Flow)                        \
+    template <>                                                                \
+    struct InterceptorInfo<Type>                                               \
+    {                                                                          \
+        static constexpr auto capability = QtGrpc::InterceptorCapability::Cap; \
+        static constexpr auto method = &Type::Method;                          \
+        static constexpr auto flow = InterceptionFlow::Flow;                   \
     }
 
 QGRPC_INTERCEPTOR_INFO(QGrpcStartInterceptor,
@@ -234,7 +238,7 @@ QGRPC_INTERCEPTOR_INFO(QGrpcCancelInterceptor,
 
 struct InterceptorCapabilityBinding
 {
-    InterceptorCapability capability;
+    QtGrpc::InterceptorCapability capability;
     void *interface;
 
     // Returns the list of interfaces found in T and extracted from \a interceptor, bound

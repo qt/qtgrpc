@@ -323,7 +323,7 @@ void QGrpcOperationContext::setServerInitialMetadata(QMultiHash<QByteArray, QByt
     Q_D(QGrpcOperationContext);
     if (auto channel = operation().d_func()->channel.lock()) {
         auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
-        if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::InitialMetadata))
+        if (engine.hasHandlerFor(QtGrpc::InterceptorCapability::InitialMetadata))
             engine.onInitialMetadata(*this, metadata);
     }
     d->serverInitialMetadata = std::move(metadata);
@@ -361,7 +361,7 @@ void QGrpcOperationContext::setServerTrailingMetadata(QMultiHash<QByteArray, QBy
     Q_D(QGrpcOperationContext);
     if (auto channel = operation().d_func()->channel.lock()) {
         auto &engine = QAbstractGrpcChannelPrivate::get(channel.get())->interceptorEngine;
-        if (engine.hasHandlerFor(QtGrpcPrivate::InterceptorCapability::TrailingMetadata))
+        if (engine.hasHandlerFor(QtGrpc::InterceptorCapability::TrailingMetadata))
             engine.onTrailingMetadata(*this, metadata);
     }
     if (d->serverTrailingMetadata == metadata)

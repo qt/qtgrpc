@@ -19,6 +19,7 @@ qt_internal_add_module(Grpc
         qtgrpcnamespace.h qtgrpcnamespace.cpp
         qgrpcserializationformat.h qgrpcserializationformat.cpp
         qgrpcinterceptor.h qgrpcinterceptor.cpp
+        qgrpcinterceptorchain.h qgrpcinterceptorchain_p.h qgrpcinterceptorchain.cpp
         qgrpcinterceptorengine_p.h
         compat/removed_api.cpp
     LIBRARIES
