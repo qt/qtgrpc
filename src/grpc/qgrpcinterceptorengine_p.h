@@ -127,17 +127,17 @@ public:
     }
 
     [[nodiscard]]
-    QGrpcStartInterceptor::Continuation onStart(QtGrpc::RpcDescriptor description,
+    QGrpcStartInterceptor::Continuation onStart(const QGrpcOperationContext &context,
                                                 QProtobufMessage &message,
                                                 QGrpcCallOptions &callOptions)
     {
         using Info = QtGrpcPrivate::InterceptorInfo<QGrpcStartInterceptor>;
         constexpr auto Idx = QtGrpcPrivate::capabilityToIndex(Info::capability);
 
+        QGrpcInterceptionContext ctx(m_parentChannel, context);
         for (const auto &handler : m_capabilityHandlers[Idx]) {
             auto *handlerInterface = static_cast<QGrpcStartInterceptor *>(handler.interface);
-            auto result = (handlerInterface->*Info::method)(description, m_parentChannel, message,
-                                                            callOptions);
+            auto result = (handlerInterface->*Info::method)(ctx, message, callOptions);
             if (result == QGrpcStartInterceptor::Drop)
                 return result;
         }

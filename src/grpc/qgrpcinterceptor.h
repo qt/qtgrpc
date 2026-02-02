@@ -55,8 +55,7 @@ struct Q_GRPC_EXPORT QGrpcStartInterceptor
     enum Continuation : uint8_t { Proceed, Drop };
 
     virtual ~QGrpcStartInterceptor();
-    virtual Continuation onStart(QtGrpc::RpcDescriptor description,
-                                 const QAbstractGrpcChannel &channel, QProtobufMessage &message,
+    virtual Continuation onStart(QGrpcInterceptionContext &context, QProtobufMessage &message,
                                  QGrpcCallOptions &callOptions) = 0;
 };
 
