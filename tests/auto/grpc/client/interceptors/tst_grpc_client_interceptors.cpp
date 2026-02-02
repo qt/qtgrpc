@@ -70,7 +70,7 @@ class LoggingInterceptor : public QGrpcStartInterceptor,
 public:
     explicit LoggingInterceptor(QByteArray name) : m_name(std::move(name)) { }
 
-    Continuation onStart(QtGrpc::RpcDescriptor, const QAbstractGrpcChannel &, QProtobufMessage &,
+    Continuation onStart(QGrpcInterceptionContext &, QProtobufMessage &,
                          QGrpcCallOptions &) override
     {
         CallLog.push_back({ m_name, Capability::Start });
@@ -123,7 +123,7 @@ class PartialInterceptor : public QGrpcStartInterceptor, public QGrpcFinishedInt
 public:
     explicit PartialInterceptor(QByteArray name) : m_name(std::move(name)) { }
 
-    Continuation onStart(QtGrpc::RpcDescriptor, const QAbstractGrpcChannel &, QProtobufMessage &,
+    Continuation onStart(QGrpcInterceptionContext &, QProtobufMessage &,
                          QGrpcCallOptions &) override
     {
         CallLog.push_back({ m_name, Capability::Start });
@@ -149,11 +149,11 @@ public:
     {
     }
 
-    Continuation onStart(QtGrpc::RpcDescriptor desc, const QAbstractGrpcChannel &,
+    Continuation onStart(QGrpcInterceptionContext &ctx,
                          QProtobufMessage &, QGrpcCallOptions &) override
     {
         CallLog.push_back({ m_name, Capability::Start });
-        return m_shouldDrop(desc);
+        return m_shouldDrop(ctx.descriptor());
     }
 
 private:
@@ -168,11 +168,11 @@ class ContextVerifyingInterceptor : public QGrpcStartInterceptor,
 public:
     explicit ContextVerifyingInterceptor(QByteArray name) : m_name(std::move(name)) { }
 
-    Continuation onStart(QtGrpc::RpcDescriptor desc, const QAbstractGrpcChannel &,
+    Continuation onStart(QGrpcInterceptionContext &context,
                          QProtobufMessage &, QGrpcCallOptions &) override
     {
         CallLog.push_back({ m_name, Capability::Start });
-        capturedDescriptor1 = std::make_unique<QtGrpc::RpcDescriptor>(desc);
+        capturedDescriptor1 = std::make_unique<QtGrpc::RpcDescriptor>(context.descriptor());
         return Proceed;
     }
 
@@ -805,8 +805,8 @@ void QtGrpcClientInterceptorsTest::modifyArguments()
     public:
         explicit ModifyingInterceptor(QByteArray name) : m_name(std::move(name)) { }
 
-        Continuation onStart(QtGrpc::RpcDescriptor, const QAbstractGrpcChannel &,
-                             QProtobufMessage &message, QGrpcCallOptions &opts) override
+        Continuation onStart(QGrpcInterceptionContext &, QProtobufMessage &message,
+                             QGrpcCallOptions &opts) override
         {
             CallLog.push_back({ m_name, Capability::Start });
             if (auto *msg = qprotobufmessage_cast<qt::tst::i2::StreamMessage *>(&message))

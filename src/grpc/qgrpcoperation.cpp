@@ -56,7 +56,7 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
         const QScopeGuard mtGuard([mt = std::move(mt), interceptedMessage] {
             mt.destroy(interceptedMessage);
         });
-        const auto continuation = interceptorEngine.onStart(operationContext->descriptor(),
+        const auto continuation = interceptorEngine.onStart(*operationContext,
                                                             *interceptedMessage,
                                                             operationContext->d_func()->options);
         if (continuation == QGrpcStartInterceptor::Drop) {
