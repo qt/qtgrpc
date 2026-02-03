@@ -5,6 +5,10 @@
 #ifndef QGRPCINTERCEPTOR_H
 #define QGRPCINTERCEPTOR_H
 
+#if 0
+#  pragma qt_class(QGrpcInterceptor)
+#endif
+
 #include <QtGrpc/qtgrpcglobal.h>
 #include <QtGrpc/qtgrpcnamespace.h>
 
