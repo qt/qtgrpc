@@ -26,6 +26,7 @@ invoked through CMake using the \c qt_add_protobuf command.
         [OUTPUT_HEADERS <var>]
         [OUTPUT_TARGETS <var>]
         [HEADER_GUARD <pragma|filename>]
+        [GENERATE_NON_FINAL_MESSAGES]
     )
 \endcode
 
@@ -116,6 +117,7 @@ link.
     \include qtprotoccommon.qdocinc output_headers-li
     \include qtprotoccommon.qdocinc output_targets-li
     \include qtprotoccommon.qdocinc header_guard-li
+    \include qtprotoccommon.qdocinc generate_non_final_messages-li
 \endlist
 
 \sa{The qtprotobufgen Tool}

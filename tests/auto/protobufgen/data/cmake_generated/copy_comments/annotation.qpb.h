@@ -76,7 +76,7 @@ using AnnotatedMessage9Repeated = QList<AnnotatedMessage9>;
 
 /* test annotation */
 class AnnotatedMessage1_QtProtobufData;
-class AnnotatedMessage1 : public QProtobufMessage
+class AnnotatedMessage1 final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_COPY_COMMENTS_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
@@ -131,7 +131,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 
 /* test annotation */
 class AnnotatedMessage2_QtProtobufData;
-class AnnotatedMessage2 : public QProtobufMessage
+class AnnotatedMessage2 final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_COPY_COMMENTS_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
@@ -186,7 +186,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 
 /* test annotation */
 class AnnotatedMessage3_QtProtobufData;
-class AnnotatedMessage3 : public QProtobufMessage
+class AnnotatedMessage3 final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_COPY_COMMENTS_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
@@ -242,7 +242,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 
 /* test annotation */
 class AnnotatedMessage4_QtProtobufData;
-class AnnotatedMessage4 : public QProtobufMessage
+class AnnotatedMessage4 final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_COPY_COMMENTS_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
@@ -294,7 +294,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 
 /*! \brief test annotation */
 class AnnotatedMessage5_QtProtobufData;
-class AnnotatedMessage5 : public QProtobufMessage
+class AnnotatedMessage5 final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_COPY_COMMENTS_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
@@ -347,7 +347,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 
 /** \brief test annotation */
 class AnnotatedMessage6_QtProtobufData;
-class AnnotatedMessage6 : public QProtobufMessage
+class AnnotatedMessage6 final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_COPY_COMMENTS_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
@@ -402,7 +402,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
  * \brief test annotation
  */
 class AnnotatedMessage7_QtProtobufData;
-class AnnotatedMessage7 : public QProtobufMessage
+class AnnotatedMessage7 final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_COPY_COMMENTS_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
@@ -457,7 +457,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
  * \brief test annotation
  */
 class AnnotatedMessage8_QtProtobufData;
-class AnnotatedMessage8 : public QProtobufMessage
+class AnnotatedMessage8 final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_COPY_COMMENTS_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)
@@ -513,7 +513,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
  * test annotation secondline
  */
 class AnnotatedMessage9_QtProtobufData;
-class AnnotatedMessage9 : public QProtobufMessage
+class AnnotatedMessage9 final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_COPY_COMMENTS_EXPORT)
     Q_PROPERTY(QtProtobuf::sint32 testField READ testField WRITE setTestField SCRIPTABLE true)

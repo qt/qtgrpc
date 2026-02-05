@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "basicmessages.qpb.h"
+#include "non_final/basicmessages.qpb.h"
 
 #include <QTest>
 
@@ -13,10 +14,24 @@ class QtProtobufInternalsTest : public QObject
 public:
     QtProtobufInternalsTest() = default;
 
+    template <typename Str, typename StrClone, typename Int>
+    void qprotobufmessageCastTest();
+
 private Q_SLOTS:
     void nullPointerMessageTest();
     void nullPointerGetterMessageTest();
-    void qprotobufmessageCastTest();
+    void qprotobufmessageCastFinalMsgTest()
+    {
+        qprotobufmessageCastTest<qtprotobufnamespace::tests::SimpleStringMessage,
+                                 qtprotobufnamespace::tests::SimpleStringMessageClone,
+                                 qtprotobufnamespace::tests::SimpleIntMessage>();
+    }
+    void qprotobufmessageCastNonFinalMsgTest()
+    {
+        qprotobufmessageCastTest<nonfinal::qtprotobufnamespace::tests::SimpleStringMessage,
+                                 nonfinal::qtprotobufnamespace::tests::SimpleStringMessageClone,
+                                 nonfinal::qtprotobufnamespace::tests::SimpleIntMessage>();
+    }
 };
 
 void QtProtobufInternalsTest::nullPointerMessageTest()
@@ -44,64 +59,60 @@ void QtProtobufInternalsTest::nullPointerGetterMessageTest()
     QVERIFY(msg.property("testComplexField_p").value<SimpleStringMessage *>() != nullptr);
 }
 
-class DerivedMessage : public SimpleIntMessage
+class DerivedMessage : public nonfinal::qtprotobufnamespace::tests::SimpleIntMessage
 {
     Q_PROTOBUF_OBJECT
 public:
     QByteArray data;
 };
 
+template <typename Str, typename StrClone, typename Int>
 void QtProtobufInternalsTest::qprotobufmessageCastTest()
 {
-    auto *original = new SimpleStringMessage();
-    QProtobufMessage *base = original;
+    Str original;
+    QProtobufMessage *base = &original;
 
-    QVERIFY(original);
     // Case 1: Successful downcast
-    auto *castToSelf = qprotobufmessage_cast<SimpleStringMessage *>(base);
-    QCOMPARE_EQ(castToSelf, original);
+    auto *castToSelf = qprotobufmessage_cast<Str *>(base);
+    QCOMPARE_EQ(castToSelf, &original);
     // Case 2: Failed downcast to an unrelated type
-    auto *castToOther = qprotobufmessage_cast<SimpleIntMessage *>(base);
+    auto *castToOther = qprotobufmessage_cast<Int *>(base);
     QCOMPARE_EQ(castToOther, nullptr);
-    auto *castToOtherClone = qprotobufmessage_cast<SimpleStringMessageClone *>(base);
+    auto *castToOtherClone = qprotobufmessage_cast<StrClone *>(base);
     QCOMPARE_EQ(castToOtherClone, nullptr);
 
     // Case 3: Casting a null pointer
     QProtobufMessage *nullBase = nullptr;
-    auto *castFromNull = qprotobufmessage_cast<SimpleStringMessage *>(nullBase);
+    auto *castFromNull = qprotobufmessage_cast<Str *>(nullBase);
     QCOMPARE_EQ(castFromNull, nullptr);
 
     // Case 4: Const-correct casting
     const QProtobufMessage *constBase = base;
-    const auto *constCast = qprotobufmessage_cast<const SimpleStringMessage *>(constBase);
-    QCOMPARE_EQ(constCast, original);
+    const auto *constCast = qprotobufmessage_cast<const Str *>(constBase);
+    QCOMPARE_EQ(constCast, &original);
     // Case 5: Failed const-correct casting
-    const auto *failedConstCast = qprotobufmessage_cast<const SimpleIntMessage *>(constBase);
+    const auto *failedConstCast = qprotobufmessage_cast<const Int *>(constBase);
     QCOMPARE_EQ(failedConstCast, nullptr);
 
     // Case 5: Derived msg casts
-    {
-        auto *derived = new DerivedMessage();
-        base = derived;
+    if constexpr (!std::is_final_v<Int>) {
+        DerivedMessage derived;
+        base = &derived;
 
         // We cannot cast to user-derived types because the QProtobufMessage ctor
         // stores the parent's metaObject (SimpleIntMessage), not DerivedMessage's.
         // There is currently no way to provide this for user-derived types.
         QEXPECT_FAIL("", "User-derived classes not detectable", Continue);
-        QCOMPARE_EQ(qprotobufmessage_cast<DerivedMessage *>(base), derived);
+        QCOMPARE_EQ(qprotobufmessage_cast<DerivedMessage *>(base), &derived);
 
-        QCOMPARE_EQ(qprotobufmessage_cast<SimpleIntMessage *>(base), derived);
-        QCOMPARE_EQ(qprotobufmessage_cast<SimpleStringMessage *>(base), nullptr);
-        delete derived;
+        QCOMPARE_EQ(qprotobufmessage_cast<Int *>(base), &derived);
+        QCOMPARE_EQ(qprotobufmessage_cast<Str *>(base), nullptr);
 
-        auto *baseMsg = new SimpleIntMessage();
-        base = baseMsg;
+        Int baseMsg;
+        base = &baseMsg;
         // Correctly rejects invalid upcast
         QCOMPARE_EQ(qprotobufmessage_cast<DerivedMessage *>(base), nullptr);
-        delete baseMsg;
     }
-
-    delete original;
 }
 
 QTEST_MAIN(QtProtobufInternalsTest)

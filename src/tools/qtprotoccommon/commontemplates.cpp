@@ -190,10 +190,17 @@ const char *CommonTemplates::ClassMessageQmlBeginDeclarationTemplate()
            "    QML_VALUE_TYPE($classname_low_case$)\n";
 }
 
-const char *CommonTemplates::ClassMessageBeginDeclarationTemplate()
+const char *CommonTemplates::NonFinalClassMessageBeginDeclarationTemplate()
 {
     return "\nclass $dataclassname$;\n"
            "class $classname$ : public QProtobufMessage\n"
+           "{\n";
+}
+
+const char *CommonTemplates::ClassMessageBeginDeclarationTemplate()
+{
+    return "\nclass $dataclassname$;\n"
+           "class $classname$ final : public QProtobufMessage\n"
            "{\n";
 }
 

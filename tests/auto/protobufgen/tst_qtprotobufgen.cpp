@@ -191,6 +191,11 @@ void qtprotobufgenTest::cmdLineGenerated_data()
         << "header_guard_pragma"
         << "qtprotobufgenminimal.proto"
         << "HEADER_GUARD=pragma";
+
+    QTest::addRow("non_final_messages")
+        << "non_final_messages"
+        << "qtprotobufgenminimal.proto"
+        << "GENERATE_NON_FINAL_MESSAGES";
 }
 
 void qtprotobufgenTest::cmdLineGenerated()
