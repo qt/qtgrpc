@@ -71,6 +71,7 @@ function(qt_internal_add_protobuf_module target)
                 ${arg_PROTO_FILES}
             OUTPUT_TARGETS generated_targets
             GENERATE_PACKAGE_SUBFOLDERS
+            GENERATE_NON_FINAL_MESSAGES
         )
         qt_internal_module_info(module ${target})
 

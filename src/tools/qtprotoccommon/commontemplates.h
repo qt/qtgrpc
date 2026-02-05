@@ -43,6 +43,7 @@ public:
     static const char *ClassMessageForwardDeclarationTemplate();
     static const char *EnumForwardDeclarationTemplate();
     static const char *EnumClassForwardDeclarationTemplate();
+    static const char *NonFinalClassMessageBeginDeclarationTemplate();
     static const char *ClassMessageBeginDeclarationTemplate();
     static const char *Q_PROTOBUF_OBJECTMacro();
     static const char *Q_PROTOBUF_OBJECT_EXPORTMacro();

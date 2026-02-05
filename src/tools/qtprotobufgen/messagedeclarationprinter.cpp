@@ -184,7 +184,11 @@ void MessageDeclarationPrinter::printNested()
 
 void MessageDeclarationPrinter::printClassDeclarationBegin()
 {
-    m_printer->Print(m_typeMap, CommonTemplates::ClassMessageBeginDeclarationTemplate());
+    if (Options::instance().generateNonFinalMessages()) {
+        m_printer->Print(m_typeMap, CommonTemplates::NonFinalClassMessageBeginDeclarationTemplate());
+    } else {
+        m_printer->Print(m_typeMap, CommonTemplates::ClassMessageBeginDeclarationTemplate());
+    }
 
     Indent();
     static const std::string exportMacro = common::buildExportMacro(false);

@@ -210,6 +210,16 @@ qt_internal_add_test(tst_protobuf_raw_serializers
         tst_protobuf_basictypes_gen
 )
 
+qt6_add_protobuf(tst_protobuf_non_final_basictypes_gen
+    PROTO_FILES
+        proto/basicmessages.proto
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated/non_final"
+    GENERATE_NON_FINAL_MESSAGES
+    EXTRA_NAMESPACE "nonfinal"
+    HEADER_GUARD pragma
+)
+qt_autogen_tools_initial_setup(tst_protobuf_non_final_basictypes_gen)
+
 if(UNIX AND NOT CMAKE_CROSSCOMPILING)
     qt_internal_add_test(tst_protobuf_internals
         SOURCES
@@ -218,5 +228,6 @@ if(UNIX AND NOT CMAKE_CROSSCOMPILING)
             Qt::Test
             Qt::Protobuf
             tst_protobuf_basictypes_gen
+            tst_protobuf_non_final_basictypes_gen
     )
 endif()

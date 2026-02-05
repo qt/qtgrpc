@@ -30,7 +30,7 @@ using IntMessageRepeated = QList<IntMessage>;
 #endif // QT_USE_PROTOBUF_LIST_ALIASES
 
 class IntMessage_QtProtobufData;
-class IntMessage : public QProtobufMessage
+class IntMessage final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTGRPCGEN_QML_EXPORT)
     QML_STRUCTURED_VALUE

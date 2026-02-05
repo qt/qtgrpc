@@ -104,7 +104,7 @@ using MessageNestedTypesRepeated = QList<MessageNestedTypes>;
 #endif // QT_USE_PROTOBUF_LIST_ALIASES
 
 class EnumTypes_QtProtobufData;
-class EnumTypes : public QProtobufMessage
+class EnumTypes final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     QML_STRUCTURED_VALUE
@@ -199,7 +199,7 @@ Q_ENUM_NS(FieldOneOfFields)
 } // namespace EnumTypes_QtProtobufNested
 
 class ScalarTypes_QtProtobufData;
-class ScalarTypes : public QProtobufMessage
+class ScalarTypes final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     QML_STRUCTURED_VALUE
@@ -320,7 +320,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace ScalarTypes_QtProtobufNested
 
 class ScalarRepeatedTypes_QtProtobufData;
-class ScalarRepeatedTypes : public QProtobufMessage
+class ScalarRepeatedTypes final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     QML_STRUCTURED_VALUE
@@ -453,7 +453,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace ScalarRepeatedTypes_QtProtobufNested
 
 class ScalarRepeatedNoPackedTypes_QtProtobufData;
-class ScalarRepeatedNoPackedTypes : public QProtobufMessage
+class ScalarRepeatedNoPackedTypes final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     QML_STRUCTURED_VALUE
@@ -592,7 +592,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace ScalarRepeatedNoPackedTypes_QtProtobufNested
 
 class ScalarOneOfTypes_QtProtobufData;
-class ScalarOneOfTypes : public QProtobufMessage
+class ScalarOneOfTypes final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     QML_STRUCTURED_VALUE
@@ -791,7 +791,7 @@ Q_ENUM_NS(FieldOneOfFields)
 } // namespace ScalarOneOfTypes_QtProtobufNested
 
 class ScalarOptionalTypes_QtProtobufData;
-class ScalarOptionalTypes : public QProtobufMessage
+class ScalarOptionalTypes final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     QML_STRUCTURED_VALUE
@@ -982,7 +982,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace ScalarOptionalTypes_QtProtobufNested
 
 class MapScalarTypes_QtProtobufData;
-class MapScalarTypes : public QProtobufMessage
+class MapScalarTypes final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     QML_STRUCTURED_VALUE
@@ -1108,7 +1108,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 } // namespace MapScalarTypes_QtProtobufNested
 
 class MessageTypes_QtProtobufData;
-class MessageTypes : public QProtobufMessage
+class MessageTypes final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     QML_STRUCTURED_VALUE
@@ -1245,7 +1245,7 @@ Q_ENUM_NS(FieldOneOfFields)
 } // namespace MessageTypes_QtProtobufNested
 
 class MessageNestedTypes_QtProtobufData;
-class MessageNestedTypes : public QProtobufMessage
+class MessageNestedTypes final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     QML_STRUCTURED_VALUE
@@ -1307,7 +1307,7 @@ Q_ENUM_NS(QtProtobufFieldEnum)
 
 
 class NestedMessage_QtProtobufData;
-class NestedMessage : public QProtobufMessage
+class NestedMessage final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_GEN_EXPORT)
     QML_STRUCTURED_VALUE

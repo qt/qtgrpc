@@ -92,3 +92,13 @@
     \endcode
     Select the preferred guard style according to your project structure.
 //! [header_guard-li]
+
+//! [generate_non_final_messages-li]
+\li \c {GENERATE_NON_FINAL_MESSAGES}
+    generates QtProtobuf message classes without the \c final specifier.
+    This option is provided for backwards compatibility. Since Qt 6.11,
+    QtProtobuf message classes are generated as \c final by default.
+    To extend the behavior of generated messages, prefer composition over
+    inheritance. This option will be removed in Qt7.
+//! [generate_non_final_messages-li]
+

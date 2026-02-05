@@ -25,7 +25,7 @@ using EmptyRepeated = QList<Empty>;
 #endif // QT_USE_PROTOBUF_LIST_ALIASES
 
 class Empty_QtProtobufData;
-class Empty : public QProtobufMessage
+class Empty final : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT
 
