@@ -195,26 +195,40 @@ using InterceptorTypes = TypeList<
     QGrpcCancelInterceptor
 >;
 
+enum class InterceptionFlow : uint8_t {
+    Outbound, // App -> Network
+    Inbound   // Network -> App
+};
+
 // Maps each individual interceptor interface to its capability and method
 template <typename T>
 struct InterceptorInfo;
 
-#define QGRPC_INTERCEPTOR_INFO(Type, Cap, Method)                      \
+#define QGRPC_INTERCEPTOR_INFO(Type, Cap, Method, Flow)                \
     template <>                                                        \
     struct InterceptorInfo<Type>                                       \
     {                                                                  \
         static constexpr auto capability = InterceptorCapability::Cap; \
         static constexpr auto method = &Type::Method;                  \
+        static constexpr auto flow = InterceptionFlow::Flow;           \
     }
 
-QGRPC_INTERCEPTOR_INFO(QGrpcStartInterceptor, Start, onStart);
-QGRPC_INTERCEPTOR_INFO(QGrpcInitialMetadataInterceptor, InitialMetadata, onInitialMetadata);
-QGRPC_INTERCEPTOR_INFO(QGrpcMessageReceivedInterceptor, MessageReceived, onMessageReceived);
-QGRPC_INTERCEPTOR_INFO(QGrpcWriteMessageInterceptor, WriteMessage, onWriteMessage);
-QGRPC_INTERCEPTOR_INFO(QGrpcWritesDoneInterceptor, WritesDone, onWritesDone);
-QGRPC_INTERCEPTOR_INFO(QGrpcTrailingMetadataInterceptor, TrailingMetadata, onTrailingMetadata);
-QGRPC_INTERCEPTOR_INFO(QGrpcFinishedInterceptor, Finished, onFinished);
-QGRPC_INTERCEPTOR_INFO(QGrpcCancelInterceptor, Cancel, onCancel);
+QGRPC_INTERCEPTOR_INFO(QGrpcStartInterceptor,
+                       Start, onStart, Outbound);
+QGRPC_INTERCEPTOR_INFO(QGrpcInitialMetadataInterceptor,
+                       InitialMetadata, onInitialMetadata, Inbound);
+QGRPC_INTERCEPTOR_INFO(QGrpcMessageReceivedInterceptor,
+                       MessageReceived, onMessageReceived, Inbound);
+QGRPC_INTERCEPTOR_INFO(QGrpcWriteMessageInterceptor,
+                       WriteMessage, onWriteMessage, Outbound);
+QGRPC_INTERCEPTOR_INFO(QGrpcWritesDoneInterceptor,
+                       WritesDone, onWritesDone, Outbound);
+QGRPC_INTERCEPTOR_INFO(QGrpcTrailingMetadataInterceptor,
+                       TrailingMetadata, onTrailingMetadata, Inbound);
+QGRPC_INTERCEPTOR_INFO(QGrpcFinishedInterceptor,
+                       Finished, onFinished, Inbound);
+QGRPC_INTERCEPTOR_INFO(QGrpcCancelInterceptor,
+                       Cancel, onCancel, Outbound);
 
 #undef QGRPC_INTERCEPTOR_INFO
 

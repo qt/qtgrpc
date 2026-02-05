@@ -187,9 +187,18 @@ private:
         constexpr auto Idx = QtGrpcPrivate::capabilityToIndex(Info::capability);
 
         QGrpcInterceptionContext ctx(m_parentChannel, context);
-        for (auto handler : m_capabilityHandlers[Idx]) {
-            auto *handlerInterface = static_cast<Interface *>(handler.interface);
-            (handlerInterface->*Info::method)(ctx, std::forward<Args>(args)...);
+        auto &handlers = m_capabilityHandlers[Idx];
+
+        if constexpr (Info::flow == QtGrpcPrivate::InterceptionFlow::Outbound) {
+            for (auto it = handlers.begin(); it != handlers.cend(); ++it) {
+                auto *iface = static_cast<Interface *>(it->interface);
+                (iface->*Info::method)(ctx, std::forward<Args>(args)...);
+            }
+        } else {
+            for (auto rit = handlers.rbegin(); rit != handlers.crend(); ++rit) {
+                auto *iface = static_cast<Interface *>(rit->interface);
+                (iface->*Info::method)(ctx, std::forward<Args>(args)...);
+            }
         }
     }
 
