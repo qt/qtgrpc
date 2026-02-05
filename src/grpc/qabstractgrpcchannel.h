@@ -41,7 +41,7 @@ public:
     void setChannelOptions(const QGrpcChannelOptions &options);
     void setChannelOptions(QGrpcChannelOptions &&options);
 
-    template <typename T, if_grpc_interceptor<T> = true>
+    template <typename T, QtGrpcPrivate::if_interceptor<T> = true>
     bool addInterceptor(T *interceptor)
     {
         if (!interceptor)
@@ -51,7 +51,7 @@ public:
         return true;
     }
 
-    template <typename T, if_grpc_interceptor<T> = true>
+    template <typename T, QtGrpcPrivate::if_interceptor<T> = true>
     bool removeInterceptor(T *interceptor)
     {
         return removeInterceptorImpl(interceptor);
