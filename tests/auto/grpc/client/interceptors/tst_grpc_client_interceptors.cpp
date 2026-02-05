@@ -426,14 +426,14 @@ void QtGrpcClientInterceptorsTest::unaryCallOrder()
     const QList<InterceptorCall> expected = {
         { "A", Capability::Start            },
         { "B", Capability::Start            },
-        { "A", Capability::InitialMetadata  },
         { "B", Capability::InitialMetadata  },
-        { "A", Capability::MessageReceived  },
+        { "A", Capability::InitialMetadata  },
         { "B", Capability::MessageReceived  },
-        { "A", Capability::TrailingMetadata },
+        { "A", Capability::MessageReceived  },
         { "B", Capability::TrailingMetadata },
-        { "A", Capability::Finished         },
+        { "A", Capability::TrailingMetadata },
         { "B", Capability::Finished         },
+        { "A", Capability::Finished         },
     };
     QCOMPARE(CallLog, expected);
 }
@@ -473,20 +473,20 @@ void QtGrpcClientInterceptorsTest::bidiStreamCallOrder()
     const QList<InterceptorCall> expected = {
         { "A", Capability::Start            },
         { "B", Capability::Start            },
-        { "A", Capability::InitialMetadata  },
         { "B", Capability::InitialMetadata  },
-        { "A", Capability::MessageReceived  }, // receive tag=1
-        { "B", Capability::MessageReceived  },
+        { "A", Capability::InitialMetadata  },
+        { "B", Capability::MessageReceived  }, // receive tag=1
+        { "A", Capability::MessageReceived  },
         { "A", Capability::WriteMessage     }, // send tag=0
         { "B", Capability::WriteMessage     },
-        { "A", Capability::MessageReceived  }, // receive tag=0
-        { "B", Capability::MessageReceived  },
+        { "B", Capability::MessageReceived  }, // receive tag=0
+        { "A", Capability::MessageReceived  },
         { "A", Capability::WritesDone       },
         { "B", Capability::WritesDone       },
-        { "A", Capability::TrailingMetadata },
         { "B", Capability::TrailingMetadata },
-        { "A", Capability::Finished         },
+        { "A", Capability::TrailingMetadata },
         { "B", Capability::Finished         },
+        { "A", Capability::Finished         },
     };
     QCOMPARE(CallLog, expected);
 }
@@ -526,14 +526,14 @@ void QtGrpcClientInterceptorsTest::clientStreamCallOrder()
         { "B", Capability::WriteMessage     },
         { "A", Capability::WritesDone       },
         { "B", Capability::WritesDone       },
-        { "A", Capability::InitialMetadata  },
         { "B", Capability::InitialMetadata  },
-        { "A", Capability::MessageReceived  },
+        { "A", Capability::InitialMetadata  },
         { "B", Capability::MessageReceived  },
-        { "A", Capability::TrailingMetadata },
+        { "A", Capability::MessageReceived  },
         { "B", Capability::TrailingMetadata },
-        { "A", Capability::Finished         },
+        { "A", Capability::TrailingMetadata },
         { "B", Capability::Finished         },
+        { "A", Capability::Finished         },
     };
     QCOMPARE(CallLog, expected);
 }
@@ -564,10 +564,10 @@ void QtGrpcClientInterceptorsTest::failedCallOrder()
     const QList<InterceptorCall> expected = {
         { "A", Capability::Start            },
         { "B", Capability::Start            },
-        { "A", Capability::TrailingMetadata },
         { "B", Capability::TrailingMetadata },
-        { "A", Capability::Finished         },
+        { "A", Capability::TrailingMetadata },
         { "B", Capability::Finished         },
+        { "A", Capability::Finished         },
     };
     QCOMPARE(CallLog, expected);
 }
@@ -611,8 +611,8 @@ void QtGrpcClientInterceptorsTest::cancelledCallOrder()
         { "B", Capability::WriteMessage },
         { "A", Capability::Cancel       },
         { "B", Capability::Cancel       },
-        { "A", Capability::Finished     },
         { "B", Capability::Finished     },
+        { "A", Capability::Finished     },
     };
     QCOMPARE(CallLog, expected);
 }
@@ -641,8 +641,8 @@ void QtGrpcClientInterceptorsTest::partialCapabilities()
         { "Full",    Capability::InitialMetadata  },
         { "Full",    Capability::MessageReceived  },
         { "Full",    Capability::TrailingMetadata },
-        { "Partial", Capability::Finished         },
         { "Full",    Capability::Finished         },
+        { "Partial", Capability::Finished         },
     };
     QCOMPARE(CallLog, expected);
 }
@@ -881,7 +881,7 @@ void QtGrpcClientInterceptorsTest::modifyArguments()
     connect(stream.get(), &QGrpcBidiStream::messageReceived, stream.get(), [&]() {
         auto msg = stream->read<qt::tst::i2::StreamMessage>();
         QVERIFY(msg.has_value());
-        QCOMPARE(msg->data(), "Base;i1;i2;i1;i2");
+        QCOMPARE(msg->data(), "Base;i1;i2;i2;i1");
         receivedMessage = true;
         stream->writesDone();
     });
@@ -891,10 +891,10 @@ void QtGrpcClientInterceptorsTest::modifyArguments()
     QVERIFY(receivedMessage);
 
     auto initialMd = stream->serverInitialMetadata();
-    QCOMPARE(initialMd.value(serverInitialMdKey), "Base;i1;i2");
+    QCOMPARE(initialMd.value(serverInitialMdKey), "Base;i2;i1");
 
     auto trailingMd = stream->serverTrailingMetadata();
-    QCOMPARE(trailingMd.value(serverTrailingMdKey), "Base;i1;i2");
+    QCOMPARE(trailingMd.value(serverTrailingMdKey), "Base;i2;i1");
 }
 
 void QtGrpcClientInterceptorsTest::interceptionContextAccessors()
