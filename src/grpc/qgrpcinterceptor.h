@@ -261,16 +261,16 @@ struct InterceptorCapabilityBinding
     }
 };
 
-// clang-format on
-} // namespace QtGrpcPrivate
-
 template <typename T>
-inline constexpr bool is_grpc_interceptor_v = std::conjunction_v<
+inline constexpr bool is_interceptor_v = std::conjunction_v<
     std::bool_constant<QtGrpcPrivate::InterceptorTypes::containsBase<T>()>,
     std::bool_constant<!QtGrpcPrivate::InterceptorTypes::containsExact<T>()>>;
 
 template <typename T>
-using if_grpc_interceptor = std::enable_if_t<is_grpc_interceptor_v<T>, bool>;
+using if_interceptor = std::enable_if_t<is_interceptor_v<T>, bool>;
+
+// clang-format on
+} // namespace QtGrpcPrivate
 
 QT_END_NAMESPACE
 
