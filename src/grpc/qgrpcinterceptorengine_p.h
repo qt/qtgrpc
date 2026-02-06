@@ -138,11 +138,11 @@ public:
         for (const auto &handler : m_capabilityHandlers[Idx]) {
             auto *handlerInterface = static_cast<QGrpcStartInterceptor *>(handler.interface);
             auto result = (handlerInterface->*Info::method)(ctx, message, callOptions);
-            if (result == QGrpcStartInterceptor::Drop)
+            if (result == QGrpcStartInterceptor::Continuation::Drop)
                 return result;
         }
 
-        return QGrpcStartInterceptor::Proceed;
+        return QGrpcStartInterceptor::Continuation::Proceed;
     }
 
     void onInitialMetadata(QGrpcOperationContext &context,
