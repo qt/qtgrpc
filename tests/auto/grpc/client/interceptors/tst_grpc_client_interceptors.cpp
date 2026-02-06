@@ -74,7 +74,7 @@ public:
                          QGrpcCallOptions &) override
     {
         CallLog.push_back({ m_name, Capability::Start });
-        return Proceed;
+        return Continuation::Proceed;
     }
 
     void onInitialMetadata(QGrpcInterceptionContext &,
@@ -127,7 +127,7 @@ public:
                          QGrpcCallOptions &) override
     {
         CallLog.push_back({ m_name, Capability::Start });
-        return Proceed;
+        return Continuation::Proceed;
     }
 
     void onFinished(QGrpcInterceptionContext &, QGrpcStatus &) override
@@ -173,7 +173,7 @@ public:
     {
         CallLog.push_back({ m_name, Capability::Start });
         capturedDescriptor1 = std::make_unique<QtGrpc::RpcDescriptor>(context.descriptor());
-        return Proceed;
+        return Continuation::Proceed;
     }
 
     void onInitialMetadata(QGrpcInterceptionContext &context,
@@ -656,9 +656,9 @@ void QtGrpcClientInterceptorsTest::onStartDrop()
     auto dropper = std::make_unique<DroppingInterceptor>("Drop", [](QtGrpc::RpcDescriptor desc) {
         if (desc.service == "tst.i1.Interceptor"_L1 && desc.method == "Unary"_L1
             && desc.type == QtGrpc::RpcType::UnaryCall) {
-            return QGrpcStartInterceptor::Proceed;
+            return QGrpcStartInterceptor::Continuation::Proceed;
         }
-        return QGrpcStartInterceptor::Drop;
+        return QGrpcStartInterceptor::Continuation::Drop;
     });
     auto logger = std::make_unique<LoggingInterceptor>("After");
     QVERIFY(channel->addInterceptor(dropper.get()));
@@ -714,7 +714,7 @@ void QtGrpcClientInterceptorsTest::onStartDropFromSecond()
 
     auto channel = createChannel();
     auto first = std::make_unique<LoggingInterceptor>("First");
-    QGrpcStartInterceptor::Continuation continuation = QGrpcStartInterceptor::Drop;
+    QGrpcStartInterceptor::Continuation continuation = QGrpcStartInterceptor::Continuation::Drop;
     auto dropper = std::make_unique<DroppingInterceptor>("Drop", [&continuation](QtGrpc::RpcDescriptor) {
                                                              return continuation;
                                                          });
@@ -734,7 +734,7 @@ void QtGrpcClientInterceptorsTest::onStartDropFromSecond()
         QCOMPARE(status.code(), expectedCode);
     };
     makeCall(QtGrpc::StatusCode::Aborted);
-    continuation = QGrpcStartInterceptor::Proceed;
+    continuation = QGrpcStartInterceptor::Continuation::Proceed;
     makeCall(QtGrpc::StatusCode::Ok);
 
     QByteArrayList onStartNames;
@@ -816,7 +816,7 @@ void QtGrpcClientInterceptorsTest::modifyArguments()
             for (auto it = md.begin(); it != md.end(); ++it)
                 it.value() += ';' + m_name;
             opts.setMetadata(md);
-            return Proceed;
+            return Continuation::Proceed;
         }
 
         void onInitialMetadata(QGrpcInterceptionContext &,

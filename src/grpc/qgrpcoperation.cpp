@@ -59,7 +59,7 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
         const auto continuation = interceptorEngine.onStart(*operationContext,
                                                             *interceptedMessage,
                                                             operationContext->d_func()->options);
-        if (continuation == QGrpcStartInterceptor::Drop) {
+        if (continuation == QGrpcStartInterceptor::Continuation::Drop) {
             Q_Q(QGrpcOperation);
             QMetaObject::invokeMethod(
                 q,

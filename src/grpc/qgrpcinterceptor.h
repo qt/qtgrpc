@@ -79,7 +79,7 @@ private:
 
 struct Q_GRPC_EXPORT QGrpcStartInterceptor
 {
-    enum Continuation : uint8_t { Proceed, Drop };
+    enum class Continuation : uint8_t { Proceed, Drop };
 
     virtual ~QGrpcStartInterceptor();
     virtual Continuation onStart(QGrpcInterceptionContext &context, QProtobufMessage &message,
