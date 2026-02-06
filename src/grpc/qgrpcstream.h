@@ -18,6 +18,10 @@ class Q_GRPC_EXPORT QGrpcServerStream final : public QGrpcOperation
     QT_DEFINE_TAG_STRUCT(PrivateConstructor);
 
 public:
+#if QT_GRPC_REMOVED_SINCE(6, 11)
+    explicit QGrpcServerStream(std::shared_ptr<QGrpcOperationContext> operationContext,
+                               QObject *parent = nullptr);
+#endif
     explicit QGrpcServerStream(const QLatin1StringView service, const QLatin1StringView method,
                                const QGrpcCallOptions &options,
                                const std::weak_ptr<QAbstractGrpcChannel> &channel,
@@ -41,6 +45,10 @@ class Q_GRPC_EXPORT QGrpcClientStream final : public QGrpcOperation
     QT_DEFINE_TAG_STRUCT(PrivateConstructor);
 
 public:
+#if QT_GRPC_REMOVED_SINCE(6, 11)
+    explicit QGrpcClientStream(std::shared_ptr<QGrpcOperationContext> operationContext,
+                               QObject *parent = nullptr);
+#endif
     explicit QGrpcClientStream(const QLatin1StringView service, const QLatin1StringView method,
                                const QGrpcCallOptions &options,
                                const std::weak_ptr<QAbstractGrpcChannel> &channel,
@@ -64,6 +72,10 @@ class Q_GRPC_EXPORT QGrpcBidiStream final : public QGrpcOperation
     QT_DEFINE_TAG_STRUCT(PrivateConstructor);
 
 public:
+#if QT_GRPC_REMOVED_SINCE(6, 11)
+    explicit QGrpcBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext,
+                             QObject *parent = nullptr);
+#endif
     explicit QGrpcBidiStream(const QLatin1StringView service, const QLatin1StringView method,
                              const QGrpcCallOptions &options,
                              const std::weak_ptr<QAbstractGrpcChannel> &channel,

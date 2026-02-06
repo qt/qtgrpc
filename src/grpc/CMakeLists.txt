@@ -20,6 +20,7 @@ qt_internal_add_module(Grpc
         qgrpcserializationformat.h qgrpcserializationformat.cpp
         qgrpcinterceptor.h qgrpcinterceptor.cpp
         qgrpcinterceptorengine_p.h
+        compat/removed_api.cpp
     LIBRARIES
         Qt::CorePrivate
         Qt::NetworkPrivate
@@ -28,6 +29,8 @@ qt_internal_add_module(Grpc
         Qt::Core
         Qt::Protobuf
         Qt::Network
+    NO_PCH_SOURCES
+        compat/removed_api.cpp
     QT_LICENSE_ID QT_COMMERCIAL_OR_GPL3
 )
 

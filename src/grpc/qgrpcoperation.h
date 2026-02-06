@@ -68,6 +68,10 @@ public Q_SLOTS:
     void cancel();
 
 protected:
+#if QT_GRPC_REMOVED_SINCE(6, 11)
+    explicit QGrpcOperation(std::shared_ptr<QGrpcOperationContext> operationContext,
+                            QObject *parent = nullptr);
+#endif
     explicit QGrpcOperation(QtGrpc::RpcDescriptor descriptor, const QGrpcCallOptions &options,
                             const std::weak_ptr<QAbstractGrpcChannel> &channel);
 
