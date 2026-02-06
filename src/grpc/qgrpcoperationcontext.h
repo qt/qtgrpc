@@ -39,10 +39,9 @@ public:
     [[nodiscard]] QLatin1StringView service() const noexcept;
     [[nodiscard]] QtGrpc::RpcDescriptor descriptor() const noexcept;
 
-#if QT_DEPRECATED_SINCE(6, 11)
-    QT_DEPRECATED_VERSION_X_6_11("Use new QAbstractGrpcChannel virtual RPC methods")
+#if 0 // Use new QAbstractGrpcChannel virtual RPC methods
     [[nodiscard]] QByteArrayView argument() const noexcept;
-#endif // QT_DEPRECATED_SINCE(6, 11)
+#endif
 
     void callOptions() const && = delete;
     [[nodiscard]] const QGrpcCallOptions &callOptions() const & noexcept;
