@@ -464,7 +464,7 @@ void QtGrpcClientEnd2EndTest::bidiStreamsInOrder()
             const auto countIt = md.find("call-count");
             QVERIFY(countIt != md.cend());
             data->count = std::stoul(std::string(countIt->second.data(), countIt->second.length()));
-            QCOMPARE_GT(data->count, 0);
+            QCOMPARE_GT(data->count, 0u);
 
             data->op.Read(&data->request, reader);
             data->updateResponse();

@@ -50,7 +50,7 @@ void TagProcessor::unregisterTag(AbstractTag *tag)
 {
     std::scoped_lock lock(mMutex);
     const auto erased = mActiveTags.erase(tag);
-    QCOMPARE_EQ(erased, 1);
+    QCOMPARE_EQ(erased, 1u);
     if (mActiveTags.empty())
         mCv.notify_all();
 }
