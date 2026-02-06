@@ -210,6 +210,10 @@ QLatin1StringView QGrpcOperationContext::service() const noexcept
     return d->descriptor.service;
 }
 
+/*!
+    \since 6.11
+    Returns the QtGrpc::RpcDescriptor for this operation-context.
+*/
 QtGrpc::RpcDescriptor QGrpcOperationContext::descriptor() const noexcept
 {
     Q_D(const QGrpcOperationContext);
