@@ -24,6 +24,9 @@ class Q_GRPC_EXPORT QGrpcCallReply final : public QGrpcOperation
     QT_DEFINE_TAG_STRUCT(PrivateConstructor);
 
 public:
+#if QT_GRPC_REMOVED_SINCE(6, 11)
+    explicit QGrpcCallReply(std::shared_ptr<QGrpcOperationContext> operationContext);
+#endif
     explicit QGrpcCallReply(const QLatin1StringView service, const QLatin1StringView method,
                             const QGrpcCallOptions &options,
                             const std::weak_ptr<QAbstractGrpcChannel> &channel, PrivateConstructor);
