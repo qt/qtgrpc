@@ -387,7 +387,7 @@ void QGrpcOperationContext::setResponseMetaType(QMetaType metaType)
     d->responseMetaType = metaType;
 }
 
-const QGrpcOperation &QGrpcOperationContext::operation() const
+const QGrpcOperation &QGrpcOperationContext::operation() const &
 {
     // Guaranteed by construction & parent<>child relationship
     const auto *p = parent();

@@ -87,8 +87,9 @@ private:
     Q_DISABLE_COPY_MOVE(QGrpcOperationContext)
     Q_DECLARE_PRIVATE(QGrpcOperationContext)
 
-    [[nodiscard]] const QGrpcOperation &operation() const;
-    [[nodiscard]] QGrpcOperation &operation()
+    void operation() const && = delete;
+    [[nodiscard]] const QGrpcOperation &operation() const &;
+    [[nodiscard]] QGrpcOperation &operation() &
     {
         return const_cast<QGrpcOperation &>(std::as_const(*this).operation());
     }
