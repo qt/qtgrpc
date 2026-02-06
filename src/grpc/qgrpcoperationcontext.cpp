@@ -231,17 +231,6 @@ QtGrpc::RpcDescriptor QGrpcOperationContext::descriptor() const noexcept
     return d->descriptor;
 }
 
-#if QT_DEPRECATED_SINCE(6, 11)
-/*!
-    \deprecated [6.11] Use the new QAbstractGrpcChannel virtual RPC methods instead.
-    Returns an empty QByteArrayView.
-*/
-QByteArrayView QGrpcOperationContext::argument() const noexcept
-{
-    return {};
-}
-#endif // QT_DEPRECATED_SINCE(6, 11)
-
 /*!
     Returns the call options that is utilized by this operation-context.
 
