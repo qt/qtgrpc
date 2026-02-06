@@ -72,7 +72,17 @@ private:
     {
         return lhs.service == rhs.service && lhs.method == rhs.method && lhs.type == rhs.type;
     }
-    Q_DECLARE_EQUALITY_COMPARABLE(RpcDescriptor)
+
+    friend Qt::strong_ordering compareThreeWay(const RpcDescriptor &lhs,
+                                               const RpcDescriptor &rhs) noexcept
+    {
+        if (auto cmp = compareThreeWay(lhs.service, rhs.service); is_neq(cmp))
+            return cmp;
+        if (auto cmp = compareThreeWay(lhs.method, rhs.method); is_neq(cmp))
+            return cmp;
+        return Qt::compareThreeWay(lhs.type, rhs.type);
+    }
+    Q_DECLARE_STRONGLY_ORDERED(RpcDescriptor)
 
     constexpr friend size_t qHash(const RpcDescriptor &key, size_t seed = 0) noexcept
     {
