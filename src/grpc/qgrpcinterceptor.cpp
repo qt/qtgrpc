@@ -14,7 +14,7 @@ static_assert(InterceptorTypes::size <= std::numeric_limits<
 
 QT_BEGIN_NAMESPACE
 
-const QGrpcCallOptions &QGrpcInterceptionContext::callOptions() const noexcept
+const QGrpcCallOptions &QGrpcInterceptionContext::callOptions() const & noexcept
 {
     return m_operationContext.callOptions();
 }

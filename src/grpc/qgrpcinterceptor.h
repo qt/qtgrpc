@@ -38,12 +38,15 @@ public:
     ~QGrpcInterceptionContext() = default;
     Q_DISABLE_COPY_MOVE(QGrpcInterceptionContext)
 
-    quint32 version() const noexcept { return m_version; }
+    [[nodiscard]] quint32 version() const noexcept { return m_version; }
 
-    const QAbstractGrpcChannel &channel() const noexcept { return m_channel; }
+    void channel() const && = delete;
+    [[nodiscard]] const QAbstractGrpcChannel &channel() const & noexcept { return m_channel; }
 
-    Q_GRPC_EXPORT QtGrpc::RpcDescriptor descriptor() const noexcept;
-    Q_GRPC_EXPORT const QGrpcCallOptions &callOptions() const noexcept;
+    [[nodiscard]] Q_GRPC_EXPORT QtGrpc::RpcDescriptor descriptor() const noexcept;
+
+    void callOptions() const && = delete;
+    [[nodiscard]] Q_GRPC_EXPORT const QGrpcCallOptions &callOptions() const & noexcept;
 
 protected:
     const QAbstractGrpcChannel &m_channel;
