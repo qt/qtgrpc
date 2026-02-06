@@ -17,40 +17,11 @@ class QtGrpcNamespaceTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void rpcDescriptorEquality() const;
     void rpcDescriptorHashing() const;
     void rpcDescriptorStreamsToDebug() const;
     void rpcDescriptorHasMetatype() const;
+    void rpcDescriptorStrongOrdering() const;
 };
-
-void QtGrpcNamespaceTest::rpcDescriptorEquality() const
-{
-    QTestPrivate::testEqualityOperatorsCompile<RpcDescriptor>();
-
-    constexpr auto serviceA = "MyService"_L1;
-    constexpr auto serviceB = "OtherService"_L1;
-    constexpr auto methodA = "MyMethod"_L1;
-    constexpr auto methodB = "OtherMethod"_L1;
-    constexpr RpcType typeA = RpcType::UnaryCall;
-    constexpr RpcType typeB = RpcType::ServerStreaming;
-
-    constexpr RpcDescriptor base{ serviceA, methodA, typeA };
-    constexpr auto same = base;
-
-    QT_TEST_EQUALITY_OPS(base, same, true);
-
-    constexpr RpcDescriptor diffService{ serviceB, methodA, typeA };
-    QT_TEST_EQUALITY_OPS(base, diffService, false);
-
-    constexpr RpcDescriptor diffMethod{ serviceA, methodB, typeA };
-    QT_TEST_EQUALITY_OPS(base, diffMethod, false);
-
-    constexpr RpcDescriptor diffType{ serviceA, methodA, typeB };
-    QT_TEST_EQUALITY_OPS(base, diffType, false);
-
-    constexpr RpcDescriptor diffAll{ serviceB, methodB, typeB };
-    QT_TEST_EQUALITY_OPS(base, diffAll, false);
-}
 
 void QtGrpcNamespaceTest::rpcDescriptorHashing() const
 {
@@ -72,6 +43,42 @@ void QtGrpcNamespaceTest::rpcDescriptorHasMetatype() const
     const QMetaType metaType = QMetaType::fromType<QtGrpc::RpcDescriptor>();
     QVERIFY(metaType.isValid());
     QCOMPARE(metaType.id(), qMetaTypeId<QtGrpc::RpcDescriptor>());
+}
+
+void QtGrpcNamespaceTest::rpcDescriptorStrongOrdering() const
+{
+    QTestPrivate::testAllComparisonOperatorsCompile<RpcDescriptor>();
+
+    constexpr RpcDescriptor A{
+        "ServiceA"_L1,
+        "Method"_L1,
+        RpcType::UnaryCall
+    };
+
+    constexpr RpcDescriptor B{
+        "ServiceB"_L1,
+        "Method"_L1,
+        RpcType::UnaryCall
+    };
+
+    QT_TEST_ALL_COMPARISON_OPS(A, B, Qt::strong_ordering::less);
+
+    constexpr RpcDescriptor ASmallCase {
+        "serviceA"_L1,
+        "Method"_L1,
+        RpcType::UnaryCall
+    };
+    QT_TEST_ALL_COMPARISON_OPS(A, ASmallCase, Qt::strong_ordering::less);
+
+    constexpr auto AClone = A;
+    QT_TEST_ALL_COMPARISON_OPS(A, AClone, Qt::strong_ordering::equal);
+
+    constexpr RpcDescriptor BGreater{
+        "ServiceB"_L1,
+        "Method"_L1,
+        RpcType::ServerStreaming
+    };
+    QT_TEST_ALL_COMPARISON_OPS(BGreater, B, Qt::strong_ordering::greater);
 }
 
 QTEST_MAIN(QtGrpcNamespaceTest)
