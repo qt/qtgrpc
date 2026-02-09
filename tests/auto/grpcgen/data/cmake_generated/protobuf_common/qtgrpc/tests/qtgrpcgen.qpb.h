@@ -30,7 +30,7 @@ class IntMessage_QtProtobufData;
 class IntMessage : public QProtobufMessage
 {
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTGRPCGEN_PROTOBUF_COMMON_EXPORT)
-    Q_PROPERTY(QtProtobuf::sint32 field READ field WRITE setField SCRIPTABLE true FINAL)
+    Q_PROPERTY(QtProtobuf::sint32 field READ field WRITE setField SCRIPTABLE true)
 
 public:
     using QtProtobufFieldEnum = IntMessage_QtProtobufNested::QtProtobufFieldEnum;
