@@ -44,6 +44,13 @@ void QtProtobufInternalsTest::nullPointerGetterMessageTest()
     QVERIFY(msg.property("testComplexField_p").value<SimpleStringMessage *>() != nullptr);
 }
 
+class DerivedMessage : public SimpleIntMessage
+{
+    Q_PROTOBUF_OBJECT
+public:
+    QByteArray data;
+};
+
 void QtProtobufInternalsTest::qprotobufmessageCastTest()
 {
     auto *original = new SimpleStringMessage();
@@ -71,6 +78,28 @@ void QtProtobufInternalsTest::qprotobufmessageCastTest()
     // Case 5: Failed const-correct casting
     const auto *failedConstCast = qprotobufmessage_cast<const SimpleIntMessage *>(constBase);
     QCOMPARE_EQ(failedConstCast, nullptr);
+
+    // Case 5: Derived msg casts
+    {
+        auto *derived = new DerivedMessage();
+        base = derived;
+
+        // We cannot cast to user-derived types because the QProtobufMessage ctor
+        // stores the parent's metaObject (SimpleIntMessage), not DerivedMessage's.
+        // There is currently no way to provide this for user-derived types.
+        QEXPECT_FAIL("", "User-derived classes not detectable", Continue);
+        QCOMPARE_EQ(qprotobufmessage_cast<DerivedMessage *>(base), derived);
+
+        QCOMPARE_EQ(qprotobufmessage_cast<SimpleIntMessage *>(base), derived);
+        QCOMPARE_EQ(qprotobufmessage_cast<SimpleStringMessage *>(base), nullptr);
+        delete derived;
+
+        auto *baseMsg = new SimpleIntMessage();
+        base = baseMsg;
+        // Correctly rejects invalid upcast
+        QCOMPARE_EQ(qprotobufmessage_cast<DerivedMessage *>(base), nullptr);
+        delete baseMsg;
+    }
 
     delete original;
 }
