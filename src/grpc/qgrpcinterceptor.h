@@ -30,11 +30,6 @@ class QGrpcInterceptionContext
     const quint32 m_version = 1;
 
 public:
-    explicit QGrpcInterceptionContext(const QAbstractGrpcChannel &channel,
-                                      const QGrpcOperationContext &context) noexcept
-        : m_channel(channel), m_operationContext(context)
-    {
-    }
     ~QGrpcInterceptionContext() = default;
     Q_DISABLE_COPY_MOVE(QGrpcInterceptionContext)
 
@@ -51,6 +46,15 @@ public:
 protected:
     const QAbstractGrpcChannel &m_channel;
     const QGrpcOperationContext &m_operationContext;
+
+private:
+    explicit QGrpcInterceptionContext(const QAbstractGrpcChannel &channel,
+                                      const QGrpcOperationContext &context) noexcept
+        : m_channel(channel), m_operationContext(context)
+    {
+    }
+
+    friend class QGrpcInterceptorEngine;
 };
 
 struct Q_GRPC_EXPORT QGrpcStartInterceptor
