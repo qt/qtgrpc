@@ -16,12 +16,12 @@ QT_BEGIN_NAMESPACE
 
 const QGrpcCallOptions &QGrpcInterceptionContext::callOptions() const & noexcept
 {
-    return m_operationContext.callOptions();
+    return m_operationContext->callOptions();
 }
 
 RpcDescriptor QGrpcInterceptionContext::descriptor() const noexcept
 {
-    return m_operationContext.descriptor();
+    return m_operationContext->descriptor();
 }
 
 QGrpcStartInterceptor::~QGrpcStartInterceptor() = default;

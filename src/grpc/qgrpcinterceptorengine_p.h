@@ -127,7 +127,7 @@ public:
     }
 
     [[nodiscard]]
-    QGrpcStartInterceptor::Continuation onStart(const QGrpcOperationContext &context,
+    QGrpcStartInterceptor::Continuation onStart(QGrpcOperationContext &context,
                                                 QProtobufMessage &message,
                                                 QGrpcCallOptions &callOptions)
     {
@@ -145,43 +145,43 @@ public:
         return QGrpcStartInterceptor::Proceed;
     }
 
-    void onInitialMetadata(const QGrpcOperationContext &context,
+    void onInitialMetadata(QGrpcOperationContext &context,
                            QMultiHash<QByteArray, QByteArray> &metadata)
     {
         invoke<QGrpcInitialMetadataInterceptor>(context, metadata);
     }
 
-    void onMessageReceived(const QGrpcOperationContext &context, QByteArray &messageData)
+    void onMessageReceived(QGrpcOperationContext &context, QByteArray &messageData)
     {
         invoke<QGrpcMessageReceivedInterceptor>(context, messageData);
     }
 
-    void onWriteMessage(const QGrpcOperationContext &context, QProtobufMessage &message)
+    void onWriteMessage(QGrpcOperationContext &context, QProtobufMessage &message)
     {
         invoke<QGrpcWriteMessageInterceptor>(context, message);
     }
 
-    void onWritesDone(const QGrpcOperationContext &context)
+    void onWritesDone(QGrpcOperationContext &context)
     {
         invoke<QGrpcWritesDoneInterceptor>(context);
     }
 
-    void onTrailingMetadata(const QGrpcOperationContext &context,
+    void onTrailingMetadata(QGrpcOperationContext &context,
                             QMultiHash<QByteArray, QByteArray> &metadata)
     {
         invoke<QGrpcTrailingMetadataInterceptor>(context, metadata);
     }
 
-    void onFinished(const QGrpcOperationContext &context, QGrpcStatus &status)
+    void onFinished(QGrpcOperationContext &context, QGrpcStatus &status)
     {
         invoke<QGrpcFinishedInterceptor>(context, status);
     }
 
-    void onCancel(const QGrpcOperationContext &context) { invoke<QGrpcCancelInterceptor>(context); }
+    void onCancel(QGrpcOperationContext &context) { invoke<QGrpcCancelInterceptor>(context); }
 
 private:
     template <typename Interface, typename... Args>
-    void invoke(const QGrpcOperationContext &context, Args &&...args)
+    void invoke(QGrpcOperationContext &context, Args &&...args)
     {
         using Info = QtGrpcPrivate::InterceptorInfo<Interface>;
         constexpr auto Idx = QtGrpcPrivate::capabilityToIndex(Info::capability);
