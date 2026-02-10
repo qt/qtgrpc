@@ -54,6 +54,22 @@ private:
     {
     }
 
+    // prevent users from implementing their own, as the data-members don't qualify for it.
+    friend size_t qHash(const QGrpcInterceptionContext &) = delete;
+    friend size_t qHash(const QGrpcInterceptionContext &, size_t) = delete;
+    friend bool operator==(const QGrpcInterceptionContext &,
+                           const QGrpcInterceptionContext &) = delete;
+    friend bool operator!=(const QGrpcInterceptionContext &,
+                           const QGrpcInterceptionContext &) = delete;
+
+#ifndef QT_NO_DEBUG_STREAM
+    friend QDebug operator<<(QDebug, const QGrpcInterceptionContext &) = delete;
+#endif
+#ifndef QT_NO_DATASTREAM
+    friend QDataStream &operator<<(QDataStream &, const QGrpcInterceptionContext &) = delete;
+    friend QDataStream &operator>>(QDataStream &, QGrpcInterceptionContext &) = delete;
+#endif
+
     friend class QGrpcInterceptorEngine;
 };
 
