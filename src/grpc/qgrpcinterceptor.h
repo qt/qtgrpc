@@ -36,7 +36,7 @@ public:
     [[nodiscard]] quint32 version() const noexcept { return m_version; }
 
     void channel() const && = delete;
-    [[nodiscard]] const QAbstractGrpcChannel &channel() const & noexcept { return m_channel; }
+    [[nodiscard]] const QAbstractGrpcChannel &channel() const & noexcept { return *m_channel; }
 
     [[nodiscard]] Q_GRPC_EXPORT QtGrpc::RpcDescriptor descriptor() const noexcept;
 
@@ -44,13 +44,13 @@ public:
     [[nodiscard]] Q_GRPC_EXPORT const QGrpcCallOptions &callOptions() const & noexcept;
 
 protected:
-    const QAbstractGrpcChannel &m_channel;
-    const QGrpcOperationContext &m_operationContext;
+    const QAbstractGrpcChannel *m_channel;
+    QGrpcOperationContext *m_operationContext;
 
 private:
     explicit QGrpcInterceptionContext(const QAbstractGrpcChannel &channel,
-                                      const QGrpcOperationContext &context) noexcept
-        : m_channel(channel), m_operationContext(context)
+                                      QGrpcOperationContext &context) noexcept
+        : m_channel(&channel), m_operationContext(&context)
     {
     }
 
