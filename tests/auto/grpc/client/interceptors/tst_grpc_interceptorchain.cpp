@@ -23,10 +23,18 @@ class QtGrpcInterceptorChainTest : public QObject
 public:
     QtGrpcInterceptorChainTest() { QTest::failOnWarning(); }
 
+    template <bool Owning>
+    void addInterceptor() const;
+
+    template <bool Owning>
+    void setInterceptor() const;
+
 private Q_SLOTS:
     void emptyByDefault() const;
-    void addInterceptor() const;
-    void setInterceptor() const;
+    void addInterceptorOwning() const { addInterceptor<true>(); };
+    void addInterceptorNonOwning() const { addInterceptor<false>(); };
+    void setInterceptorOwning() const { setInterceptor<true>(); };
+    void setInterceptorNonOwning() const { setInterceptor<false>(); };
     void aggregatesCapabilities() const;
     void capabilitiesAt() const;
 };
@@ -42,6 +50,7 @@ void QtGrpcInterceptorChainTest::emptyByDefault() const
     QCOMPARE_EQ(caps, QtGrpc::InterceptorCapabilities{});
 }
 
+template <bool Owning>
 void QtGrpcInterceptorChainTest::addInterceptor() const
 {
     QGrpcInterceptorChain chain;
@@ -50,30 +59,50 @@ void QtGrpcInterceptorChainTest::addInterceptor() const
         expectedPartial = QtGrpc::InterceptorCapabilities(Capability::Start) | Capability::Finished;
 
     auto i1 = std::make_unique<PartialInterceptor>("Partial");
-    QVERIFY(chain.add(std::move(i1)));
-    QVERIFY(!i1); // Moved from on success
+    if constexpr (Owning) {
+        QVERIFY(chain.add(std::move(i1)));
+        QVERIFY(!i1); // Owning: takes control
+    } else {
+        QVERIFY(chain.add(i1.get()));
+        QVERIFY(i1); // Non-Owning: takes no control
+    }
     QCOMPARE_EQ(chain.size(), 1);
     QCOMPARE_EQ(chain.capabilities(), expectedPartial);
 
     auto i2 = std::make_unique<LoggingInterceptor>("Logging");
-    QVERIFY(chain.add(std::move(i2)));
-    QVERIFY(!i2); // Moved from on success
+    if constexpr (Owning) {
+        QVERIFY(chain.add(std::move(i2)));
+        QVERIFY(!i2);
+    } else {
+        QVERIFY(chain.add(i2.get()));
+        QVERIFY(i2);
+    }
     QCOMPARE_EQ(chain.size(), 2);
     QCOMPARE_EQ(chain.capabilities(), AllCapabilities);
 
     // Invalid add: null interceptor
     QTest::ignoreMessage(QtWarningMsg, "Cannot add null interceptor");
     auto nullInterceptor = std::unique_ptr<LoggingInterceptor>(nullptr);
-    QVERIFY(!chain.add(std::move(nullInterceptor)));
+    if constexpr (Owning) {
+        QVERIFY(!chain.add(std::move(nullInterceptor)));
+    } else {
+        QVERIFY(!chain.add(nullInterceptor.get()));
+    }
     QCOMPARE_EQ(chain.size(), 2); // Chain unchanged
 
     // Valid add after failure
     auto i3 = std::make_unique<PartialInterceptor>("AfterNull");
-    QVERIFY(chain.add(std::move(i3)));
-    QVERIFY(!i3); // Moved from on success
+    if constexpr (Owning) {
+        QVERIFY(chain.add(std::move(i3)));
+        QVERIFY(!i3);
+    } else {
+        QVERIFY(chain.add(i3.get()));
+        QVERIFY(i3);
+    }
     QCOMPARE_EQ(chain.size(), 3);
 }
 
+template <bool Owning>
 void QtGrpcInterceptorChainTest::setInterceptor() const
 {
     QGrpcInterceptorChain chain;
@@ -87,14 +116,34 @@ void QtGrpcInterceptorChainTest::setInterceptor() const
     auto i2 = std::make_unique<LoggingInterceptor>("I2");
     auto nullInterceptor = std::unique_ptr<LoggingInterceptor>(nullptr);
 
-    QTest::ignoreMessage(QtWarningMsg, "Cannot set null interceptor at index 2 of 3");
-    QVERIFY(!chain.set(std::move(i1), std::move(i2), std::move(nullInterceptor)));
-    // All interceptors should NOT be moved from (all-or-nothing semantics)
-    QVERIFY(i1);
-    QVERIFY(i2);
-    QVERIFY(!nullInterceptor);
+    if constexpr (Owning) {
+        QTest::ignoreMessage(QtWarningMsg, "Cannot set null interceptor at index 2 of 2");
+        QVERIFY(!chain.set(std::move(i1), std::move(i2), std::move(nullInterceptor)));
+        // All interceptors should NOT be moved from (all-or-nothing semantics)
+        QVERIFY(i1);
+        QVERIFY(i2);
+        QVERIFY(!nullInterceptor);
+    } else {
+        QTest::ignoreMessage(QtWarningMsg, "Cannot set null interceptor at index 1 of 2");
+        QVERIFY(!chain.set(i1.get(), nullInterceptor.get(), i2.get()));
+        QVERIFY(i1);
+        QVERIFY(!nullInterceptor);
+        QVERIFY(i2);
+    }
 
     QCOMPARE_EQ(chain.size(), 1); // Chain should be unchanged
+
+    if constexpr (Owning) {
+        QVERIFY(chain.set(std::move(i1), std::move(i2)));
+        QVERIFY(!i1);
+        QVERIFY(!i2);
+    } else {
+        QVERIFY(chain.set(i1.get(), i2.get()));
+        QVERIFY(i1);
+        QVERIFY(i2);
+    }
+
+    QCOMPARE_EQ(chain.size(), 2);
 }
 
 void QtGrpcInterceptorChainTest::aggregatesCapabilities() const

@@ -60,7 +60,16 @@ public:
                                                    std::move(interceptors));
     }
 
+    enum class InterceptorUsage { Owning, NonOwning, Mixed };
+
 private Q_SLOTS:
+    void initTestCase_data() const
+    {
+        QTest::addColumn<InterceptorUsage>("interceptorUsage");
+        QTest::newRow("InterceptorUsage::Owning") << InterceptorUsage::Owning;
+        QTest::newRow("InterceptorUsage::NonOwning") << InterceptorUsage::NonOwning;
+        QTest::newRow("InterceptorUsage::Mixed") << InterceptorUsage::Mixed;
+    }
     void initTestCase()
     {
         QTest::failOnWarning();
@@ -242,12 +251,30 @@ void QtGrpcClientInterceptorsTest::setupClientStreamSink(std::unique_ptr<TagProc
 
 void QtGrpcClientInterceptorsTest::unaryCallOrder()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
+    auto i1 = std::make_unique<LoggingInterceptor>("A");
+    auto i2 = std::make_unique<LoggingInterceptor>("B");
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("A")));
-    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("B")));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.add(std::move(i1)));
+        QVERIFY(interceptors.add(std::move(i2)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.add(i1.get()));
+        QVERIFY(interceptors.add(i2.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.add(std::move(i1)));
+        QVERIFY(interceptors.add(i2.get()));
+        break;
+    }
+
     auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
 
@@ -275,13 +302,28 @@ void QtGrpcClientInterceptorsTest::unaryCallOrder()
 
 void QtGrpcClientInterceptorsTest::bidiStreamCallOrder()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     auto processor = m_server->createProcessor();
     setupBidiStreamEcho(processor);
 
     auto interceptorA = std::make_unique<LoggingInterceptor>("A");
     auto interceptorB = std::make_unique<LoggingInterceptor>("B");
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.set(std::move(interceptorA), std::move(interceptorB)));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.set(std::move(interceptorA), std::move(interceptorB)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.set(interceptorA.get(), interceptorB.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.set(std::move(interceptorA)));
+        QVERIFY(interceptors.add(interceptorB.get()));
+        break;
+    }
+
     auto channel = createChannel(std::move(interceptors));
     m_client2.attachChannel(channel);
 
@@ -328,13 +370,29 @@ void QtGrpcClientInterceptorsTest::bidiStreamCallOrder()
 
 void QtGrpcClientInterceptorsTest::clientStreamCallOrder()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     std::atomic<bool> cancelled{ false };
     auto processor = m_server->createProcessor();
     setupClientStreamSink(processor, cancelled);
 
+    auto i1 = std::make_unique<LoggingInterceptor>("A");
+    auto i2 = std::make_unique<LoggingInterceptor>("B");
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.set(std::make_unique<LoggingInterceptor>("A"),
-                             std::make_unique<LoggingInterceptor>("B")));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.set(std::move(i1), std::move(i2)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.set(i1.get(), i2.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.set(i1.get()));
+        QVERIFY(interceptors.add(std::move(i2)));
+        break;
+    }
+
     auto channel = createChannel(std::move(interceptors));
     m_client2.attachChannel(channel);
 
@@ -374,14 +432,30 @@ void QtGrpcClientInterceptorsTest::clientStreamCallOrder()
 
 void QtGrpcClientInterceptorsTest::failedCallOrder()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     auto processor = m_server->createProcessor();
     setupUnaryError(processor, grpc::CANCELLED);
 
     auto interceptorA = std::make_unique<LoggingInterceptor>("A");
     auto interceptorB = std::make_unique<LoggingInterceptor>("B");
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.add(std::move(interceptorA)));
-    QVERIFY(interceptors.add(std::move(interceptorB)));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.add(std::move(interceptorA)));
+        QVERIFY(interceptors.add(std::move(interceptorB)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.add(interceptorA.get()));
+        QVERIFY(interceptors.add(interceptorB.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.add(std::move(interceptorA)));
+        QVERIFY(interceptors.add(interceptorB.get()));
+        break;
+    }
+
     auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
 
@@ -409,13 +483,29 @@ void QtGrpcClientInterceptorsTest::failedCallOrder()
 
 void QtGrpcClientInterceptorsTest::cancelledCallOrder()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     std::atomic<bool> serverCancelled{ false };
     auto processor = m_server->createProcessor();
     setupClientStreamSink(processor, serverCancelled);
 
+    auto i1 = std::make_unique<LoggingInterceptor>("A");
+    auto i2 = std::make_unique<LoggingInterceptor>("B");
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.set(std::make_unique<LoggingInterceptor>("A"),
-                             std::make_unique<LoggingInterceptor>("B")));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.set(std::move(i1), std::move(i2)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.set(i1.get(), i2.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.add(i1.get()));
+        QVERIFY(interceptors.add(std::move(i2)));
+        break;
+    }
+
     auto channel = createChannel(std::move(interceptors));
     m_client2.attachChannel(channel);
 
@@ -453,12 +543,28 @@ void QtGrpcClientInterceptorsTest::cancelledCallOrder()
 
 void QtGrpcClientInterceptorsTest::partialCapabilities()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
+    auto partial = std::make_unique<PartialInterceptor>("Partial");
+    auto full = std::make_unique<LoggingInterceptor>("Full");
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.set(std::make_unique<PartialInterceptor>("Partial"),
-                             std::make_unique<LoggingInterceptor>("Full")));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.set(std::move(partial), std::move(full)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.set(partial.get(), full.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.set(partial.get()));
+        QVERIFY(interceptors.add(std::move(full)));
+        break;
+    }
+
     auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
 
@@ -482,6 +588,8 @@ void QtGrpcClientInterceptorsTest::partialCapabilities()
 
 void QtGrpcClientInterceptorsTest::onStartDrop()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
@@ -494,7 +602,20 @@ void QtGrpcClientInterceptorsTest::onStartDrop()
     });
     auto logger = std::make_unique<LoggingInterceptor>("After");
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.set(std::move(dropper), std::move(logger)));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.set(std::move(dropper), std::move(logger)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.set(dropper.get(), logger.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.add(dropper.get()));
+        QVERIFY(interceptors.add(std::move(logger)));
+        break;
+    }
+
     auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
     m_client2.attachChannel(channel);
@@ -542,6 +663,8 @@ void QtGrpcClientInterceptorsTest::onStartDrop()
 
 void QtGrpcClientInterceptorsTest::onStartDropFromSecond()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
@@ -553,9 +676,21 @@ void QtGrpcClientInterceptorsTest::onStartDropFromSecond()
     auto third = std::make_unique<LoggingInterceptor>("Proceed");
 
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.add(std::move(first)));
-    QVERIFY(interceptors.add(std::move(dropper)));
-    QVERIFY(interceptors.add(std::move(third)));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.set(std::move(first), std::move(dropper), std::move(third)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.set(first.get(), dropper.get(), third.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.add(first.get()));
+        QVERIFY(interceptors.add(std::move(dropper)));
+        QVERIFY(interceptors.add(std::move(third)));
+        break;
+    }
+
     auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
 
@@ -585,6 +720,8 @@ void QtGrpcClientInterceptorsTest::onStartDropFromSecond()
 
 void QtGrpcClientInterceptorsTest::modifyArguments()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     const QByteArray clientMdKey = "client-key";
     const QByteArray serverInitialMdKey = "server-initial-key";
     const QByteArray serverTrailingMdKey = "server-trailing-key";
@@ -698,7 +835,20 @@ void QtGrpcClientInterceptorsTest::modifyArguments()
     auto modifyingInterceptor1 = std::make_unique<ModifyingInterceptor>("i1");
     auto modifyingInterceptor2 = std::make_unique<ModifyingInterceptor>("i2");
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.set(std::move(modifyingInterceptor1), std::move(modifyingInterceptor2)));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.set(std::move(modifyingInterceptor1), std::move(modifyingInterceptor2)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.set(modifyingInterceptor1.get(), modifyingInterceptor2.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.add(std::move(modifyingInterceptor1)));
+        QVERIFY(interceptors.add(modifyingInterceptor2.get()));
+        break;
+    }
+
     auto channel = createChannel(std::move(interceptors));
     m_client2.attachChannel(channel);
 
@@ -733,6 +883,10 @@ void QtGrpcClientInterceptorsTest::modifyArguments()
 
 void QtGrpcClientInterceptorsTest::interceptionContextAccessors()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+    if (interceptorUsage == InterceptorUsage::Mixed)
+        return;
+
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
@@ -740,10 +894,22 @@ void QtGrpcClientInterceptorsTest::interceptionContextAccessors()
     opts.addMetadata("test-key", "test-value");
     opts.setDeadlineTimeout(std::chrono::seconds(30));
 
+    auto i1 = std::make_unique<ContextVerifyingInterceptor>("Ctx"_ba);
+    auto interceptor = i1.get();
     QGrpcInterceptorChain interceptors;
-    auto interceptor = std::make_unique<ContextVerifyingInterceptor>("Ctx");
-    const auto *interceptorPtr = interceptor.get();
-    QVERIFY(interceptors.add(std::move(interceptor)));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.add(std::move(i1)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.add(i1.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        Q_UNREACHABLE();
+        return;
+    }
+
     auto channel = createChannel(std::move(interceptors));
 
     m_client1.attachChannel(channel);
@@ -753,28 +919,47 @@ void QtGrpcClientInterceptorsTest::interceptionContextAccessors()
     QSignalSpy finishedSpy(reply.get(), &QGrpcCallReply::finished);
     QVERIFY(finishedSpy.wait());
 
-    QCOMPARE(interceptorPtr->capturedDescriptor1->service, "tst.i1.Interceptor"_L1);
-    QCOMPARE(interceptorPtr->capturedDescriptor1->method, "Unary"_L1);
-    QCOMPARE(interceptorPtr->capturedDescriptor1->type, QtGrpc::RpcType::UnaryCall);
+    QCOMPARE(interceptor->capturedDescriptor1->service, "tst.i1.Interceptor"_L1);
+    QCOMPARE(interceptor->capturedDescriptor1->method, "Unary"_L1);
+    QCOMPARE(interceptor->capturedDescriptor1->type, QtGrpc::RpcType::UnaryCall);
 
-    QCOMPARE_EQ(*interceptorPtr->capturedDescriptor1, *interceptorPtr->capturedDescriptor2);
-    QCOMPARE_EQ(*interceptorPtr->capturedDescriptor1, *interceptorPtr->capturedDescriptor3);
+    QCOMPARE_EQ(*interceptor->capturedDescriptor1, *interceptor->capturedDescriptor2);
+    QCOMPARE_EQ(*interceptor->capturedDescriptor1, *interceptor->capturedDescriptor3);
 
-    QCOMPARE_EQ(interceptorPtr->capturedCallOptions.deadlineTimeout(), opts.deadlineTimeout());
-    QCOMPARE_EQ(interceptorPtr->capturedCallOptions.metadata(QtGrpc::MultiValue),
+    QCOMPARE_EQ(interceptor->capturedCallOptions.deadlineTimeout(), opts.deadlineTimeout());
+    QCOMPARE_EQ(interceptor->capturedCallOptions.metadata(QtGrpc::MultiValue),
                 opts.metadata(QtGrpc::MultiValue));
 }
 
 void QtGrpcClientInterceptorsTest::addInterceptorVariations()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
+    auto i1 = std::make_unique<LoggingInterceptor>("Single");
+    auto i2 = std::make_unique<LoggingInterceptor>("V1");
+    auto i3 = std::make_unique<LoggingInterceptor>("V2");
+    auto i4 = std::make_unique<LoggingInterceptor>("V3");
+
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("Single")));
-    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("V1")));
-    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("V2")));
-    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("V3")));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.set(std::move(i1), std::move(i2), std::move(i3), std::move(i4)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.set(i1.get(), i2.get(), i3.get(), i4.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.add(std::move(i1)));
+        QVERIFY(interceptors.add(i2.get()));
+        QVERIFY(interceptors.add(std::move(i3)));
+        QVERIFY(interceptors.add(i4.get()));
+        break;
+    }
+
     auto channel = createChannel(std::move(interceptors));
 
     m_client1.attachChannel(channel);
@@ -795,15 +980,37 @@ void QtGrpcClientInterceptorsTest::addInterceptorVariations()
 
 void QtGrpcClientInterceptorsTest::removeAllInterceptorsMultiple()
 {
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+
     auto processor = m_server->createProcessor();
     setupUnaryEcho(processor);
 
+    auto i1 = std::make_unique<LoggingInterceptor>("A");
+    auto i2 = std::make_unique<LoggingInterceptor>("B");
     QGrpcInterceptorChain interceptors;
-    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("A")));
-    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("B")));
+
+    switch (interceptorUsage) {
+    case InterceptorUsage::Owning:
+        QVERIFY(interceptors.add(std::move(i1)));
+        QVERIFY(interceptors.add(std::move(i2)));
+        break;
+    case InterceptorUsage::NonOwning:
+        QVERIFY(interceptors.add(i1.get()));
+        QVERIFY(interceptors.add(i2.get()));
+        break;
+    case InterceptorUsage::Mixed:
+        QVERIFY(interceptors.add(std::move(i1)));
+        QVERIFY(interceptors.add(i2.get()));
+        break;
+    }
+
     interceptors.clear();
 
-    QVERIFY(interceptors.add(std::make_unique<LoggingInterceptor>("New")));
+    auto i3 = std::make_unique<LoggingInterceptor>("New");
+    if (interceptorUsage == InterceptorUsage::Owning)
+        QVERIFY(interceptors.add(std::move(i3)));
+    else
+        QVERIFY(interceptors.add(i3.get()));
 
     auto channel = createChannel(std::move(interceptors));
     m_client1.attachChannel(channel);
