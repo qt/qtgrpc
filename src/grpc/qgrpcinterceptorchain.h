@@ -14,6 +14,7 @@
 #include <QtCore/qstring.h>
 
 #include <memory>
+#include <type_traits>
 
 QT_BEGIN_NAMESPACE
 
@@ -37,53 +38,27 @@ public:
     template <typename T, QtGrpcPrivate::if_interceptor<T> = true>
     [[nodiscard]] bool add(std::unique_ptr<T> &&interceptor)
     {
-        using namespace QtGrpcPrivate;
-
-        if (!interceptor) {
-            warnNullInterceptor();
-            return false;
-        }
-
-        auto *ptr = interceptor.get();
-        auto deleter = [](void *p) { delete static_cast<T *>(p); };
-        auto bindings = InterceptorCapabilityBinding::extractFrom(ptr);
-
-        if (!addImpl(ptr, deleter, bindings))
-            return false; // caller still owns interceptor
-
-        interceptor.release(); // we take ownership on success
-        return true;
+        return addHelper(std::move(interceptor));
     }
 
     template <typename... Ts,
               std::enable_if_t<(QtGrpcPrivate::is_interceptor_v<Ts> && ...), bool> = true>
     [[nodiscard]] bool set(std::unique_ptr<Ts> &&...interceptors)
     {
-        qsizetype failedIndex = -1;
-        qsizetype idx = 0;
+        return setHelper(std::move(interceptors)...);
+    }
 
-        auto check = [&](auto &p) {
-            if (!p && failedIndex == -1)
-                failedIndex = idx;
-            ++idx;
-        };
+    template <typename T, QtGrpcPrivate::if_interceptor<T> = true>
+    [[nodiscard]] bool add(T *interceptor)
+    {
+        return addHelper(interceptor);
+    }
 
-        // Locate the first null interceptor (if any)
-        (void)std::initializer_list<int>{ (check(interceptors), 0)... };
-
-        if (failedIndex != -1) {
-            warnNullInterceptor(failedIndex, sizeof...(Ts));
-            return false;
-        }
-
-        QGrpcInterceptorChain tmp;
-        bool ok = true;
-        ((ok = ok && tmp.add(std::move(interceptors))), ...);
-
-        if (ok)
-            *this = std::move(tmp);
-
-        return ok;
+    template <typename... Ts,
+              std::enable_if_t<(QtGrpcPrivate::is_interceptor_v<Ts> && ...), bool> = true>
+    [[nodiscard]] bool set(Ts *...interceptors)
+    {
+        return setHelper(interceptors...);
     }
 
     Q_GRPC_EXPORT void clear();
@@ -100,6 +75,77 @@ public:
 
 private:
     using DeleterFn = void (*)(void *);
+
+    template <typename T>
+    struct is_unique_ptr : std::false_type
+    {
+        using element_type = std::remove_pointer_t<T>; // For raw pointers: T* -> T
+    };
+    template <typename T>
+    struct is_unique_ptr<std::unique_ptr<T>> : std::true_type
+    {
+        using element_type = T;
+    };
+
+    template <typename T>
+    [[nodiscard]] bool addHelper(T &&interceptor)
+    {
+        using namespace QtGrpcPrivate;
+        using DecayedT = std::decay_t<T>;
+        constexpr bool is_uptr = is_unique_ptr<DecayedT>::value;
+        using ElementType = typename is_unique_ptr<DecayedT>::element_type;
+
+        if (!interceptor) {
+            warnNullInterceptor();
+            return false;
+        }
+
+        ElementType *ptr = nullptr;
+        if constexpr (is_uptr)
+            ptr = interceptor.get();
+        else
+            ptr = interceptor;
+
+        DeleterFn deleter = nullptr;
+        if constexpr (is_uptr)
+            deleter = [](void *p) { delete static_cast<ElementType *>(p); };
+
+        auto bindings = InterceptorCapabilityBinding::extractFrom(ptr);
+
+        if (!addImpl(ptr, deleter, bindings))
+            return false;
+
+        if constexpr (is_uptr)
+            interceptor.release(); // we take ownership on success
+
+        return true;
+    }
+
+    template <typename... Ts>
+    [[nodiscard]] bool setHelper(Ts &&...interceptors)
+    {
+        qsizetype failedIndex = -1;
+        qsizetype idx = 0;
+        auto checkNull = [&](const auto &p) {
+            if (!p && failedIndex == -1)
+                failedIndex = idx;
+            ++idx;
+        };
+        (checkNull(interceptors), ...);
+
+        if (failedIndex != -1) {
+            warnNullInterceptor(failedIndex, sizeof...(Ts) - 1);
+            return false;
+        }
+
+        QGrpcInterceptorChain tmp;
+        bool ok = (... && tmp.addHelper(std::forward<Ts>(interceptors)));
+
+        if (ok)
+            *this = std::move(tmp);
+
+        return ok;
+    }
 
     [[nodiscard]] Q_GRPC_EXPORT bool
     addImpl(void *interceptor, DeleterFn deleter,
