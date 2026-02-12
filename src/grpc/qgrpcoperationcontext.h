@@ -72,6 +72,8 @@ public:
 
     [[nodiscard]] std::shared_ptr<const QAbstractProtobufSerializer> serializer() const;
 
+    [[nodiscard]] quint64 operationId() const noexcept;
+
 Q_SIGNALS:
     // Outgoing signals of the channel.
     void finished(const QGrpcStatus &status);

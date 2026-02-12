@@ -25,6 +25,7 @@
 #include <QtTest/qsignalspy.h>
 #include <QtTest/qtest.h>
 
+#include <QtCore/qset.h>
 #include <QtCore/qtimer.h>
 
 #include <string>
@@ -101,6 +102,7 @@ private Q_SLOTS:
     void modifyArguments();
 
     void interceptionContextAccessors();
+    void interceptionContextUniqueId();
 
     void addInterceptorVariations();
     void removeAllInterceptorsMultiple();
@@ -138,6 +140,7 @@ private:
     std::unique_ptr<tst::i1::Interceptor::AsyncService> m_service1;
     std::unique_ptr<tst::i2::Interceptor::AsyncService> m_service2;
     qt::tst::i1::Interceptor::Client m_client1;
+    qt::tst::i1::Interceptor::Client m_client1_1;
     qt::tst::i2::Interceptor::Client m_client2;
 };
 
@@ -929,6 +932,122 @@ void QtGrpcClientInterceptorsTest::interceptionContextAccessors()
     QCOMPARE_EQ(interceptor->capturedCallOptions.deadlineTimeout(), opts.deadlineTimeout());
     QCOMPARE_EQ(interceptor->capturedCallOptions.metadata(QtGrpc::MultiValue),
                 opts.metadata(QtGrpc::MultiValue));
+}
+
+void QtGrpcClientInterceptorsTest::interceptionContextUniqueId()
+{
+    QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
+    if (interceptorUsage == InterceptorUsage::Mixed)
+        return;
+
+    constexpr qsizetype NumCalls = 20 * 2; // 2 channels
+    auto processor = m_server->createProcessor();
+    for (int i = 0; i < NumCalls; ++i)
+        setupUnaryEcho(processor);
+
+    struct SharedData
+    {
+        QMap<QtGrpc::InterceptorCapability, QSet<quint64>> operationIds;
+    };
+
+    class IdCapturingInterceptor : public QGrpcStartInterceptor,
+                                   public QGrpcInitialMetadataInterceptor,
+                                   public QGrpcMessageReceivedInterceptor,
+                                   public QGrpcTrailingMetadataInterceptor,
+                                   public QGrpcFinishedInterceptor
+    {
+    public:
+        IdCapturingInterceptor(std::shared_ptr<SharedData> sharedData_)
+            : sharedData(std::move(sharedData_))
+        {
+        }
+
+        Continuation onStart(QGrpcInterceptionContext &context, QProtobufMessage &,
+                             QGrpcCallOptions &) override
+        {
+            insertOperationId(context, QtGrpc::InterceptorCapability::Start);
+            return Continuation::Proceed;
+        }
+
+        void onInitialMetadata(QGrpcInterceptionContext &context,
+                               QMultiHash<QByteArray, QByteArray> &) override
+        {
+            insertOperationId(context, QtGrpc::InterceptorCapability::InitialMetadata);
+        }
+
+        void onMessageReceived(QGrpcInterceptionContext &context, QByteArray &) override
+        {
+            insertOperationId(context, QtGrpc::InterceptorCapability::MessageReceived);
+        }
+
+        void onTrailingMetadata(QGrpcInterceptionContext &context,
+                                QMultiHash<QByteArray, QByteArray> &) override
+        {
+            insertOperationId(context, QtGrpc::InterceptorCapability::TrailingMetadata);
+        }
+
+        void onFinished(QGrpcInterceptionContext &context, QGrpcStatus &) override
+        {
+            insertOperationId(context, QtGrpc::InterceptorCapability::Finished);
+        }
+
+    private:
+        void insertOperationId(QGrpcInterceptionContext &context, QtGrpc::InterceptorCapability cap)
+        {
+            QVERIFY(!sharedData->operationIds[cap].contains(context.operationId()));
+            sharedData->operationIds[cap].insert(context.operationId());
+        }
+
+        std::shared_ptr<SharedData> sharedData;
+    };
+
+    auto sharedData = std::make_shared<SharedData>();
+
+    std::unique_ptr<IdCapturingInterceptor> nonOwningInterceptor;
+    if (interceptorUsage == InterceptorUsage::NonOwning)
+        nonOwningInterceptor = std::make_unique<IdCapturingInterceptor>(sharedData);
+
+    auto createChain = [&]() {
+        QGrpcInterceptorChain interceptors;
+        if (interceptorUsage == InterceptorUsage::Owning)
+            QVERIFY(interceptors.add(std::make_unique<IdCapturingInterceptor>(sharedData)));
+        else
+            QVERIFY(interceptors.add(nonOwningInterceptor.get()));
+        return interceptors;
+    };
+
+    auto channel1 = createChannel(createChain());
+    auto channel2 = createChannel(createChain());
+    m_client1.attachChannel(channel1);
+    m_client1_1.attachChannel(channel2);
+
+    for (int i = 0; i < NumCalls / 2; ++i) {
+        {
+            auto reply = m_client1.Unary(qt::tst::i1::CallMessage{});
+            QSignalSpy finishedSpy(reply.get(), &QGrpcCallReply::finished);
+            QVERIFY(finishedSpy.wait());
+        }
+        {
+            auto reply = m_client1_1.Unary(qt::tst::i1::CallMessage{});
+            QSignalSpy finishedSpy(reply.get(), &QGrpcCallReply::finished);
+            QVERIFY(finishedSpy.wait());
+        }
+    }
+
+    const auto unaryCapabilities = {
+        QtGrpc::InterceptorCapability::Start,
+        QtGrpc::InterceptorCapability::InitialMetadata,
+        QtGrpc::InterceptorCapability::MessageReceived,
+        QtGrpc::InterceptorCapability::TrailingMetadata,
+        QtGrpc::InterceptorCapability::Finished,
+    };
+
+    // Verify that each hook point contains the same operation IDs
+    for (const auto c : unaryCapabilities) {
+        QCOMPARE_EQ(sharedData->operationIds[c].size(), NumCalls);
+        QCOMPARE_EQ(sharedData->operationIds[QtGrpc::InterceptorCapability::Start],
+                    sharedData->operationIds[c]);
+    }
 }
 
 void QtGrpcClientInterceptorsTest::addInterceptorVariations()

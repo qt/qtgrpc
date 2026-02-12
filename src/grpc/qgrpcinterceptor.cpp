@@ -24,6 +24,11 @@ RpcDescriptor QGrpcInterceptionContext::descriptor() const noexcept
     return m_operationContext->descriptor();
 }
 
+quint64 QGrpcInterceptionContext::operationId() const noexcept
+{
+    return m_operationContext->operationId();
+}
+
 QGrpcStartInterceptor::~QGrpcStartInterceptor() = default;
 QGrpcInitialMetadataInterceptor::~QGrpcInitialMetadataInterceptor() = default;
 QGrpcMessageReceivedInterceptor::~QGrpcMessageReceivedInterceptor() = default;
