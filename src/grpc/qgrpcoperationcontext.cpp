@@ -15,9 +15,20 @@
 #include <QtCore/qbytearrayview.h>
 #include <QtCore/qlatin1stringview.h>
 
+#include <atomic>
 #include <utility>
 
 QT_BEGIN_NAMESPACE
+
+namespace {
+
+quint64 nextOperationId()
+{
+    static std::atomic<quint64> counter{ 0 };
+    return counter.fetch_add(1, std::memory_order_relaxed);
+}
+
+}
 
 /*!
     \class QGrpcOperationContext
@@ -168,7 +179,7 @@ QGrpcOperationContext::QGrpcOperationContext(QtGrpc::RpcDescriptor descriptor,
                                                  serializer,
                                              QGrpcOperation *parent, PrivateConstructor /*unused*/)
     : QObject(*new QGrpcOperationContextPrivate(std::move(descriptor), options,
-                                                std::move(serializer)),
+                                                std::move(serializer), nextOperationId()),
               parent)
 {
     using namespace QtGrpc;
@@ -385,6 +396,19 @@ void QGrpcOperationContext::setResponseMetaType(QMetaType metaType)
 {
     Q_D(QGrpcOperationContext);
     d->responseMetaType = metaType;
+}
+
+/*!
+    \since 6.11
+
+    Returns the unique identifier for this operation context.
+
+    Each ID is unique across all channels for the application lifetime.
+*/
+quint64 QGrpcOperationContext::operationId() const noexcept
+{
+    Q_D(const QGrpcOperationContext);
+    return d->operationId;
 }
 
 const QGrpcOperation &QGrpcOperationContext::operation() const &

@@ -31,9 +31,10 @@ class QGrpcOperationContextPrivate : public QObjectPrivate
     Q_DECLARE_PUBLIC(QGrpcOperationContext)
 public:
     QGrpcOperationContextPrivate(QtGrpc::RpcDescriptor &&descriptor_, QGrpcCallOptions options_,
-                                 std::shared_ptr<QAbstractProtobufSerializer> &&serializer_)
+                                 std::shared_ptr<QAbstractProtobufSerializer> &&serializer_,
+                                 quint64 operationId_)
         : descriptor(std::move(descriptor_)), options(std::move(options_)),
-          serializer(std::move(serializer_))
+          serializer(std::move(serializer_)), operationId(operationId_)
     {
     }
 
@@ -46,6 +47,7 @@ public:
     QHash<QByteArray, QByteArray> deprServerInitialMetadata;
 #endif
     QMultiHash<QByteArray, QByteArray> serverTrailingMetadata;
+    const quint64 operationId;
 };
 
 QT_END_NAMESPACE

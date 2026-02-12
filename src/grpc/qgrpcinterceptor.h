@@ -47,6 +47,8 @@ public:
     void callOptions() const && = delete;
     [[nodiscard]] Q_GRPC_EXPORT const QGrpcCallOptions &callOptions() const & noexcept;
 
+    [[nodiscard]] Q_GRPC_EXPORT quint64 operationId() const noexcept;
+
 protected:
     const QAbstractGrpcChannel *m_channel;
     QGrpcOperationContext *m_operationContext;
