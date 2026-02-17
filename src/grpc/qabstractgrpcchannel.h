@@ -5,7 +5,6 @@
 #ifndef QABSTRACTGRPCCHANNEL_H
 #define QABSTRACTGRPCCHANNEL_H
 
-#include <QtGrpc/qgrpcinterceptor.h>
 #include <QtGrpc/qtgrpcglobal.h>
 
 #include <QtCore/qmetatype.h>
