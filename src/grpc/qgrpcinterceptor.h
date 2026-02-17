@@ -174,16 +174,10 @@ struct TypeList
     }
 
     template <typename T>
-    static constexpr bool containsBase() noexcept
-    {
-        return std::disjunction_v<std::is_base_of<Ts, T>...>;
-    }
+    using ContainsBase = std::disjunction<std::is_base_of<Ts, T>...>;
 
     template <typename T>
-    static constexpr bool containsExact() noexcept
-    {
-        return std::disjunction_v<std::is_same<T, Ts>...>;
-    }
+    using ContainsExact = std::disjunction<std::is_same<T, Ts>...>;
 
     template <typename Fn>
     static constexpr void forEach(Fn &&fn) noexcept
@@ -277,12 +271,12 @@ struct InterceptorCapabilityBinding
 };
 
 template <typename T>
-inline constexpr bool is_interceptor_v = std::conjunction_v<
-    std::bool_constant<QtGrpcPrivate::InterceptorTypes::containsBase<T>()>,
-    std::bool_constant<!QtGrpcPrivate::InterceptorTypes::containsExact<T>()>>;
+using is_interceptor = std::conjunction<
+    typename InterceptorTypes::template ContainsBase<T>,
+    std::negation<typename InterceptorTypes::template ContainsExact<T>>>;
 
-template <typename T>
-using if_interceptor = std::enable_if_t<is_interceptor_v<T>, bool>;
+template <typename... Ts>
+using if_interceptor = std::enable_if_t<std::conjunction_v<is_interceptor<Ts>...>, bool>;
 
 // clang-format on
 } // namespace QtGrpcPrivate
