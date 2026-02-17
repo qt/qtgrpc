@@ -24,7 +24,7 @@ public:
 #endif
     explicit QGrpcServerStream(QLatin1StringView service, QLatin1StringView method,
                                const QGrpcCallOptions &options,
-                               const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                               std::weak_ptr<QAbstractGrpcChannel> channel,
                                PrivateConstructor);
     ~QGrpcServerStream() override;
 
@@ -51,7 +51,7 @@ public:
 #endif
     explicit QGrpcClientStream(QLatin1StringView service, QLatin1StringView method,
                                const QGrpcCallOptions &options,
-                               const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                               std::weak_ptr<QAbstractGrpcChannel> channel,
                                PrivateConstructor);
     ~QGrpcClientStream() override;
 
@@ -78,7 +78,7 @@ public:
 #endif
     explicit QGrpcBidiStream(QLatin1StringView service, QLatin1StringView method,
                              const QGrpcCallOptions &options,
-                             const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                             std::weak_ptr<QAbstractGrpcChannel> channel,
                              PrivateConstructor);
     ~QGrpcBidiStream() override;
 

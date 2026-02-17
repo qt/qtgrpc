@@ -139,7 +139,7 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
     This is indirectly called by the generated client interface.
 */
 QGrpcOperation::QGrpcOperation(QtGrpc::RpcDescriptor descriptor, const QGrpcCallOptions &options,
-                               const std::weak_ptr<QAbstractGrpcChannel> &channel)
+                               std::weak_ptr<QAbstractGrpcChannel> &&channel)
     : QObject(*new QGrpcOperationPrivate())
 {
     Q_D(QGrpcOperation);
@@ -203,7 +203,7 @@ QGrpcOperation::QGrpcOperation(QtGrpc::RpcDescriptor descriptor, const QGrpcCall
         d->asyncFinishInvalid({ QtGrpc::StatusCode::Aborted, tr("Channel is not available") });
         return;
     }
-    d->channel = channel;
+    d->channel = std::move(channel);
 
     if (!d->operationContext->serializer()) {
         d->asyncFinishInvalid({ QtGrpc::StatusCode::Aborted, tr("Serializer is not available") });
