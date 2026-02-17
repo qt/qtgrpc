@@ -44,9 +44,10 @@ QT_BEGIN_NAMESPACE
 */
 QGrpcServerStream::QGrpcServerStream(QLatin1StringView service, QLatin1StringView method,
                                      const QGrpcCallOptions &options,
-                                     const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                                     std::weak_ptr<QAbstractGrpcChannel> channel,
                                      PrivateConstructor /* unused */)
-    : QGrpcOperation({ service, method, QtGrpc::RpcType::ServerStreaming }, options, channel)
+    : QGrpcOperation({ service, method, QtGrpc::RpcType::ServerStreaming }, options,
+                     std::move(channel))
 {
     QObject::connect(&QGrpcOperation::context(), &QGrpcOperationContext::messageReceived, this,
                      &QGrpcServerStream::messageReceived);
@@ -89,9 +90,10 @@ bool QGrpcServerStream::event(QEvent *event)
 */
 QGrpcClientStream::QGrpcClientStream(QLatin1StringView service, QLatin1StringView method,
                                      const QGrpcCallOptions &options,
-                                     const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                                     std::weak_ptr<QAbstractGrpcChannel> channel,
                                      PrivateConstructor /* unused */)
-    : QGrpcOperation({ service, method, QtGrpc::RpcType::ClientStreaming }, options, channel)
+    : QGrpcOperation({ service, method, QtGrpc::RpcType::ClientStreaming }, options,
+                     std::move(channel))
 {
 }
 
@@ -161,9 +163,10 @@ bool QGrpcClientStream::event(QEvent *event)
 */
 QGrpcBidiStream::QGrpcBidiStream(QLatin1StringView service, QLatin1StringView method,
                                  const QGrpcCallOptions &options,
-                                 const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                                 std::weak_ptr<QAbstractGrpcChannel> channel,
                                  PrivateConstructor /* unused */)
-    : QGrpcOperation({ service, method, QtGrpc::RpcType::BidiStreaming }, options, channel)
+    : QGrpcOperation({ service, method, QtGrpc::RpcType::BidiStreaming }, options,
+                     std::move(channel))
 {
     QObject::connect(&QGrpcOperation::context(), &QGrpcOperationContext::messageReceived,
                      this, &QGrpcBidiStream::messageReceived);

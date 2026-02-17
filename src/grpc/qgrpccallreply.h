@@ -29,7 +29,7 @@ public:
 #endif
     explicit QGrpcCallReply(QLatin1StringView service, QLatin1StringView method,
                             const QGrpcCallOptions &options,
-                            const std::weak_ptr<QAbstractGrpcChannel> &channel, PrivateConstructor);
+                            std::weak_ptr<QAbstractGrpcChannel> channel, PrivateConstructor);
     ~QGrpcCallReply() override;
 
 private:

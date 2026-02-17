@@ -73,7 +73,7 @@ protected:
                             QObject *parent = nullptr);
 #endif
     explicit QGrpcOperation(QtGrpc::RpcDescriptor descriptor, const QGrpcCallOptions &options,
-                            const std::weak_ptr<QAbstractGrpcChannel> &channel);
+                            std::weak_ptr<QAbstractGrpcChannel> &&channel);
 
     [[nodiscard]] const QGrpcOperationContext &context() const & noexcept;
     [[nodiscard]] QGrpcOperationContext &context() & noexcept

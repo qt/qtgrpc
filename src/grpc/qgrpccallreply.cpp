@@ -38,9 +38,9 @@ using namespace Qt::StringLiterals;
 */
 QGrpcCallReply::QGrpcCallReply(QLatin1StringView service, QLatin1StringView method,
                                const QGrpcCallOptions &options,
-                               const std::weak_ptr<QAbstractGrpcChannel> &channel,
+                               std::weak_ptr<QAbstractGrpcChannel> channel,
                                PrivateConstructor /* unused */)
-    : QGrpcOperation({ service, method, QtGrpc::RpcType::UnaryCall }, options, channel)
+    : QGrpcOperation({ service, method, QtGrpc::RpcType::UnaryCall }, options, std::move(channel))
 {
 }
 
