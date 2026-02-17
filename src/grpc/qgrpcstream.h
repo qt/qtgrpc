@@ -22,7 +22,7 @@ public:
     explicit QGrpcServerStream(std::shared_ptr<QGrpcOperationContext> operationContext,
                                QObject *parent = nullptr);
 #endif
-    explicit QGrpcServerStream(const QLatin1StringView service, const QLatin1StringView method,
+    explicit QGrpcServerStream(QLatin1StringView service, QLatin1StringView method,
                                const QGrpcCallOptions &options,
                                const std::weak_ptr<QAbstractGrpcChannel> &channel,
                                PrivateConstructor);
@@ -49,7 +49,7 @@ public:
     explicit QGrpcClientStream(std::shared_ptr<QGrpcOperationContext> operationContext,
                                QObject *parent = nullptr);
 #endif
-    explicit QGrpcClientStream(const QLatin1StringView service, const QLatin1StringView method,
+    explicit QGrpcClientStream(QLatin1StringView service, QLatin1StringView method,
                                const QGrpcCallOptions &options,
                                const std::weak_ptr<QAbstractGrpcChannel> &channel,
                                PrivateConstructor);
@@ -76,7 +76,7 @@ public:
     explicit QGrpcBidiStream(std::shared_ptr<QGrpcOperationContext> operationContext,
                              QObject *parent = nullptr);
 #endif
-    explicit QGrpcBidiStream(const QLatin1StringView service, const QLatin1StringView method,
+    explicit QGrpcBidiStream(QLatin1StringView service, QLatin1StringView method,
                              const QGrpcCallOptions &options,
                              const std::weak_ptr<QAbstractGrpcChannel> &channel,
                              PrivateConstructor);

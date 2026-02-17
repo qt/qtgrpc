@@ -36,7 +36,7 @@ using namespace Qt::StringLiterals;
 
     \sa QGrpcClientBase::call QAbstractGrpcChannel::call
 */
-QGrpcCallReply::QGrpcCallReply(const QLatin1StringView service, const QLatin1StringView method,
+QGrpcCallReply::QGrpcCallReply(QLatin1StringView service, QLatin1StringView method,
                                const QGrpcCallOptions &options,
                                const std::weak_ptr<QAbstractGrpcChannel> &channel,
                                PrivateConstructor /* unused */)

@@ -27,7 +27,7 @@ public:
 #if QT_GRPC_REMOVED_SINCE(6, 11)
     explicit QGrpcCallReply(std::shared_ptr<QGrpcOperationContext> operationContext);
 #endif
-    explicit QGrpcCallReply(const QLatin1StringView service, const QLatin1StringView method,
+    explicit QGrpcCallReply(QLatin1StringView service, QLatin1StringView method,
                             const QGrpcCallOptions &options,
                             const std::weak_ptr<QAbstractGrpcChannel> &channel, PrivateConstructor);
     ~QGrpcCallReply() override;

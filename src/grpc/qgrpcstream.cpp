@@ -42,8 +42,7 @@ QT_BEGIN_NAMESPACE
 
     \sa QGrpcClientBase::serverStream QAbstractGrpcChannel::serverStream
 */
-QGrpcServerStream::QGrpcServerStream(const QLatin1StringView service,
-                                     const QLatin1StringView method,
+QGrpcServerStream::QGrpcServerStream(QLatin1StringView service, QLatin1StringView method,
                                      const QGrpcCallOptions &options,
                                      const std::weak_ptr<QAbstractGrpcChannel> &channel,
                                      PrivateConstructor /* unused */)
@@ -88,8 +87,7 @@ bool QGrpcServerStream::event(QEvent *event)
 
     \sa QGrpcClientBase::clientStream QAbstractGrpcChannel::clientStream
 */
-QGrpcClientStream::QGrpcClientStream(const QLatin1StringView service,
-                                     const QLatin1StringView method,
+QGrpcClientStream::QGrpcClientStream(QLatin1StringView service, QLatin1StringView method,
                                      const QGrpcCallOptions &options,
                                      const std::weak_ptr<QAbstractGrpcChannel> &channel,
                                      PrivateConstructor /* unused */)
@@ -161,7 +159,7 @@ bool QGrpcClientStream::event(QEvent *event)
 
     \sa QGrpcClientBase::bidiStream QAbstractGrpcChannel::bidiStream
 */
-QGrpcBidiStream::QGrpcBidiStream(const QLatin1StringView service, const QLatin1StringView method,
+QGrpcBidiStream::QGrpcBidiStream(QLatin1StringView service, QLatin1StringView method,
                                  const QGrpcCallOptions &options,
                                  const std::weak_ptr<QAbstractGrpcChannel> &channel,
                                  PrivateConstructor /* unused */)
