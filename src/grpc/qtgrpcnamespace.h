@@ -63,9 +63,9 @@ Q_ENUM_NS(RpcType)
 
 struct RpcDescriptor
 {
-    const QLatin1StringView service;
-    const QLatin1StringView method;
-    const RpcType type;
+    QLatin1StringView service;
+    QLatin1StringView method;
+    RpcType type;
 
 private:
     friend bool comparesEqual(const RpcDescriptor &lhs, const RpcDescriptor &rhs) noexcept
