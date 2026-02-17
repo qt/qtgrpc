@@ -18,7 +18,7 @@
 #include <QtCore/qtclasshelpermacros.h>
 
 #include <array>
-#include <type_traits>
+#include <QtCore/q20type_traits.h>
 #include <utility>
 
 QT_BEGIN_NAMESPACE
@@ -189,7 +189,8 @@ private:
     template <typename Fn, size_t... Is>
     static constexpr void forEachImpl(Fn &&fn, std::index_sequence<Is...>) noexcept
     {
-        (fn(std::integral_constant<quint32, Is>{}, static_cast<Ts *>(nullptr)), ...);
+        (std::forward<Fn>(fn)(std::integral_constant<size_t, Is>{},
+                              q20::type_identity<Ts>{}), ...);
     }
 };
 
@@ -253,11 +254,11 @@ struct InterceptorCapabilityBinding
     {
         constexpr auto N = InterceptorTypes::countBaseOf<T>();
         std::array<InterceptorCapabilityBinding, N> bindings{};
-        quint32 i = 0;
+        size_t i = 0;
 
         InterceptorTypes::forEach(
-            [&](auto , auto interfaceTag) constexpr {
-                using Interface = std::remove_pointer_t<decltype(interfaceTag)>;
+            [&](auto , auto interfaceType) constexpr {
+                using Interface = typename decltype(interfaceType)::type;
                 if constexpr (std::is_base_of_v<Interface, T>) {
                     bindings[i++] = {
                         InterceptorInfo<Interface>::capability,
