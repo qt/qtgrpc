@@ -272,11 +272,18 @@ struct InterceptorCapabilityBinding
 
 template <typename T>
 using is_interceptor = std::conjunction<
+    std::negation<std::is_const<T>>,
     typename InterceptorTypes::template ContainsBase<T>,
-    std::negation<typename InterceptorTypes::template ContainsExact<T>>>;
+    std::negation<typename InterceptorTypes::template ContainsExact<T>>
+>;
 
 template <typename... Ts>
-using if_interceptor = std::enable_if_t<std::conjunction_v<is_interceptor<Ts>...>, bool>;
+using if_interceptor = std::enable_if_t<
+    std::conjunction_v<
+        std::bool_constant<(sizeof...(Ts) > 0)>,
+        is_interceptor<Ts>...>
+    , bool
+>;
 
 // clang-format on
 } // namespace QtGrpcPrivate

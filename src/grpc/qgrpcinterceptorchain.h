@@ -14,7 +14,7 @@
 #include <QtCore/qstring.h>
 
 #include <memory>
-#include <type_traits>
+#include <QtCore/q20type_traits.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -75,45 +75,62 @@ private:
     using DeleterFn = void (*)(void *);
 
     template <typename T>
-    struct is_unique_ptr : std::false_type
+    struct InterceptorTraits
     {
-        using element_type = std::remove_pointer_t<T>; // For raw pointers: T* -> T
+        static constexpr bool is_supported = false;
     };
+
     template <typename T>
-    struct is_unique_ptr<std::unique_ptr<T>> : std::true_type
+    struct InterceptorTraits<T *>
     {
+        static constexpr bool is_supported = true;
+        static constexpr bool is_owning = false;
         using element_type = T;
+
+        static element_type *get(T *p) noexcept { return p; }
+        static constexpr DeleterFn deleter() noexcept { return nullptr; }
+    };
+
+    template <typename T>
+    struct InterceptorTraits<std::unique_ptr<T>>
+    {
+        static constexpr bool is_supported = true;
+        static constexpr bool is_owning = true;
+        using element_type = T;
+
+        static_assert(!std::is_array_v<T>, "Arrays of interceptors are not supported.");
+
+        static element_type *get(const std::unique_ptr<T> &p) noexcept { return p.get(); }
+        static constexpr DeleterFn deleter() noexcept
+        {
+            return [](void *p) { delete static_cast<T *>(p); };
+        }
     };
 
     template <typename T>
     [[nodiscard]] bool addHelper(T &&interceptor)
     {
         using namespace QtGrpcPrivate;
-        using DecayedT = std::decay_t<T>;
-        constexpr bool is_uptr = is_unique_ptr<DecayedT>::value;
-        using ElementType = typename is_unique_ptr<DecayedT>::element_type;
+
+        using DecayedT = q20::remove_cvref_t<T>;
+        using Traits = QGrpcInterceptorChain::InterceptorTraits<DecayedT>;
+
+        static_assert(Traits::is_supported,
+                      "Interceptor must be passed as T* or std::unique_ptr<T>.");
 
         if (!interceptor) {
             warnNullInterceptor();
             return false;
         }
 
-        ElementType *ptr = nullptr;
-        if constexpr (is_uptr)
-            ptr = interceptor.get();
-        else
-            ptr = interceptor;
-
-        DeleterFn deleter = nullptr;
-        if constexpr (is_uptr)
-            deleter = [](void *p) { delete static_cast<ElementType *>(p); };
-
+        auto *ptr = Traits::get(interceptor);
+        const auto deleter = Traits::deleter();
         auto bindings = InterceptorCapabilityBinding::extractFrom(ptr);
 
         if (!addImpl(ptr, deleter, bindings))
             return false;
 
-        if constexpr (is_uptr)
+        if constexpr (Traits::is_owning)
             interceptor.release(); // we take ownership on success
 
         return true;
