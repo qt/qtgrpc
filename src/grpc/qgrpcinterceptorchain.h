@@ -41,8 +41,7 @@ public:
         return addHelper(std::move(interceptor));
     }
 
-    template <typename... Ts,
-              std::enable_if_t<(QtGrpcPrivate::is_interceptor_v<Ts> && ...), bool> = true>
+    template <typename... Ts, QtGrpcPrivate::if_interceptor<Ts...> = true>
     [[nodiscard]] bool set(std::unique_ptr<Ts> &&...interceptors)
     {
         return setHelper(std::move(interceptors)...);
@@ -54,8 +53,7 @@ public:
         return addHelper(interceptor);
     }
 
-    template <typename... Ts,
-              std::enable_if_t<(QtGrpcPrivate::is_interceptor_v<Ts> && ...), bool> = true>
+    template <typename... Ts, QtGrpcPrivate::if_interceptor<Ts...> = true>
     [[nodiscard]] bool set(Ts *...interceptors)
     {
         return setHelper(interceptors...);
