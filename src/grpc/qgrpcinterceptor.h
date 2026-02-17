@@ -156,6 +156,7 @@ enum class InterceptorCapability : quint64 {
     // WARNING: Do not reorder or modify existing values. Append only.
 };
 Q_DECLARE_FLAGS(InterceptorCapabilities, InterceptorCapability)
+Q_DECLARE_OPERATORS_FOR_FLAGS(InterceptorCapabilities)
 
 } // namespace QtGrpc
 
