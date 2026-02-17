@@ -79,8 +79,9 @@ private:
     friend class QGrpcInterceptorEngine;
 };
 
-struct Q_GRPC_EXPORT QGrpcStartInterceptor
+class Q_GRPC_EXPORT QGrpcStartInterceptor
 {
+public:
     enum class Continuation : uint8_t { Proceed, Drop };
 
     virtual ~QGrpcStartInterceptor();
@@ -88,46 +89,53 @@ struct Q_GRPC_EXPORT QGrpcStartInterceptor
                                  QGrpcCallOptions &callOptions) = 0;
 };
 
-struct Q_GRPC_EXPORT QGrpcInitialMetadataInterceptor
+class Q_GRPC_EXPORT QGrpcInitialMetadataInterceptor
 {
+public:
     virtual ~QGrpcInitialMetadataInterceptor();
     virtual void onInitialMetadata(QGrpcInterceptionContext &context,
                                    QMultiHash<QByteArray, QByteArray> &metadata) = 0;
 };
 
-struct Q_GRPC_EXPORT QGrpcMessageReceivedInterceptor
+class Q_GRPC_EXPORT QGrpcMessageReceivedInterceptor
 {
+public:
     virtual ~QGrpcMessageReceivedInterceptor();
     virtual void onMessageReceived(QGrpcInterceptionContext &context, QByteArray &messageData) = 0;
 };
 
-struct Q_GRPC_EXPORT QGrpcWriteMessageInterceptor
+class Q_GRPC_EXPORT QGrpcWriteMessageInterceptor
 {
+public:
     virtual ~QGrpcWriteMessageInterceptor();
     virtual void onWriteMessage(QGrpcInterceptionContext &context, QProtobufMessage &message) = 0;
 };
 
-struct Q_GRPC_EXPORT QGrpcWritesDoneInterceptor
+class Q_GRPC_EXPORT QGrpcWritesDoneInterceptor
 {
+public:
     virtual ~QGrpcWritesDoneInterceptor();
     virtual void onWritesDone(QGrpcInterceptionContext &context) = 0;
 };
 
-struct Q_GRPC_EXPORT QGrpcTrailingMetadataInterceptor
+class Q_GRPC_EXPORT QGrpcTrailingMetadataInterceptor
 {
+public:
     virtual ~QGrpcTrailingMetadataInterceptor();
     virtual void onTrailingMetadata(QGrpcInterceptionContext &context,
                                     QMultiHash<QByteArray, QByteArray> &metadata) = 0;
 };
 
-struct Q_GRPC_EXPORT QGrpcFinishedInterceptor
+class Q_GRPC_EXPORT QGrpcFinishedInterceptor
 {
+public:
     virtual ~QGrpcFinishedInterceptor();
     virtual void onFinished(QGrpcInterceptionContext &context, QGrpcStatus &status) = 0;
 };
 
-struct Q_GRPC_EXPORT QGrpcCancelInterceptor
+class Q_GRPC_EXPORT QGrpcCancelInterceptor
 {
+public:
     virtual ~QGrpcCancelInterceptor();
     virtual void onCancel(QGrpcInterceptionContext &context) = 0;
 };
