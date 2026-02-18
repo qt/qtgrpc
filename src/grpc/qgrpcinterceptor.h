@@ -277,13 +277,19 @@ using is_interceptor = std::conjunction<
     std::negation<typename InterceptorTypes::template ContainsExact<T>>
 >;
 
-template <typename... Ts>
-using if_interceptor = std::enable_if_t<
-    std::conjunction_v<
-        std::bool_constant<(sizeof...(Ts) > 0)>,
-        is_interceptor<Ts>...>
-    , bool
->;
+template <typename T, typename... Ts>
+// A template alias doesn't work: they don't support pack expansion to
+// non-pack parameters, as in
+//   <typename...Ts, if_interceptor<Ts...> = true>
+//                                   ^ error: T is not a pack
+// [[citation needed]
+constexpr bool is_interceptor_v = std::conjunction_v<
+        is_interceptor<T>, // require at least one
+        is_interceptor<Ts>...
+    >;
+
+template <typename...Ts>
+using if_interceptor = std::enable_if_t<is_interceptor_v<Ts...>, bool>;
 
 // clang-format on
 } // namespace QtGrpcPrivate
