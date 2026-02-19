@@ -121,6 +121,9 @@ private:
         grpc::ServerContext ctx;
         grpc::ServerAsyncReaderWriter<tst::i2::StreamMessage, tst::i2::StreamMessage> op{ &ctx };
         tst::i2::StreamMessage request;
+        std::atomic<bool> writePending = { false };
+        std::atomic<bool> finishRequested = { false };
+        std::atomic<bool> finishStarted = { false };
     };
 
     struct ClientStreamHandler
@@ -184,25 +187,44 @@ void QtGrpcClientInterceptorsTest::setupBidiStreamEcho(std::unique_ptr<TagProces
 {
     auto *data = new BidiStreamHandler;
 
+    auto *processorPtr = processor.get();
+
+    auto startFinish = [data, processorPtr]() {
+        if (data->finishStarted.exchange(true, std::memory_order_acq_rel))
+            return;
+        data->op.Finish(grpc::Status::OK, new DeleteTag<BidiStreamHandler>(data, processorPtr));
+    };
+
     auto reader = std::make_shared<CallbackTag *>(nullptr);
     *reader = new CallbackTag(
-        [data, &processor, reader](bool ok) {
+        [data, reader, startFinish, processorPtr](bool ok) {
             if (!ok) {
-                data->op.Finish(grpc::Status::OK,
-                                new DeleteTag<BidiStreamHandler>(data, processor.get()));
+                // Client closed its write side (or stream ended).
+                // Defer Finish until any in-flight Write completes.
+                data->finishRequested.store(true, std::memory_order_release);
+                if (!data->writePending.load(std::memory_order_acquire))
+                    startFinish();
                 return CallbackTag::Delete;
             }
+
+            data->writePending.store(true, std::memory_order_release);
             data->op.Write(data->request,
                            new CallbackTag(
-                               [](bool ok) {
+                               [data, startFinish](bool ok) {
                                    QVERIFY(ok);
+                                   data->writePending.store(false, std::memory_order_release);
+
+                                   if (data->finishRequested.load(std::memory_order_acquire))
+                                       startFinish();
+
                                    return CallbackTag::Delete;
                                },
-                               processor.get()));
+                               processorPtr));
+
             data->op.Read(&data->request, *reader);
             return CallbackTag::Proceed;
         },
-        processor.get());
+        processorPtr);
 
     auto *handler = new CallbackTag(
         [data, reader](bool ok) {
@@ -210,7 +232,7 @@ void QtGrpcClientInterceptorsTest::setupBidiStreamEcho(std::unique_ptr<TagProces
             data->op.Read(&data->request, *reader);
             return CallbackTag::Delete;
         },
-        processor.get());
+        processorPtr);
 
     m_service2->RequestBidiStream(&data->ctx, &data->op, m_server->cq(), m_server->cq(), handler);
 }
