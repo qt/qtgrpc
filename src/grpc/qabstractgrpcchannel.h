@@ -41,6 +41,7 @@ public:
     void setChannelOptions(QGrpcChannelOptions &&options);
 
     [[nodiscard]] const QGrpcInterceptorChain &interceptorChain() const & noexcept;
+    void interceptorChain() const && = delete;
 
 protected:
     QAbstractGrpcChannel();
