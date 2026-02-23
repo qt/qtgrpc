@@ -115,7 +115,7 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
 */
 
 /*!
-    \fn void QGrpcOperation::serverInitialMetadataReceived()
+    \fn void QGrpcOperation::serverInitialMetadataReceived(const QMultiHash<QByteArray, QByteArray> &metadata)
     \since 6.11
 
 //![serverInitialMetadataReceived]
@@ -123,7 +123,8 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
     Initial metadata from the server is sent to the client before the initial
     response of an RPC.
 
-    After this signal is received, you can access the \l{serverInitialMetadata}.
+    The received metadata is provided in \a metadata and is also available via
+    \l{serverInitialMetadata()}.
 //![serverInitialMetadataReceived]
 
     \include qtgrpc-shared.qdocinc http2-metadata-note
@@ -306,7 +307,7 @@ void QGrpcOperation::cancel()
 /*!
     \deprecated [6.13] Use serverInitialMetadata() and serverTrailingMetadata() instead.
 
-    \include qgrpcoperation.cpp serverInitialMetadata
+    \include qgrpcoperation.cpp serverInitialMetadata-shared
 
     \sa serverInitialMetadata() serverTrailingMetadata()
 */
@@ -321,7 +322,7 @@ const QHash<QByteArray, QByteArray> &QGrpcOperation::metadata() const & noexcept
 /*!
     \since 6.10
 
-//! [serverInitialMetadata]
+//! [serverInitialMetadata-shared]
     Returns the initial metadata received from the server before any response
     messages.
 
@@ -330,7 +331,7 @@ const QHash<QByteArray, QByteArray> &QGrpcOperation::metadata() const & noexcept
     call.
 
     \include qtgrpc-shared.qdocinc http2-metadata-note
-//! [serverInitialMetadata]
+//! [serverInitialMetadata-shared]
 
     The metadata may contain multiple entries under the same key.
 

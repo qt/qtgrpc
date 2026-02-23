@@ -62,7 +62,7 @@ public:
 
 Q_SIGNALS:
     void finished(const QGrpcStatus &status);
-    void serverInitialMetadataReceived();
+    void serverInitialMetadataReceived(const QMultiHash<QByteArray, QByteArray> &metadata);
 
 public Q_SLOTS:
     void cancel();

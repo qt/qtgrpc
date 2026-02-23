@@ -156,7 +156,8 @@ quint64 nextOperationId()
 */
 
 /*!
-    \fn void QGrpcOperationContext::serverInitialMetadataReceived()
+    \fn void QGrpcOperationContext::serverInitialMetadataReceived(const QMultiHash<QByteArray, QByteArray> &metadata)
+    \since 6.11
 
     \include qgrpcoperation.cpp serverInitialMetadataReceived
 
@@ -257,7 +258,7 @@ QGrpcOperationContext::serializer() const
 /*!
     \deprecated [6.13] Use serverInitialMetadata() and serverTrailingMetadata() instead.
 
-    \include qgrpcoperation.cpp serverInitialMetadata
+    \include qgrpcoperation.cpp serverInitialMetadata-shared
     \note This method is used implicitly by QGrpcOperation.
 
     \sa serverInitialMetadata() QGrpcOperation::serverInitialMetadata()
@@ -299,7 +300,7 @@ void QGrpcOperationContext::setServerMetadata(QHash<QByteArray, QByteArray> &&me
 /*!
     \since 6.10
 
-    \include qgrpcoperation.cpp serverInitialMetadata
+    \include qgrpcoperation.cpp serverInitialMetadata-shared
     \note This method is used implicitly by QGrpcOperation.
 
     \sa QGrpcOperation::serverInitialMetadata() serverTrailingMetadata()
@@ -330,7 +331,7 @@ void QGrpcOperationContext::setServerInitialMetadata(QMultiHash<QByteArray, QByt
 #if QT_DEPRECATED_SINCE(6, 13)
     d->deprServerInitialMetadata = QtGrpcPrivate::toHash(d->serverInitialMetadata);
 #endif
-    emit serverInitialMetadataReceived(QPrivateSignal{});
+    emit serverInitialMetadataReceived(d->serverInitialMetadata, QPrivateSignal{});
 }
 
 /*!

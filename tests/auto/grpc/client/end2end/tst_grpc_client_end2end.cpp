@@ -380,10 +380,12 @@ void QtGrpcClientEnd2EndTest::serverInitialMetadataEmitted()
         QVERIFY(status.isOk());
         QCOMPARE_EQ(call->serverTrailingMetadata().size(), 1);
     });
-    connect(call.get(), &QGrpcOperation::serverInitialMetadataReceived, this, [&]() {
-        initialMetadataTime = QDateTime::currentDateTime();
-        QCOMPARE_EQ(call->serverInitialMetadata().size(), 1);
-    });
+    connect(call.get(), &QGrpcOperation::serverInitialMetadataReceived, this,
+            [&](const QMultiHash<QByteArray, QByteArray> &metadata) {
+                initialMetadataTime = QDateTime::currentDateTime();
+                QCOMPARE_EQ(call->serverInitialMetadata().size(), 1);
+                QCOMPARE_EQ(call->serverInitialMetadata(), metadata);
+            });
 
     QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
     QVERIFY(finishedSpy.isValid());
