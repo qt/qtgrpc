@@ -170,6 +170,10 @@ private:
                                                                 qsizetype total = -1) const;
 
     // prevent users from implementing their own, as the data-members don't qualify for it.
+    friend bool operator==(const QGrpcInterceptorChain &,
+                           const QGrpcInterceptorChain &) = delete;
+    friend bool operator!=(const QGrpcInterceptorChain &,
+                           const QGrpcInterceptorChain &) = delete;
     constexpr friend size_t qHash(const QGrpcInterceptorChain &, size_t) = delete;
 #ifndef QT_NO_DEBUG_STREAM
     friend QDebug operator<<(QDebug debug, const QGrpcInterceptorChain &) = delete;
