@@ -174,7 +174,8 @@ private:
                            const QGrpcInterceptorChain &) = delete;
     friend bool operator!=(const QGrpcInterceptorChain &,
                            const QGrpcInterceptorChain &) = delete;
-    constexpr friend size_t qHash(const QGrpcInterceptorChain &, size_t) = delete;
+    friend size_t qHash(const QGrpcInterceptorChain &) = delete;
+    friend size_t qHash(const QGrpcInterceptorChain &, size_t) = delete;
 #ifndef QT_NO_DEBUG_STREAM
     friend QDebug operator<<(QDebug debug, const QGrpcInterceptorChain &) = delete;
 #endif
