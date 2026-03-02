@@ -1,0 +1,15 @@
+// Copyright (C) 2026 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+
+syntax = "proto3";
+
+message TestMessages {
+    int32 field1 = 1;
+    repeated uint32 field2 = 2;
+    optional sint32 field3 = 3;
+    map<sint64, uint32> field4 = 4;
+    oneof fieldOneOf {
+        uint64 field5 = 5;
+        float field6 = 6;
+    }
+}

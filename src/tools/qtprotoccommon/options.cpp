@@ -18,6 +18,7 @@ static const char ExportMacroGenerationOption[] = "EXPORT_MACRO";
 static const char HeaderGuardOption[] = "HEADER_GUARD";
 static const char MutableGetterConflicts[] = "ALLOW_MUTABLE_GETTER_CONFLICTS";
 static const char GenerateNonFinalMessagesOption[] = "GENERATE_NON_FINAL_MESSAGES";
+static const char GenerateNonFinalPropertiesOption[] = "GENERATE_NON_FINAL_PROPERTIES";
 
 static const char ExportSuffix[] = "_exports.qpb.h";
 
@@ -118,6 +119,8 @@ void Options::setFromString(const std::string &options, GeneratorType /*unused*/
             instance.m_mutableGetterConflicts = true;
         } else if (option == GenerateNonFinalMessagesOption) {
             instance.m_generateNonFinalMessages = true;
+        } else if (option == GenerateNonFinalPropertiesOption) {
+            instance.m_propertyGenerationType = Options::FinalPropertyPolicy::NonFinal;
         }
     }
 }

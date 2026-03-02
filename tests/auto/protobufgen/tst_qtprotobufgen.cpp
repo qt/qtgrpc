@@ -196,6 +196,11 @@ void qtprotobufgenTest::cmdLineGenerated_data()
         << "non_final_messages"
         << "qtprotobufgenminimal.proto"
         << "GENERATE_NON_FINAL_MESSAGES";
+
+    QTest::addRow("non_final_properties")
+        << "non_final_properties"
+        << "non-final-properties.proto"
+        << "GENERATE_NON_FINAL_PROPERTIES";
 }
 
 void qtprotobufgenTest::cmdLineGenerated()

@@ -20,6 +20,10 @@ class Options
 
     static Options &mutableInstance();
 public:
+    enum class FinalPropertyPolicy : bool {
+        Final,
+        NonFinal
+    };
     enum class HeaderGuardType {
         Pragma,
         ProtoFilename,
@@ -48,6 +52,7 @@ public:
     HeaderGuardType headerGuard() const { return m_headerGuard; }
     bool mutableGetterConflicts() const { return m_mutableGetterConflicts; }
     bool generateNonFinalMessages() const { return m_generateNonFinalMessages; }
+    FinalPropertyPolicy propertyGenerationType() const { return m_propertyGenerationType; }
 
 private:
     bool m_generateComments;
@@ -60,7 +65,8 @@ private:
     bool m_qml;
     bool m_mutableGetterConflicts;
     bool m_generateNonFinalMessages = false;
-
+    FinalPropertyPolicy m_propertyGenerationType
+        = Options::FinalPropertyPolicy::Final;
     HeaderGuardType m_headerGuard = Options::HeaderGuardType::ProtoFilename;
 };
 

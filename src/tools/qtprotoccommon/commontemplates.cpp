@@ -232,46 +232,92 @@ const char *CommonTemplates::CopyConstructorMessageDataDefinitionTemplate()
            "    : QSharedData(other)";
 }
 
-const char *CommonTemplates::PropertyTemplate()
+const char *CommonTemplates::PropertyTemplate(Options::FinalPropertyPolicy value)
 {
-    return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
-           "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
-}
-const char *CommonTemplates::PropertyRepeatedTemplate()
-{
-    return "Q_PROPERTY($property_list_type$ $property_name$ READ $property_name$ WRITE "
-           "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
-}
-const char *CommonTemplates::PropertyRepeatedMessageTemplate()
-{
-    return "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
-           "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
-}
-const char *CommonTemplates::PropertyMessageTemplate()
-{
-    return "Q_PROPERTY($property_type$ *$property_name$_p READ $property_name$_p WRITE "
-           "set$property_name_cap$_p SCRIPTABLE false FINAL)\n";
-}
-const char *CommonTemplates::PropertyQmlMessageTemplate()
-{
-    return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
-           "set$property_name_cap$ FINAL)\n";
+    if (value == Options::FinalPropertyPolicy::Final) {
+        return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
+               "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
+    } else {
+        return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
+               "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
+    }
 }
 
-const char *CommonTemplates::PropertyOneofTemplate()
+const char *CommonTemplates::PropertyRepeatedTemplate(Options::FinalPropertyPolicy value)
 {
-    return "Q_PROPERTY($property_type$ $property_name$ "
-           "READ $property_name$_p WRITE set$property_name_cap$_p FINAL)\n";
+    if (value == Options::FinalPropertyPolicy::Final) {
+        return "Q_PROPERTY($property_list_type$ $property_name$ READ $property_name$ WRITE "
+               "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
+    } else {
+        return "Q_PROPERTY($property_list_type$ $property_name$ READ $property_name$ WRITE "
+               "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
+    }
 }
-const char *CommonTemplates::PropertyOneofMessageTemplate()
+
+const char *CommonTemplates::PropertyRepeatedMessageTemplate(Options::FinalPropertyPolicy value)
 {
-    return "Q_PROPERTY($property_type$ *$property_name$_p "
-           "READ $property_name$_p WRITE set$property_name_cap$_p SCRIPTABLE false FINAL)\n";
+    if (value == Options::FinalPropertyPolicy::Final) {
+        return "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
+               "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
+    } else {
+        return "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
+               "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
+    }
 }
-const char *CommonTemplates::PropertyHasFieldTemplate()
+
+const char *CommonTemplates::PropertyMessageTemplate(Options::FinalPropertyPolicy value)
 {
-    return "Q_PROPERTY(bool has$property_name_cap$ "
-           "READ has$property_name_cap$ FINAL)\n";
+    if (value == Options::FinalPropertyPolicy::Final) {
+        return "Q_PROPERTY($property_type$ *$property_name$_p READ $property_name$_p WRITE "
+               "set$property_name_cap$_p SCRIPTABLE false FINAL)\n";
+    } else {
+        return "Q_PROPERTY($property_type$ *$property_name$_p READ $property_name$_p WRITE "
+               "set$property_name_cap$_p SCRIPTABLE false)\n";
+    }
+}
+
+const char *CommonTemplates::PropertyQmlMessageTemplate(Options::FinalPropertyPolicy value)
+{
+    if (value == Options::FinalPropertyPolicy::Final) {
+        return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
+               "set$property_name_cap$ FINAL)\n";
+    } else {
+        return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
+               "set$property_name_cap$)\n";
+    }
+}
+
+const char *CommonTemplates::PropertyOneofTemplate(Options::FinalPropertyPolicy value)
+{
+    if (value == Options::FinalPropertyPolicy::Final) {
+        return "Q_PROPERTY($property_type$ $property_name$ "
+               "READ $property_name$_p WRITE set$property_name_cap$_p FINAL)\n";
+    } else {
+        return "Q_PROPERTY($property_type$ $property_name$ "
+               "READ $property_name$_p WRITE set$property_name_cap$_p)\n";
+    }
+}
+
+const char *CommonTemplates::PropertyOneofMessageTemplate(Options::FinalPropertyPolicy value)
+{
+    if (value == Options::FinalPropertyPolicy::Final) {
+        return "Q_PROPERTY($property_type$ *$property_name$_p "
+               "READ $property_name$_p WRITE set$property_name_cap$_p SCRIPTABLE false FINAL)\n";
+    } else {
+        return "Q_PROPERTY($property_type$ *$property_name$_p "
+               "READ $property_name$_p WRITE set$property_name_cap$_p SCRIPTABLE false)\n";
+    }
+}
+
+const char *CommonTemplates::PropertyHasFieldTemplate(Options::FinalPropertyPolicy value)
+{
+    if (value == Options::FinalPropertyPolicy::Final) {
+        return "Q_PROPERTY(bool has$property_name_cap$ "
+               "READ has$property_name_cap$ FINAL)\n";
+    } else {
+        return "Q_PROPERTY(bool has$property_name_cap$ "
+               "READ has$property_name_cap$)\n";
+    }
 }
 
 const char *CommonTemplates::ConstructorMessageDeclarationTemplate()

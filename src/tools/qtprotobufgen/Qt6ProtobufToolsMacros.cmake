@@ -11,6 +11,7 @@ macro(_qt_internal_get_protoc_common_options option_args single_args multi_args)
         QML
         ALLOW_MUTABLE_GETTER_CONFLICTS
         GENERATE_NON_FINAL_MESSAGES
+        GENERATE_NON_FINAL_PROPERTIES
     )
     set(${single_args}
         EXTRA_NAMESPACE

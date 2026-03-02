@@ -55,6 +55,7 @@ function(qt_internal_add_protobuf_wellknown_types target)
             OUTPUT_TARGETS type_generated_targets
             GENERATE_PACKAGE_SUBFOLDERS
             GENERATE_NON_FINAL_MESSAGES
+            GENERATE_NON_FINAL_PROPERTIES
         )
         list(APPEND generated_headers ${type_generated_headers})
         list(APPEND generated_targets ${type_generated_targets})

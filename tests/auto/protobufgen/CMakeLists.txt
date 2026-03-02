@@ -93,6 +93,15 @@ qt_add_protobuf(tst_qtprotobufgen_non_final_messages
 )
 list(APPEND cmake_generator_tests non_final_messages)
 
+add_library(tst_qtprotobufgen_non_final_properties STATIC)
+qt_add_protobuf(tst_qtprotobufgen_non_final_properties
+    GENERATE_NON_FINAL_PROPERTIES
+    PROTO_FILES
+        data/non-final-properties.proto
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${cmake_generated_dir}/non_final_properties"
+)
+list(APPEND cmake_generator_tests non_final_properties)
+
 if(TARGET Qt6::ProtobufQuick)
     qt_internal_extend_target(tst_qtprotobufgen
         DEFINES

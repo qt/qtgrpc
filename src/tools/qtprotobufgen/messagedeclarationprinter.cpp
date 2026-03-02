@@ -213,37 +213,46 @@ void MessageDeclarationPrinter::printProperties()
     Indent();
 
     const int numFields = m_descriptor->field_count();
+    const Options::FinalPropertyPolicy propertyType
+        = Options::instance().propertyGenerationType();
     common::iterateMessageFields(
         m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
-            const char *propertyTemplate = CommonTemplates::PropertyTemplate();
+            const char *propertyTemplate = CommonTemplates::PropertyTemplate(propertyType);
             if (common::isOneofField(field)) {
                 m_printer->Print(propertyMap,
                                  common::isPureMessage(field)
-                                     ? CommonTemplates::PropertyOneofMessageTemplate()
-                                     : CommonTemplates::PropertyOneofTemplate());
-                m_printer->Print(propertyMap, CommonTemplates::PropertyHasFieldTemplate());
+                                     ? CommonTemplates::PropertyOneofMessageTemplate(propertyType)
+                                     : CommonTemplates::PropertyOneofTemplate(propertyType));
+                m_printer->Print(propertyMap,
+                                 CommonTemplates::PropertyHasFieldTemplate(propertyType));
                 return;
             }
 
             if (common::isOptionalField(field)) {
-                m_printer->Print(propertyMap, CommonTemplates::PropertyOneofTemplate());
-                m_printer->Print(propertyMap, CommonTemplates::PropertyHasFieldTemplate());
+                m_printer->Print(propertyMap,
+                                 CommonTemplates::PropertyOneofTemplate(propertyType));
+                m_printer->Print(propertyMap,
+                                 CommonTemplates::PropertyHasFieldTemplate(propertyType));
                 return;
             }
 
             if (common::isPureMessage(field)) {
-                m_printer->Print(propertyMap, CommonTemplates::PropertyMessageTemplate());
-                m_printer->Print(propertyMap, CommonTemplates::PropertyHasFieldTemplate());
+                m_printer->Print(propertyMap,
+                                 CommonTemplates::PropertyMessageTemplate(propertyType));
+                m_printer->Print(propertyMap,
+                                 CommonTemplates::PropertyHasFieldTemplate(propertyType));
                 return;
             }
 
             if (field->is_repeated() && !field->is_map()) {
                 // Non-message list properties don't require an extra QQmlListProperty to access
                 // their data, so the property name should not contain the 'Data' suffix
-                if (field->type() == FieldDescriptor::TYPE_MESSAGE)
-                    propertyTemplate = CommonTemplates::PropertyRepeatedMessageTemplate();
-                else
-                    propertyTemplate = CommonTemplates::PropertyRepeatedTemplate();
+                if (field->type() == FieldDescriptor::TYPE_MESSAGE) {
+                    propertyTemplate
+                        = CommonTemplates::PropertyRepeatedMessageTemplate(propertyType);
+                } else {
+                    propertyTemplate = CommonTemplates::PropertyRepeatedTemplate(propertyType);
+                }
             }
             m_printer->Print(propertyMap, propertyTemplate);
         });
@@ -254,7 +263,7 @@ void MessageDeclarationPrinter::printProperties()
             const FieldDescriptor *field = m_descriptor->field(i);
             if (common::isPureMessage(field)) {
                 m_printer->Print(common::producePropertyMap(field, m_descriptor),
-                                 CommonTemplates::PropertyQmlMessageTemplate());
+                                 CommonTemplates::PropertyQmlMessageTemplate(propertyType));
             }
         }
     }

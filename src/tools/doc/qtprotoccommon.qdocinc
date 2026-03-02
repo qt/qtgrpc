@@ -102,3 +102,16 @@
     inheritance. This option will be removed in Qt7.
 //! [generate_non_final_messages-li]
 
+//! [generate_non_final_properties-li]
+\li \c {GENERATE_NON_FINAL_PROPERTIES}
+    Generates properties of QtProtobuf message classes without the
+    \c FINAL specifier.
+    The \c FINAL specifier enables QML tooling to apply performance
+    optimizations and generate more efficient code.
+    Since Qt 6.12, QtProtobuf message properties are generated with
+    the \c FINAL specifier by default. This option is provided for
+    backwards compatibility only and will be removed in Qt 7.
+    For more information about the \c FINAL specifier, see
+    \l{The Property System}{Qt Property System}.
+//! [generate_non_final_properties-li]
+

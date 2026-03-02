@@ -5,6 +5,7 @@
 #ifndef QTPROTOCCOMMON_TEMPLATES_H
 #define QTPROTOCCOMMON_TEMPLATES_H
 
+#include "options.h"
 #include <unordered_map>
 #include <set>
 #include <string>
@@ -54,14 +55,14 @@ public:
 
     static const char *UseNamespace();
 
-    static const char *PropertyTemplate();
-    static const char *PropertyRepeatedTemplate();
-    static const char *PropertyRepeatedMessageTemplate();
-    static const char *PropertyMessageTemplate();
-    static const char *PropertyQmlMessageTemplate();
-    static const char *PropertyOneofTemplate();
-    static const char *PropertyOneofMessageTemplate();
-    static const char *PropertyHasFieldTemplate();
+    static const char *PropertyTemplate(Options::FinalPropertyPolicy value);
+    static const char *PropertyRepeatedTemplate(Options::FinalPropertyPolicy value);
+    static const char *PropertyRepeatedMessageTemplate(Options::FinalPropertyPolicy value);
+    static const char *PropertyMessageTemplate(Options::FinalPropertyPolicy value);
+    static const char *PropertyQmlMessageTemplate(Options::FinalPropertyPolicy value);
+    static const char *PropertyOneofTemplate(Options::FinalPropertyPolicy value);
+    static const char *PropertyOneofMessageTemplate(Options::FinalPropertyPolicy value);
+    static const char *PropertyHasFieldTemplate(Options::FinalPropertyPolicy value);
 
     static const char *ConstructorMessageDeclarationTemplate();
     static const char *DestructorMessageDeclarationTemplate();
