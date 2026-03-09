@@ -66,8 +66,8 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
                 [qPtr = QPointer(q)] {
                     if (!qPtr)
                         return;
-                    emit qPtr->finished({ QtGrpc::StatusCode::Aborted,
-                                          "Interceptors dropped the call" });
+                    emit qPtr->context().finished({ QtGrpc::StatusCode::Aborted,
+                                                    "Interceptors dropped the call"_L1 });
                 },
                 Qt::QueuedConnection);
             return {};
