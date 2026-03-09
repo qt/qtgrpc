@@ -674,7 +674,9 @@ void QtGrpcClientInterceptorsTest::onStartDrop()
 
     const QList<InterceptorCall> expected = {
         { "Drop",  Capability::Start            }, // stream1 - fail
+        { "After", Capability::Finished         },
         { "Drop",  Capability::Start            }, // stream2 - fail
+        { "After", Capability::Finished         },
 
         { "Drop",  Capability::Start            }, // unary - success
         { "After", Capability::Start            },
