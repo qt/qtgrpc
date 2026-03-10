@@ -1,10 +1,12 @@
 // Copyright (C) 2024 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
+// clang-format off
 
 //! [gen-includes]
 #include "clientguide.qpb.h"
 #include "clientguide_client.grpc.qpb.h"
 //! [gen-includes]
+#include "client_wrapper.h"
 #include "interceptors.h"
 
 #include <QtGrpc/QGrpcHttp2Channel>
@@ -27,6 +29,7 @@ using namespace Qt::Literals::StringLiterals;
 
 void startServerProcess();
 QDebug operator<<(QDebug debug, const guide::Response &response);
+enum class ExpectedResult { Success, Failure };
 
 class ClientGuide : public QObject
 {
@@ -39,23 +42,25 @@ public:
     //! [basic-1]
 
     //! [basic-2]
-    static guide::Request createRequest(int32_t num, bool fail = false)
+    static guide::Request createRequest(int32_t num,
+                                        ExpectedResult expected = ExpectedResult::Success)
     {
         guide::Request request;
         request.setNum(num);
         // The server-side logic fails the RPC if the time is in the future.
-        request.setTime(fail ? std::numeric_limits<int64_t>::max()
-                             : now());
+        const auto time = expected == ExpectedResult::Failure ?
+            std::numeric_limits<int64_t>::max() : now();
+        request.setTime(time);
         return request;
     }
     //! [basic-2]
 
     //! [unary-0]
-    void unaryCall(const guide::Request &request, const QGrpcCallOptions &opts = {})
+    void unaryCall(const guide::Request &request, const QGrpcCallOptions &opts = { })
     {
         std::unique_ptr<QGrpcCallReply> reply = m_client.UnaryCall(request, opts);
         const auto *replyPtr = reply.get();
-        QObject::connect(
+        connect(
             replyPtr, &QGrpcCallReply::finished, replyPtr,
             [reply = std::move(reply)](const QGrpcStatus &status) {
                 if (status.isOk()) {
@@ -77,7 +82,7 @@ public:
         std::unique_ptr<QGrpcServerStream> stream = m_client.ServerStreaming(initialRequest);
         const auto *streamPtr = stream.get();
 
-        QObject::connect(
+        connect(
             streamPtr, &QGrpcServerStream::finished, streamPtr,
             [stream = std::move(stream)](const QGrpcStatus &status) {
                 if (status.isOk())
@@ -88,7 +93,7 @@ public:
             Qt::SingleShotConnection);
         //! [sstream-0]
         //! [sstream-1]
-        QObject::connect(streamPtr, &QGrpcServerStream::messageReceived, streamPtr, [streamPtr] {
+        connect(streamPtr, &QGrpcServerStream::messageReceived, streamPtr, [streamPtr] {
             if (const auto response = streamPtr->read<guide::Response>())
                 qDebug() << "Client (ServerStream) received:" << *response;
             else
@@ -105,19 +110,20 @@ public:
             m_clientStream->writeMessage(createRequest(initialRequest.num() + i));
         m_clientStream->writesDone();
 
-        QObject::connect(m_clientStream.get(), &QGrpcClientStream::finished, m_clientStream.get(),
-                         [this](const QGrpcStatus &status) {
-                             if (status.isOk()) {
-                                 if (const auto response = m_clientStream->read<guide::Response>())
-                                     qDebug() << "Client (ClientStreaming) finished, received:"
-                                              << *response;
-                                 m_clientStream.reset();
-                             } else {
-                                 qDebug() << "Client (ClientStreaming) failed:" << status;
-                                 qDebug("Restarting the client stream");
-                                 clientStreaming(createRequest(0));
-                             }
-                         });
+        connect(m_clientStream.get(), &QGrpcClientStream::finished, m_clientStream.get(),
+            [this](const QGrpcStatus &status) {
+                if (status.isOk()) {
+                    if (const auto response = m_clientStream->read<guide::Response>()) {
+                        qDebug() << "Client (ClientStreaming) finished, received:"
+                                 << *response;
+                    }
+                    m_clientStream.reset();
+                } else {
+                    qDebug() << "Client (ClientStreaming) failed:" << status;
+                    qDebug("Restarting the client stream");
+                    clientStreaming(createRequest(0));
+                }
+            });
     }
     // ! [cstream-0]
 
@@ -160,7 +166,7 @@ private slots:
     // ! [bstream-3]
 
 private:
-    guide::ClientGuideService::Client m_client;
+    ClientGuideServiceWrapper m_client;
     std::unique_ptr<QGrpcClientStream> m_clientStream;
     // ! [bstream-0]
     std::unique_ptr<QGrpcBidiStream> m_bidiStream;
@@ -231,16 +237,16 @@ int main(int argc, char *argv[])
         if (defaultRun || parser.isSet(enableUnary)) {
             //! [interceptors-0b]
             for (int i = 1; i < 6; ++i) {
-                QTimer::singleShot(delayMs, [&, i]{
-                    bool fail = i % 2 == 0;
-                    clientGuide.unaryCall(ClientGuide::createRequest(i, fail));
+                QTimer::singleShot(delayMs, [&, i] {
+                    auto expected = i % 2 == 0 ? ExpectedResult::Failure : ExpectedResult::Success;
+                    clientGuide.unaryCall(ClientGuide::createRequest(i, expected));
                 });
                 delayMs += 150;
             }
-            QTimer::singleShot(delayMs, [&]{
+            QTimer::singleShot(delayMs, [&] {
                 QGrpcCallOptions invalidOpts;
                 invalidOpts.addMetadata("huge_key"_ba, "huge_value"_ba.repeated(8'000));
-                clientGuide.unaryCall(guide::Request{}, invalidOpts); // this call will fail.
+                clientGuide.unaryCall(guide::Request{ }, invalidOpts); // this call will fail.
             });
             delayMs += 150;
             //! [interceptors-0b]
@@ -257,7 +263,7 @@ int main(int argc, char *argv[])
         if (defaultRun || parser.isSet(enableUnary)) {
             //! [unary-1]
             clientGuide.unaryCall(ClientGuide::createRequest(1));
-            clientGuide.unaryCall(ClientGuide::createRequest(2, true));
+            clientGuide.unaryCall(ClientGuide::createRequest(2, ExpectedResult::Failure));
             clientGuide.unaryCall(ClientGuide::createRequest(3));
             //! [unary-1]
         }
@@ -270,7 +276,7 @@ int main(int argc, char *argv[])
 
         if (defaultRun || parser.isSet(enableCStream)) {
             // ! [cstream-1]
-            clientGuide.clientStreaming(ClientGuide::createRequest(0, true));
+            clientGuide.clientStreaming(ClientGuide::createRequest(0, ExpectedResult::Failure));
             // ! [cstream-1]
         }
 
@@ -281,7 +287,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    return app.exec();
+    return QCoreApplication::exec();
 }
 
 void startServerProcess()
@@ -292,10 +298,10 @@ void startServerProcess()
     // used here solely for convenience in demonstrating the full interaction.
     static QProcess serverProcess;
     QObject::connect(&serverProcess, &QProcess::readyReadStandardOutput, [] {
-        auto msgs = serverProcess.readAll().split('\n');
-        msgs.removeIf([](const QByteArray &s) { return s.isEmpty(); });
-        for (const auto &m : std::as_const(msgs)) {
-            qDebug().noquote().nospace() << "    " << m;
+        while (serverProcess.canReadLine()) {
+            QByteArray line = serverProcess.readLine().trimmed();
+            if (!line.isEmpty())
+                qDebug().noquote().nospace() << "    " << line;
         }
     });
     serverProcess.setProcessChannelMode(QProcess::MergedChannels);
@@ -305,11 +311,19 @@ void startServerProcess()
         qFatal() << "Couldn't start the server: " << serverProcess.errorString();
         exit(EXIT_FAILURE);
     }
+    QObject::connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, [] {
+        if (serverProcess.state() == QProcess::Running) {
+            serverProcess.kill();
+            serverProcess.waitForFinished(5'000); // 5s timeout
+        }
+    });
     // give the process some time to properly start up the server
-    QThread::currentThread()->msleep(250);
+    QThread::sleep(1);
 }
 
 QDebug operator<<(QDebug debug, const guide::Response &response)
 {
-    return debug << "Response( time: " << response.time() << ", num: " << response.num() << " )";
+    QDebugStateSaver saver(debug);
+    return debug.nospace() << "Response( time: " << response.time()
+        << ", num: " << response.num() << " )";
 }
