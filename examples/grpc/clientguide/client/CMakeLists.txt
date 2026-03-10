@@ -8,7 +8,7 @@ set(proto_files "${CMAKE_CURRENT_LIST_DIR}/../proto/clientguide.proto")
 find_package(Qt6 COMPONENTS Protobuf Grpc)
 qt_standard_project_setup(REQUIRES 6.9)
 
-qt_add_executable(clientguide_client main.cpp)
+qt_add_executable(clientguide_client main.cpp interceptors.cpp)
 
 # Using the executable as input target will append the generated files to it.
 qt_add_protobuf(clientguide_client

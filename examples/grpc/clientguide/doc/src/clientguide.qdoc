@@ -182,7 +182,8 @@
     communication, making it easier to follow. We begin by setting up the
     backbone of all \gRPC communication: a channel.
 
-    \snippet clientguide/client/main.cpp basic-0
+    \snippet clientguide/client/main.cpp basic-0a
+    \snippet clientguide/client/main.cpp basic-0b
 
     The Qt GRPC library offers QGrpcHttp2Channel, which you can
     \l{QGrpcClientBase::attachChannel} {attach} to the generated
@@ -446,5 +447,221 @@
             Client (BidirectionalStreaming) received: Response( time:  1733503832109529 , num:  0  )
             Client (BidirectionalStreaming) finished
         \endcode
+    \enddetails
+
+    \section1 ClientGuide Interceptors
+
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    The client guide example demonstrates three interceptors combined in a
+    single chain:
+
+    \list
+    \li A \e{metrics} interceptor that records RPC statistics and injects a trace id.
+    \li An \e{authentication} interceptor that attaches a bearer token.
+    \li A \e{sanitizing} interceptor that validates and normalizes messages.
+    \endlist
+
+    Together they demonstrate how interceptors can observe, modify, and
+    validate RPC traffic at different stages of the call lifecycle.
+
+    \section2 Metrics Interceptor
+
+    The metrics interceptor is placed first in the chain so it can observe
+    the entire RPC lifecycle. It records basic statistics such as received
+    payload sizes, RPC durations, and success or failure counts for each RPC
+    method.
+
+    \snippet clientguide/client/interceptors.h metrics-0
+
+    \details {Metrics Interceptor Implementation}
+        When an RPC starts, the interceptor records the current timestamp and
+        stores it using the unique \l{QGrpcOperationContext::}{operationId} as
+        a key. A trace identifier is also added to the outgoing metadata so the
+        call can be correlated across services.
+
+        \snippet clientguide/client/interceptors.cpp metrics-1
+
+        While the RPC is active, incoming messages contribute to the collected
+        metrics by accumulating the number of received payload bytes.
+
+        When the RPC finishes, the interceptor computes the total duration and
+        updates aggregated statistics per RPC descriptor.
+
+        For demonstration purposes, the collected metrics are printed when the
+        interceptor instance is destroyed.
+
+        \snippet clientguide/client/interceptors.cpp metrics-2
+    \enddetails
+
+    \section2 Authentication Interceptor
+
+    The authentication interceptor attaches a bearer token to outgoing RPC
+    calls. If the application already provides an \c authorization header, the
+    interceptor leaves it unchanged.
+
+    If the server reports an authentication failure, the interceptor refreshes
+    the token so that subsequent RPC calls use updated credentials.
+
+    \snippet clientguide/client/interceptors.h auth-0
+
+    \details {Auth Interceptor Implementation}
+        The \c TokenProvider encapsulates token management. In this example, it
+        generates a simplified token string for demonstration purposes only. It
+        does not represent a real authentication token. In real applications,
+        tokens would typically be obtained and refreshed through an external
+        identity system responsible for issuing and managing authentication
+        tokens.
+
+        \snippet clientguide/client/interceptors.cpp auth-1
+
+        On the server side, incoming calls validate the \c authorization
+        metadata. If validation fails, the server returns an \c Unauthenticated
+        status and provides additional information in trailing metadata.
+
+        \snippet clientguide/server/main.cpp auth
+
+        When an RPC starts, the interceptor checks whether the call already
+        contains an \c authorization header. If not, it attaches a bearer token
+        to the outgoing metadata.
+
+        Trailing metadata is inspected for authentication hints returned by the
+        server. If present, the hint is stored so it can be reported if the
+        call ultimately fails with an authentication error.
+
+        When the RPC finishes with an \c Unauthenticated status, the
+        interceptor refreshes the token. In this example, the refresh simply
+        regenerates a token with a new current time. In real-world scenarios,
+        this would involve requesting a new token from an external identity
+        system.
+
+        \snippet clientguide/client/interceptors.cpp auth-2
+    \enddetails
+
+    \section2 Sanitizing Interceptor
+
+    The sanitizing interceptor validates and normalizes request and response
+    data. It demonstrates how interceptors can enforce basic client-side
+    constraints before messages are sent and after responses are received.
+
+    In this example the interceptor clamps request values to acceptable ranges,
+    normalizes timestamps, and rejects calls whose metadata exceeds a
+    predefined size limit.
+
+    \snippet clientguide/client/interceptors.h sanitizing-0
+
+    \details {Sanitizing Interceptor Implementation}
+      Helper functions are used to calculate the total metadata size and to
+      apply basic normalization rules to request and response messages.
+
+      \snippet clientguide/client/interceptors.cpp sanitizing-1
+
+      When an RPC starts, the interceptor first verifies that the outgoing
+      metadata does not exceed the allowed size. If the limit is exceeded, the
+      call is aborted by returning \l{QGrpcStartInterceptor::}{Continuation::Drop}
+
+      If the request message matches the expected type, its fields are
+      sanitized before the RPC is sent.
+
+      For streaming calls, outgoing messages are also sanitized in the \c
+      onWriteMessage hook.
+
+      Finally, incoming responses are intercepted. The serialized payload is
+      deserialized, normalized, and serialized again before it is delivered to
+      the application.
+
+      \snippet clientguide/client/interceptors.cpp sanitizing-2
+    \enddetails
+
+    \section2 Interceptor Usage
+
+    Construct the interceptor chain in a helper function and return it to the
+    caller.
+
+    \snippet clientguide/client/interceptors.h interceptorchain-0
+
+    Before attaching the chain to the channel, verify that it was populated
+    successfully (for example by checking \c isEmpty()) and apply an
+    appropriate error-handling strategy if creation failed.
+
+    \snippet clientguide/client/main.cpp interceptorchain-1
+
+    For unary calls, the example schedules a sequence of requests with a short
+    delay between them. This makes it easier to observe how the interceptors
+    affect successive calls: trace metadata is added, authentication failures
+    refresh the token for later requests, and invalid metadata can cause a call
+    to be dropped before it is sent.
+
+    \snippet clientguide/client/main.cpp interceptors-0a
+    \snippet clientguide/client/main.cpp interceptors-0b
+
+    The example also performs a bidirectional streaming RPC. The
+    \c{bidirectionalStreaming()} implementation would normally exchange \c{666}
+    messages, but the sanitizing interceptor clamps the request values so that
+    the stream terminates after five exchanges.
+
+    \snippet clientguide/client/main.cpp interceptors-1
+
+    \details {Running the code}
+
+    Run \c clientguide_client with the \c{-I} option to enable interceptor
+    support. A possible output is shown below:
+
+    \badcode
+        Welcome to the clientguide!
+        Running with Interceptor support
+        Starting the server process ...
+            Server listening on: localhost:50056
+            Server (UnaryCall): Request( time: 1774360832277, num: 1 ), Metadata: { x-trace-id: {360bb041-9ab5-4940-95c1-0d4c89491570} }
+        Client (UnaryCall) finished, received: Response( time: 1774360832278, num: 1 )
+            Server (UnaryCall): Request( time: 1774360832427, num: 2 ), Metadata: { x-trace-id: {01817a8f-9f0e-404e-a21c-767f81e74a2d} }
+        Client (UnaryCall) finished, received: Response( time: 1774360832429, num: 2 )
+            Server (UnaryCall): Request( time: 1774360832577, num: 3 ), Metadata: { x-trace-id: {78cb336f-0396-4bbc-b1ee-59914651feef} }
+        Client (UnaryCall) finished, received: Response( time: 1774360832578, num: 3 )
+        [AuthInterceptor] Refreshing token for next call
+        Client (UnaryCall) failed: QGrpcStatus( code: QtGrpc::StatusCode::Unauthenticated, message: "Token expired with age: 603 ms, Hint: Bearer realm=\"clientguide\", error=\"invalid_token\"" )
+            Server (UnaryCall): Request( time: 1774360832876, num: 5 ), Metadata: { x-trace-id: {63a40327-2f46-43c4-9e2c-44b67f297bd2} }
+        Client (UnaryCall) finished, received: Response( time: 1774360832877, num: 5 )
+        [Sanitizing] Aborting call with metadata size of 80129 bytes
+        Client (UnaryCall) failed: QGrpcStatus( code: QtGrpc::StatusCode::Aborted, message: "Interceptors dropped the call" )
+            Server (BidirectionalStreaming) accepted call, Metadata: { x-trace-id: {fc945bdb-5c8a-4c65-8bfb-8655800d5774} }
+            Server (BidirectionalStreaming): Request( time: 1774360833177, num: 5 )
+        Client (BidirectionalStreaming) received: Response( time: 1774360833178, num: 5 )
+            Server (BidirectionalStreaming): Request( time: 1774360833178, num: 4 )
+        Client (BidirectionalStreaming) received: Response( time: 1774360833179, num: 4 )
+            Server (BidirectionalStreaming): Request( time: 1774360833179, num: 3 )
+        Client (BidirectionalStreaming) received: Response( time: 1774360833179, num: 3 )
+            Server (BidirectionalStreaming): Request( time: 1774360833179, num: 2 )
+        Client (BidirectionalStreaming) received: Response( time: 1774360833180, num: 2 )
+            Server (BidirectionalStreaming): Request( time: 1774360833180, num: 1 )
+        Client (BidirectionalStreaming) received: Response( time: 1774360833180, num: 1 )
+            Server (BidirectionalStreaming): Request( time: 1774360833180, num: 0 )
+        Client (BidirectionalStreaming) received: Response( time: 1774360833180, num: 0 )
+        Client (BidirectionalStreaming) finished
+        All operations completed! Automatically shutting down...
+        Metrics for: QtGrpc::RpcDescriptor( service: "client.guide.ClientGuideService", method: "BidirectionalStreaming", type: QtGrpc::RpcType::BidiStreaming )
+        Bytes received    : 52
+        Failed RPCs       : 0
+        Completed RPCs    : 1
+        Completed Durations (ms): QList(3.97233)
+        Metrics for: QtGrpc::RpcDescriptor( service: "client.guide.ClientGuideService", method: "UnaryCall", type: QtGrpc::RpcType::UnaryCall )
+        Bytes received    : 36
+        Failed RPCs       : 2
+        Completed RPCs    : 4
+        Completed Durations (ms): QList(1.937, 1.90971, 1.624, 1.50429)
+    \endcode
+
+    The output shows the interceptor chain in action. Outgoing unary calls
+    reach the server with trace metadata added by the metrics interceptor. When
+    the server reports an authentication failure, the authentication
+    interceptor refreshes the token for subsequent calls and augments the error
+    message with the server-provided hint. A later call is rejected locally by
+    the sanitizing interceptor because its metadata exceeds the configured
+    limit. The bidirectional streaming call shows that interceptors also apply
+    to streaming RPCs: the sanitizing interceptor clamps the request value, so
+    the stream terminates after five message exchanges instead of continuing
+    from \c 666. Finally, when the client shuts down, the metrics interceptor
+    prints the collected statistics for each RPC method.
+
     \enddetails
 */
