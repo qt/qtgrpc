@@ -7,8 +7,11 @@
 #include <grpcpp/server.h>
 #include <grpcpp/server_builder.h>
 
+#include <charconv>
 #include <chrono>
 #include <iostream>
+#include <mutex>
+#include <sstream>
 #include <string_view>
 
 using client::guide::Request;
@@ -30,14 +33,103 @@ std::ostream &operator<<(std::ostream &stream, const Request &request)
     return stream << "Request( time: " << request.time() << ", num: " << request.num() << " )";
 }
 
+// Validate Bearer token format and freshness
+grpc::Status validateAuth(grpc::ServerContext *context)
+{
+    const auto fail = [&](grpc::StatusCode code, const std::string &msg) {
+        context->AddTrailingMetadata("www-authenticate",
+                                     R"(Bearer realm="clientguide", error="invalid_token")");
+        return grpc::Status{ code, msg };
+    };
+
+    const auto &md = context->client_metadata();
+    const auto it = md.find("authorization");
+    if (it == md.end())
+        return grpc::Status::OK; // no auth required in this demo
+
+    std::string_view auth{ it->second.data(), it->second.size() };
+    if (auth.size() < 7 || auth.substr(0, 7) != "Bearer ")
+        return { grpc::StatusCode::UNAUTHENTICATED, "Invalid authorization format" };
+
+    auto token = auth.substr(7);
+
+    // Expected: header.payload.signature
+    const auto dot1 = token.find('.');
+    const auto dot2 = token.find('.', dot1 == token.npos ? dot1 : dot1 + 1);
+    if (dot1 == token.npos || dot2 == token.npos)
+        return fail(grpc::StatusCode::UNAUTHENTICATED, "Invalid token structure");
+
+    // payload = timestamp
+    std::string_view payload = token.substr(dot1 + 1, dot2 - dot1 - 1);
+
+    int64_t ts{ };
+    const auto [_, ec] = std::from_chars(payload.data(), payload.data() + payload.size(), ts);
+    if (ec != std::errc{ })
+        return fail(grpc::StatusCode::UNAUTHENTICATED, "Invalid token payload");
+
+    const auto age = now() - ts;
+    if (age > 500) {
+        return fail(grpc::StatusCode::UNAUTHENTICATED,
+                    "Token expired with age: " + std::to_string(age) + " ms");
+    }
+
+    return grpc::Status::OK;
 }
+
+std::string getPrintableTraceId(const std::multimap<grpc::string_ref, grpc::string_ref> &md)
+{
+    const auto traceIt = md.find("x-trace-id");
+    if (traceIt == md.cend())
+        return { };
+    return std::string(", Metadata: { ")
+        .append(traceIt->first.data(), traceIt->first.size())
+        .append(": ")
+        .append(traceIt->second.data(), traceIt->second.size())
+        .append(" }");
+}
+
+class LogLine
+{
+public:
+    ~LogLine()
+    {
+        std::lock_guard lock(mutex());
+        std::cout << m_buf.str() << std::endl;
+    }
+
+    template <typename T>
+    LogLine &operator<<(T &&value)
+    {
+        m_buf << std::forward<T>(value);
+        return *this;
+    }
+
+private:
+    static std::mutex &mutex()
+    {
+        static std::mutex m;
+        return m;
+    }
+    std::ostringstream m_buf;
+};
+
+LogLine log() { return { }; }
+
+} // namespace
 
 class ClientGuideService : public client::guide::ClientGuideService::Service
 {
-    grpc::Status UnaryCall(grpc::ServerContext * /* context */, const Request *request,
+    grpc::Status UnaryCall(grpc::ServerContext *context, const Request *request,
                            Response *response) override
     {
-        std::cout << "Server (UnaryCall): " << *request << std::endl;
+        //! [auth]
+        if (auto authStatus = validateAuth(context); !authStatus.ok())
+            return authStatus;
+        //! [auth]
+
+        log() << "Server (UnaryCall): " << *request
+              << getPrintableTraceId(context->client_metadata());
+
         //! [time]
         const auto time = now();
         if (request->time() > time)
@@ -51,10 +143,15 @@ class ClientGuideService : public client::guide::ClientGuideService::Service
         //! [response]
     }
 
-    grpc::Status ServerStreaming(grpc::ServerContext * /* context */, const Request *request,
+    grpc::Status ServerStreaming(grpc::ServerContext *context, const Request *request,
                                  grpc::ServerWriter<Response> *writer) override
     {
-        std::cout << "Server (ServerStreaming): " << *request << std::endl;
+        if (auto authStatus = validateAuth(context); !authStatus.ok())
+            return authStatus;
+
+        log() << "Server (ServerStreaming): " << *request
+              << getPrintableTraceId(context->client_metadata());
+
         if (request->time() > now())
             return { grpc::StatusCode::INVALID_ARGUMENT, "Request time is in the future!" };
 
@@ -68,13 +165,19 @@ class ClientGuideService : public client::guide::ClientGuideService::Service
         return grpc::Status::OK;
     }
 
-    grpc::Status ClientStreaming(grpc::ServerContext * /* context */,
-                                 grpc::ServerReader<Request> *reader, Response *response) override
+    grpc::Status ClientStreaming(grpc::ServerContext *context, grpc::ServerReader<Request> *reader,
+                                 Response *response) override
     {
+        if (auto authStatus = validateAuth(context); !authStatus.ok())
+            return authStatus;
+
+        log() << "Server (ClientStreaming) accepted call"
+              << getPrintableTraceId(context->client_metadata());
+
         Request request;
         int32_t count = 0;
         while (reader->Read(&request)) {
-            std::cout << "Server (ClientStreaming): " << request << std::endl;
+            log() << "Server (ClientStreaming): " << request;
             if (request.time() > now())
                 return { grpc::StatusCode::INVALID_ARGUMENT, "Request time is in the future!" };
             ++count;
@@ -85,14 +188,20 @@ class ClientGuideService : public client::guide::ClientGuideService::Service
     }
 
     grpc::Status
-    BidirectionalStreaming(grpc::ServerContext * /* context */,
+    BidirectionalStreaming(grpc::ServerContext *context,
                            grpc::ServerReaderWriter<Response, Request> *stream) override
     {
+        if (auto authStatus = validateAuth(context); !authStatus.ok())
+            return authStatus;
+
+        log() << "Server (BidirectionalStreaming) accepted call"
+              << getPrintableTraceId(context->client_metadata());
+
         Request request;
         Response response;
 
         while (stream->Read(&request)) {
-            std::cout << "Server (BidirectionalStreaming): " << request << std::endl;
+            log() << "Server (BidirectionalStreaming): " << request;
             const auto time = now();
             if (request.time() > time)
                 return { grpc::StatusCode::INVALID_ARGUMENT, "Request time is in the future!" };
