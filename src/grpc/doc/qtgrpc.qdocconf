@@ -48,6 +48,7 @@ sourcedirs  += ../../tools/doc
 
 exampledirs += src/snippets \
                ../../../examples/grpc
+imagedirs   += images
 
 navigation.landingpage = "Qt GRPC"
 navigation.cppclassespage = "Qt GRPC C++ Classes"
@@ -63,6 +64,9 @@ manifestmeta.highlighted.names = \
 tagfile                 = qtgrpc.tags
 
 macro.gRPC = "\\tm gRPC"
+macro.interceptorDirection = \
+"\\note This interceptor operates in the \\b{\1} direction. For details on how " \
+"multiple interceptor callbacks flow through the chain, see the \\l{Direction and flow} section."
 
 # Enforce zero documentation warnings
 warninglimit = 0
