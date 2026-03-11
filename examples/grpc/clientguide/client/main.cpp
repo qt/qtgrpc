@@ -15,6 +15,7 @@
 #include <QtCore/QCommandLineParser>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDateTime>
+#include <QtCore/QDir>
 #include <QtCore/QProcess>
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
@@ -306,7 +307,9 @@ void startServerProcess()
     });
     serverProcess.setProcessChannelMode(QProcess::MergedChannels);
     serverProcess.setReadChannel(QProcess::StandardOutput);
-    serverProcess.start(SERVER_PATH);
+    // The server must be located next to the client.
+    serverProcess.start(QCoreApplication::applicationDirPath()
+            + QDir::separator() + SERVER_FILE_NAME);
     if (!serverProcess.waitForStarted()) {
         qFatal() << "Couldn't start the server: " << serverProcess.errorString();
         exit(EXIT_FAILURE);
