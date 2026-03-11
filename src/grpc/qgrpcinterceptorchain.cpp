@@ -50,7 +50,8 @@ bool QGrpcInterceptorChainPrivate::add(void *interceptor, DeleterFn deleter,
 
     Interceptors are added to the chain in a defined order. The order is
     significant and determines how interceptors are invoked during outbound and
-    inbound stages of an RPC.
+    inbound stages of an RPC. For details, see the \l{Direction and flow}
+    section of the \l{Qt GRPC Interceptors Overview}.
 
     Interceptors can be added using two primary ownership models:
 

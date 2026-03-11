@@ -35,3 +35,9 @@
     \l{https://www.rfc-editor.org/rfc/rfc7540.html#section-8.1.2}{RFC 7540,
     Section 8.1.2}.
 //! [http2-metadata-note]
+
+//! [interceptors_overview_ref]
+    For an introduction to the interception mechanism and how interceptor
+    interfaces participate in the lifecycle of an RPC, see the
+    \l{Qt GRPC Interceptors Overview}.
+//! [interceptors_overview_ref]

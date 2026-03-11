@@ -25,6 +25,13 @@ QT_BEGIN_NAMESPACE
     Qt GRPC provides various types that are commonly grouped in the
     \c{<QtGrpcInterceptor>} header file.
 
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    Qt GRPC provides the following interceptor interfaces as hook points in the
+    RPC lifecycle:
+
+    \include qtgrpc-interceptors-overview.qdoc interface-table
+
     \section1 Interceptor mechanism
 
     The following classes and pages form the Qt GRPC interceptor mechanism:
@@ -35,6 +42,13 @@ QT_BEGIN_NAMESPACE
 /*!
     \group qtgrpc-interceptors
     \title Qt GRPC Interceptors
+
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    Qt GRPC provides the following interceptor interfaces as hook points in the
+    RPC lifecycle:
+
+    \include qtgrpc-interceptors-overview.qdoc interface-table
 
     The following classes and pages form the Qt GRPC interceptor mechanism:
 */
@@ -155,6 +169,10 @@ quint64 QGrpcInterceptionContext::operationId() const noexcept
 
     The interceptor is invoked once per RPC, before the call proceeds.
 
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    \interceptorDirection {outbound}
+
     \sa QtGrpc::InterceptorCapability::Start, QGrpcInterceptionContext,
         QGrpcInterceptionContext
 */
@@ -214,6 +232,10 @@ QGrpcStartInterceptor::~QGrpcStartInterceptor() = default;
     Initial metadata is sent by the server immediately after the call is
     established and before any response messages are delivered.
 
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    \interceptorDirection {outbound}
+
     \sa QtGrpc::InterceptorCapability::InitialMetadata,
         QGrpcOperation::serverInitialMetadata(),
         QGrpcOperation::serverInitialMetadataReceived(),
@@ -249,6 +271,10 @@ QGrpcInitialMetadataInterceptor::~QGrpcInitialMetadataInterceptor() = default;
     Implement QGrpcMessageReceivedInterceptor to observe or modify the
     serialized message payload of messages received from an RPC.
 
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    \interceptorDirection {outbound}
+
     \sa QtGrpc::InterceptorCapability::MessageReceived, QGrpcInterceptionContext
 */
 
@@ -280,6 +306,10 @@ QGrpcMessageReceivedInterceptor::~QGrpcMessageReceivedInterceptor() = default;
     Implement QGrpcWriteMessageInterceptor to observe or modify messages that are
     written as part of an RPC after it has been started.
 
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    \interceptorDirection {inbound}
+
     \sa QtGrpc::InterceptorCapability::WriteMessage, QGrpcInterceptionContext
 */
 
@@ -310,6 +340,10 @@ QGrpcWriteMessageInterceptor::~QGrpcWriteMessageInterceptor() = default;
 
     Implement QGrpcWritesDoneInterceptor to observe when no further outgoing
     messages will be written for an RPC.
+
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    \interceptorDirection {inbound}
 
     \sa QtGrpc::InterceptorCapability::WritesDone, QGrpcInterceptionContext
 */
@@ -345,6 +379,9 @@ QGrpcWritesDoneInterceptor::~QGrpcWritesDoneInterceptor() = default;
     Trailing metadata is sent by the server when the RPC is completing,
     after all response messages have been delivered.
 
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    \interceptorDirection {outbound}
 
     \sa QtGrpc::InterceptorCapability::TrailingMetadata,
         QGrpcOperation::serverTrailingMetadata(), QGrpcInterceptionContext
@@ -378,6 +415,10 @@ QGrpcTrailingMetadataInterceptor::~QGrpcTrailingMetadataInterceptor() = default;
     Implement QGrpcFinishedInterceptor to observe or modify the final status of
     an RPC.
 
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    \interceptorDirection {outbound}
+
     \sa QtGrpc::InterceptorCapability::Finished, QGrpcOperation::finished(),
         QGrpcInterceptionContext
 */
@@ -409,6 +450,10 @@ QGrpcFinishedInterceptor::~QGrpcFinishedInterceptor() = default;
 
     Implement QGrpcCancelInterceptor to observe when cancellation is requested
     for an RPC.
+
+    \include qtgrpc-shared.qdocinc interceptors_overview_ref
+
+    \interceptorDirection {inbound}
 
     \sa QtGrpc::InterceptorCapability::Cancel, QGrpcInterceptionContext
 */

@@ -82,6 +82,7 @@
         \li \l{clientguide} {Qt GRPC Client Guide}
         \li \l{CMake Commands in Qt6 GRPC}
         \li \l{Qt GRPC Security Considerations}
+        \li \l{Qt GRPC Interceptors Overview}
     \endlist
 
     \section1 References
