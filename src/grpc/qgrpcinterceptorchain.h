@@ -36,25 +36,25 @@ public:
     void swap(QGrpcInterceptorChain &other) noexcept { qt_ptr_swap(d_ptr, other.d_ptr); }
 
     template <typename T, QtGrpcPrivate::if_interceptor<T> = true>
-    [[nodiscard]] bool add(std::unique_ptr<T> &&interceptor)
+    bool add(std::unique_ptr<T> &&interceptor)
     {
         return addHelper(std::move(interceptor));
     }
 
     template <typename... Ts, QtGrpcPrivate::if_interceptor<Ts...> = true>
-    [[nodiscard]] bool set(std::unique_ptr<Ts> &&...interceptors)
+    bool set(std::unique_ptr<Ts> &&...interceptors)
     {
         return setHelper(std::move(interceptors)...);
     }
 
     template <typename T, QtGrpcPrivate::if_interceptor<T> = true>
-    [[nodiscard]] bool add(T *interceptor)
+    bool add(T *interceptor)
     {
         return addHelper(interceptor);
     }
 
     template <typename... Ts, QtGrpcPrivate::if_interceptor<Ts...> = true>
-    [[nodiscard]] bool set(Ts *...interceptors)
+    bool set(Ts *...interceptors)
     {
         return setHelper(interceptors...);
     }
