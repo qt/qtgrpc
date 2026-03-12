@@ -118,9 +118,9 @@ void Options::setFromString(const std::string &options, GeneratorType /*unused*/
         } else if (option == MutableGetterConflicts) {
             instance.m_mutableGetterConflicts = true;
         } else if (option == GenerateNonFinalMessagesOption) {
-            instance.m_generateNonFinalMessages = true;
+            instance.m_messageGenerationType = Options::FinalPolicy::NonFinal;
         } else if (option == GenerateNonFinalPropertiesOption) {
-            instance.m_propertyGenerationType = Options::FinalPropertyPolicy::NonFinal;
+            instance.m_propertyGenerationType = Options::FinalPolicy::NonFinal;
         }
     }
 }

@@ -184,11 +184,8 @@ void MessageDeclarationPrinter::printNested()
 
 void MessageDeclarationPrinter::printClassDeclarationBegin()
 {
-    if (Options::instance().generateNonFinalMessages()) {
-        m_printer->Print(m_typeMap, CommonTemplates::NonFinalClassMessageBeginDeclarationTemplate());
-    } else {
-        m_printer->Print(m_typeMap, CommonTemplates::ClassMessageBeginDeclarationTemplate());
-    }
+    const Options::FinalPolicy policy = Options::instance().messageGenerationType();
+    m_printer->Print(m_typeMap, CommonTemplates::ClassMessageBeginDeclarationTemplate(policy));
 
     Indent();
     static const std::string exportMacro = common::buildExportMacro(false);
@@ -213,8 +210,7 @@ void MessageDeclarationPrinter::printProperties()
     Indent();
 
     const int numFields = m_descriptor->field_count();
-    const Options::FinalPropertyPolicy propertyType
-        = Options::instance().propertyGenerationType();
+    const Options::FinalPolicy propertyType = Options::instance().propertyGenerationType();
     common::iterateMessageFields(
         m_descriptor, [&](const FieldDescriptor *field, const PropertyMap &propertyMap) {
             const char *propertyTemplate = CommonTemplates::PropertyTemplate(propertyType);

@@ -44,8 +44,7 @@ public:
     static const char *ClassMessageForwardDeclarationTemplate();
     static const char *EnumForwardDeclarationTemplate();
     static const char *EnumClassForwardDeclarationTemplate();
-    static const char *NonFinalClassMessageBeginDeclarationTemplate();
-    static const char *ClassMessageBeginDeclarationTemplate();
+    static const char *ClassMessageBeginDeclarationTemplate(Options::FinalPolicy policy);
     static const char *Q_PROTOBUF_OBJECTMacro();
     static const char *Q_PROTOBUF_OBJECT_EXPORTMacro();
     static const char *ClassMessageQmlBeginDeclarationTemplate();
@@ -55,14 +54,14 @@ public:
 
     static const char *UseNamespace();
 
-    static const char *PropertyTemplate(Options::FinalPropertyPolicy value);
-    static const char *PropertyRepeatedTemplate(Options::FinalPropertyPolicy value);
-    static const char *PropertyRepeatedMessageTemplate(Options::FinalPropertyPolicy value);
-    static const char *PropertyMessageTemplate(Options::FinalPropertyPolicy value);
-    static const char *PropertyQmlMessageTemplate(Options::FinalPropertyPolicy value);
-    static const char *PropertyOneofTemplate(Options::FinalPropertyPolicy value);
-    static const char *PropertyOneofMessageTemplate(Options::FinalPropertyPolicy value);
-    static const char *PropertyHasFieldTemplate(Options::FinalPropertyPolicy value);
+    static const char *PropertyTemplate(Options::FinalPolicy policy);
+    static const char *PropertyRepeatedTemplate(Options::FinalPolicy policy);
+    static const char *PropertyRepeatedMessageTemplate(Options::FinalPolicy policy);
+    static const char *PropertyMessageTemplate(Options::FinalPolicy policy);
+    static const char *PropertyQmlMessageTemplate(Options::FinalPolicy policy);
+    static const char *PropertyOneofTemplate(Options::FinalPolicy policy);
+    static const char *PropertyOneofMessageTemplate(Options::FinalPolicy policy);
+    static const char *PropertyHasFieldTemplate(Options::FinalPolicy policy);
 
     static const char *ConstructorMessageDeclarationTemplate();
     static const char *DestructorMessageDeclarationTemplate();

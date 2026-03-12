@@ -190,18 +190,17 @@ const char *CommonTemplates::ClassMessageQmlBeginDeclarationTemplate()
            "    QML_VALUE_TYPE($classname_low_case$)\n";
 }
 
-const char *CommonTemplates::NonFinalClassMessageBeginDeclarationTemplate()
+const char *CommonTemplates::ClassMessageBeginDeclarationTemplate(Options::FinalPolicy policy)
 {
-    return "\nclass $dataclassname$;\n"
-           "class $classname$ : public QProtobufMessage\n"
-           "{\n";
-}
-
-const char *CommonTemplates::ClassMessageBeginDeclarationTemplate()
-{
-    return "\nclass $dataclassname$;\n"
-           "class $classname$ final : public QProtobufMessage\n"
-           "{\n";
+    if (policy == Options::FinalPolicy::Final) {
+        return "\nclass $dataclassname$;\n"
+               "class $classname$ final : public QProtobufMessage\n"
+               "{\n";
+    } else {
+        return "\nclass $dataclassname$;\n"
+               "class $classname$ : public QProtobufMessage\n"
+               "{\n";
+    }
 }
 
 const char *CommonTemplates::Q_PROTOBUF_OBJECTMacro()
@@ -232,9 +231,9 @@ const char *CommonTemplates::CopyConstructorMessageDataDefinitionTemplate()
            "    : QSharedData(other)";
 }
 
-const char *CommonTemplates::PropertyTemplate(Options::FinalPropertyPolicy value)
+const char *CommonTemplates::PropertyTemplate(Options::FinalPolicy policy)
 {
-    if (value == Options::FinalPropertyPolicy::Final) {
+    if (policy == Options::FinalPolicy::Final) {
         return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
                "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
     } else {
@@ -243,9 +242,9 @@ const char *CommonTemplates::PropertyTemplate(Options::FinalPropertyPolicy value
     }
 }
 
-const char *CommonTemplates::PropertyRepeatedTemplate(Options::FinalPropertyPolicy value)
+const char *CommonTemplates::PropertyRepeatedTemplate(Options::FinalPolicy policy)
 {
-    if (value == Options::FinalPropertyPolicy::Final) {
+    if (policy == Options::FinalPolicy::Final) {
         return "Q_PROPERTY($property_list_type$ $property_name$ READ $property_name$ WRITE "
                "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
     } else {
@@ -254,9 +253,9 @@ const char *CommonTemplates::PropertyRepeatedTemplate(Options::FinalPropertyPoli
     }
 }
 
-const char *CommonTemplates::PropertyRepeatedMessageTemplate(Options::FinalPropertyPolicy value)
+const char *CommonTemplates::PropertyRepeatedMessageTemplate(Options::FinalPolicy policy)
 {
-    if (value == Options::FinalPropertyPolicy::Final) {
+    if (policy == Options::FinalPolicy::Final) {
         return "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
                "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
     } else {
@@ -265,9 +264,9 @@ const char *CommonTemplates::PropertyRepeatedMessageTemplate(Options::FinalPrope
     }
 }
 
-const char *CommonTemplates::PropertyMessageTemplate(Options::FinalPropertyPolicy value)
+const char *CommonTemplates::PropertyMessageTemplate(Options::FinalPolicy policy)
 {
-    if (value == Options::FinalPropertyPolicy::Final) {
+    if (policy == Options::FinalPolicy::Final) {
         return "Q_PROPERTY($property_type$ *$property_name$_p READ $property_name$_p WRITE "
                "set$property_name_cap$_p SCRIPTABLE false FINAL)\n";
     } else {
@@ -276,9 +275,9 @@ const char *CommonTemplates::PropertyMessageTemplate(Options::FinalPropertyPolic
     }
 }
 
-const char *CommonTemplates::PropertyQmlMessageTemplate(Options::FinalPropertyPolicy value)
+const char *CommonTemplates::PropertyQmlMessageTemplate(Options::FinalPolicy policy)
 {
-    if (value == Options::FinalPropertyPolicy::Final) {
+    if (policy == Options::FinalPolicy::Final) {
         return "Q_PROPERTY($property_type$ $property_name$ READ $property_name$ WRITE "
                "set$property_name_cap$ FINAL)\n";
     } else {
@@ -287,9 +286,9 @@ const char *CommonTemplates::PropertyQmlMessageTemplate(Options::FinalPropertyPo
     }
 }
 
-const char *CommonTemplates::PropertyOneofTemplate(Options::FinalPropertyPolicy value)
+const char *CommonTemplates::PropertyOneofTemplate(Options::FinalPolicy policy)
 {
-    if (value == Options::FinalPropertyPolicy::Final) {
+    if (policy == Options::FinalPolicy::Final) {
         return "Q_PROPERTY($property_type$ $property_name$ "
                "READ $property_name$_p WRITE set$property_name_cap$_p FINAL)\n";
     } else {
@@ -298,9 +297,9 @@ const char *CommonTemplates::PropertyOneofTemplate(Options::FinalPropertyPolicy 
     }
 }
 
-const char *CommonTemplates::PropertyOneofMessageTemplate(Options::FinalPropertyPolicy value)
+const char *CommonTemplates::PropertyOneofMessageTemplate(Options::FinalPolicy policy)
 {
-    if (value == Options::FinalPropertyPolicy::Final) {
+    if (policy == Options::FinalPolicy::Final) {
         return "Q_PROPERTY($property_type$ *$property_name$_p "
                "READ $property_name$_p WRITE set$property_name_cap$_p SCRIPTABLE false FINAL)\n";
     } else {
@@ -309,9 +308,9 @@ const char *CommonTemplates::PropertyOneofMessageTemplate(Options::FinalProperty
     }
 }
 
-const char *CommonTemplates::PropertyHasFieldTemplate(Options::FinalPropertyPolicy value)
+const char *CommonTemplates::PropertyHasFieldTemplate(Options::FinalPolicy policy)
 {
-    if (value == Options::FinalPropertyPolicy::Final) {
+    if (policy == Options::FinalPolicy::Final) {
         return "Q_PROPERTY(bool has$property_name_cap$ "
                "READ has$property_name_cap$ FINAL)\n";
     } else {

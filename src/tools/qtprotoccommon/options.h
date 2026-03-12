@@ -20,10 +20,7 @@ class Options
 
     static Options &mutableInstance();
 public:
-    enum class FinalPropertyPolicy : bool {
-        Final,
-        NonFinal
-    };
+    enum class FinalPolicy : bool { Final, NonFinal };
     enum class HeaderGuardType {
         Pragma,
         ProtoFilename,
@@ -51,8 +48,8 @@ public:
     bool generateMacroExportFile() const { return m_generateMacroExportFile; }
     HeaderGuardType headerGuard() const { return m_headerGuard; }
     bool mutableGetterConflicts() const { return m_mutableGetterConflicts; }
-    bool generateNonFinalMessages() const { return m_generateNonFinalMessages; }
-    FinalPropertyPolicy propertyGenerationType() const { return m_propertyGenerationType; }
+    FinalPolicy messageGenerationType() const { return m_messageGenerationType; }
+    FinalPolicy propertyGenerationType() const { return m_propertyGenerationType; }
 
 private:
     bool m_generateComments;
@@ -64,9 +61,8 @@ private:
     bool m_generateMacroExportFile;
     bool m_qml;
     bool m_mutableGetterConflicts;
-    bool m_generateNonFinalMessages = false;
-    FinalPropertyPolicy m_propertyGenerationType
-        = Options::FinalPropertyPolicy::Final;
+    FinalPolicy m_messageGenerationType = Options::FinalPolicy::Final;
+    FinalPolicy m_propertyGenerationType = Options::FinalPolicy::Final;
     HeaderGuardType m_headerGuard = Options::HeaderGuardType::ProtoFilename;
 };
 
