@@ -1066,7 +1066,7 @@ void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operation
         if (m_isInsideSocketErrorOccurred) {
             qCWarning(lcChannel,
                       "[%p] Inside socket error handler. Reconnect deferred to event loop.", this);
-            QTimer::singleShot(0, [this]{ m_reconnectFunction(); });
+            QTimer::singleShot(0, this, [this] { m_reconnectFunction(); });
         } else {
             m_reconnectFunction();
         }
