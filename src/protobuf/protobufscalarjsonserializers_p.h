@@ -133,7 +133,7 @@ template <typename L>
 QJsonValue serializeList(const QVariant &propertyValue)
 {
     QJsonArray arr;
-    L listValue = propertyValue.value<L>();
+    const L listValue = propertyValue.value<L>();
     for (const auto &value : listValue)
         arr.append(serialize(value));
 
@@ -274,13 +274,13 @@ QVariant deserializeList(const QJsonValue &value, bool &ok)
     }
 
     L list;
-    QJsonArray array = value.toArray();
-    for (auto arrayValue : array) {
+    const QJsonArray array = value.toArray();
+    for (const auto &arrayValue : array) {
         ok = false;
-        T value = deserialize<T>(arrayValue, ok);
+        T decoded = deserialize<T>(arrayValue, ok);
         if (!ok)
             break;
-        list.append(value);
+        list.append(decoded);
     }
     return QVariant::fromValue(list);
 }
