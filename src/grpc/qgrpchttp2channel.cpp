@@ -1016,7 +1016,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
         connect(socket.get(), &QLocalSocket::errorOccurred, this,
                 &QGrpcHttp2ChannelPrivate::handleLocalSocketError);
         m_reconnectFunction = [this, socket = socket.get()] {
-            const auto name = hostUri.host() + hostUri.path();
+            const QString name = hostUri.host() + hostUri.path();
             qCDebug(lcChannel, "[%p] Connecting to local socket at: %s", this, qPrintable(name));
             socket->connectToServer(name);
         };
