@@ -60,6 +60,11 @@ if(NOT grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
     return()
 endif()
 
+# grpc-c++ has issues when mixing ASan and non-ASan builds.
+# See https://github.com/grpc/grpc/issues/40935.
+# Re-enable once grpc supports ASan or when we build grpc with ASan in CI.
+qt_internal_skip_sanitizer()
+
 set(proto_files "${CMAKE_CURRENT_LIST_DIR}/../../../shared/proto/testservice.proto")
 set(out_dir ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -149,3 +154,6 @@ qt_internal_add_executable(grpc_testserver
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/"
     INSTALL_DIRECTORY "${INSTALL_TESTSDIR}/shared"
 )
+
+# Note the qt_internal_skip_sanitizer() above when removing.
+qt_internal_skip_linking_sanitizer()
