@@ -39,12 +39,12 @@ public:
             {
                 std::vector<grpc::experimental::IdentityKeyCertPair> identityPairs;
                 identityPairs.emplace_back(grpc::experimental::IdentityKeyCertPair{
-                    .private_key = std::string(SslKey.data(), SslKey.length()),
-                    .certificate_chain = std::string(SslCert.data(), SslCert.length()),
+                    .private_key = std::string(Bench::SslKey.data(), Bench::SslKey.length()),
+                    .certificate_chain = std::string(Bench::SslCert.data(), Bench::SslCert.length()),
                 });
                 grpc::experimental::TlsServerCredentialsOptions
                     tlsOpts(std::make_shared<grpc::experimental::StaticDataCertificateProvider>(
-                        std::string(SslRootKey.data(), SslRootKey.length()), identityPairs));
+                        std::string(Bench::SslRootKey.data(), Bench::SslRootKey.length()), identityPairs));
                 // Needed for TLS debugging in wireshark (Edit > Preferences >
                 // Protocol > TLS > Master-Secret log filename)
                 tlsOpts.set_tls_session_key_log_file_path("sslkeylog.log");
@@ -54,7 +54,7 @@ public:
                 tlsCreds = grpc::experimental::TlsServerCredentials(tlsOpts);
             }
             for (const auto &t : transports) {
-                const auto address = getTransportAddress(t);
+                const auto address = Bench::getTransportAddress(t);
                 if (t == "https")
                     builder.AddListeningPort(address, tlsCreds);
                 else
@@ -62,13 +62,13 @@ public:
                 std::cout << std::format("Server listening on: {}, {}\n", t.toStdString(), address);
             }
             builder.RegisterService(&mService);
-            for (int i = 0; i < 1; ++i) // 2 completion queues for better concurrency
+            for (int i = 0; i < 1; ++i)
                 mCompletionQueues.emplace_back(builder.AddCompletionQueue());
             mServer = builder.BuildAndStart();
         }
 
         // Pre-register multiple instances type across all CQs
-        constexpr size_t initial_instances = 1; // 10 per CQ
+        constexpr size_t initial_instances = 1;
         for (auto& cq : mCompletionQueues) {
             for (size_t i = 0; i < initial_instances / mCompletionQueues.size(); ++i) {
                 new UnaryCall(cq.get(), &mService);

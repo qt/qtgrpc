@@ -74,9 +74,10 @@ public:
 
         if (mState == State::Created) {
             new UnaryCall(mCQ, mService);
-            *mResponse.mutable_timestamp() = getTimestamp();
-            mResponse.set_request_latency_nanos(calculateLatencyNanos(mRequest.timestamp(),
-                                                                      mResponse.timestamp()));
+            *mResponse.mutable_timestamp() = Bench::getTimestamp();
+            mResponse
+                .set_request_latency_nanos(Bench::calculateLatencyNanos(mRequest.timestamp(),
+                                                                        mResponse.timestamp()));
             if (mRequest.has_payload())
                 mResponse.mutable_payload()->swap(*mRequest.mutable_payload());
             mWriter.Finish(mResponse, grpc::Status::OK, this);
