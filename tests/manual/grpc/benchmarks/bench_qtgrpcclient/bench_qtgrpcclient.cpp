@@ -10,6 +10,7 @@
 #include <QtNetwork/qsslcertificate.h>
 #include <QtNetwork/qsslconfiguration.h>
 
+#include <QtCore/qelapsedtimer.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qeventloop.h>
 #include <QtCore/qobject.h>
@@ -31,10 +32,10 @@ public:
 
         QUrl uri;
         QGrpcChannelOptions opts;
-        const auto address = QString::fromStdString(getTransportAddress(transport));
+        const auto address = QString::fromStdString(Bench::getTransportAddress(transport));
         if (transport == "https") {
             uri = QUrl("https://"_L1 + address);
-            QSslCertificate crt(QByteArray(SslRootKey.data(), SslRootKey.size()));
+            QSslCertificate crt(QByteArray(Bench::SslRootKey.data(), Bench::SslRootKey.size()));
             QSslConfiguration sslConfig;
             sslConfig.setProtocol(QSsl::TlsV1_2OrLater);
             sslConfig.addCaCertificate(crt);
@@ -62,7 +63,7 @@ public:
     void bidiStreaming();
 
 private:
-    void unaryCallHelper(qt::bench::UnaryCallRequest &request, BenchmarkData &benchData);
+    void unaryCallHelper(qt::bench::UnaryCallRequest &request, Bench::BenchmarkData &benchData);
 
 private:
     qt::bench::BenchmarkService::Client mClient;
@@ -76,7 +77,7 @@ private:
 void QtGrpcClientBenchmark::unaryCall()
 {
     qt::bench::UnaryCallRequest request;
-    BenchmarkData benchData(mCalls);
+    Bench::BenchmarkData benchData(mCalls);
     benchData.callCount = -50; // warmup
     unaryCallHelper(request, benchData);
     mLoop.exec();
@@ -84,9 +85,9 @@ void QtGrpcClientBenchmark::unaryCall()
 
 // recursively enqueue a message after the previous message finished
 void QtGrpcClientBenchmark::unaryCallHelper(qt::bench::UnaryCallRequest &request,
-                                            BenchmarkData &benchData)
+                                            Bench::BenchmarkData &benchData)
 {
-    request.setTimestamp(getTimestamp());
+    request.setTimestamp(Bench::getTimestamp());
     if (!sData.isEmpty() && benchData.callCount >= 0) {
         request.setPayload(sData);
         benchData.sendBytes += sData.size();
@@ -107,7 +108,7 @@ void QtGrpcClientBenchmark::unaryCallHelper(qt::bench::UnaryCallRequest &request
                         benchData.receivedBytes += static_cast<quint64>(response->payload().size());
                     benchData.requestLatenciesNanos.push_back(response->requestLatencyNanos());
                     benchData.responseLatenciesNanos
-                        .push_back(calculateLatencyNanosNow(response->timestamp()));
+                        .push_back(Bench::calculateLatencyNanosNow(response->timestamp()));
                 }
                 if (benchData.callCount < mCalls) {
                     unaryCallHelper(request, benchData);
@@ -126,7 +127,7 @@ void QtGrpcClientBenchmark::unaryCallHelper(qt::bench::UnaryCallRequest &request
 
 void QtGrpcClientBenchmark::serverStreaming()
 {
-    BenchmarkData benchData(mCalls);
+    Bench::BenchmarkData benchData(mCalls);
 
     qt::bench::ServerStreamingRequest request;
     if (!sData.isEmpty()) {
@@ -163,7 +164,7 @@ void QtGrpcClientBenchmark::serverStreaming()
 
 void QtGrpcClientBenchmark::clientStreaming()
 {
-    BenchmarkData benchData(mCalls);
+    Bench::BenchmarkData benchData(mCalls);
 
     qt::bench::ClientStreamingRequest request;
     if (!sData.isEmpty()) {
@@ -204,7 +205,7 @@ void QtGrpcClientBenchmark::clientStreaming()
 
 void QtGrpcClientBenchmark::bidiStreaming()
 {
-    BenchmarkData benchData(mCalls);
+    Bench::BenchmarkData benchData(mCalls);
 
     QGrpcCallOptions copts;
     copts.addMetadata("write-queries"_ba, QString::number(mCalls).toUtf8());

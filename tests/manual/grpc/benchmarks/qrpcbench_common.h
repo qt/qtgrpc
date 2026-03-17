@@ -4,12 +4,18 @@
 #ifndef QRPCBENCH_COMMON_H
 #define QRPCBENCH_COMMON_H
 
+#if defined QTGRPCCLIENT
+#  include "google/protobuf/timestamp.qpb.h"
+#else
+#  include <google/protobuf/timestamp.pb.h>
+#endif
+
 #include <QtCore/qcommandlineoption.h>
 #include <QtCore/qcommandlineparser.h>
-#include <QtCore/qelapsedtimer.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qsysinfo.h>
 
+#include <algorithm>
 #include <chrono>
 #include <concepts>
 #include <cstdlib>
@@ -17,7 +23,11 @@
 #include <iomanip>
 #include <iostream>
 #include <ranges>
+#include <string>
 #include <string_view>
+#include <vector>
+
+namespace Bench {
 
 inline std::string getTransportAddress(QAnyStringView transport)
 {
@@ -140,13 +150,7 @@ struct BenchmarkData
     int64_t elapsedNanos = {};
 };
 
-#if defined QTGRPCCLIENT
-#  include "google/protobuf/timestamp.qpb.h"
-#else
-#  include <google/protobuf/timestamp.pb.h>
-#endif
-
-static google::protobuf::Timestamp getTimestamp()
+inline google::protobuf::Timestamp getTimestamp()
 {
     google::protobuf::Timestamp ts;
     auto now = std::chrono::system_clock::now();
@@ -163,7 +167,7 @@ static google::protobuf::Timestamp getTimestamp()
     return ts;
 }
 
-[[maybe_unused]] static int64_t calculateLatencyNanos(const google::protobuf::Timestamp &start,
+[[maybe_unused]] inline int64_t calculateLatencyNanos(const google::protobuf::Timestamp &start,
                                                       const google::protobuf::Timestamp &end)
 {
     int64_t startNanos = (start.seconds() * 1'000'000'000LL) + start.nanos();
@@ -171,7 +175,7 @@ static google::protobuf::Timestamp getTimestamp()
     return endNanos - startNanos;
 }
 
-[[maybe_unused]] static int64_t calculateLatencyNanosNow(const google::protobuf::Timestamp &start)
+[[maybe_unused]] inline int64_t calculateLatencyNanosNow(const google::protobuf::Timestamp &start)
 {
     int64_t startNanos = (start.seconds() * 1'000'000'000LL) + start.nanos();
     int64_t endNanos = std::chrono::time_point_cast<
@@ -180,6 +184,8 @@ static google::protobuf::Timestamp getTimestamp()
                            .count();
     return endNanos - startNanos;
 }
+
+} // namespace Bench
 
 namespace Client {
 
@@ -243,7 +249,7 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
     std::cout << std::format("  kernel: {}, {}\n", QSysInfo::kernelType().toStdString(),
                              QSysInfo::kernelVersion().toStdString());
     std::cout << std::format("  host URI: {}, {}\n\n", transportValue,
-                             getTransportAddress(transportValue));
+                             Bench::getTransportAddress(transportValue));
 
     if (parser.isSet(payload))
         std::cout << std::format("  Option: payload per message {} bytes\n", payloadSize);
@@ -366,7 +372,7 @@ inline void printLatencyStats(const std::vector<uint64_t> &latencies, const std:
                              l[5], valWidth);
 }
 
-void printBenchmarkResult(const std::string &title, const BenchmarkData &data)
+inline void printBenchmarkResult(const std::string &title, const Bench::BenchmarkData &data)
 {
     assert(data.callCount > 0);
     std::string titleString = "========== Benchmark Results: " + title + " ==========";

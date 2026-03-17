@@ -10,6 +10,8 @@
 
 #include <absl/log/initialize.h>
 
+#include <QtCore/qelapsedtimer.h>
+
 class AsyncGrpcClientBenchmark
 {
 public:
@@ -25,12 +27,12 @@ public:
         grpc::ChannelArguments args;
         if (transport == "https") {
             grpc::SslCredentialsOptions sslOpts;
-            sslOpts.pem_root_certs = { SslRootKey.data(), SslRootKey.size() };
+            sslOpts.pem_root_certs = { Bench::SslRootKey.data(), Bench::SslRootKey.size() };
             creds = grpc::SslCredentials(sslOpts);
         } else {
             creds = grpc::InsecureChannelCredentials();
         }
-        auto channel = grpc::CreateCustomChannel(getTransportAddress(transport), creds, args);
+        auto channel = grpc::CreateCustomChannel(Bench::getTransportAddress(transport), creds, args);
         mStub = qt::bench::BenchmarkService::NewStub(std::move(channel));
     }
 
@@ -59,7 +61,7 @@ void AsyncGrpcClientBenchmark::unaryCall()
         qt::bench::UnaryCallResponse response;
     };
 
-    BenchmarkData benchData(static_cast<uint64_t>(mExpectedCalls));
+    Bench::BenchmarkData benchData(static_cast<uint64_t>(mExpectedCalls));
     benchData.callCount = -50; // for warmup
 
     grpc::CompletionQueue cq;
@@ -68,7 +70,7 @@ void AsyncGrpcClientBenchmark::unaryCall()
 
     const auto startCall = [this, &cq, &benchData]() {
         auto *call = new UnaryCallData();
-        *call->request.mutable_timestamp() = getTimestamp();
+        *call->request.mutable_timestamp() = Bench::getTimestamp();
         if (!sData.empty() && benchData.callCount >= 0) {
             call->request.set_payload(sData);
             benchData.sendBytes += call->request.payload().size();
@@ -90,7 +92,7 @@ void AsyncGrpcClientBenchmark::unaryCall()
                     benchData.requestLatenciesNanos
                         .push_back(rpcResult->response.request_latency_nanos());
                     benchData.responseLatenciesNanos
-                        .push_back(calculateLatencyNanosNow(rpcResult->response.timestamp()));
+                        .push_back(Bench::calculateLatencyNanosNow(rpcResult->response.timestamp()));
                 }
                 delete rpcResult;
                 startCall();
@@ -129,7 +131,7 @@ void AsyncGrpcClientBenchmark::serverStreaming()
         std::function<bool(bool)> callHandler;
     };
 
-    BenchmarkData benchData(static_cast<uint64_t>(mExpectedCalls));
+    Bench::BenchmarkData benchData(static_cast<uint64_t>(mExpectedCalls));
 
     grpc::CompletionQueue cq;
     void *rawTag = nullptr;
@@ -204,7 +206,7 @@ void AsyncGrpcClientBenchmark::clientStreaming()
         std::function<bool(bool)> callHandler;
     };
 
-    BenchmarkData benchData(static_cast<uint64_t>(mExpectedCalls));
+    Bench::BenchmarkData benchData(static_cast<uint64_t>(mExpectedCalls));
 
     grpc::CompletionQueue cq;
     void *rawTag = nullptr;
@@ -284,7 +286,7 @@ void AsyncGrpcClientBenchmark::bidiStreaming()
         std::function<bool(bool)> writesDoneHandler;
         std::function<bool(bool)> readHandler;
     };
-    BenchmarkData benchData(static_cast<uint64_t>(mExpectedCalls));
+    Bench::BenchmarkData benchData(static_cast<uint64_t>(mExpectedCalls));
 
     grpc::CompletionQueue cq;
     void *rawTag = nullptr;
