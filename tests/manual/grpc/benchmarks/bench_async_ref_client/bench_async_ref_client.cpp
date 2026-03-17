@@ -21,7 +21,7 @@ public:
     {
         assert(mExpectedCalls > 0);
         if (payload > 0)
-            sData.assign(payload, 'x');
+            sData = Bench::generatePayloads<std::string>(payload);
 
         std::shared_ptr<grpc::ChannelCredentials> creds;
         grpc::ChannelArguments args;
@@ -46,7 +46,7 @@ private:
     QElapsedTimer mTimer;
     int64_t mExpectedCalls;
 
-    inline static std::string sData;
+    inline static std::vector<std::string> sData;
 };
 
 void AsyncGrpcClientBenchmark::unaryCall()
@@ -72,8 +72,9 @@ void AsyncGrpcClientBenchmark::unaryCall()
         auto *call = new UnaryCallData();
         *call->request.mutable_timestamp() = Bench::getTimestamp();
         if (!sData.empty() && benchData.callCount >= 0) {
-            call->request.set_payload(sData);
-            benchData.sendBytes += call->request.payload().size();
+            auto nextPayload = Bench::nextPayload(sData);
+            benchData.sendBytes += nextPayload.size();
+            call->request.set_payload(std::move(nextPayload));
         }
         call->reader = mStub->AsyncUnaryCall(&call->context, call->request, &cq);
         call->reader->Finish(&call->response, &call->status, call);
@@ -169,8 +170,9 @@ void AsyncGrpcClientBenchmark::serverStreaming()
     };
 
     if (!sData.empty()) {
-        call->request.set_payload(sData);
-        benchData.sendBytes += sData.size();
+        auto nextPayload = Bench::nextPayload(sData);
+        benchData.sendBytes += nextPayload.size();
+        call->request.set_payload(std::move(nextPayload));
     }
     call->request.set_ping(mExpectedCalls);
     call->stream = mStub->AsyncServerStreaming(&call->context, call->request, &cq,
@@ -215,10 +217,13 @@ void AsyncGrpcClientBenchmark::clientStreaming()
     auto *call = new ClientStreamingData();
     call->writeHandler = [this, call, &benchData](bool ok) {
         if (ok && benchData.callCount < mExpectedCalls) {
+            if (!sData.empty()) {
+                auto nextPayload = Bench::nextPayload(sData);
+                benchData.sendBytes += nextPayload.size();
+                call->request.set_payload(std::move(nextPayload));
+            }
             call->request.set_ping(benchData.callCount);
             call->stream->Write(call->request, &call->writeHandler);
-            if (call->request.has_payload())
-                benchData.sendBytes += call->request.payload().size();
             ++benchData.callCount;
         } else if (ok && benchData.callCount >= mExpectedCalls) {
             call->stream->WritesDone(&call->writesDoneHandler);
@@ -249,8 +254,6 @@ void AsyncGrpcClientBenchmark::clientStreaming()
         }
     };
 
-    if (!sData.empty())
-        call->request.set_payload(sData);
     call->stream = mStub->AsyncClientStreaming(&call->context, &call->response, &cq,
                                                &call->callHandler);
 
@@ -295,8 +298,11 @@ void AsyncGrpcClientBenchmark::bidiStreaming()
     auto *call = new BidiStreamingData();
     call->writeHandler = [this, call, &benchData](bool ok) {
         if (ok && benchData.callCount < mExpectedCalls) {
-            if (call->request.has_payload())
-                benchData.sendBytes += call->request.payload().size();
+            if (!sData.empty()) {
+                auto nextPayload = Bench::nextPayload(sData);
+                benchData.sendBytes += nextPayload.size();
+                call->request.set_payload(std::move(nextPayload));
+            }
             call->stream->Write(call->request, &call->writeHandler);
             ++benchData.callCount;
         } else if (ok && benchData.callCount >= mExpectedCalls) {
@@ -336,12 +342,9 @@ void AsyncGrpcClientBenchmark::bidiStreaming()
         }
     };
 
+    if (!sData.empty())
+        call->context.AddMetadata("write-size", std::to_string(sData[0].size()));
     call->context.AddMetadata("write-queries", std::to_string(mExpectedCalls));
-
-    if (!sData.empty()) {
-        call->request.set_payload(sData);
-        call->context.AddMetadata("write-size", std::to_string(sData.size()));
-    }
     mTimer.restart();
     call->stream = mStub->AsyncBiDiStreaming(&call->context, &cq, &call->callHandler);
 
