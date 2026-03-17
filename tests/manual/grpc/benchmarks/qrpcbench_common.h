@@ -12,6 +12,7 @@
 
 #include <QtCore/qcommandlineoption.h>
 #include <QtCore/qcommandlineparser.h>
+#include <QtCore/qcompilerdetection.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qsysinfo.h>
 
@@ -32,21 +33,26 @@ namespace Bench {
 
 inline std::string getTransportAddress(QAnyStringView transport)
 {
-    if (transport == "http") {
+    if (transport == "http")
         return "localhost:65002";
-    } else if (transport == "https") {
+    if (transport == "https")
         return "localhost:65003";
-    }
+
 #ifndef Q_OS_WINDOWS
-    else if (transport == "unix") {
+    if (transport == "unix") {
+#  if defined(Q_OS_LINUX)
         return "unix-abstract:bench";
+#  elif defined(Q_OS_BSD4)
+        return "unix:///tmp/bench.sock";
+#  else
+        std::cerr << "Unix transport not supported on this platform!" << std::endl;
+        std::exit(EXIT_FAILURE);
+#  endif
     }
 #endif
-    else {
-        std::cerr << "Invalid transport specified: " << transport.toString().toStdString()
-                  << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
+
+    std::cerr << "Invalid transport specified: " << transport.toString().toStdString() << std::endl;
+    std::exit(EXIT_FAILURE);
 }
 
 // Valid for the next 100 years.
