@@ -28,7 +28,7 @@ public:
         : mCalls(calls)
     {
         if (payload > 0)
-            sData = QByteArray(payload, 'x');
+            sData = Bench::generatePayloads<QByteArray>(payload);
 
         QUrl uri;
         QGrpcChannelOptions opts;
@@ -71,7 +71,7 @@ private:
     QElapsedTimer mTimer;
     int64_t mCalls;
 
-    inline static QByteArray sData;
+    inline static std::vector<QByteArray> sData;
 };
 
 void QtGrpcClientBenchmark::unaryCall()
@@ -88,9 +88,10 @@ void QtGrpcClientBenchmark::unaryCallHelper(qt::bench::UnaryCallRequest &request
                                             Bench::BenchmarkData &benchData)
 {
     request.setTimestamp(Bench::getTimestamp());
-    if (!sData.isEmpty() && benchData.callCount >= 0) {
-        request.setPayload(sData);
-        benchData.sendBytes += sData.size();
+    if (!sData.empty() && benchData.callCount >= 0) {
+        auto nextPayload = Bench::nextPayload(sData);
+        benchData.sendBytes += nextPayload.size();
+        request.setPayload(std::move(nextPayload));
     }
     auto reply = mClient.UnaryCall(request);
     auto *replyPtr = reply.get();
@@ -130,9 +131,10 @@ void QtGrpcClientBenchmark::serverStreaming()
     Bench::BenchmarkData benchData(mCalls);
 
     qt::bench::ServerStreamingRequest request;
-    if (!sData.isEmpty()) {
-        request.setPayload(sData);
-        benchData.sendBytes += sData.size();
+    if (!sData.empty()) {
+        auto nextPayload = Bench::nextPayload(sData);
+        benchData.sendBytes += nextPayload.size();
+        request.setPayload(std::move(nextPayload));
     }
     request.setPing(mCalls);
     auto stream = mClient.ServerStreaming(request);
@@ -144,8 +146,7 @@ void QtGrpcClientBenchmark::serverStreaming()
                              mTimer.start();
                          const auto response = stream->read<qt::bench::ServerStreamingResponse>();
                          if (response->hasPayload())
-                             benchData
-                                 .receivedBytes += static_cast<quint64>(response->payload().size());
+                             benchData.receivedBytes += response->payload().size();
                          ++benchData.callCount;
                      });
 
@@ -167,9 +168,10 @@ void QtGrpcClientBenchmark::clientStreaming()
     Bench::BenchmarkData benchData(mCalls);
 
     qt::bench::ClientStreamingRequest request;
-    if (!sData.isEmpty()) {
-        request.setPayload(sData);
-        benchData.sendBytes += request.payload().size();
+    if (!sData.empty()) {
+        auto nextPayload = Bench::nextPayload(sData);
+        benchData.sendBytes += nextPayload.size();
+        request.setPayload(std::move(nextPayload));
     }
     request.setPing(benchData.callCount++);
 
@@ -179,8 +181,11 @@ void QtGrpcClientBenchmark::clientStreaming()
         // Run on event loop
         mTimer.start();
         for (; benchData.callCount < mCalls; ++benchData.callCount) {
-            if (request.hasPayload())
-                benchData.sendBytes += request.payload().size();
+            if (!sData.empty()) {
+                auto nextPayload = Bench::nextPayload(sData);
+                benchData.sendBytes += nextPayload.size();
+                request.setPayload(std::move(nextPayload));
+            }
             request.setPing(benchData.callCount);
             stream->writeMessage(request);
         }
@@ -213,10 +218,11 @@ void QtGrpcClientBenchmark::bidiStreaming()
     qt::bench::BiDiStreamingRequest request;
     qt::bench::BiDiStreamingResponse response;
 
-    if (!sData.isEmpty()) {
-        request.setPayload(sData);
-        benchData.sendBytes += request.payload().size();
-        copts.addMetadata("write-size", QString::number(sData.size()).toUtf8());
+    if (!sData.empty()) {
+        auto nextPayload = Bench::nextPayload(sData);
+        benchData.sendBytes += nextPayload.size();
+        copts.addMetadata("write-size", QByteArray::number(nextPayload.size()));
+        request.setPayload(std::move(nextPayload));
     }
 
     auto stream = mClient.BiDiStreaming(request, copts);
@@ -226,8 +232,11 @@ void QtGrpcClientBenchmark::bidiStreaming()
         // Run on event loop
         mTimer.start();
         for (; benchData.callCount < mCalls; ++benchData.callCount) {
-            if (request.hasPayload())
-                benchData.sendBytes += request.payload().size();
+            if (!sData.empty()) {
+                auto nextPayload = Bench::nextPayload(sData);
+                benchData.sendBytes += nextPayload.size();
+                request.setPayload(std::move(nextPayload));
+            }
             stream->writeMessage(request);
         }
         stream->writesDone();

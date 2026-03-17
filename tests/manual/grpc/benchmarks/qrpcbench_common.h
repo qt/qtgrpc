@@ -22,6 +22,7 @@
 #include <format>
 #include <iomanip>
 #include <iostream>
+#include <random>
 #include <ranges>
 #include <string>
 #include <string_view>
@@ -183,6 +184,25 @@ inline google::protobuf::Timestamp getTimestamp()
                            .time_since_epoch()
                            .count();
     return endNanos - startNanos;
+}
+
+template <typename Buffer>
+[[nodiscard]] inline std::vector<Buffer> generatePayloads(std::size_t size, std::size_t count = 8)
+{
+    std::mt19937_64 rng(42);
+    std::vector<Buffer> payloads(count);
+    for (auto &buf : payloads) {
+        buf.resize(size);
+        std::generate(buf.begin(), buf.end(),
+                      [&] { return static_cast<typename Buffer::value_type>(rng()); });
+    }
+    return payloads;
+}
+
+[[nodiscard]] inline const auto &nextPayload(const auto &payloads) noexcept
+{
+    static std::size_t cursor{ 0 };
+    return payloads[(cursor += 1) % payloads.size()];
 }
 
 } // namespace Bench

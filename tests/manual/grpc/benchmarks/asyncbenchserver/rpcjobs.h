@@ -125,8 +125,10 @@ public:
         case State::Created: {
             new ServerStreaming(mCQ, mService);
 
-            if (mRequest.has_payload())
-                mResponse.mutable_payload()->assign(mRequest.payload().size(), 'x');
+            if (mRequest.has_payload()) {
+                mResponseData = Bench::generatePayloads<std::string>(mRequest.payload().size(), 2);
+                mResponse.set_payload(Bench::nextPayload(mResponseData));
+            }
             mResponse.set_pong(mPongCount);
 
             mServerStream.Write(mResponse, this);
@@ -137,6 +139,7 @@ public:
                 mServerStream.Finish(grpc::Status::OK, this);
                 mState = State::Finished;
             } else {
+                mResponse.set_payload(Bench::nextPayload(mResponseData));
                 mResponse.set_pong(mPongCount);
                 mServerStream.Write(mResponse, this);
             }
@@ -165,6 +168,7 @@ private:
     Request mRequest;
     Response mResponse;
     uint64_t mPongCount = 0;
+    std::vector<std::string> mResponseData;
 };
 
 class ClientStreaming final : public RpcJob
@@ -196,14 +200,13 @@ public:
         } break;
         case State::Reading: {
             if (!ok) {
+                if (mRequest.has_payload())
+                    mResponse.mutable_payload()->swap(*mRequest.mutable_payload());
                 mResponse.set_pong(mPingCount);
                 mClientStream.Finish(mResponse, grpc::Status::OK, this);
                 mState = State::Finished;
             } else {
                 ++mPingCount;
-                if (mRequest.has_payload() && !mResponse.has_payload())
-                    mResponse.mutable_payload()->assign(mRequest.payload().size(), 'x');
-                mRequest.set_ping(mPingCount);
                 mClientStream.Read(&mRequest, this);
             }
         } break;
@@ -262,8 +265,10 @@ public:
             } else {
                 mWriteQueries = std::stoul({ it->second.data() });
             }
-            if (const auto it = md.find("write-size"); it != md.cend())
-                mWriteSize = std::stoul({ it->second.data() });
+            if (const auto it = md.find("write-size"); it != md.cend()) {
+                const auto payloadSize = std::stoul({ it->second.data() });
+                mResponseData = Bench::generatePayloads<std::string>(payloadSize, 2);
+            }
             mState = State::Processing;
             mReadOperation = new ReadOperation(this);
             mWriteOperation = new WriteOperation(this);
@@ -333,8 +338,8 @@ private:
     public:
         explicit WriteOperation(BiDiStreaming *parent) : mParent(parent)
         {
-            if (mParent->mWriteSize > 0)
-                mResponse.set_payload(std::string(mParent->mWriteSize, 'x'));
+            if (mParent->mResponseData.size() > 0)
+                mResponse.set_payload(Bench::nextPayload(mParent->mResponseData));
             mParent->mStream.Write(mResponse, this);
             ++mWritten;
         }
@@ -354,6 +359,7 @@ private:
                 return;
             }
 
+            mResponse.set_payload(Bench::nextPayload(mParent->mResponseData));
             mParent->mStream.Write(mResponse, this);
             ++mWritten;
         }
@@ -371,9 +377,10 @@ private:
     ReadOperation *mReadOperation{};
     WriteOperation *mWriteOperation{};
     size_t mWriteQueries = 0;
-    size_t mWriteSize = 0;
     std::atomic<bool> mReadDone = false;
     std::atomic<bool> mWriteDone = false;
+
+    std::vector<std::string> mResponseData;
 };
 
 #endif // RPCJOBS_H
