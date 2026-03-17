@@ -352,6 +352,7 @@ private:
                 return;
 
             if (mWritten >= mParent->mWriteQueries) {
+                mParent->mWriteDone = true;
                 if (mParent->mReadDone || !ok) { // both ends finished
                     mParent->mState = State::Finished;
                     mParent->mStream.Finish(grpc::Status::OK, mParent);
