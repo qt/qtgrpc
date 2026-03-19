@@ -80,22 +80,38 @@ ApplicationWindow {
             anchors.leftMargin: 15
             anchors.rightMargin: 15
 
-            component NavigationButton: Button {
-                Material.roundedScale: Material.SmallScale
-                Layout.fillHeight: true
-                Layout.preferredWidth: 120
-                visible: mainView.depth > 1
-                enabled: mainView.depth > 1
-                clip: true
-            }
-
-            NavigationButton {
+            ToolButton {
+                id: settingsButton
                 Layout.alignment: Qt.AlignLeft
-                text: "Logout"
-                onPressed: {
-                    if (userStatusButton.checked)
-                        userStatusButton.animateClick()
-                    ChatEngine.logout()
+                Layout.fillHeight: true
+                Layout.preferredWidth: userStatusButton.implicitWidth
+                Material.roundedScale: Material.SmallScale
+                icon.source: "res/gear.svg"
+                onPressed: settingsMenu.popup(settingsButton, 0, height)
+
+                Menu {
+                    id: settingsMenu
+
+                    MenuItem {
+                        text: "Show Logs"
+                        onTriggered: logsDialog.open()
+                    }
+
+                    MenuSeparator {
+                        visible: mainView.depth > 1
+                        height: visible ? implicitHeight : 0
+                    }
+
+                    MenuItem {
+                        text: "Logout"
+                        visible: mainView.depth > 1
+                        height: visible ? implicitHeight : 0
+                        onTriggered: {
+                            if (userStatusButton.checked)
+                                userStatusButton.animateClick()
+                            ChatEngine.logout()
+                        }
+                    }
                 }
             }
 
@@ -111,9 +127,16 @@ ApplicationWindow {
                 clip: true
             }
 
-            NavigationButton {
+            Button {
                 id: userStatusButton
+
                 Layout.alignment: Qt.AlignRight
+                Layout.fillHeight: true
+                Layout.preferredWidth: 120
+                Material.roundedScale: Material.SmallScale
+
+                enabled: mainView.depth > 1
+                clip: true
                 checkable: true
                 text: userStatusView.count + " ONLINE"
                 onPressed: userStatus.height = checked ? 0 : userStatusView.contentHeight
@@ -235,5 +258,13 @@ ApplicationWindow {
             }
         }
     }
-
+    LogDialog {
+        id: logsDialog
+        parent: Overlay.overlay
+        anchors.centerIn: parent
+        width: root.width * 0.95
+        height: root.height * 0.8
+        leftPadding: 4
+        rightPadding: 4
+    }
 }

@@ -37,6 +37,7 @@ qt_add_qml_module(qtgrpc_chat_client
         Main.qml
         ChatView.qml
         LoginView.qml
+        LogDialog.qml
         StatusDisplay.qml
         ChatMessages/FileContinuationDelegate.qml
         ChatMessages/FileDelegate.qml
@@ -47,11 +48,14 @@ qt_add_qml_module(qtgrpc_chat_client
         res/send.svg
         res/generic_file.svg
         res/attach.svg
+        res/gear.svg
     SOURCES
         chatengine.h chatengine.cpp
         clientworker.h clientworker.cpp
         userstatusmodel.h userstatusmodel.cpp
         chatmessagemodel.h chatmessagemodel.cpp
+        logginginterceptor.h logginginterceptor.cpp
+        logmodel.h logmodel.cpp
 )
 
 qt_add_resources(qtgrpc_chat_client "resources"

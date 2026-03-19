@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
 #include "clientworker.h"
+#include "logginginterceptor.h"
 #include "chatmessages.qpb.h"
 
 #include <QtQml/QQmlFile>
@@ -9,6 +10,7 @@
 #include <QtGrpc/QGrpcCallOptions>
 #include <QtGrpc/QGrpcChannelOptions>
 #include <QtGrpc/QGrpcHttp2Channel>
+#include <QtGrpc/QGrpcInterceptorChain>
 
 #include <QtNetwork/QSslCertificate>
 #include <QtNetwork/QSslConfiguration>
@@ -25,7 +27,8 @@
 using namespace std::chrono_literals;
 using namespace Backend;
 
-ClientWorker::ClientWorker(QObject *parent) : QObject(parent)
+ClientWorker::ClientWorker(std::shared_ptr<LogModel> logger, QObject *parent)
+    : QObject(parent), m_logModel(std::move(logger))
 {
 }
 
@@ -345,7 +348,15 @@ bool ClientWorker::initializeClient()
 #endif
 
     m_client = std::make_unique<chat::QtGrpcChat::Client>();
-    if (!m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(m_hostUri, opts)))
+
+    //! [interceptor-1]
+    QGrpcInterceptorChain interceptorChain;
+    interceptorChain.add(std::make_unique<LoggingInterceptor>(m_logModel));
+    auto channel = std::make_shared<QGrpcHttp2Channel>(m_hostUri, opts,
+                                                       std::move(interceptorChain));
+    //! [interceptor-1]
+
+    if (!m_client->attachChannel(std::move(channel)))
         return false;
     m_hostUriDirty = false;
     return true;
