@@ -7,6 +7,8 @@
 #include "chatmessages.qpb.h"
 #include "qtgrpcchat_client.grpc.qpb.h"
 
+#include "logmodel.h"
+
 #include <QtQmlIntegration/QtQmlIntegration>
 
 #include <QtCore/QDir>
@@ -38,7 +40,7 @@ class ClientWorker : public QObject
     Q_OBJECT
 public:
 //! [client-2a]
-    explicit ClientWorker(QObject *parent = nullptr);
+    explicit ClientWorker(std::shared_ptr<LogModel> logger, QObject *parent = nullptr);
     ~ClientWorker() override;
 
 //! [client-2a]
@@ -82,6 +84,7 @@ private:
     QList<QUrl> m_fileRequestBuffer;
 
     chat::Credentials m_userCredentials;
+    std::shared_ptr<LogModel> m_logModel;
 
     Q_DISABLE_COPY_MOVE(ClientWorker)
 };

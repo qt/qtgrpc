@@ -401,6 +401,65 @@
     provide the \c{"h2"} protocol with
     \l{QSslConfiguration::}{setAllowedNextProtocols}, as you are using HTTP/2.
 
+    \section1 Interceptors
+
+    The chat client uses a QGrpcInterceptorChain to observe all RPC activity.
+    During initialization, a \c{LoggingInterceptor} attaches to the channel,
+    giving the application a live view of every operation that passes through
+    the chain.
+
+    \snippet chat/client/clientworker.cpp interceptor-1
+
+    You construct a QGrpcInterceptorChain and add the interceptor to it using
+    its \c{unique_ptr} overload, which transfers ownership to the chain. You
+    then move the chain into the QGrpcHttp2Channel constructor. After the
+    channel takes ownership, the interceptor remains valid for the entire
+    lifetime of the channel.
+
+    \snippet chat/client/logginginterceptor.h interceptor-2
+
+    \c{LoggingInterceptor} implements all available interceptor interfaces,
+    covering the full RPC lifecycle. It holds a \c{shared_ptr} to a
+    \c{LogModel} for adding log entries, and a \c{QHash} to track active
+    operations by ID.
+
+    \details {Logging interceptor implementation}
+
+        The following snippets show how the \c{onStart} and \c{onFinished}
+        interception points work. The remaining interception points perform
+        basic logging of their respective events.
+
+        \snippet chat/client/logginginterceptor.cpp interceptor-3
+
+        In \c{onStart}, the interceptor stores the current timestamp in a QHash
+        keyed by the \l{QGrpcOperationContext::}{operationId()}. Returning
+        \c{Continuation::Proceed} passes the call down the chain.
+
+        \snippet chat/client/logginginterceptor.cpp interceptor-4
+
+        In \c{onFinished}, the stored timestamp is looked up by operation ID
+        to compute the RPC duration. The log level is derived from the status
+        code, and the final entry is added to the \c{LogModel}.
+
+    \enddetails
+
+    The accumulated log entries are exposed to QML through the
+    \c{ChatEngine::logModel} property. A dedicated \c{LogDialog} renders them
+    in a ListView:
+
+    \snippet chat/client/LogDialog.qml interceptor-5a
+    \dots 4
+    \snippet chat/client/LogDialog.qml interceptor-5b
+    \dots 16
+    \snippet chat/client/LogDialog.qml interceptor-5c
+
+    Each delegate shows the log level, timestamp, and RPC details. The
+    \c{LogModel} prepends new entries so the most recent activity appears
+    at the top.
+
+    \image {interceptor_logs.webp} {Interceptor Logs dialog with RPC activity
+    entries}
+
     \section1 Source files
 
     \sa {All Qt Examples}

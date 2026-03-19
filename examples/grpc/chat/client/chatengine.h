@@ -8,6 +8,7 @@
 #include "clientworker.h"
 #include "chatmessagemodel.h"
 #include "userstatusmodel.h"
+#include "logmodel.h"
 
 #include <QtQmlIntegration/QtQmlIntegration>
 
@@ -30,6 +31,7 @@ class ChatEngine : public QObject
 
     Q_PROPERTY(UserStatusModel *userStatusModel READ userStatusModel NOTIFY chatStreamFinished)
     Q_PROPERTY(ChatMessageModel *chatMessageModel READ chatMessageModel NOTIFY chatStreamFinished)
+    Q_PROPERTY(LogModel *logModel READ logModel CONSTANT)
     Q_PROPERTY(QString username READ username NOTIFY chatStateChanged)
     Q_PROPERTY(QUrl hostUri READ hostUri WRITE setHostUri NOTIFY hostUriChanged)
     Q_PROPERTY(Backend::ChatState chatState READ chatState NOTIFY chatStateChanged)
@@ -57,6 +59,7 @@ public:
 
     UserStatusModel *userStatusModel() noexcept { return m_userStatusModel.get(); }
     ChatMessageModel *chatMessageModel() noexcept { return m_chatMessageModel.get(); }
+    LogModel *logModel() noexcept { return m_logModel.get(); }
 
     [[nodiscard]] const QString &username() const & { return m_userCredentials.name(); }
 
@@ -81,6 +84,7 @@ private:
     void setUserStatus(chat::UserStatus::Type status);
 
 private:
+    std::shared_ptr<LogModel> m_logModel;
     QThread m_clientThread;
     ClientWorker *m_clientWorker;
     QUrl m_hostUri;

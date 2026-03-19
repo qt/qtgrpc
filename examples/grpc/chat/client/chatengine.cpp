@@ -19,7 +19,8 @@
 #include <QtCore/QUrl>
 
 ChatEngine::ChatEngine(QObject *parent)
-    : QObject(parent), m_clientWorker(new ClientWorker()), m_clipboard(QGuiApplication::clipboard())
+    : QObject(parent), m_logModel(std::make_shared<LogModel>()),
+      m_clientWorker(new ClientWorker(m_logModel)), m_clipboard(QGuiApplication::clipboard())
 {
     initialize();
 #if QT_CONFIG(ssl)
