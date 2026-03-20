@@ -73,10 +73,11 @@ ApplicationWindow {
 
     // Navigation header containing buttons and information text
     header: Rectangle {
-        height: 40
+        height: 40 + root.SafeArea.margins.top
         color: Qt.darker(root.darkColor, 1.2)
         RowLayout {
             anchors.fill: parent
+            anchors.topMargin: root.SafeArea.margins.top
             anchors.leftMargin: 15
             anchors.rightMargin: 15
 

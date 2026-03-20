@@ -86,7 +86,7 @@ void ClientWorker::registerUser(const chat::Credentials &credentials)
         return;
     }
 
-    auto reply = m_client->Register(credentials, QGrpcCallOptions{}.setDeadlineTimeout(5s));
+    auto reply = m_client->Register(credentials, QGrpcCallOptions{}.setDeadlineTimeout(2s));
     const auto *replyPtr = reply.get();
     connect(
         replyPtr, &QGrpcCallReply::finished, this,
@@ -138,8 +138,8 @@ void ClientWorker::logout()
 
 void ClientWorker::sendFile(const QUrl &url)
 {
-    // By default gRPC accepts a maximum message size of 4 MiB
-    constexpr auto MaxMessageSize = quint64(3.9 * 1024 * 1024);
+    // Send in chunks of 128KiB
+    constexpr auto MaxMessageSize = quint64(128 * 1024);
 
     if (m_chatState == ChatState::Connecting) {
         m_fileRequestBuffer.push_back(url);
