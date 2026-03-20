@@ -6,6 +6,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import QtCore
 
 import QtGrpcChat
 import QtGrpcChat.Proto
@@ -56,6 +57,7 @@ Rectangle {
             placeholderText: qsTr("user password")
             inputMethodHints: Qt.ImhHiddenText | Qt.ImhSensitiveData
             echoMode: TextInput.Password
+            font.pointSize: 14
         }
 
 //! [client-qml-3c]
@@ -128,7 +130,10 @@ Rectangle {
             const ips = ChatEngine.findLocalIps();
             if (ips.length === 0)
                 clientIpField.text = qsTr("No network connection");
-            clientIpField.text = ips.join(", ");
+            else
+                clientIpField.text = ips.join(", ");
+            if (settings.hostUri !== "")
+                ChatEngine.hostUri = settings.hostUri
             hostUriField.text = ChatEngine.hostUri
         }
 
@@ -208,6 +213,7 @@ Rectangle {
                             return;
                         }
                         ChatEngine.hostUri = hostUriField.text
+                        settings.hostUri = hostUriField.text
                         settingsDialog.accept()
                     }
                 }
@@ -216,4 +222,8 @@ Rectangle {
 
     }
 
+    Settings {
+        id: settings
+        property string hostUri: ""
+    }
 }
