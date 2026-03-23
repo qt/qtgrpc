@@ -51,7 +51,7 @@ QGrpcCallReply::~QGrpcCallReply() = default;
 
 bool QGrpcCallReply::event(QEvent *event)
 {
-    return QObject::event(event);
+    return QGrpcOperation::event(event);
 }
 
 QT_END_NAMESPACE
