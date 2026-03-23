@@ -135,6 +135,7 @@ struct common {
     static bool isQtType(const FieldDescriptor *field);
     static bool isOverridden(const FieldDescriptor *field);
     static bool isPureMessage(const FieldDescriptor *field);
+    static bool isRepeatedMessage(const FieldDescriptor *field);
 
     using IterateMessageLogic = std::function<void(const FieldDescriptor *, PropertyMap &)>;
     static void iterateMessageFields(const Descriptor *message, const IterateMessageLogic &callback);

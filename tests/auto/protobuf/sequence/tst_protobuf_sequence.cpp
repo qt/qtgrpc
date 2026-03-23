@@ -39,7 +39,7 @@ void QtProtobufGenerationSequenceTest::cyclingTest()
 
 void QtProtobufGenerationSequenceTest::mapRepeatedFieldSequenceTest()
 {
-    qProtobufAssertMessagePropertyRegistered<sequence::RepeatedFieldSequence, QList<sequence::RepeatedFieldSequence2>>(1, "QList<qtprotobufnamespace::tests::sequence::RepeatedFieldSequence2>", "testFieldData");
+    qProtobufAssertMessagePropertyRegistered<sequence::RepeatedFieldSequence, QList<sequence::RepeatedFieldSequence2>>(1, "QList<qtprotobufnamespace::tests::sequence::RepeatedFieldSequence2>", "testField");
     qProtobufAssertMessagePropertyRegistered<sequence::MapFieldSequence, sequence::MapFieldSequence::TestFieldEntry>(1, "qtprotobufnamespace::tests::sequence::MapFieldSequence::TestFieldEntry", "testField");
 }
 

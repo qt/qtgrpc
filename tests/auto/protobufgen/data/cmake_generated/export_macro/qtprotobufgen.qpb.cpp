@@ -3459,12 +3459,12 @@ static constexpr struct {
         // Property indices:
         0, /* = field1 */
         2, /* = field2 */
-        3, /* = field3 */
-        5, /* = field4 */
-        6, /* = field5 */
-        7, /* = field6 */
-        9, /* = field7 */
-        11, /* = field8 */
+        4, /* = field3 */
+        6, /* = field4 */
+        7, /* = field5 */
+        8, /* = field6 */
+        10, /* = field7 */
+        12, /* = field8 */
         // Field flags:
         uint(QtProtobufPrivate::FieldFlag::ExplicitPresence | QtProtobufPrivate::FieldFlag::Message), /* = field1 */
         uint(QtProtobufPrivate::FieldFlag::Repeated | QtProtobufPrivate::FieldFlag::Message), /* = field2 */

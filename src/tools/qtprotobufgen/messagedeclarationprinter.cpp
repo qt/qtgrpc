@@ -240,15 +240,16 @@ void MessageDeclarationPrinter::printProperties()
                 return;
             }
 
-            if (field->is_repeated() && !field->is_map()) {
-                // Non-message list properties don't require an extra QQmlListProperty to access
-                // their data, so the property name should not contain the 'Data' suffix
-                if (field->type() == FieldDescriptor::TYPE_MESSAGE) {
-                    propertyTemplate
-                        = CommonTemplates::PropertyRepeatedMessageTemplate(propertyType);
-                } else {
-                    propertyTemplate = CommonTemplates::PropertyRepeatedTemplate(propertyType);
-                }
+            if (common::isRepeatedMessage(field)) {
+                m_printer->Print(
+                    propertyMap,
+                    CommonTemplates::PropertyRepeatedMessageTemplate(propertyType));
+                m_printer->Print(
+                    propertyMap,
+                    CommonTemplates::PropertyRepeatedMessageTemplateDeprecated(propertyType));
+                return;
+            } else if (field->is_repeated() && !field->is_map()) {
+                propertyTemplate = CommonTemplates::PropertyRepeatedTemplate(propertyType);
             }
             m_printer->Print(propertyMap, propertyTemplate);
         });

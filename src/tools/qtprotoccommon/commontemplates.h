@@ -56,6 +56,7 @@ public:
 
     static const char *PropertyTemplate(Options::FinalPolicy policy);
     static const char *PropertyRepeatedTemplate(Options::FinalPolicy policy);
+    static const char *PropertyRepeatedMessageTemplateDeprecated(Options::FinalPolicy policy);
     static const char *PropertyRepeatedMessageTemplate(Options::FinalPolicy policy);
     static const char *PropertyMessageTemplate(Options::FinalPolicy policy);
     static const char *PropertyQmlMessageTemplate(Options::FinalPolicy policy);

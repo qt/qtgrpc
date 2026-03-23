@@ -253,13 +253,34 @@ const char *CommonTemplates::PropertyRepeatedTemplate(Options::FinalPolicy polic
     }
 }
 
+// ### Qt7: Remove usage of the deprecated $property_name$Data property and related logic
+// The property name for list of messages was generated incorrectly.
+// The correct way is to use the $property_name$, but we used $property_name$Data instead.
+// To fix the problem we should add the same property with correct name and
+// we should 'deprecate' the old one. But there is no way to deprecate a property yet.
+// See QTBUG-132809. So, we can just add a comment, that property is 'deprecated'.
+const char *CommonTemplates::PropertyRepeatedMessageTemplateDeprecated(Options::FinalPolicy policy)
+{
+    if (policy == Options::FinalPolicy::Final) {
+        return "/* The property $property_name$Data is deprecated and will be removed in Qt 7. "
+               "Please use the property $property_name$ instead. */\n"
+               "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
+               "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
+    } else {
+        return "/* The property $property_name$Data is deprecated and will be removed in Qt 7. "
+               "Please use the property $property_name$ instead. */\n"
+               "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
+               "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
+    }
+}
+
 const char *CommonTemplates::PropertyRepeatedMessageTemplate(Options::FinalPolicy policy)
 {
     if (policy == Options::FinalPolicy::Final) {
-        return "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
+        return "Q_PROPERTY($property_list_type$ $property_name$ READ $property_name$ WRITE "
                "set$property_name_cap$ SCRIPTABLE $scriptable$ FINAL)\n";
     } else {
-        return "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
+        return "Q_PROPERTY($property_list_type$ $property_name$ READ $property_name$ WRITE "
                "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
     }
 }
