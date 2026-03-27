@@ -27,6 +27,11 @@ if(NOT grpc_cpp_plugin OR NOT TARGET WrapProtoc::WrapProtoc
     return()
 endif()
 
+# grpc-c++ has issues when mixing ASan and non-ASan builds.
+# See https://github.com/grpc/grpc/issues/40935.
+# Re-enable once grpc supports ASan or when we build grpc with ASan in CI.
+qt_internal_skip_sanitizer()
+
 add_library(grpc_mock_server STATIC mockserver.h mockserver.cpp)
 target_include_directories(grpc_mock_server
     PUBLIC
@@ -40,3 +45,5 @@ target_link_libraries(grpc_mock_server
         Qt::Test
 )
 
+# Note the qt_internal_skip_sanitizer() above when removing.
+qt_internal_skip_linking_sanitizer()
