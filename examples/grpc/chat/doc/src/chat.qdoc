@@ -9,7 +9,7 @@
     \title QtGrpc Chat
     \brief A chat application to share messages of any kind in a chat room.
 
-    The \e Chat example demonstrates advanced usage of the QtGrpc client API.
+    The \e Chat example demonstrates advanced usage of the Qt GRPC client API.
     The server enables users to register and authenticate, allowing them to
     join the \e ChatRoom. Once joined, users can share various message types in
     the \e ChatRoom, such as text messages, images, user activity or any other
@@ -43,7 +43,7 @@
 
     \list
         \li Communication through long-lived \l{QGrpcBidiStream}.
-        \li Using the QtGrpc client from a worker \l{QThread}{thread}.
+        \li Using the \c{QtGrpc} client from a worker \l{QThread}{thread}.
         \li Using the QtProtobufQtCoreTypes module in the protobuf schema.
         \li Secure communication through \l{Secure Sockets Layer (SSL) Classes}{SSL}.
         \li Visualizing QtProtobuf messages in a QML ListView.
@@ -283,7 +283,7 @@
     The following imports are used in the QML code:
 
     \list
-        \li \c{QtGrpc}: Provides QtGrpc QML functionality, such as the
+        \li \c{QtGrpc}: Provides \l[QML]{QtGrpc} QML functionality, such as the
             \l{QtGrpc::}{StatusCode}.
         \li \c{QtGrpcChat}: Our application module, which includes components
             like the \c{ChatEngine} singleton.
