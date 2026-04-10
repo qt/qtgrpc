@@ -12,7 +12,6 @@
 #include <QtCore/q20utility.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qmetatype.h>
-#include <QtCore/qpair.h>
 #include <QtCore/qreadwritelock.h>
 #include <QtCore/qstring.h>
 
@@ -27,7 +26,7 @@ namespace {
 struct ProtobufOrderingRegistry
 {
     using ProtobufOrderingRegistryRecord =
-        QPair<QMetaType, QtProtobufPrivate::QProtobufPropertyOrdering>;
+        std::pair<QMetaType, QtProtobufPrivate::QProtobufPropertyOrdering>;
 
     void registerOrdering(QMetaType type, QtProtobufPrivate::QProtobufPropertyOrdering ordering)
     {
