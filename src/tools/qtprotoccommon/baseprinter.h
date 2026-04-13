@@ -37,8 +37,8 @@ public:
             return;
 
         ::google::protobuf::SourceLocation loc;
-        descriptor->GetSourceLocation(&loc);
-        printCommentsImpl(loc.leading_comments);
+        if (descriptor->GetSourceLocation(&loc))
+            printCommentsImpl(loc.leading_comments);
     }
     void Indent();
     void Outdent();
