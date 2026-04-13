@@ -3,11 +3,15 @@
 
 #include "basicmessages.qpb.h"
 #include "mapmessages.qpb.h"
-#include <QObject>
-#include <QProtobufSerializer>
-#include <QTest>
 
 #include <qtprotobuftestscommon.h>
+
+#include <QtProtobuf/qprotobufserializer.h>
+
+#include <QtTest/qtest.h>
+
+#include <QtCore/qbytearray.h>
+#include <QtCore/qobject.h>
 
 using namespace qtprotobufnamespace::tests;
 
@@ -62,7 +66,7 @@ void QtProtobufMapTypesSerializationTest::simpleFixed32ComplexMapSerializeTest()
                      result.toHex(), "3a180d0a00000012110810120d320b74656e207369787465656e",
                      "3a230d2a000000121c080a12183216666f757274792074776f2074656e207369787465656e",
                      "3a110d13000100120a080a120632045755543f"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 void QtProtobufMapTypesSerializationTest::simpleSFixed32ComplexMapSerializeTest()
@@ -95,7 +99,7 @@ void QtProtobufMapTypesSerializationTest::simpleSFixed32ComplexMapSerializeTest(
                                      "f2074656e207369787465656e",
                                      "4a180d0a00000012110810120d320b74656e207369787465656e",
                                      "4a110d13000100120a080a120632045755543f"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 void QtProtobufMapTypesSerializationTest::simpleInt32ComplexMapSerializeTest()
@@ -128,7 +132,7 @@ void QtProtobufMapTypesSerializationTest::simpleInt32ComplexMapSerializeTest()
                                      "274792074776f2074656e207369787465656e",
                                      "1a15080a12110810120d320b74656e207369787465656e",
                                      "1a1008938004120a080a120632045755543f"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 void QtProtobufMapTypesSerializationTest::simpleSInt32ComplexMapSerializeTest()
@@ -161,7 +165,7 @@ void QtProtobufMapTypesSerializationTest::simpleSInt32ComplexMapSerializeTest()
                      "0a200854121c080a12183216666f757274792074776f2074656e207369787465656e",
                      "0a1608a580081210080a120c320a6d696e7573205755543f",
                      "0a15081412110810120d320b74656e207369787465656e"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 void QtProtobufMapTypesSerializationTest::simpleUInt32ComplexMapSerializeTest()
@@ -193,7 +197,7 @@ void QtProtobufMapTypesSerializationTest::simpleUInt32ComplexMapSerializeTest()
                      result.toHex(), "2a1008938004120a080a120632045755543f",
                      "2a20082a121c080a12183216666f757274792074776f2074656e207369787465656e",
                      "2a15080a12110810120d320b74656e207369787465656e"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 void QtProtobufMapTypesSerializationTest::simpleFixed64ComplexMapSerializeTest()
@@ -226,7 +230,7 @@ void QtProtobufMapTypesSerializationTest::simpleFixed64ComplexMapSerializeTest()
                                      "422b09ffffffffffffffff1220082a121c321a6d696e757320666f7572747"
                                      "92074776f2074656e204d41414158",
                                      "4215091300010000000000120a080a120632045755543f"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 void QtProtobufMapTypesSerializationTest::simpleSFixed64ComplexMapSerializeTest()
@@ -259,7 +263,7 @@ void QtProtobufMapTypesSerializationTest::simpleSFixed64ComplexMapSerializeTest(
                                      "522d09d6ffffffffffffff1222080a121e321c6d696e757320666f7572747"
                                      "92074776f2074656e207369787465656e",
                                      "5215091300010000000000120a080a120632045755543f"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 void QtProtobufMapTypesSerializationTest::simpleInt64ComplexMapSerializeTest()
@@ -292,7 +296,7 @@ void QtProtobufMapTypesSerializationTest::simpleInt64ComplexMapSerializeTest()
                                      "222f08d6ffffffffffffffff011222080a121e321c6d696e757320666f757"
                                      "274792074776f2074656e207369787465656e",
                                      "221008938004120a080a120632045755543f"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 void QtProtobufMapTypesSerializationTest::simpleSInt64ComplexMapSerializeTest()
@@ -325,7 +329,7 @@ void QtProtobufMapTypesSerializationTest::simpleSInt64ComplexMapSerializeTest()
                                      "121008a68008120a080a120632045755543f",
                                      "122608531222080a121e321c6d696e757320666f757274792074776f20746"
                                      "56e207369787465656e"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 void QtProtobufMapTypesSerializationTest::simpleUInt64ComplexMapSerializeTest()
@@ -358,7 +362,7 @@ void QtProtobufMapTypesSerializationTest::simpleUInt64ComplexMapSerializeTest()
                      "3220082a121c080a12183216666f757274792074776f2074656e207369787465656e",
                      "321008938004120a080a120632045755543f",
                      "3214080a1210080b120c320a74656e20656c6576656e"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 void QtProtobufMapTypesSerializationTest::simpleStringComplexMapSerializeTest()
@@ -391,7 +395,7 @@ void QtProtobufMapTypesSerializationTest::simpleStringComplexMapSerializeTest()
                                      "6a140a055755543f3f120b080a120732053f5755543f",
                                      "6a350a157768657265206973206d792063617220647564653f121c080a121"
                                      "83216666f757274792074776f2074656e207369787465656e"),
-             result.toHex());
+             result.toHex().constData());
 }
 
 QTEST_MAIN(QtProtobufMapTypesSerializationTest)
