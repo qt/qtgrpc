@@ -5,8 +5,12 @@
 #ifndef QTPROTOBUFTESTSCOMMON_H
 #define QTPROTOBUFTESTSCOMMON_H
 
-#include <QMetaType>
-#include <QTest>
+#include <QtTest/qtest.h>
+
+#include <QtCore/qbytearrayview.h>
+#include <QtCore/qmetatype.h>
+
+#include <algorithm>
 
 template<typename MessageType, typename PropertyType>
 static void qProtobufAssertMessagePropertyRegistered(int fieldIndex, const char *propertyTypeName, const char *propertyName)
@@ -26,21 +30,22 @@ static void qProtobufAssertMessagePropertyRegistered(int fieldIndex, const char 
 }
 
 [[maybe_unused]]
-static bool compareSerializedChunks(const QString &actual, const char *chunk1, const char *chunk2,
-                                    const char *chunk3)
+static bool compareSerializedChunks(QByteArrayView actual, QByteArrayView chunk1,
+                                    QByteArrayView chunk2, QByteArrayView chunk3)
 {
-    return QLatin1StringView(chunk1) + QLatin1StringView(chunk2) + QLatin1StringView(chunk3)
-            == actual
-            || QLatin1StringView(chunk1) + QLatin1StringView(chunk3) + QLatin1StringView(chunk2)
-            == actual
-            || QLatin1StringView(chunk2) + QLatin1StringView(chunk1) + QLatin1StringView(chunk3)
-            == actual
-            || QLatin1StringView(chunk2) + QLatin1StringView(chunk3) + QLatin1StringView(chunk1)
-            == actual
-            || QLatin1StringView(chunk3) + QLatin1StringView(chunk2) + QLatin1StringView(chunk1)
-            == actual
-            || QLatin1StringView(chunk3) + QLatin1StringView(chunk1) + QLatin1StringView(chunk2)
-            == actual;
+    const qsizetype p1 = actual.indexOf(chunk1);
+    const qsizetype p2 = actual.indexOf(chunk2);
+    const qsizetype p3 = actual.indexOf(chunk3);
+    if (p1 < 0 || p2 < 0 || p3 < 0)
+        return false;
+    std::pair<qsizetype, qsizetype> iv[3] = {
+        { p1, p1 + chunk1.size() },
+        { p2, p2 + chunk2.size() },
+        { p3, p3 + chunk3.size() },
+    };
+    std::sort(std::begin(iv), std::end(iv));
+    return iv[0].first == 0 && iv[0].second == iv[1].first
+        && iv[1].second == iv[2].first && iv[2].second == actual.size();
 }
 
 #endif // QTPROTOBUFTESTSCOMMON_H
