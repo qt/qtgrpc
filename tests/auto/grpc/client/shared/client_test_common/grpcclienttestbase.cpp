@@ -7,8 +7,6 @@
 #include <QtNetwork/qtnetwork-config.h>
 #include <message_latency_defs.h>
 
-using namespace Qt::Literals::StringLiterals;
-
 void GrpcClientTestBase::initTestCase_data()
 {
     QTest::addColumn<GrpcClientTestBase::Channels>("type");
@@ -28,29 +26,6 @@ void GrpcClientTestBase::initTestCase_data()
                                                                     QUrl::StrictMode)));
 #endif
     }
-
-#ifdef TEST_GRPC_SERVER_SUPPORTS_JSON
-    if (m_channels.testFlag(Channel::Json)) {
-        QHash<QByteArray, QByteArray> md{
-            {"content-type"_ba, "application/grpc+json"}
-        };
-        QTest::newRow("Http2ClientJson")
-            << QFlags{ Channel::Qt }
-            << std::shared_ptr<
-                   QAbstractGrpcChannel>(new QGrpcHttp2Channel(QUrl("http://localhost:50051",
-                                                                    QUrl::StrictMode),
-                                                               QGrpcChannelOptions{}
-                                                                   .setMetadata(md)));
-
-        QTest::newRow("Http2ClientJsonUnix")
-            << QFlags{ Channel::Qt }
-            << std::shared_ptr<
-                   QAbstractGrpcChannel>(new QGrpcHttp2Channel(QUrl("unix:///tmp/qtgrpc_test.sock",
-                                                                    QUrl::StrictMode),
-                                                               QGrpcChannelOptions{}
-                                                                   .setMetadata(md)));
-    }
-#endif
 
 #if QT_CONFIG(ssl)
     if (m_channels.testFlag(Channel::Ssl)) {

@@ -30,7 +30,6 @@ public:
     QtGrpcClientUnaryCallTest()
         : GrpcClientTestBase(GrpcClientTestBase::Channels{
             GrpcClientTestBase::Channel::Qt,
-            GrpcClientTestBase::Channel::Json,
             #if !defined(Q_OS_DARWIN) && !defined(Q_OS_WIN32)
                             GrpcClientTestBase::Channel::Ssl,
             #endif
