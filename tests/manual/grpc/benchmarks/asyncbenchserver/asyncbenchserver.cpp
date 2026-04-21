@@ -37,19 +37,30 @@ public:
             std::shared_ptr<grpc::ServerCredentials> tcpCreds = grpc::InsecureServerCredentials();
             std::shared_ptr<grpc::ServerCredentials> tlsCreds;
             {
-                std::vector<grpc::experimental::IdentityKeyCertPair> identityPairs;
-                identityPairs.emplace_back(grpc::experimental::IdentityKeyCertPair{
+                auto provider = std::make_shared<grpc::experimental::InMemoryCertificateProvider>();
+                std::string sslRootKey(Bench::SslRootKey);
+                auto isOk = provider->UpdateRoot(sslRootKey).ok();
+                if (!isOk) {
+                    std::cerr << "failed to update SslRootKey\n";
+                    std::terminate();
+                }
+                std::vector<grpc::experimental::IdentityKeyOrSignerCertPair> identityPairs;
+                identityPairs.emplace_back(grpc::experimental::IdentityKeyOrSignerCertPair{
                     .private_key = std::string(Bench::SslKey.data(), Bench::SslKey.length()),
-                    .certificate_chain = std::string(Bench::SslCert.data(), Bench::SslCert.length()),
+                    .certificate_chain = std::string(Bench::SslCert.data(),
+                                                     Bench::SslCert.length()),
                 });
-                grpc::experimental::TlsServerCredentialsOptions
-                    tlsOpts(std::make_shared<grpc::experimental::StaticDataCertificateProvider>(
-                        std::string(Bench::SslRootKey.data(), Bench::SslRootKey.length()), identityPairs));
+                isOk = provider->UpdateIdentityKeyCertPair(std::move(identityPairs)).ok();
+                if (!isOk) {
+                    std::cerr << "Failed to update identity key\n";
+                    std::terminate();
+                }
+                auto tlsOpts = grpc::experimental::TlsServerCredentialsOptions::Create(provider)
+                                   .value();
+                tlsOpts.set_root_certificate_provider(provider);
                 // Needed for TLS debugging in wireshark (Edit > Preferences >
                 // Protocol > TLS > Master-Secret log filename)
                 tlsOpts.set_tls_session_key_log_file_path("sslkeylog.log");
-                tlsOpts.watch_root_certs();
-                tlsOpts.watch_identity_key_cert_pairs();
                 tlsOpts.set_cert_request_type(GRPC_SSL_REQUEST_CLIENT_CERTIFICATE_AND_VERIFY);
                 tlsCreds = grpc::experimental::TlsServerCredentials(tlsOpts);
             }
