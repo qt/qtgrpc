@@ -261,11 +261,15 @@ void MessageDefinitionPrinter::printUintData(const char *templateString)
             { "json_name",        std::string{ field->json_name() } },
         };
 
-        // Oneof and optional properties generate additional has<FieldName> property next to the
-        // field property one.
+        // Oneof and optional properties generate additional has<FieldName>
+        // property next to the field property one.
+        // The repeated message property also generates 2 properties per field:
+        // <FieldName> and <FieldName>Data (the old one).
+        // The old one is deprecated and should be removed in Qt7.
         if (common::isOneofField(field) || common::isOptionalField(field) ||
-            common::isPureMessage(field))
+            common::isPureMessage(field) || common::isRepeatedMessage(field)) {
             ++propertyIndex;
+        }
 
         m_printer->Print(variables, templateString);
 

@@ -25,7 +25,7 @@ using namespace qtprotobufnamespace::tests;
 
 void QtProtobufExternalPackageGenerationTest::repeatedExternalComplexMessageTest()
 {
-    const char *propertyName = "testExternalComplexData";
+    const char *propertyName = "testExternalComplex";
     qProtobufAssertMessagePropertyRegistered<RepeatedExternalComplexMessage, QList<qtprotobufnamespace1::externaltests::ExternalComplexMessage>>(
                 1, "QList<qtprotobufnamespace1::externaltests::ExternalComplexMessage>", propertyName);
 

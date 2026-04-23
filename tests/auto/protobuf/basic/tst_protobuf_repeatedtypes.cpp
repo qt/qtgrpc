@@ -259,6 +259,13 @@ void QtProtobufRepeatedTypesGenerationTest::moveOperatorRepeatedTest()
 
 void QtProtobufRepeatedTypesGenerationTest::repeatedComplexMessageCompareTest()
 {
+    const char *propertyName = "testRepeatedComplex";
+    qProtobufAssertMessagePropertyRegistered<RepeatedComplexMessage, QList<ComplexMessage>>(
+        1, "QList<ComplexMessage>", propertyName);
+
+    QVERIFY(RepeatedComplexMessage::staticPropertyOrdering.fieldFlags(0)
+            & QtProtobufPrivate::FieldFlag::Repeated);
+
     SimpleStringMessage stringMsg;
 
     ComplexMessage msg1;

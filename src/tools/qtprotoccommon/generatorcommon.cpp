@@ -467,6 +467,12 @@ bool common::isPureMessage(const FieldDescriptor *field)
             && !field->is_repeated() && !common::isQtType(field) && !common::isOverridden(field);
 }
 
+bool common::isRepeatedMessage(const FieldDescriptor *field)
+{
+    return field->type() == FieldDescriptor::TYPE_MESSAGE
+        && !field->is_map() && field->is_repeated();
+}
+
 void common::iterateMessageFields(const Descriptor *message, const IterateMessageLogic &callback)
 {
     int numFields = message->field_count();

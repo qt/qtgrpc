@@ -1088,6 +1088,8 @@ class MessageTypes final : public QProtobufMessage
     Q_PROTOBUF_OBJECT_EXPORT(QPB_TST_QTPROTOBUFGEN_NO_OPTIONS_EXPORT)
     Q_PROPERTY(qt::protobuf::ScalarTypes *field1_p READ field1_p WRITE setField1_p SCRIPTABLE false)
     Q_PROPERTY(bool hasField1 READ hasField1)
+    Q_PROPERTY(QList<qt::protobuf::ScalarTypes> field2 READ field2 WRITE setField2 SCRIPTABLE true)
+    /* The property field2Data is deprecated and will be removed in Qt 7. Please use the property field2 instead. */
     Q_PROPERTY(QList<qt::protobuf::ScalarTypes> field2Data READ field2 WRITE setField2 SCRIPTABLE true)
     Q_PROPERTY(qt::protobuf::ScalarTypes *field3_p READ field3_p WRITE setField3_p SCRIPTABLE false)
     Q_PROPERTY(bool hasField3 READ hasField3)

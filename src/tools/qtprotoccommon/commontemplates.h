@@ -56,6 +56,7 @@ public:
 
     static const char *PropertyTemplate();
     static const char *PropertyRepeatedTemplate();
+    static const char *PropertyRepeatedMessageTemplateDeprecated();
     static const char *PropertyRepeatedMessageTemplate();
     static const char *PropertyMessageTemplate();
     static const char *PropertyQmlMessageTemplate();

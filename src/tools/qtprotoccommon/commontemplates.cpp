@@ -242,9 +242,16 @@ const char *CommonTemplates::PropertyRepeatedTemplate()
     return "Q_PROPERTY($property_list_type$ $property_name$ READ $property_name$ WRITE "
            "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
 }
+const char *CommonTemplates::PropertyRepeatedMessageTemplateDeprecated()
+{
+    return "/* The property $property_name$Data is deprecated and will be removed in Qt 7. "
+           "Please use the property $property_name$ instead. */\n"
+           "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
+           "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
+}
 const char *CommonTemplates::PropertyRepeatedMessageTemplate()
 {
-    return "Q_PROPERTY($property_list_type$ $property_name$Data READ $property_name$ WRITE "
+    return "Q_PROPERTY($property_list_type$ $property_name$ READ $property_name$ WRITE "
            "set$property_name_cap$ SCRIPTABLE $scriptable$)\n";
 }
 const char *CommonTemplates::PropertyMessageTemplate()
