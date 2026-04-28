@@ -41,8 +41,8 @@ class QtGrpcClientEnd2EndTest : public QObject
     Q_OBJECT
 
 public:
-    static std::string serverHttpAddress() { return "localhost:50051"; }
-    static std::string serverHttpsAddress() { return "localhost:50052"; }
+    static std::string serverHttpAddress() { return "localhost:50061"; }
+    static std::string serverHttpsAddress() { return "localhost:50062"; }
     static std::string serverUnixAddress() { return "unix:///tmp/qtgrpc_test_end2end.sock"; }
     static std::string serverUnixAbstractAddress() { return "unix-abstract:qtgrpc_test_end2end"; }
     static std::vector<ListeningPort> serverListeningPorts()
