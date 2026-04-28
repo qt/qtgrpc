@@ -39,7 +39,7 @@ class QtGrpcClientInterceptorsTest : public QObject
     Q_OBJECT
 
 public:
-    static std::string serverAddress() { return "localhost:50051"; }
+    static std::string serverAddress() { return "localhost:50061"; }
 
     static std::vector<ListeningPort> serverPorts()
     {
