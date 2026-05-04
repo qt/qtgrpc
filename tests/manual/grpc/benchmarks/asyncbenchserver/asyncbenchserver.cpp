@@ -26,6 +26,10 @@ public:
 
     void run(const QList<QString> &transports)
     {
+        constexpr int numCompletionQueues = 1;      // scale to ~numCPUs/2 for better throughput
+        constexpr int threadsPerQueue = 1;          // Increase if CQ processing is the bottleneck
+        constexpr int initialInstancesPerQueue = 1; // raise for high concurrency
+
         State expected = State::Created;
         while (!mState.compare_exchange_weak(expected, State::Running)) {
             if (expected != State::Created)
@@ -73,15 +77,13 @@ public:
                 std::cout << std::format("Server listening on: {}, {}\n", t.toStdString(), address);
             }
             builder.RegisterService(&mService);
-            for (int i = 0; i < 1; ++i)
+            for (int i = 0; i < numCompletionQueues; ++i)
                 mCompletionQueues.emplace_back(builder.AddCompletionQueue());
             mServer = builder.BuildAndStart();
         }
 
-        // Pre-register multiple instances type across all CQs
-        constexpr size_t initial_instances = 1;
-        for (auto& cq : mCompletionQueues) {
-            for (size_t i = 0; i < initial_instances / mCompletionQueues.size(); ++i) {
+        for (auto &cq : mCompletionQueues) {
+            for (int i = 0; i < initialInstancesPerQueue; ++i) {
                 new UnaryCall(cq.get(), &mService);
                 new ServerStreaming(cq.get(), &mService);
                 new ClientStreaming(cq.get(), &mService);
@@ -89,9 +91,9 @@ public:
             }
         }
 
-        for (auto& cq : mCompletionQueues) {
-            mThreads.emplace_back([cq = cq.get()] { processRPCs(cq); });
-            // Add more threads for parallel RPC processing.
+        for (auto &cq : mCompletionQueues) {
+            for (int i = 0; i < threadsPerQueue; ++i)
+                mThreads.emplace_back([cq = cq.get()] { processRPCs(cq); });
         }
     }
 
