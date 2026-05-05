@@ -53,6 +53,9 @@ public:
     std::optional<bool> filterServerMetadata() const noexcept;
     void setFilterServerMetadata(bool value);
 
+    std::optional<quint64> maximumReceiveMessageSize() const noexcept;
+    void setMaximumReceiveMessageSize(quint64 size);
+
 private:
     std::optional<std::chrono::milliseconds> m_timeout;
     QMultiHash<QByteArray, QByteArray> m_metadata;
@@ -60,6 +63,7 @@ private:
     QHash<QByteArray, QByteArray> m_deprecatedMetadata;
 #endif
     std::optional<bool> m_filterServerMetadata;
+    std::optional<quint64> m_maximumReceiveMessageSize;
 };
 
 namespace QtGrpcPrivate {

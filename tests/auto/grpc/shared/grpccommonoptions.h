@@ -246,6 +246,19 @@ QT_WARNING_POP
         QCOMPARE_NE(o1.filterServerMetadata(), o1Detach.filterServerMetadata());
         QCOMPARE_EQ(o1.filterServerMetadata(), std::optional<bool>(true));
     }
+    void propertyMaximumReceiveMessageSize() const
+    {
+        T o1;
+        QCOMPARE_EQ(o1.maximumReceiveMessageSize(), std::nullopt);
+        auto o1Detach = o1;
+        o1.setMaximumReceiveMessageSize(1024 * 1024);
+        QCOMPARE_NE(o1.maximumReceiveMessageSize(), o1Detach.maximumReceiveMessageSize());
+        QCOMPARE_EQ(o1.maximumReceiveMessageSize(), std::optional<quint64>(1024 * 1024));
+
+        // 0 means unlimited
+        o1.setMaximumReceiveMessageSize(0);
+        QCOMPARE_EQ(o1.maximumReceiveMessageSize(), std::optional<quint64>(0));
+    }
     void streamsToDebug() const
     {
         T o;
@@ -277,6 +290,8 @@ QT_WARNING_POP
         o1.setDeadlineTimeout(1s);
         updateComparisonCheck();
         o1.setFilterServerMetadata(true);
+        updateComparisonCheck();
+        o1.setMaximumReceiveMessageSize(1024);
         updateComparisonCheck();
 
         if constexpr (std::is_same_v<T, QGrpcChannelOptions>) {

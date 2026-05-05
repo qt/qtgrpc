@@ -69,6 +69,9 @@ public:
     [[nodiscard]] Q_GRPC_EXPORT std::optional<bool> filterServerMetadata() const noexcept;
     Q_GRPC_EXPORT QGrpcCallOptions &setFilterServerMetadata(bool value);
 
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<quint64> maximumReceiveMessageSize() const;
+    Q_GRPC_EXPORT QGrpcCallOptions &setMaximumReceiveMessageSize(quint64 size);
+
 private:
     QExplicitlySharedDataPointer<QGrpcCallOptionsPrivate> d_ptr;
 

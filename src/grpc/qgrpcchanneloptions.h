@@ -75,6 +75,9 @@ public:
     [[nodiscard]] Q_GRPC_EXPORT std::optional<bool> filterServerMetadata() const noexcept;
     Q_GRPC_EXPORT QGrpcChannelOptions &setFilterServerMetadata(bool value);
 
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<quint64> maximumReceiveMessageSize() const;
+    Q_GRPC_EXPORT QGrpcChannelOptions &setMaximumReceiveMessageSize(quint64 size);
+
     [[nodiscard]] Q_GRPC_EXPORT QGrpcSerializationFormat serializationFormat() const;
     Q_GRPC_EXPORT QGrpcChannelOptions &
     setSerializationFormat(const QGrpcSerializationFormat &format);

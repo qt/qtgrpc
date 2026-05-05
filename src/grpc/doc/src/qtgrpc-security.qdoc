@@ -27,6 +27,19 @@
         incoming data are vulnerable to injection attacks.
         For more information, see \l{Handling Untrusted Data}.
 
+    \li Limit the maximum incoming message size. By default, QtGrpc rejects
+        incoming messages larger than 4 MiB (matching the \gRPC specification).
+        The limit applies to the decoded gRPC frame payload after
+        transport-level decryption and any per-message decompression. You can
+        raise, lower, or remove this limit per channel or per individual RPC
+        using \l{QGrpcChannelOptions::setMaximumReceiveMessageSize()} or
+        \l{QGrpcCallOptions::setMaximumReceiveMessageSize()}. A value of \c{0}
+        disables the QtGrpc receive size limit; the effective maximum size is
+        then determined by the underlying channel implementation. The
+        environment variable \c{QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE} sets a
+        global fallback used only when no C++ option is configured. The value
+        is sampled once per channel construction.
+
     \li Set rate limits and monitor traffic to prevent misuse.
         Qt GRPC can be vulnerable to denial-of-service attacks and setting
         limits and thorough testing can help with reducing the risk of

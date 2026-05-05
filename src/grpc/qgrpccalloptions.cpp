@@ -300,16 +300,43 @@ QGrpcCallOptions &QGrpcCallOptions::setFilterServerMetadata(bool value)
     return *this;
 }
 
+/*!
+    \include qgrpccommonoptions.cpp maximumReceiveMessageSize
+    \sa QGrpcChannelOptions::maximumReceiveMessageSize()
+*/
+std::optional<quint64> QGrpcCallOptions::maximumReceiveMessageSize() const
+{
+    Q_D(const QGrpcCallOptions);
+    return d->maximumReceiveMessageSize();
+}
+
+/*!
+    \include qgrpccommonoptions.cpp setMaximumReceiveMessageSize
+    \note Setting this field \b{overrides} the corresponding channel options field.
+    \sa QGrpcChannelOptions::setMaximumReceiveMessageSize()
+*/
+QGrpcCallOptions &QGrpcCallOptions::setMaximumReceiveMessageSize(quint64 size)
+{
+    if (d_ptr->maximumReceiveMessageSize() == size)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcCallOptions);
+    d->setMaximumReceiveMessageSize(size);
+    return *this;
+}
+
 /*
 //! [compares]
-    Returns \c true if the \l{deadlineTimeout}, \l{filterServerMetadata}
-    and \l{metadata(QtGrpc::MultiValue_t)} in \a lhs and \a rhs are
+    Returns \c true if the \l{deadlineTimeout}, \l{filterServerMetadata},
+    \l{maximumReceiveMessageSize}, and \l{metadata(QtGrpc::MultiValue_t)} in \a lhs
+    and \a rhs are
 //! [compares]
 */
 bool comparesEqual(const QGrpcCallOptions &lhs, const QGrpcCallOptions &rhs)
 {
     return lhs.deadlineTimeout() == rhs.deadlineTimeout()
         && lhs.filterServerMetadata() == rhs.filterServerMetadata()
+        && lhs.maximumReceiveMessageSize() == rhs.maximumReceiveMessageSize()
         && lhs.metadata(QtGrpc::MultiValue) == rhs.metadata(QtGrpc::MultiValue);
 }
 
@@ -339,8 +366,9 @@ QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts)
     const QDebugStateSaver save(debug);
     debug.nospace().noquote();
     debug << "QGrpcCallOptions(deadline: " << callOpts.deadlineTimeout()
-          << ", metadata: " << callOpts.metadata(QtGrpc::MultiValue) << ", filterServerMetadata: "
-          << callOpts.filterServerMetadata() << ')';
+          << ", metadata: " << callOpts.metadata(QtGrpc::MultiValue)
+          << ", filterServerMetadata: " << callOpts.filterServerMetadata()
+          << ", maximumReceiveMessageSize: " << callOpts.maximumReceiveMessageSize() << ')';
     return debug;
 }
 #endif

@@ -311,6 +311,34 @@ QGrpcChannelOptions &QGrpcChannelOptions::setFilterServerMetadata(bool value)
 }
 
 /*!
+    \include qgrpccommonoptions.cpp maximumReceiveMessageSize
+    \sa QGrpcCallOptions::maximumReceiveMessageSize()
+*/
+std::optional<quint64> QGrpcChannelOptions::maximumReceiveMessageSize() const
+{
+    Q_D(const QGrpcChannelOptions);
+    return d->maximumReceiveMessageSize();
+}
+
+/*!
+    \include qgrpccommonoptions.cpp setMaximumReceiveMessageSize
+
+    \include qgrpcchanneloptions.cpp channel-note
+    \l{QGrpcCallOptions::setMaximumReceiveMessageSize()}
+
+    \sa QGrpcCallOptions::setMaximumReceiveMessageSize()
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::setMaximumReceiveMessageSize(quint64 size)
+{
+    if (d_ptr->maximumReceiveMessageSize() == size)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->setMaximumReceiveMessageSize(size);
+    return *this;
+}
+
+/*!
     \since 6.8
 
     Sets the serialization \a format for the channel and returns a reference to
@@ -384,14 +412,16 @@ std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const
 /*
 //! [compares]
     Returns \c true if the \l{deadlineTimeout}, \l{filterServerMetadata},
-    \l{metadata(QtGrpc::MultiValue_t)}, \l{serializationFormat} and
-    \l{sslConfiguration} in \a lhs and \a rhs are
+    \l{maximumReceiveMessageSize}, \l{metadata(QtGrpc::MultiValue_t)},
+    \l{requestCompression}, \l{serializationFormat} and \l{sslConfiguration}
+    in \a lhs and \a rhs are
 //! [compares]
 */
 bool comparesEqual(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rhs)
 {
     return lhs.deadlineTimeout() == rhs.deadlineTimeout()
         && lhs.filterServerMetadata() == rhs.filterServerMetadata()
+        && lhs.maximumReceiveMessageSize() == rhs.maximumReceiveMessageSize()
         && lhs.metadata(QtGrpc::MultiValue) == rhs.metadata(QtGrpc::MultiValue)
         && lhs.serializationFormat() == rhs.serializationFormat()
 #if QT_CONFIG(ssl)
@@ -428,6 +458,7 @@ QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
     debug << "QGrpcChannelOptions(deadline: " << chOpts.deadlineTimeout()
           << ", metadata: " << chOpts.metadata(QtGrpc::MultiValue)
           << ", filterServerMetadata: " << chOpts.filterServerMetadata()
+          << ", maximumReceiveMessageSize: " << chOpts.maximumReceiveMessageSize()
           << ", serializationFormat: " << chOpts.serializationFormat().suffix()
           << ", sslConfiguration: ";
 #  if QT_CONFIG(ssl)

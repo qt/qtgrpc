@@ -197,4 +197,65 @@ void QGrpcCommonOptions::setFilterServerMetadata(bool value)
     m_filterServerMetadata = value;
 }
 
+/*!
+//! [maximumReceiveMessageSize]
+    \since 6.12
+
+    Returns the maximum size in bytes of an incoming gRPC message accepted by
+    this channel or call. The limit applies to the decoded gRPC frame payload,
+    after transport-level decryption and any per-message decompression.
+
+    This function returns only the value explicitly configured on this object:
+    \list
+        \li \c std::nullopt if no value was set
+        \li \c 0 if the QtGrpc-imposed limit is disabled
+        \li otherwise, the configured maximum message size
+    \endlist
+
+    If no value is configured, the effective limit is resolved when an RPC
+    starts using the following precedence:
+    \list 1
+        \li call options
+        \li channel options
+        \li the \c QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE environment variable
+        \li the built-in 4 MiB default specified by \gRPC
+    \endlist
+
+    \sa setMaximumReceiveMessageSize()
+//! [maximumReceiveMessageSize]
+*/
+std::optional<quint64> QGrpcCommonOptions::maximumReceiveMessageSize() const noexcept
+{
+    return m_maximumReceiveMessageSize;
+}
+
+/*!
+//! [setMaximumReceiveMessageSize]
+    \since 6.12
+
+    Sets the maximum incoming message \a size in bytes and returns a reference
+    to the updated object.
+
+    Messages exceeding this limit are rejected with
+    \l{QtGrpc::}{StatusCode::ResourceExhausted} before their payload is
+    buffered.
+
+    A value of \c 0 disables the QtGrpc-imposed limit. If no value is
+    configured, a default limit of 4 MiB applies, matching the \gRPC
+    specification.
+
+    \note Concrete channel implementations may impose a hard upper bound on the
+    effective limit. The \l QGrpcHttp2Channel transport caps the value at the
+    maximum gRPC-over-HTTP/2 frame payload (\c{2^32 - 1}) bytes, or \c
+    qsizetype's maximum minus the 5-byte gRPC frame header on 32-bit platforms.
+    A larger configured value is clamped to that cap.
+
+    \sa maximumReceiveMessageSize()
+//! [setMaximumReceiveMessageSize]
+*/
+void QGrpcCommonOptions::setMaximumReceiveMessageSize(quint64 size)
+{
+    m_maximumReceiveMessageSize = size;
+}
+
 QT_END_NAMESPACE
