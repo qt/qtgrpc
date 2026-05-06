@@ -190,6 +190,7 @@ std::optional<bool> QGrpcCommonOptions::filterServerMetadata() const noexcept
     is \c false, all metadata received from the server will be included.
 
     \sa filterServerMetadata()
+//! [setFilterServerMetadata]
 */
 void QGrpcCommonOptions::setFilterServerMetadata(bool value)
 {
