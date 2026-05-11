@@ -17,7 +17,10 @@ if(NOT QT_NO_CREATE_TARGETS)
         "$ENV{Protobuf_DIR}")
         if(extra_protobuf_dir_path)
             list(APPEND _@target@_include_lookup_dirs
-                "${extra_protobuf_dir_path}/../.." "${extra_protobuf_dir_path}")
+                "${extra_protobuf_dir_path}/../../.."
+                "${extra_protobuf_dir_path}/../.."
+                "${extra_protobuf_dir_path}"
+            )
         endif()
         unset(extra_protobuf_dir_path)
     endforeach()
