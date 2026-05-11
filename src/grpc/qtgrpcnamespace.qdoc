@@ -155,3 +155,22 @@
     \sa QGrpcChannelOptions::metadata(QtGrpc::MultiValue_t),
         QGrpcCallOptions::metadata(QtGrpc::MultiValue_t)
 */
+
+/*!
+    \enum QtGrpc::CompressionAlgorithm
+    \since 6.12
+
+    \brief Lists the compression algorithms a gRPC channel accepts from the
+    server.
+
+    The \l{QGrpcHttp2Channel}{HTTP/2 channel} advertises the selected
+    algorithms in the \c{grpc-accept-encoding} request header.
+
+    \value Identity No compression. Always present in the accepted set because
+    the gRPC specification mandates that uncompressed messages are accepted.
+    \value Deflate The \c deflate compression algorithm.
+    \value Gzip The \c gzip compression algorithm.
+
+    \sa QGrpcChannelOptions::setAcceptedCompressionAlgorithms(),
+        QGrpcChannelOptions::supportedCompressionAlgorithms()
+*/

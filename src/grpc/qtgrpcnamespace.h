@@ -11,6 +11,7 @@
 #include <QtGrpc/qtgrpcexports.h>
 
 #include <QtCore/qcompare.h>
+#include <QtCore/qflags.h>
 #include <QtCore/qhashfunctions.h>
 #include <QtCore/qlatin1stringview.h>
 #include <QtCore/qmetatype.h>
@@ -101,6 +102,16 @@ private:
 
 // ### Qt7: remove QHash metadata interfaces.
 inline QT_DEFINE_TAG(MultiValue);
+
+enum class CompressionAlgorithm : quint32 {
+    Identity = 0x01,
+    Deflate = 0x02,
+    Gzip = 0x04,
+};
+Q_ENUM_NS(CompressionAlgorithm)
+Q_DECLARE_FLAGS(CompressionAlgorithms, CompressionAlgorithm)
+Q_DECLARE_OPERATORS_FOR_FLAGS(CompressionAlgorithms)
+Q_FLAG_NS(CompressionAlgorithms)
 
 Q_CLASSINFO("RegisterEnumClassesUnscoped", "false")
 } // namespace QtGrpc

@@ -203,7 +203,6 @@ const QByteArray GrpcStatusMessageHeader("grpc-message");
 const QByteArray DefaultContentType("application/grpc");
 const QByteArray GrpcStatusDetailsHeader("grpc-status-details-bin");
 const QByteArray GrpcAcceptEncodingHeader("grpc-accept-encoding");
-const QByteArray GrpcAcceptEncodingValue("identity,deflate,gzip");
 const QByteArray GrpcEncodingHeader("grpc-encoding");
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
 constexpr quint32 DefaultMaximumReceiveMessageSize = 4 * 1024 * 1024; // 4 MiB
@@ -491,6 +490,8 @@ public:
     // qEnvironmentVariable() takes a global lock per call.
     const std::optional<quint64> envMaximumReceiveSize = envMaximumReceiveMessageSize();
 
+    [[nodiscard]] const QByteArray &acceptEncoding();
+
 private:
     enum ConnectionState { Connecting = 0, Connected, SettingsReceived, Error };
 
@@ -499,6 +500,7 @@ private:
     QByteArray setupContentTypeNegotiation(QGrpcHttp2Channel *qPtr) const;
     static QByteArray constructAuthorityHeader(const QUrl &hostUri, SocketType socketType);
     static QByteArray constructSchemeHeader(SocketType socketType);
+    static QByteArray constructAcceptEncoding(QtGrpc::CompressionAlgorithms flags);
 
     bool createHttp2Stream(Http2Handler *handler);
     void createHttp2Connection();
@@ -542,6 +544,11 @@ private:
     bool m_isInsideSocketErrorOccurred = false;
     QHttp2Connection *m_connection = nullptr;
     ConnectionState m_state = Connecting;
+
+    // Lazily-built cache of the grpc-accept-encoding header value. Rebuilt
+    // only when the configured algorithm flags change.
+    QByteArray m_acceptEncoding;
+    QtGrpc::CompressionAlgorithms m_acceptEncodingFlags;
 
     Q_DISABLE_COPY_MOVE(QGrpcHttp2ChannelPrivate)
 };
@@ -739,7 +746,7 @@ HPack::HttpHeader Http2Handler::constructInitialHeaders() const
                                     + QSysInfo::productVersion().toUtf8() + ')');
 
     const auto &channelOptions = channel()->channelOptions();
-    const auto *channel = channelPriv();
+    auto *channel = channelPriv();
 
     QByteArray service{ m_context->service() };
     QByteArray method{ m_context->method() };
@@ -750,7 +757,7 @@ HPack::HttpHeader Http2Handler::constructInitialHeaders() const
         { SchemeHeader,             channel->schemeHeader                    },
         { ContentTypeHeader,        channel->contentType                     },
         { GrpcServiceNameHeader,    service                                  },
-        { GrpcAcceptEncodingHeader, GrpcAcceptEncodingValue                  },
+        { GrpcAcceptEncodingHeader, channel->acceptEncoding()                },
         { UserAgentHeader,          UserAgentValue                           },
         { TEHeader,                 TEValue                                  },
     };
@@ -1034,12 +1041,9 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
             // TODO: Implement status-details - QTBUG-138362
         } else if (phase == HeaderPhase::Initial && k == GrpcEncodingHeader) {
             // Allowed optional headers
-            if (v == "identity"_ba)
-                continue;
-            if (!GrpcAcceptEncodingValue.contains(v)
-                || !QDecompressHelper::isSupportedEncoding(v)) {
-                finish({ StatusCode::Internal,
-                         "Server responded with an unsupported compression algorithm: %1"_L1
+            if (!channelPriv()->acceptEncoding().contains(v)) {
+                finish({ StatusCode::Unimplemented,
+                         "Server responded with an encoding not advertised by client: %1"_L1
                              .arg(v) });
                 return;
             }
@@ -1410,6 +1414,29 @@ QByteArray QGrpcHttp2ChannelPrivate::constructAuthorityHeader(const QUrl &hostUr
 QByteArray QGrpcHttp2ChannelPrivate::constructSchemeHeader(SocketType socketType)
 {
     return socketType == SocketType::Tls ? "https"_ba : "http"_ba;
+}
+
+QByteArray QGrpcHttp2ChannelPrivate::constructAcceptEncoding(QtGrpc::CompressionAlgorithms flags)
+{
+    // "identity" (uncompressed) is mandated by the gRPC specification and is
+    // therefore always advertised.
+    QByteArray result = "identity";
+
+    if (flags & CompressionAlgorithm::Deflate)
+        result += ",deflate";
+    if (flags & CompressionAlgorithm::Gzip)
+        result += ",gzip";
+    return result;
+}
+
+const QByteArray &QGrpcHttp2ChannelPrivate::acceptEncoding()
+{
+    const auto flags = q_ptr->channelOptions().acceptedCompressionAlgorithms();
+    if (m_acceptEncoding.isNull() || flags != m_acceptEncodingFlags) {
+        m_acceptEncoding = constructAcceptEncoding(flags);
+        m_acceptEncodingFlags = flags;
+    }
+    return m_acceptEncoding;
 }
 
 bool QGrpcHttp2ChannelPrivate::createHttp2Stream(Http2Handler *handler)

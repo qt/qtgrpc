@@ -91,6 +91,9 @@ private Q_SLOTS:
     void maximumReceiveMessageSize_data() const;
     void maximumReceiveMessageSize();
 
+    void acceptedCompressionAlgorithms_data() const;
+    void acceptedCompressionAlgorithms();
+
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
     {
@@ -833,6 +836,91 @@ void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize()
     QCOMPARE_EQ(status->code(), expectedCode);
     if (status->code() == QtGrpc::StatusCode::ResourceExhausted)
         QVERIFY(status->message().contains("512"));
+}
+
+void QtGrpcClientEnd2EndTest::acceptedCompressionAlgorithms_data() const
+{
+    QTest::addColumn<CompressionAlgorithms>("setAlgorithms");
+    QTest::addColumn<grpc_compression_algorithm>("serverAlgo");
+    QTest::addColumn<StatusCode>("expectedCode");
+
+    const CompressionAlgorithms defaults = QGrpcChannelOptions::supportedCompressionAlgorithms();
+    const CompressionAlgorithms identity = CompressionAlgorithm::Identity;
+    const CompressionAlgorithms gzip = CompressionAlgorithm::Gzip;
+    const CompressionAlgorithms deflate = CompressionAlgorithm::Deflate;
+
+    QTest::newRow("default-gzip-accepted") << defaults << GRPC_COMPRESS_GZIP << StatusCode::Ok;
+
+    QTest::newRow("default-deflate-accepted")
+        << defaults << GRPC_COMPRESS_DEFLATE << StatusCode::Ok;
+
+    // Passing only Identity rejects every compressed encoding from the server,
+    // while uncompressed responses are always accepted per the gRPC spec.
+    QTest::newRow("identity-only-rejects-gzip")
+        << identity << GRPC_COMPRESS_GZIP << StatusCode::Unimplemented;
+
+    QTest::newRow("identity-only-accepts-uncompressed")
+        << identity << GRPC_COMPRESS_NONE << StatusCode::Ok;
+
+    QTest::newRow("gzip-allowed-accepts-gzip") << gzip << GRPC_COMPRESS_GZIP << StatusCode::Ok;
+
+    QTest::newRow("gzip-allowed-rejects-deflate")
+        << gzip << GRPC_COMPRESS_DEFLATE << StatusCode::Unimplemented;
+
+    QTest::newRow("deflate-allowed-accepts-deflate")
+        << deflate << GRPC_COMPRESS_DEFLATE << StatusCode::Ok;
+}
+
+void QtGrpcClientEnd2EndTest::acceptedCompressionAlgorithms()
+{
+    QFETCH(const CompressionAlgorithms, setAlgorithms);
+    QFETCH(const grpc_compression_algorithm, serverAlgo);
+    QFETCH(const StatusCode, expectedCode);
+
+    QGrpcChannelOptions chOpts;
+    chOpts.setAcceptedCompressionAlgorithms(setAlgorithms);
+    m_client->channel()->setChannelOptions(chOpts);
+
+    // Server: send one message with the requested compression algorithm, then finish OK.
+    auto processor = m_server->createProcessor();
+    auto *processorPtr = processor.get();
+    struct ServerData
+    {
+        grpc::ServerAsyncWriter<Event> op{ &ctx };
+        grpc::ServerContext ctx;
+        None request;
+        Event response;
+    };
+    ServerData *data = new ServerData;
+    data->ctx.set_compression_algorithm(serverAlgo);
+    data->response.set_name("hello");
+
+    CallbackTag *writeHandler = new CallbackTag(
+        [data, processorPtr](bool ok) {
+            QVERIFY(ok);
+            data->op.Finish(grpc::Status::OK, new DeleteTag<ServerData>(data, processorPtr));
+            return CallbackTag::Delete;
+        },
+        processorPtr);
+    CallbackTag *callHandler = new CallbackTag(
+        [data, writeHandler](bool ok) {
+            QVERIFY(ok);
+            data->op.Write(data->response, writeHandler);
+            return CallbackTag::Delete;
+        },
+        processorPtr);
+    m_service->RequestSubscribe(&data->ctx, &data->request, &data->op, m_server->cq(),
+                                m_server->cq(), callHandler);
+
+    auto call = m_client->Subscribe(qt::None{});
+    QVERIFY(call);
+
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    QVERIFY(finishedSpy.wait());
+
+    const auto status = qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first());
+    QCOMPARE_EQ(status.code(), expectedCode);
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)

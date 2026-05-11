@@ -6,6 +6,8 @@
 #include <QtGrpc/qgrpcserializationformat.h>
 #include <QtGrpc/qtgrpcnamespace.h>
 
+#include <QtNetwork/private/qdecompresshelper_p.h>
+
 #include <QtCore/qbytearray.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qvariant.h>
@@ -56,6 +58,8 @@ class QGrpcChannelOptionsPrivate : public QGrpcCommonOptions
 {
 public:
     QGrpcSerializationFormat serializationFormat;
+    CompressionAlgorithms
+        acceptedCompressionAlgorithms = QGrpcChannelOptions::supportedCompressionAlgorithms();
 #if QT_CONFIG(ssl)
     std::optional<QSslConfiguration> sslConfiguration;
 #endif
@@ -339,6 +343,85 @@ QGrpcChannelOptions &QGrpcChannelOptions::setMaximumReceiveMessageSize(quint64 s
 }
 
 /*!
+    \since 6.12
+
+    Returns the compression algorithms that the current Qt build can
+    negotiate. \l{QtGrpc::CompressionAlgorithm::}{Identity} is always present
+    because the \gRPC specification mandates uncompressed messages.
+    \l{QtGrpc::CompressionAlgorithm::}{Deflate} and
+    \l{QtGrpc::CompressionAlgorithm::}{Gzip} are always supported.
+
+    \sa acceptedCompressionAlgorithms(), setAcceptedCompressionAlgorithms()
+*/
+CompressionAlgorithms QGrpcChannelOptions::supportedCompressionAlgorithms() noexcept
+{
+    CompressionAlgorithms supported = CompressionAlgorithm::Identity;
+    if (QDecompressHelper::isSupportedEncoding("deflate"_ba))
+        supported |= CompressionAlgorithm::Deflate;
+    if (QDecompressHelper::isSupportedEncoding("gzip"_ba))
+        supported |= CompressionAlgorithm::Gzip;
+    return supported;
+}
+
+/*!
+    \since 6.12
+
+    Returns the compression algorithms that this channel is willing to accept
+    from the server. The set always contains
+    \l{QtGrpc::CompressionAlgorithm::}{Identity} because the \gRPC specification
+    mandates that uncompressed messages are accepted.
+
+    The value is used to build the \c{grpc-accept-encoding} request header.
+    If the server responds with a compression algorithm that is not in this
+    set, the call is finished with a \l{QtGrpc::StatusCode::}{Unimplemented}
+    status code.
+
+    By default, this is \l{supportedCompressionAlgorithms()}: every algorithm
+    the current Qt build can negotiate is advertised.
+
+    \sa setAcceptedCompressionAlgorithms(), supportedCompressionAlgorithms()
+*/
+QtGrpc::CompressionAlgorithms QGrpcChannelOptions::acceptedCompressionAlgorithms() const noexcept
+{
+    Q_D(const QGrpcChannelOptions);
+    return d->acceptedCompressionAlgorithms;
+}
+
+/*!
+    \since 6.12
+
+    Sets the accepted compression \a algorithms and returns a reference to the
+    updated object.
+
+    \l{QtGrpc::CompressionAlgorithm::}{Identity} is always added implicitly,
+    because the gRPC specification requires clients to accept uncompressed
+    messages.
+
+    If \c{{QtGrpc::CompressionAlgorithm::Identity}} is the only accepted
+    algorithm, compressed responses are refused. Adding additional flags allows
+    the server to respond using those compression algorithms.
+
+    Only algorithms supported by this Qt build and included in \a algorithms
+    are advertised to the server as accepted response compression methods.
+    Flags that are not present in \l{supportedCompressionAlgorithms()} are
+    silently discarded.
+
+    \sa acceptedCompressionAlgorithms(), supportedCompressionAlgorithms()
+*/
+QGrpcChannelOptions &
+QGrpcChannelOptions::setAcceptedCompressionAlgorithms(QtGrpc::CompressionAlgorithms algorithms)
+{
+    algorithms &= supportedCompressionAlgorithms();
+    algorithms.setFlag(CompressionAlgorithm::Identity);
+    if (d_ptr->acceptedCompressionAlgorithms == algorithms)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->acceptedCompressionAlgorithms = algorithms;
+    return *this;
+}
+
+/*!
     \since 6.8
 
     Sets the serialization \a format for the channel and returns a reference to
@@ -411,7 +494,8 @@ std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const
 
 /*
 //! [compares]
-    Returns \c true if the \l{deadlineTimeout}, \l{filterServerMetadata},
+    Returns \c true if the \l{acceptedCompressionAlgorithms},
+    \l{deadlineTimeout}, \l{filterServerMetadata},
     \l{maximumReceiveMessageSize}, \l{metadata(QtGrpc::MultiValue_t)},
     \l{requestCompression}, \l{serializationFormat} and \l{sslConfiguration}
     in \a lhs and \a rhs are
@@ -419,7 +503,8 @@ std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const
 */
 bool comparesEqual(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rhs)
 {
-    return lhs.deadlineTimeout() == rhs.deadlineTimeout()
+    return lhs.acceptedCompressionAlgorithms() == rhs.acceptedCompressionAlgorithms()
+        && lhs.deadlineTimeout() == rhs.deadlineTimeout()
         && lhs.filterServerMetadata() == rhs.filterServerMetadata()
         && lhs.maximumReceiveMessageSize() == rhs.maximumReceiveMessageSize()
         && lhs.metadata(QtGrpc::MultiValue) == rhs.metadata(QtGrpc::MultiValue)
@@ -455,7 +540,8 @@ QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
 {
     const QDebugStateSaver save(debug);
     debug.nospace().noquote();
-    debug << "QGrpcChannelOptions(deadline: " << chOpts.deadlineTimeout()
+    debug << "QGrpcChannelOptions(acceptedCompressionAlgorithms: "
+          << chOpts.acceptedCompressionAlgorithms() << ", deadline: " << chOpts.deadlineTimeout()
           << ", metadata: " << chOpts.metadata(QtGrpc::MultiValue)
           << ", filterServerMetadata: " << chOpts.filterServerMetadata()
           << ", maximumReceiveMessageSize: " << chOpts.maximumReceiveMessageSize()

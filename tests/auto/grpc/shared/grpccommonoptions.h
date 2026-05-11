@@ -295,6 +295,8 @@ QT_WARNING_POP
         updateComparisonCheck();
 
         if constexpr (std::is_same_v<T, QGrpcChannelOptions>) {
+            o1.setAcceptedCompressionAlgorithms(QtGrpc::CompressionAlgorithm::Gzip);
+            updateComparisonCheck();
             o1.setSerializationFormat(QtGrpc::SerializationFormat::Protobuf);
             updateComparisonCheck();
 #if QT_CONFIG(ssl)

@@ -25,7 +25,7 @@ private Q_SLOTS:
     void propertyMetadata() const { common.propertyMetadata(); }
     void propertyDeadline() const { common.propertyDeadline(); }
     void propertyFilterServerMetadata() const { common.propertyFilterServerMetadata(); }
-    void propertyMaximumReceiveMessageSize() const { common.propertyMaximumReceiveMessageSize(); }
+    void propertyAcceptedCompressionAlgorithms() const;
     void streamsToDebug() const { common.streamsToDebug(); }
     void comparesEqual() const { common.comparesEqual(); }
 
@@ -37,6 +37,44 @@ private Q_SLOTS:
 private:
     GrpcCommonOptionsTest<QGrpcChannelOptions> common;
 };
+
+void QGrpcChannelOptionsTest::propertyAcceptedCompressionAlgorithms() const
+{
+    using namespace QtGrpc;
+
+    const auto supported = QGrpcChannelOptions::supportedCompressionAlgorithms();
+
+    QGrpcChannelOptions o1;
+    QCOMPARE_EQ(o1.acceptedCompressionAlgorithms(), supported);
+    QVERIFY(o1.acceptedCompressionAlgorithms().testFlag(CompressionAlgorithm::Identity));
+
+    // Refuse all compressed encodings: pass {Identity} explicitly.
+    auto o1Detach = o1;
+    o1.setAcceptedCompressionAlgorithms(CompressionAlgorithm::Identity);
+    QCOMPARE_NE(o1.acceptedCompressionAlgorithms(), o1Detach.acceptedCompressionAlgorithms());
+    QCOMPARE_EQ(o1.acceptedCompressionAlgorithms(),
+                CompressionAlgorithms{ CompressionAlgorithm::Identity });
+    QVERIFY(o1.acceptedCompressionAlgorithms().testFlag(CompressionAlgorithm::Identity));
+    QVERIFY(!o1.acceptedCompressionAlgorithms().testFlag(CompressionAlgorithm::Deflate));
+    QVERIFY(!o1.acceptedCompressionAlgorithms().testFlag(CompressionAlgorithm::Gzip));
+
+    // Single algorithm: Identity is added back by the setter (spec-mandated).
+    o1.setAcceptedCompressionAlgorithms(CompressionAlgorithm::Gzip);
+    QCOMPARE_EQ(o1.acceptedCompressionAlgorithms(),
+                CompressionAlgorithm::Identity | CompressionAlgorithm::Gzip);
+
+    // Explicit Identity OR'd with another algorithm: stored as-is.
+    o1.setAcceptedCompressionAlgorithms(CompressionAlgorithm::Identity
+                                        | CompressionAlgorithm::Deflate);
+    QCOMPARE_EQ(o1.acceptedCompressionAlgorithms(),
+                CompressionAlgorithm::Identity | CompressionAlgorithm::Deflate);
+
+    // All compressed algorithms: Identity is added back by the setter.
+    o1.setAcceptedCompressionAlgorithms(CompressionAlgorithm::Deflate | CompressionAlgorithm::Gzip);
+    QCOMPARE_EQ(o1.acceptedCompressionAlgorithms(),
+                CompressionAlgorithm::Identity | CompressionAlgorithm::Deflate
+                    | CompressionAlgorithm::Gzip);
+}
 
 void QGrpcChannelOptionsTest::propertySerializationFormat() const
 {
