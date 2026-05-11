@@ -78,6 +78,11 @@ public:
     [[nodiscard]] Q_GRPC_EXPORT std::optional<quint64> maximumReceiveMessageSize() const;
     Q_GRPC_EXPORT QGrpcChannelOptions &setMaximumReceiveMessageSize(quint64 size);
 
+    [[nodiscard]] Q_GRPC_EXPORT std::optional<QtGrpc::CompressionAlgorithm>
+    requestCompression() const noexcept;
+    Q_GRPC_EXPORT QGrpcChannelOptions &
+    setRequestCompression(QtGrpc::CompressionAlgorithm algorithm);
+
     [[nodiscard]] static Q_GRPC_EXPORT QtGrpc::CompressionAlgorithms
     supportedCompressionAlgorithms() noexcept;
 

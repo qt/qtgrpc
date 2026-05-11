@@ -25,6 +25,7 @@ private Q_SLOTS:
     void propertyMetadata() const { common.propertyMetadata(); }
     void propertyDeadline() const { common.propertyDeadline(); }
     void propertyFilterServerMetadata() const { common.propertyFilterServerMetadata(); }
+    void propertyRequestCompression() const { common.propertyRequestCompression(); }
     void propertyAcceptedCompressionAlgorithms() const;
     void streamsToDebug() const { common.streamsToDebug(); }
     void comparesEqual() const { common.comparesEqual(); }

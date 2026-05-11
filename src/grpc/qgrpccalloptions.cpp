@@ -325,11 +325,38 @@ QGrpcCallOptions &QGrpcCallOptions::setMaximumReceiveMessageSize(quint64 size)
     return *this;
 }
 
+/*!
+    \include qgrpccommonoptions.cpp requestCompression
+    \sa QGrpcChannelOptions::requestCompression()
+*/
+std::optional<QtGrpc::CompressionAlgorithm> QGrpcCallOptions::requestCompression() const noexcept
+{
+    Q_D(const QGrpcCallOptions);
+    return d->requestCompression();
+}
+
+/*!
+    \include qgrpccommonoptions.cpp setRequestCompression
+    \note Setting this field \b{overrides} the corresponding channel options
+    field.
+
+    \sa QGrpcChannelOptions::setRequestCompression()
+*/
+QGrpcCallOptions &QGrpcCallOptions::setRequestCompression(QtGrpc::CompressionAlgorithm algorithm)
+{
+    if (d_ptr->requestCompression() == algorithm)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcCallOptions);
+    d->setRequestCompression(algorithm);
+    return *this;
+}
+
 /*
 //! [compares]
     Returns \c true if the \l{deadlineTimeout}, \l{filterServerMetadata},
-    \l{maximumReceiveMessageSize}, and \l{metadata(QtGrpc::MultiValue_t)} in \a lhs
-    and \a rhs are
+    \l{maximumReceiveMessageSize}, \l{requestCompression}, and
+    \l{metadata(QtGrpc::MultiValue_t)} in \a lhs and \a rhs are
 //! [compares]
 */
 bool comparesEqual(const QGrpcCallOptions &lhs, const QGrpcCallOptions &rhs)
@@ -337,6 +364,7 @@ bool comparesEqual(const QGrpcCallOptions &lhs, const QGrpcCallOptions &rhs)
     return lhs.deadlineTimeout() == rhs.deadlineTimeout()
         && lhs.filterServerMetadata() == rhs.filterServerMetadata()
         && lhs.maximumReceiveMessageSize() == rhs.maximumReceiveMessageSize()
+        && lhs.requestCompression() == rhs.requestCompression()
         && lhs.metadata(QtGrpc::MultiValue) == rhs.metadata(QtGrpc::MultiValue);
 }
 
@@ -368,7 +396,8 @@ QDebug operator<<(QDebug debug, const QGrpcCallOptions &callOpts)
     debug << "QGrpcCallOptions(deadline: " << callOpts.deadlineTimeout()
           << ", metadata: " << callOpts.metadata(QtGrpc::MultiValue)
           << ", filterServerMetadata: " << callOpts.filterServerMetadata()
-          << ", maximumReceiveMessageSize: " << callOpts.maximumReceiveMessageSize() << ')';
+          << ", maximumReceiveMessageSize: " << callOpts.maximumReceiveMessageSize() << ')'
+          << ", requestCompression: " << callOpts.requestCompression() << ')';
     return debug;
 }
 #endif

@@ -259,6 +259,22 @@ QT_WARNING_POP
         o1.setMaximumReceiveMessageSize(0);
         QCOMPARE_EQ(o1.maximumReceiveMessageSize(), std::optional<quint64>(0));
     }
+    void propertyRequestCompression() const
+    {
+        using QtGrpc::CompressionAlgorithm;
+
+        T o1;
+        QCOMPARE_EQ(o1.requestCompression(), std::nullopt);
+        auto o1Detach = o1;
+        o1.setRequestCompression(CompressionAlgorithm::Gzip);
+        QCOMPARE_NE(o1.requestCompression(), o1Detach.requestCompression());
+        QCOMPARE_EQ(o1.requestCompression(),
+                    std::optional<CompressionAlgorithm>(CompressionAlgorithm::Gzip));
+
+        o1.setRequestCompression(CompressionAlgorithm::Deflate);
+        QCOMPARE_EQ(o1.requestCompression(),
+                    std::optional<CompressionAlgorithm>(CompressionAlgorithm::Deflate));
+    }
     void streamsToDebug() const
     {
         T o;
@@ -292,6 +308,8 @@ QT_WARNING_POP
         o1.setFilterServerMetadata(true);
         updateComparisonCheck();
         o1.setMaximumReceiveMessageSize(1024);
+        updateComparisonCheck();
+        o1.setRequestCompression(QtGrpc::CompressionAlgorithm::Gzip);
         updateComparisonCheck();
 
         if constexpr (std::is_same_v<T, QGrpcChannelOptions>) {

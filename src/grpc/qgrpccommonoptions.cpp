@@ -258,4 +258,47 @@ void QGrpcCommonOptions::setMaximumReceiveMessageSize(quint64 size)
     m_maximumReceiveMessageSize = size;
 }
 
+/*!
+//! [requestCompression]
+    \since 6.12
+
+    Returns the compression algorithm used to compress outbound messages on
+    this channel or call.
+
+    If this field is unset, returns an empty \c {std::optional}.
+
+    \sa setRequestCompression()
+//! [requestCompression]
+*/
+std::optional<QtGrpc::CompressionAlgorithm> QGrpcCommonOptions::requestCompression() const noexcept
+{
+    return m_requestCompression;
+}
+
+/*!
+//! [setRequestCompression]
+    \since 6.12
+
+    Sets the compression \a algorithm used to compress messages sent by the
+    client and returns a reference to the updated object.
+
+    When set, the algorithm is announced in the \c{grpc-encoding} request
+    header. Each message is compressed independently; if compression does not
+    reduce the payload size, the message is sent uncompressed with the
+    \c{Compressed-Flag} set to \c 0 regardless.
+
+    \note Compressing messages that contain both sensitive data and data that
+    could potentially be influenced by an attacker may expose the connection to
+    compression side-channel attacks such as CRIME or BREACH. If possible,
+    avoid compressing such messages, or separate sensitive and untrusted data
+    into different requests.
+
+    \sa requestCompression()
+//! [setRequestCompression]
+*/
+void QGrpcCommonOptions::setRequestCompression(QtGrpc::CompressionAlgorithm algorithm)
+{
+    m_requestCompression = algorithm;
+}
+
 QT_END_NAMESPACE

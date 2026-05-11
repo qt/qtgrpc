@@ -1,6 +1,13 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
+# Handle the conditional finding of either system zlib or qt zlib.
+if(NOT QT_FEATURE_system_zlib)
+    find_package(Qt6 COMPONENTS ZlibPrivate)
+elseif(NOT TARGET WrapZLIB::WrapZLIB)
+    qt_find_package(WrapZLIB PROVIDED_TARGETS WrapZLIB::WrapZLIB)
+endif()
+
 qt_internal_add_module(Grpc
     SOURCES
         qgrpcoperation.h qgrpcoperation_p.h qgrpcoperation.cpp
@@ -33,6 +40,16 @@ qt_internal_add_module(Grpc
     NO_PCH_SOURCES
         compat/removed_api.cpp
     QT_LICENSE_ID QT_COMMERCIAL_OR_GPL3
+)
+
+qt_internal_extend_target(Grpc CONDITION QT_FEATURE_system_zlib
+    LIBRARIES
+        WrapZLIB::WrapZLIB
+)
+
+qt_internal_extend_target(Grpc CONDITION NOT QT_FEATURE_system_zlib
+    LIBRARIES
+        Qt::ZlibPrivate
 )
 
 qt_internal_add_docs(Grpc

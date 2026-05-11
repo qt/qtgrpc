@@ -42,10 +42,13 @@
 #include <QtCore/qvarlengtharray.h>
 
 #include <QtCore/q20algorithm.h>
+#include <QtCore/q20utility.h>
 
 #include <functional>
 #include <optional>
 #include <utility>
+
+#include <zlib.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -205,6 +208,7 @@ const QByteArray GrpcStatusDetailsHeader("grpc-status-details-bin");
 const QByteArray GrpcAcceptEncodingHeader("grpc-accept-encoding");
 const QByteArray GrpcEncodingHeader("grpc-encoding");
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
+constexpr quint8 GrpcCompressedFlag = 0x01;
 constexpr quint32 DefaultMaximumReceiveMessageSize = 4 * 1024 * 1024; // 4 MiB
 
 // Maximum gRPC frame payload size for the HTTP/2 transport. Bounded by the
@@ -303,6 +307,12 @@ constexpr StatusCode http2StatusToStatusCode(const int status)
     }
 }
 
+QByteArray requestEncodingName(CompressionAlgorithm algo)
+{
+    Q_ASSERT(algo != CompressionAlgorithm::Identity);
+    return algo == CompressionAlgorithm::Gzip ? "gzip"_ba : "deflate"_ba;
+}
+
 bool hasSslConfiguration(const QGrpcChannelOptions &opts)
 {
 #if QT_CONFIG(ssl)
@@ -387,6 +397,108 @@ private:
     QByteArray container;
 };
 
+// Encapsulates a zlib deflate stream used to compress outbound gRPC messages.
+class GrpcCompressionHelper
+{
+    QT_DEFINE_TAG_STRUCT(PrivateConstructor);
+
+public:
+    enum class Error {
+        // Compression was not applied: the payload is uncompressible or the
+        // worst-case bound exceeds the frame cap. The helper is still usable;
+        // the caller should fall back to sending the payload uncompressed.
+        Skipped,
+        // Hard zlib failure: the zstream is in an undefined state and the
+        // helper must be discarded so a fresh one is created on retry.
+        Broken,
+    };
+
+    explicit GrpcCompressionHelper(PrivateConstructor) {}
+    ~GrpcCompressionHelper() { deflateEnd(&m_stream); }
+
+    // Lazily initializes the zstream; returns nullptr on initialization failure.
+    static std::unique_ptr<GrpcCompressionHelper> create(CompressionAlgorithm algo)
+    {
+        auto helper = std::make_unique<GrpcCompressionHelper>(PrivateConstructor{});
+        const auto res = deflateInit2(&helper->m_stream, Z_BEST_SPEED, Z_DEFLATED,
+                                      windowBitsFor(algo), 8, Z_DEFAULT_STRATEGY);
+        if (res != Z_OK) {
+            qCWarning(lcStream,
+                      "gRPC request compression: deflateInit2 failed (ret=%d, %s, msg=%s)", res,
+                      zError(res), helper->m_stream.msg ? helper->m_stream.msg : "n/a");
+            return nullptr;
+        }
+        return helper;
+    }
+
+    // Compresses \a in directly into \a out, reserving space for
+    // GrpcMessageSizeHeaderSize. On success returns the compressed payload
+    // size.
+    [[nodiscard]] q23::expected<qsizetype, Error> tryCompressMessage(QByteArrayView in,
+                                                                     QByteArray &out)
+    {
+        Q_ASSERT(!in.isEmpty());
+        Q_ASSERT(q20::cmp_less_equal(in.size(), GrpcMaxPayloadSize));
+
+        // Qt requires 32-bit int globally. Restate the assumption for zlib's uInt.
+        static_assert(std::numeric_limits<uInt>::max() >= std::numeric_limits<quint32>::max(),
+                      "zlib uInt must be at least 32 bits");
+
+        if (m_needsReset) { // first call skips deflateReset
+            if (const int res = deflateReset(&m_stream); res != Z_OK) {
+                qCWarning(lcStream,
+                          "[%p] gRPC request compression: deflateReset failed (ret=%d, %s, msg=%s)",
+                          static_cast<const void *>(this), res, zError(res),
+                          m_stream.msg ? m_stream.msg : "n/a");
+                return q23::unexpected(Error::Broken);
+            }
+            m_needsReset = false;
+        }
+
+        // Size the output to the input length. deflate(Z_FINISH) then returns
+        // Z_STREAM_END if compression shrunk the payload; when it doesn't fit,
+        // zlib documents Z_OK or Z_BUF_ERROR as the non-fatal "needs more
+        // output space" signals that we use as our skip trigger.
+        out = QByteArray(GrpcMessageSizeHeaderSize + in.size(), Qt::Uninitialized);
+
+        // zlib supports const next_in via z_const, but it's disabled by default.
+        m_stream.next_in = reinterpret_cast<Bytef *>(const_cast<char *>(in.data()));
+        m_stream.avail_in = static_cast<uInt>(in.size()); // fits into uInt
+        m_stream.next_out = reinterpret_cast<Bytef *>(out.data() + GrpcMessageSizeHeaderSize);
+        m_stream.avail_out = static_cast<uInt>(in.size()); // fits into uInt
+
+        const int ret = deflate(&m_stream, Z_FINISH);
+        // Either outcome leaves the stream non-reusable; the next call must reset.
+        m_needsReset = true;
+        if (ret == Z_OK || ret == Z_BUF_ERROR)
+            return q23::unexpected(Error::Skipped);
+        if (ret != Z_STREAM_END) {
+            qCWarning(lcStream,
+                      "[%p] gRPC request compression: deflate failed (ret=%d, %s, msg=%s)",
+                      static_cast<const void *>(this), ret, zError(ret),
+                      m_stream.msg ? m_stream.msg : "n/a");
+            return q23::unexpected(Error::Broken);
+        }
+
+        const auto compressedSize = static_cast<qsizetype>(m_stream.total_out);
+        // Adjust the logical size to the actual compressed payload.
+        out.resize(GrpcMessageSizeHeaderSize + compressedSize);
+        return compressedSize;
+    }
+
+private:
+    static constexpr int windowBitsFor(CompressionAlgorithm algo)
+    {
+        Q_ASSERT(algo != CompressionAlgorithm::Identity);
+        return algo == CompressionAlgorithm::Gzip ? (15 | 16) : 15;
+    }
+
+    z_stream m_stream{};
+    bool m_needsReset = false;
+
+    Q_DISABLE_COPY_MOVE(GrpcCompressionHelper)
+};
+
 // The Http2Handler manages an individual RPC over the HTTP/2 channel.
 // Each instance corresponds to an RPC initiated by the user.
 class Http2Handler : public QObject
@@ -448,6 +560,9 @@ private:
     [[nodiscard]] QGrpcHttp2Channel *channel() const;
     [[nodiscard]] bool handleContextExpired();
 
+    [[nodiscard]] static CompressionAlgorithm
+    constructRequestEncoding(const QGrpcHttp2ChannelPrivate &channel,
+                             const QGrpcOperationContext &context);
     [[nodiscard]] static quint64
     constructMaximumReceiveSize(const QGrpcHttp2ChannelPrivate &channel,
                                 const QGrpcOperationContext &context);
@@ -459,11 +574,13 @@ private:
     GrpcDataParser m_grpcDataParser;
     QByteArray m_negotiatedEncoding;
     std::unique_ptr<QDecompressHelper> m_decompressor;
+    std::unique_ptr<GrpcCompressionHelper> m_compressor;
     State m_state = State::Idle;
     const bool m_endStreamAtFirstData;
     bool m_writesDoneSent = false;
     bool m_filterServerMetadata;
     QTimer m_deadlineTimer;
+    const CompressionAlgorithm m_requestEncoding;
 
     Q_DISABLE_COPY_MOVE(Http2Handler)
 };
@@ -559,10 +676,15 @@ private:
 
 Http2Handler::Http2Handler(QGrpcHttp2ChannelPrivate *parent, QGrpcOperationContext *context,
                            QByteArray &&messageData, bool endStream)
-    : QObject(parent), m_context(context), m_initialHeaders(constructInitialHeaders()),
+    : QObject(parent), m_context(context),
       m_grpcDataParser(constructMaximumReceiveSize(*parent, *context)),
-      m_endStreamAtFirstData(endStream), m_filterServerMetadata(constructFilterServerMetadata())
+      m_endStreamAtFirstData(endStream), m_filterServerMetadata(constructFilterServerMetadata()),
+      m_requestEncoding(constructRequestEncoding(*parent, *context))
 {
+    // constructInitialHeaders() depends on members initialized above; build it
+    // here so it sees a fully constructed object.
+    m_initialHeaders = constructInitialHeaders();
+
     // If the context (lifetime bound to the user) is destroyed, this handler
     // can no longer perform any meaningful work. We allow it to be deleted;
     // QHttp2Stream will handle any outstanding cancellations appropriately.
@@ -761,6 +883,8 @@ HPack::HttpHeader Http2Handler::constructInitialHeaders() const
         { UserAgentHeader,          UserAgentValue                           },
         { TEHeader,                 TEValue                                  },
     };
+    if (m_requestEncoding != CompressionAlgorithm::Identity)
+        headers.emplace_back(GrpcEncodingHeader, requestEncodingName(m_requestEncoding));
 
     auto iterateMetadata = [&headers, this](const auto &metadata) {
         for (const auto &[key, value] : metadata.asKeyValueRange()) {
@@ -788,6 +912,16 @@ bool Http2Handler::constructFilterServerMetadata() const
     return m_context->callOptions()
         .filterServerMetadata()
         .value_or(channel()->channelOptions().filterServerMetadata().value_or(true));
+}
+
+CompressionAlgorithm Http2Handler::constructRequestEncoding(const QGrpcHttp2ChannelPrivate &channel,
+                                                            const QGrpcOperationContext &context)
+{
+    return context.callOptions()
+        .requestCompression()
+        .value_or(channel.q_ptr->channelOptions()
+                      .requestCompression()
+                      .value_or(CompressionAlgorithm::Identity));
 }
 
 QGrpcHttp2ChannelPrivate *Http2Handler::channelPriv() const
@@ -827,6 +961,9 @@ quint64 Http2Handler::constructMaximumReceiveSize(const QGrpcHttp2ChannelPrivate
 // or from the user in client/bidirectional streaming RPCs.
 void Http2Handler::writeMessage(QByteArrayView data)
 {
+    // Common HTTP/gRPC default; below ~30B, compression overhead outweighs savings.
+    constexpr quint8 CompressionMinPayloadBytes = 30;
+
     if (m_writesDoneSent || m_state > State::Active || isStreamClosedForSending()) {
         qCDebug(lcStream, "[%p] Cannot write message (state=%s, writesDone=%d, streamClosed=%d)",
                 this, QDebug::toBytes(m_state).constData(), m_writesDoneSent,
@@ -842,17 +979,39 @@ void Http2Handler::writeMessage(QByteArrayView data)
         return;
     }
 
-    QByteArray msg(GrpcMessageSizeHeaderSize + data.size(), '\0');
-    // Args must be 4-byte unsigned int to fit into 4-byte big endian
-    qToBigEndian(static_cast<quint32>(data.size()), msg.data() + 1);
+    quint8 compressedFlag = 0;
+    QByteArray msg;
+    qsizetype payloadSize = data.size();
 
-    // protect against nullptr data.
-    if (!data.isEmpty()) {
-        std::memcpy(msg.begin() + GrpcMessageSizeHeaderSize, data.begin(),
-                    static_cast<size_t>(data.size()));
+    if (m_requestEncoding != CompressionAlgorithm::Identity
+        && payloadSize >= CompressionMinPayloadBytes) {
+        if (!m_compressor)
+            m_compressor = GrpcCompressionHelper::create(m_requestEncoding);
+        if (m_compressor) {
+            const auto res = m_compressor->tryCompressMessage(data, msg);
+            if (res) {
+                payloadSize = *res;
+                compressedFlag = GrpcCompressedFlag;
+            } else if (res.error() == GrpcCompressionHelper::Error::Broken) {
+                // Stream is in an undefined state; discard so the next attempt
+                // re-initializes from scratch.
+                m_compressor.reset();
+            }
+        }
     }
 
-    m_queue.enqueue(msg);
+    if (compressedFlag == 0) {
+        msg = QByteArray(GrpcMessageSizeHeaderSize + data.size(), Qt::Uninitialized);
+        if (!data.isEmpty()) {
+            std::memcpy(msg.data() + GrpcMessageSizeHeaderSize, data.data(),
+                        static_cast<size_t>(data.size()));
+        }
+    }
+
+    msg[0] = static_cast<char>(compressedFlag);
+    qToBigEndian(static_cast<quint32>(payloadSize), msg.data() + 1);
+
+    m_queue.enqueue(std::move(msg));
     processQueue();
 }
 
@@ -1056,8 +1215,24 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
             }
             m_negotiatedEncoding = v;
         } else if (phase == HeaderPhase::Initial && k == GrpcAcceptEncodingHeader) {
-            // Allowed optional headers
-            // TODO: Implement client-side (request) compression handling - QTBUG-140235
+            // The server advertises what it can decode. The client does not filter
+            // its own request compression against this set; a mismatch causes the
+            // server to respond with UNIMPLEMENTED (per the gRPC compression spec).
+            if (m_requestEncoding != CompressionAlgorithm::Identity) {
+                const QByteArray name = requestEncodingName(m_requestEncoding);
+                const auto tokens = v.split(',');
+                const bool advertised = std::any_of(tokens.cbegin(), tokens.cend(),
+                                                    [&name](const QByteArray &t) {
+                                                        return t.trimmed() == name;
+                                                    });
+                if (!advertised) {
+                    qCWarning(lcStream,
+                              "[%p] Outbound request-compression '%s' is not in the "
+                              "server's grpc-accept-encoding ('%s'); the server is "
+                              "expected to respond with UNIMPLEMENTED.",
+                              this, name.constData(), v.constData());
+                }
+            }
         } else if (k.startsWith(':')) {
             qCWarning(lcStream,
                       "[%p] Received unhandled HTTP/2 pseudo-header: { key: '%s', value: '%s' } "

@@ -23,6 +23,7 @@ private Q_SLOTS:
     void propertyDeadline() const { common.propertyDeadline(); }
     void propertyFilterServerMetadata() const { common.propertyFilterServerMetadata(); }
     void propertyMaximumReceiveMessageSize() const { common.propertyMaximumReceiveMessageSize(); }
+    void propertyRequestCompression() const { common.propertyRequestCompression(); }
     void streamsToDebug() const { common.streamsToDebug(); }
     void comparesEqual() const { common.comparesEqual(); }
 

@@ -94,6 +94,9 @@ private Q_SLOTS:
     void acceptedCompressionAlgorithms_data() const;
     void acceptedCompressionAlgorithms();
 
+    void requestCompression_data() const;
+    void requestCompression();
+
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
     {
@@ -921,6 +924,108 @@ void QtGrpcClientEnd2EndTest::acceptedCompressionAlgorithms()
 
     const auto status = qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first());
     QCOMPARE_EQ(status.code(), expectedCode);
+}
+
+void QtGrpcClientEnd2EndTest::requestCompression_data() const
+{
+    using OptAlgo = std::optional<CompressionAlgorithm>;
+    using C = CompressionAlgorithm;
+
+    QTest::addColumn<OptAlgo>("channelAlgo");
+    QTest::addColumn<OptAlgo>("callAlgo");
+    QTest::addColumn<std::string>("payload");
+    QTest::addColumn<bool>("serverRejects");
+    QTest::addColumn<StatusCode>("expectedCode");
+
+    const std::string big(1024, 'A');
+    const std::string tiny("x");
+
+    QTest::newRow("none") << OptAlgo{} << OptAlgo{} << big << false << StatusCode::Ok;
+    QTest::newRow("channel-gzip") << OptAlgo{ C::Gzip } << OptAlgo{} << big << false
+                                  << StatusCode::Ok;
+    QTest::newRow("call-deflate") << OptAlgo{} << OptAlgo{ C::Deflate } << big << false
+                                  << StatusCode::Ok;
+    QTest::newRow("call-overrides-channel")
+        << OptAlgo{ C::Gzip } << OptAlgo{ C::Deflate } << big << false << StatusCode::Ok;
+    // Tiny payload would grow when compressed; the channel falls back to identity-encoded frames.
+    QTest::newRow("no-shrink-fallback")
+        << OptAlgo{ C::Gzip } << OptAlgo{} << tiny << false << StatusCode::Ok;
+    // Server enabled only for identity rejects gzip-compressed requests at the
+    // transport layer with Unimplemented; no application handler runs.
+    QTest::newRow("server-rejects-gzip")
+        << OptAlgo{ C::Gzip } << OptAlgo{} << big << true << StatusCode::Unimplemented;
+}
+
+void QtGrpcClientEnd2EndTest::requestCompression()
+{
+    QFETCH(const std::optional<CompressionAlgorithm>, channelAlgo);
+    QFETCH(const std::optional<CompressionAlgorithm>, callAlgo);
+    QFETCH(const std::string, payload);
+    QFETCH(const bool, serverRejects);
+    QFETCH(const StatusCode, expectedCode);
+
+    // After a rejection scenario, restore the unrestricted server for the next row.
+    const auto restoreServer = qScopeGuard([this, serverRejects] {
+        if (serverRejects)
+            restartServer();
+    });
+
+    if (serverRejects) {
+        grpc::ChannelArguments args;
+        args.SetInt(GRPC_COMPRESSION_CHANNEL_ENABLED_ALGORITHMS_BITSET, 1 << GRPC_COMPRESS_NONE);
+        restartServer(args);
+        // init()'s channel points at the now-dead server; re-attach to avoid
+        // racing the reconnect (surfaces as Unavailable on unix transports).
+        auto *staleChannel = static_cast<QGrpcHttp2Channel *>(m_client->channel().get());
+        QVERIFY(staleChannel);
+        auto freshChannel = std::make_shared<QGrpcHttp2Channel>(staleChannel->hostUri(),
+                                                                staleChannel->channelOptions());
+        QVERIFY(m_client->attachChannel(freshChannel));
+    }
+
+    QGrpcChannelOptions chOpts = m_client->channel()->channelOptions();
+    if (channelAlgo)
+        chOpts.setRequestCompression(*channelAlgo);
+    m_client->channel()->setChannelOptions(chOpts);
+
+    auto processor = m_server->createProcessor();
+    auto *processorPtr = processor.get();
+    struct ServerData
+    {
+        grpc::ServerAsyncResponseWriter<None> op{ &ctx };
+        grpc::ServerContext ctx;
+        Event request;
+        None response;
+    };
+
+    // Only register a handler when the server accepts. In rejection paths gRPC
+    // refuses before matching, leaving the tag pending.
+    if (!serverRejects) {
+        auto *data = new ServerData;
+        auto *callHandler = new CallbackTag(
+            [&payload, data, processorPtr](bool ok) {
+                QVERIFY(ok);
+                QCOMPARE_EQ(data->request.name(), payload);
+                data->op.Finish(data->response, grpc::Status::OK,
+                                new DeleteTag<ServerData>(data, processorPtr));
+                return CallbackTag::Delete;
+            },
+            processorPtr);
+        m_service->RequestPush(&data->ctx, &data->request, &data->op, m_server->cq(),
+                               m_server->cq(), callHandler);
+    }
+
+    qt::Event evt;
+    evt.setName(QString::fromStdString(payload));
+    std::unique_ptr<QGrpcCallReply> call = callAlgo
+        ? m_client->Push(evt, QGrpcCallOptions().setRequestCompression(*callAlgo))
+        : m_client->Push(evt);
+    QVERIFY(call);
+
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    QVERIFY(finishedSpy.wait());
+    QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first()).code(), expectedCode);
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)

@@ -343,6 +343,35 @@ QGrpcChannelOptions &QGrpcChannelOptions::setMaximumReceiveMessageSize(quint64 s
 }
 
 /*!
+    \include qgrpccommonoptions.cpp requestCompression
+    \sa QGrpcCallOptions::requestCompression()
+*/
+std::optional<QtGrpc::CompressionAlgorithm> QGrpcChannelOptions::requestCompression() const noexcept
+{
+    Q_D(const QGrpcChannelOptions);
+    return d->requestCompression();
+}
+
+/*!
+    \include qgrpccommonoptions.cpp setRequestCompression
+
+    \include qgrpcchanneloptions.cpp channel-note
+    \l{QGrpcCallOptions::setRequestCompression()}
+
+    \sa QGrpcCallOptions::setRequestCompression()
+*/
+QGrpcChannelOptions &
+QGrpcChannelOptions::setRequestCompression(QtGrpc::CompressionAlgorithm algorithm)
+{
+    if (d_ptr->requestCompression() == algorithm)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->setRequestCompression(algorithm);
+    return *this;
+}
+
+/*!
     \since 6.12
 
     Returns the compression algorithms that the current Qt build can
@@ -508,6 +537,7 @@ bool comparesEqual(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rh
         && lhs.filterServerMetadata() == rhs.filterServerMetadata()
         && lhs.maximumReceiveMessageSize() == rhs.maximumReceiveMessageSize()
         && lhs.metadata(QtGrpc::MultiValue) == rhs.metadata(QtGrpc::MultiValue)
+        && lhs.requestCompression() == rhs.requestCompression()
         && lhs.serializationFormat() == rhs.serializationFormat()
 #if QT_CONFIG(ssl)
         && lhs.sslConfiguration() == rhs.sslConfiguration()
@@ -545,6 +575,7 @@ QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
           << ", metadata: " << chOpts.metadata(QtGrpc::MultiValue)
           << ", filterServerMetadata: " << chOpts.filterServerMetadata()
           << ", maximumReceiveMessageSize: " << chOpts.maximumReceiveMessageSize()
+          << ", requestCompression: " << chOpts.requestCompression()
           << ", serializationFormat: " << chOpts.serializationFormat().suffix()
           << ", sslConfiguration: ";
 #  if QT_CONFIG(ssl)

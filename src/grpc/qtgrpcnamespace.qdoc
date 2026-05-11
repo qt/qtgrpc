@@ -160,11 +160,12 @@
     \enum QtGrpc::CompressionAlgorithm
     \since 6.12
 
-    \brief Lists the compression algorithms a gRPC channel accepts from the
-    server.
+    \brief Lists the compression algorithms supported for gRPC messages.
 
     The \l{QGrpcHttp2Channel}{HTTP/2 channel} advertises the selected
-    algorithms in the \c{grpc-accept-encoding} request header.
+    algorithms in the \c{grpc-accept-encoding} request header, and sends
+    outbound messages compressed with the algorithm selected via
+    \l{QGrpcChannelOptions::}{setRequestCompression()}.
 
     \value Identity No compression. Always present in the accepted set because
     the gRPC specification mandates that uncompressed messages are accepted.
@@ -172,5 +173,7 @@
     \value Gzip The \c gzip compression algorithm.
 
     \sa QGrpcChannelOptions::setAcceptedCompressionAlgorithms(),
-        QGrpcChannelOptions::supportedCompressionAlgorithms()
+        QGrpcChannelOptions::supportedCompressionAlgorithms(),
+        QGrpcChannelOptions::setRequestCompression(),
+        QGrpcCallOptions::setRequestCompression()
 */

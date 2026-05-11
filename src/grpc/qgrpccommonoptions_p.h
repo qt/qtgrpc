@@ -56,6 +56,9 @@ public:
     std::optional<quint64> maximumReceiveMessageSize() const noexcept;
     void setMaximumReceiveMessageSize(quint64 size);
 
+    std::optional<QtGrpc::CompressionAlgorithm> requestCompression() const noexcept;
+    void setRequestCompression(QtGrpc::CompressionAlgorithm algorithm);
+
 private:
     std::optional<std::chrono::milliseconds> m_timeout;
     QMultiHash<QByteArray, QByteArray> m_metadata;
@@ -64,6 +67,7 @@ private:
 #endif
     std::optional<bool> m_filterServerMetadata;
     std::optional<quint64> m_maximumReceiveMessageSize;
+    std::optional<QtGrpc::CompressionAlgorithm> m_requestCompression;
 };
 
 namespace QtGrpcPrivate {
