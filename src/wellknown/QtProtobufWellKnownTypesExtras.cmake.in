@@ -25,6 +25,15 @@ if(__qt_@target@_targets_file_included)
         unset(extra_protobuf_dir_path)
     endforeach()
 
+    set(_@target@_extra_find_path_args "")
+    if(CMAKE_CROSSCOMPILING)
+        # NO_DEFAULT_PATH is intentionally omitted: the consumer's CMAKE_PREFIX_PATH
+        # may point to the target protobuf prefix where the .proto files live, and
+        # that path must remain searchable. Unlike BuildInternals, there is no
+        # protobuf::libprotobuf target to fall back on here.
+        set(_@target@_extra_find_path_args CMAKE_FIND_ROOT_PATH_BOTH)
+    endif()
+
     foreach(type IN LISTS _@target@_protobuf_wellknowntypes)
         unset(_@target@_proto_file_dir)
         find_path(_@target@_proto_file_dir
@@ -32,6 +41,7 @@ if(__qt_@target@_targets_file_included)
             PATHS ${_@target@_include_lookup_dirs}
             PATH_SUFFIXES include
             NO_CACHE
+            ${_@target@_extra_find_path_args}
         )
         if(_@target@_proto_file_dir)
             if(NOT _@target@_proto_file_dir IN_LIST _@target@_proto_external_include_dirs)
