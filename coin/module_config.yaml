@@ -23,5 +23,12 @@ instructions:
     - !include "{{qt/qtbase}}/coin_module_build_template_v2.yaml"
 
   Test:
+    - type: EnvironmentVariable
+      variableName: USE_VCPKG
+      variableValue: "ON"
+      enable_if:
+        condition: property
+        property: features
+        contains_value: BuildTestsInTest
     - !include "{{qt/qtbase}}/coin_module_test_template_v3.yaml"
     - !include "{{qt/qtbase}}/coin_module_test_docs.yaml"
