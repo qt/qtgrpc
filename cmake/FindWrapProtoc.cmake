@@ -49,13 +49,26 @@ if(NOT CMAKE_CROSSCOMPILING)
 endif()
 
 if(NOT __WrapProtoc_protoc_imported_location)
+    set(__WrapProtoc_find_program_args "")
     if(CMAKE_CROSSCOMPILING)
         set(__WrapProtoc_extra_prefix_paths "${QT_ADDITIONAL_HOST_PACKAGES_PREFIX_PATH}")
+        # In cross-compile builds CMAKE_PREFIX_PATH and CMAKE_FIND_ROOT_PATH
+        # conventionally hold target prefixes and root paths; suppress all of
+        # them so that a target's bin/protoc cannot be picked as the host
+        # protoc. NO_CMAKE_FIND_ROOT_PATH disables root-path re-rooting so
+        # HINTS and system PATH are searched directly (un-rooted), which is
+        # exactly what we want for a host-side tool.
+        list(APPEND __WrapProtoc_find_program_args
+            NO_CMAKE_PATH
+            NO_CMAKE_ENVIRONMENT_PATH
+            NO_CMAKE_FIND_ROOT_PATH
+        )
     endif()
     find_program(__WrapProtoc_protoc_imported_location
         NAMES protoc protoc.exe
-        PATHS "${__WrapProtoc_extra_prefix_paths}" "$ENV{Protobuf_ROOT}"
+        HINTS "${__WrapProtoc_extra_prefix_paths}" "$ENV{Protobuf_ROOT}"
         PATH_SUFFIXES bin
+        ${__WrapProtoc_find_program_args}
     )
 endif()
 
