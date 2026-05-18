@@ -13,6 +13,11 @@ if(NOT TARGET grpc_mock_server)
     return()
 endif()
 
+# grpc-c++ has issues when mixing ASan and non-ASan builds.
+# See https://github.com/grpc/grpc/issues/40935.
+# Re-enable once grpc supports ASan or when we build grpc with ASan in CI.
+qt_internal_skip_sanitizer()
+
 qt_internal_add_test(tst_grpc_client_end2end
     SOURCES
         tst_grpc_client_end2end.cpp
@@ -66,3 +71,6 @@ protobuf_generate(
 target_include_directories(tst_grpc_client_end2end PRIVATE
     "${proto_out_include}"
 )
+
+# Note the qt_internal_skip_sanitizer() above when removing.
+qt_internal_skip_linking_sanitizer()
