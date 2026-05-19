@@ -18,6 +18,7 @@ class QProtobufMessage;
 
 class Q_PROTOBUF_EXPORT QAbstractProtobufSerializer
 {
+    Q_DISABLE_COPY_MOVE(QAbstractProtobufSerializer)
 public:
     enum class Error : uint8_t {
         None,
@@ -26,6 +27,8 @@ public:
         UnexpectedEndOfStream,
         InvalidFormat,
     };
+
+    QAbstractProtobufSerializer() = default;
 
     QByteArray serialize(const QProtobufMessage *message) const;
     bool deserialize(QProtobufMessage *message, QByteArrayView data) const;
