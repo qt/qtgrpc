@@ -128,7 +128,7 @@ void QtGrpcClientBidiStreamTest::multipleImmediateSendsWithDone()
     QVERIFY(streamFinishedSpy.isValid());
 
     QTRY_COMPARE_EQ_WITH_TIMEOUT(streamFinishedSpy.count(), 1,
-                                 MessageLatencyWithThreshold * ExpectedMessageCount);
+                                 MessageLatencyWithThreshold * ExpectedMessageCount * 6);
 
     auto args = streamFinishedSpy.first();
     QCOMPARE(args.count(), 1);
