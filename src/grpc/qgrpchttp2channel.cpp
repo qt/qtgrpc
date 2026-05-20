@@ -820,6 +820,14 @@ void Http2Handler::writeMessage(QByteArrayView data)
         return;
     }
 
+    if (q20::cmp_greater(data.size(), GrpcMaxPayloadSize)) {
+        finish({ StatusCode::ResourceExhausted,
+                 QString::asprintf("Outgoing message size (%lld bytes) exceeds "
+                                   "configured limit (%llu bytes)",
+                                   static_cast<qint64>(data.size()), GrpcMaxPayloadSize) });
+        return;
+    }
+
     QByteArray msg(GrpcMessageSizeHeaderSize + data.size(), '\0');
     // Args must be 4-byte unsigned int to fit into 4-byte big endian
     qToBigEndian(static_cast<quint32>(data.size()), msg.data() + 1);
