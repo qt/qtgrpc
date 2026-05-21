@@ -55,6 +55,9 @@ ConstructorInitializerIndentWidth: 4
 # initializer list in list-initialization.
 SpaceBeforeCpp11BracedList: false
 
+# Tighten empty braces only: Event{} not Event{ }; Requires clang-format >= 22.
+SpaceInEmptyBraces: Never
+
 # Indent width for line continuations.
 ContinuationIndentWidth: 4
 
