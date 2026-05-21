@@ -423,6 +423,7 @@ private:
     QUrl sanitizeHostUri(const QUrl &rawUri, const QGrpcChannelOptions &chOpts) const;
     QByteArray setupContentTypeNegotiation(QGrpcHttp2Channel *qPtr) const;
     static QByteArray constructAuthorityHeader(const QUrl &hostUri, SocketType socketType);
+    static QByteArray constructSchemeHeader(SocketType socketType);
 
     bool createHttp2Stream(Http2Handler *handler);
     void createHttp2Connection();
@@ -984,7 +985,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
       hostUri(sanitizeHostUri(uri, q_ptr->channelOptions())),
       contentType(setupContentTypeNegotiation(q_ptr)),
       authorityHeader(constructAuthorityHeader(hostUri, socketType)),
-      schemeHeader(hostUri.scheme().toLatin1())
+      schemeHeader(constructSchemeHeader(socketType))
 {
     switch (socketType) {
     case SocketType::Tcp: {
@@ -1180,7 +1181,9 @@ QUrl QGrpcHttp2ChannelPrivate::sanitizeHostUri(const QUrl &rawUri,
     };
     const auto scheme = rawUri.scheme();
     if (scheme == UnixScheme || scheme == UnixAbstractScheme) {
-        sanitizedUri.setScheme(HttpScheme);
+        // Keep the unix/unix-abstract scheme so the sanitized URI is
+        // idempotent: re-feeding it into QGrpcHttp2Channel must select the
+        // same SocketType.
     } else if (scheme == HttpsScheme || hasSslConfiguration(chOpts)) {
         check(HttpsScheme);
         if (rawUri.port() < 0)
@@ -1277,6 +1280,11 @@ QByteArray QGrpcHttp2ChannelPrivate::constructAuthorityHeader(const QUrl &hostUr
     return authority;
 }
 
+QByteArray QGrpcHttp2ChannelPrivate::constructSchemeHeader(SocketType socketType)
+{
+    return socketType == SocketType::Tls ? "https"_ba : "http"_ba;
+}
+
 bool QGrpcHttp2ChannelPrivate::createHttp2Stream(Http2Handler *handler)
 {
     Q_ASSERT(handler != nullptr);
@@ -1338,6 +1346,11 @@ QGrpcHttp2Channel::~QGrpcHttp2Channel() = default;
 
 /*!
     Returns the host URI for this channel.
+
+    The URI is normalized according to the \l{Transportation scheme}: the
+    scheme may be adjusted and a default port may be filled in. Passing the
+    returned URI back to QGrpcHttp2Channel will select the same transport
+    configuration.
 */
 QUrl QGrpcHttp2Channel::hostUri() const
 {

@@ -78,6 +78,7 @@ private Q_SLOTS:
     void serverInitialMetadataEmitted();
 
     void bidiStreamsInOrder();
+    void hostUriRoundTrip();
 
     void clientHandlesCompression_data() const;
     void clientHandlesCompression();
@@ -526,6 +527,48 @@ void QtGrpcClientEnd2EndTest::bidiStreamsInOrder()
     QSignalSpy finishedSpy(stream.get(), &QGrpcOperation::finished);
     QVERIFY(finishedSpy.isValid());
     QVERIFY(finishedSpy.wait());
+}
+
+void QtGrpcClientEnd2EndTest::hostUriRoundTrip()
+{
+    auto *initialChannel = static_cast<QGrpcHttp2Channel *>(m_client->channel().get());
+    QVERIFY(initialChannel);
+
+    const QUrl sanitizedUri = initialChannel->hostUri();
+    auto rebuiltChannel = std::make_shared<QGrpcHttp2Channel>(sanitizedUri,
+                                                              initialChannel->channelOptions());
+    // sanitizeHostUri must be idempotent: feeding hostUri() back in yields the
+    // same URI, which is what keeps unix/unix-abstract channels reconstructible.
+    QCOMPARE(rebuiltChannel->hostUri(), sanitizedUri);
+    QVERIFY(m_client->attachChannel(rebuiltChannel));
+
+    auto processor = m_server->createProcessor();
+    struct ServerData
+    {
+        grpc::ServerAsyncResponseWriter<None> op{ &ctx };
+        grpc::ServerContext ctx;
+        Event request;
+        None response;
+    };
+    ServerData *data = new ServerData;
+    CallbackTag *callHandler = new CallbackTag(
+        [&, data](bool ok) {
+            QVERIFY(ok);
+            data->op.Finish(data->response, grpc::Status::OK,
+                            new DeleteTag<ServerData>(data, processor.get()));
+            return CallbackTag::Delete;
+        },
+        processor.get());
+    m_service->RequestPush(&data->ctx, &data->request, &data->op, m_server->cq(), m_server->cq(),
+                           callHandler);
+
+    auto call = m_client->Push(qt::Event{});
+    QVERIFY(call);
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    QVERIFY(finishedSpy.wait());
+    QCOMPARE_EQ(finishedSpy.count(), 1);
+    QVERIFY(finishedSpy.takeFirst().at(0).value<QGrpcStatus>().isOk());
 }
 
 void QtGrpcClientEnd2EndTest::clientHandlesCompression_data() const
