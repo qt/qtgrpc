@@ -622,14 +622,20 @@ void QtGrpcClientEnd2EndTest::clientHandlesCompression()
 
 void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs_data() const
 {
-    QTest::addColumn<int>("triggerCancellationDelay");
-    QTest::addRow("Active") << 150;
-    QTest::addRow("Idle") << 0;
+    QTest::addColumn<bool>("waitForServer");
+    // Active: cancel hits an RPC the server has already accepted.
+    QTest::addRow("Active") << true;
+    // Idle: cancel races the first write; client still observes Cancelled.
+    QTest::addRow("Idle") << false;
 }
 
 void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs()
 {
-    QFETCH(const int, triggerCancellationDelay);
+    QFETCH(const bool, waitForServer);
+
+    // Cancelled RPC leaves a half-drained server; rebuild for the next row.
+    const auto restoreServer = qScopeGuard([this] { restartServer(); });
+
     auto processor = m_server->createProcessor();
     struct ServerData
     {
@@ -638,15 +644,15 @@ void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs()
 
         Event request;
         None response;
-        bool notifyWhenDone = false;
+        std::atomic<bool> requestReceived = false;
+        std::atomic<bool> notifyWhenDone = false;
     };
     auto data = std::make_unique<ServerData>();
 
-    if (triggerCancellationDelay) {
+    if (waitForServer) {
         data->ctx.AsyncNotifyWhenDone(new CallbackTag(
             [&](bool ok) {
                 QVERIFY(ok);
-                // QVERIFY(data->ctx.IsCancelled()); // TODO: should this be true?
                 data->notifyWhenDone = true;
                 return CallbackTag::Delete;
             },
@@ -654,6 +660,7 @@ void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs()
         CallbackTag *callHandler = new CallbackTag(
             [&](bool ok) {
                 QVERIFY(ok);
+                data->requestReceived = true;
                 return CallbackTag::Delete;
             },
             processor.get());
@@ -673,15 +680,22 @@ void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs()
     QVERIFY(finishedSpy.isValid());
     QVERIFY(channelChangedSpy.isValid());
 
-    QTimer::singleShot(triggerCancellationDelay, [&] {
-        auto uri = static_cast<QGrpcHttp2Channel *>(m_client->channel().get())->hostUri();
-        m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(uri));
-    });
+    if (waitForServer) {
+        // Ensure the server has committed to the RPC before we cancel.
+        QTRY_VERIFY(data->requestReceived.load());
+    }
 
-    finishedSpy.wait();
+    auto *channelPtr = static_cast<QGrpcHttp2Channel *>(m_client->channel().get());
+    QVERIFY(channelPtr);
+    const auto uri = channelPtr->hostUri();
+    const auto opts = channelPtr->channelOptions();
+    QVERIFY(m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(uri, opts)));
+
+    // attachChannel() cancellation might emit finished() before we reach this line.
+    QTRY_COMPARE_EQ(finishedSpy.count(), 1);
     QCOMPARE_EQ(channelChangedSpy.count(), 1);
-    if (triggerCancellationDelay)
-        QTRY_COMPARE_EQ_WITH_TIMEOUT(data->notifyWhenDone, true, 5s);
+    if (waitForServer)
+        QTRY_VERIFY(data->notifyWhenDone.load());
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)
