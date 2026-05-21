@@ -93,6 +93,15 @@ private:
         return grpc::SslServerCredentials(opts);
     }
 
+    void restartServer(const grpc::ChannelArguments &channelArgs = {})
+    {
+        if (m_server)
+            QVERIFY(m_server->stop());
+        m_service = std::make_unique<EventHub::AsyncService>();
+        m_server = std::make_unique<MockServer>();
+        QVERIFY(m_server->start(serverListeningPorts(), { m_service.get() }, channelArgs));
+    }
+
 private:
     std::unique_ptr<MockServer> m_server;
     std::unique_ptr<EventHub::AsyncService> m_service;
@@ -101,39 +110,36 @@ private:
 
 void QtGrpcClientEnd2EndTest::initTestCase_data() const
 {
-    QTest::addColumn<std::shared_ptr<QGrpcHttp2Channel>>("channel");
+    QTest::addColumn<QUrl>("hostUri");
+    QTest::addColumn<QGrpcChannelOptions>("channelOptions");
 
-    QUrl httpAddress("http://"_ba + QByteArrayView(serverHttpAddress()));
-    QTest::newRow("http") << std::make_shared<QGrpcHttp2Channel>(httpAddress);
+    QTest::newRow("http") << QUrl("http://"_ba + QByteArrayView(serverHttpAddress()))
+                          << QGrpcChannelOptions{};
 
 #if QT_CONFIG(ssl)
     QSslConfiguration tlsConfig;
     tlsConfig.setProtocol(QSsl::TlsV1_2);
     tlsConfig.setCaCertificates({ QSslCertificate{ QByteArray(SslCert) } });
     tlsConfig.setAllowedNextProtocols({ "h2"_ba });
-    QGrpcChannelOptions chOpts;
-    chOpts.setSslConfiguration(tlsConfig);
-    QUrl httpsAddress("https://"_ba + QByteArrayView(serverHttpsAddress()));
-    QTest::newRow("https") << std::make_shared<QGrpcHttp2Channel>(httpsAddress, chOpts);
+    QGrpcChannelOptions tlsOpts;
+    tlsOpts.setSslConfiguration(tlsConfig);
+    QTest::newRow("https") << QUrl("https://"_ba + QByteArrayView(serverHttpsAddress())) << tlsOpts;
 #endif
 
 #ifdef Q_OS_UNIX
-    QUrl unixAddress(serverUnixAddress().data());
-    QTest::newRow("unix") << std::make_shared<QGrpcHttp2Channel>(unixAddress);
+    QTest::newRow("unix") << QUrl(serverUnixAddress().data()) << QGrpcChannelOptions{};
 #endif
 
 #ifdef Q_OS_LINUX
-    QUrl unixAbstractAddress(serverUnixAbstractAddress().data());
-    QTest::newRow("unix-abstract") << std::make_shared<QGrpcHttp2Channel>(unixAbstractAddress);
+    QTest::newRow("unix-abstract")
+        << QUrl(serverUnixAbstractAddress().data()) << QGrpcChannelOptions{};
 #endif
 }
 
 void QtGrpcClientEnd2EndTest::initTestCase()
 {
     QTest::failOnWarning();
-    m_service = std::make_unique<EventHub::AsyncService>();
-    m_server = std::make_unique<MockServer>();
-    QVERIFY(m_server->start(serverListeningPorts(), { m_service.get() }));
+    restartServer();
 }
 
 void QtGrpcClientEnd2EndTest::cleanupTestCase()
@@ -146,9 +152,10 @@ void QtGrpcClientEnd2EndTest::cleanupTestCase()
 void QtGrpcClientEnd2EndTest::init()
 {
     QVERIFY(m_service && m_server);
-    QFETCH_GLOBAL(std::shared_ptr<QGrpcHttp2Channel>, channel);
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    QFETCH_GLOBAL(const QGrpcChannelOptions, channelOptions);
     m_client = std::make_unique<qt::EventHub::Client>();
-    QVERIFY(m_client->attachChannel(channel));
+    QVERIFY(m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(hostUri, channelOptions)));
 }
 
 void QtGrpcClientEnd2EndTest::cleanup()

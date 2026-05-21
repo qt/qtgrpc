@@ -71,7 +71,8 @@ public:
     grpc::ServerCompletionQueue *cq() { return mCQ.get(); }
     State state() const { return mState.load(std::memory_order_acquire); }
 
-    bool start(std::vector<ListeningPort> ports, std::vector<grpc::Service *> services);
+    bool start(std::vector<ListeningPort> ports, std::vector<grpc::Service *> services,
+               const grpc::ChannelArguments &channelArgs = {});
     bool stop();
 
     bool processTag(int timeoutMs = -1);

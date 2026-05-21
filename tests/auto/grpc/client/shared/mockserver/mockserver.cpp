@@ -9,6 +9,8 @@
 #include <grpcpp/alarm.h>
 #include <grpcpp/server_builder.h>
 
+#include <cstring>
+
 using namespace std::chrono_literals;
 
 TagProcessor::TagProcessor(MockServer *server)
@@ -87,7 +89,8 @@ MockServer::~MockServer()
     stop();
 };
 
-bool MockServer::start(std::vector<ListeningPort> ports, std::vector<grpc::Service *> services)
+bool MockServer::start(std::vector<ListeningPort> ports, std::vector<grpc::Service *> services,
+                       const grpc::ChannelArguments &channelArgs)
 {
     if (!transitionState(State::Stopped, State::Starting))
         return false;
@@ -97,12 +100,24 @@ bool MockServer::start(std::vector<ListeningPort> ports, std::vector<grpc::Servi
         builder.AddListeningPort(p.addressUri, p.creds, &p.selectedPort);
     for (auto *s : services)
         builder.RegisterService(s);
+    const grpc_channel_args cArgs = channelArgs.c_channel_args();
+    for (size_t i = 0; i < cArgs.num_args; ++i) {
+        const grpc_arg &a = cArgs.args[i];
+        // Skip client-only args that are not applicable to a server builder.
+        if (std::strcmp(a.key, GRPC_ARG_PRIMARY_USER_AGENT_STRING) == 0)
+            continue;
+        if (a.type == GRPC_ARG_INTEGER)
+            builder.AddChannelArgument(a.key, a.value.integer);
+        else if (a.type == GRPC_ARG_STRING)
+            builder.AddChannelArgument(a.key, a.value.string);
+    }
     mCQ = builder.AddCompletionQueue();
     mServer = builder.BuildAndStart();
     if (!mServer || !mCQ) {
         mState = State::Stopped;
         return false;
     }
+
     mState = State::Started;
     return true;
 }
