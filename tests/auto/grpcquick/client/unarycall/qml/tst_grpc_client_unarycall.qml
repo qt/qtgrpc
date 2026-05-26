@@ -11,23 +11,12 @@ import qtgrpc.tests
 Item {
     id: root
 
-    Timer {
-        id: timer
-        running: false
-        repeat: false
-        interval: 10000
-        onTriggered:  testCase.when = true;
-    }
-
     property simpleStringMessage messageArg;
     property simpleStringMessage messageResponse;
 
-    property bool calbackCalled: false
     property var clientQml
     property var grpcChannel
     property var grpcChannelDeadline
-    property var setResponse: function(value) { root.messageResponse = value; testCase.when = true; }
-    property var errorCallback: function() { root.calbackCalled = true; testCase.when = true; }
 
     function createClientItem() {
         return Qt.createQmlObject("import QtQuick; import QtGrpc; \
@@ -52,7 +41,12 @@ Item {
     }
 
     TestCase {
+        id: registrationTestCase
         name: "qtgrpcClientRegistration"
+
+        property bool callDone: false
+        property bool callErrorOccurred: false
+
         function test_1clientTypes_data() {
             return [
                         { tag: "Grpc Client created",
@@ -82,19 +76,24 @@ Item {
         }
 
         function test_testMethodCall() {
-            clientQml.testMethod(root.messageArg, root.setResponse, root.errorCallback);
-            timer.start()
-        }
-    }
-
-    TestCase {
-        id: testCase
-        name: "qtgrpcClientTestCall"
-        when: false
-
-        function test_testMethodCallCheck() {
+            registrationTestCase.callDone = false
+            registrationTestCase.callErrorOccurred = false
+            clientQml.testMethod(root.messageArg,
+                                 function(value) {
+                                     root.messageResponse = value
+                                     registrationTestCase.callDone = true
+                                 },
+                                 function(status) {
+                                     console.log("testMethod error: " + status.code
+                                                 + " - " + status.message)
+                                     registrationTestCase.callErrorOccurred = true
+                                     registrationTestCase.callDone = true
+                                 })
+            tryVerify(function() { return registrationTestCase.callDone },
+                      testMessageLatencyWithThreshold + 1000,
+                      "testMethod call did not complete in time")
             verify(root.messageResponse == root.messageArg)
-            verify(!root.calbackCalled)
+            verify(!registrationTestCase.callErrorOccurred)
         }
     }
 
@@ -104,6 +103,8 @@ Item {
         property empty arg;
         property metadataMessage result;
         property bool errorOccurred: false;
+        property bool done: false;
+
         GrpcCallOptions {
             id: options
             metadata: GrpcMetadata {
@@ -112,41 +113,30 @@ Item {
             }
         }
 
-        Timer {
-            id: unaryCallWithOptionsTimeout
-            running: false
-            repeat: false
-            interval: 10000
-            onTriggered: unaryCallWithOptionsCheck.when = true;
-        }
-        function test_unaryCallWithOptions() {
-            clientQml.replyWithMetadata(unaryCallWithOptions.arg,
-                                        function(value) {
-                                            unaryCallWithOptions.result = value;
-                                            unaryCallWithOptionsCheck.when = true;
-                                        },
-                                        function() {
-                                            unaryCallWithOptions.errorOccurred = true;
-                                            unaryCallWithOptionsCheck.when = true;
-                                        },
-                                        options)
-            unaryCallWithOptionsTimeout.start()
-        }
-    }
-
-    TestCase {
-        id: unaryCallWithOptionsCheck
-        name: "unaryCallWithOptionsCheck"
-        when: false
-
         function removeElementFromArray(array, element) {
             var index = array.indexOf(element)
             verify(index !== -1)
-
             array.splice(index, 1)
         }
 
-        function test_unaryCallWithOptionsCheck() {
+        function test_unaryCallWithOptions() {
+            unaryCallWithOptions.done = false
+            unaryCallWithOptions.errorOccurred = false
+            clientQml.replyWithMetadata(unaryCallWithOptions.arg,
+                                        function(value) {
+                                            unaryCallWithOptions.result = value
+                                            unaryCallWithOptions.done = true
+                                        },
+                                        function(status) {
+                                            console.log("replyWithMetadata error: " + status.code
+                                                        + " - " + status.message)
+                                            unaryCallWithOptions.errorOccurred = true
+                                            unaryCallWithOptions.done = true
+                                        },
+                                        options)
+            tryVerify(function() { return unaryCallWithOptions.done },
+                      testMessageLatencyWithThreshold + 1000,
+                      "replyWithMetadata call did not complete in time")
             verify(!unaryCallWithOptions.errorOccurred, "unaryCallWithOptions ended with error")
 
             var missingHeaders = Array()
@@ -168,7 +158,6 @@ Item {
                    "Missing headers from server: " + missingHeaders)
         }
     }
-
 
     Component.onCompleted: {
         clientQml = root.createClientItem()

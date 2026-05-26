@@ -18,16 +18,16 @@ public slots:
         // Initialization requiring the QQmlEngine to be constructed
         engine->rootContext()->setContextProperty("testMessageLatencyWithThreshold",
                                                   QVariant::fromValue(MessageLatencyWithThreshold));
-        if (m_serverProccess.state() != QProcess::ProcessState::Running) {
+        if (m_serverProcess.state() != QProcess::ProcessState::Running) {
             qInfo() << "Restarting server";
-            m_serverProccess.restart();
-            QVERIFY2(m_serverProccess.state() == QProcess::ProcessState::Running,
+            m_serverProcess.restart();
+            QVERIFY2(m_serverProcess.state() == QProcess::ProcessState::Running,
                      "Precondition failed - Server cannot be started.");
         }
     }
 
 private:
-    ServerProcRunner m_serverProccess{ TEST_GRPC_SERVER_PATH };
+    ServerProcRunner m_serverProcess{ TEST_GRPC_SERVER_PATH };
 };
 
 QUICK_TEST_MAIN_WITH_SETUP(tst_grpc_client_serverstream_qml, GrpcClientServerStreamQml)

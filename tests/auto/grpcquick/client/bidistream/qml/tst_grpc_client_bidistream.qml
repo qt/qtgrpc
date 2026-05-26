@@ -18,14 +18,6 @@ Item {
     property bool errorCallbackCalled: false
     property int times: 1
 
-    Timer {
-        id: timer
-        running: false
-        repeat: false
-        interval: testMessageLatencyWithThreshold * root.expectedNumberOfMessages
-        onTriggered:  testCase.when = true;
-    }
-
     function readMessage(msg) {
         root.result += msg.testFieldString
 
@@ -35,17 +27,7 @@ Item {
             testCase.verify(root.streamSender,
                             "readMessage callback is called without active stream sender")
             root.streamSender.writeMessage(root.messageArg)
-
         }
-    }
-
-    function endTest() {
-        testCase.when = true
-    }
-
-    function errorCallback() {
-        root.errorCallbackCalled = true
-        endTest()
     }
 
     GrpcHttp2Channel {
@@ -61,24 +43,24 @@ Item {
     }
 
     TestCase {
-        name: "startBidiStream"
-
-        function test_testBidiStream() {
-            root.messageArg.testFieldString = "streamQml" + root.times
-            root.streamSender = clientQml.testMethodBiStream(root.messageArg,
-                                                             root.readMessage,
-                                                             root.endTest,
-                                                             root.errorCallback)
-            timer.start()
-        }
-    }
-
-    TestCase {
         id: testCase
-        name: "checkBidiStreamResult"
-        when: false
+        name: "bidiStream"
 
-        function test_testBidiStreamCheck() {
+        property bool done: false
+
+        function test_bidiStream() {
+            root.messageArg.testFieldString = "streamQml" + root.times
+            root.streamSender = clientQml.testMethodBiStream(
+                root.messageArg,
+                root.readMessage,
+                function() { testCase.done = true },
+                function(status) {
+                    root.errorCallbackCalled = true
+                    testCase.done = true
+                })
+            tryVerify(function() { return testCase.done },
+                      testMessageLatencyWithThreshold * root.expectedNumberOfMessages + 1000,
+                      "Bidirectional stream did not complete in time")
             compare(root.result, "streamQml11streamQml22streamQml33streamQml44")
             compare(root.times, root.expectedNumberOfMessages)
             verify(!root.errorCallbackCalled)

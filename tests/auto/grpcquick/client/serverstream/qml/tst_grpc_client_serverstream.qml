@@ -11,7 +11,6 @@ Item {
     id: root
 
     property simpleStringMessage messageArg;
-    property simpleStringMessage messageResponse;
     property string result: ""
 
     property bool errorCallbackCalled: false
@@ -19,26 +18,9 @@ Item {
 
     readonly property int expectedNumberOfMessages: 4
 
-    Timer {
-        id: timer
-        running: false
-        repeat: false
-        interval: testMessageLatencyWithThreshold * (root.expectedNumberOfMessages + 1)
-        onTriggered: testCase.when = true;
-    }
-
     function readMessage(msg) {
         root.result += msg.testFieldString
         ++root.times
-    }
-
-    function endTest() {
-        testCase.when = true
-    }
-
-    function errorCallback() {
-        root.errorCallbackCalled = true
-        root.endTest()
     }
 
     GrpcHttp2Channel {
@@ -54,22 +36,23 @@ Item {
     }
 
     TestCase {
-        name: "startServerStream"
-
-        function test_testServerStream() {
-            root.messageArg.testFieldString = "streamQml"
-            clientQml.testMethodServerStream(root.messageArg, root.readMessage, root.endTest,
-                                             root.errorCallback)
-            timer.start()
-        }
-    }
-
-    TestCase {
         id: testCase
-        name: "checkServerStreamResult"
-        when: false
+        name: "serverStream"
 
-        function test_testServerStreamCheck() {
+        property bool done: false
+
+        function test_serverStream() {
+            root.messageArg.testFieldString = "streamQml"
+            clientQml.testMethodServerStream(root.messageArg,
+                root.readMessage,
+                function() { testCase.done = true },
+                function(status) {
+                    root.errorCallbackCalled = true
+                    testCase.done = true
+                })
+            tryVerify(function() { return testCase.done },
+                      testMessageLatencyWithThreshold * (root.expectedNumberOfMessages + 1) + 1000,
+                      "Server stream did not complete in time")
             compare(root.result, "streamQml1streamQml2streamQml3streamQml4")
             compare(root.times, expectedNumberOfMessages)
             verify(!root.errorCallbackCalled)

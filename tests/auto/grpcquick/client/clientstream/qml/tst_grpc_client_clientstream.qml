@@ -13,29 +13,18 @@ Item {
     readonly property int expectedNumberOfMessages: 4
 
     property simpleStringMessage messageArg;
-    property simpleStringMessage messageResponse;
     property string result: ""
     property var streamSender: null
     property bool errorCallbackCalled: false
     property int times: 1
 
     Timer {
-        id: timer
-        running: false
-        repeat: false
-        interval: testMessageLatencyWithThreshold * root.expectedNumberOfMessages
-        onTriggered:  testCase.when = true;
-    }
-
-
-    function endTest(msg) {
-        result = msg.testFieldString
-        testCase.when = true
-    }
-
-    function errorCallback() {
-        root.errorCallbackCalled = true
-        endTest()
+        running: root.streamSender != null && root.times < root.expectedNumberOfMessages
+        interval: testMessageLatency
+        onTriggered: {
+            root.streamSender.writeMessage(root.messageArg)
+            ++times
+        }
     }
 
     GrpcHttp2Channel {
@@ -51,32 +40,26 @@ Item {
     }
 
     TestCase {
-        name: "startClientStream"
-
-        function test_testClientStream() {
-            root.messageArg.testFieldString = "streamQml"
-            root.streamSender = clientQml.testMethodClientStream(root.messageArg,
-                                                                 root.endTest,
-                                                                 root.errorCallback)
-            timer.start()
-        }
-    }
-
-    Timer {
-        running: root.streamSender != null && root.times < root.expectedNumberOfMessages
-        interval: testMessageLatency
-        onTriggered: {
-            root.streamSender.writeMessage(root.messageArg)
-            ++times
-        }
-    }
-
-    TestCase {
         id: testCase
-        name: "checkClientStreamResult"
-        when: false
+        name: "clientStream"
 
-        function test_testClientStreamCheck() {
+        property bool done: false
+
+        function test_clientStream() {
+            root.messageArg.testFieldString = "streamQml"
+            root.streamSender = clientQml.testMethodClientStream(
+                root.messageArg,
+                function(msg) {
+                    result = msg.testFieldString
+                    testCase.done = true
+                },
+                function(status) {
+                    root.errorCallbackCalled = true
+                    testCase.done = true
+                })
+            tryVerify(function() { return testCase.done },
+                      testMessageLatencyWithThreshold * root.expectedNumberOfMessages + 1000,
+                      "Client stream did not complete in time")
             compare(root.result, "streamQml1streamQml2streamQml3streamQml4")
             compare(root.times, root.expectedNumberOfMessages)
             verify(!root.errorCallbackCalled)
