@@ -84,10 +84,10 @@ void GrpcClientTestBase::init()
     m_client = std::make_shared<qtgrpc::tests::TestService::Client>();
     m_client->attachChannel(std::move(channel));
 
-    if (m_serverProccess.state() != QProcess::ProcessState::Running) {
+    if (m_serverProcess.state() != QProcess::ProcessState::Running) {
         qInfo() << "Restarting server";
-        m_serverProccess.restart();
-        QVERIFY2(m_serverProccess.state() == QProcess::ProcessState::Running,
+        m_serverProcess.restart();
+        QVERIFY2(m_serverProcess.state() == QProcess::ProcessState::Running,
                  "Precondition failed - Server cannot be started.");
     }
 }
