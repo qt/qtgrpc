@@ -739,6 +739,11 @@ void Http2Handler::processQueue()
     if (!m_stream)
         return;
 
+    // HTTP/2 forbids DATA before HEADERS; sendInitialRequest() resumes the
+    // drain once the request HEADERS have been sent.
+    if (m_state == State::Idle)
+        return;
+
     if (m_stream->isUploadingDATA()) {
         qCDebug(lcStream, "[%p] Stream busy uploading (queue size=%" PRIdQSIZETYPE ")", this,
                 m_queue.size());
