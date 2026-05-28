@@ -1026,24 +1026,25 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
             // Allowed optional headers
             // TODO: Implement status-details - QTBUG-138362
         } else if (phase == HeaderPhase::Initial && k == GrpcEncodingHeader) {
-            // Allowed optional headers
-            if (v == "identity"_ba)
-                continue;
-            if (!GrpcAcceptEncodingValue.contains(v)
-                || !QDecompressHelper::isSupportedEncoding(v)) {
+            // Allowed optional header. Per the gRPC compression spec, an
+            // unsupported server-side encoding MUST be reported as Internal.
+            if (v == "identity"_ba) {
+                m_negotiatedEncoding.clear();
+            } else if (!GrpcAcceptEncodingValue.contains(v)
+                       || !QDecompressHelper::isSupportedEncoding(v)) {
                 finish({ StatusCode::Internal,
-                         "Server responded with an unsupported compression algorithm: %1"_L1
+                         "Server responded with an encoding not advertised by client: %1"_L1
                              .arg(v) });
                 return;
+            } else {
+                m_decompressor = std::make_unique<QDecompressHelper>();
+                if (!m_decompressor->setEncoding(v)) {
+                    finish({ StatusCode::Internal,
+                             "Failed to initialize decompressor for algorithm: %1"_L1.arg(v) });
+                    return;
+                }
+                m_negotiatedEncoding = v;
             }
-            // Create and configure the decompressor for this stream.
-            m_decompressor = std::make_unique<QDecompressHelper>();
-            if (!m_decompressor->setEncoding(v)) {
-                finish({ StatusCode::Internal,
-                         "Failed to initialize decompressor for algorithm: %1"_L1.arg(v) });
-                return;
-            }
-            m_negotiatedEncoding = v;
         } else if (phase == HeaderPhase::Initial && k == GrpcAcceptEncodingHeader) {
             // Allowed optional headers
             // TODO: Implement client-side (request) compression handling - QTBUG-140235
