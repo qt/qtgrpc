@@ -127,7 +127,7 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
     \l{serverInitialMetadata()}.
 //![serverInitialMetadataReceived]
 
-    \include qtgrpc-shared.qdocinc http2-metadata-note
+    \include qtgrpc-shared.qdocinc metadata-note
 
     \sa serverInitialMetadata()
 */
@@ -330,7 +330,7 @@ const QHash<QByteArray, QByteArray> &QGrpcOperation::metadata() const & noexcept
     established. It may include key-value pairs that provide context for the
     call.
 
-    \include qtgrpc-shared.qdocinc http2-metadata-note
+    \include qtgrpc-shared.qdocinc metadata-note
 //! [serverInitialMetadata-shared]
 
     The metadata may contain multiple entries under the same key.
@@ -354,7 +354,7 @@ const QMultiHash<QByteArray, QByteArray> &QGrpcOperation::serverInitialMetadata(
     have been sent and just before the RPC completes. It may include key-value
     pairs providing additional context about the completed call.
 
-    \include qtgrpc-shared.qdocinc http2-metadata-note
+    \include qtgrpc-shared.qdocinc metadata-note
 //! [serverTrailingMetadata]
 
     The metadata may contain multiple entries under the same key.

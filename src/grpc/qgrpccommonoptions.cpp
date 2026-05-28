@@ -24,7 +24,7 @@ QtGrpcPrivate::toHash(const QMultiHash<QByteArray, QByteArray> &multiHash)
     Returns the metadata. If this field is unset, returns empty
     metadata.
 
-    \include qtgrpc-shared.qdocinc http2-metadata-note
+    \include qtgrpc-shared.qdocinc metadata-note
 //! [metadata]
 */
 const QHash<QByteArray, QByteArray> &QGrpcCommonOptions::metadata() const & noexcept
@@ -48,7 +48,7 @@ QHash<QByteArray, QByteArray> QGrpcCommonOptions::metadata() &&
 //! [set-metadata]
     Sets the \a metadata and returns a reference to the updated object.
 
-    \include qtgrpc-shared.qdocinc http2-metadata-note
+    \include qtgrpc-shared.qdocinc metadata-note
 //! [set-metadata]
 */
 void QGrpcCommonOptions::setMetadata(const QHash<QByteArray, QByteArray> &md)
@@ -143,7 +143,7 @@ void QGrpcCommonOptions::setMetadata(QMultiHash<QByteArray, QByteArray> &&md)
     Adds \a key and \a value to the \l metadata if the exact pair is not already contained.
     The same key may appear multiple times with different values.
 
-    \include qtgrpc-shared.qdocinc http2-metadata-note
+    \include qtgrpc-shared.qdocinc metadata-note
 
     \sa {metadata(QtGrpc::MultiValue_t)}{metadata()} {setMetadata(const
     QMultiHash<QByteArray, QByteArray>&)}{setMetadata()}
