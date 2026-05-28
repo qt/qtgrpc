@@ -860,7 +860,7 @@ void QtGrpcClientEnd2EndTest::acceptedCompressionAlgorithms_data() const
     // Passing only Identity rejects every compressed encoding from the server,
     // while uncompressed responses are always accepted per the gRPC spec.
     QTest::newRow("identity-only-rejects-gzip")
-        << identity << GRPC_COMPRESS_GZIP << StatusCode::Unimplemented;
+        << identity << GRPC_COMPRESS_GZIP << StatusCode::Internal;
 
     QTest::newRow("identity-only-accepts-uncompressed")
         << identity << GRPC_COMPRESS_NONE << StatusCode::Ok;
@@ -868,7 +868,7 @@ void QtGrpcClientEnd2EndTest::acceptedCompressionAlgorithms_data() const
     QTest::newRow("gzip-allowed-accepts-gzip") << gzip << GRPC_COMPRESS_GZIP << StatusCode::Ok;
 
     QTest::newRow("gzip-allowed-rejects-deflate")
-        << gzip << GRPC_COMPRESS_DEFLATE << StatusCode::Unimplemented;
+        << gzip << GRPC_COMPRESS_DEFLATE << StatusCode::Internal;
 
     QTest::newRow("deflate-allowed-accepts-deflate")
         << deflate << GRPC_COMPRESS_DEFLATE << StatusCode::Ok;

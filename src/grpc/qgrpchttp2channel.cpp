@@ -313,6 +313,17 @@ QByteArray requestEncodingName(CompressionAlgorithm algo)
     return algo == CompressionAlgorithm::Gzip ? "gzip"_ba : "deflate"_ba;
 }
 
+bool isAcceptedEncoding(QByteArrayView v, QtGrpc::CompressionAlgorithms accepted)
+{
+    if (v == "identity"_ba)
+        return true;
+    if (v == "gzip"_ba)
+        return accepted & CompressionAlgorithm::Gzip;
+    if (v == "deflate"_ba)
+        return accepted & CompressionAlgorithm::Deflate;
+    return false;
+}
+
 bool hasSslConfiguration(const QGrpcChannelOptions &opts)
 {
 #if QT_CONFIG(ssl)
@@ -1199,21 +1210,26 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
             // Allowed optional headers
             // TODO: Implement status-details - QTBUG-138362
         } else if (phase == HeaderPhase::Initial && k == GrpcEncodingHeader) {
-            // Allowed optional headers
-            if (!channelPriv()->acceptEncoding().contains(v)) {
-                finish({ StatusCode::Unimplemented,
+            // Allowed optional header. Per the gRPC compression spec, an
+            // unsupported server-side encoding MUST be reported as Internal.
+            const auto accepted = channel()->channelOptions().acceptedCompressionAlgorithms();
+            if (!isAcceptedEncoding(v, accepted)) {
+                finish({ StatusCode::Internal,
                          "Server responded with an encoding not advertised by client: %1"_L1
                              .arg(v) });
                 return;
             }
-            // Create and configure the decompressor for this stream.
-            m_decompressor = std::make_unique<QDecompressHelper>();
-            if (!m_decompressor->setEncoding(v)) {
-                finish({ StatusCode::Internal,
-                         "Failed to initialize decompressor for algorithm: %1"_L1.arg(v) });
-                return;
+            if (v == "identity"_ba) {
+                m_negotiatedEncoding.clear();
+            } else {
+                m_decompressor = std::make_unique<QDecompressHelper>();
+                if (!m_decompressor->setEncoding(v)) {
+                    finish({ StatusCode::Internal,
+                             "Failed to initialize decompressor for algorithm: %1"_L1.arg(v) });
+                    return;
+                }
+                m_negotiatedEncoding = v;
             }
-            m_negotiatedEncoding = v;
         } else if (phase == HeaderPhase::Initial && k == GrpcAcceptEncodingHeader) {
             // The server advertises what it can decode. The client does not filter
             // its own request compression against this set; a mismatch causes the
