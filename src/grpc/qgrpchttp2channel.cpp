@@ -160,6 +160,27 @@ using namespace QtGrpc;
 
     \include qgrpcserializationformat.cpp custom-serializer-desc
 
+    \section2 Reserved metadata keys
+
+    Metadata is transmitted as HTTP/2 headers: \b{keys} are case-insensitive
+    ASCII strings, \b{values} may be ASCII strings or binary data. The
+    following keys are reserved by HTTP/2 or the \gRPC protocol and are
+    dropped from user metadata when the request is built:
+
+    \list
+        \li HTTP/2 pseudo-headers (any key starting with \c{:}).
+        \li Any key with the \c{grpc-} or \c{qtgrpc-} prefix.
+        \li \c{te}, \c{content-type}, \c{user-agent}.
+    \endlist
+
+    A user-provided \c{content-type} is still consulted at channel construction
+    for serializer auto-detection (see \l{Content-Type}); it is not, however,
+    forwarded as a Custom-Metadata entry.
+
+    For more information on HTTP/2 headers, see
+    \l{https://www.rfc-editor.org/rfc/rfc7540.html#section-8.1.2}{RFC 7540,
+    Section 8.1.2}.
+
     \sa QAbstractGrpcChannel, QGrpcChannelOptions, QGrpcSerializationFormat
 */
 
@@ -629,11 +650,15 @@ HPack::HttpHeader Http2Handler::constructInitialHeaders() const
         { TEHeader,                 TEValue                                  },
     };
 
-    auto iterateMetadata = [&headers](const auto &metadata) {
+    auto iterateMetadata = [&headers, this](const auto &metadata) {
         for (const auto &[key, value] : metadata.asKeyValueRange()) {
             const auto lowerKey = key.toLower();
-            if (lowerKey == AuthorityHeader || lowerKey == MethodHeader || lowerKey == PathHeader
-                || lowerKey == SchemeHeader || lowerKey == ContentTypeHeader) {
+            // Filter out HTTP/2 and gRPC reserved headers that are managed by the transport.
+            if (lowerKey.startsWith(':') || lowerKey.startsWith("grpc-")
+                || lowerKey.startsWith("qtgrpc-") || lowerKey == ContentTypeHeader
+                || lowerKey == TEHeader || lowerKey == UserAgentHeader) {
+                qCWarning(lcStream, "[%p] Dropping user-provided reserved metadata key: '%s'", this,
+                          lowerKey.constData());
                 continue;
             }
             headers.emplace_back(lowerKey, value);
