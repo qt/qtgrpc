@@ -23,7 +23,8 @@
 
     The client application binds on the \c localhost UDP port \c 65500 and
     waits for data from the emulator application.
-    \image client.webp
+    \image client.webp {Client console window showing latitude, longitude,
+           and altitude coordinates and a weather temperature field}
 
     Use the emulator application to change the values of sensor data and send
     the data to the client's UDP port.
