@@ -27,6 +27,7 @@
 #  include <QtNetwork/qsslsocket.h>
 #endif
 
+#include <QtCore/private/qexpected_p.h>
 #include <QtCore/private/qnoncontiguousbytedevice_p.h>
 #include <QtCore/qalgorithms.h>
 #include <QtCore/qbytearray.h>
@@ -36,6 +37,7 @@
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qpointer.h>
 #include <QtCore/qqueue.h>
+#include <QtCore/qtenvironmentvariables.h>
 #include <QtCore/qtimer.h>
 #include <QtCore/qvarlengtharray.h>
 
@@ -204,6 +206,44 @@ const QByteArray GrpcAcceptEncodingHeader("grpc-accept-encoding");
 const QByteArray GrpcAcceptEncodingValue("identity,deflate,gzip");
 const QByteArray GrpcEncodingHeader("grpc-encoding");
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
+constexpr quint32 DefaultMaximumReceiveMessageSize = 4 * 1024 * 1024; // 4 MiB
+
+// Maximum gRPC frame payload size for the HTTP/2 transport. Bounded by the
+// wire-format u32 length and by qsizetype headroom for the 5-byte frame prefix
+// on 32-bit platforms.
+constexpr quint64 GrpcMaxPayloadSize = (std::min)(quint64{ (std::numeric_limits<quint32>::max)() },
+                                                  quint64{ (std::numeric_limits<qsizetype>::max)() }
+                                                      - GrpcMessageSizeHeaderSize);
+
+std::optional<quint64> envMaximumReceiveMessageSize()
+{
+    const auto v = qEnvironmentVariableIntegerValue("QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE");
+    if (!v)
+        return std::nullopt;
+    const auto env = *v;
+    if (env < 0) {
+        qCWarning(lcChannel,
+                  "QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE has a negative value (%lld); ignoring.",
+                  static_cast<long long>(env));
+        return std::nullopt;
+    }
+    return static_cast<quint64>(env);
+}
+
+// Clamps a configured maximum-receive-size to the HTTP/2 transport cap
+quint64 clampMaximumReceiveSize(quint64 configured, const char *source)
+{
+    if (configured == 0)
+        return GrpcMaxPayloadSize;
+    if (configured > GrpcMaxPayloadSize) {
+        qCWarning(lcChannel,
+                  "Configured maximum receive message size %llu (%s) exceeds the "
+                  "HTTP/2 transport cap of %llu bytes; clamping to the cap.",
+                  configured, source, GrpcMaxPayloadSize);
+        return GrpcMaxPayloadSize;
+    }
+    return configured;
+}
 
 // This HTTP/2 Error Codes to QGrpcStatus::StatusCode mapping should be kept in sync
 // with the following docs:
@@ -281,31 +321,59 @@ class GrpcDataParser
 public:
     struct Frame
     {
-        Frame(QByteArray &&payload, bool isCompressed)
+        Frame(QByteArray &&payload, bool isCompressed) noexcept
             : payload(std::move(payload)), isCompressed(isCompressed)
         {
         }
         QByteArray payload;
         bool isCompressed = false;
     };
-    // Parses the next complete gRPC frame from the buffer. Removes the frame
-    // on success, or returns std::nullopt if incomplete.
-    std::optional<Frame> parseNextFrame()
+
+    struct ParseError
+    {
+        enum Kind {
+            NeedMoreData, // Buffer does not yet contain a full frame.
+            Oversize, // Declared length exceeds maxReceiveSize.
+        };
+        Kind kind;
+        quint32 declaredSize; // Valid for Oversize.
+    };
+
+    explicit GrpcDataParser(quint64 maxReceiveSize) : maxReceiveSize(maxReceiveSize) {}
+
+    const quint64 maxReceiveSize;
+
+    [[nodiscard]] q23::expected<Frame, ParseError> parseNextFrame()
     {
         static constexpr qsizetype FlagOffset = 0;
         static constexpr qsizetype LengthOffset = 1;
 
-        std::optional<Frame> out;
+        auto out = q23::expected<Frame, ParseError>{ q23::unexpected(ParseError{
+            ParseError::NeedMoreData, 0 }) };
+
         if (container.size() < GrpcMessageSizeHeaderSize)
             return out;
 
         // Parse length (big endian, 4 bytes after flag)
         const auto messageLength = qFromBigEndian<
             quint32>(reinterpret_cast<const uchar *>(container.constData() + LengthOffset));
+
+        // Reject frames that exceed the configured receive size limit before
+        // allocating any memory for the payload.
+        if (messageLength > maxReceiveSize) {
+            // The stream will be aborted and cleaned up asynchronously after
+            // this error; discard the accumulated buffer now as no further
+            // frames will be processed.
+            container.clear();
+            out = q23::unexpected(ParseError{ ParseError::Oversize, messageLength });
+            return out;
+        }
+
+        // Safe on 32-bit platforms: maxReceiveSize is clamped to GrpcMaxPayloadSize
         const qsizetype frameSize = GrpcMessageSizeHeaderSize + messageLength;
 
         if (container.size() < frameSize)
-            return out; // Incomplete frame in buffer. Wait for more data
+            return out;
 
         out.emplace(container.mid(GrpcMessageSizeHeaderSize, messageLength),
                     container.at(FlagOffset) != 0);
@@ -381,6 +449,9 @@ private:
     [[nodiscard]] QGrpcHttp2Channel *channel() const;
     [[nodiscard]] bool handleContextExpired();
 
+    [[nodiscard]] static quint64
+    constructMaximumReceiveSize(const QGrpcHttp2ChannelPrivate &channel);
+
     QPointer<QGrpcOperationContext> m_context;
     HPack::HttpHeader m_initialHeaders;
     QQueue<QByteArray> m_queue;
@@ -415,6 +486,9 @@ public:
     const QByteArray contentType;
     const QByteArray authorityHeader;
     const QByteArray schemeHeader;
+    // Cached once at channel construction; the env var is process-global and
+    // qEnvironmentVariable() takes a global lock per call.
+    const std::optional<quint64> envMaximumReceiveSize = envMaximumReceiveMessageSize();
 
 private:
     enum ConnectionState { Connecting = 0, Connected, SettingsReceived, Error };
@@ -478,6 +552,7 @@ private:
 Http2Handler::Http2Handler(QGrpcHttp2ChannelPrivate *parent, QGrpcOperationContext *context,
                            QByteArray &&messageData, bool endStream)
     : QObject(parent), m_context(context), m_initialHeaders(constructInitialHeaders()),
+      m_grpcDataParser(constructMaximumReceiveSize(*parent)),
       m_endStreamAtFirstData(endStream), m_filterServerMetadata(constructFilterServerMetadata())
 {
     // If the context (lifetime bound to the user) is destroyed, this handler
@@ -564,7 +639,22 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                     return;
 
                 m_grpcDataParser.feed(data);
-                while (auto frame = m_grpcDataParser.parseNextFrame()) {
+                while (true) {
+                    auto frame = m_grpcDataParser.parseNextFrame();
+                    if (!frame) {
+                        switch (frame.error().kind) {
+                        case GrpcDataParser::ParseError::NeedMoreData:
+                            break;
+                        case GrpcDataParser::ParseError::Oversize:
+                            finish({ StatusCode::ResourceExhausted,
+                                     QString::asprintf("Received message size (%u bytes) exceeds "
+                                                       "configured limit (%llu bytes)",
+                                                       frame.error().declaredSize,
+                                                       m_grpcDataParser.maxReceiveSize) });
+                            return;
+                        }
+                        break;
+                    }
                     QByteArray finalPayload;
 
                     if (frame->isCompressed) {
@@ -575,7 +665,8 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                             return;
                         }
                         m_decompressor->feed(std::move(frame->payload));
-                        // Read all decompressed data for this single message.
+                        // Read all decompressed data for this single message, enforcing the
+                        // configured maximum to guard against compression-bomb payloads.
                         while (m_decompressor->hasData()) {
                             char buffer[4096];
                             qsizetype bytesRead = m_decompressor->read(buffer, sizeof(buffer));
@@ -583,6 +674,18 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                                 finish({ QtGrpc::StatusCode::Internal,
                                          "Decompression failed: %1"_L1
                                              .arg(m_decompressor->errorString()) });
+                                return;
+                            }
+                            // Reject decompressed payloads that would exceed
+                            // the configured receive limit.
+                            const quint64 newPayloadSize = static_cast<quint64>(finalPayload.size())
+                                + static_cast<quint64>(bytesRead);
+                            if (newPayloadSize > m_grpcDataParser.maxReceiveSize) {
+                                finish({ StatusCode::ResourceExhausted,
+                                         QString::asprintf("Decompressed message size (%llu bytes) "
+                                                           "exceeded configured limit (%llu bytes)",
+                                                           newPayloadSize,
+                                                           m_grpcDataParser.maxReceiveSize) });
                                 return;
                             }
                             finalPayload.append(buffer, bytesRead);
@@ -695,6 +798,15 @@ bool Http2Handler::handleContextExpired()
     m_state = State::Cancelled;
     deleteLater(); // m_stream will sendRST_STREAM on destruction
     return true;
+}
+
+quint64 Http2Handler::constructMaximumReceiveSize(const QGrpcHttp2ChannelPrivate &channel)
+{
+    // The environment variable provides a global override, sampled once at
+    // channel construction. Otherwise fall back to the gRPC default.
+    if (const auto envVal = channel.envMaximumReceiveSize)
+        return clampMaximumReceiveSize(*envVal, "QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE");
+    return DefaultMaximumReceiveMessageSize;
 }
 
 // Slot to enqueue a writeMessage request, either from the initial message

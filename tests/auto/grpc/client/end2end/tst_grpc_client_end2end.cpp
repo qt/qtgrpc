@@ -19,6 +19,7 @@
 #include <QtCore/qbytearray.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qhash.h>
+#include <QtCore/qscopeguard.h>
 #include <QtCore/qtimer.h>
 
 #include <atomic>
@@ -26,6 +27,7 @@
 #include <vector>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace QtGrpc;
 using MultiHash = QMultiHash<QByteArray, QByteArray>;
 
 class QtGrpcClientEnd2EndTest : public QObject
@@ -77,6 +79,9 @@ private Q_SLOTS:
 
     void channelChangeCancelsInFlightRPCs_data() const;
     void channelChangeCancelsInFlightRPCs();
+
+    void maximumReceiveMessageSize_data() const;
+    void maximumReceiveMessageSize();
 
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
@@ -731,6 +736,80 @@ void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs()
     QCOMPARE_EQ(channelChangedSpy.count(), 1);
     if (waitForServer)
         QTRY_VERIFY(data->notifyWhenDone.load());
+}
+
+void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize_data() const
+{
+    constexpr std::optional<quint64> None = std::nullopt;
+    constexpr std::optional<quint64> Small = 512;
+    constexpr std::optional<quint64> Unlimited = 0;
+
+    QTest::addColumn<std::optional<quint64>>("envLimit");
+    QTest::addColumn<StatusCode>("expectedCode");
+
+    QTest::newRow("env-default-accepts") << None << StatusCode::Ok;
+    QTest::newRow("env-var-rejects") << Small << StatusCode::ResourceExhausted;
+    QTest::newRow("env-unlimited-accepts") << Unlimited << StatusCode::Ok;
+}
+
+void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize()
+{
+    QFETCH(const std::optional<quint64>, envLimit);
+    QFETCH(const QtGrpc::StatusCode, expectedCode);
+
+    if (envLimit)
+        qputenv("QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE", QByteArray::number(*envLimit));
+    const auto cleanup = qScopeGuard([] { qunsetenv("QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE"); });
+
+    // Re-attach a fresh channel so the env var (set above) is sampled at
+    // channel construction time, not the one created in init().
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    QFETCH_GLOBAL(const QGrpcChannelOptions, channelOptions);
+    QVERIFY(m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(hostUri, channelOptions)));
+
+    // Server sends a 2048-byte Event message, then finishes OK.
+    auto processor = m_server->createProcessor();
+    struct ServerData
+    {
+        grpc::ServerAsyncWriter<Event> op{ &ctx };
+        grpc::ServerContext ctx;
+
+        None request;
+        Event response;
+    };
+    ServerData *data = new ServerData;
+    data->response.set_name(std::string(2048, 'x'));
+
+    CallbackTag *writeHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Finish(grpc::Status::OK, new DeleteTag<ServerData>(data, processor.get()));
+            return CallbackTag::Delete;
+        },
+        processor.get());
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Write(data->response, writeHandler);
+            return CallbackTag::Delete;
+        },
+        processor.get());
+    m_service->RequestSubscribe(&data->ctx, &data->request, &data->op, m_server->cq(),
+                                m_server->cq(), callHandler);
+
+    auto call = m_client->Subscribe(qt::None{});
+    QVERIFY(call);
+
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    QVERIFY(finishedSpy.wait());
+
+    const QVariant &finishedArg = finishedSpy.at(0).first();
+    const auto *status = get_if<QGrpcStatus>(&finishedArg);
+    QVERIFY(status);
+    QCOMPARE_EQ(status->code(), expectedCode);
+    if (status->code() == QtGrpc::StatusCode::ResourceExhausted)
+        QVERIFY(status->message().contains("512"));
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)
