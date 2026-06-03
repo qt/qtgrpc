@@ -5,6 +5,11 @@
 if(NOT QT_FEATURE_system_zlib)
     find_package(Qt6 COMPONENTS ZlibPrivate)
 elseif(NOT TARGET WrapZLIB::WrapZLIB)
+    # ZLIB::ZLIB could already come from another directory scope (e.g. Protobuf) so
+    # avoid promoting it to GLOBAL here, which CMake forbids outside that scope.
+    if(TARGET ZLIB::ZLIB)
+        qt_internal_disable_find_package_global_promotion(ZLIB::ZLIB)
+    endif()
     qt_find_package(WrapZLIB PROVIDED_TARGETS WrapZLIB::WrapZLIB)
 endif()
 
