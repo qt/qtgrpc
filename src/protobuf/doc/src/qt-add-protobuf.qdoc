@@ -31,7 +31,7 @@ invoked through CMake using the \c qt_add_protobuf command.
         [OUTPUT_HEADERS <var>]
         [OUTPUT_TARGETS <var>]
         [HEADER_GUARD <pragma|filename>]
-        [GENERATE_NON_FINAL_MESSAGES]
+        [GENERATE_NON_FINAL_MESSAGES] # since Qt 6.11
     )
 \endcode
 
