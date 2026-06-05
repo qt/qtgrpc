@@ -21,6 +21,7 @@
 #include <QtCore/qbytearray.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qhash.h>
+#include <QtCore/qregularexpression.h>
 #include <QtCore/qscopeguard.h>
 #include <QtCore/qtimer.h>
 
@@ -810,19 +811,39 @@ void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize_data() const
 {
     constexpr std::optional<quint64> None = std::nullopt;
     constexpr std::optional<quint64> Small = 512;
-    constexpr std::optional<quint64> Unlimited = 0;
+    // No "unlimited" setting exists: a value at/above the transport cap is
+    // clamped down to it, so a huge value is effectively unlimited. The env var
+    // is parsed as a signed 64-bit integer, so stay inside that range.
+    constexpr std::optional<quint64> Unlimited = quint64((std::numeric_limits<qint64>::max)());
+
+    constexpr std::optional<quint64> Zero = 0;
+    constexpr int Payload = 2048;
+    constexpr int Empty = 0;
 
     QTest::addColumn<std::optional<quint64>>("envLimit");
+    QTest::addColumn<int>("serverPayloadBytes");
+    QTest::addColumn<QRegularExpression>("expectedWarning");
     QTest::addColumn<StatusCode>("expectedCode");
 
-    QTest::newRow("env-default-accepts") << None << StatusCode::Ok;
-    QTest::newRow("env-var-rejects") << Small << StatusCode::ResourceExhausted;
-    QTest::newRow("env-unlimited-accepts") << Unlimited << StatusCode::Ok;
+    const auto noWarning = QRegularExpression();
+    const auto aboveCap = QRegularExpression("exceeds the HTTP/2 transport cap of \\d+ bytes");
+
+    QTest::newRow("env-default-accepts") << None << Payload << noWarning << StatusCode::Ok;
+    QTest::newRow("env-var-rejects")
+        << Small << Payload << noWarning << StatusCode::ResourceExhausted;
+    QTest::newRow("env-unlimited-accepts") << Unlimited << Payload << aboveCap << StatusCode::Ok;
+    // Literal-0 semantics: a payload-containing message is rejected, but an empty
+    // message (e.g. google.protobuf.Empty) still passes.
+    QTest::newRow("env-zero-rejects-payload")
+        << Zero << Payload << noWarning << StatusCode::ResourceExhausted;
+    QTest::newRow("env-zero-accepts-empty") << Zero << Empty << noWarning << StatusCode::Ok;
 }
 
 void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize()
 {
     QFETCH(const std::optional<quint64>, envLimit);
+    QFETCH(const int, serverPayloadBytes);
+    QFETCH(const QRegularExpression, expectedWarning);
     QFETCH(const QtGrpc::StatusCode, expectedCode);
 
     if (envLimit)
@@ -835,7 +856,7 @@ void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize()
     QFETCH_GLOBAL(const QGrpcChannelOptions, channelOptions);
     QVERIFY(m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(hostUri, channelOptions)));
 
-    // Server sends a 2048-byte Event message, then finishes OK.
+    // Server sends an Event message of the requested payload size, then finishes OK.
     auto processor = m_server->createProcessor();
     struct ServerData
     {
@@ -846,7 +867,8 @@ void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize()
         Event response;
     };
     ServerData *data = new ServerData;
-    data->response.set_name(std::string(2048, 'x'));
+    if (serverPayloadBytes > 0)
+        data->response.set_name(std::string(serverPayloadBytes, 'x'));
 
     CallbackTag *writeHandler = new CallbackTag(
         [&](bool ok) {
@@ -865,6 +887,9 @@ void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize()
     m_service->RequestSubscribe(&data->ctx, &data->request, &data->op, m_server->cq(),
                                 m_server->cq(), callHandler);
 
+    if (!expectedWarning.pattern().isEmpty())
+        QTest::ignoreMessage(QtWarningMsg, expectedWarning);
+
     auto call = m_client->Subscribe(qt::None{});
     QVERIFY(call);
 
@@ -877,7 +902,7 @@ void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize()
     QVERIFY(status);
     QCOMPARE_EQ(status->code(), expectedCode);
     if (status->code() == QtGrpc::StatusCode::ResourceExhausted)
-        QVERIFY(status->message().contains("512"));
+        QVERIFY(status->message().contains("exceeds"));
 }
 
 void QtGrpcClientEnd2EndTest::burstWritesDoNotOverflowStack()

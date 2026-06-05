@@ -31,11 +31,14 @@
         incoming messages larger than 4 MiB (matching the \gRPC specification).
         The limit applies to the decoded gRPC frame payload after
         transport-level decryption and any per-message decompression. You can
-        raise, lower, or remove this limit using the environment variable
-        \c{QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE}. A value of \c{0} disables the
-        QtGrpc receive size limit; the effective maximum size is then
-        determined by the underlying channel implementation. The value is
-        sampled once per channel construction.
+        raise or lower it per channel with the
+        \c{QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE} environment variable, which
+        QGrpcHttp2Channel reads when the channel is constructed. The value is
+        used verbatim: a value of \c 0 accepts only empty messages (such as
+        \c google.protobuf.Empty), and to allow larger messages you set the
+        limit accordingly, up to the transport's own maximum. If the
+        environment variable is not set, the default value is used. See
+        \l{Environment variable fallbacks}.
 
     \li Set rate limits and monitor traffic to prevent misuse.
         Qt GRPC can be vulnerable to denial-of-service attacks and setting

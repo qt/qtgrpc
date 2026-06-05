@@ -185,6 +185,23 @@ using namespace QtGrpc;
     \l{https://www.rfc-editor.org/rfc/rfc7540.html#section-8.1.2}{RFC 7540,
     Section 8.1.2}.
 
+    \section2 Environment variable fallbacks
+
+    Some channel settings can be configured through environment variables. They
+    are evaluated when each channel is constructed. If an environment variable
+    is not set, the built-in default is used.
+
+    \table
+        \header
+            \li Environment Variable
+            \li Option
+            \li Default fallback
+        \row
+            \li \c QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE
+            \li \e{None}
+            \li 4 MiB (4'194'304 Bytes)
+    \endtable
+
     \sa QAbstractGrpcChannel, QGrpcChannelOptions, QGrpcSerializationFormat
 */
 
@@ -208,43 +225,52 @@ const QByteArray GrpcAcceptEncodingHeader("grpc-accept-encoding");
 const QByteArray GrpcAcceptEncodingValue("identity,deflate,gzip");
 const QByteArray GrpcEncodingHeader("grpc-encoding");
 constexpr qsizetype GrpcMessageSizeHeaderSize = 5;
-constexpr quint32 DefaultMaximumReceiveMessageSize = 4 * 1024 * 1024; // 4 MiB
 
 // Maximum gRPC frame payload size for the HTTP/2 transport. Bounded by the
 // wire-format u32 length and by qsizetype headroom for the 5-byte frame prefix
-// on 32-bit platforms.
-constexpr quint64 GrpcMaxPayloadSize = (std::min)(quint64{ (std::numeric_limits<quint32>::max)() },
-                                                  quint64{ (std::numeric_limits<qsizetype>::max)() }
-                                                      - GrpcMessageSizeHeaderSize);
+// on 32-bit platforms. Both bounds fit in quint32.
+constexpr quint32
+    GrpcMaxPayloadSize = quint32((std::min)(quint64{ (std::numeric_limits<quint32>::max)() },
+                                            quint64{ (std::numeric_limits<qsizetype>::max)() }
+                                                - GrpcMessageSizeHeaderSize));
 
-std::optional<quint64> envMaximumReceiveMessageSize()
+constexpr const char EnvMaximumReceiveMessageSize[] = "QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE";
+constexpr quint32 DefaultMaximumReceiveMessageSize = 4 * 1024 * 1024; // 4 MiB
+
+std::optional<quint64> readEnvUnsignedInt(const char *name)
 {
-    const auto v = qEnvironmentVariableIntegerValue("QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE");
+    const auto v = qEnvironmentVariableIntegerValue(name);
     if (!v)
         return std::nullopt;
-    const auto env = *v;
-    if (env < 0) {
-        qCWarning(lcChannel,
-                  "QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE has a negative value (%lld); ignoring.",
-                  static_cast<long long>(env));
+
+    if (*v < 0) {
+        qCWarning(lcChannel, "%s has an invalid value (%lld); ignoring.", name,
+                  static_cast<long long>(*v));
         return std::nullopt;
     }
-    return static_cast<quint64>(env);
+
+    return static_cast<quint64>(*v);
 }
 
-// Clamps a configured maximum-receive-size to the HTTP/2 transport cap
-quint64 clampMaximumReceiveSize(quint64 configured, const char *source)
+// Clamps a quint64 byte limit into the 32-bit HTTP/2 transport cap [floor, cap]
+quint32 clampToRange(quint64 configured, quint32 floor, quint32 cap, const char *source)
 {
-    if (configured == 0)
-        return GrpcMaxPayloadSize;
-    if (configured > GrpcMaxPayloadSize) {
+    Q_PRE(floor <= cap);
+    if (configured > cap) {
         qCWarning(lcChannel,
-                  "Configured maximum receive message size %llu (%s) exceeds the "
-                  "HTTP/2 transport cap of %llu bytes; clamping to the cap.",
-                  configured, source, GrpcMaxPayloadSize);
-        return GrpcMaxPayloadSize;
+                  "Configured size %llu (%s) exceeds the HTTP/2 transport cap of "
+                  "%u bytes; clamping to the cap.",
+                  configured, source, cap);
+        return cap;
     }
-    return configured;
+    if (configured < floor) {
+        qCWarning(lcChannel,
+                  "Configured size %llu (%s) is below the minimum of %u bytes; "
+                  "raising to the minimum.",
+                  configured, source, floor);
+        return floor;
+    }
+    return quint32(configured);
 }
 
 // This HTTP/2 Error Codes to QGrpcStatus::StatusCode mapping should be kept in sync
@@ -349,9 +375,9 @@ public:
         quint32 declaredSize; // Valid for Oversize.
     };
 
-    explicit GrpcDataParser(quint64 maxReceiveSize) : maxReceiveSize(maxReceiveSize) {}
+    explicit GrpcDataParser(quint32 maxReceiveSize) : maxReceiveSize(maxReceiveSize) {}
 
-    const quint64 maxReceiveSize;
+    const quint32 maxReceiveSize;
 
     [[nodiscard]] q23::expected<Frame, ParseError> parseNextFrame()
     {
@@ -459,7 +485,7 @@ private:
     [[nodiscard]] QGrpcHttp2Channel *channel() const;
     [[nodiscard]] bool handleContextExpired();
 
-    [[nodiscard]] static quint64
+    [[nodiscard]] static quint32
     constructMaximumReceiveSize(const QGrpcHttp2ChannelPrivate &channel);
 
     QPointer<QGrpcOperationContext> m_context;
@@ -499,7 +525,8 @@ public:
     const QByteArray schemeHeader;
     // Cached once at channel construction; the env var is process-global and
     // qEnvironmentVariable() takes a global lock per call.
-    const std::optional<quint64> envMaximumReceiveSize = envMaximumReceiveMessageSize();
+    const std::optional<quint64>
+        envMaximumReceiveSize = readEnvUnsignedInt(EnvMaximumReceiveMessageSize);
 
 private:
     enum ConnectionState { Connecting = 0, Connected, SettingsReceived, Error };
@@ -659,7 +686,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                         case GrpcDataParser::ParseError::Oversize:
                             finish({ StatusCode::ResourceExhausted,
                                      QString::asprintf("Received message size (%u bytes) exceeds "
-                                                       "configured limit (%llu bytes)",
+                                                       "configured limit (%u bytes)",
                                                        frame.error().declaredSize,
                                                        m_grpcDataParser.maxReceiveSize) });
                             return;
@@ -694,7 +721,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                             if (newPayloadSize > m_grpcDataParser.maxReceiveSize) {
                                 finish({ StatusCode::ResourceExhausted,
                                          QString::asprintf("Decompressed message size (%llu bytes) "
-                                                           "exceeded configured limit (%llu bytes)",
+                                                           "exceeded configured limit (%u bytes)",
                                                            newPayloadSize,
                                                            m_grpcDataParser.maxReceiveSize) });
                                 return;
@@ -817,12 +844,11 @@ bool Http2Handler::handleContextExpired()
     return true;
 }
 
-quint64 Http2Handler::constructMaximumReceiveSize(const QGrpcHttp2ChannelPrivate &channel)
+quint32 Http2Handler::constructMaximumReceiveSize(const QGrpcHttp2ChannelPrivate &channel)
 {
-    // The environment variable provides a global override, sampled once at
-    // channel construction. Otherwise fall back to the gRPC default.
-    if (const auto envVal = channel.envMaximumReceiveSize)
-        return clampMaximumReceiveSize(*envVal, "QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE");
+    if (const auto envVal = channel.envMaximumReceiveSize) {
+        return clampToRange(*envVal, 0, GrpcMaxPayloadSize, EnvMaximumReceiveMessageSize);
+    }
     return DefaultMaximumReceiveMessageSize;
 }
 
@@ -840,7 +866,7 @@ void Http2Handler::writeMessage(QByteArrayView data)
     if (q20::cmp_greater(data.size(), GrpcMaxPayloadSize)) {
         finish({ StatusCode::ResourceExhausted,
                  QString::asprintf("Outgoing message size (%lld bytes) exceeds "
-                                   "configured limit (%llu bytes)",
+                                   "configured limit (%u bytes)",
                                    static_cast<qint64>(data.size()), GrpcMaxPayloadSize) });
         return;
     }
