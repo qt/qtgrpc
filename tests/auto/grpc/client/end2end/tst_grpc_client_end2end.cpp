@@ -21,6 +21,7 @@
 #include <QtCore/qbytearray.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qhash.h>
+#include <QtCore/qregularexpression.h>
 #include <QtCore/qscopeguard.h>
 #include <QtCore/qtimer.h>
 
@@ -93,6 +94,9 @@ private Q_SLOTS:
     void requestCompression();
 
     void burstWritesDoNotOverflowStack();
+
+    void receiveWindowConfig_data() const;
+    void receiveWindowConfig();
 
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
@@ -1167,6 +1171,121 @@ void QtGrpcClientEnd2EndTest::burstWritesDoNotOverflowStack()
 
     QVERIFY(finishedSpy.wait(std::chrono::seconds(60)));
     QVERIFY(qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first()).isOk());
+}
+
+void QtGrpcClientEnd2EndTest::receiveWindowConfig_data() const
+{
+    QTest::addColumn<QByteArray>("streamWindowSize");
+    QTest::addColumn<QByteArray>("connectionWindowSize");
+    QTest::addColumn<QRegularExpression>("expectedWarning");
+
+    const auto emptyEnv = QByteArray();
+
+    // The following rows exercise valid configurations. None of them should warn.
+    QTest::newRow("stream-only-valid") << "8388608"_ba << emptyEnv << QRegularExpression();
+    QTest::newRow("connection-only-valid") << emptyEnv << "33554432"_ba << QRegularExpression();
+    QTest::newRow("stream-and-connection-valid")
+        << "8388608"_ba << "67108864"_ba << QRegularExpression();
+
+    // The connection window is floored at the protocol's initial of 65535.
+    // The per-stream window allows a smaller 1024 floor.
+    QTest::newRow("stream-below-minimum-floored")
+        << "0"_ba << emptyEnv
+        << QRegularExpression("STREAM_RECEIVE_WINDOW_SIZE.*below the minimum of 1024 bytes");
+    QTest::newRow("connection-below-minimum-floored")
+        << "1024"_ba << "10000"_ba
+        << QRegularExpression("CONNECTION_RECEIVE_WINDOW_SIZE.*below the minimum of 65535 bytes");
+
+    // A sub-default per-stream window (below the 64 KiB initial, above the 1 KiB
+    // floor) is accepted verbatim, with no warning.
+    QTest::newRow("stream-below-rfc-default-valid")
+        << "4096"_ba << emptyEnv << QRegularExpression();
+
+    // A stream window above the cap is clamped
+    QTest::newRow("stream-above-cap-clamped")
+        << "2147483648"_ba << emptyEnv
+        << QRegularExpression("STREAM_RECEIVE_WINDOW_SIZE.*"
+                              "exceeds the HTTP/2 transport cap of 2147483647 bytes");
+
+    // A connection window above the cap is clamped the same way.
+    QTest::newRow("connection-above-cap-clamped")
+        << emptyEnv << "2147483648"_ba
+        << QRegularExpression("CONNECTION_RECEIVE_WINDOW_SIZE.*"
+                              "exceeds the HTTP/2 transport cap of 2147483647 bytes");
+
+    // A connection window below the stream window clamps the stream window,
+    // whether the stream window was set explicitly or is the 4 MiB default.
+    QTest::newRow("stream-above-connection-clamped")
+        << "8388608"_ba << "1048576"_ba
+        << QRegularExpression("CONNECTION_RECEIVE_WINDOW_SIZE.*"
+                              "smaller than the stream receive-window");
+    QTest::newRow("connection-only-below-default-stream-clamped")
+        << emptyEnv << "1048576"_ba
+        << QRegularExpression("CONNECTION_RECEIVE_WINDOW_SIZE.*"
+                              "smaller than the stream receive-window");
+}
+
+void QtGrpcClientEnd2EndTest::receiveWindowConfig()
+{
+    QFETCH(const QByteArray, streamWindowSize);
+    QFETCH(const QByteArray, connectionWindowSize);
+    QFETCH(const QRegularExpression, expectedWarning);
+
+    if (!streamWindowSize.isEmpty())
+        qputenv("QT_GRPC_HTTP2_STREAM_RECEIVE_WINDOW_SIZE", streamWindowSize);
+    if (!connectionWindowSize.isEmpty())
+        qputenv("QT_GRPC_HTTP2_CONNECTION_RECEIVE_WINDOW_SIZE", connectionWindowSize);
+    const auto cleanup = qScopeGuard([] {
+        qunsetenv("QT_GRPC_HTTP2_STREAM_RECEIVE_WINDOW_SIZE");
+        qunsetenv("QT_GRPC_HTTP2_CONNECTION_RECEIVE_WINDOW_SIZE");
+    });
+
+    if (!expectedWarning.pattern().isEmpty())
+        QTest::ignoreMessage(QtWarningMsg, expectedWarning);
+
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    QFETCH_GLOBAL(const QGrpcChannelOptions, channelOptions);
+    QVERIFY(m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(hostUri, channelOptions)));
+
+    TagProcessor processor(m_server.get());
+    struct ServerData
+    {
+        grpc::ServerAsyncWriter<Event> op{ &ctx };
+        grpc::ServerContext ctx;
+
+        None request;
+        Event response;
+    };
+    ServerData *data = new ServerData;
+
+    CallbackTag *writeHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Finish(grpc::Status::OK, new DeleteTag<ServerData>(data, &processor));
+            return CallbackTag::Delete;
+        },
+        &processor);
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Write(data->response, writeHandler);
+            return CallbackTag::Delete;
+        },
+        &processor);
+    m_service->RequestSubscribe(&data->ctx, &data->request, &data->op, m_server->cq(),
+                                m_server->cq(), callHandler);
+
+    auto call = m_client->Subscribe(qt::None{});
+    QVERIFY(call);
+
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    QVERIFY(finishedSpy.wait());
+
+    const QVariant &finishedArg = finishedSpy.at(0).first();
+    const auto *status = get_if<QGrpcStatus>(&finishedArg);
+    QVERIFY(status);
+    QCOMPARE_EQ(status->code(), QtGrpc::StatusCode::Ok);
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)

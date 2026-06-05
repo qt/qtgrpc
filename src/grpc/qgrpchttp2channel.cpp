@@ -19,6 +19,7 @@
 #include <QtNetwork/private/http2protocol_p.h>
 #include <QtNetwork/private/qdecompresshelper_p.h>
 #include <QtNetwork/private/qhttp2connection_p.h>
+#include <QtNetwork/qhttp2configuration.h>
 #if QT_CONFIG(localserver)
 #  include <QtNetwork/qlocalsocket.h>
 #endif
@@ -188,6 +189,108 @@ using namespace QtGrpc;
     \l{https://www.rfc-editor.org/rfc/rfc7540.html#section-8.1.2}{RFC 7540,
     Section 8.1.2}.
 
+    \section2 Receive windows
+
+    HTTP/2 flow control limits how much data a sender may transmit before the
+    receiver acknowledges it. The channel advertises two such limits to the
+    server, the \e{receive windows}:
+
+    \list
+        \li The \e{stream window} caps the unacknowledged data of a single
+            RPC.
+        \li The \e{connection window} caps the combined unacknowledged data
+            of all RPCs, which share one connection.
+    \endlist
+
+    A window limits data in flight, not the size of a transfer. Because
+    acknowledgements take one network round trip, it also caps throughput:
+
+    \badcode
+    maximum throughput = window / round-trip time
+    \endcode
+
+    Both windows are configured in bytes through environment variables:
+
+    \list
+        \li \c QT_GRPC_HTTP2_STREAM_RECEIVE_WINDOW_SIZE for the stream windows;
+            (defaults to \c{4 MiB})
+        \li \c QT_GRPC_HTTP2_CONNECTION_RECEIVE_WINDOW_SIZE for the connection
+            window; (defaults to four times the stream window, \c{16 MiB})
+    \endlist
+
+    Setting only \c QT_GRPC_HTTP2_STREAM_RECEIVE_WINDOW_SIZE automatically
+    scales the connection window to four times the stream window. Set \c
+    QT_GRPC_HTTP2_CONNECTION_RECEIVE_WINDOW_SIZE explicitly to use a
+    different ratio.
+
+    The defaults saturate local networks and most internet paths. They fall
+    short on fast links with long round-trip times. For example, an
+    application receives large messages from a distant server:
+
+    \badcode
+    link: 1 Gbit/s (125 MB/s), 100 ms round-trip time
+    \endcode
+
+    The server sends one stream window of data, then waits one round trip
+    for the acknowledgement. With the default window it delivers at most
+    4 MiB every 100 ms:
+
+    \badcode
+    4 MiB / 0.1 s = 42 MB/s, 34% of the 125 MB/s the link carries
+    \endcode
+
+    To saturate the link, the window must hold everything the link delivers
+    during one round trip, the link's \e{bandwidth-delay product} (BDP):
+
+    \badcode
+    BDP = 125 MB/s x 0.1 s = 12.5 MB
+
+    QT_GRPC_HTTP2_STREAM_RECEIVE_WINDOW_SIZE=12500000
+    12.5 MB / 0.1 s = 125 MB/s, the link is saturated
+    \endcode
+
+    Concurrent RPCs share a single connection receive window. As long as every
+    stream is continuously read, the total in-flight data remains bounded by
+    the BDP. If a stream is not read, however, its buffered data consumes part
+    of the shared connection window and may block other streams. A good rule of
+    thumb is to size the connection window for the sum of all concurrently
+    active stream windows. For eight parallel transfers on the link above:
+
+    \badcode
+    QT_GRPC_HTTP2_STREAM_RECEIVE_WINDOW_SIZE=12500000       (12.5 MB = BDP)
+    QT_GRPC_HTTP2_CONNECTION_RECEIVE_WINDOW_SIZE=100000000  (8 x 12.5 MB)
+    \endcode
+
+    Each RPC can use the full 125 MB/s when it is the only active transfer.
+    With eight concurrent RPCs, they share the link at roughly 15 MB/s each. In
+    the worst case, if the application stops reading from every stream, the
+    channel may buffer up to 100 MB of data.
+
+    Alternatively, size the stream windows so they collectively fit within a
+    connection window equal to the BDP. This bounds the maximum buffered data,
+    but limits every RPC to its allocated share, even when it transfers alone:
+
+    \badcode
+    QT_GRPC_HTTP2_STREAM_RECEIVE_WINDOW_SIZE=1562500        (12.5 MB / 8)
+    QT_GRPC_HTTP2_CONNECTION_RECEIVE_WINDOW_SIZE=12500000   (= BDP)
+    \endcode
+
+    Each RPC is limited to roughly 15 MB/s, whether it transfers alone or
+    alongside seven others. The benefit is that the channel never buffers more
+    than about 12.5 MB of unread data.
+
+    Use full-sized stream windows when minimizing transfer latency is more
+    important than memory usage. Use smaller stream windows when bounding
+    memory consumption is the priority. In either case, keep the connection
+    window large enough to hold several stream windows; otherwise a single
+    unread stream can exhaust the shared connection window and block all other
+    RPCs.
+
+    Both windows accept values up to \c{2147483647} bytes. The stream window
+    has a floor of \c{1024} bytes, which lets memory-constrained receivers
+    bound per-stream buffering; the connection window has a floor of
+    \c{65535} bytes, the protocol's initial window.
+
     \section2 Environment variable fallbacks
 
     Some channel options can be configured through environment variables.
@@ -205,6 +308,14 @@ using namespace QtGrpc;
             \li \c QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE
             \li \l{QGrpcChannelOptions::}{maximumReceiveMessageSize}
             \li 4 MiB (4'194'304 Bytes)
+        \row
+            \li \c QT_GRPC_HTTP2_STREAM_RECEIVE_WINDOW_SIZE
+            \li \e{None}
+            \li 4 MiB (4'194'304 Bytes)
+        \row
+            \li \c QT_GRPC_HTTP2_CONNECTION_RECEIVE_WINDOW_SIZE
+            \li \e{None}
+            \li 16 MiB (16'777'216 Bytes)
     \endtable
 
     \sa QAbstractGrpcChannel, QGrpcChannelOptions, QGrpcSerializationFormat
@@ -241,6 +352,13 @@ constexpr quint32
 
 constexpr const char EnvMaximumReceiveMessageSize[] = "QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE";
 constexpr quint32 DefaultMaximumReceiveMessageSize = 4 * 1024 * 1024; // 4 MiB
+
+constexpr const char EnvHttp2StreamReceiveWindowSize[] = "QT_GRPC_HTTP2_STREAM_RECEIVE_WINDOW_SIZE";
+constexpr const char
+    EnvHttp2ConnReceiveWindowSize[] = "QT_GRPC_HTTP2_CONNECTION_RECEIVE_WINDOW_SIZE";
+constexpr quint32 DefaultHttp2StreamReceiveWindowSize = 4 * 1024 * 1024; // 4 MiB
+// RFC 6.9.3 permits arbitrarily small per-stream windows
+constexpr quint32 MinimumHttp2StreamReceiveWindowSize = 1024; // 1 KiB
 
 std::optional<quint64> readEnvUnsignedInt(const char *name)
 {
@@ -669,6 +787,14 @@ private:
     static QByteArray constructAuthorityHeader(const QUrl &hostUri, SocketType socketType);
     static QByteArray constructSchemeHeader(SocketType socketType);
     static QByteArray constructAcceptEncoding(QtGrpc::CompressionAlgorithms flags);
+
+    struct ReceiveWindowSizes
+    {
+        quint32 stream;
+        quint32 connection;
+    };
+    [[nodiscard]] static ReceiveWindowSizes constructReceiveWindowSizes();
+    [[nodiscard]] static QHttp2Configuration createHttp2Configuration();
 
     bool createHttp2Stream(Http2Handler *handler);
     void createHttp2Connection();
@@ -1524,7 +1650,8 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
     if (QAbstractSocket *abstractSocket = qobject_cast<QAbstractSocket *>(m_socket.get()))
         abstractSocket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
 
-    m_connection = QHttp2Connection::createDirectConnection(m_socket.get(), {});
+    m_connection = QHttp2Connection::createDirectConnection(m_socket.get(),
+                                                            createHttp2Configuration());
 
     Q_ASSERT_X(m_connection, "QGrpcHttp2ChannelPrivate", "Unable to create the HTTP/2 connection");
     connect(m_socket.get(), &QAbstractSocket::readyRead, m_connection,
@@ -1697,6 +1824,66 @@ QByteArray QGrpcHttp2ChannelPrivate::constructAcceptEncoding(QtGrpc::Compression
     if (flags & CompressionAlgorithm::Gzip)
         result += ",gzip";
     return result;
+}
+
+auto QGrpcHttp2ChannelPrivate::constructReceiveWindowSizes() -> ReceiveWindowSizes
+{
+    // When the connection window is left to the default it is sized as this
+    // many per-stream windows.
+    constexpr quint32 ConnectionWindowStreams = 4;
+
+    // Resolve one window: take the env override (or the default) and clamp it
+    // into [floor, maxSessionReceiveWindowSize]. The connection window keeps the
+    // RFC 9113 (6.9.2) 64 KiB initial window as its floor; the per-stream window
+    // allows a smaller floor so constrained receivers can cap per-stream
+    // buffering (RFC 6.9.3 permits small per-stream windows).
+    const auto resolveWindow = [](const char *env, quint64 dflt, quint32 floor) -> quint32 {
+        return clampToRange(readEnvUnsignedInt(env).value_or(dflt), floor,
+                            Http2::maxSessionReceiveWindowSize, env);
+    };
+
+    quint32 streamWindow = resolveWindow(EnvHttp2StreamReceiveWindowSize,
+                                         DefaultHttp2StreamReceiveWindowSize,
+                                         MinimumHttp2StreamReceiveWindowSize);
+    // Pre-clamp the derived default so a stream window near either bound
+    // doesn't trigger a warning blaming an environment variable the user
+    // never set.
+    const quint64 connectionDefault = qBound(quint64(Http2::defaultSessionWindowSize),
+                                             quint64(streamWindow) * ConnectionWindowStreams,
+                                             quint64(Http2::maxSessionReceiveWindowSize));
+    const quint32 connectionWindow = resolveWindow(EnvHttp2ConnReceiveWindowSize, connectionDefault,
+                                                   Http2::defaultSessionWindowSize);
+
+    // Flow control caps in-flight data per stream at min(stream, connection)
+    // anyway; clamping keeps the advertised windows equal to the effective
+    // behavior while respecting the connection window as the memory budget.
+    if (connectionWindow < streamWindow) {
+        qCWarning(lcChannel,
+                  "Connection receive-window of %u bytes (%s) is smaller than the stream "
+                  "receive-window of %u bytes; clamping the stream window to the connection "
+                  "window.",
+                  connectionWindow, EnvHttp2ConnReceiveWindowSize, streamWindow);
+        streamWindow = connectionWindow;
+    }
+
+    return { streamWindow, connectionWindow };
+}
+
+QHttp2Configuration QGrpcHttp2ChannelPrivate::createHttp2Configuration()
+{
+    QHttp2Configuration config;
+    // These setters are expected to succeed. If they fail, the default HTTP/2
+    // receive-window sizes remain in effect.
+    const auto windows = constructReceiveWindowSizes();
+    if (!config.setStreamReceiveWindowSize(windows.stream)) {
+        qCWarning(lcChannel, "Stream receive-window of '%u' rejected by QHttp2Configuration",
+                  windows.stream);
+    }
+    if (!config.setSessionReceiveWindowSize(windows.connection)) {
+        qCWarning(lcChannel, "Session receive-window of '%u' rejected by QHttp2Configuration",
+                  windows.connection);
+    }
+    return config;
 }
 
 const QByteArray &QGrpcHttp2ChannelPrivate::acceptEncoding()
