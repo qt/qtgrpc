@@ -312,7 +312,9 @@ std::optional<quint64> QGrpcCallOptions::maximumReceiveMessageSize() const
 
 /*!
     \include qgrpccommonoptions.cpp setMaximumReceiveMessageSize
-    \note Setting this field \b{overrides} the corresponding channel options field.
+    \note Setting this field \b{overrides} the corresponding channel options
+    field — see \l{QGrpcChannelOptions::setMaximumReceiveMessageSize}.
+
     \sa QGrpcChannelOptions::setMaximumReceiveMessageSize()
 */
 QGrpcCallOptions &QGrpcCallOptions::setMaximumReceiveMessageSize(quint64 size)

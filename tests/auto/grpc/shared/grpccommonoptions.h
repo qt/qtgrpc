@@ -255,7 +255,6 @@ QT_WARNING_POP
         QCOMPARE_NE(o1.maximumReceiveMessageSize(), o1Detach.maximumReceiveMessageSize());
         QCOMPARE_EQ(o1.maximumReceiveMessageSize(), std::optional<quint64>(1024 * 1024));
 
-        // 0 means unlimited
         o1.setMaximumReceiveMessageSize(0);
         QCOMPARE_EQ(o1.maximumReceiveMessageSize(), std::optional<quint64>(0));
     }

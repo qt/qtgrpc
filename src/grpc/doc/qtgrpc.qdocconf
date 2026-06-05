@@ -67,6 +67,10 @@ macro.gRPC = "\\tm gRPC"
 macro.interceptorDirection = \
 "\\note This interceptor operates in the \\b{\1} direction. For details on how " \
 "multiple interceptor callbacks flow through the chain, see the \\l{Direction and flow} section."
+macro.h2EnvFallback = \
+"\\note QGrpcHttp2Channel uses the \\c \1 environment variable as a fallback " \
+"when this option is not set explicitly. If the environment variable is not set, " \
+"the built-in default value of \\c \2 is used. See \l{Environment variable fallbacks}."
 
 # Enforce zero documentation warnings
 warninglimit = 0
