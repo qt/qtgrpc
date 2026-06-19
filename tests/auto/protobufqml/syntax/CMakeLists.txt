@@ -22,6 +22,7 @@ qt_add_protobuf(tst_protobuf_syntax_qml_gen
     PROTO_FILES
         ../../shared/data/proto/syntax.proto
     QML
+    QML_URI "qtprotobufnamespace.tests.syntax"
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
     ALLOW_MUTABLE_GETTER_CONFLICTS
 )

@@ -4,7 +4,7 @@
 import QtQuick
 import QtTest
 
-import qtprotobufnamespace.tests
+import qtprotobufnamespace.tests.enumtypes
 import qtprotobufnamespace.tests.enums as EnumPack_
 
 TestCase {
