@@ -4,7 +4,7 @@
 import QtQuick
 import QtTest
 
-import qtprotobufnamespace.tests
+import qtprotobufnamespace.tests.repeated
 
 TestCase {
     name: "qtprotobufRepeatedTest"

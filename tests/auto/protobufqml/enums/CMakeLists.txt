@@ -29,6 +29,7 @@ qt_add_protobuf(tst_protobuf_enumtypes_qml_gen
     PROTO_FILES
         ../../protobuf/enums/enummessages.proto
     QML
+    QML_URI "qtprotobufnamespace.tests.enumtypes"
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
 )
 qt_autogen_tools_initial_setup(tst_protobuf_enumtypes_qml_gen)
