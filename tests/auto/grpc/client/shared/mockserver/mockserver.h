@@ -82,8 +82,6 @@ public:
     MockServer &step(int timeoutMs = -1);
     bool waitForAllSteps();
 
-    std::unique_ptr<TagProcessor> createProcessor();
-
 private:
     bool transitionState(State from, State to);
 

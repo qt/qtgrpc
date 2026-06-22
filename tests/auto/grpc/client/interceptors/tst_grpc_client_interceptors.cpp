@@ -133,11 +133,10 @@ private:
         std::atomic<bool> isCancelled = false;
     };
 
-    void setupUnaryEcho(std::unique_ptr<TagProcessor> &processor);
-    void setupUnaryError(std::unique_ptr<TagProcessor> &processor, grpc::StatusCode code);
-    void setupBidiStreamEcho(std::unique_ptr<TagProcessor> &processor);
-    void setupClientStreamSink(std::unique_ptr<TagProcessor> &processor,
-                               std::atomic<bool> &cancelled);
+    void setupUnaryEcho(TagProcessor *processor);
+    void setupUnaryError(TagProcessor *processor, grpc::StatusCode code);
+    void setupBidiStreamEcho(TagProcessor *processor);
+    void setupClientStreamSink(TagProcessor *processor, std::atomic<bool> &cancelled);
 
     std::unique_ptr<MockServer> m_server;
     std::unique_ptr<tst::i1::Interceptor::AsyncService> m_service1;
@@ -147,55 +146,52 @@ private:
     qt::tst::i2::Interceptor::Client m_client2;
 };
 
-void QtGrpcClientInterceptorsTest::setupUnaryEcho(std::unique_ptr<TagProcessor> &processor)
+void QtGrpcClientInterceptorsTest::setupUnaryEcho(TagProcessor *processor)
 {
     auto *data = new UnaryHandler;
 
     auto *handler = new CallbackTag(
-        [data, &processor](bool ok) {
+        [data, processor](bool ok) {
             QVERIFY(ok);
             data->response = data->request;
             data->op.Finish(data->response, grpc::Status::OK,
-                            new DeleteTag<UnaryHandler>(data, processor.get()));
+                            new DeleteTag<UnaryHandler>(data, processor));
             return CallbackTag::Delete;
         },
-        processor.get());
+        processor);
 
     m_service1->RequestUnary(&data->ctx, &data->request, &data->op, m_server->cq(), m_server->cq(),
                              handler);
 }
 
-void QtGrpcClientInterceptorsTest::setupUnaryError(std::unique_ptr<TagProcessor> &processor,
-                                                   grpc::StatusCode code)
+void QtGrpcClientInterceptorsTest::setupUnaryError(TagProcessor *processor, grpc::StatusCode code)
 {
     auto *data = new UnaryHandler;
 
     auto *handler = new CallbackTag(
-        [data, code, &processor](bool ok) {
+        [data, code, processor](bool ok) {
             QVERIFY(ok);
             data->op.FinishWithError(grpc::Status(code, "error"),
-                                     new DeleteTag<UnaryHandler>(data, processor.get()));
+                                     new DeleteTag<UnaryHandler>(data, processor));
             return CallbackTag::Delete;
         },
-        processor.get());
+        processor);
 
     m_service1->RequestUnary(&data->ctx, &data->request, &data->op, m_server->cq(), m_server->cq(),
                              handler);
 }
 
-void QtGrpcClientInterceptorsTest::setupBidiStreamEcho(std::unique_ptr<TagProcessor> &processor)
+void QtGrpcClientInterceptorsTest::setupBidiStreamEcho(TagProcessor *processor)
 {
     auto *data = new BidiStreamHandler;
 
-    auto *processorPtr = processor.get();
-
-    data->startFinish = [data, processorPtr]() {
+    data->startFinish = [data, processor]() {
         if (data->finishStarted.exchange(true, std::memory_order_acq_rel))
             return;
-        data->op.Finish(grpc::Status::OK, new DeleteTag<BidiStreamHandler>(data, processorPtr));
+        data->op.Finish(grpc::Status::OK, new DeleteTag<BidiStreamHandler>(data, processor));
     };
 
-    data->writeNext = [data, processorPtr]() {
+    data->writeNext = [data, processor]() {
         if (data->pendingMessages.empty()) {
             data->writePending.store(false, std::memory_order_release);
             if (data->finishRequested.load(std::memory_order_acquire))
@@ -213,7 +209,7 @@ void QtGrpcClientInterceptorsTest::setupBidiStreamEcho(std::unique_ptr<TagProces
                                (data->writeNext)();
                                return CallbackTag::Delete;
                            },
-                           processorPtr));
+                           processor));
     };
 
     data->readerTag = new CallbackTag(
@@ -234,7 +230,7 @@ void QtGrpcClientInterceptorsTest::setupBidiStreamEcho(std::unique_ptr<TagProces
             data->op.Read(&data->request, data->readerTag);
             return CallbackTag::Proceed;
         },
-        processorPtr);
+        processor);
 
     auto *handler = new CallbackTag(
         [data](bool ok) {
@@ -242,30 +238,30 @@ void QtGrpcClientInterceptorsTest::setupBidiStreamEcho(std::unique_ptr<TagProces
             data->op.Read(&data->request, data->readerTag);
             return CallbackTag::Delete;
         },
-        processorPtr);
+        processor);
 
     m_service2->RequestBidiStream(&data->ctx, &data->op, m_server->cq(), m_server->cq(), handler);
 }
 
-void QtGrpcClientInterceptorsTest::setupClientStreamSink(std::unique_ptr<TagProcessor> &processor,
+void QtGrpcClientInterceptorsTest::setupClientStreamSink(TagProcessor *processor,
                                                          std::atomic<bool> &cancelled)
 {
     auto *data = new ClientStreamHandler;
 
     auto reader = std::make_shared<CallbackTag *>(nullptr);
     *reader = new CallbackTag(
-        [data, &processor, reader](bool ok) {
+        [data, processor, reader](bool ok) {
             if (!ok) {
                 if (!data->isCancelled) {
                     data->op.Finish(data->request, grpc::Status::OK,
-                                    new DeleteTag<ClientStreamHandler>(data, processor.get()));
+                                    new DeleteTag<ClientStreamHandler>(data, processor));
                 }
                 return CallbackTag::Delete;
             }
             data->op.Read(&data->request, *reader);
             return CallbackTag::Proceed;
         },
-        processor.get());
+        processor);
 
     data->ctx.AsyncNotifyWhenDone(new CallbackTag(
         [&cancelled, data](bool ) {
@@ -273,17 +269,17 @@ void QtGrpcClientInterceptorsTest::setupClientStreamSink(std::unique_ptr<TagProc
             cancelled = data->ctx.IsCancelled();
             return CallbackTag::Delete;
         },
-        processor.get()));
+        processor));
 
     auto *handler = new CallbackTag(
-        [data, reader, processor = processor.get()](bool ok) {
+        [data, reader, processor](bool ok) {
             QVERIFY(ok);
             data->op.Read(&data->request, *reader);
             data->ctx.AddInitialMetadata("test-key", "test-value");
             data->op.SendInitialMetadata(new VoidTag(processor));
             return CallbackTag::Delete;
         },
-        processor.get());
+        processor);
 
     m_service2->RequestClientStream(&data->ctx, &data->op, m_server->cq(), m_server->cq(), handler);
 }
@@ -292,8 +288,8 @@ void QtGrpcClientInterceptorsTest::unaryCallOrder()
 {
     QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
 
-    auto processor = m_server->createProcessor();
-    setupUnaryEcho(processor);
+    TagProcessor processor(m_server.get());
+    setupUnaryEcho(&processor);
 
     auto i1 = std::make_unique<LoggingInterceptor>("A");
     auto i2 = std::make_unique<LoggingInterceptor>("B");
@@ -343,8 +339,8 @@ void QtGrpcClientInterceptorsTest::bidiStreamCallOrder()
 {
     QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
 
-    auto processor = m_server->createProcessor();
-    setupBidiStreamEcho(processor);
+    TagProcessor processor(m_server.get());
+    setupBidiStreamEcho(&processor);
 
     auto interceptorA = std::make_unique<LoggingInterceptor>("A");
     auto interceptorB = std::make_unique<LoggingInterceptor>("B");
@@ -412,8 +408,8 @@ void QtGrpcClientInterceptorsTest::clientStreamCallOrder()
     QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
 
     std::atomic<bool> cancelled{ false };
-    auto processor = m_server->createProcessor();
-    setupClientStreamSink(processor, cancelled);
+    TagProcessor processor(m_server.get());
+    setupClientStreamSink(&processor, cancelled);
 
     auto i1 = std::make_unique<LoggingInterceptor>("A");
     auto i2 = std::make_unique<LoggingInterceptor>("B");
@@ -473,8 +469,8 @@ void QtGrpcClientInterceptorsTest::failedCallOrder()
 {
     QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
 
-    auto processor = m_server->createProcessor();
-    setupUnaryError(processor, grpc::CANCELLED);
+    TagProcessor processor(m_server.get());
+    setupUnaryError(&processor, grpc::CANCELLED);
 
     auto interceptorA = std::make_unique<LoggingInterceptor>("A");
     auto interceptorB = std::make_unique<LoggingInterceptor>("B");
@@ -525,8 +521,8 @@ void QtGrpcClientInterceptorsTest::cancelledCallOrder()
     QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
 
     std::atomic<bool> serverCancelled{ false };
-    auto processor = m_server->createProcessor();
-    setupClientStreamSink(processor, serverCancelled);
+    TagProcessor processor(m_server.get());
+    setupClientStreamSink(&processor, serverCancelled);
 
     auto i1 = std::make_unique<LoggingInterceptor>("A");
     auto i2 = std::make_unique<LoggingInterceptor>("B");
@@ -589,8 +585,8 @@ void QtGrpcClientInterceptorsTest::partialCapabilities()
 {
     QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
 
-    auto processor = m_server->createProcessor();
-    setupUnaryEcho(processor);
+    TagProcessor processor(m_server.get());
+    setupUnaryEcho(&processor);
 
     auto partial = std::make_unique<PartialInterceptor>("Partial");
     auto full = std::make_unique<LoggingInterceptor>("Full");
@@ -634,8 +630,8 @@ void QtGrpcClientInterceptorsTest::onStartDrop()
 {
     QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
 
-    auto processor = m_server->createProcessor();
-    setupUnaryEcho(processor);
+    TagProcessor processor(m_server.get());
+    setupUnaryEcho(&processor);
 
     auto dropper = std::make_unique<DroppingInterceptor>("Drop", [](QtGrpc::RpcDescriptor desc) {
         if (desc.service == "tst.i1.Interceptor"_L1 && desc.method == "Unary"_L1
@@ -711,8 +707,8 @@ void QtGrpcClientInterceptorsTest::onStartDropFromSecond()
 {
     QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
 
-    auto processor = m_server->createProcessor();
-    setupUnaryEcho(processor);
+    TagProcessor processor(m_server.get());
+    setupUnaryEcho(&processor);
 
     auto first = std::make_unique<LoggingInterceptor>("First");
     QGrpcStartInterceptor::Continuation continuation = QGrpcStartInterceptor::Continuation::Drop;
@@ -772,7 +768,7 @@ void QtGrpcClientInterceptorsTest::modifyArguments()
     const QByteArray serverInitialMdKey = "server-initial-key";
     const QByteArray serverTrailingMdKey = "server-trailing-key";
 
-    auto processor = m_server->createProcessor();
+    TagProcessor processor(m_server.get());
 
     struct ModifyingBidiHandler
     {
@@ -790,17 +786,16 @@ void QtGrpcClientInterceptorsTest::modifyArguments()
         [data, &processor, reader](bool ok) {
             if (!ok) {
                 data->op.Finish(grpc::Status::OK,
-                                new DeleteTag<ModifyingBidiHandler>(data, processor.get()));
+                                new DeleteTag<ModifyingBidiHandler>(data, &processor));
                 return CallbackTag::Delete;
             }
             // Echo back
             data->op.Write(data->request,
-                           new CallbackTag([](bool) { return CallbackTag::Delete; },
-                                           processor.get()));
+                           new CallbackTag([](bool) { return CallbackTag::Delete; }, &processor));
             data->op.Read(&data->request, *reader);
             return CallbackTag::Proceed;
         },
-        processor.get());
+        &processor);
 
     auto *handler = new CallbackTag(
         [data, reader](bool ok) {
@@ -808,7 +803,7 @@ void QtGrpcClientInterceptorsTest::modifyArguments()
             data->op.Read(&data->request, *reader);
             return CallbackTag::Delete;
         },
-        processor.get());
+        &processor);
 
     m_service2->RequestBidiStream(&data->ctx, &data->op, m_server->cq(), m_server->cq(), handler);
 
@@ -933,8 +928,8 @@ void QtGrpcClientInterceptorsTest::interceptionContextAccessors()
     if (interceptorUsage == InterceptorUsage::Mixed)
         return;
 
-    auto processor = m_server->createProcessor();
-    setupUnaryEcho(processor);
+    TagProcessor processor(m_server.get());
+    setupUnaryEcho(&processor);
 
     QGrpcCallOptions opts;
     opts.addMetadata("test-key", "test-value");
@@ -984,9 +979,9 @@ void QtGrpcClientInterceptorsTest::interceptionContextUniqueId()
         return;
 
     constexpr qsizetype NumCalls = 20 * 2; // 2 channels
-    auto processor = m_server->createProcessor();
+    TagProcessor processor(m_server.get());
     for (int i = 0; i < NumCalls; ++i)
-        setupUnaryEcho(processor);
+        setupUnaryEcho(&processor);
 
     struct SharedData
     {
@@ -1097,8 +1092,8 @@ void QtGrpcClientInterceptorsTest::addInterceptorVariations()
 {
     QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
 
-    auto processor = m_server->createProcessor();
-    setupUnaryEcho(processor);
+    TagProcessor processor(m_server.get());
+    setupUnaryEcho(&processor);
 
     auto i1 = std::make_unique<LoggingInterceptor>("Single");
     auto i2 = std::make_unique<LoggingInterceptor>("V1");
@@ -1144,8 +1139,8 @@ void QtGrpcClientInterceptorsTest::removeAllInterceptorsMultiple()
 {
     QFETCH_GLOBAL(const InterceptorUsage, interceptorUsage);
 
-    auto processor = m_server->createProcessor();
-    setupUnaryEcho(processor);
+    TagProcessor processor(m_server.get());
+    setupUnaryEcho(&processor);
 
     auto i1 = std::make_unique<LoggingInterceptor>("A");
     auto i2 = std::make_unique<LoggingInterceptor>("B");

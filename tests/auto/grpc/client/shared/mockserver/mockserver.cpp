@@ -191,11 +191,6 @@ void MockServer::startRpcTag(AbstractRpcTag *tag)
     tag->start(mCQ.get());
 }
 
-std::unique_ptr<TagProcessor> MockServer::createProcessor()
-{
-    return std::make_unique<TagProcessor>(this);
-}
-
 bool MockServer::transitionState(State from, State to)
 {
     State expected = from;
