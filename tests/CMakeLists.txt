@@ -7,8 +7,11 @@ if(QT_BUILD_STANDALONE_TESTS)
     find_package(Qt6 ${PROJECT_VERSION} QUIET CONFIG OPTIONAL_COMPONENTS Gui Quick QuickTest)
 endif()
 
-# Find OpenSSL first since it's a transitive dependency that may not be available in CONFIG mode
+# Find OpenSSL and ZLIB first since they're transitive dependencies of gRPC that may
+# not be available in CONFIG mode. gRPC's config only resolves ZLIB if(NOT ZLIB_FOUND),
+# so ensure the ZLIB::ZLIB target exists in this scope before finding gRPC.
 find_package(OpenSSL QUIET)
+find_package(ZLIB QUIET)
 
 set(_qt_grpc_backup_prefer_config ${CMAKE_FIND_PACKAGE_PREFER_CONFIG})
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
