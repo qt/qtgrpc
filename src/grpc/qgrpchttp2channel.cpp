@@ -313,6 +313,10 @@ using namespace std::chrono_literals;
             \li \l{QGrpcChannelOptions::}{maximumReceiveMessageSize}
             \li 4 MiB (4'194'304 Bytes)
         \row
+            \li \c QT_GRPC_MAXIMUM_METADATA_SIZE
+            \li \l{QGrpcChannelOptions::maximumMetadataSize}
+            \li 16 KiB (16'384 Bytes)
+        \row
             \li \c QT_GRPC_INITIAL_RECONNECT_BACKOFF_MS
             \li \l{QGrpcChannelOptions::}{initialReconnectBackoff}
             \li 1s (1'000ms)
@@ -379,6 +383,8 @@ constexpr quint32 MinimumHttp2StreamReceiveWindowSize = 1024; // 1 KiB
 constexpr const char EnvInitialReconnectBackoff[] = "QT_GRPC_INITIAL_RECONNECT_BACKOFF_MS";
 constexpr const char EnvMaximumReconnectBackoff[] = "QT_GRPC_MAXIMUM_RECONNECT_BACKOFF_MS";
 constexpr const char EnvConnectTimeout[] = "QT_GRPC_CONNECT_TIMEOUT_MS";
+
+constexpr const char EnvGrpcMaximumMetadataSize[] = "QT_GRPC_MAXIMUM_METADATA_SIZE";
 
 std::optional<quint64> readEnvUnsignedInt(const char *name)
 {
@@ -850,6 +856,8 @@ public:
     const std::optional<quint64>
         envMaximumReconnectBackoff = readEnvUnsignedInt(EnvMaximumReconnectBackoff);
     const std::optional<quint64> envConnectTimeout = readEnvUnsignedInt(EnvConnectTimeout);
+    const std::optional<quint64>
+        envMaximumMetadataSize = readEnvUnsignedInt(EnvGrpcMaximumMetadataSize);
 
     [[nodiscard]] const QByteArray &acceptEncoding();
 
@@ -872,7 +880,8 @@ private:
         quint32 connection;
     };
     [[nodiscard]] static ReceiveWindowSizes constructReceiveWindowSizes();
-    [[nodiscard]] static QHttp2Configuration createHttp2Configuration();
+    [[nodiscard]] static QHttp2Configuration
+    createHttp2Configuration(const QGrpcHttp2ChannelPrivate &channel);
 
     bool createHttp2Stream(Http2Handler *handler);
     void createHttp2Connection();
@@ -1764,7 +1773,7 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
         abstractSocket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
 
     m_connection = QHttp2Connection::createDirectConnection(m_socket.get(),
-                                                            createHttp2Configuration());
+                                                            createHttp2Configuration(*this));
 
     Q_ASSERT_X(m_connection, "QGrpcHttp2ChannelPrivate", "Unable to create the HTTP/2 connection");
     connect(m_socket.get(), &QAbstractSocket::readyRead, m_connection,
@@ -2008,7 +2017,8 @@ auto QGrpcHttp2ChannelPrivate::constructReceiveWindowSizes() -> ReceiveWindowSiz
     return { streamWindow, connectionWindow };
 }
 
-QHttp2Configuration QGrpcHttp2ChannelPrivate::createHttp2Configuration()
+QHttp2Configuration
+QGrpcHttp2ChannelPrivate::createHttp2Configuration(const QGrpcHttp2ChannelPrivate &channel)
 {
     QHttp2Configuration config;
     // These setters are expected to succeed. If they fail, the default HTTP/2
@@ -2022,6 +2032,24 @@ QHttp2Configuration QGrpcHttp2ChannelPrivate::createHttp2Configuration()
         qCWarning(lcChannel, "Session receive-window of '%u' rejected by QHttp2Configuration",
                   windows.connection);
     }
+
+    // Advertise the metadata limit as SETTINGS_MAX_HEADER_LIST_SIZE;
+    // QHttp2Connection also enforces it on every received header block.
+    // The environment variable is a global fallback used only while the option
+    // is not explicitly set.
+    constexpr quint32 Cap = (std::numeric_limits<quint32>::max)();
+    quint64 requested = QtGrpcPrivate::DefaultMaximumMetadataSize;
+    const char *source = "QGrpcChannelOptions::maximumMetadataSize";
+    if (const auto chVal = QGrpcChannelOptionsPrivate::get(channel.q_ptr->channelOptions())
+                               ->maximumMetadataSize) {
+        requested = *chVal;
+    } else if (const auto envVal = channel.envMaximumMetadataSize) {
+        requested = *envVal;
+        source = EnvGrpcMaximumMetadataSize;
+    }
+    config.setMaxHeaderListSize(clampToRange(requested, QtGrpcPrivate::MinimumMetadataSize, Cap,
+                                             source));
+
     return config;
 }
 

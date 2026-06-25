@@ -30,6 +30,9 @@ constexpr std::chrono::milliseconds DefaultInitialReconnectBackoff = std::chrono
 constexpr std::chrono::milliseconds DefaultMaximumReconnectBackoff = std::chrono::seconds(120);
 constexpr std::chrono::milliseconds DefaultConnectTimeout = std::chrono::seconds(20);
 
+constexpr quint64 DefaultMaximumMetadataSize = 16 * 1024;
+constexpr quint32 MinimumMetadataSize = 4 * 1024;
+
 } // namespace QtGrpcPrivate
 
 class QGrpcChannelOptionsPrivate : public QGrpcCommonOptions
@@ -43,6 +46,7 @@ public:
     std::optional<std::chrono::milliseconds> initialReconnectBackoff;
     std::optional<std::chrono::milliseconds> maximumReconnectBackoff;
     std::optional<std::chrono::milliseconds> connectTimeout;
+    std::optional<quint64> maximumMetadataSize;
 #if QT_CONFIG(ssl)
     std::optional<QSslConfiguration> sslConfiguration;
 #endif

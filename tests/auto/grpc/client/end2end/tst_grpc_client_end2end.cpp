@@ -90,6 +90,9 @@ private Q_SLOTS:
     void maximumReceiveMessageSize_data() const;
     void maximumReceiveMessageSize();
 
+    void maximumMetadataSize_data() const;
+    void maximumMetadataSize();
+
     void acceptedCompressionAlgorithms_data() const;
     void acceptedCompressionAlgorithms();
 
@@ -940,6 +943,123 @@ void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize()
     QCOMPARE_EQ(status->code(), expectedCode);
     if (status->code() == QtGrpc::StatusCode::ResourceExhausted)
         QVERIFY(status->message().contains("exceeds"));
+}
+
+void QtGrpcClientEnd2EndTest::maximumMetadataSize_data() const
+{
+    constexpr std::optional<quint64> None = std::nullopt;
+    constexpr std::optional<quint64> SubFloor = 512;
+    constexpr std::optional<quint64> Zero = 0;
+    // Above the 32-bit transport cap: clamped down, lifting the limit.
+    constexpr std::optional<quint64> AboveCap = (std::numeric_limits<quint64>::max)();
+
+    constexpr int SmallMetadata = 2048;
+    constexpr int LargeMetadata = 8192;
+
+    QTest::addColumn<std::optional<quint64>>("channelLimit");
+    QTest::addColumn<int>("serverPaddingBytes");
+    QTest::addColumn<QRegularExpression>("expectedWarning");
+    QTest::addColumn<StatusCode>("expectedCode");
+
+    const auto noWarning = QRegularExpression();
+    const auto belowMin = QRegularExpression("below the minimum of 4096 bytes");
+    const auto aboveCap = QRegularExpression("exceeds the HTTP/2 transport cap of 4294967295 bytes");
+
+    // No limit falls back to the 16 KiB default.
+    QTest::newRow("default-accepts") << None << SmallMetadata << noWarning << StatusCode::Ok;
+    // Zero and any sub-floor value are raised to the 4 KiB minimum.
+    QTest::newRow("zero-floored-to-min") << Zero << SmallMetadata << belowMin << StatusCode::Ok;
+    QTest::newRow("subfloor-accepts-normal")
+        << SubFloor << SmallMetadata << belowMin << StatusCode::Ok;
+    // The 4 KiB floor still rejects a larger header block.
+    QTest::newRow("floored-rejects-large")
+        << SubFloor << LargeMetadata << belowMin << StatusCode::ResourceExhausted;
+    // A value above the transport cap is clamped down, lifting the limit.
+    QTest::newRow("above-cap-accepts") << AboveCap << LargeMetadata << aboveCap << StatusCode::Ok;
+}
+
+void QtGrpcClientEnd2EndTest::maximumMetadataSize()
+{
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    QFETCH_GLOBAL(const QGrpcChannelOptions, channelOptions);
+
+    QFETCH(const std::optional<quint64>, channelLimit);
+    QFETCH(const int, serverPaddingBytes);
+    QFETCH(const QRegularExpression, expectedWarning);
+    QFETCH(const QtGrpc::StatusCode, expectedCode);
+
+    // Server attaches an initial-metadata entry of the requested size, then finishes OK.
+    TagProcessor processor(m_server.get());
+    struct ServerData
+    {
+        grpc::ServerAsyncWriter<Event> op{ &ctx };
+        grpc::ServerContext ctx;
+
+        None request;
+        Event response;
+    };
+    ServerData *data = new ServerData;
+    data->ctx.AddInitialMetadata("x-padding", std::string(serverPaddingBytes, 'a'));
+
+    CallbackTag *writeHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Finish(grpc::Status::OK, new DeleteTag<ServerData>(data, &processor));
+            return CallbackTag::Delete;
+        },
+        &processor);
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Write(data->response, writeHandler);
+            return CallbackTag::Delete;
+        },
+        &processor);
+    m_service->RequestSubscribe(&data->ctx, &data->request, &data->op, m_server->cq(),
+                                m_server->cq(), callHandler);
+
+    QGrpcChannelOptions opts = channelOptions;
+    // The gRPC minimum is channel-agnostic, so a sub-floor value warns and is
+    // raised by the setter; anything above the transport cap warns later, when
+    // the channel builds its HTTP/2 configuration.
+    const bool warnsAtSet = expectedWarning.pattern().contains("below the minimum");
+    if (channelLimit) {
+        if (warnsAtSet)
+            QTest::ignoreMessage(QtWarningMsg, expectedWarning);
+        opts.setMaximumMetadataSize(*channelLimit);
+        if (warnsAtSet)
+            QCOMPARE_EQ(opts.maximumMetadataSize(), quint64(4096));
+    }
+
+    if (!expectedWarning.pattern().isEmpty() && !warnsAtSet)
+        QTest::ignoreMessage(QtWarningMsg, expectedWarning);
+
+    qt::EventHub::Client client;
+    QVERIFY(client.attachChannel(std::make_shared<QGrpcHttp2Channel>(hostUri, opts)));
+
+    // Rejecting the oversized header block is a connection error, which
+    // QHttp2Connection reports with a qCCritical of its own.
+    if (expectedCode != QtGrpc::StatusCode::Ok) {
+        QTest::ignoreMessage(QtCriticalMsg,
+                             QRegularExpression(
+                                 "Connection error: Header list size limit exceeded"));
+    }
+
+    auto call = client.Subscribe(qt::None{});
+    QVERIFY(call);
+
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    QVERIFY(finishedSpy.wait());
+
+    const QVariant &finishedArg = finishedSpy.at(0).first();
+    const auto *status = get_if<QGrpcStatus>(&finishedArg);
+    QVERIFY(status);
+    QCOMPARE_EQ(status->code(), expectedCode);
+    // An oversized header block is rejected by the advertised SETTINGS_MAX_HEADER_LIST_SIZE;
+    // QHttp2Connection reports it as ENHANCE_YOUR_CALM with this error string.
+    if (expectedCode != QtGrpc::StatusCode::Ok)
+        QVERIFY(status->message().contains("Header list size limit exceeded"));
 }
 
 void QtGrpcClientEnd2EndTest::acceptedCompressionAlgorithms_data() const

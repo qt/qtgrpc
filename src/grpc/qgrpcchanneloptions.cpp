@@ -349,6 +349,57 @@ QGrpcChannelOptions &QGrpcChannelOptions::setMaximumReceiveMessageSize(quint64 s
 /*!
     \since 6.13
 
+    Returns the maximum incoming metadata size in bytes.
+
+//! [maximumMetadataSize]
+    The limit applies to all metadata received for an RPC, including
+    protocol-required metadata.
+
+    The default is 16 KiB, matching the \gRPC specification.
+
+    \h2EnvFallback {QT_GRPC_MAXIMUM_METADATA_SIZE} {16 KiB}
+//! [maximumMetadataSize]
+
+    \sa setMaximumMetadataSize()
+*/
+quint64 QGrpcChannelOptions::maximumMetadataSize() const
+{
+    Q_D(const QGrpcChannelOptions);
+    return d->maximumMetadataSize.value_or(QtGrpcPrivate::MinimumMetadataSize);
+}
+
+/*!
+    \since 6.13
+    Sets the maximum incoming metadata size to \a size and returns a reference
+    to the updated object.
+
+    \include qgrpcchanneloptions.cpp maximumMetadataSize
+
+    Values below 4 KiB are raised to the minimum supported size and log a
+    warning.
+
+    \sa maximumMetadataSize()
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::setMaximumMetadataSize(quint64 size)
+{
+    if (size < QtGrpcPrivate::MinimumMetadataSize) {
+        qGrpcWarning("QGrpcChannelOptions::setMaximumMetadataSize: %llu is below the minimum of "
+                     "%u bytes; raising to the minimum.",
+                     size, QtGrpcPrivate::MinimumMetadataSize);
+        size = QtGrpcPrivate::MinimumMetadataSize;
+    }
+
+    if (d_ptr->maximumMetadataSize == size)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->maximumMetadataSize = size;
+    return *this;
+}
+
+/*!
+    \since 6.13
+
     Returns the initial reconnect backoff delay after a connection failure.
 
 //! [initialReconnectBackoff]
@@ -678,7 +729,7 @@ std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const
 //! [compares]
     Returns \c true if the \l{acceptedCompressionAlgorithms},
     \l{deadlineTimeout}, \l{filterServerMetadata},
-    \l{maximumReceiveMessageSize}, \l{metadata(QtGrpc::MultiValue_t)},
+    \l{maximumReceiveMessageSize}, \l{maximumMetadataSize}, \l{metadata(QtGrpc::MultiValue_t)},
     \l{requestCompression}, \l{serializationFormat}, \l{initialReconnectBackoff},
     \l{maximumReconnectBackoff}, \l{connectTimeout}
     and \l{sslConfiguration} in \a lhs and \a rhs are
@@ -690,6 +741,7 @@ bool comparesEqual(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rh
         && lhs.deadlineTimeout() == rhs.deadlineTimeout()
         && lhs.filterServerMetadata() == rhs.filterServerMetadata()
         && lhs.maximumReceiveMessageSize() == rhs.maximumReceiveMessageSize()
+        && lhs.maximumMetadataSize() == rhs.maximumMetadataSize()
         && lhs.metadata(QtGrpc::MultiValue) == rhs.metadata(QtGrpc::MultiValue)
         && lhs.requestCompression() == rhs.requestCompression()
         && lhs.serializationFormat() == rhs.serializationFormat()
@@ -732,6 +784,7 @@ QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
           << ", metadata: " << chOpts.metadata(QtGrpc::MultiValue)
           << ", filterServerMetadata: " << chOpts.filterServerMetadata()
           << ", maximumReceiveMessageSize: " << chOpts.maximumReceiveMessageSize()
+          << ", maximumMetadataSize: " << chOpts.maximumMetadataSize()
           << ", requestCompression: " << chOpts.requestCompression()
           << ", serializationFormat: " << chOpts.serializationFormat().suffix()
           << ", initialReconnectBackoff: " << chOpts.initialReconnectBackoff().count() << "ms"
