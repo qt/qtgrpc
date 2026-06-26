@@ -20,7 +20,7 @@ qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
 
 qt_add_qml_module(tst_grpc_http2channel_qml
-    URI QmlTestUri
+    URI GrpcQuickTest.Http2Channel
     VERSION 1.0
     QML_FILES
         qml/tst_grpchttp2channel.qml

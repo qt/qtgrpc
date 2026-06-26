@@ -20,7 +20,7 @@ qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
 
 qt_add_qml_module(tst_calloptions_qml
-    URI QmlTestUri
+    URI GrpcQuickTest.CallOptions
     VERSION 1.0
     QML_FILES
         qml/tst_calloptions.qml
