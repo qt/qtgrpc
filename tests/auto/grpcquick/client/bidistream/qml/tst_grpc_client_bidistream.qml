@@ -5,7 +5,7 @@ import QtQuick
 import QtTest
 import GrpcQuickTest.Client.BidiStream
 import QtGrpc;
-import qtgrpc.tests
+import qtgrpc.tests.bidistream
 
 Item {
     id: root

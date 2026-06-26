@@ -39,7 +39,7 @@ qt_add_protobuf(tst_grpc_client_bidistream_qml_gen
     PROTO_FILES
         ../../../grpc/shared/proto/testservice.proto
     QML
-    QML_URI qtgrpc.tests
+    QML_URI qtgrpc.tests.bidistream
     OUTPUT_DIRECTORY
         "${CMAKE_CURRENT_BINARY_DIR}/qt_grpc_generated_qml"
 )
