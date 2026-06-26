@@ -3,7 +3,7 @@
 
 import QtQuick
 import QtTest
-import QmlTestUri
+import GrpcQuickTest.Client.BidiStream
 import QtGrpc;
 import qtgrpc.tests
 
