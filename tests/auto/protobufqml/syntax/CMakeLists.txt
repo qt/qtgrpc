@@ -28,7 +28,7 @@ qt_add_protobuf(tst_protobuf_syntax_qml_gen
 )
 
 qt_add_qml_module(tst_protobuf_syntax_qml
-    URI QmlTestUri
+    URI ProtobufQmlTest.Syntax
     VERSION 1.0
     QML_FILES
         qml/tst_syntax.qml
