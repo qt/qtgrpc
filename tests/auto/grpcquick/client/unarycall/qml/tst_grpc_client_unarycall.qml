@@ -5,7 +5,7 @@ import QtQuick
 import QtGrpc;
 import QtProtobuf;
 import QtTest
-import QmlTestUri
+import GrpcQuickTest.Client.UnaryCall
 import qtgrpc.tests
 
 Item {

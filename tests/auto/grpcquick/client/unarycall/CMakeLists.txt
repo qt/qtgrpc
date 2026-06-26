@@ -45,7 +45,7 @@ qt_add_protobuf(tst_grpc_client_unarycall_qml_gen
 )
 
 qt_add_qml_module(tst_grpc_client_unarycall_qml
-    URI QmlTestUri
+    URI GrpcQuickTest.Client.UnaryCall
     VERSION 1.0
     QML_FILES
         qml/tst_grpc_client_unarycall.qml

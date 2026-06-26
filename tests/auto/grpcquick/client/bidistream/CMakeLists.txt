@@ -45,7 +45,7 @@ qt_add_protobuf(tst_grpc_client_bidistream_qml_gen
 )
 
 qt_add_qml_module(tst_grpc_client_bidistream_qml
-    URI QmlTestUri
+    URI GrpcQuickTest.Client.BidiStream
     VERSION 1.0
     QML_FILES
         qml/tst_grpc_client_bidistream.qml
