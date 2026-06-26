@@ -6,7 +6,7 @@ import QtGrpc;
 import QtProtobuf;
 import QtTest
 import GrpcQuickTest.Client.UnaryCall
-import qtgrpc.tests
+import qtgrpc.tests.unarycall
 
 Item {
     id: root
@@ -20,7 +20,7 @@ Item {
 
     function createClientItem() {
         return Qt.createQmlObject("import QtQuick; import QtGrpc; \
-                                   import qtgrpc.tests; TestServiceClient {}", root)
+                                   import qtgrpc.tests.unarycall; TestServiceClient {}", root)
     }
 
     function createGrpcChannelItem() {

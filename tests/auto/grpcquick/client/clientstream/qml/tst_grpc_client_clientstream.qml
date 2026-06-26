@@ -5,7 +5,7 @@ import QtQuick
 import QtTest
 import GrpcQuickTest.Client.ClientStream
 import QtGrpc;
-import qtgrpc.tests
+import qtgrpc.tests.clientstream
 
 Item {
     id: root
