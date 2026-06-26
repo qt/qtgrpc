@@ -21,7 +21,7 @@ qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
 
 qt_add_qml_module(tst_grpc_channel_options_qml
-    URI QmlTestUri
+    URI GrpcQuickTest.ChannelOptions
     VERSION 1.0
     QML_FILES
         qml/tst_channeloptions.qml

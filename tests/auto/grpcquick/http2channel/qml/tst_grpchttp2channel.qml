@@ -4,7 +4,7 @@
 import QtQuick
 import QtTest
 import QtGrpc
-import QmlTestUri
+import GrpcQuickTest.Http2Channel
 
 TestCase {
     id: root
