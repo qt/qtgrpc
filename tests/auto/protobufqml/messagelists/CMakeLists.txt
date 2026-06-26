@@ -30,7 +30,7 @@ qt_add_protobuf(tst_protobuf_repeated_qml_gen
 )
 
 qt_add_qml_module(tst_protobuf_repeated_qml
-    URI QmlTestUri
+    URI ProtobufQmlTest.MessageLists
     VERSION 1.0
     QML_FILES
         qml/tst_repeated.qml

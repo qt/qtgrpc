@@ -19,7 +19,7 @@ qt_internal_add_test(tst_protobuf_enumtypes_qml
 )
 
 qt_add_qml_module(tst_protobuf_enumtypes_qml
-    URI QmlTestUri
+    URI ProtobufQmlTest.Enums
     VERSION 1.0
     QML_FILES qml/tst_enumtypes.qml
 )

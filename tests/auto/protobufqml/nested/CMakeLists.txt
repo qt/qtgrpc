@@ -29,7 +29,7 @@ qt_add_protobuf(tst_nestedtypes_qtprotobuf_qml
 )
 
 qt_add_qml_module(tst_nestedtypes_qtprotobuf_qmltest
-    URI QmlTestUri
+    URI ProtobufQmlTest.Nested
     VERSION 1.0
     QML_FILES
         qml/tst_nested.qml

@@ -4,7 +4,7 @@
 import QtQuick
 import QtTest
 
-import QmlTestUri
+import ProtobufQmlTest.Basic
 
 pragma ValueTypeBehavior: Addressable
 

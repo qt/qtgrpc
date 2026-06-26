@@ -21,7 +21,7 @@ qt_internal_add_test(tst_protobuf_basictypes_qml
 )
 
 qt_add_qml_module(tst_protobuf_basictypes_qml
-    URI QmlTestUri
+    URI ProtobufQmlTest.Basic
     VERSION 1.0
     QML_FILES
         qml/tst_basic.qml
