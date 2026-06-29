@@ -27,6 +27,7 @@
 #  include <QtNetwork/qsslsocket.h>
 #endif
 
+#include <QtCore/private/qdebug_p.h>
 #include <QtCore/private/qexpected_p.h>
 #include <QtCore/private/qnoncontiguousbytedevice_p.h>
 #include <QtCore/qalgorithms.h>
@@ -313,6 +314,14 @@ bool hasSslConfiguration(const QGrpcChannelOptions &opts)
     Q_UNUSED(opts)
     return false;
 #endif
+}
+
+QByteArray sanitizedForLog(QByteArrayView v)
+{
+    // Untrusted strings should be bounded and escaped before
+    // logging to prevent log injection (CWE-117).
+    constexpr qsizetype MaxLoggedHeaderBytes = 256;
+    return QtDebugUtils::toPrintable(v.data(), v.size(), MaxLoggedHeaderBytes);
 }
 
 } // namespace
@@ -615,7 +624,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                     phase = HeaderPhase::Trailers;
                 } else {
                     qCWarning(lcStream,
-                              "[%p] Received unexcpected %s HEADERS (state=%s, "
+                              "[%p] Received unexpected %s HEADERS (state=%s, "
                               "endStream=%d)",
                               this, QDebug::toBytes(phase).constData(),
                               QDebug::toBytes(m_state).constData(), endStream);
@@ -710,7 +719,7 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                 if (endStream) {
                     if (const auto bytes = m_grpcDataParser.bytesAvailable()) {
                         finish({ QtGrpc::StatusCode::DataLoss,
-                                 "Unexcpected end of stream with %1 bytes remaining"_L1
+                                 "Unexpected end of stream with %1 bytes remaining"_L1
                                      .arg(QString::number(bytes)) });
                         return;
                     }
@@ -1064,12 +1073,14 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
             qCWarning(lcStream,
                       "[%p] Received unhandled HTTP/2 pseudo-header: { key: '%s', value: '%s' } "
                       "in phase: %s",
-                      this, k.data(), v.data(), QDebug::toBytes(phase).constData());
+                      this, sanitizedForLog(k).constData(), sanitizedForLog(v).constData(),
+                      QDebug::toBytes(phase).constData());
         } else if (k.startsWith("grpc-")) {
             qCWarning(lcStream,
-                      "[%p] Received unexcpected gRPC-reserved header: { key: %s, value: %s } "
+                      "[%p] Received unexpected gRPC-reserved header: { key: %s, value: %s } "
                       "in phase: %s",
-                      this, k.data(), v.data(), QDebug::toBytes(phase).constData());
+                      this, sanitizedForLog(k).constData(), sanitizedForLog(v).constData(),
+                      QDebug::toBytes(phase).constData());
         } else { // Custom-Metadata
             metadata.insert(k, v);
             continue;
