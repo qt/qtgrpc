@@ -6,6 +6,7 @@
 \ingroup cmake-commands-qtgrpc
 
 \title qt_add_grpc
+\keyword qt_add_grpc()
 \target qt_add_grpc
 \summary {Generates Qt-based C++ services using a protobuf schema}
 
@@ -45,7 +46,7 @@ link to.
 
 The \gRPC library that is generated using the \c qt_add_grpc command refers to
 the protobuf symbols that are used in service calls. This means you either need
-to use a common target in both \l qt_add_protobuf and \l qt_add_grpc calls or
+to use a common target in both \l qt_add_protobuf() and \l qt_add_grpc() calls or
 link the generated protobuf library to the \gRPC one.
 
 Considering the above statement you may reuse the target for both protobuf and

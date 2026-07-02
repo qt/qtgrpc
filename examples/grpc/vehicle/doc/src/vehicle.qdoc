@@ -16,7 +16,7 @@
     The example code has the following components:
     \list
     \li \c vehicle_client Qt \gRPC client application that uses the
-        \l {qt_add_protobuf}{qt_add_protobuf()} and \l {qt_add_grpc}{qt_add_grpc()} CMake functions
+        \l qt_add_protobuf() and \l qt_add_grpc() CMake functions
         for message and service Qt code generation.
     \li \c vehicle_server application that calls C++ \gRPC plugin for generating server code and
         implementing simple server logic.

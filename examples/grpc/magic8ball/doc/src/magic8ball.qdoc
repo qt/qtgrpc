@@ -16,8 +16,8 @@
     The example code includes the following components:
     \list
     \li \c magic8ball Qt \gRPC client application that uses
-        the \l {qt_add_protobuf}{qt_add_protobuf()} and
-        \l {qt_add_grpc}{qt_add_grpc()}
+        the \l qt_add_protobuf() and
+        \l qt_add_grpc()
         CMake functions for message and service Qt code generation.
     \li \c server application that calls C++ \gRPC plugin
         for generating server code and implementing simple server

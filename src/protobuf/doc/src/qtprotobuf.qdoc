@@ -65,9 +65,9 @@
 
     \section2 QML API
     The QML types of the module are available through the QML and QML_URI
-    options in the \l{qt_add_protobuf} macro.
+    options in the \l qt_add_protobuf() macro.
     The import name is equal to the \c.proto package name or defined by
-    QML_URI option in the \l{qt_add_protobuf} macro.
+    QML_URI option in the \l qt_add_protobuf() macro.
     To use the types, add the following import statement to your .qml file:
     \code
         import my.proto.package.uri
@@ -202,7 +202,7 @@
     With the \l{The qtprotobufgen Tool}{generator plugin}, you can register
     protobuf messages in the QML. To register the type, use the
     \c QML and \c QML_URI generation keys. See API details in
-    \l{qt_add_protobuf}{qt_add_protobuf} command and
+    \l qt_add_protobuf() command and
     API usage example \l{QML extended protobuf example}{QML extended protobuf}.
 
     Registered protobuf messages are available in the QML,
@@ -236,7 +236,7 @@
     \endcode
 
     To expose the \c User message in QML, use the protobuf schema and the
-    \l{qt_add_protobuf} command with the \c QML argument:
+    \l qt_add_protobuf() command with the \c QML argument:
     \badcode
         qt_add_executable(appuserdb
             ...
@@ -261,7 +261,7 @@
         target_link_libraries(appuserdb PRIVATE userdb_gen)
     \endcode
 
-    The \l{qt_add_protobuf} function will generate a library called
+    The \l qt_add_protobuf() function will generate a library called
     \c userdb_gen, containing the protobuf messages from \c userdb.proto with
     QML support. To use the messages in QML, import the generated QML module
     using the URI specified in the \c QML_URI argument of the \c qt_add_protobuf
@@ -455,7 +455,7 @@
             sint32 height = 2;
         }
     \endcode
-    Use the \l qt_add_protobuf macro with the \c QML option to
+    Use the \l qt_add_protobuf() macro with the \c QML option to
     enable QML types generation from the above protobuf messages.
     See the example below:
     \badcode
