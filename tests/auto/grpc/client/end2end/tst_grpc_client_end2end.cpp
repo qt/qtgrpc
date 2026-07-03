@@ -20,6 +20,7 @@
 #include <QtNetwork/qtcpsocket.h>
 
 #include <QtCore/qbytearray.h>
+#include <QtCore/qcoreapplication.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qelapsedtimer.h>
 #include <QtCore/qhash.h>
@@ -110,6 +111,11 @@ private Q_SLOTS:
     void connectTimeout_data() const;
     void connectTimeout();
     void channelTeardownAfterConnectTimeoutAbort();
+
+    void messageWritten_data() const;
+    void messageWritten();
+    void messageWrittenBidi();
+    void messageWrittenNotAfterCancel();
 
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
@@ -1742,6 +1748,233 @@ void QtGrpcClientEnd2EndTest::channelTeardownAfterConnectTimeoutAbort()
     client.reset();
     QCOMPARE_EQ(spy2.count(), 1);
     QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(spy2.at(0).first()).code(), StatusCode::Unavailable);
+}
+
+void QtGrpcClientEnd2EndTest::messageWritten_data() const
+{
+    QTest::addColumn<const bool>("burst");
+    QTest::addColumn<const bool>("immediateWritesDone");
+    QTest::addColumn<const qsizetype>("payloadBytes");
+
+    QTest::newRow("paced") << false << false << qsizetype(0);
+    QTest::newRow("burst") << true << false << qsizetype(0);
+    // writesDone() right after the writes must not swallow the pending
+    // messageWritten emissions for messages that were actually sent.
+    QTest::newRow("burst-immediate-writes-done") << true << true << qsizetype(0);
+    // Messages larger than the HTTP/2 send window upload asynchronously
+    // across WINDOW_UPDATEs instead of within the synchronous queue drain,
+    // yet must still produce one messageWritten each. The test pins the
+    // server's windows to the 64 KiB default (BDP probing off), so these
+    // payloads should exceed the send window.
+    constexpr qsizetype LargePayload = qsizetype(1) * 1024 * 1024;
+    QTest::newRow("paced-large") << false << false << LargePayload;
+    QTest::newRow("burst-large") << true << false << LargePayload;
+}
+
+void QtGrpcClientEnd2EndTest::messageWritten()
+{
+    using namespace std::chrono_literals;
+    QFETCH(const bool, burst);
+    QFETCH(const bool, immediateWritesDone);
+    QFETCH(const qsizetype, payloadBytes);
+    constexpr int TotalMessages = 4;
+    const QString payload(payloadBytes, QLatin1Char('x'));
+
+    const auto restoreServer = qScopeGuard([this, payloadBytes] {
+        if (payloadBytes > 0)
+            restartServer();
+    });
+    if (payloadBytes > 0) {
+        // Freeze the server's flow-control windows at the 64 KiB HTTP/2
+        // default so the large payloads always upload asynchronously; BDP
+        // probing might grow the windows beyond the payload size.
+        grpc::ChannelArguments args;
+        args.SetInt(GRPC_ARG_HTTP2_BDP_PROBE, 0);
+        restartServer(args);
+        // init()'s channel points at the now-dead server; re-attach to start clean.
+        auto *staleChannel = static_cast<QGrpcHttp2Channel *>(m_client->channel().get());
+        QVERIFY(staleChannel);
+        auto freshChannel = std::make_shared<QGrpcHttp2Channel>(staleChannel->hostUri(),
+                                                                staleChannel->channelOptions());
+        QVERIFY(m_client->attachChannel(freshChannel));
+    }
+
+    // Setup Server-side handling: read all client messages until end-of-stream, then finish.
+    TagProcessor processor(m_server.get());
+    struct ServerData
+    {
+        grpc::ServerContext ctx;
+        grpc::ServerAsyncReader<None, Event> op{ &ctx };
+        Event request;
+        None response;
+    };
+    ServerData *data = new ServerData;
+
+    CallbackTag *reader = new CallbackTag(
+        [&](bool ok) {
+            if (!ok) {
+                data->op.Finish(data->response, grpc::Status::OK,
+                                new DeleteTag<ServerData>(data, &processor));
+                return CallbackTag::Delete;
+            }
+            data->op.Read(&data->request, reader);
+            return CallbackTag::Proceed;
+        },
+        &processor);
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Read(&data->request, reader);
+            return CallbackTag::Delete;
+        },
+        &processor);
+    m_service->RequestNotify(&data->ctx, &data->op, m_server->cq(), m_server->cq(), callHandler);
+
+    // Client: write the first event as the stream argument.
+    qt::Event event;
+    event.setNumber(1);
+    event.setName(payload);
+    auto stream = m_client->Notify(event);
+    QVERIFY(stream);
+
+    QSignalSpy messageWrittenSpy(stream.get(), &QGrpcClientStream::messageWritten);
+    QVERIFY(messageWrittenSpy.isValid());
+    QSignalSpy finishedSpy(stream.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+
+    int writeCount = 1;
+    if (burst) {
+        // Burst the remaining messages up front; an open send window transmits
+        // them synchronously within a single queue drain, which must still
+        // produce one messageWritten per message.
+        for (; writeCount < TotalMessages; ++writeCount) {
+            qt::Event next;
+            next.setNumber(writeCount + 1);
+            next.setName(payload);
+            stream->writeMessage(next);
+        }
+        if (!immediateWritesDone)
+            QTRY_COMPARE_EQ(messageWrittenSpy.count(), TotalMessages);
+        stream->writesDone();
+    } else {
+        // Pace subsequent writes using messageWritten: one writeMessage() per
+        // signal, writesDone() after the last.
+        connect(stream.get(), &QGrpcClientStream::messageWritten, this, [&]() {
+            if (writeCount < TotalMessages) {
+                qt::Event next;
+                next.setNumber(writeCount + 1);
+                next.setName(payload);
+                stream->writeMessage(next);
+                ++writeCount;
+            } else {
+                stream->writesDone();
+            }
+        });
+    }
+
+    QVERIFY(finishedSpy.wait());
+    QVERIFY(qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first()).isOk());
+    // messageWritten fires once per user message, for the initial request and
+    // each writeMessage(): TotalMessages times total.
+    QCOMPARE_EQ(messageWrittenSpy.count(), TotalMessages);
+}
+
+void QtGrpcClientEnd2EndTest::messageWrittenBidi()
+{
+    constexpr int TotalMessages = 4;
+
+    // Setup Server-side handling: read all client messages until end-of-stream, then finish.
+    TagProcessor processor(m_server.get());
+    struct ServerData
+    {
+        grpc::ServerContext ctx;
+        grpc::ServerAsyncReaderWriter<Event, Event> op{ &ctx };
+        Event request;
+    };
+    ServerData *data = new ServerData;
+
+    CallbackTag *reader = new CallbackTag(
+        [&](bool ok) {
+            if (!ok) {
+                data->op.Finish(grpc::Status::OK, new DeleteTag<ServerData>(data, &processor));
+                return CallbackTag::Delete;
+            }
+            data->op.Read(&data->request, reader);
+            return CallbackTag::Proceed;
+        },
+        &processor);
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Read(&data->request, reader);
+            return CallbackTag::Delete;
+        },
+        &processor);
+    m_service->RequestExchange(&data->ctx, &data->op, m_server->cq(), m_server->cq(), callHandler);
+
+    qt::Event event;
+    event.setNumber(1);
+    auto stream = m_client->Exchange(event);
+    QVERIFY(stream);
+
+    QSignalSpy messageWrittenSpy(stream.get(), &QGrpcBidiStream::messageWritten);
+    QVERIFY(messageWrittenSpy.isValid());
+    QSignalSpy finishedSpy(stream.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+
+    int writeCount = 1;
+    connect(stream.get(), &QGrpcBidiStream::messageWritten, this, [&]() {
+        if (writeCount < TotalMessages) {
+            qt::Event next;
+            next.setNumber(writeCount + 1);
+            stream->writeMessage(next);
+            ++writeCount;
+        } else {
+            stream->writesDone();
+        }
+    });
+
+    QVERIFY(finishedSpy.wait());
+    QVERIFY(qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first()).isOk());
+    QCOMPARE_EQ(messageWrittenSpy.count(), TotalMessages);
+}
+
+void QtGrpcClientEnd2EndTest::messageWrittenNotAfterCancel()
+{
+    // Cancelled RPC leaves a half-drained server; rebuild for the next test.
+    const auto restoreServer = qScopeGuard([this] { restartServer(); });
+
+    // gRPC 1.50 has no EventEngine poller. Start the TagProcessor for polling
+    // early connection attempts from the client.
+    TagProcessor processor(m_server.get());
+
+    qt::Event event;
+    event.setNumber(1);
+    auto stream = m_client->Notify(event);
+    QVERIFY(stream);
+
+    QSignalSpy messageWrittenSpy(stream.get(), &QGrpcClientStream::messageWritten);
+    QVERIFY(messageWrittenSpy.isValid());
+    QSignalSpy finishedSpy(stream.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+
+    // The first signal proves the stream is up, so the writes below reach the
+    // transport and queue their emissions; the cancel in the same slot must
+    // suppress their delivery.
+    connect(stream.get(), &QGrpcClientStream::messageWritten, this, [&]() {
+        qt::Event next;
+        next.setNumber(2);
+        stream->writeMessage(next);
+        stream->writeMessage(next);
+        stream->cancel();
+    });
+
+    QVERIFY(finishedSpy.wait());
+    QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first()).code(),
+                QtGrpc::StatusCode::Cancelled);
+    // Flush the queued emissions that were posted before the cancel.
+    QCoreApplication::processEvents();
+    QCOMPARE_EQ(messageWrittenSpy.count(), 1);
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)

@@ -177,20 +177,48 @@ void QtGrpcClientBenchmark::clientStreaming()
 
     const auto stream = mClient.ClientStreaming(request);
 
-    QTimer::singleShot(0, [this, &stream, &request, &benchData]() {
-        // Run on event loop
-        mTimer.start();
-        for (; benchData.callCount < mCalls; ++benchData.callCount) {
-            if (!sData.empty()) {
-                auto nextPayload = Bench::nextPayload(sData);
-                benchData.sendBytes += nextPayload.size();
-                request.setPayload(std::move(nextPayload));
-            }
-            request.setPing(benchData.callCount);
-            stream->writeMessage(request);
+    auto writeNext = [&stream, &request, &benchData]() {
+        if (!sData.empty()) {
+            auto nextPayload = Bench::nextPayload(sData);
+            benchData.sendBytes += nextPayload.size();
+            request.setPayload(std::move(nextPayload));
         }
-        stream->writesDone();
-    });
+        request.setPing(benchData.callCount);
+        stream->writeMessage(request);
+        ++benchData.callCount;
+    };
+
+    int inFlight = 1; // the initial request message
+    bool writesDoneSent = false;
+    auto pump = [this, &stream, &writeNext, &benchData, &inFlight, &writesDoneSent]() {
+        while (inFlight < Bench::pacedInFlight && benchData.callCount < mCalls) {
+            writeNext();
+            ++inFlight;
+        }
+        if (benchData.callCount >= mCalls && !writesDoneSent) {
+            writesDoneSent = true;
+            stream->writesDone();
+        }
+    };
+
+    if (Bench::pacedInFlight > 0) {
+        QObject::connect(stream.get(), &QGrpcClientStream::messageWritten, this,
+                         [&inFlight, &pump]() {
+                             --inFlight;
+                             pump();
+                         });
+        QTimer::singleShot(0, this, [this, &pump]() {
+            mTimer.start();
+            pump();
+        });
+    } else {
+        QTimer::singleShot(0, this, [this, &writeNext, &stream, &benchData]() {
+            mTimer.start();
+            while (benchData.callCount < mCalls)
+                writeNext();
+            stream->writesDone();
+        });
+    }
 
     QObject::connect(stream.get(), &QGrpcServerStream::finished, this,
                      [this, &stream, &benchData](const QGrpcStatus &status) {
@@ -228,19 +256,46 @@ void QtGrpcClientBenchmark::bidiStreaming()
     auto stream = mClient.BiDiStreaming(request, copts);
     auto *streamPtr = stream.get();
 
-    QTimer::singleShot(0, [this, &stream, &request, &benchData]() {
-        // Run on event loop
-        mTimer.start();
-        for (; benchData.callCount < mCalls; ++benchData.callCount) {
-            if (!sData.empty()) {
-                auto nextPayload = Bench::nextPayload(sData);
-                benchData.sendBytes += nextPayload.size();
-                request.setPayload(std::move(nextPayload));
-            }
-            stream->writeMessage(request);
+    auto writeNext = [this, &stream, &request, &benchData]() {
+        if (!sData.empty()) {
+            auto nextPayload = Bench::nextPayload(sData);
+            benchData.sendBytes += nextPayload.size();
+            request.setPayload(std::move(nextPayload));
         }
-        stream->writesDone();
-    });
+        stream->writeMessage(request);
+        ++benchData.callCount;
+    };
+
+    int inFlight = 1; // the initial request message
+    bool writesDoneSent = false;
+    auto pump = [this, &stream, &writeNext, &benchData, &inFlight, &writesDoneSent]() {
+        while (inFlight < Bench::pacedInFlight && benchData.callCount < mCalls) {
+            writeNext();
+            ++inFlight;
+        }
+        if (benchData.callCount >= mCalls && !writesDoneSent) {
+            writesDoneSent = true;
+            stream->writesDone();
+        }
+    };
+
+    if (Bench::pacedInFlight > 0) {
+        QObject::connect(streamPtr, &QGrpcBidiStream::messageWritten, this, [&inFlight, &pump]() {
+            --inFlight;
+            pump();
+        });
+        QTimer::singleShot(0, this, [this, &pump]() {
+            mTimer.start();
+            pump();
+        });
+    } else {
+        QTimer::singleShot(0, this, [this, &writeNext, &stream, &benchData]() {
+            mTimer.start();
+            while (benchData.callCount < mCalls)
+                writeNext();
+            stream->writesDone();
+        });
+    }
 
     QObject::connect(streamPtr, &QGrpcBidiStream::messageReceived, this,
                      [this, stream = streamPtr, &response, &benchData]() {

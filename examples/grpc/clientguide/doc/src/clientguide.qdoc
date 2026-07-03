@@ -352,15 +352,19 @@
 
     \snippet clientguide/client/main.cpp cstream-0
 
-    The function starts the client stream with an initial message. Then it
-    continues to write two additional messages before signaling the end of
-    communication by calling \l{QGrpcClientStream::}{writesDone}. If the
-    streaming RPC succeeds, we \l {QGrpcOperation::} {read} the final response
-    from the server and \c reset the RPC object. If the RPC fails, we retry
-    by invoking the same function, which overwrites the \c m_clientStream
-    member and reconnects the \l {QGrpcOperation::} {finished} signal. We
+    The function starts the client stream with an initial message and then
+    paces its writes. Rather than enqueuing every message up front, it sends the
+    next message from the \l{QGrpcClientStream::}{messageWritten} handler, which
+    fires once the channel has passed the previous message to the transport and
+    so respects HTTP/2 flow control. It calls \l{QGrpcClientStream::}{writesDone}
+    once all messages have been sent. Pacing this way keeps the outgoing message
+    queue bounded even when the application produces messages faster than the
+    network drains them. If the streaming RPC succeeds, we
+    \l {QGrpcOperation::} {read} the final response from the server and \c reset
+    the RPC object. If the RPC fails, we retry by invoking the same function,
+    which overwrites the \c m_clientStream member and reconnects its signals. We
     cannot simply reassign the \c m_clientStream member within the lambda, as
-    this would lose the necessary connection.
+    this would lose the necessary connections.
 
     \details {Running the code}
         In \c main, we invoke the \c clientStreaming function with a failing

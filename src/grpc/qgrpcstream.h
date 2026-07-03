@@ -58,6 +58,9 @@ public:
     void writeMessage(const QProtobufMessage &message);
     void writesDone();
 
+Q_SIGNALS:
+    void messageWritten();
+
 private:
     Q_DISABLE_COPY_MOVE(QGrpcClientStream)
     friend class QGrpcClientBasePrivate;
@@ -87,6 +90,7 @@ public:
 
 Q_SIGNALS:
     void messageReceived();
+    void messageWritten();
 
 private:
     Q_DISABLE_COPY_MOVE(QGrpcBidiStream)

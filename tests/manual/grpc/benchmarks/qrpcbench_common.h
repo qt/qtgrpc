@@ -31,6 +31,10 @@
 
 namespace Bench {
 
+// 0 = burst all streaming writes at once; N >= 1 = keep at most N writes in
+// flight, topping up on messageWritten (1 = strict write-then-wait).
+inline int pacedInFlight = 0;
+
 inline std::string getTransportAddress(QAnyStringView transport)
 {
     if (transport == "http")
@@ -243,6 +247,7 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
     QCommandLineOption calls({ "c", "calls" }, "Amount of calls made.", "size", "1000");
     QCommandLineOption payload({ "p", "payload" }, "Payload size in bytes", "size", "0");
     QCommandLineOption uniqueRpc({ "u", "unique" }, "Make each RPC on a fresh client");
+    QCommandLineOption paced("paced", "In-flight streaming writes (0=burst).", "in-flight", "0");
 
     QCommandLineOption enableUnary("U", "Enable UnaryCalls");
     QCommandLineOption enableSStream("S", "Enable ServerStream");
@@ -255,6 +260,7 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
         calls,
         payload,
         uniqueRpc,
+        paced,
 
         enableUnary,
         enableSStream,
@@ -268,6 +274,7 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
         && !parser.isSet(enableCStream) && !parser.isSet(enableBStream);
     uint64_t amountCalls = parser.value(calls).toULong();
     qsizetype payloadSize = parser.value(payload).toLong();
+    Bench::pacedInFlight = parser.value(paced).toInt();
     const auto transportValue = parser.value(transport).toStdString();
 
     std::cout << std::format("#### Start of {} benchmark ####\n", name);
@@ -281,6 +288,9 @@ inline void benchmarkMain(std::string_view name, int argc, char *argv[])
         std::cout << std::format("  Option: payload per message {} bytes\n", payloadSize);
     if (parser.isSet(uniqueRpc))
         std::cout << std::format("  Option: unique client per RPC {}\n", parser.isSet(uniqueRpc));
+    if (parser.isSet(paced))
+        std::cout << std::format("  Option: paced streaming writes, {} in flight\n",
+                                 Bench::pacedInFlight);
 
     if (parser.isSet(uniqueRpc)) {
         {

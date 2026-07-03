@@ -802,6 +802,7 @@ private:
     [[nodiscard]] QGrpcHttp2ChannelPrivate *channelPriv() const;
     [[nodiscard]] QGrpcHttp2Channel *channel() const;
     [[nodiscard]] bool handleContextExpired();
+    void scheduleMessageWritten();
 
     [[nodiscard]] static CompressionAlgorithm
     constructRequestEncoding(const QGrpcHttp2ChannelPrivate &channel,
@@ -822,6 +823,7 @@ private:
     const bool m_endStreamAtFirstData;
     bool m_writesDoneSent = false;
     bool m_drainingQueue = false;
+    bool m_inFlightUserWrite = false;
     bool m_filterServerMetadata;
     QTimer m_deadlineTimer;
     const CompressionAlgorithm m_requestEncoding;
@@ -1115,10 +1117,14 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
             });
 
     connect(m_stream.get(), &QHttp2Stream::uploadFinished, this, [this] {
+        if (std::exchange(m_inFlightUserWrite, false))
+            scheduleMessageWritten();
+
         // sendDATA() may emit uploadFinished synchronously mid-drain; let
         // processQueue()'s loop advance the queue instead of recursing.
         if (m_drainingQueue)
             return;
+
         processQueue();
     });
 }
@@ -1356,8 +1362,30 @@ void Http2Handler::processQueue()
     do {
         const auto nextMessage = m_queue.dequeue();
         const bool closeStream = nextMessage.isEmpty() || m_endStreamAtFirstData;
-        m_stream->sendDATA(nextMessage, closeStream);
+        // Set before sendDATA(): a message that fits the send window emits
+        // uploadFinished synchronously, and its handler consumes the flag.
+        m_inFlightUserWrite = !closeStream;
+        if (!m_stream->sendDATA(nextMessage, closeStream)) {
+            m_inFlightUserWrite = false;
+            return;
+        }
     } while (!m_stream->isUploadingDATA() && !m_queue.isEmpty());
+}
+
+// Emits messageWritten() deferred to the next event-loop turn: a synchronous
+// emission would re-enter the user's slot while writeMessage() is still on
+// the call stack. Only the operation ending suppresses delivery, so that the
+// signal never follows finished; writesDone() does not invalidate writes
+// that already completed.
+void Http2Handler::scheduleMessageWritten()
+{
+    QMetaObject::invokeMethod(
+        this,
+        [this] {
+            if (m_context && m_state <= State::Active)
+                emit m_context->messageWritten();
+        },
+        Qt::QueuedConnection);
 }
 
 void Http2Handler::finish(const QGrpcStatus &status)

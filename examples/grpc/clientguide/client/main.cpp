@@ -107,9 +107,18 @@ public:
     void clientStreaming(const guide::Request &initialRequest)
     {
         m_clientStream = m_client.ClientStreaming(initialRequest);
-        for (int32_t i = 1; i < 3; ++i)
-            m_clientStream->writeMessage(createRequest(initialRequest.num() + i));
-        m_clientStream->writesDone();
+
+        // Pace the writes: send the next message only once messageWritten reports
+        // the previous one accepted by the channel. This respects HTTP/2 flow
+        // control and keeps the outgoing queue bounded, unlike writing every
+        // message up front.
+        connect(m_clientStream.get(), &QGrpcClientStream::messageWritten, m_clientStream.get(),
+            [this, initialRequest, sent = 1]() mutable {
+                if (sent < 3)
+                    m_clientStream->writeMessage(createRequest(initialRequest.num() + sent++));
+                else
+                    m_clientStream->writesDone();
+            });
 
         connect(m_clientStream.get(), &QGrpcClientStream::finished, m_clientStream.get(),
             [this](const QGrpcStatus &status) {

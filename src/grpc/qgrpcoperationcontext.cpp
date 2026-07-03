@@ -60,6 +60,7 @@ quint64 nextOperationId()
     \list
         \li finished()
         \li messageReceived()
+        \li messageWritten()
     \endlist
 
     Signals which will be emitted by QGrpcOperation and its specializations are:
@@ -109,6 +110,28 @@ quint64 nextOperationId()
 
     \sa QGrpcServerStream::messageReceived
     \sa QGrpcBidiStream::messageReceived
+*/
+
+/*!
+    \since 6.13
+    \fn void QGrpcOperationContext::messageWritten()
+
+    This signal should be emitted by the channel when it has passed an
+    outgoing message on to the transport: once for the initial request
+    message and once per writeMessageRequested(), in write order.
+
+    Clients rely on this signal to pace their writes and bound their
+    outgoing queue. Channels that buffer messages should therefore delay
+    the emission while the transport applies backpressure, and channels
+    that never emit it leave client-streaming and bidirectional-streaming
+    RPCs without write pacing. The signal must not be emitted once
+    finished() has been emitted.
+
+    \note This signal is implicitly connected to the QGrpcClientStream and
+    QGrpcBidiStream counterparts.
+
+    \sa QGrpcClientStream::messageWritten
+    \sa QGrpcBidiStream::messageWritten
 */
 
 /*!

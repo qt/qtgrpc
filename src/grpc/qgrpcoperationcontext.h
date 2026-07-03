@@ -77,6 +77,7 @@ Q_SIGNALS:
     // Outgoing signals of the channel.
     void finished(const QGrpcStatus &status);
     void messageReceived(const QByteArray &data);
+    void messageWritten();
     // Icoming signals from the client.
     void cancelRequested();
     void writeMessageRequested(const QByteArray &data);

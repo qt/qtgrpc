@@ -34,6 +34,38 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
+    \since 6.13
+    \fn void QGrpcClientStream::messageWritten()
+
+//! [message-written-desc]
+    This signal is emitted when the channel has passed an outgoing message on
+    to the transport: once for the initial request message and once per
+    writeMessage() call, in write order.
+
+    QGrpcHttp2Channel emits it after the message has been fully written to the
+    connection, which respects HTTP/2 flow control; when the server stops
+    consuming data, the emission is delayed until the server grants more send
+    window.
+
+    Messages queue up without limit when they are written faster than the
+    network transmits them. To bound the queue, write the next message only
+    after this signal reports the previous one written, matching the
+    write-then-wait discipline commonly seen in \gRPC implementations.
+
+    For medium and large messages this one-at-a-time pacing costs no throughput,
+    and usually improves it by avoiding a large backlog. For very small,
+    high-rate messages the per-message wait can dominate instead; there, keep a
+    few messages in flight: write a small batch up front and write one more on
+    each emission.
+
+    Once finished() has been emitted the signal is not emitted anymore, even
+    for messages that were still in transmission when the operation ended.
+//! [message-written-desc]
+
+    \sa writeMessage()
+*/
+
+/*!
     \internal
 
     Constructs a new QGrpcServerStream from QGrpcClientBase.
@@ -95,6 +127,8 @@ QGrpcClientStream::QGrpcClientStream(QLatin1StringView service, QLatin1StringVie
     : QGrpcOperation({ service, method, QtGrpc::RpcType::ClientStreaming }, options,
                      std::move(channel))
 {
+    QObject::connect(&QGrpcOperation::context(), &QGrpcOperationContext::messageWritten, this,
+                     &QGrpcClientStream::messageWritten);
 }
 
 /*!
@@ -105,7 +139,12 @@ QGrpcClientStream::~QGrpcClientStream() = default;
 /*!
 //! [write-message-desc]
     Serializes \a message and sends it to the server.
+
+    Messages are queued and handed to the transport. The queue is unbounded, so
+    pace high-rate writes using the messageWritten() signal.
 //! [write-message-desc]
+
+    \sa messageWritten()
 */
 void QGrpcClientStream::writeMessage(const QProtobufMessage &message)
 {
@@ -153,6 +192,15 @@ bool QGrpcClientStream::event(QEvent *event)
 */
 
 /*!
+    \since 6.13
+    \fn void QGrpcBidiStream::messageWritten()
+
+    \include qgrpcstream.cpp message-written-desc
+
+    \sa writeMessage()
+*/
+
+/*!
     \internal
 
     Constructs a new QGrpcBidiStream from QGrpcClientBase.
@@ -170,6 +218,8 @@ QGrpcBidiStream::QGrpcBidiStream(QLatin1StringView service, QLatin1StringView me
 {
     QObject::connect(&QGrpcOperation::context(), &QGrpcOperationContext::messageReceived,
                      this, &QGrpcBidiStream::messageReceived);
+    QObject::connect(&QGrpcOperation::context(), &QGrpcOperationContext::messageWritten, this,
+                     &QGrpcBidiStream::messageWritten);
 }
 
 /*!
@@ -179,6 +229,8 @@ QGrpcBidiStream::~QGrpcBidiStream() = default;
 
 /*!
     \include qgrpcstream.cpp write-message-desc
+
+    \sa messageWritten()
 */
 void QGrpcBidiStream::writeMessage(const QProtobufMessage &message)
 {
