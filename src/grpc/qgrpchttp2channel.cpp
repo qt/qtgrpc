@@ -37,6 +37,7 @@
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qpointer.h>
 #include <QtCore/qqueue.h>
+#include <QtCore/qscopedvaluerollback.h>
 #include <QtCore/qtenvironmentvariables.h>
 #include <QtCore/qtimer.h>
 #include <QtCore/qvarlengtharray.h>
@@ -589,6 +590,7 @@ private:
     State m_state = State::Idle;
     const bool m_endStreamAtFirstData;
     bool m_writesDoneSent = false;
+    bool m_drainingQueue = false;
     bool m_filterServerMetadata;
     QTimer m_deadlineTimer;
     const CompressionAlgorithm m_requestEncoding;
@@ -857,7 +859,13 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                 }
             });
 
-    connect(m_stream.get(), &QHttp2Stream::uploadFinished, this, &Http2Handler::processQueue);
+    connect(m_stream.get(), &QHttp2Stream::uploadFinished, this, [this] {
+        // sendDATA() may emit uploadFinished synchronously mid-drain; let
+        // processQueue()'s loop advance the queue instead of recursing.
+        if (m_drainingQueue)
+            return;
+        processQueue();
+    });
 }
 
 // Builds HTTP/2 headers for the initial gRPC request.
@@ -1083,9 +1091,13 @@ void Http2Handler::processQueue()
     if (m_queue.isEmpty())
         return;
 
-    const auto nextMessage = m_queue.dequeue();
-    const bool closeStream = nextMessage.isEmpty() || m_endStreamAtFirstData;
-    m_stream->sendDATA(nextMessage, closeStream);
+    QScopedValueRollback drainingGuard(m_drainingQueue, true);
+
+    do {
+        const auto nextMessage = m_queue.dequeue();
+        const bool closeStream = nextMessage.isEmpty() || m_endStreamAtFirstData;
+        m_stream->sendDATA(nextMessage, closeStream);
+    } while (!m_stream->isUploadingDATA() && !m_queue.isEmpty());
 }
 
 void Http2Handler::finish(const QGrpcStatus &status)
