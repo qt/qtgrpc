@@ -83,6 +83,8 @@ private Q_SLOTS:
     void maximumReceiveMessageSize_data() const;
     void maximumReceiveMessageSize();
 
+    void burstWritesDoNotOverflowStack();
+
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
     {
@@ -810,6 +812,62 @@ void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize()
     QCOMPARE_EQ(status->code(), expectedCode);
     if (status->code() == QtGrpc::StatusCode::ResourceExhausted)
         QVERIFY(status->message().contains("512"));
+}
+
+void QtGrpcClientEnd2EndTest::burstWritesDoNotOverflowStack()
+{
+    // Regression test: Http2Handler::processQueue() used to drain the outgoing
+    // queue recursively (sendDATA -> uploadFinished -> processQueue), so a large
+    // burst-written backlog overflowed the stack when it drained. Queue a big
+    // backlog before the event loop runs, then require the RPC to finish.
+    constexpr int TotalMessages = 20000;
+
+    TagProcessor processor(m_server.get());
+    struct ServerData
+    {
+        grpc::ServerAsyncReader<None, Event> op{ &ctx };
+        grpc::ServerContext ctx;
+        Event request;
+        None response;
+    };
+    ServerData *data = new ServerData;
+
+    CallbackTag *reader = new CallbackTag(
+        [&](bool ok) {
+            if (!ok) {
+                data->op.Finish(data->response, grpc::Status::OK,
+                                new DeleteTag<ServerData>(data, &processor));
+                return CallbackTag::Delete;
+            }
+            data->op.Read(&data->request, reader);
+            return CallbackTag::Proceed;
+        },
+        &processor);
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Read(&data->request, reader);
+            return CallbackTag::Delete;
+        },
+        &processor);
+    m_service->RequestNotify(&data->ctx, &data->op, m_server->cq(), m_server->cq(), callHandler);
+
+    qt::Event event;
+    event.setNumber(0);
+    auto stream = m_client->Notify(event);
+    QVERIFY(stream);
+    QSignalSpy finishedSpy(stream.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+
+    for (int i = 1; i < TotalMessages; ++i) {
+        qt::Event next;
+        next.setNumber(i);
+        stream->writeMessage(next);
+    }
+    stream->writesDone();
+
+    QVERIFY(finishedSpy.wait(std::chrono::seconds(60)));
+    QVERIFY(qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first()).isOk());
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)
