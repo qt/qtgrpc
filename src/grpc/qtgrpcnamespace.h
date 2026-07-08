@@ -51,6 +51,7 @@ enum class StatusCode : quint8 {
     Unavailable = 14,
     DataLoss = 15,
     Unauthenticated = 16,
+    // NOTE: Keep StatusCodeCount in sync with the last StatusCode enumerator.
 };
 Q_ENUM_NS(StatusCode)
 
@@ -115,6 +116,10 @@ Q_FLAG_NS(CompressionAlgorithms)
 
 Q_CLASSINFO("RegisterEnumClassesUnscoped", "false")
 } // namespace QtGrpc
+
+namespace QtGrpcPrivate {
+inline constexpr quint8 StatusCodeCount = qToUnderlying(QtGrpc::StatusCode::Unauthenticated);
+}
 
 QT_END_NAMESPACE
 
