@@ -1025,8 +1025,8 @@ void Http2Handler::handleHeaders(const HPack::HttpHeader &headers, HeaderPhase p
         } else if (validation.requireGrpcStatus && k == GrpcStatusHeader) {
             bool ok;
             const auto parsed = v.toShort(&ok);
-            if (!ok) {
-                finish({ StatusCode::Internal, "Failed to parse gRPC-status: %1"_L1.arg(v) });
+            if (!ok || parsed < 0 || parsed > QtGrpcPrivate::StatusCodeCount) {
+                finish({ StatusCode::Unknown, "Received invalid gRPC-status: %1"_L1.arg(v) });
                 return;
             }
             statusCode = static_cast<StatusCode>(parsed);
