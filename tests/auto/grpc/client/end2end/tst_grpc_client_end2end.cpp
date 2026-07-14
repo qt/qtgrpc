@@ -17,12 +17,15 @@
 #include <QtTest/qtest.h>
 
 #include <QtNetwork/qtcpserver.h>
+#include <QtNetwork/qtcpsocket.h>
 
 #include <QtCore/qbytearray.h>
 #include <QtCore/qdatetime.h>
+#include <QtCore/qelapsedtimer.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qregularexpression.h>
 #include <QtCore/qscopeguard.h>
+#include <QtCore/qtenvironmentvariables.h>
 #include <QtCore/qtimer.h>
 
 #include <atomic>
@@ -97,6 +100,13 @@ private Q_SLOTS:
 
     void receiveWindowConfig_data() const;
     void receiveWindowConfig();
+
+    void reconnectBackoff_data() const;
+    void reconnectBackoff();
+    void reconnectRecoversAfterServerRestart();
+    void connectTimeout_data() const;
+    void connectTimeout();
+    void channelTeardownAfterConnectTimeoutAbort();
 
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
@@ -1286,6 +1296,332 @@ void QtGrpcClientEnd2EndTest::receiveWindowConfig()
     const auto *status = get_if<QGrpcStatus>(&finishedArg);
     QVERIFY(status);
     QCOMPARE_EQ(status->code(), QtGrpc::StatusCode::Ok);
+}
+
+void QtGrpcClientEnd2EndTest::reconnectBackoff_data() const
+{
+    using namespace std::chrono_literals;
+
+    QTest::addColumn<const QGrpcChannelOptions>("opts");
+    QTest::addColumn<const QByteArray>("envInitial");
+    QTest::addColumn<const QByteArray>("envMaximum");
+    QTest::addColumn<const int>("failingCalls");
+    QTest::addColumn<const int>("minLastCallMs");
+    QTest::addColumn<const int>("maxLastCallMs"); // -1: unbounded
+    QTest::addColumn<const QRegularExpression>("constructionWarning");
+
+    const QByteArray noEnv;
+    const QRegularExpression noWarning;
+
+    // By the fourth call the delay must exceed the initial backoff's range.
+    {
+        QGrpcChannelOptions opts;
+        opts.setInitialReconnectBackoff(100ms).setMaximumReconnectBackoff(2000ms);
+        QTest::newRow("delays-grow") << opts << noEnv << noEnv << 4 << 150 << -1 << noWarning;
+    }
+    // Uncapped growth would put the sixth call beyond 500ms; the maximum
+    // keeps it near 200ms.
+    {
+        QGrpcChannelOptions opts;
+        opts.setInitialReconnectBackoff(100ms).setMaximumReconnectBackoff(200ms);
+        QTest::newRow("delays-capped-at-maximum")
+            << opts << noEnv << noEnv << 6 << 100 << 500 << noWarning;
+    }
+    // Zero disables the backoff; retries stay immediate, far below the 1s
+    // default that would apply if the zero were not honored.
+    {
+        QGrpcChannelOptions opts;
+        opts.setInitialReconnectBackoff(0ms);
+        QTest::newRow("zero-disables-backoff")
+            << opts << noEnv << noEnv << 3 << 0 << 800 << noWarning;
+    }
+    // Even a 1ms initial backoff must keep growing into a measurable delay.
+    {
+        QGrpcChannelOptions opts;
+        opts.setInitialReconnectBackoff(1ms).setMaximumReconnectBackoff(2000ms);
+        QTest::newRow("one-ms-grows") << opts << noEnv << noEnv << 12 << 100 << -1 << noWarning;
+    }
+    // An initial backoff above the maximum warns and is clamped down to it.
+    {
+        QGrpcChannelOptions opts;
+        opts.setInitialReconnectBackoff(500ms).setMaximumReconnectBackoff(100ms);
+        QTest::newRow("initial-clamped-to-maximum")
+            << opts << noEnv << noEnv << 2 << 60 << 400
+            << QRegularExpression("Initial reconnect backoff of 500ms exceeds the maximum of "
+                                  "100ms");
+    }
+    // With no option set the env value applies (default pacing would exceed
+    // the bound).
+    QTest::newRow("env-initial-applies")
+        << QGrpcChannelOptions() << "0"_ba << noEnv << 2 << 0 << 800 << noWarning;
+    // The env maximum applies: the default 1s initial clamps down to it.
+    QTest::newRow("env-maximum-applies")
+        << QGrpcChannelOptions() << noEnv << "0"_ba << 2 << 0 << 800
+        << QRegularExpression("Initial reconnect backoff of 1000ms exceeds the maximum of 0ms");
+    // An explicitly set option takes precedence over the environment.
+    {
+        QGrpcChannelOptions opts;
+        opts.setInitialReconnectBackoff(0ms);
+        QTest::newRow("option-beats-env")
+            << opts << "60000"_ba << noEnv << 2 << 0 << 800 << noWarning;
+    }
+    // Invalid env values warn and are ignored.
+    QTest::newRow("env-invalid-ignored")
+        << QGrpcChannelOptions() << "-5"_ba << noEnv << 1 << 0 << -1
+        << QRegularExpression("QT_GRPC_INITIAL_RECONNECT_BACKOFF_MS has an invalid value "
+                              "\\(-5\\); ignoring");
+}
+
+void QtGrpcClientEnd2EndTest::reconnectBackoff()
+{
+    using namespace std::chrono_literals;
+
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    if (hostUri.scheme() != "http"_L1)
+        QSKIP("Transport independent; runs on the plain HTTP row only.");
+
+    QFETCH(const QGrpcChannelOptions, opts);
+    QFETCH(const QByteArray, envInitial);
+    QFETCH(const QByteArray, envMaximum);
+    QFETCH(const int, failingCalls);
+    QFETCH(const int, minLastCallMs);
+    QFETCH(const int, maxLastCallMs);
+    QFETCH(const QRegularExpression, constructionWarning);
+
+    const auto restoreEnv = qScopeGuard([] {
+        qunsetenv("QT_GRPC_INITIAL_RECONNECT_BACKOFF_MS");
+        qunsetenv("QT_GRPC_MAXIMUM_RECONNECT_BACKOFF_MS");
+    });
+    if (!envInitial.isNull())
+        qputenv("QT_GRPC_INITIAL_RECONNECT_BACKOFF_MS", envInitial);
+    if (!envMaximum.isNull())
+        qputenv("QT_GRPC_MAXIMUM_RECONNECT_BACKOFF_MS", envMaximum);
+
+    if (!constructionWarning.pattern().isEmpty())
+        QTest::ignoreMessage(QtWarningMsg, constructionWarning);
+
+    // Accepts TCP and aborts right away, so every call fails quickly after
+    // its reconnect attempt regardless of how the OS reports refused ports.
+    QTcpServer refusingServer;
+    QObject::connect(&refusingServer, &QTcpServer::newConnection, &refusingServer, [&] {
+        while (QTcpSocket *socket = refusingServer.nextPendingConnection()) {
+            socket->abort();
+            socket->deleteLater();
+        }
+    });
+    QVERIFY(refusingServer.listen(QHostAddress::LocalHost));
+    const QUrl url("http://127.0.0.1:" + QByteArray::number(refusingServer.serverPort()));
+
+    // A pathological environment must fail the attempt, not stall the test.
+    QGrpcChannelOptions channelOpts = opts;
+    channelOpts.setConnectTimeout(5s);
+
+    qt::EventHub::Client client;
+    QVERIFY(client.attachChannel(std::make_shared<QGrpcHttp2Channel>(url, channelOpts)));
+
+    qint64 lastCallMs = 0;
+    QElapsedTimer callTimer;
+    for (int i = 0; i < failingCalls; ++i) {
+        callTimer.start();
+        auto call = client.Push(qt::Event{});
+        QVERIFY(call);
+        QSignalSpy spy(call.get(), &QGrpcOperation::finished);
+        QVERIFY(spy.isValid());
+        QVERIFY(spy.wait(15s));
+        lastCallMs = callTimer.elapsed();
+        QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(spy.at(0).first()).code(),
+                    StatusCode::Unavailable);
+    }
+
+    QVERIFY2(lastCallMs >= minLastCallMs,
+             qPrintable(u"last call took %1ms, expected at least %2ms"_s.arg(lastCallMs)
+                            .arg(minLastCallMs)));
+    if (maxLastCallMs >= 0) {
+        QVERIFY2(lastCallMs <= maxLastCallMs,
+                 qPrintable(u"last call took %1ms, expected at most %2ms"_s.arg(lastCallMs)
+                                .arg(maxLastCallMs)));
+    }
+}
+
+void QtGrpcClientEnd2EndTest::reconnectRecoversAfterServerRestart()
+{
+    using namespace std::chrono_literals;
+
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    QFETCH_GLOBAL(const QGrpcChannelOptions, channelOptions);
+    QGrpcChannelOptions opts = channelOptions;
+    opts.setInitialReconnectBackoff(200ms).setMaximumReconnectBackoff(2000ms);
+#if defined Q_OS_WINDOWS
+    // Windows CI does not report refused loopback connects; without this the
+    // first attempt only fails at the 20s default connect timeout.
+    opts.setConnectTimeout(1s);
+    QTest::ignoreMessage(QtWarningMsg,
+                         QRegularExpression("Connection attempt timed out after 1000ms"));
+#endif
+
+    const auto restoreServer = qScopeGuard([this] { restartServer(); });
+    QVERIFY(m_server->stop());
+
+    // The server is down when the channel is created; after the first failure
+    // the server is brought back up so the next reconnect attempt succeeds.
+    qt::EventHub::Client client;
+    QVERIFY(client.attachChannel(std::make_shared<QGrpcHttp2Channel>(hostUri, opts)));
+
+    auto call1 = client.Push(qt::Event{});
+    QVERIFY(call1);
+    QSignalSpy spy1(call1.get(), &QGrpcOperation::finished);
+    QVERIFY(spy1.isValid());
+    QVERIFY(spy1.wait());
+    QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(spy1.at(0).first()).code(), StatusCode::Unavailable);
+
+    // Restart the server and register a handler so the channel's next reconnect succeeds.
+    restartServer();
+    TagProcessor processor(m_server.get());
+    struct ServerData
+    {
+        grpc::ServerAsyncResponseWriter<None> op{ &ctx };
+        grpc::ServerContext ctx;
+        Event request;
+        None response;
+    };
+    ServerData *data = new ServerData;
+    CallbackTag *callHandler = new CallbackTag(
+        [data, &processor](bool ok) {
+            QVERIFY(ok);
+            data->op.Finish(data->response, grpc::Status::OK,
+                            new DeleteTag<ServerData>(data, &processor));
+            return CallbackTag::Delete;
+        },
+        &processor);
+    m_service->RequestPush(&data->ctx, &data->request, &data->op, m_server->cq(), m_server->cq(),
+                           callHandler);
+
+    auto call2 = client.Push(qt::Event{});
+    QVERIFY(call2);
+    QSignalSpy spy2(call2.get(), &QGrpcOperation::finished);
+    QVERIFY(spy2.isValid());
+    QVERIFY(!spy2.wait(50ms)); // backoff timer still active; must not complete immediately
+    QVERIFY(spy2.wait());
+    QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(spy2.at(0).first()).code(), StatusCode::Ok);
+}
+
+void QtGrpcClientEnd2EndTest::connectTimeout_data() const
+{
+    using namespace std::chrono_literals;
+
+    QTest::addColumn<const QGrpcChannelOptions>("opts");
+    QTest::addColumn<const QByteArray>("envTimeout");
+    QTest::addColumn<const bool>("expectTimeout");
+
+    // Every timing-out row uses an effective timeout of 300ms; the warning
+    // asserted below pins which source provided that value.
+    {
+        QGrpcChannelOptions opts;
+        opts.setConnectTimeout(300ms);
+        QTest::newRow("option-applies") << opts << QByteArray() << true;
+    }
+    QTest::newRow("env-applies") << QGrpcChannelOptions() << "300"_ba << true;
+    {
+        QGrpcChannelOptions opts;
+        opts.setConnectTimeout(300ms);
+        QTest::newRow("option-beats-env") << opts << "5000"_ba << true;
+    }
+    {
+        QGrpcChannelOptions opts;
+        opts.setConnectTimeout(0ms);
+        QTest::newRow("zero-disables-timeout") << opts << "100"_ba << false;
+    }
+}
+
+void QtGrpcClientEnd2EndTest::connectTimeout()
+{
+    using namespace std::chrono_literals;
+
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    if (hostUri.scheme() != "http"_L1)
+        QSKIP("Transport independent; runs on the plain HTTP row only.");
+
+    QFETCH(const QGrpcChannelOptions, opts);
+    QFETCH(const QByteArray, envTimeout);
+    QFETCH(const bool, expectTimeout);
+
+    const auto restoreEnv = qScopeGuard([] { qunsetenv("QT_GRPC_CONNECT_TIMEOUT_MS"); });
+    if (!envTimeout.isNull())
+        qputenv("QT_GRPC_CONNECT_TIMEOUT_MS", envTimeout);
+
+    // Accepts TCP but never sends HTTP/2 data, keeping the connect attempt pending.
+    QTcpServer silentServer;
+    QVERIFY(silentServer.listen(QHostAddress::LocalHost));
+    const QUrl url("http://127.0.0.1:" + QByteArray::number(silentServer.serverPort()));
+
+    if (expectTimeout) {
+        QTest::ignoreMessage(QtWarningMsg,
+                             QRegularExpression("Connection attempt timed out after 300ms"));
+    } else {
+        QTest::failOnWarning(QRegularExpression("Connection attempt timed out"));
+    }
+
+    qt::EventHub::Client client;
+    QVERIFY(client.attachChannel(std::make_shared<QGrpcHttp2Channel>(url, opts)));
+
+    QElapsedTimer callTimer;
+    callTimer.start();
+    auto call = client.Push(qt::Event{});
+    QVERIFY(call);
+    QSignalSpy spy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(spy.isValid());
+
+    if (!expectTimeout) {
+        QVERIFY(!spy.wait(700ms));
+        return;
+    }
+
+    QVERIFY(spy.wait(15s));
+    QCOMPARE_GE(callTimer.elapsed(), 250);
+    const auto status = qvariant_cast<QGrpcStatus>(spy.at(0).first());
+    QCOMPARE_EQ(status.code(), StatusCode::Unavailable);
+    QVERIFY2(status.message().contains("ConnectTimeout"), qPrintable(status.message()));
+}
+
+void QtGrpcClientEnd2EndTest::channelTeardownAfterConnectTimeoutAbort()
+{
+    using namespace std::chrono_literals;
+
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    if (hostUri.scheme() != "http"_L1)
+        QSKIP("Transport independent; runs on the plain HTTP row only.");
+
+    // Accepts TCP but never sends HTTP/2 data; the connect attempt only ends
+    // when the channel's own connect timeout aborts it.
+    QTcpServer silentServer;
+    QVERIFY(silentServer.listen(QHostAddress::LocalHost));
+    const QUrl url("http://127.0.0.1:" + QByteArray::number(silentServer.serverPort()));
+
+    QGrpcChannelOptions opts;
+    opts.setConnectTimeout(200ms);
+
+    QTest::ignoreMessage(QtWarningMsg,
+                         QRegularExpression("Connection attempt timed out after 200ms"));
+
+    auto client = std::make_unique<qt::EventHub::Client>();
+    QVERIFY(client->attachChannel(std::make_shared<QGrpcHttp2Channel>(url, opts)));
+
+    auto call = client->Push(qt::Event{});
+    QVERIFY(call);
+    QSignalSpy spy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(spy.isValid());
+    QVERIFY(spy.wait());
+    QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(spy.at(0).first()).code(), StatusCode::Unavailable);
+
+    // Tear down while a second call is mid-reconnect right after the abort,
+    // mirroring a test that bails out of a failed check on this path.
+    auto call2 = client->Push(qt::Event{});
+    QVERIFY(call2);
+    QSignalSpy spy2(call2.get(), &QGrpcOperation::finished);
+    QVERIFY(spy2.isValid());
+    client.reset();
+    QCOMPARE_EQ(spy2.count(), 1);
+    QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(spy2.at(0).first()).code(), StatusCode::Unavailable);
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)

@@ -25,7 +25,7 @@ qt_internal_add_module(Grpc
         qgrpcclientbase.h qgrpcclientbase.cpp
         qgrpccommonoptions_p.h qgrpccommonoptions.cpp
         qgrpccalloptions.h qgrpccalloptions.cpp
-        qgrpcchanneloptions.h qgrpcchanneloptions.cpp
+        qgrpcchanneloptions.h qgrpcchanneloptions_p.h qgrpcchanneloptions.cpp
         qtgrpcglobal.h
         qtgrpclogging_p.h qtgrpclogging.cpp
         qtgrpcnamespace.h qtgrpcnamespace.cpp

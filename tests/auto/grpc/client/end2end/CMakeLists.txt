@@ -28,6 +28,7 @@ qt_internal_add_test(tst_grpc_client_end2end
         Qt::Test
         Qt::Core
         Qt::Grpc
+        Qt::Network
         grpc_mock_server
 )
 

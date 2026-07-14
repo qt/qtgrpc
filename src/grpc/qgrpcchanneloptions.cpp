@@ -1,7 +1,8 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <QtGrpc/private/qgrpccommonoptions_p.h>
+#include <QtGrpc/private/qgrpcchanneloptions_p.h>
+#include <QtGrpc/private/qtgrpclogging_p.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qgrpcserializationformat.h>
 #include <QtGrpc/qtgrpcnamespace.h>
@@ -16,6 +17,20 @@ QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
 using namespace QtGrpc;
+
+namespace {
+
+std::chrono::milliseconds clampNonNegative(const char *setter, std::chrono::milliseconds value)
+{
+    if (value < std::chrono::milliseconds::zero()) {
+        qGrpcWarning("%s: negative intervals aren't allowed (%lldms); clamping to 0.", setter,
+                     static_cast<long long>(value.count()));
+        return std::chrono::milliseconds::zero();
+    }
+    return value;
+}
+
+} // namespace
 
 /*!
     \class QGrpcChannelOptions
@@ -53,17 +68,6 @@ using namespace QtGrpc;
     \note It is up to the channel's implementation to determine the specifics
     of these options.
 */
-
-class QGrpcChannelOptionsPrivate : public QGrpcCommonOptions
-{
-public:
-    QGrpcSerializationFormat serializationFormat;
-    CompressionAlgorithms
-        acceptedCompressionAlgorithms = QGrpcChannelOptions::supportedCompressionAlgorithms();
-#if QT_CONFIG(ssl)
-    std::optional<QSslConfiguration> sslConfiguration;
-#endif
-};
 
 QT_DEFINE_QESDP_SPECIALIZATION_DTOR(QGrpcChannelOptionsPrivate)
 
@@ -343,6 +347,155 @@ QGrpcChannelOptions &QGrpcChannelOptions::setMaximumReceiveMessageSize(quint64 s
 }
 
 /*!
+    \since 6.13
+
+    Returns the initial reconnect backoff delay after a connection failure.
+
+//! [initialReconnectBackoff]
+    QtGrpc applies exponential backoff with jitter between reconnection
+    attempts to limit the rate of reconnections and prevent resource exhaustion
+    caused by repeated connection failures. The initial reconnect delay is
+    \l{initialReconnectBackoff}. Subsequent delays grow by a factor of 1.6, up
+    to \l{maximumReconnectBackoff}, with jitter applied to desynchronize
+    clients.
+
+    The default is 1 second, matching the \gRPC specification.
+
+    \h2EnvFallback {QT_GRPC_INITIAL_RECONNECT_BACKOFF_MS} {1s}
+//! [initialReconnectBackoff]
+
+    \sa setInitialReconnectBackoff(), maximumReconnectBackoff()
+*/
+std::chrono::milliseconds QGrpcChannelOptions::initialReconnectBackoff() const
+{
+    Q_D(const QGrpcChannelOptions);
+    return d->initialReconnectBackoff.value_or(QtGrpcPrivate::DefaultInitialReconnectBackoff);
+}
+
+/*!
+    \since 6.13
+
+    Sets the initial reconnect backoff to \a delay and returns a reference to
+    the updated object.
+
+    \include qgrpcchanneloptions.cpp initialReconnectBackoff
+
+    \note Setting this to zero disables backoff and reconnects immediately.
+
+    Negative values are clamped to zero and log a warning.
+
+    \sa initialReconnectBackoff(), setMaximumReconnectBackoff()
+*/
+QGrpcChannelOptions &
+QGrpcChannelOptions::setInitialReconnectBackoff(std::chrono::milliseconds delay)
+{
+    delay = clampNonNegative("QGrpcChannelOptions::setInitialReconnectBackoff", delay);
+    if (d_ptr->initialReconnectBackoff == delay)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->initialReconnectBackoff = delay;
+    return *this;
+}
+
+/*!
+    \since 6.13
+
+    Returns the maximum reconnect backoff delay.
+
+//! [maximumReconnectBackoff]
+    The exponential backoff delay grows up to this maximum. Once reached,
+    all subsequent reconnection delays stay at (or near, with jitter)
+    this value until the connection succeeds and the backoff resets. If the
+    maximum is smaller than \l{initialReconnectBackoff}, the initial delay
+    is clamped down to the maximum and a warning is issued.
+
+    The default is 120 seconds, matching the \gRPC specification.
+
+    \h2EnvFallback {QT_GRPC_MAXIMUM_RECONNECT_BACKOFF_MS} {120 s}
+//! [maximumReconnectBackoff]
+
+    \sa setMaximumReconnectBackoff(), initialReconnectBackoff()
+*/
+std::chrono::milliseconds QGrpcChannelOptions::maximumReconnectBackoff() const
+{
+    Q_D(const QGrpcChannelOptions);
+    return d->maximumReconnectBackoff.value_or(QtGrpcPrivate::DefaultMaximumReconnectBackoff);
+}
+
+/*!
+    \since 6.13
+
+    Sets the maximum reconnect backoff to \a delay and returns a reference to
+    the updated object.
+
+    \include qgrpcchanneloptions.cpp maximumReconnectBackoff
+
+    Negative values are clamped to zero and log a warning.
+
+    \sa maximumReconnectBackoff(), setInitialReconnectBackoff()
+*/
+QGrpcChannelOptions &
+QGrpcChannelOptions::setMaximumReconnectBackoff(std::chrono::milliseconds delay)
+{
+    delay = clampNonNegative("QGrpcChannelOptions::setMaximumReconnectBackoff", delay);
+    if (d_ptr->maximumReconnectBackoff == delay)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->maximumReconnectBackoff = delay;
+    return *this;
+}
+
+/*!
+    \since 6.13
+
+    Returns the connection attempt timeout.
+
+//! [connectTimeout]
+    If the socket does not reach the connected state within this timeout,
+    the attempt is aborted and the channel transitions to the error state.
+    The backoff timer then schedules the next attempt.
+
+    The default is 20 seconds, matching the \gRPC specification.
+
+    \h2EnvFallback {QT_GRPC_CONNECT_TIMEOUT_MS} {20 s}
+//! [connectTimeout]
+
+    \sa setConnectTimeout(), initialReconnectBackoff()
+*/
+std::chrono::milliseconds QGrpcChannelOptions::connectTimeout() const
+{
+    Q_D(const QGrpcChannelOptions);
+    return d->connectTimeout.value_or(QtGrpcPrivate::DefaultConnectTimeout);
+}
+
+/*!
+    \since 6.13
+
+    Sets the connection attempt timeout to \a timeout and returns a reference
+    to the updated object.
+
+    \include qgrpcchanneloptions.cpp connectTimeout
+
+    \note Setting this to zero disables the connection attempt timeout.
+
+    Negative values are clamped to zero and log a warning.
+
+    \sa connectTimeout(), setInitialReconnectBackoff()
+*/
+QGrpcChannelOptions &QGrpcChannelOptions::setConnectTimeout(std::chrono::milliseconds timeout)
+{
+    timeout = clampNonNegative("QGrpcChannelOptions::setConnectTimeout", timeout);
+    if (d_ptr->connectTimeout == timeout)
+        return *this;
+    d_ptr.detach();
+    Q_D(QGrpcChannelOptions);
+    d->connectTimeout = timeout;
+    return *this;
+}
+
+/*!
     \include qgrpccommonoptions.cpp requestCompression
     \sa QGrpcCallOptions::requestCompression()
 */
@@ -526,8 +679,9 @@ std::optional<QSslConfiguration> QGrpcChannelOptions::sslConfiguration() const
     Returns \c true if the \l{acceptedCompressionAlgorithms},
     \l{deadlineTimeout}, \l{filterServerMetadata},
     \l{maximumReceiveMessageSize}, \l{metadata(QtGrpc::MultiValue_t)},
-    \l{requestCompression}, \l{serializationFormat} and \l{sslConfiguration}
-    in \a lhs and \a rhs are
+    \l{requestCompression}, \l{serializationFormat}, \l{initialReconnectBackoff},
+    \l{maximumReconnectBackoff}, \l{connectTimeout}
+    and \l{sslConfiguration} in \a lhs and \a rhs are
 //! [compares]
 */
 bool comparesEqual(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rhs)
@@ -539,6 +693,9 @@ bool comparesEqual(const QGrpcChannelOptions &lhs, const QGrpcChannelOptions &rh
         && lhs.metadata(QtGrpc::MultiValue) == rhs.metadata(QtGrpc::MultiValue)
         && lhs.requestCompression() == rhs.requestCompression()
         && lhs.serializationFormat() == rhs.serializationFormat()
+        && lhs.initialReconnectBackoff() == rhs.initialReconnectBackoff()
+        && lhs.maximumReconnectBackoff() == rhs.maximumReconnectBackoff()
+        && lhs.connectTimeout() == rhs.connectTimeout()
 #if QT_CONFIG(ssl)
         && lhs.sslConfiguration() == rhs.sslConfiguration()
 #endif
@@ -577,6 +734,9 @@ QDebug operator<<(QDebug debug, const QGrpcChannelOptions &chOpts)
           << ", maximumReceiveMessageSize: " << chOpts.maximumReceiveMessageSize()
           << ", requestCompression: " << chOpts.requestCompression()
           << ", serializationFormat: " << chOpts.serializationFormat().suffix()
+          << ", initialReconnectBackoff: " << chOpts.initialReconnectBackoff().count() << "ms"
+          << ", maximumReconnectBackoff: " << chOpts.maximumReconnectBackoff().count() << "ms"
+          << ", connectTimeout: " << chOpts.connectTimeout().count() << "ms"
           << ", sslConfiguration: ";
 #  if QT_CONFIG(ssl)
     if (chOpts.sslConfiguration())

@@ -31,6 +31,7 @@ private Q_SLOTS:
     void comparesEqual() const { common.comparesEqual(); }
 
     void propertySerializationFormat() const;
+    void propertyBackoff() const;
 #if QT_CONFIG(ssl)
     void propertySslConfiguration() const;
 #endif
@@ -105,6 +106,58 @@ void QGrpcChannelOptionsTest::propertySslConfiguration() const
     QCOMPARE_NE(o1.sslConfiguration(), o1Detach.sslConfiguration());
 }
 #endif
+
+void QGrpcChannelOptionsTest::propertyBackoff() const
+{
+    using namespace std::chrono_literals;
+
+    QGrpcChannelOptions o1;
+    QCOMPARE_EQ(o1.initialReconnectBackoff(), 1000ms);
+    QCOMPARE_EQ(o1.maximumReconnectBackoff(), 120000ms);
+    QCOMPARE_EQ(o1.connectTimeout(), 20000ms);
+
+    auto o1Detach = o1;
+
+    o1.setInitialReconnectBackoff(200ms);
+    QCOMPARE_EQ(o1.initialReconnectBackoff(), 200ms);
+    QCOMPARE_NE(o1.initialReconnectBackoff(), o1Detach.initialReconnectBackoff());
+
+    o1 = o1Detach;
+    o1.setMaximumReconnectBackoff(2000ms);
+    QCOMPARE_EQ(o1.maximumReconnectBackoff(), 2000ms);
+    QCOMPARE_NE(o1.maximumReconnectBackoff(), o1Detach.maximumReconnectBackoff());
+
+    o1 = o1Detach;
+    o1.setConnectTimeout(500ms);
+    QCOMPARE_EQ(o1.connectTimeout(), 500ms);
+    QCOMPARE_NE(o1.connectTimeout(), o1Detach.connectTimeout());
+
+    o1 = o1Detach;
+    o1.setInitialReconnectBackoff(200ms)
+        .setMaximumReconnectBackoff(2000ms)
+        .setConnectTimeout(500ms);
+    QCOMPARE_EQ(o1.initialReconnectBackoff(), 200ms);
+    QCOMPARE_EQ(o1.maximumReconnectBackoff(), 2000ms);
+    QCOMPARE_EQ(o1.connectTimeout(), 500ms);
+
+    QTest::ignoreMessage(QtWarningMsg,
+                         "QGrpcChannelOptions::setInitialReconnectBackoff: negative intervals "
+                         "aren't allowed (-1ms); clamping to 0.");
+    o1.setInitialReconnectBackoff(-1ms);
+    QCOMPARE_EQ(o1.initialReconnectBackoff(), 0ms);
+
+    QTest::ignoreMessage(QtWarningMsg,
+                         "QGrpcChannelOptions::setMaximumReconnectBackoff: negative intervals "
+                         "aren't allowed (-1ms); clamping to 0.");
+    o1.setMaximumReconnectBackoff(-1ms);
+    QCOMPARE_EQ(o1.maximumReconnectBackoff(), 0ms);
+
+    QTest::ignoreMessage(QtWarningMsg,
+                         "QGrpcChannelOptions::setConnectTimeout: negative intervals "
+                         "aren't allowed (-1ms); clamping to 0.");
+    o1.setConnectTimeout(-1ms);
+    QCOMPARE_EQ(o1.connectTimeout(), 0ms);
+}
 
 QTEST_MAIN(QGrpcChannelOptionsTest)
 

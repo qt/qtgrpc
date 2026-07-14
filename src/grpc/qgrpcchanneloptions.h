@@ -94,6 +94,15 @@ public:
     Q_GRPC_EXPORT QGrpcChannelOptions &
     setSerializationFormat(const QGrpcSerializationFormat &format);
 
+    [[nodiscard]] Q_GRPC_EXPORT std::chrono::milliseconds initialReconnectBackoff() const;
+    Q_GRPC_EXPORT QGrpcChannelOptions &setInitialReconnectBackoff(std::chrono::milliseconds delay);
+
+    [[nodiscard]] Q_GRPC_EXPORT std::chrono::milliseconds maximumReconnectBackoff() const;
+    Q_GRPC_EXPORT QGrpcChannelOptions &setMaximumReconnectBackoff(std::chrono::milliseconds delay);
+
+    [[nodiscard]] Q_GRPC_EXPORT std::chrono::milliseconds connectTimeout() const;
+    Q_GRPC_EXPORT QGrpcChannelOptions &setConnectTimeout(std::chrono::milliseconds timeout);
+
 #if QT_CONFIG(ssl)
     [[nodiscard]] Q_GRPC_EXPORT std::optional<QSslConfiguration> sslConfiguration() const;
     Q_GRPC_EXPORT QGrpcChannelOptions &
