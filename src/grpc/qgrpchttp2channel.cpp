@@ -385,6 +385,9 @@ constexpr const char EnvGrpcMaximumMetadataSize[] = "QT_GRPC_MAXIMUM_METADATA_SI
 constexpr quint64 DefaultMaximumMetadataSize = 16 * 1024; // 16 KiB
 constexpr quint32 MinimumMetadataSize = 4 * 1024; // 4 KiB
 
+// Soft diagnostic threshold only; the queue stays unbounded.
+constexpr quint32 QueuedBytesWarningThreshold = 16 * 1024 * 1024; // 16 MiB
+
 std::optional<quint64> readEnvUnsignedInt(const char *name)
 {
     const auto v = qEnvironmentVariableIntegerValue(name);
@@ -694,6 +697,8 @@ private:
     const bool m_endStreamAtFirstData;
     bool m_writesDoneSent = false;
     bool m_drainingQueue = false;
+    quint64 m_queuedBytes = 0;
+    quint64 m_nextQueueWarnBytes = QueuedBytesWarningThreshold;
     bool m_filterServerMetadata;
     QTimer m_deadlineTimer;
 
@@ -1098,8 +1103,23 @@ void Http2Handler::writeMessage(QByteArrayView data)
                     static_cast<size_t>(data.size()));
     }
 
+    m_queuedBytes += msg.size();
     m_queue.enqueue(msg);
     processQueue();
+
+    // Checked after processQueue() so a message already handed to the
+    // transport never counts against the threshold.
+    if (m_queuedBytes > m_nextQueueWarnBytes) {
+        qCWarning(lcStream,
+                  "[%p] Outgoing message queue exceeds %lld bytes (%lld queued); messages are "
+                  "written faster than the connection transmits them.",
+                  this, static_cast<qint64>(m_nextQueueWarnBytes),
+                  static_cast<qint64>(m_queuedBytes));
+        // Escalate the threshold so a steady large upload warns once, while a
+        // runaway queue leaves a doubling trail instead of per-write spam.
+        while (m_queuedBytes > m_nextQueueWarnBytes)
+            m_nextQueueWarnBytes *= 2;
+    }
 }
 
 // Sends the initial headers and processes the message queue containing the
@@ -1163,6 +1183,8 @@ void Http2Handler::processQueue()
 
     do {
         const auto nextMessage = m_queue.dequeue();
+        Q_ASSERT(quint64(nextMessage.size()) <= m_queuedBytes);
+        m_queuedBytes -= quint64(nextMessage.size());
         const bool closeStream = nextMessage.isEmpty() || m_endStreamAtFirstData;
         m_stream->sendDATA(nextMessage, closeStream);
     } while (!m_stream->isUploadingDATA() && !m_queue.isEmpty());
