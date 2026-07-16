@@ -16,6 +16,8 @@
 #include <QtTest/qsignalspy.h>
 #include <QtTest/qtest.h>
 
+#include <QtNetwork/qtcpserver.h>
+
 #include <QtCore/qbytearray.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qhash.h>
@@ -79,6 +81,7 @@ private Q_SLOTS:
 
     void channelChangeCancelsInFlightRPCs_data() const;
     void channelChangeCancelsInFlightRPCs();
+    void channelTeardownCancelsActiveStream();
 
     void maximumReceiveMessageSize_data() const;
     void maximumReceiveMessageSize();
@@ -738,6 +741,69 @@ void QtGrpcClientEnd2EndTest::channelChangeCancelsInFlightRPCs()
     QCOMPARE_EQ(channelChangedSpy.count(), 1);
     if (waitForServer)
         QTRY_VERIFY(data->notifyWhenDone.load());
+}
+
+// Walks the HTTP/2 frames a client sent after its connection preface and
+// reports whether one of them has the given frame type.
+static bool containsHttp2Frame(QByteArrayView data, quint8 frameType)
+{
+    constexpr QByteArrayView Preface("PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n");
+    if (!data.startsWith(Preface))
+        return false;
+    qsizetype i = Preface.size();
+    while (i + 9 <= data.size()) {
+        if (quint8(data[i + 3]) == frameType)
+            return true;
+        const auto payloadLength = (quint32(quint8(data[i])) << 16)
+            | (quint32(quint8(data[i + 1])) << 8) | quint8(data[i + 2]);
+        i += 9 + qsizetype(payloadLength);
+    }
+    return false;
+}
+
+void QtGrpcClientEnd2EndTest::channelTeardownCancelsActiveStream()
+{
+    constexpr quint8 HeadersFrame = 0x01;
+    constexpr quint8 RstStreamFrame = 0x03;
+
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    if (hostUri.scheme() != "http"_L1)
+        QSKIP("Transport independent; runs on the plain HTTP row only.");
+
+    // A minimal HTTP/2 server: acknowledges the client preface with an empty
+    // SETTINGS frame so the client opens its stream, then stays silent.
+    QTcpServer fakeServer;
+    QVERIFY(fakeServer.listen(QHostAddress::LocalHost));
+    QByteArray received;
+    QObject::connect(&fakeServer, &QTcpServer::newConnection, &fakeServer, [&] {
+        QTcpSocket *serverSide = fakeServer.nextPendingConnection();
+        serverSide->write(QByteArray::fromHex("000000040000000000"    // SETTINGS
+                                              "000000040100000000")); // SETTINGS ACK
+        QObject::connect(serverSide, &QTcpSocket::readyRead, serverSide,
+                         [&received, serverSide] { received.append(serverSide->readAll()); });
+        received.append(serverSide->readAll());
+    });
+    const QUrl url("http://127.0.0.1:" + QByteArray::number(fakeServer.serverPort()));
+
+    auto client = std::make_unique<qt::EventHub::Client>();
+    QVERIFY(client->attachChannel(std::make_shared<QGrpcHttp2Channel>(url)));
+
+    auto call = client->Push(qt::Event{});
+    QVERIFY(call);
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    // Once HEADERS arrive the stream is open on the wire; the server never
+    // answers it, so it stays open until the client tears down.
+    QTRY_VERIFY(containsHttp2Frame(received, HeadersFrame));
+    QVERIFY(!containsHttp2Frame(received, RstStreamFrame));
+
+    client.reset();
+    QTRY_VERIFY2(containsHttp2Frame(received, RstStreamFrame),
+                 "the channel was destroyed without cancelling its active stream");
+    // The wire is cancelled; the local call must also terminate, not hang.
+    QCOMPARE(finishedSpy.count(), 1);
+    QCOMPARE_EQ(qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first()).code(),
+                StatusCode::Unavailable);
 }
 
 void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize_data() const

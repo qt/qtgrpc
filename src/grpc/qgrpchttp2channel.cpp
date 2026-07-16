@@ -486,7 +486,7 @@ public:
     enum class SocketType : uint8_t { Tcp, Tls, Local, LocalAbstract };
 
     explicit QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Channel *q);
-    ~QGrpcHttp2ChannelPrivate() override = default;
+    ~QGrpcHttp2ChannelPrivate() override;
 
     void processOperation(QGrpcOperationContext *operationContext, QByteArray &&data,
                           bool endStream = false);
@@ -1211,6 +1211,29 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
     m_reconnectFunction();
 }
 
+QGrpcHttp2ChannelPrivate::~QGrpcHttp2ChannelPrivate()
+{
+    for_each_non_expired_handler([](Http2Handler *handler) {
+        emit handler->finish({ StatusCode::Unavailable, tr("Channel destroyed") });
+    });
+
+    if (!m_socket)
+        return;
+    // The teardown below can emit errorOccurred synchronously; detach our
+    // handlers so none of them runs on a channel that is mid-destruction.
+    m_socket->disconnect(this);
+    // m_connection is parented to m_socket; delete it while the socket is
+    // still intact so destroying active streams can send their RST_STREAM.
+    delete std::exchange(m_connection, nullptr);
+    // The socket destructor discards unsent data; flush the RST_STREAM out.
+#if QT_CONFIG(localserver)
+    if (socketType == SocketType::Local || socketType == SocketType::LocalAbstract)
+        static_cast<QLocalSocket *>(m_socket.get())->flush();
+    else
+#endif
+        static_cast<QAbstractSocket *>(m_socket.get())->flush();
+}
+
 void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operationContext,
                                                 QByteArray &&messageData, bool endStream)
 {
@@ -1306,8 +1329,7 @@ void QGrpcHttp2ChannelPrivate::handleSocketError(const QByteArray &errorCode)
     qCDebug(lcChannel, "[%p] Socket error occurred (code=%s, details=%s, hostUri=%s)", this,
             errorCode.constData(), qPrintable(m_socket->errorString()),
             qPrintable(hostUri.toString()));
-    delete m_connection;
-    m_connection = nullptr;
+    delete std::exchange(m_connection, nullptr);
     m_state = ConnectionState::Error;
 }
 
