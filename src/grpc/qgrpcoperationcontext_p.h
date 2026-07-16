@@ -48,6 +48,7 @@ public:
 #endif
     QMultiHash<QByteArray, QByteArray> serverTrailingMetadata;
     const quint64 operationId;
+    quint64 bytesToWrite = 0;
 };
 
 QT_END_NAMESPACE

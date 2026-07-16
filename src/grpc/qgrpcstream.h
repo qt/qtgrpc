@@ -58,6 +58,8 @@ public:
     void writeMessage(const QProtobufMessage &message);
     void writesDone();
 
+    [[nodiscard]] quint64 bytesToWrite() const noexcept;
+
 Q_SIGNALS:
     void messageWritten();
 
@@ -87,6 +89,8 @@ public:
 
     void writeMessage(const QProtobufMessage &message);
     void writesDone();
+
+    [[nodiscard]] quint64 bytesToWrite() const noexcept;
 
 Q_SIGNALS:
     void messageReceived();

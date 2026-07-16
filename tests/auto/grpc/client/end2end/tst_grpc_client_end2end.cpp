@@ -13,6 +13,8 @@
 #include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qgrpchttp2channel.h>
 
+#include <QtProtobuf/qprotobufserializer.h>
+
 #include <QtTest/qsignalspy.h>
 #include <QtTest/qtest.h>
 
@@ -116,6 +118,8 @@ private Q_SLOTS:
     void messageWritten();
     void messageWrittenBidi();
     void messageWrittenNotAfterCancel();
+
+    void streamBytesToWrite();
 
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
@@ -1975,6 +1979,72 @@ void QtGrpcClientEnd2EndTest::messageWrittenNotAfterCancel()
     // Flush the queued emissions that were posted before the cancel.
     QCoreApplication::processEvents();
     QCOMPARE_EQ(messageWrittenSpy.count(), 1);
+}
+
+void QtGrpcClientEnd2EndTest::streamBytesToWrite()
+{
+    // Setup Server-side handling: read all client messages until end-of-stream, then finish.
+    TagProcessor processor(m_server.get());
+    struct ServerData
+    {
+        grpc::ServerContext ctx;
+        grpc::ServerAsyncReader<None, Event> op{ &ctx };
+        Event request;
+        None response;
+    };
+    ServerData *data = new ServerData;
+
+    CallbackTag *reader = new CallbackTag(
+        [&](bool ok) {
+            if (!ok) {
+                data->op.Finish(data->response, grpc::Status::OK,
+                                new DeleteTag<ServerData>(data, &processor));
+                return CallbackTag::Delete;
+            }
+            data->op.Read(&data->request, reader);
+            return CallbackTag::Proceed;
+        },
+        &processor);
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Read(&data->request, reader);
+            return CallbackTag::Delete;
+        },
+        &processor);
+    m_service->RequestNotify(&data->ctx, &data->op, m_server->cq(), m_server->cq(), callHandler);
+
+    // 1-byte compression flag + 4-byte big-endian length prefix per message.
+    constexpr quint64 FrameHeaderSize = 5;
+    QProtobufSerializer serializer;
+    const auto framedSize = [&](const qt::Event &e) {
+        return FrameHeaderSize + quint64(e.serialize(&serializer).size());
+    };
+
+    qt::Event event;
+    event.setNumber(1);
+    auto stream = m_client->Notify(event);
+    QVERIFY(stream);
+    // The channel is freshly attached, so the connection cannot be up yet and
+    // nothing was transmitted: the value is exactly the framed wire size of
+    // the queued initial message.
+    QCOMPARE_EQ(stream->bytesToWrite(), framedSize(event));
+
+    qt::Event next;
+    next.setNumber(2);
+    next.setName(QString(1024, u'x'));
+    stream->writeMessage(next);
+    QCOMPARE_EQ(stream->bytesToWrite(), framedSize(event) + framedSize(next));
+
+    // Once the connection is up the transport drains the queue completely.
+    QTRY_COMPARE_EQ(stream->bytesToWrite(), 0u);
+
+    QSignalSpy finishedSpy(stream.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    stream->writesDone();
+    QVERIFY(finishedSpy.wait());
+    QVERIFY(qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first()).isOk());
+    QCOMPARE_EQ(stream->bytesToWrite(), 0u);
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)

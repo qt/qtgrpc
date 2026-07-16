@@ -829,6 +829,7 @@ private:
     bool m_inFlightUserWrite = false;
     quint64 m_queuedBytes = 0;
     quint64 m_nextQueueWarnBytes = QueuedBytesWarningThreshold;
+    quint64 m_bytesToWrite = 0;
     bool m_filterServerMetadata;
     QTimer m_deadlineTimer;
     const CompressionAlgorithm m_requestEncoding;
@@ -1121,6 +1122,16 @@ void Http2Handler::attachStream(QHttp2Stream *stream_)
                 }
             });
 
+    // Progressive decrement instead of dequeue-time: bytesToWrite() then
+    // includes the unsent remainder of the message in transmission, so it
+    // never reports 0 while a large message is stalled mid-window.
+    connect(m_stream.get(), &QHttp2Stream::bytesWritten, this, [this](qint64 bytes) {
+        Q_ASSERT(quint64(bytes) <= m_bytesToWrite);
+        m_bytesToWrite -= quint64(bytes);
+        if (m_context)
+            m_context->setBytesToWrite(m_bytesToWrite);
+    });
+
     connect(m_stream.get(), &QHttp2Stream::uploadFinished, this, [this] {
         if (std::exchange(m_inFlightUserWrite, false))
             scheduleMessageWritten();
@@ -1302,6 +1313,10 @@ void Http2Handler::writeMessage(QByteArrayView data)
     qToBigEndian(static_cast<quint32>(payloadSize), msg.data() + 1);
 
     m_queuedBytes += msg.size();
+    m_bytesToWrite += msg.size();
+    if (m_context)
+        m_context->setBytesToWrite(m_bytesToWrite);
+
     m_queue.enqueue(std::move(msg));
     processQueue();
 

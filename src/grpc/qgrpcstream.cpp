@@ -56,13 +56,14 @@ QT_BEGIN_NAMESPACE
     and usually improves it by avoiding a large backlog. For very small,
     high-rate messages the per-message wait can dominate instead; there, keep a
     few messages in flight: write a small batch up front and write one more on
-    each emission.
+    each emission. bytesToWrite() reports how much of the written data still
+    awaits transmission.
 
     Once finished() has been emitted the signal is not emitted anymore, even
     for messages that were still in transmission when the operation ended.
 //! [message-written-desc]
 
-    \sa writeMessage()
+    \sa writeMessage(), bytesToWrite()
 */
 
 /*!
@@ -163,6 +164,27 @@ void QGrpcClientStream::writesDone()
     QGrpcOperation::writesDone();
 }
 
+/*!
+    \since 6.13
+//! [bytes-to-write-desc]
+    Returns the number of bytes the channel has accepted for this stream but
+    not yet written to the transport. QGrpcHttp2Channel reports the wire size
+    of the queued messages, including the message currently in transmission,
+    after framing and optional compression.
+
+    The value changes as writeMessage() accepts messages and the transport
+    consumes them; check it in a messageWritten() handler to decide whether
+    to write more messages or wait, and to bound the memory the outgoing
+    queue may occupy.
+//! [bytes-to-write-desc]
+
+    \sa messageWritten(), writeMessage()
+*/
+quint64 QGrpcClientStream::bytesToWrite() const noexcept
+{
+    return context().bytesToWrite();
+}
+
 bool QGrpcClientStream::event(QEvent *event)
 {
     return QGrpcOperation::event(event);
@@ -244,6 +266,18 @@ void QGrpcBidiStream::writeMessage(const QProtobufMessage &message)
 void QGrpcBidiStream::writesDone()
 {
     QGrpcOperation::writesDone();
+}
+
+/*!
+    \since 6.13
+
+    \include qgrpcstream.cpp bytes-to-write-desc
+
+    \sa messageWritten(), writeMessage()
+*/
+quint64 QGrpcBidiStream::bytesToWrite() const noexcept
+{
+    return context().bytesToWrite();
 }
 
 bool QGrpcBidiStream::event(QEvent *event)

@@ -124,14 +124,16 @@ quint64 nextOperationId()
     outgoing queue. Channels that buffer messages should therefore delay
     the emission while the transport applies backpressure, and channels
     that never emit it leave client-streaming and bidirectional-streaming
-    RPCs without write pacing. The signal must not be emitted once
-    finished() has been emitted.
+    RPCs without write pacing. The signal must not be emitted once finished()
+    has been emitted. Channels should additionally report their queue state
+    through setBytesToWrite().
 
     \note This signal is implicitly connected to the QGrpcClientStream and
     QGrpcBidiStream counterparts.
 
     \sa QGrpcClientStream::messageWritten
     \sa QGrpcBidiStream::messageWritten
+    \sa setBytesToWrite()
 */
 
 /*!
@@ -422,6 +424,38 @@ quint64 QGrpcOperationContext::operationId() const noexcept
 {
     Q_D(const QGrpcOperationContext);
     return d->operationId;
+}
+
+/*!
+    \since 6.13
+
+    Returns the number of bytes the channel has accepted for this operation
+    but not yet written to the transport.
+
+    \sa setBytesToWrite()
+*/
+quint64 QGrpcOperationContext::bytesToWrite() const noexcept
+{
+    Q_D(const QGrpcOperationContext);
+    return d->bytesToWrite;
+}
+
+/*!
+    \since 6.13
+
+    Stores the number of \a bytes the channel has accepted for this operation
+    but not yet written to the transport.
+
+    This function should be called by the channel whenever its outgoing queue
+    for this operation changes, so that clients can pace their writes against
+    the reported value.
+
+    \sa bytesToWrite()
+*/
+void QGrpcOperationContext::setBytesToWrite(quint64 bytes)
+{
+    Q_D(QGrpcOperationContext);
+    d->bytesToWrite = bytes;
 }
 
 const QGrpcOperation &QGrpcOperationContext::operation() const &

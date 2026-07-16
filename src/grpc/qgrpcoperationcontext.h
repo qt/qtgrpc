@@ -73,6 +73,9 @@ public:
 
     [[nodiscard]] quint64 operationId() const noexcept;
 
+    [[nodiscard]] quint64 bytesToWrite() const noexcept;
+    void setBytesToWrite(quint64 bytes);
+
 Q_SIGNALS:
     // Outgoing signals of the channel.
     void finished(const QGrpcStatus &status);
