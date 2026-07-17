@@ -907,6 +907,17 @@ private:
     }
     void handleSocketError(const QByteArray &errorCode);
 
+    // Invokes fn with m_socket downcast to its concrete socket type.
+    template <typename Fn>
+    auto visitSocket(Fn &&fn)
+    {
+#if QT_CONFIG(localserver)
+        if (socketType == SocketType::Local || socketType == SocketType::LocalAbstract)
+            return std::invoke(std::forward<Fn>(fn), static_cast<QLocalSocket *>(m_socket.get()));
+#endif
+        return std::invoke(std::forward<Fn>(fn), static_cast<QAbstractSocket *>(m_socket.get()));
+    }
+
     template <typename Projection = q20::identity>
     void for_each_non_expired_handler(Projection proj)
     {
@@ -1739,12 +1750,7 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
     m_connectTimeoutTimer.callOnTimeout(this, [this] {
         qCWarning(lcChannel, "[%p] Connection attempt timed out after %dms; aborting.", this,
                   m_connectTimeoutTimer.interval());
-#if QT_CONFIG(localserver)
-        if (socketType == SocketType::Local || socketType == SocketType::LocalAbstract)
-            static_cast<QLocalSocket *>(m_socket.get())->abort();
-        else
-#endif
-            static_cast<QAbstractSocket *>(m_socket.get())->abort();
+        visitSocket([](auto *socket) { socket->abort(); });
         handleSocketError("ConnectTimeout"_ba);
     });
 
@@ -1766,12 +1772,7 @@ QGrpcHttp2ChannelPrivate::~QGrpcHttp2ChannelPrivate()
     // still intact so destroying active streams can send their RST_STREAM.
     delete std::exchange(m_connection, nullptr);
     // The socket destructor discards unsent data; flush the RST_STREAM out.
-#if QT_CONFIG(localserver)
-    if (socketType == SocketType::Local || socketType == SocketType::LocalAbstract)
-        static_cast<QLocalSocket *>(m_socket.get())->flush();
-    else
-#endif
-        static_cast<QAbstractSocket *>(m_socket.get())->flush();
+    visitSocket([](auto *socket) { socket->flush(); });
 }
 
 void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operationContext,
