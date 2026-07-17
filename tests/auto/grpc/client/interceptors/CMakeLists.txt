@@ -28,6 +28,9 @@ qt_internal_skip_sanitizer()
 qt_internal_add_test(tst_grpc_client_interceptors
     SOURCES
         tst_grpc_client_interceptors.cpp
+    DEFINES
+        QTEST_THROW_ON_FAIL
+        QTEST_THROW_ON_SKIP
     LIBRARIES
         Qt::Test
         Qt::Core
