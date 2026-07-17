@@ -25,14 +25,6 @@
 #include <string>
 #include <vector>
 
-// Re-define so that we can use QTest Macros inside non void functions too.
-#undef QTEST_FAIL_ACTION
-#define QTEST_FAIL_ACTION                         \
-    do {                                          \
-        std::cerr << "Test failed!" << std::endl; \
-        std::abort();                             \
-    } while (0)
-
 using namespace Qt::Literals::StringLiterals;
 using MultiHash = QMultiHash<QByteArray, QByteArray>;
 

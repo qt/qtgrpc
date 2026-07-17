@@ -32,13 +32,6 @@
 #include <string>
 #include <vector>
 
-#undef QTEST_FAIL_ACTION
-#define QTEST_FAIL_ACTION                         \
-    do {                                          \
-        std::cerr << "Test failed!" << std::endl; \
-        std::abort();                             \
-    } while (0)
-
 using namespace Qt::Literals::StringLiterals;
 
 class QtGrpcClientInterceptorsTest : public QObject
