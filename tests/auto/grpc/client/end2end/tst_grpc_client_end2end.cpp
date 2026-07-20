@@ -147,7 +147,6 @@ void QtGrpcClientEnd2EndTest::initTestCase_data() const
 
 void QtGrpcClientEnd2EndTest::initTestCase()
 {
-    QTest::failOnWarning();
     restartServer();
 }
 
@@ -160,6 +159,7 @@ void QtGrpcClientEnd2EndTest::cleanupTestCase()
 
 void QtGrpcClientEnd2EndTest::init()
 {
+    QTest::failOnWarning();
     QVERIFY(m_service && m_server);
     QFETCH_GLOBAL(const QUrl, hostUri);
     QFETCH_GLOBAL(const QGrpcChannelOptions, channelOptions);
