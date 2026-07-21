@@ -91,15 +91,15 @@ function(qt_internal_add_protobuf_wellknown_types target)
             set(alias_header "${module_build_interface_include_dir}/google/protobuf/${file_name}")
             qt_internal_generate_wellknown_header_alias(
                 "${module_build_interface_include_dir}/${file_name}" "${alias_header}")
+            list(APPEND alias_headers "${alias_header}")
             if(is_fw)
-                qt_internal_get_framework_info(fw ${target})
                 get_target_property(output_dir ${target} LIBRARY_OUTPUT_DIRECTORY)
                 set(output_dir "${output_dir}/${fw_versioned_header_dir}")
                 set(fw_alias_dir "${output_dir}/google/protobuf")
                 set(fw_alias_header "${fw_alias_dir}/${file_name}")
                 add_custom_command(
                     OUTPUT "${fw_alias_header}"
-                    DEPENDS ${in_file_path}
+                    DEPENDS "${alias_header}"
                     COMMAND ${CMAKE_COMMAND} -E make_directory "${fw_alias_dir}"
                     COMMAND ${CMAKE_COMMAND} -E copy
                         "${alias_header}"
@@ -108,15 +108,13 @@ function(qt_internal_add_protobuf_wellknown_types target)
                 )
                 set_property(TARGET ${target} APPEND PROPERTY
                     QT_COPIED_FRAMEWORK_HEADERS "${fw_alias_header}")
-            else()
-                list(APPEND alias_headers "${alias_header}")
             endif()
         endforeach()
 
-        if(NOT is_fw)
-            qt_install(FILES ${alias_headers}
-                DESTINATION "${module_install_interface_include_dir}/google/protobuf")
-        endif()
+        # The framework's Headers dir is no longer part of the include paths, so the aliases
+        # must also live in the regular include dir, next to the syncqt forwarding headers.
+        qt_install(FILES ${alias_headers}
+            DESTINATION "${module_install_interface_include_dir}/google/protobuf")
     endif()
 
     if(generated_targets)
