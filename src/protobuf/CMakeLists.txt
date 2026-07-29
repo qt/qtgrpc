@@ -47,7 +47,8 @@ if(CMAKE_VERSION GREATER_EQUAL 3.27)
 endif()
 
 # TODO: Remove this and fix it in qtbase's qt_internal_find_tool directly
-if(QT_HOST_PATH AND Qt6::qtprotobufgen IN_LIST Qt6ProtobufTools_TARGETS
-    AND NOT QT_FORCE_BUILD_TOOLS)
-    qt_record_extra_qt_main_tools_package_dependency(Protobuf ProtobufTools "${PROJECT_VERSION}")
+if(QT_HOST_PATH AND Qt6::qtprotobufgen IN_LIST Qt6ProtobufTools_TARGETS)
+    if(NOT QT_FORCE_BUILD_TOOLS OR NOT QT_FEATURE_qtprotobufgen)
+        qt_record_extra_qt_main_tools_package_dependency(Protobuf ProtobufTools "${PROJECT_VERSION}")
+    endif()
 endif()

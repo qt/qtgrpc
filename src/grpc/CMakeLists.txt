@@ -62,6 +62,8 @@ qt_internal_add_docs(Grpc
 )
 
 # TODO: Remove this and fix it in qtbase's qt_internal_find_tool directly
-if(QT_HOST_PATH AND Qt6::qtgrpcgen IN_LIST Qt6GrpcTools_TARGETS AND NOT QT_FORCE_BUILD_TOOLS)
-    qt_record_extra_qt_main_tools_package_dependency(Grpc GrpcTools "${PROJECT_VERSION}")
+if(QT_HOST_PATH AND Qt6::qtgrpcgen IN_LIST Qt6GrpcTools_TARGETS)
+    if(NOT QT_FORCE_BUILD_TOOLS OR NOT QT_FEATURE_qtgrpcgen)
+        qt_record_extra_qt_main_tools_package_dependency(Grpc GrpcTools "${PROJECT_VERSION}")
+    endif()
 endif()
