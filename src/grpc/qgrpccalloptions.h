@@ -73,7 +73,7 @@ public:
     Q_GRPC_EXPORT QGrpcCallOptions &setMaximumReceiveMessageSize(quint64 size);
 
     [[nodiscard]] Q_GRPC_EXPORT std::optional<QtGrpc::CompressionAlgorithm>
-    requestCompression() const noexcept;
+    requestCompression() const;
     Q_GRPC_EXPORT QGrpcCallOptions &setRequestCompression(QtGrpc::CompressionAlgorithm algorithm);
 
 private:

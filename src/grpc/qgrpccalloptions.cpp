@@ -331,7 +331,7 @@ QGrpcCallOptions &QGrpcCallOptions::setMaximumReceiveMessageSize(quint64 size)
     \include qgrpccommonoptions.cpp requestCompression
     \sa QGrpcChannelOptions::requestCompression()
 */
-std::optional<QtGrpc::CompressionAlgorithm> QGrpcCallOptions::requestCompression() const noexcept
+std::optional<QtGrpc::CompressionAlgorithm> QGrpcCallOptions::requestCompression() const
 {
     Q_D(const QGrpcCallOptions);
     return d->requestCompression();

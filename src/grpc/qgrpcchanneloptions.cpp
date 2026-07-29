@@ -346,7 +346,7 @@ QGrpcChannelOptions &QGrpcChannelOptions::setMaximumReceiveMessageSize(quint64 s
     \include qgrpccommonoptions.cpp requestCompression
     \sa QGrpcCallOptions::requestCompression()
 */
-std::optional<QtGrpc::CompressionAlgorithm> QGrpcChannelOptions::requestCompression() const noexcept
+std::optional<QtGrpc::CompressionAlgorithm> QGrpcChannelOptions::requestCompression() const
 {
     Q_D(const QGrpcChannelOptions);
     return d->requestCompression();
@@ -385,9 +385,9 @@ QGrpcChannelOptions::setRequestCompression(QtGrpc::CompressionAlgorithm algorith
 CompressionAlgorithms QGrpcChannelOptions::supportedCompressionAlgorithms() noexcept
 {
     CompressionAlgorithms supported = CompressionAlgorithm::Identity;
-    if (QDecompressHelper::isSupportedEncoding("deflate"_ba))
+    if (QDecompressHelper::isSupportedEncoding("deflate"))
         supported |= CompressionAlgorithm::Deflate;
-    if (QDecompressHelper::isSupportedEncoding("gzip"_ba))
+    if (QDecompressHelper::isSupportedEncoding("gzip"))
         supported |= CompressionAlgorithm::Gzip;
     return supported;
 }
@@ -410,7 +410,7 @@ CompressionAlgorithms QGrpcChannelOptions::supportedCompressionAlgorithms() noex
 
     \sa setAcceptedCompressionAlgorithms(), supportedCompressionAlgorithms()
 */
-QtGrpc::CompressionAlgorithms QGrpcChannelOptions::acceptedCompressionAlgorithms() const noexcept
+QtGrpc::CompressionAlgorithms QGrpcChannelOptions::acceptedCompressionAlgorithms() const
 {
     Q_D(const QGrpcChannelOptions);
     return d->acceptedCompressionAlgorithms;
