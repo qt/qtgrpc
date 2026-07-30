@@ -25,7 +25,7 @@ if(QT_FEATURE_qtgrpcgen OR
     (QT_HOST_PATH AND Qt6::qtgrpcgen IN_LIST Qt6GrpcTools_TARGETS
      AND NOT QT_FORCE_BUILD_TOOLS))
     add_subdirectory(qtgrpcgen)
-elseif(NOT QT_FEATURE_qtprotobufgen AND QT_FORCE_BUILD_TOOLS)
+elseif(NOT QT_FEATURE_qtgrpcgen AND QT_FORCE_BUILD_TOOLS)
     # TODO: We ignore the QT_FORCE_BUILD_TOOLS option for this tool to pass the CI check.
     # See QTBUG-110849 for details.
     message(WARNING "You are trying to force build the qtgrpcgen tool, but its dependencies"
