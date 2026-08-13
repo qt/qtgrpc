@@ -13,8 +13,11 @@ set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/grpc/chat")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find OpenSSL first since it's a transitive dependency that may not be available in CONFIG mode
+# Find OpenSSL and ZLIB first since they're transitive dependencies of gRPC that may not be
+# available in CONFIG mode. gRPC's config only resolves ZLIB if(NOT ZLIB_FOUND), so ensure the
+# ZLIB::ZLIB target exists in this scope before finding gRPC.
 find_package(OpenSSL)
+find_package(ZLIB)
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 find_package(Qt6 COMPONENTS ProtobufTools ProtobufQtCoreTypes)
