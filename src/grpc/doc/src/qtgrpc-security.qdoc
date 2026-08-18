@@ -40,6 +40,21 @@
         environment variable is not set, the default value is used. See
         \l{Environment variable fallbacks}.
 
+    \li Use exponential backoff to limit reconnection attempts. When a server
+        drops the connection, a client that reconnects without any delay can
+        exhaust local file descriptors, CPU, and network bandwidth. By default,
+        QtGrpc applies exponential backoff with jitter between reconnection
+        attempts, with an initial interval of 1 second, a multiplier of 1.6,
+        and a maximum of 120 seconds (matching the \gRPC specification). The
+        backoff resets automatically when the server acknowledges the
+        connection. QGrpcHttp2Channel reads the initial and maximum intervals,
+        as well as the per-attempt connect timeout, from the
+        \c{QT_GRPC_INITIAL_RECONNECT_BACKOFF_MS},
+        \c{QT_GRPC_MAXIMUM_RECONNECT_BACKOFF_MS}, and
+        \c{QT_GRPC_CONNECT_TIMEOUT_MS} environment variables. If they are not
+        set, the default values are used. See \l{Environment variable
+        fallbacks}.
+
     \li Set rate limits and monitor traffic to prevent misuse.
         Qt GRPC can be vulnerable to denial-of-service attacks and setting
         limits and thorough testing can help with reducing the risk of

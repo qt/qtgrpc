@@ -39,6 +39,7 @@
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qpointer.h>
 #include <QtCore/qqueue.h>
+#include <QtCore/qrandom.h>
 #include <QtCore/qscopedvaluerollback.h>
 #include <QtCore/qtenvironmentvariables.h>
 #include <QtCore/qtimer.h>
@@ -46,6 +47,7 @@
 
 #include <QtCore/q20algorithm.h>
 
+#include <cmath>
 #include <functional>
 #include <optional>
 #include <utility>
@@ -304,6 +306,18 @@ using namespace QtGrpc;
             \li \e{None}
             \li 4 MiB (4'194'304 Bytes)
         \row
+            \li \c QT_GRPC_INITIAL_RECONNECT_BACKOFF_MS
+            \li \e{None}
+            \li 1s (1'000ms)
+        \row
+            \li \c QT_GRPC_MAXIMUM_RECONNECT_BACKOFF_MS
+            \li \e{None}
+            \li 120s (120'000ms)
+        \row
+            \li \c QT_GRPC_CONNECT_TIMEOUT_MS
+            \li \e{None}
+            \li 20s (20'000ms)
+        \row
             \li \c QT_GRPC_HTTP2_STREAM_RECEIVE_WINDOW_SIZE
             \li \e{None}
             \li 4 MiB (4'194'304 Bytes)
@@ -354,6 +368,13 @@ constexpr const char
 constexpr quint32 DefaultHttp2StreamReceiveWindowSize = 4 * 1024 * 1024; // 4 MiB
 // RFC 6.9.3 permits arbitrarily small per-stream windows
 constexpr quint32 MinimumHttp2StreamReceiveWindowSize = 1024; // 1 KiB
+
+constexpr const char EnvInitialReconnectBackoff[] = "QT_GRPC_INITIAL_RECONNECT_BACKOFF_MS";
+constexpr const char EnvMaximumReconnectBackoff[] = "QT_GRPC_MAXIMUM_RECONNECT_BACKOFF_MS";
+constexpr const char EnvConnectTimeout[] = "QT_GRPC_CONNECT_TIMEOUT_MS";
+constexpr std::chrono::milliseconds DefaultInitialReconnectBackoff = std::chrono::seconds(1);
+constexpr std::chrono::milliseconds DefaultMaximumReconnectBackoff = std::chrono::seconds(120);
+constexpr std::chrono::milliseconds DefaultConnectTimeout = std::chrono::seconds(20);
 
 std::optional<quint64> readEnvUnsignedInt(const char *name)
 {
@@ -468,6 +489,13 @@ QByteArray sanitizedForLog(QByteArrayView v)
     return QtDebugUtils::toPrintable(v.data(), v.size(), MaxLoggedHeaderBytes);
 }
 
+std::chrono::milliseconds resolveMs(std::optional<quint64> envVal, std::chrono::milliseconds dflt)
+{
+    if (envVal)
+        return std::chrono::milliseconds(*envVal);
+    return dflt;
+}
+
 } // namespace
 
 class GrpcDataParser
@@ -540,6 +568,46 @@ public:
 
 private:
     QByteArray container;
+};
+
+struct ReconnectBackoff
+{
+    ReconnectBackoff(std::chrono::milliseconds init, std::chrono::milliseconds max)
+        : m_current(init), m_initial(init), m_maximum(max)
+    {
+    }
+
+    void reset() { m_current = m_initial; }
+
+    [[nodiscard]] std::chrono::milliseconds nextDelay()
+    {
+        constexpr double BackoffMultiplier = 1.6;
+        constexpr double BackoffJitter = 0.2;
+
+        const auto delay = m_current;
+        // Grow the underlying backoff value without jitter so retries don't
+        // drift randomly over time. 0 stays 0 (backoff disabled) by design.
+        // Clamp in double space: casting a value beyond INT64_MAX to qint64 is UB.
+        const double multiplied = std::ceil(static_cast<double>(m_current.count())
+                                            * BackoffMultiplier);
+        m_current = multiplied >= static_cast<double>(m_maximum.count())
+            ? m_maximum
+            : std::chrono::milliseconds(static_cast<qint64>(multiplied));
+
+        // Apply a random jitter in the range [0.8, 1.2] to avoid synchronized reconnects.
+        const double jitterFactor = 1.0 - BackoffJitter
+            + (2.0 * BackoffJitter * QRandomGenerator::global()->generateDouble());
+
+        const double jittered = static_cast<double>(delay.count()) * jitterFactor;
+        return jittered >= static_cast<double>(std::chrono::milliseconds::max().count())
+            ? std::chrono::milliseconds::max()
+            : std::chrono::milliseconds(static_cast<qint64>(jittered));
+    }
+
+private:
+    std::chrono::milliseconds m_current;
+    std::chrono::milliseconds m_initial;
+    std::chrono::milliseconds m_maximum;
 };
 
 // The Http2Handler manages an individual RPC over the HTTP/2 channel.
@@ -645,6 +713,11 @@ public:
     // qEnvironmentVariable() takes a global lock per call.
     const std::optional<quint64>
         envMaximumReceiveSize = readEnvUnsignedInt(EnvMaximumReceiveMessageSize);
+    const std::optional<quint64>
+        envInitialReconnectBackoff = readEnvUnsignedInt(EnvInitialReconnectBackoff);
+    const std::optional<quint64>
+        envMaximumReconnectBackoff = readEnvUnsignedInt(EnvMaximumReconnectBackoff);
+    const std::optional<quint64> envConnectTimeout = readEnvUnsignedInt(EnvConnectTimeout);
 
 private:
     enum ConnectionState { Connecting = 0, Connected, SettingsReceived, Error };
@@ -654,6 +727,8 @@ private:
     QByteArray setupContentTypeNegotiation(QGrpcHttp2Channel *qPtr) const;
     static QByteArray constructAuthorityHeader(const QUrl &hostUri, SocketType socketType);
     static QByteArray constructSchemeHeader(SocketType socketType);
+    static ReconnectBackoff constructReconnectBackoff(std::optional<quint64> envInitial,
+                                                      std::optional<quint64> envMaximum);
 
     struct ReceiveWindowSizes
     {
@@ -665,6 +740,7 @@ private:
 
     bool createHttp2Stream(Http2Handler *handler);
     void createHttp2Connection();
+    void attemptConnect();
 
 #if QT_CONFIG(localserver)
     void handleLocalSocketError(QLocalSocket::LocalSocketError error)
@@ -705,6 +781,9 @@ private:
     bool m_isInsideSocketErrorOccurred = false;
     QHttp2Connection *m_connection = nullptr;
     ConnectionState m_state = Connecting;
+    ReconnectBackoff m_reconnectBackoff;
+    QTimer m_reconnectTimer;
+    QTimer m_connectTimeoutTimer;
 
     Q_DISABLE_COPY_MOVE(QGrpcHttp2ChannelPrivate)
 };
@@ -1281,7 +1360,9 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
       hostUri(sanitizeHostUri(uri, q_ptr->channelOptions())),
       contentType(setupContentTypeNegotiation(q_ptr)),
       authorityHeader(constructAuthorityHeader(hostUri, socketType)),
-      schemeHeader(constructSchemeHeader(socketType))
+      schemeHeader(constructSchemeHeader(socketType)),
+      m_reconnectBackoff(constructReconnectBackoff(envInitialReconnectBackoff,
+                                                   envMaximumReconnectBackoff))
 {
     switch (socketType) {
     case SocketType::Tcp: {
@@ -1360,7 +1441,24 @@ QGrpcHttp2ChannelPrivate::QGrpcHttp2ChannelPrivate(const QUrl &uri, QGrpcHttp2Ch
 
     } // switch (socketType)
 
-    m_reconnectFunction();
+    m_reconnectTimer.setSingleShot(true);
+    m_reconnectTimer.callOnTimeout(this, &QGrpcHttp2ChannelPrivate::attemptConnect);
+
+    m_connectTimeoutTimer.setSingleShot(true);
+    m_connectTimeoutTimer.setInterval(resolveMs(envConnectTimeout, DefaultConnectTimeout));
+    m_connectTimeoutTimer.callOnTimeout(this, [this] {
+        qCWarning(lcChannel, "[%p] Connection attempt timed out after %dms; aborting.", this,
+                  m_connectTimeoutTimer.interval());
+#if QT_CONFIG(localserver)
+        if (socketType == SocketType::Local || socketType == SocketType::LocalAbstract)
+            static_cast<QLocalSocket *>(m_socket.get())->abort();
+        else
+#endif
+            static_cast<QAbstractSocket *>(m_socket.get())->abort();
+        handleSocketError("ConnectTimeout"_ba);
+    });
+
+    attemptConnect();
 }
 
 QGrpcHttp2ChannelPrivate::~QGrpcHttp2ChannelPrivate()
@@ -1413,16 +1511,24 @@ void QGrpcHttp2ChannelPrivate::processOperation(QGrpcOperationContext *operation
     if (m_state == ConnectionState::Error) {
         Q_ASSERT_X(m_reconnectFunction, "QGrpcHttp2ChannelPrivate::processOperation",
                    "Socket reconnection function is not defined.");
-        if (m_isInsideSocketErrorOccurred) {
-            qCWarning(lcChannel,
-                      "[%p] Inside socket error handler. Reconnect deferred to event loop.", this);
-            QTimer::singleShot(0, this, [this] { m_reconnectFunction(); });
-        } else {
-            m_reconnectFunction();
+        if (!m_reconnectTimer.isActive()) {
+            const auto delay = m_reconnectBackoff.nextDelay();
+            qCDebug(lcChannel, "[%p] Scheduling reconnect in %lldms.", this,
+                    static_cast<long long>(delay.count()));
+            m_reconnectTimer.start(delay);
         }
         m_state = ConnectionState::Connecting;
         qCDebug(lcChannel, "[%p] State changed to 'Connecting'. Reconnection initiated.", this);
     }
+}
+
+void QGrpcHttp2ChannelPrivate::attemptConnect()
+{
+    Q_ASSERT_X(m_reconnectFunction, "QGrpcHttp2ChannelPrivate::attemptConnect",
+               "Socket reconnection function is not defined.");
+    if (m_connectTimeoutTimer.interval() > 0)
+        m_connectTimeoutTimer.start();
+    m_reconnectFunction();
 }
 
 void QGrpcHttp2ChannelPrivate::createHttp2Connection()
@@ -1455,6 +1561,10 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
     connect(m_connection, &QHttp2Connection::settingsFrameReceived, this, [this] {
         if (m_state == ConnectionState::SettingsReceived)
             return;
+        // The gRPC connection-backoff spec recommends a backoff reset when the SETTINGS
+        // frame is received, confirming the server fully accepted the connection.
+        m_connectTimeoutTimer.stop();
+        m_reconnectBackoff.reset();
         m_state = ConnectionState::SettingsReceived;
         qCDebug(lcChannel, "[%p] SETTINGS frame received. Connection ready for use.", this);
         for_each_non_expired_handler([](Http2Handler *handler) { handler->sendInitialRequest(); });
@@ -1479,6 +1589,7 @@ void QGrpcHttp2ChannelPrivate::handleSocketError(const QByteArray &errorCode)
                                 tr("Network error occurred: %1").arg(errorCode) });
     });
 
+    m_connectTimeoutTimer.stop();
     qCDebug(lcChannel, "[%p] Socket error occurred (code=%s, details=%s, hostUri=%s)", this,
             errorCode.constData(), qPrintable(m_socket->errorString()),
             qPrintable(hostUri.toString()));
@@ -1602,6 +1713,23 @@ QByteArray QGrpcHttp2ChannelPrivate::constructAuthorityHeader(const QUrl &hostUr
 QByteArray QGrpcHttp2ChannelPrivate::constructSchemeHeader(SocketType socketType)
 {
     return socketType == SocketType::Tls ? "https"_ba : "http"_ba;
+}
+
+ReconnectBackoff
+QGrpcHttp2ChannelPrivate::constructReconnectBackoff(std::optional<quint64> envInitial,
+                                                    std::optional<quint64> envMaximum)
+{
+    auto effectiveInitial = resolveMs(envInitial, DefaultInitialReconnectBackoff);
+    const auto effectiveMaximum = resolveMs(envMaximum, DefaultMaximumReconnectBackoff);
+    if (effectiveInitial > effectiveMaximum) {
+        qCWarning(lcChannel,
+                  "Initial reconnect backoff of %lldms exceeds the maximum of %lldms; "
+                  "clamping to the maximum.",
+                  static_cast<qint64>(effectiveInitial.count()),
+                  static_cast<qint64>(effectiveMaximum.count()));
+        effectiveInitial = effectiveMaximum;
+    }
+    return { effectiveInitial, effectiveMaximum };
 }
 
 auto QGrpcHttp2ChannelPrivate::constructReceiveWindowSizes() -> ReceiveWindowSizes
