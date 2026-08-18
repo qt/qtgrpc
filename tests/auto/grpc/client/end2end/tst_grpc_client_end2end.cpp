@@ -90,6 +90,9 @@ private Q_SLOTS:
     void maximumReceiveMessageSize_data() const;
     void maximumReceiveMessageSize();
 
+    void maximumMetadataSize_data() const;
+    void maximumMetadataSize();
+
     void acceptedCompressionAlgorithms_data() const;
     void acceptedCompressionAlgorithms();
 
@@ -940,6 +943,115 @@ void QtGrpcClientEnd2EndTest::maximumReceiveMessageSize()
     QCOMPARE_EQ(status->code(), expectedCode);
     if (status->code() == QtGrpc::StatusCode::ResourceExhausted)
         QVERIFY(status->message().contains("exceeds"));
+}
+
+void QtGrpcClientEnd2EndTest::maximumMetadataSize_data() const
+{
+    constexpr int SmallMetadata = 2048;
+    constexpr int LargeMetadata = 8192;
+    constexpr int OversizedMetadata = 20480;
+
+    QTest::addColumn<QByteArray>("envLimit");
+    QTest::addColumn<int>("serverPaddingBytes");
+    QTest::addColumn<QRegularExpression>("expectedWarning");
+    QTest::addColumn<StatusCode>("expectedCode");
+
+    const auto noEnv = QByteArray();
+    const auto noWarning = QRegularExpression();
+    const auto belowMin = QRegularExpression("below the minimum of 4096 bytes");
+
+    // No limit configured falls back to the 16 KiB default, which accepts a
+    // normal header block and rejects one beyond it.
+    QTest::newRow("default-accepts") << noEnv << SmallMetadata << noWarning << StatusCode::Ok;
+    QTest::newRow("default-rejects-oversized")
+        << noEnv << OversizedMetadata << noWarning << StatusCode::ResourceExhausted;
+    // Zero and any sub-floor value are raised to the 4 KiB minimum.
+    QTest::newRow("zero-floored-to-min") << "0"_ba << SmallMetadata << belowMin << StatusCode::Ok;
+    QTest::newRow("subfloor-accepts-normal")
+        << "512"_ba << SmallMetadata << belowMin << StatusCode::Ok;
+    // The 4 KiB floor still rejects a larger header block.
+    QTest::newRow("floored-rejects-large")
+        << "512"_ba << LargeMetadata << belowMin << StatusCode::ResourceExhausted;
+    // Raising the limit above the default accepts what the default rejects.
+    QTest::newRow("raised-accepts-oversized")
+        << "32768"_ba << OversizedMetadata << noWarning << StatusCode::Ok;
+}
+
+void QtGrpcClientEnd2EndTest::maximumMetadataSize()
+{
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    QFETCH_GLOBAL(const QGrpcChannelOptions, channelOptions);
+
+    QFETCH(const QByteArray, envLimit);
+    QFETCH(const int, serverPaddingBytes);
+    QFETCH(const QRegularExpression, expectedWarning);
+    QFETCH(const QtGrpc::StatusCode, expectedCode);
+
+    const auto restoreEnv = qScopeGuard([] { qunsetenv("QT_GRPC_MAXIMUM_METADATA_SIZE"); });
+    if (!envLimit.isNull())
+        qputenv("QT_GRPC_MAXIMUM_METADATA_SIZE", envLimit);
+
+    // Server attaches an initial-metadata entry of the requested size, then finishes OK.
+    TagProcessor processor(m_server.get());
+    struct ServerData
+    {
+        grpc::ServerAsyncWriter<Event> op{ &ctx };
+        grpc::ServerContext ctx;
+
+        None request;
+        Event response;
+    };
+    ServerData *data = new ServerData;
+    data->ctx.AddInitialMetadata("x-padding", std::string(serverPaddingBytes, 'a'));
+
+    CallbackTag *writeHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Finish(grpc::Status::OK, new DeleteTag<ServerData>(data, &processor));
+            return CallbackTag::Delete;
+        },
+        &processor);
+    CallbackTag *callHandler = new CallbackTag(
+        [&](bool ok) {
+            QVERIFY(ok);
+            data->op.Write(data->response, writeHandler);
+            return CallbackTag::Delete;
+        },
+        &processor);
+    m_service->RequestSubscribe(&data->ctx, &data->request, &data->op, m_server->cq(),
+                                m_server->cq(), callHandler);
+
+    if (!expectedWarning.pattern().isEmpty())
+        QTest::ignoreMessage(QtWarningMsg, expectedWarning);
+
+    // Re-attach a fresh channel so the env var (set above) is sampled at
+    // channel construction time, not the one created in init().
+    qt::EventHub::Client client;
+    QVERIFY(client.attachChannel(std::make_shared<QGrpcHttp2Channel>(hostUri, channelOptions)));
+
+    // Rejecting the oversized header block is a connection error, which
+    // QHttp2Connection reports with a qCCritical of its own.
+    if (expectedCode != QtGrpc::StatusCode::Ok) {
+        QTest::ignoreMessage(QtCriticalMsg,
+                             QRegularExpression("Connection error: Header list size "
+                                                "limit exceeded"));
+    }
+
+    auto call = client.Subscribe(qt::None{});
+    QVERIFY(call);
+
+    QSignalSpy finishedSpy(call.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+    QVERIFY(finishedSpy.wait());
+
+    const QVariant &finishedArg = finishedSpy.at(0).first();
+    const auto *status = get_if<QGrpcStatus>(&finishedArg);
+    QVERIFY(status);
+    QCOMPARE_EQ(status->code(), expectedCode);
+    // An oversized header block is rejected by the advertised SETTINGS_MAX_HEADER_LIST_SIZE;
+    // QHttp2Connection reports it as ENHANCE_YOUR_CALM with this error string.
+    if (expectedCode != QtGrpc::StatusCode::Ok)
+        QVERIFY(status->message().contains("Header list size limit exceeded"));
 }
 
 void QtGrpcClientEnd2EndTest::acceptedCompressionAlgorithms_data() const

@@ -18,6 +18,7 @@
 #include <QtNetwork/private/hpack_p.h>
 #include <QtNetwork/private/http2protocol_p.h>
 #include <QtNetwork/private/qdecompresshelper_p.h>
+#include <QtNetwork/private/qhttp2configuration_p.h>
 #include <QtNetwork/private/qhttp2connection_p.h>
 #include <QtNetwork/qhttp2configuration.h>
 #if QT_CONFIG(localserver)
@@ -295,11 +296,9 @@ using namespace QtGrpc;
 
     \section2 Environment variable fallbacks
 
-    Some channel options can be configured through environment variables.
-    Environment variables are only consulted if the corresponding option is not
-    set explicitly. They are evaluated when each channel is constructed. If
-    neither an explicit option nor an environment variable is provided, the
-    built-in default is used.
+    Some channel settings can be configured through environment variables. They
+    are evaluated when each channel is constructed. If an environment variable
+    is not set, the built-in default is used.
 
     \table
         \header
@@ -310,6 +309,10 @@ using namespace QtGrpc;
             \li \c QT_GRPC_MAXIMUM_RECEIVE_MESSAGE_SIZE
             \li \l{QGrpcChannelOptions::}{maximumReceiveMessageSize}
             \li 4 MiB (4'194'304 Bytes)
+        \row
+            \li \c QT_GRPC_MAXIMUM_METADATA_SIZE
+            \li \e{None}
+            \li 16 KiB (16'384 Bytes)
         \row
             \li \c QT_GRPC_INITIAL_RECONNECT_BACKOFF_MS
             \li \e{None}
@@ -380,6 +383,10 @@ constexpr const char EnvConnectTimeout[] = "QT_GRPC_CONNECT_TIMEOUT_MS";
 constexpr std::chrono::milliseconds DefaultInitialReconnectBackoff = std::chrono::seconds(1);
 constexpr std::chrono::milliseconds DefaultMaximumReconnectBackoff = std::chrono::seconds(120);
 constexpr std::chrono::milliseconds DefaultConnectTimeout = std::chrono::seconds(20);
+
+constexpr const char EnvGrpcMaximumMetadataSize[] = "QT_GRPC_MAXIMUM_METADATA_SIZE";
+constexpr quint64 DefaultMaximumMetadataSize = 16 * 1024; // 16 KiB
+constexpr quint32 MinimumMetadataSize = 4 * 1024; // 4 KiB
 
 std::optional<quint64> readEnvUnsignedInt(const char *name)
 {
@@ -848,6 +855,8 @@ public:
     const std::optional<quint64>
         envMaximumReconnectBackoff = readEnvUnsignedInt(EnvMaximumReconnectBackoff);
     const std::optional<quint64> envConnectTimeout = readEnvUnsignedInt(EnvConnectTimeout);
+    const std::optional<quint64>
+        envMaximumMetadataSize = readEnvUnsignedInt(EnvGrpcMaximumMetadataSize);
 
     [[nodiscard]] const QByteArray &acceptEncoding();
 
@@ -869,7 +878,8 @@ private:
         quint32 connection;
     };
     [[nodiscard]] static ReceiveWindowSizes constructReceiveWindowSizes();
-    [[nodiscard]] static QHttp2Configuration createHttp2Configuration();
+    [[nodiscard]] static QHttp2Configuration
+    createHttp2Configuration(const QGrpcHttp2ChannelPrivate &channel);
 
     bool createHttp2Stream(Http2Handler *handler);
     void createHttp2Connection();
@@ -1757,7 +1767,7 @@ void QGrpcHttp2ChannelPrivate::createHttp2Connection()
         abstractSocket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
 
     m_connection = QHttp2Connection::createDirectConnection(m_socket.get(),
-                                                            createHttp2Configuration());
+                                                            createHttp2Configuration(*this));
 
     Q_ASSERT_X(m_connection, "QGrpcHttp2ChannelPrivate", "Unable to create the HTTP/2 connection");
     connect(m_socket.get(), &QAbstractSocket::readyRead, m_connection,
@@ -1997,7 +2007,8 @@ auto QGrpcHttp2ChannelPrivate::constructReceiveWindowSizes() -> ReceiveWindowSiz
     return { streamWindow, connectionWindow };
 }
 
-QHttp2Configuration QGrpcHttp2ChannelPrivate::createHttp2Configuration()
+QHttp2Configuration
+QGrpcHttp2ChannelPrivate::createHttp2Configuration(const QGrpcHttp2ChannelPrivate &channel)
 {
     QHttp2Configuration config;
     // These setters are expected to succeed. If they fail, the default HTTP/2
@@ -2011,6 +2022,17 @@ QHttp2Configuration QGrpcHttp2ChannelPrivate::createHttp2Configuration()
         qCWarning(lcChannel, "Session receive-window of '%u' rejected by QHttp2Configuration",
                   windows.connection);
     }
+
+    // Advertise the metadata limit as SETTINGS_MAX_HEADER_LIST_SIZE;
+    // QHttp2Connection also enforces it on every received header block.
+    // QHttp2Configuration has no public setter on this branch, so reach for the
+    // private member QHttp2Connection reads.
+    constexpr quint32 Cap = (std::numeric_limits<quint32>::max)();
+    const quint64 requested = channel.envMaximumMetadataSize.value_or(DefaultMaximumMetadataSize);
+    QHttp2ConfigurationPrivate::get(config)
+        ->maxHeaderListSize = clampToRange(requested, MinimumMetadataSize, Cap,
+                                           EnvGrpcMaximumMetadataSize);
+
     return config;
 }
 
