@@ -55,6 +55,15 @@
         set, the default values are used. See \l{Environment variable
         fallbacks}.
 
+    \li Limit the maximum incoming metadata size. By default, QtGrpc applies a
+        16 KiB limit (matching the \gRPC specification). The limit covers all
+        metadata received for an RPC, including protocol-required metadata.
+        QGrpcHttp2Channel reads it from the \c{QT_GRPC_MAXIMUM_METADATA_SIZE}
+        environment variable. Values below 4 KiB are raised to that minimum
+        (with a warning), and values above the transport's supported maximum
+        are clamped. If the environment variable is not set, the default value
+        is used. See \l{Environment variable fallbacks}.
+
     \li Set rate limits and monitor traffic to prevent misuse.
         Qt GRPC can be vulnerable to denial-of-service attacks and setting
         limits and thorough testing can help with reducing the risk of
