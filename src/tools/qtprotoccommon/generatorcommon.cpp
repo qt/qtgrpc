@@ -641,7 +641,9 @@ bool common::isTriviallyCopyable(const FieldDescriptor *field)
 bool common::isOptionalField(const FieldDescriptor *field)
 {
 #ifdef HAVE_PROTOBUF_SYNC_PIPER
-    bool hasOptional = field->has_presence() && !field->real_containing_oneof();
+    // required fields report explicit presence too, so exclude them here.
+    bool hasOptional = field->has_presence() && !field->real_containing_oneof()
+        && !field->is_required();
 #else
     bool hasOptional = field->file()->syntax() == FileDescriptor::SYNTAX_PROTO2
         && field->is_optional() && !field->containing_oneof();
@@ -784,6 +786,9 @@ std::string common::collectFieldFlags(const FieldDescriptor *field)
 
     if (common::isOptionalField(field))
         writeFlag("Optional");
+
+    if (field->is_required())
+        writeFlag("Required");
 
     if (common::isOneofField(field) || common::isOptionalField(field)
         || common::isPureMessage(field)) {

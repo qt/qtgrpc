@@ -201,6 +201,10 @@ void qtprotobufgenTest::cmdLineGenerated_data()
         << "non_final_properties"
         << "non-final-properties.proto"
         << "GENERATE_NON_FINAL_PROPERTIES";
+    QTest::addRow("opt_and_req_properties")
+        << "opt_and_req_properties"
+        << "protoc2-opt-and-req-properties.proto"
+        << "";
 }
 
 void qtprotobufgenTest::cmdLineGenerated()
