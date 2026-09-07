@@ -1,0 +1,10 @@
+// Copyright (C) 2026 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+
+syntax = "proto2";
+
+message SimpleBoolMessage {
+    required bool testReqFieldBool = 1;
+    optional bool testOptFieldBool = 2;
+    repeated bool testRepFieldBool = 3;
+}
