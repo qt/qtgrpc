@@ -222,7 +222,7 @@ bool QProtobufSerializerImpl::serializeEnum(QVariant &value,
             return false;
 
         if (!ProtobufFieldPresenceChecker::isPresent<QtProtobuf::int64>(value)
-            && !isOneofOrOptionalField(fieldInfo.fieldFlags())) {
+            && !mustSerializeDefaultValue(fieldInfo.fieldFlags())) {
             return true;
         }
 
@@ -243,7 +243,7 @@ bool QProtobufSerializerImpl::serializeScalarField(const QVariant &value,
         return false;
 
     // Field is empty
-    if (!basicHandler->isPresent(value) && !isOneofOrOptionalField(flags))
+    if (!basicHandler->isPresent(value) && !mustSerializeDefaultValue(flags))
         return true;
 
     const QByteArray header = encodeHeader(fieldInfo.fieldNumber(), basicHandler->wireType);

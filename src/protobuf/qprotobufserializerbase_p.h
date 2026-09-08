@@ -33,10 +33,11 @@ public:
 
     void serializeMessage(const QProtobufMessage *message);
 
-    static bool isOneofOrOptionalField(QtProtobufPrivate::FieldFlags flags)
+    static bool mustSerializeDefaultValue(QtProtobufPrivate::FieldFlags flags)
     {
         return flags.testAnyFlags({ QtProtobufPrivate::FieldFlag::Oneof,
-                                    QtProtobufPrivate::FieldFlag::Optional });
+                                    QtProtobufPrivate::FieldFlag::Optional,
+                                    QtProtobufPrivate::FieldFlag::Required });
     }
 
 protected:
