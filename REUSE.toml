@@ -5,7 +5,7 @@ path = ["tests/auto/protobufgen/data/cmd_line_generated/**",
         "tests/auto/protobufgen/data/cmake_generated/**",
         "tests/auto/grpcgen/data/expected_result/**",
         "tests/auto/grpc/**",
-        "tests/auto/protobuf/conformance/expect_failing_tests_v3.21.9.0.txt",
+        "tests/auto/protobuf/conformance/expect_failing_tests_v*.txt",
         "tests/auto/grpcgen/data/cmake_generated/**",
         "tests/auto/grpcgen/data/cmd_line_generated/**"]
 precedence = "closest"
