@@ -17,6 +17,9 @@ using namespace Qt::Literals::StringLiterals;
 // of the same .proto can be compared side by side in one translation unit.
 using QtMessage = QtProtobufInterop::qtprotobufnamespace::proto2::tests::RequiredMessage;
 using ReferenceMessage = qtprotobufnamespace::proto2::tests::RequiredMessage;
+using QtNestedMessage = QtProtobufInterop::qtprotobufnamespace::proto2::tests::
+    NestedRequiredMessage;
+using ReferenceNestedMessage = qtprotobufnamespace::proto2::tests::NestedRequiredMessage;
 
 class QtProtobufInteropTest : public QObject
 {
@@ -24,6 +27,8 @@ class QtProtobufInteropTest : public QObject
 private Q_SLOTS:
     void requiredMessage_data();
     void requiredMessage();
+    void nestedRequiredMessage();
+    void nestedRequiredMessageIncomplete();
 };
 
 void QtProtobufInteropTest::requiredMessage_data()
@@ -77,6 +82,41 @@ void QtProtobufInteropTest::requiredMessage()
     QCOMPARE(roundTripped.testFieldInt(), intValue);
     QCOMPARE(roundTripped.testFieldBool(), boolValue);
     QCOMPARE(roundTripped.testFieldString().toUtf8(), stringValue);
+}
+
+void QtProtobufInteropTest::nestedRequiredMessage()
+{
+    QProtobufSerializer serializer;
+    const QByteArray qtBytes = QtNestedMessage().serialize(&serializer);
+
+    ReferenceNestedMessage reference;
+    ReferenceMessage *nested = reference.mutable_nested();
+    nested->set_testfieldint(0);
+    nested->set_testfieldbool(false);
+    nested->set_testfieldstring(std::string());
+    std::string referenceBytes;
+    QVERIFY(reference.SerializeToString(&referenceBytes));
+
+    QCOMPARE(qtBytes.toHex(), QByteArrayView(referenceBytes).toByteArray().toHex());
+
+    ReferenceNestedMessage parsed;
+    QVERIFY(parsed.ParsePartialFromArray(qtBytes.data(), int(qtBytes.size())));
+    QVERIFY2(parsed.IsInitialized(),
+             qPrintable(QString::fromStdString(parsed.InitializationErrorString())));
+}
+
+void QtProtobufInteropTest::nestedRequiredMessageIncomplete()
+{
+    ReferenceNestedMessage reference;
+    reference.mutable_nested()->set_testfieldint(42);
+    QVERIFY(!reference.IsInitialized());
+    std::string referenceBytes;
+    QVERIFY(reference.SerializePartialToString(&referenceBytes));
+
+    QProtobufSerializer serializer;
+    QtNestedMessage qtMessage;
+    QVERIFY(!serializer.deserialize(&qtMessage, QByteArrayView(referenceBytes)));
+    QCOMPARE(serializer.lastError(), QAbstractProtobufSerializer::Error::InvalidFormat);
 }
 
 QTEST_MAIN(QtProtobufInteropTest)

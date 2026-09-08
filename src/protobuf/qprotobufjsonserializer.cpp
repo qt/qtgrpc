@@ -170,6 +170,7 @@ public:
     void reset(QJsonObject obj);
 
     void setError(QAbstractProtobufSerializer::Error error, QAnyStringView errorString) override;
+    bool hasError() const override;
     void setUnexpectedEndOfStreamError();
     void setInvalidFormatError();
 
@@ -352,7 +353,7 @@ void QProtobufJsonSerializerImpl::serializeMessageFieldEnd(const QProtobufMessag
 }
 
 QProtobufJsonDeserializerImpl::QProtobufJsonDeserializerImpl(QProtobufJsonSerializerPrivate *parent)
-    : m_parent(parent)
+    : QProtobufDeserializerBase(false), m_parent(parent)
 {
 }
 
@@ -372,6 +373,11 @@ void QProtobufJsonDeserializerImpl::setError(QAbstractProtobufSerializer::Error 
 {
     m_parent->lastError = error;
     m_parent->lastErrorString = errorString.toString();
+}
+
+bool QProtobufJsonDeserializerImpl::hasError() const
+{
+    return m_parent->lastError != QAbstractProtobufSerializer::Error::None;
 }
 
 bool QProtobufJsonDeserializerImpl::deserializeMessageField(QProtobufMessage *message)

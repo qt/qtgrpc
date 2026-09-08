@@ -22,6 +22,11 @@ private Q_SLOTS:
     void serializeNestedRequiredDefaultValues();
     void serializeNestedRequiredDefaultValuesJson();
     void serializeRequiredCycle();
+    void deserializeRejectsMissingRequiredFields_data();
+    void deserializeRejectsMissingRequiredFields();
+    void deserializeAcceptsCompletePayload();
+    void deserializeJsonStaysLenient();
+    void deserializeChecksNestedRequiredFields();
 };
 
 // A proto2 required field has no implicit presence: it must appear on the wire even
@@ -96,6 +101,68 @@ void QtProtobufProto2Test::serializeRequiredCycle()
     qtprotobufnamespace::proto2::tests::RequiredCycle msg;
 
     QCOMPARE(msg.serialize(&serializer).toHex(), "0a00"_ba);
+}
+
+void QtProtobufProto2Test::deserializeRejectsMissingRequiredFields_data()
+{
+    QTest::addColumn<QByteArray>("payload");
+    QTest::addColumn<QString>("missing");
+
+    QTest::newRow("all missing") << ""_ba << u"testFieldInt, testFieldBool, testFieldString"_s;
+    QTest::newRow("int present") << "0800"_ba << u"testFieldBool, testFieldString"_s;
+    QTest::newRow("string missing") << "08001000"_ba << u"testFieldString"_s;
+    // A scalar may repeat on the wire; counting occurrences would hide the missing field.
+    QTest::newRow("int repeated") << "08000800"_ba
+                                  << u"testFieldBool, testFieldString"_s;
+}
+
+void QtProtobufProto2Test::deserializeRejectsMissingRequiredFields()
+{
+    QFETCH(const QByteArray, payload);
+    QFETCH(const QString, missing);
+
+    QProtobufSerializer serializer;
+    qtprotobufnamespace::proto2::tests::RequiredMessage msg;
+
+    QVERIFY(!serializer.deserialize(&msg, QByteArray::fromHex(payload)));
+    QCOMPARE(serializer.lastError(), QAbstractProtobufSerializer::Error::InvalidFormat);
+    QVERIFY2(serializer.lastErrorString().contains(missing),
+             qPrintable(serializer.lastErrorString()));
+}
+
+void QtProtobufProto2Test::deserializeAcceptsCompletePayload()
+{
+    QProtobufSerializer serializer;
+    qtprotobufnamespace::proto2::tests::RequiredMessage msg;
+
+    QVERIFY(serializer.deserialize(&msg, QByteArray::fromHex("080010001a00"_ba)));
+    QCOMPARE(serializer.lastError(), QAbstractProtobufSerializer::Error::None);
+}
+
+// The reference implementation enforces required fields when parsing the binary
+// format but not when parsing JSON. Being stricter would fail conformance.
+void QtProtobufProto2Test::deserializeJsonStaysLenient()
+{
+    QProtobufJsonSerializer serializer;
+    qtprotobufnamespace::proto2::tests::RequiredMessage msg;
+
+    QVERIFY(serializer.deserialize(&msg, "{}"_ba));
+    QCOMPARE(serializer.lastError(), QAbstractProtobufSerializer::Error::None);
+}
+
+void QtProtobufProto2Test::deserializeChecksNestedRequiredFields()
+{
+    QProtobufSerializer serializer;
+    qtprotobufnamespace::proto2::tests::NestedRequiredMessage msg;
+
+    // Field 1, length 2: a RequiredMessage carrying only testFieldInt.
+    QVERIFY(!serializer.deserialize(&msg, QByteArray::fromHex("0a020800"_ba)));
+    QCOMPARE(serializer.lastError(), QAbstractProtobufSerializer::Error::InvalidFormat);
+    QVERIFY2(serializer.lastErrorString().contains(u"testFieldBool"_s),
+             qPrintable(serializer.lastErrorString()));
+
+    QVERIFY(serializer.deserialize(&msg, QByteArray::fromHex("0a06080010001a00"_ba)));
+    QCOMPARE(serializer.lastError(), QAbstractProtobufSerializer::Error::None);
 }
 
 QTEST_MAIN(QtProtobufProto2Test)

@@ -19,6 +19,7 @@
 #include <QtProtobuf/qprotobufrepeatediterator.h>
 
 #include <QtCore/qtconfigmacros.h>
+#include <QtCore/qvarlengtharray.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -28,7 +29,7 @@ class QProtobufMessage;
 class QProtobufDeserializerBase
 {
 public:
-    QProtobufDeserializerBase();
+    explicit QProtobufDeserializerBase(bool enforceRequiredFields);
 
     bool deserializeMessage(QProtobufMessage *message);
     void clearCachedValue();
@@ -37,6 +38,7 @@ protected:
     ~QProtobufDeserializerBase();
 
     virtual void setError(QAbstractProtobufSerializer::Error error, QAnyStringView errorString) = 0;
+    virtual bool hasError() const = 0;
 
     virtual bool deserializeMessageField(QProtobufMessage *message);
 
@@ -48,10 +50,13 @@ private:
                                         const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) = 0;
 
     bool storeCachedValue(QProtobufMessage *message);
+    bool checkRequiredFields(const QtProtobufPrivate::QProtobufPropertyOrdering *ordering,
+                             const QVarLengthArray<quint64, 1> &seenFields);
 
     QVariant m_cachedPropertyValue;
     QProtobufRepeatedIterator m_cachedRepeatedIterator;
     int m_cachedIndex = -1;
+    const bool m_enforceRequiredFields;
 
     Q_DISABLE_COPY_MOVE(QProtobufDeserializerBase)
 

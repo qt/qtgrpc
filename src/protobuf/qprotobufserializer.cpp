@@ -293,7 +293,7 @@ QByteArray QProtobufSerializerImpl::encodeHeader(int fieldNumber, QtProtobuf::Wi
 }
 
 QProtobufDeserializerImpl::QProtobufDeserializerImpl(QProtobufSerializerPrivate *parent)
-    : m_parent(parent)
+    : QProtobufDeserializerBase(true), m_parent(parent)
 {
 }
 
@@ -312,6 +312,11 @@ void QProtobufDeserializerImpl::setError(QAbstractProtobufSerializer::Error erro
 {
     m_parent->lastError = error;
     m_parent->lastErrorString = errorString.toString();
+}
+
+bool QProtobufDeserializerImpl::hasError() const
+{
+    return m_parent->lastError != QAbstractProtobufSerializer::Error::None;
 }
 
 bool QProtobufDeserializerImpl::deserializeEnum(QVariant &value,
