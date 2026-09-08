@@ -71,4 +71,26 @@ options are supported:
     \include qtprotoccommon.qdocinc generate_non_final_messages-li
     \include qtprotoccommon.qdocinc generate_non_final_properties-li
 \endlist
+
+\section1 Proto2 groups
+
+Qt Protobuf does not implement groups, the deprecated proto2 feature that
+encodes a nested message between \l{QtProtobuf::WireTypes}{StartGroup} and
+\l{QtProtobuf::WireTypes}{EndGroup} tags instead of as a length-delimited
+field. A schema that declares groups still generates compilable code:
+
+\list
+    \li The generator skips each group field and prints a warning. The
+        message has no property, getter, or setter for the field, and the
+        other fields keep their field numbers.
+    \li The message type that the group declares is still generated. It is a
+        regular message type, serialized as length-delimited data, and cannot
+        stand in for the group on the wire.
+    \li Binary data that contains a group, for example from a peer that uses
+        another protobuf implementation, fails to deserialize with
+        QAbstractProtobufSerializer::Error::InvalidHeader.
+\endlist
+
+If you control the schema, declare the field as a regular message field
+instead.
 */

@@ -160,6 +160,14 @@ void QProtobufGenerator::GenerateHeader(const FileDescriptor *file,
 
     std::string mutFieldsClashError;
     const auto specialMessageHandling = [&](const Descriptor *message) {
+        for (int i = 0; i < message->field_count(); ++i) {
+            const FieldDescriptor *field = message->field(i);
+            if (common::isGroupField(field)) {
+                std::clog << message->full_name() << ": skipping field '" << field->name()
+                          << "': groups are not supported by Qt Protobuf" << std::endl;
+            }
+        }
+
         if (message->oneof_decl_count() > 0)
             externalIncludes.insert("QtProtobuf/qprotobufoneof.h");
 

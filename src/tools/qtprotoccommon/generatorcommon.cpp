@@ -473,11 +473,32 @@ bool common::isRepeatedMessage(const FieldDescriptor *field)
             && !field->is_map() && field->is_repeated();
 }
 
+// Groups use their own wire encoding, which QtProtobuf does not implement, so no
+// code is generated for them. Every place that derives field indices or metadata
+// offsets must skip them the same way or the two disagree.
+bool common::isGroupField(const FieldDescriptor *field)
+{
+    return field->type() == FieldDescriptor::TYPE_GROUP;
+}
+
+int common::generatedFieldCount(const Descriptor *message)
+{
+    int count = 0;
+    const int numFields = message->field_count();
+    for (int i = 0; i < numFields; ++i) {
+        if (!isGroupField(message->field(i)))
+            ++count;
+    }
+    return count;
+}
+
 void common::iterateMessageFields(const Descriptor *message, const IterateMessageLogic &callback)
 {
     int numFields = message->field_count();
     for (int i = 0; i < numFields; ++i) {
         const FieldDescriptor *field = message->field(i);
+        if (isGroupField(field))
+            continue;
         auto propertyMap = common::producePropertyMap(field, message);
         callback(field, propertyMap);
     }

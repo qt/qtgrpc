@@ -205,6 +205,10 @@ void qtprotobufgenTest::cmdLineGenerated_data()
         << "opt_and_req_properties"
         << "protoc2-opt-and-req-properties.proto"
         << "";
+    QTest::addRow("group_fields")
+        << "group_fields"
+        << "protoc2-group-fields.proto"
+        << "";
 }
 
 void qtprotobufgenTest::cmdLineGenerated()
