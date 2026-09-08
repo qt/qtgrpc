@@ -4,7 +4,8 @@
     "QDocModule": "qtprotobuf",
     "QtUsage": "Used in the qtprotobufgen conformance tests.",
     "QtParts": [ "tests" ],
-    "Files": ["conformance.proto", "test_messages_proto3.proto"],
+    "Files": ["conformance.proto", "test_messages_proto3.proto",
+               "test_messages_proto2.proto"],
 
     "SecurityCritical": false,
     "Homepage": "https://protobuf.dev",

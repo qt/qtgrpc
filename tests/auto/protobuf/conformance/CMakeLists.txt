@@ -63,6 +63,8 @@ file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/data/conformance.proto" DESTINATION
     "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/data/test_messages_proto3.proto" DESTINATION
     "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/data/test_messages_proto2.proto" DESTINATION
+    "${CMAKE_CURRENT_BINARY_DIR}")
 
 add_executable(tst_protobuf_conformance
     tst_protobuf_conformance.cpp
@@ -72,6 +74,7 @@ qt6_add_protobuf(tst_protobuf_conformance
     PROTO_FILES
         "${CMAKE_CURRENT_BINARY_DIR}/conformance.proto"
         "${CMAKE_CURRENT_BINARY_DIR}/test_messages_proto3.proto"
+        "${CMAKE_CURRENT_BINARY_DIR}/test_messages_proto2.proto"
 )
 
 target_compile_definitions(tst_protobuf_conformance

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include <conformance.qpb.h>
+#include <test_messages_proto2.qpb.h>
 #include <test_messages_proto3.qpb.h>
 
 #include <cstdio>

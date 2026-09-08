@@ -8,9 +8,18 @@
 # 33.4 is the release the vcpkg protobuf port builds, so this is the list the
 # CI images use once protobuf[conformance] provides the runner.
 #
+# The Proto2.MessageSetEncoding entries need group support, which Qt
+# Protobuf does not implement; qtprotobufgen omits group fields.
+#
 # The Duration and Timestamp entries are all range and sign checks that the
 # JSON serializer has to enforce on values it accepted from the wire.
 
+Required.Proto2.JsonInput.Int32FieldQuotedExponentialValue.JsonOutput
+Required.Proto2.JsonInput.Int32FieldQuotedExponentialValue.ProtobufOutput
+Required.Proto2.JsonInput.OneofFieldDuplicate
+Required.Proto2.ProtobufInput.MessageSetEncoding.UnknownExtension.ProtobufOutput
+Required.Proto2.ProtobufInput.ValidMessageSetEncoding.OutOfOrderGroupsEntries.ProtobufOutput
+Required.Proto2.ProtobufInput.ValidMessageSetEncoding.ProtobufOutput
 Required.Proto3.DurationProtoInputTooLarge.JsonOutput
 Required.Proto3.DurationProtoInputTooSmall.JsonOutput
 Required.Proto3.DurationProtoNanosTooLarge.JsonOutput
