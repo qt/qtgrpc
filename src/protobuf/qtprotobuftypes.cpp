@@ -18,8 +18,9 @@ QT_BEGIN_NAMESPACE
     \value Varint           int32, int64, uint32, uint64, sint32, sint64, bool, enum
     \value Fixed64          fixed64, sfixed64, double
     \value LengthDelimited  string, bytes, embedded messages, packed repeated fields
-    \value StartGroup       groups. Deprecated in proto syntax 3. Not supported by Qt Protobuf.
-    \value EndGroup         groups. Deprecated in proto syntax 3. Not supported by Qt Protobuf.
+    \value StartGroup       start of a group. Groups are deprecated in proto2 and not available
+                            in proto3. Not supported by Qt Protobuf, see \l{Proto2 groups}.
+    \value EndGroup         end of a group. Not supported by Qt Protobuf, see \l{Proto2 groups}.
     \value Fixed32          fixed32, sfixed32, float
 
     \sa {https://protobuf.dev/programming-guides/encoding} {encoding}

@@ -1,0 +1,12 @@
+// Copyright (C) 2026 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+
+syntax = "proto2";
+
+message GroupFieldMessage {
+    optional bool beforeGroup = 1;
+    optional group SkippedGroup = 2 {
+        optional bool groupMember = 3;
+    }
+    optional bool afterGroup = 4;
+}

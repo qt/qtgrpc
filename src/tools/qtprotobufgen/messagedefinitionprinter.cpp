@@ -185,7 +185,7 @@ void MessageDefinitionPrinter::printRegisterBody()
 
 void MessageDefinitionPrinter::printFieldsOrdering()
 {
-    const int fieldCount = m_descriptor->field_count();
+    const int fieldCount = common::generatedFieldCount(m_descriptor);
     constexpr int MetaFieldsCount = 4;
     constexpr int Version = 0;
     constexpr int NullTerminator = 1;
@@ -251,8 +251,10 @@ void MessageDefinitionPrinter::printUintData(const char *templateString)
     // JSon data starts where string metadata ends
     size_t jsonOffset = metaCharDataSize() + NullTerminator;
     const int numFields = m_descriptor->field_count();
-    for (int i = 0, propertyIndex = 0; i < numFields; ++i, ++propertyIndex) {
+    for (int i = 0, propertyIndex = 0; i < numFields; ++i) {
         const FieldDescriptor *field = m_descriptor->field(i);
+        if (common::isGroupField(field))
+            continue;
         const std::map<std::string, std::string> variables = {
             { "json_name_offset", std::to_string(jsonOffset)        },
             { "field_number",     std::to_string(field->number())   },
@@ -272,6 +274,7 @@ void MessageDefinitionPrinter::printUintData(const char *templateString)
         }
 
         m_printer->Print(variables, templateString);
+        ++propertyIndex;
 
         const size_t length = field->json_name().length();
         jsonOffset += length + NullTerminator;
@@ -288,11 +291,14 @@ void MessageDefinitionPrinter::printCharData()
 
     m_printer->Print("/* field char_data: */\n\"");
     const int numFields = m_descriptor->field_count();
-    for (int i = 0; i < numFields; ++i) {
+    for (int i = 0, emitted = 0; i < numFields; ++i) {
         const FieldDescriptor *field = m_descriptor->field(i);
-        if (i && i % 5 == 0) // add some newlines to avoid overly long lines
+        if (common::isGroupField(field))
+            continue;
+        if (emitted && emitted % 5 == 0) // add some newlines to avoid overly long lines
             m_printer->Print("\"\n\"");
         m_printer->Print({ { "json_name", field->json_name() } }, "$json_name$\\0");
+        ++emitted;
     }
     m_printer->Print("\"\n");
 }
@@ -308,6 +314,8 @@ size_t MessageDefinitionPrinter::charDataSize() const
     const int numFields = m_descriptor->field_count();
     for (int i = 0; i < numFields; ++i) {
         const FieldDescriptor *field = m_descriptor->field(i);
+        if (common::isGroupField(field))
+            continue;
         size += field->json_name().length() + 1; // +1 for the embedded null terminator
     }
     return size + 1; // 1 for the trailing null terminator

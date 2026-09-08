@@ -136,6 +136,8 @@ struct common {
     static bool isOverridden(const FieldDescriptor *field);
     static bool isPureMessage(const FieldDescriptor *field);
     static bool isRepeatedMessage(const FieldDescriptor *field);
+    static bool isGroupField(const FieldDescriptor *field);
+    static int generatedFieldCount(const Descriptor *message);
 
     using IterateMessageLogic = std::function<void(const FieldDescriptor *, PropertyMap &)>;
     static void iterateMessageFields(const Descriptor *message, const IterateMessageLogic &callback);

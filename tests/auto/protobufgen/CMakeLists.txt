@@ -110,6 +110,14 @@ qt_add_protobuf(tst_qtprotobufgen_opt_and_req_properties
 )
 list(APPEND cmake_generator_tests opt_and_req_properties)
 
+add_library(tst_qtprotobufgen_group_fields STATIC)
+qt_add_protobuf(tst_qtprotobufgen_group_fields
+    PROTO_FILES
+        data/protoc2-group-fields.proto
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${cmake_generated_dir}/group_fields"
+)
+list(APPEND cmake_generator_tests group_fields)
+
 if(TARGET Qt6::ProtobufQuick)
     qt_internal_extend_target(tst_qtprotobufgen
         DEFINES
