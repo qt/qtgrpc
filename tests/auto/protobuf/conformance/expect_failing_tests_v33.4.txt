@@ -1,3 +1,22 @@
+# Conformance tests that Qt Protobuf is known to fail, for protobuf 33.4.
+#
+# Regenerate for a runner without a list: run the suite and merge
+# failing_tests.txt from --output_dir, dropping any entry the run reported in
+# nonexistent_tests.txt. Test names are listed without a failure message so the
+# entry matches regardless of how the failure is reported.
+#
+# 33.4 is the release the vcpkg protobuf port builds, so this is the list the
+# CI images use once protobuf[conformance] provides the runner.
+#
+# The Duration and Timestamp entries are all range and sign checks that the
+# JSON serializer has to enforce on values it accepted from the wire.
+
+Required.Proto3.DurationProtoInputTooLarge.JsonOutput
+Required.Proto3.DurationProtoInputTooSmall.JsonOutput
+Required.Proto3.DurationProtoNanosTooLarge.JsonOutput
+Required.Proto3.DurationProtoNanosTooSmall.JsonOutput
+Required.Proto3.DurationProtoNanosWrongSign.JsonOutput
+Required.Proto3.DurationProtoNanosWrongSignNegativeSecs.JsonOutput
 Required.Proto3.JsonInput.Any.JsonOutput
 Required.Proto3.JsonInput.Any.ProtobufOutput
 Required.Proto3.JsonInput.AnyNested.JsonOutput
@@ -10,6 +29,8 @@ Required.Proto3.JsonInput.AnyWithFieldMask.JsonOutput
 Required.Proto3.JsonInput.AnyWithFieldMask.ProtobufOutput
 Required.Proto3.JsonInput.AnyWithInt32ValueWrapper.JsonOutput
 Required.Proto3.JsonInput.AnyWithInt32ValueWrapper.ProtobufOutput
+Required.Proto3.JsonInput.AnyWithNoType.JsonOutput
+Required.Proto3.JsonInput.AnyWithNoType.ProtobufOutput
 Required.Proto3.JsonInput.AnyWithStruct.JsonOutput
 Required.Proto3.JsonInput.AnyWithStruct.ProtobufOutput
 Required.Proto3.JsonInput.AnyWithTimestamp.JsonOutput
@@ -18,11 +39,15 @@ Required.Proto3.JsonInput.AnyWithValueForInteger.JsonOutput
 Required.Proto3.JsonInput.AnyWithValueForInteger.ProtobufOutput
 Required.Proto3.JsonInput.AnyWithValueForJsonObject.JsonOutput
 Required.Proto3.JsonInput.AnyWithValueForJsonObject.ProtobufOutput
+Required.Proto3.JsonInput.AnyWktRepresentationWithBadType
+Required.Proto3.JsonInput.AnyWktRepresentationWithEmptyTypeAndValue
 Required.Proto3.JsonInput.EmptyFieldMask.JsonOutput
 Required.Proto3.JsonInput.EmptyFieldMask.ProtobufOutput
 Required.Proto3.JsonInput.EnumFieldUnknownValue.Validator
 Required.Proto3.JsonInput.FieldMask.JsonOutput
 Required.Proto3.JsonInput.FieldMask.ProtobufOutput
+Required.Proto3.JsonInput.Int32FieldQuotedExponentialValue.JsonOutput
+Required.Proto3.JsonInput.Int32FieldQuotedExponentialValue.ProtobufOutput
 Required.Proto3.JsonInput.OneofFieldDuplicate
 Required.Proto3.JsonInput.RepeatedListValue.JsonOutput
 Required.Proto3.JsonInput.RepeatedListValue.ProtobufOutput
@@ -32,10 +57,19 @@ Required.Proto3.JsonInput.Struct.JsonOutput
 Required.Proto3.JsonInput.Struct.ProtobufOutput
 Required.Proto3.JsonInput.StructWithEmptyListValue.JsonOutput
 Required.Proto3.JsonInput.StructWithEmptyListValue.ProtobufOutput
+Required.Proto3.JsonInput.TimestampLittleAfterEpochlValue.JsonOutput
+Required.Proto3.JsonInput.TimestampLittleAfterEpochlValue.ProtobufOutput
+Required.Proto3.JsonInput.TimestampLittleBeforeEpochValue.JsonOutput
+Required.Proto3.JsonInput.TimestampLittleBeforeEpochValue.ProtobufOutput
 Required.Proto3.JsonInput.TimestampMaxValue.JsonOutput
 Required.Proto3.JsonInput.TimestampMaxValue.ProtobufOutput
+Required.Proto3.JsonInput.TimestampNanoAfterEpochlValue.JsonOutput
+Required.Proto3.JsonInput.TimestampNanoAfterEpochlValue.ProtobufOutput
+Required.Proto3.JsonInput.TimestampNanoBeforeEpochValue.JsonOutput
+Required.Proto3.JsonInput.TimestampNanoBeforeEpochValue.ProtobufOutput
 Required.Proto3.JsonInput.TimestampRepeatedValue.JsonOutput
 Required.Proto3.JsonInput.TimestampRepeatedValue.ProtobufOutput
+Required.Proto3.JsonInput.TimestampTenAndHalfSecondsBeforeEpochValue.ProtobufOutput
 Required.Proto3.JsonInput.ValueAcceptBool.JsonOutput
 Required.Proto3.JsonInput.ValueAcceptBool.ProtobufOutput
 Required.Proto3.JsonInput.ValueAcceptFloat.JsonOutput
@@ -50,7 +84,7 @@ Required.Proto3.JsonInput.ValueAcceptObject.JsonOutput
 Required.Proto3.JsonInput.ValueAcceptObject.ProtobufOutput
 Required.Proto3.JsonInput.ValueAcceptString.JsonOutput
 Required.Proto3.JsonInput.ValueAcceptString.ProtobufOutput
-Required.DurationProtoInputTooLarge.JsonOutput
-Required.DurationProtoInputTooSmall.JsonOutput
-Required.TimestampProtoInputTooLarge.JsonOutput
-Required.TimestampProtoInputTooSmall.JsonOutput
+Required.Proto3.TimestampProtoInputTooLarge.JsonOutput
+Required.Proto3.TimestampProtoInputTooSmall.JsonOutput
+Required.Proto3.TimestampProtoNanoTooLarge.JsonOutput
+Required.Proto3.TimestampProtoNegativeNanos.JsonOutput

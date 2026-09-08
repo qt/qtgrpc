@@ -10,6 +10,13 @@ machine_type:
 
 instructions:
   Build:
+    # The CI images build libprotobuf from vcpkg but still take
+    # conformance_test_runner from the /usr/local protobuf that
+    # coin/provisioning/common/unix/install_protobuf.sh installs. Baseline the
+    # failure list against that runner until protobuf[conformance] ships it.
+    - type: EnvironmentVariable
+      variableName: QT_PROTOBUF_CONFORMANCE_VERSION
+      variableValue: "21.9"
     - type: EnvironmentVariable
       variableName: VERIFY_SOURCE_SBOM
       variableValue: "ON"
@@ -23,6 +30,10 @@ instructions:
     - !include "{{qt/qtbase}}/coin_module_build_template_v2.yaml"
 
   Test:
+    # Needed again for the configurations that build the tests in this step.
+    - type: EnvironmentVariable
+      variableName: QT_PROTOBUF_CONFORMANCE_VERSION
+      variableValue: "21.9"
     - type: EnvironmentVariable
       variableName: USE_VCPKG
       variableValue: "ON"
