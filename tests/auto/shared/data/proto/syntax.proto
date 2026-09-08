@@ -106,6 +106,17 @@ message CppKeywords {
     bool case = 7;
     bool do = 8;
     bool goto = 9;
+    optional string concept = 10;
+    repeated string requires = 11;
+    optional sint32 consteval = 12;
+    bool assert = 13;
+
+    enum CoroutineKeywords {
+        co_await = 0;
+        co_return = 1;
+        co_yield = 2;
+    }
+    CoroutineKeywords constinit = 14;
 }
 
 message int {

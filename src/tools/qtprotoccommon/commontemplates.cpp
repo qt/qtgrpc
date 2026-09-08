@@ -60,6 +60,11 @@ const std::set<std::string_view> &CommonTemplates::ListOfCppExceptions()
         "typedef",       "typeid",       "typename",  "union",      "unsigned",
         "using",         "virtual",      "void",      "volatile",   "wchar_t",
         "while",         "xor",          "xor_eq",
+        // block of C++11 and C++20 words:
+        "char8_t",       "char16_t",     "char32_t",  "concept",    "consteval",
+        "constinit",     "co_await",     "co_return", "co_yield",   "requires",
+        // 'assert' is a function-like macro, it expands in 'bool assert() const':
+        "assert",
         // block of Qt Cpp words:
         "signals",       "slots",        "emit"
     };
