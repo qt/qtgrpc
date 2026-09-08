@@ -1,0 +1,12 @@
+// Copyright (C) 2026 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+
+syntax = "proto2";
+
+package qtprotobufnamespace.proto2.tests;
+
+message RequiredMessage {
+    required sint32 testFieldInt = 1;
+    required bool testFieldBool = 2;
+    required string testFieldString = 3;
+}
