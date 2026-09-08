@@ -18,6 +18,7 @@ private Q_SLOTS:
     void underscoresTest();
     void upperCaseTest();
     void reservedTest();
+    void cppKeywordsTest();
     void reservedUpperCaseTest();
     void reservedEnumTest();
     void lowerCaseEnumTest();
@@ -55,6 +56,29 @@ void QtProtobufSyntaxTest::reservedTest()
     qProtobufAssertMessagePropertyRegistered<MessageReserved, QtProtobuf::sint32>(1, "QtProtobuf::sint32", "import_proto");
     qProtobufAssertMessagePropertyRegistered<MessageReserved, QtProtobuf::sint32>(2, "QtProtobuf::sint32", "property_proto");
     qProtobufAssertMessagePropertyRegistered<MessageReserved, QtProtobuf::sint32>(3, "QtProtobuf::sint32", "id_proto");
+}
+
+void QtProtobufSyntaxTest::cppKeywordsTest()
+{
+    qProtobufAssertMessagePropertyRegistered<CppKeywords, bool>(1, "bool", "private_");
+    qProtobufAssertMessagePropertyRegistered<CppKeywords, QString>(10, "QString", "concept_");
+    qProtobufAssertMessagePropertyRegistered<CppKeywords, QStringList>(11, "QStringList",
+                                                                      "requires_");
+    qProtobufAssertMessagePropertyRegistered<CppKeywords, QtProtobuf::sint32>(
+            12, "QtProtobuf::sint32", "consteval_");
+
+    CppKeywords msg;
+    msg.setAssert_(true);
+    msg.setConcept_("concept");
+    msg.setRequires_({ "requires" });
+    msg.setConsteval_(42);
+    msg.setConstinit_(CppKeywords::CoroutineKeywords::co_yield_);
+
+    QVERIFY(msg.assert_());
+    QCOMPARE(msg.concept_(), "concept");
+    QCOMPARE(msg.requires_(), QStringList{ "requires" });
+    QCOMPARE(msg.consteval_(), 42);
+    QCOMPARE(msg.constinit_(), CppKeywords::CoroutineKeywords::co_yield_);
 }
 
 void QtProtobufSyntaxTest::reservedUpperCaseTest()
