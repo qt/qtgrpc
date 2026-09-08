@@ -294,7 +294,7 @@ bool QProtobufJsonSerializerImpl::serializeEnum(QVariant &value,
         if (!value.convert(QMetaType::fromType<QString>()))
             return false;
         if (!ProtobufFieldPresenceChecker::isPresent<QString>(value)
-            && !isOneofOrOptionalField(fieldInfo.fieldFlags())) {
+            && !mustSerializeDefaultValue(fieldInfo.fieldFlags())) {
             return true;
         }
         m_result.insert(jsonName.toString(), serializeCommon<QString>(value));
@@ -311,7 +311,7 @@ bool QProtobufJsonSerializerImpl::serializeScalarField(const QVariant &value,
         return false;
 
     // Field is empty
-    if (!it->isPresent(value) && !isOneofOrOptionalField(fieldInfo.fieldFlags()))
+    if (!it->isPresent(value) && !mustSerializeDefaultValue(fieldInfo.fieldFlags()))
         return true;
 
     // If serializer is not defined we should use the standard QJsonValue cast from variant
