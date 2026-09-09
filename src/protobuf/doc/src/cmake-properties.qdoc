@@ -44,4 +44,6 @@ set_target_properties(protobuf_target PROPERTIES
 \note Generating type aliases for \l{QList} of protobuf messages leads to name
       clashes if the \c .proto schema includes messages with \c Repeated
       suffixes. To avoid these conflicts, set the property to \c FALSE.
+
+\sa {Setting CMake variables and properties}
 */
