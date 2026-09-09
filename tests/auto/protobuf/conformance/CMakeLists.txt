@@ -28,7 +28,7 @@ if(QT_ALLOW_DOWNLOAD)
     elseif(ENV{QT_PROTOBUF_CONFORMANCE_VERSION})
         set(version "v$ENV{QT_PROTOBUF_CONFORMANCE_VERSION}")
     else()
-        set(version "v21.9")
+        set(version "v33.4")
     endif()
 
     set(protobuf_github_base_url
