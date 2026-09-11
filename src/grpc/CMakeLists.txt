@@ -44,6 +44,9 @@ qt_internal_add_module(Grpc
         Qt::Network
     NO_PCH_SOURCES
         compat/removed_api.cpp
+    NO_UNITY_BUILD_SOURCES
+        qgrpccalloptions.cpp
+        qgrpcchanneloptions.cpp
     QT_LICENSE_ID QT_COMMERCIAL_OR_GPL3
 )
 
