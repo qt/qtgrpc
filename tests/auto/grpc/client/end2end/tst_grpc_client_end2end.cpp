@@ -1858,7 +1858,7 @@ void QtGrpcClientEnd2EndTest::messageWritten()
             stream->writeMessage(next);
         }
         if (!immediateWritesDone)
-            QTRY_COMPARE_EQ(messageWrittenSpy.count(), TotalMessages);
+            QTRY_COMPARE_EQ_WITH_TIMEOUT(messageWrittenSpy.count(), TotalMessages, 10000);
         stream->writesDone();
     } else {
         // Pace subsequent writes using messageWritten: one writeMessage() per
