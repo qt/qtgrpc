@@ -28,6 +28,11 @@ done <<EOF
 $(grep -rl "$MAGIC" "$ROOT_DIR")
 EOF
 
+if [ -z "$INCLUDE_FILES" ]; then
+    echo "No Security Critical files found; running analysis with an explicit fallback sentinel."
+    INCLUDE_FILES="__NO_FILES_FOUND__"
+fi
+
 export INCLUDE_FILES
 
 for MODULE in qtgrpc qtprotobuf; do
@@ -36,12 +41,12 @@ for MODULE in qtgrpc qtprotobuf; do
     export IRNAME=build/$MODULE.ir
     if [ "$MODULE" == "qtgrpc" ]
     then
-        export TARGET_NAME="build/lib/libQt6Grpc.so.*.ir:build/lib/libQt6GrpcQuick.so.*.ir:"
-        export PLUGINS="build/qml/QtGrpc/libgrpcquickplugin.so"
+        export TARGET_NAME="build/lib/libQt6Grpc.so.*.ir:build/lib/libQt6GrpcQuick.so.*.ir"
+        export PLUGINS="build/qml/QtGrpc/libgrpcquickplugin.so.ir"
         export PACKAGE="Add-ons"
     elif [ "$MODULE" == "qtprotobuf" ]
     then
-        export TARGET_NAME="build/lib/libQt6Protobuf.so.*.ir:build/lib/libQt6ProtobufQtGuiTypes.so:build/lib/libQt6ProtobufQtCoreTypes.so.*.ir:build/lib/libQt6ProtobufWellKnownTypes.so.*.ir:build/lib/libQt6ProtobufQuick.so.*.ir"
+        export TARGET_NAME="build/lib/libQt6Protobuf.so.*.ir:build/lib/libQt6ProtobufQtGuiTypes.so.*.ir:build/lib/libQt6ProtobufQtCoreTypes.so.*.ir:build/lib/libQt6ProtobufWellKnownTypes.so.*.ir:build/lib/libQt6ProtobufQuick.so.*.ir"
         export PACKAGE="Add-ons"
     fi
     axivion_ci "$@"
