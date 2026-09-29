@@ -18,6 +18,7 @@
 #include <QtProtobuf/qprotobufpropertyordering.h>
 
 #include <QtCore/qtconfigmacros.h>
+#include <QtCore/qvarlengtharray.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -26,6 +27,7 @@ struct QProtobufFieldInfo;
 }
 class QVariant;
 class QProtobufMessage;
+struct QMetaObject;
 class QProtobufSerializerBase
 {
 public:
@@ -47,6 +49,9 @@ protected:
                                        const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo);
 
 private:
+    void serializeDefaultMessageField(const QMetaObject *metaObject,
+                                      const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo);
+
     virtual bool serializeEnum(QVariant &value,
                                const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) = 0;
     virtual bool serializeScalarField(const QVariant &value,
@@ -54,6 +59,8 @@ private:
     virtual void serializeMessageFieldBegin() = 0;
     virtual void serializeMessageFieldEnd(const QProtobufMessage *,
                                           const QtProtobufPrivate::QProtobufFieldInfo &) = 0;
+
+    QVarLengthArray<const QMetaObject *, 4> m_defaultMessageTypes;
 
     Q_DISABLE_COPY_MOVE(QProtobufSerializerBase)
 };
