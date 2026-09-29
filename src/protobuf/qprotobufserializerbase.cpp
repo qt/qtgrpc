@@ -34,8 +34,13 @@ void QProtobufSerializerBase::serializeMessage(const QProtobufMessage *message)
         QMetaType metaType = value.metaType();
 
         // Empty value
-        if (metaType.id() == QMetaType::UnknownType || value.isNull())
+        if (metaType.id() == QMetaType::UnknownType || value.isNull()) {
+            if (metaType.flags().testFlag(QMetaType::IsPointer)
+                && fieldInfo.fieldFlags().testFlag(QtProtobufPrivate::FieldFlag::Required)) {
+                serializeDefaultMessageField(metaType.metaObject(), fieldInfo);
+            }
             continue;
+        }
 
         if (metaType.flags().testFlag(QMetaType::IsPointer)) {
             serializeMessageField(value.value<QProtobufMessage *>(), fieldInfo);
@@ -80,6 +85,26 @@ void QProtobufSerializerBase::serializeMessageField(const QProtobufMessage *mess
     serializeMessageFieldBegin();
     serializeMessage(message);
     serializeMessageFieldEnd(message, fieldInfo);
+}
+
+void QProtobufSerializerBase::
+    serializeDefaultMessageField(const QMetaObject *metaObject,
+                                 const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo)
+{
+    Q_ASSERT(metaObject != nullptr);
+
+    // No finite message satisfies required fields that form a cycle.
+    if (m_defaultMessageTypes.contains(metaObject)) {
+        qProtoWarning("Required fields of %s form a cycle, the serialized message is incomplete",
+                      metaObject->className());
+        return;
+    }
+
+    const QMetaType messageType = metaObject->metaType();
+    QProtobufMessagePointer message(static_cast<QProtobufMessage *>(messageType.create()));
+    m_defaultMessageTypes.append(metaObject);
+    serializeMessageField(message.get(), fieldInfo);
+    m_defaultMessageTypes.removeLast();
 }
 
 QT_END_NAMESPACE

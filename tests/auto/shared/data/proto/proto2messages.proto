@@ -10,3 +10,11 @@ message RequiredMessage {
     required bool testFieldBool = 2;
     required string testFieldString = 3;
 }
+
+message NestedRequiredMessage {
+    required RequiredMessage nested = 1;
+}
+
+message RequiredCycle {
+    required RequiredCycle next = 1;
+}
