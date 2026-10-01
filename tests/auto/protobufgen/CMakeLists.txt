@@ -118,6 +118,14 @@ qt_add_protobuf(tst_qtprotobufgen_group_fields
 )
 list(APPEND cmake_generator_tests group_fields)
 
+add_library(tst_qtprotobufgen_string_escaping STATIC)
+qt_add_protobuf(tst_qtprotobufgen_string_escaping
+    PROTO_FILES
+        data/string-escaping.proto
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${cmake_generated_dir}/string_escaping"
+)
+list(APPEND cmake_generator_tests string_escaping)
+
 if(TARGET Qt6::ProtobufQuick)
     qt_internal_extend_target(tst_qtprotobufgen
         DEFINES

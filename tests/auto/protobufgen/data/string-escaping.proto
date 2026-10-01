@@ -1,0 +1,18 @@
+// Copyright (C) 2026 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+
+syntax = "proto3";
+
+package qtprotobufnamespace.tests;
+
+message EscapedStrings {
+    string quote = 1 [json_name = "q\"uote"];
+    string leadingDigit = 8 [json_name = "7up"];
+    string backslash = 2 [json_name = "back\\slash"];
+    string escapeSequence = 3 [json_name = "\\x41"];
+    string commentEnd = 4 [json_name = "comment*/End"];
+    string commentMiddle = 9 [json_name = "comment/*Middle*/"];
+    string newline = 5 [json_name = "new\nline"];
+    string nonAscii = 6 [json_name = "\xc3\xa4"];
+    string dollar = 7 [json_name = "$dollar$"];
+}

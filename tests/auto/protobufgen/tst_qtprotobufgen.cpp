@@ -209,6 +209,10 @@ void qtprotobufgenTest::cmdLineGenerated_data()
         << "group_fields"
         << "protoc2-group-fields.proto"
         << "";
+    QTest::addRow("string_escaping")
+        << "string_escaping"
+        << "string-escaping.proto"
+        << "";
 }
 
 void qtprotobufgenTest::cmdLineGenerated()

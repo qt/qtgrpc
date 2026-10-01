@@ -114,3 +114,19 @@ qt_internal_add_test(tst_protobuf_deserialization_json_enumtypes
         Qt::Protobuf
         tst_protobuf_json_enumtypes_gen
 )
+
+qt6_add_protobuf(tst_protobuf_json_customnames_gen
+    PROTO_FILES
+        proto/customjsonnames.proto
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
+)
+qt_autogen_tools_initial_setup(tst_protobuf_json_customnames_gen)
+
+qt_internal_add_test(tst_protobuf_json_customnames
+    SOURCES
+        tst_protobuf_json_customnames.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_json_customnames_gen
+)
