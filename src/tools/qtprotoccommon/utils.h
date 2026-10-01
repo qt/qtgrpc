@@ -26,6 +26,8 @@ namespace qtprotoccommon {
 namespace utils {
 std::vector<std::string> split(std::string_view s, std::string_view c, bool keepEmpty = false);
 std::string replace(std::string_view where, std::string_view from, std::string_view to);
+std::string escapeCString(std::string_view s);
+std::string escapeBlockComment(std::string_view s);
 void asciiToLower(std::string &str);
 void asciiToUpper(std::string &str);
 std::string removeFileSuffix(std::string_view fileName);

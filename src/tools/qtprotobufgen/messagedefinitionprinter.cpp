@@ -255,12 +255,14 @@ void MessageDefinitionPrinter::printUintData(const char *templateString)
         const FieldDescriptor *field = m_descriptor->field(i);
         if (common::isGroupField(field))
             continue;
+        const std::string jsonName =
+            utils::escapeBlockComment(utils::escapeCString(field->json_name()));
         const std::map<std::string, std::string> variables = {
             { "json_name_offset", std::to_string(jsonOffset)        },
             { "field_number",     std::to_string(field->number())   },
             { "property_index",   std::to_string(propertyIndex)     },
             { "field_flags",      common::collectFieldFlags(field)  },
-            { "json_name",        std::string{ field->json_name() } },
+            { "json_name",        jsonName                          },
         };
 
         // Oneof and optional properties generate additional has<FieldName>
@@ -295,9 +297,12 @@ void MessageDefinitionPrinter::printCharData()
         const FieldDescriptor *field = m_descriptor->field(i);
         if (common::isGroupField(field))
             continue;
+        const std::string jsonName = utils::escapeCString(field->json_name());
         if (emitted && emitted % 5 == 0) // add some newlines to avoid overly long lines
             m_printer->Print("\"\n\"");
-        m_printer->Print({ { "json_name", field->json_name() } }, "$json_name$\\0");
+        else if (emitted && !jsonName.empty() && jsonName[0] >= '0' && jsonName[0] <= '7')
+            m_printer->Print("\" \""); // keep the digit out of the preceding \0 escape
+        m_printer->Print({ { "json_name", jsonName } }, "$json_name$\\0");
         ++emitted;
     }
     m_printer->Print("\"\n");

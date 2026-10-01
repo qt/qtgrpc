@@ -60,6 +60,33 @@ std::string replace(std::string_view where, std::string_view from, std::string_v
     return out;
 }
 
+std::string escapeCString(std::string_view s)
+{
+    std::string out;
+    out.reserve(s.size());
+    for (const char c : s) {
+        const auto byte = static_cast<unsigned char>(c);
+        if (c == '"' || c == '\\') {
+            out += '\\';
+            out += c;
+        } else if (byte >= 0x20 && byte < 0x7f) {
+            out += c;
+        } else {
+            // Fixed-width octal: a \x escape would swallow any hex digits that follow.
+            out += '\\';
+            out += char('0' + (byte >> 6));
+            out += char('0' + ((byte >> 3) & 7));
+            out += char('0' + (byte & 7));
+        }
+    }
+    return out;
+}
+
+std::string escapeBlockComment(std::string_view s)
+{
+    return replace(replace(s, "*/", "* /"), "/*", "/ *");
+}
+
 void asciiToLower(std::string &str)
 {
     std::transform(std::begin(str), std::end(str), std::begin(str), utils::toAsciiLower);
