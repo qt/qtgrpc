@@ -40,15 +40,14 @@ void BasePrinter::printCommentsImpl(std::string comments)
 
         // We print all comments using multi-line semantic.
         m_printer->Print("\n/*");
-        if (isSingleLine) {
-            m_printer->Print(comments.c_str());
-        } else {
+        if (!isSingleLine) {
             // Align all comment lines by adding asterisks at the beginning of the line.
             comments = utils::replace(comments, "\n", "\n *");
-            m_printer->Print(comments.c_str());
             if (!utils::endsWith(comments, '\n'))
-                m_printer->Print("\n");
+                comments += "\n";
         }
+        // Print() treats '$' as variable syntax; "$$" emits a literal one.
+        m_printer->Print(utils::replace(utils::escapeBlockComment(comments), "$", "$$").c_str());
         m_printer->Print(" */");
     }
 }

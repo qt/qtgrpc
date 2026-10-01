@@ -212,7 +212,7 @@ void qtprotobufgenTest::cmdLineGenerated_data()
     QTest::addRow("string_escaping")
         << "string_escaping"
         << "string-escaping.proto"
-        << "";
+        << "COPY_COMMENTS";
 }
 
 void qtprotobufgenTest::cmdLineGenerated()

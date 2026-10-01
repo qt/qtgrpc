@@ -5,7 +5,9 @@ syntax = "proto3";
 
 package qtprotobufnamespace.tests;
 
+// Comment closing the generated comment */ early, costing $5 and $var$
 message EscapedStrings {
+    // Comment injecting a member */ int injected; /*
     string quote = 1 [json_name = "q\"uote"];
     string leadingDigit = 8 [json_name = "7up"];
     string backslash = 2 [json_name = "back\\slash"];

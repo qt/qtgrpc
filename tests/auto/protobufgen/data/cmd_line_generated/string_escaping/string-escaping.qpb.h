@@ -24,6 +24,7 @@ enum class QtProtobufFieldEnum;
 using EscapedStringsRepeated = QList<EscapedStrings>;
 #endif // QT_USE_PROTOBUF_LIST_ALIASES
 
+/* Comment closing the generated comment * / early, costing $5 and $var$ */
 class EscapedStrings_QtProtobufData;
 class EscapedStrings final : public QProtobufMessage
 {
@@ -57,6 +58,7 @@ public:
     }
     Q_IMPLICIT operator QVariant() const;
 
+    /* Comment injecting a member * / int injected; / * */
     const QString &quote() const &;
 
     const QString &leadingDigit() const &;
