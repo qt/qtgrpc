@@ -153,20 +153,16 @@ bool QGrpcOperation::read(QProtobufMessage *message) const
 */
 void QGrpcOperation::cancel()
 {
-    if (!isFinished()) {
-        Q_D(QGrpcOperation);
-        d->isFinished.storeRelaxed(true);
-        emit d->operationContext->cancelRequested();
-        Q_EMIT finished(QGrpcStatus{ QtGrpc::StatusCode::Cancelled,
-                                     tr("Operation is cancelled by client") });
-    }
+    if (isFinished())
+        return;
+    Q_D(QGrpcOperation);
+    emit d->operationContext->cancelRequested();
 }
 
 /*!
     Returns the server metadata received from the channel.
 
-    \note For \l {QGrpcHttp2Channel} {HTTP/2 channels} it usually includes the
-    HTTP headers received from the server.
+    \include qtgrpc-shared.qdocinc http2-metadata-note
 */
 const QHash<QByteArray, QByteArray> &QGrpcOperation::metadata() const & noexcept
 {

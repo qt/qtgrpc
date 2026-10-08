@@ -764,7 +764,7 @@ std::string common::collectFieldFlags(const FieldDescriptor *field)
     if (field->type() != FieldDescriptor::TYPE_STRING
         && field->type() != FieldDescriptor::TYPE_BYTES
         && field->type() != FieldDescriptor::TYPE_MESSAGE
-        && field->type() != FieldDescriptor::TYPE_ENUM && !field->is_map() && field->is_repeated()
+        && !field->is_map() && field->is_repeated()
         && !field->is_packed()) {
         writeFlag("NonPacked");
     }

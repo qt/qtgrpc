@@ -38,22 +38,18 @@ void connectMultipleReceiveOperationFinished(QJSEngine *jsEngine,
     auto *operationPtr = operation.get();
     QtGrpcQuickFunctional::validateEngineAndOperation(jsEngine, operationPtr);
 
-    auto finishConnection = std::make_shared<QMetaObject::Connection>();
-    *finishConnection = QObject::connect(operationPtr, &QGrpcOperation::finished, jsEngine,
-                                         [successCallback, errorCallback, jsEngine,
-                                          finishConnection,
-                                          operation = std::move(operation)](const QGrpcStatus
-                                                                                &status) {
-                                             // We take 'operation' by copy so that its lifetime
-                                             // is extended until this lambda is destroyed.
-                                             if (QtGrpcQuickFunctional::
-                                                     checkReceivedStatus(jsEngine, status,
-                                                                         errorCallback)
-                                                 && successCallback.isCallable()) {
-                                                 successCallback.call();
-                                             }
-                                             QObject::disconnect(*finishConnection);
-                                         });
+    QObject::connect(
+        operationPtr, &QGrpcOperation::finished, jsEngine,
+        [successCallback, errorCallback, jsEngine,
+         operation = std::move(operation)](const QGrpcStatus &status) {
+            // We take 'operation' by copy so that its lifetime
+            // is extended until this lambda is destroyed.
+            if (QtGrpcQuickFunctional::checkReceivedStatus(jsEngine, status, errorCallback)
+                && successCallback.isCallable()) {
+                successCallback.call();
+            }
+        },
+        Qt::SingleShotConnection);
 }
 
 void handleReceivedMessageImpl(QJSEngine *jsEngine, std::optional<QJSValue> message,
