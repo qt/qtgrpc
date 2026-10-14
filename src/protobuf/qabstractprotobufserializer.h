@@ -26,6 +26,7 @@ public:
         UnknownType,
         UnexpectedEndOfStream,
         InvalidFormat,
+        MessageTooLarge,
     };
 
     QAbstractProtobufSerializer() = default;

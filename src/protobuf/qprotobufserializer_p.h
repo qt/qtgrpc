@@ -34,6 +34,8 @@
 #include <QtCore/qhash.h>
 #include <QtCore/qvariant.h>
 
+#include <optional>
+
 QT_BEGIN_NAMESPACE
 
 class QProtobufSerializerImpl final : public QProtobufSerializerBase
@@ -138,12 +140,15 @@ public:
     }
 
     void clearError();
+    void setMessageTooLargeError(qsizetype size, quint32 limit);
+    quint32 effectiveMaximumInputSize() const;
 
     QAbstractProtobufSerializer::Error lastError =
             QAbstractProtobufSerializer::Error::UnknownType;
     QString lastErrorString;
 
     bool preserveUnknownFields = true;
+    std::optional<quint32> maximumInputSize;
 
     QProtobufSerializerImpl serializer;
     QProtobufDeserializerImpl deserializer;

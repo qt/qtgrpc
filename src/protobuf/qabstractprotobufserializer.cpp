@@ -36,7 +36,8 @@ QT_BEGIN_NAMESPACE
     \enum QAbstractProtobufSerializer::Error
     \since 6.8
 
-    This enum contains possible errors that can occur during deserialization.
+    This enum contains possible errors that can occur during serialization
+    and deserialization.
     When an error occurs, call lastErrorString() to get a
     human-readable error message.
 
@@ -50,6 +51,12 @@ QT_BEGIN_NAMESPACE
                                         stream ended unexpectedly.
     \value InvalidFormat                The data has invalid format. For example
                                         the JSON value doesn't match the field type.
+    \value [since 6.13] MessageTooLarge
+                                        The serialized message is 2 GiB or
+                                        larger, or the data passed for
+                                        deserialization is larger than the
+                                        maximum input size. See
+                                        QProtobufSerializer::setMaximumInputSize().
 */
 
 /*!

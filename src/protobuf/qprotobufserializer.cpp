@@ -20,6 +20,7 @@
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qmetatype.h>
 #include <QtCore/qreadwritelock.h>
+#include <QtCore/qtenvironmentvariables.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -35,6 +36,42 @@ QT_BEGIN_NAMESPACE
     classes are generated automatically, based on a \c{.proto} file, using the CMake
     function \l qt_add_protobuf or by running
     \l {The qtprotobufgen Tool} {qtprotobufgen} directly.
+
+    \section1 Message size limits
+
+    A serialized protobuf message must be smaller than 2 GiB. This is the
+    biggest size that all protobuf implementations support. So
+    QProtobufSerializer does not serialize a message of 2 GiB or more, and
+    does not deserialize input data of 2 GiB or more. When a size limit is
+    exceeded, lastError() returns
+    QAbstractProtobufSerializer::Error::MessageTooLarge.
+
+    \list
+    \li Serialization limit: serialize() fails if the serialized message is
+        2 GiB or larger.
+    \li Deserialization limit: deserialize() fails, without parsing, if the
+        input data is larger than the maximum input size. By default, it
+        is the same as the serialization limit. You can make it smaller with
+        setMaximumInputSize(), or with the
+        \c{QT_PROTOBUF_MAXIMUM_INPUT_SIZE} environment variable. It does
+        not affect serialize().
+    \endlist
+
+    The two limits are separate, like in other protobuf implementations such
+    as C++ and Java. The 2 GiB serialization limit is a rule of the protobuf
+    format, so it is fixed. A smaller serialization limit would not help,
+    because your application creates the message itself, and serialize()
+    checks the size only after the message is built in memory. The
+    deserialization limit protects against input that may come from an
+    untrusted source and can use a lot of memory. Only your application
+    knows which size is reasonable, so you can set it.
+
+    The environment variable is used only if you do not call
+    setMaximumInputSize(). It is read once per process, the first time the
+    limit is needed. If you change it later, the new value is not used.
+
+    \note Set a smaller deserialization limit for data that comes from
+    untrusted sources. See \l{maximumInputSize()} for details.
 */
 
 using namespace Qt::StringLiterals;
@@ -170,6 +207,60 @@ findIntegratedTypeHandler(QMetaType metaType, bool nonPacked)
         return findIntegratedTypeHandlerImpl(metaType, IntegratedNonPackedSerializers);
 
     return findIntegratedTypeHandlerImpl(metaType, IntegratedTypesSerializers);
+}
+
+constexpr char EnvMaximumInputSize[] = "QT_PROTOBUF_MAXIMUM_INPUT_SIZE";
+
+// Any serialized protobuf message must be < 2 GiB, see
+// https://protobuf.dev/programming-guides/proto-limits/.
+// serialize() always uses this fixed limit.
+constexpr quint32 MaxSerializeMessageSizeLimit = (2u * 1024 * 1024 * 1024) - 1;
+// The default and the upper bound of the configurable limit used by
+// deserialize().
+constexpr quint32 MaxDeserializeMessageSizeLimit = MaxSerializeMessageSizeLimit;
+
+// Maps a configured maximum input size to the effective limit. Values above
+// the protobuf limit are clamped.
+quint32 clampMaximumInputSize(quint64 configured, const char *source)
+{
+    if (configured > MaxDeserializeMessageSizeLimit) {
+        qProtoWarning("Configured maximum input size %llu (%s) exceeds the protobuf limit of "
+                      "%u bytes; clamping to the limit.",
+                      static_cast<unsigned long long>(configured), source,
+                      MaxDeserializeMessageSizeLimit);
+        return MaxDeserializeMessageSizeLimit;
+    }
+    return quint32(configured);
+}
+
+// Returns nullopt if the variable is unset or invalid. An invalid value is reported
+// with a warning.
+std::optional<quint32> readEnvMaximumInputSize()
+{
+    if (!qEnvironmentVariableIsSet(EnvMaximumInputSize))
+        return std::nullopt;
+    const auto env = qEnvironmentVariableIntegerValue(EnvMaximumInputSize);
+    if (!env) {
+        qProtoWarning("%s is set to \"%s\", which is not an integer; ignoring.",
+                      EnvMaximumInputSize, qgetenv(EnvMaximumInputSize).constData());
+        return std::nullopt;
+    }
+    if (*env < 0) {
+        qProtoWarning("%s has an invalid value (%lld); ignoring.", EnvMaximumInputSize,
+                      static_cast<long long>(*env));
+        return std::nullopt;
+    }
+    return clampMaximumInputSize(quint64(*env), EnvMaximumInputSize);
+}
+
+// Reading an environment variable is not free. Serialization can run often and
+// on many threads, so we do not want to read it each time. Read the variable
+// only once per process, the first time a limit is needed (and no explicit
+// limit is set), and cache the result. The initialization is thread-safe.
+const std::optional<quint32> &envMaximumInputSize()
+{
+    static const std::optional<quint32> value = readEnvMaximumInputSize();
+    return value;
 }
 } // namespace
 
@@ -517,6 +608,23 @@ QProtobufSerializerPrivate::QProtobufSerializerPrivate() : serializer(this), des
 {
 }
 
+quint32 QProtobufSerializerPrivate::effectiveMaximumInputSize() const
+{
+    if (maximumInputSize)
+        return *maximumInputSize;
+    return envMaximumInputSize().value_or(MaxDeserializeMessageSizeLimit);
+}
+
+void QProtobufSerializerPrivate::setMessageTooLargeError(qsizetype size, quint32 limit)
+{
+    lastError = QAbstractProtobufSerializer::Error::MessageTooLarge;
+    lastErrorString = QCoreApplication::translate("QtProtobuf",
+                                                  "Message size (%1 bytes) exceeds the maximum "
+                                                  "message size (%2 bytes)")
+                          .arg(size)
+                          .arg(limit);
+}
+
 void QProtobufSerializerPrivate::clearError()
 {
     lastError = QAbstractProtobufSerializer::Error::None;
@@ -543,12 +651,20 @@ QByteArray QProtobufSerializer::serializeMessage(const QProtobufMessage *message
     d_ptr->serializer.serializeUnknownFields(message);
     auto result = d_ptr->serializer.result();
     d_ptr->serializer.reset();
+    if (result.size() > qsizetype(MaxSerializeMessageSizeLimit)) {
+        d_ptr->setMessageTooLargeError(result.size(), MaxSerializeMessageSizeLimit);
+        return {};
+    }
     return result;
 }
 
 bool QProtobufSerializer::deserializeMessage(QProtobufMessage *message, QByteArrayView data) const
 {
     d_ptr->clearError();
+    if (data.size() > qsizetype(d_ptr->effectiveMaximumInputSize())) {
+        d_ptr->setMessageTooLargeError(data.size(), d_ptr->effectiveMaximumInputSize());
+        return false;
+    }
     d_ptr->deserializer.reset(data);
     d_ptr->deserializer.deserializeMessage(message);
     d_ptr->deserializer.reset({});
@@ -582,6 +698,55 @@ QString QProtobufSerializer::lastErrorString() const
 void QProtobufSerializer::shouldPreserveUnknownFields(bool preserveUnknownFields)
 {
     d_ptr->preserveUnknownFields = preserveUnknownFields;
+}
+
+/*!
+    \since 6.13
+
+    Returns the maximum size, in bytes, that deserialize() will accept.
+
+    If the input data is larger than this value, deserialize() returns
+    \c false without parsing, and lastError() returns
+    QAbstractProtobufSerializer::Error::MessageTooLarge.
+    This value does not affect serialize().
+
+    The value is chosen in this order:
+    \list 1
+    \li The size set with setMaximumInputSize().
+    \li The \c{QT_PROTOBUF_MAXIMUM_INPUT_SIZE} environment variable, if it
+        is set to a non-negative integer. It is read once per process, the
+        first time the limit is needed. Later changes to it are not used.
+    \li The default: \c{2 GiB - 1}.
+    \endlist
+
+    A value of \c{0} allows only empty input data. Values larger than
+    \c{2 GiB - 1} are reduced to that value.
+
+    \sa setMaximumInputSize()
+*/
+quint64 QProtobufSerializer::maximumInputSize() const
+{
+    return d_ptr->effectiveMaximumInputSize();
+}
+
+/*!
+    \since 6.13
+
+    Sets the maximum size, in bytes, that deserialize() will accept to \a size.
+    This size is used instead of the \c{QT_PROTOBUF_MAXIMUM_INPUT_SIZE}
+    environment variable. It does not affect serialize().
+
+    A \a size of \c{0} allows only empty input data. Values larger than
+    \c{2 GiB - 1} are reduced to that value.
+
+    It is recommended to bound the size of messages received from untrusted
+    sources.
+
+    \sa maximumInputSize()
+*/
+void QProtobufSerializer::setMaximumInputSize(quint64 size)
+{
+    d_ptr->maximumInputSize = clampMaximumInputSize(size, "setMaximumInputSize()");
 }
 
 QT_END_NAMESPACE

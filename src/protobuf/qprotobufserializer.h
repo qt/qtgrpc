@@ -29,6 +29,9 @@ public:
 
     void shouldPreserveUnknownFields(bool preserveUnknownFields);
 
+    quint64 maximumInputSize() const;
+    void setMaximumInputSize(quint64 size);
+
 private:
     QByteArray serializeMessage(const QProtobufMessage *message) const override;
     bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const override;
