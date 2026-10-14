@@ -20,6 +20,7 @@
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qmetatype.h>
 #include <QtCore/qreadwritelock.h>
+#include <QtCore/qtenvironmentvariables.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -35,6 +36,34 @@ QT_BEGIN_NAMESPACE
     classes are generated automatically, based on a \c{.proto} file, using the CMake
     function \l qt_add_protobuf or by running
     \l {The qtprotobufgen Tool} {qtprotobufgen} directly.
+
+    \section1 Message size limits
+
+    A serialized protobuf message must be smaller than 2 GiB. This is the
+    biggest size that all protobuf implementations support. So
+    QProtobufSerializer does not serialize a message of 2 GiB or more, and
+    does not deserialize input data of 2 GiB or more. When a size limit is
+    exceeded, lastError() returns
+    QAbstractProtobufSerializer::Error::InvalidFormat.
+
+    \list
+    \li Serialization limit: serialize() fails if the serialized message is
+        2 GiB or larger.
+    \li Deserialization limit: deserialize() fails, without parsing, if the
+        input data is larger than the maximum input size. By default, it
+        is the same as the serialization limit. You can make it smaller with
+        the \c{QT_PROTOBUF_MAXIMUM_INPUT_SIZE} environment variable. It does
+        not affect serialize().
+    \endlist
+
+    The two limits are separate, like in other protobuf implementations such
+    as C++ and Java. The 2 GiB serialization limit is a rule of the protobuf
+    format, so it is fixed.
+
+    The environment variable is read once per process, the first time the
+    limit is needed. If you change it later, the new value is not used. A
+    value that is not a non-negative integer is ignored. Values larger than
+    \c{2 GiB - 1} are reduced to that value.
 */
 
 using namespace Qt::StringLiterals;
@@ -170,6 +199,60 @@ findIntegratedTypeHandler(QMetaType metaType, bool nonPacked)
         return findIntegratedTypeHandlerImpl(metaType, IntegratedNonPackedSerializers);
 
     return findIntegratedTypeHandlerImpl(metaType, IntegratedTypesSerializers);
+}
+
+constexpr char EnvMaximumInputSize[] = "QT_PROTOBUF_MAXIMUM_INPUT_SIZE";
+
+// Any serialized protobuf message must be < 2 GiB, see
+// https://protobuf.dev/programming-guides/proto-limits/.
+// serialize() always uses this fixed limit.
+constexpr quint32 MaxSerializeMessageSizeLimit = (2u * 1024 * 1024 * 1024) - 1;
+// The default and the upper bound of the configurable limit used by
+// deserialize().
+constexpr quint32 MaxDeserializeMessageSizeLimit = MaxSerializeMessageSizeLimit;
+
+// Maps a configured maximum input size to the effective limit. Values above
+// the protobuf limit are clamped.
+quint32 clampMaximumInputSize(quint64 configured, const char *source)
+{
+    if (configured > MaxDeserializeMessageSizeLimit) {
+        qProtoWarning("Configured maximum input size %llu (%s) exceeds the protobuf limit of "
+                      "%u bytes; clamping to the limit.",
+                      static_cast<unsigned long long>(configured), source,
+                      MaxDeserializeMessageSizeLimit);
+        return MaxDeserializeMessageSizeLimit;
+    }
+    return quint32(configured);
+}
+
+// Returns nullopt if the variable is unset or invalid. An invalid value is reported
+// with a warning.
+std::optional<quint32> readEnvMaximumInputSize()
+{
+    if (!qEnvironmentVariableIsSet(EnvMaximumInputSize))
+        return std::nullopt;
+    const auto env = qEnvironmentVariableIntegerValue(EnvMaximumInputSize);
+    if (!env) {
+        qProtoWarning("%s is set to \"%s\", which is not an integer; ignoring.",
+                      EnvMaximumInputSize, qgetenv(EnvMaximumInputSize).constData());
+        return std::nullopt;
+    }
+    if (*env < 0) {
+        qProtoWarning("%s has an invalid value (%lld); ignoring.", EnvMaximumInputSize,
+                      static_cast<long long>(*env));
+        return std::nullopt;
+    }
+    return clampMaximumInputSize(quint64(*env), EnvMaximumInputSize);
+}
+
+// Reading an environment variable is not free. Serialization can run often and
+// on many threads, so we do not want to read it each time. Read the variable
+// only once per process, the first time a limit is needed (and no explicit
+// limit is set), and cache the result. The initialization is thread-safe.
+const std::optional<quint32> &envMaximumInputSize()
+{
+    static const std::optional<quint32> value = readEnvMaximumInputSize();
+    return value;
 }
 } // namespace
 
@@ -512,6 +595,21 @@ QProtobufSerializerPrivate::QProtobufSerializerPrivate() : serializer(this), des
 {
 }
 
+quint32 QProtobufSerializerPrivate::effectiveMaximumInputSize() const
+{
+    return envMaximumInputSize().value_or(MaxDeserializeMessageSizeLimit);
+}
+
+void QProtobufSerializerPrivate::setMessageSizeError(qsizetype size, quint32 limit)
+{
+    lastError = QAbstractProtobufSerializer::Error::InvalidFormat;
+    lastErrorString = QCoreApplication::translate("QtProtobuf",
+                                                  "Message size (%1 bytes) exceeds the maximum "
+                                                  "message size (%2 bytes)")
+                          .arg(size)
+                          .arg(limit);
+}
+
 void QProtobufSerializerPrivate::clearError()
 {
     lastError = QAbstractProtobufSerializer::Error::None;
@@ -538,12 +636,20 @@ QByteArray QProtobufSerializer::serializeMessage(const QProtobufMessage *message
     d_ptr->serializer.serializeUnknownFields(message);
     auto result = d_ptr->serializer.result();
     d_ptr->serializer.reset();
+    if (result.size() > qsizetype(MaxSerializeMessageSizeLimit)) {
+        d_ptr->setMessageSizeError(result.size(), MaxSerializeMessageSizeLimit);
+        return {};
+    }
     return result;
 }
 
 bool QProtobufSerializer::deserializeMessage(QProtobufMessage *message, QByteArrayView data) const
 {
     d_ptr->clearError();
+    if (data.size() > qsizetype(d_ptr->effectiveMaximumInputSize())) {
+        d_ptr->setMessageSizeError(data.size(), d_ptr->effectiveMaximumInputSize());
+        return false;
+    }
     d_ptr->deserializer.reset(data);
     d_ptr->deserializer.deserializeMessage(message);
     d_ptr->deserializer.reset({});

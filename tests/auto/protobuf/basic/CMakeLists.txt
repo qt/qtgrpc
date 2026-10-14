@@ -39,6 +39,24 @@ target_link_libraries(tst_protobuf_repeatedtypes_gen
         tst_protobuf_basictypes_gen
 )
 
+qt_internal_add_test(tst_protobuf_message_size_env
+    SOURCES
+        tst_protobuf_message_size_env.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+)
+
+qt_internal_add_test(tst_protobuf_message_size_env_invalid
+    SOURCES
+        tst_protobuf_message_size_env_invalid.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+        tst_protobuf_basictypes_gen
+)
+
 qt_internal_add_test(tst_protobuf_repeatedtypes
     SOURCES
         tst_protobuf_repeatedtypes.cpp

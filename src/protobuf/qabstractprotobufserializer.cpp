@@ -36,7 +36,8 @@ QT_BEGIN_NAMESPACE
     \enum QAbstractProtobufSerializer::Error
     \since 6.8
 
-    This enum contains possible errors that can occur during deserialization.
+    This enum contains possible errors that can occur during serialization
+    and deserialization.
     When an error occurs, call lastErrorString() to get a
     human-readable error message.
 

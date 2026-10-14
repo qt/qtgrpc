@@ -137,6 +137,8 @@ public:
     }
 
     void clearError();
+    void setMessageSizeError(qsizetype size, quint32 limit);
+    quint32 effectiveMaximumInputSize() const;
 
     QAbstractProtobufSerializer::Error lastError =
             QAbstractProtobufSerializer::Error::UnknownType;
