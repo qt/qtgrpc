@@ -303,6 +303,7 @@ QProtobufDeserializerImpl::~QProtobufDeserializerImpl()
 void QProtobufDeserializerImpl::reset(QByteArrayView data)
 {
     m_it = QProtobufSelfcheckIterator::fromView(data);
+    m_state.clear();
     m_state.push_back(data.end());
     clearCachedValue();
 }
