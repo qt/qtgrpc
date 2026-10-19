@@ -152,20 +152,20 @@ function(qt6_add_grpc target type)
         message(FATAL_ERROR "Unsupported target type '${target_type}'.")
     endif()
 
+    set(output_directory "${CMAKE_CURRENT_BINARY_DIR}")
+    if(DEFINED arg_OUTPUT_DIRECTORY)
+        set(output_directory "${arg_OUTPUT_DIRECTORY}")
+    endif()
+
     if(is_shared)
         set(generated_export "")
         set(generated_export_options "")
         _qt_internal_protoc_generate_cpp_exports(generated_export generated_export_options
-            ${target} "${arg_EXPORT_MACRO}")
+            ${target} "${arg_EXPORT_MACRO}" "${output_directory}")
         if(generated_export)
             list(APPEND generated_files "${generated_export}")
         endif()
         list(APPEND generation_options "${generated_export_options}")
-    endif()
-
-    set(output_directory "${CMAKE_CURRENT_BINARY_DIR}")
-    if(DEFINED arg_OUTPUT_DIRECTORY)
-        set(output_directory "${arg_OUTPUT_DIRECTORY}")
     endif()
 
     list(TRANSFORM generated_files PREPEND "${output_directory}/")
@@ -179,8 +179,8 @@ function(qt6_add_grpc target type)
 
     target_sources(${target} PRIVATE ${generated_files})
     if(is_shared)
-        _qt_internal_protoc_get_export_macro_filename(export_macro_filename ${target})
-        target_sources(${target} PRIVATE "${output_directory}/${export_macro_filename}")
+        get_target_property(export_macro_file ${target} _qt_internal_protobuf_export_macro_file)
+        target_sources(${target} PRIVATE "${export_macro_file}")
     endif()
 
     # Filter generated headers

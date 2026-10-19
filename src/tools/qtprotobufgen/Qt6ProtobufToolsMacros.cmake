@@ -292,7 +292,7 @@ function(_qt_internal_protoc_get_export_macro_filename out_filename target)
 endfunction()
 
 function(_qt_internal_protoc_generate_cpp_exports out_generated_file out_generation_options target
-    export_macro)
+    export_macro output_directory)
 
     # Add EXPORT_MACRO if the target is a shared library
     string(TOUPPER "${target}" target_upper)
@@ -338,7 +338,8 @@ function(_qt_internal_protoc_generate_cpp_exports out_generated_file out_generat
             "EXPORT_MACRO=${export_macro}:${export_macro_filename}:true")
 
         set_target_properties(${target} PROPERTIES
-            _qt_internal_protobuf_export_macro "${export_macro}")
+            _qt_internal_protobuf_export_macro "${export_macro}"
+            _qt_internal_protobuf_export_macro_file "${output_directory}/${export_macro_filename}")
 
             # Define this so we can conditionally set the export macro behavior
         target_compile_definitions(${target}
@@ -563,7 +564,7 @@ function(qt6_add_protobuf target)
         set(generated_export "")
         set(generated_export_options "")
         _qt_internal_protoc_generate_cpp_exports(generated_export generated_export_options
-            ${target} "${arg_EXPORT_MACRO}")
+            ${target} "${arg_EXPORT_MACRO}" "${output_directory}")
         if(generated_export)
             list(APPEND cpp_sources "${output_directory}/${generated_export}")
         endif()
@@ -624,8 +625,7 @@ function(qt6_add_protobuf target)
     )
 
     if(is_shared)
-        _qt_internal_protoc_get_export_macro_filename(export_macro_filename ${target})
-        set(export_macro_file "${output_directory}/${export_macro_filename}")
+        get_target_property(export_macro_file ${target} _qt_internal_protobuf_export_macro_file)
     endif()
 
     set_source_files_properties(${type_registrations} PROPERTIES SKIP_AUTOGEN ON)

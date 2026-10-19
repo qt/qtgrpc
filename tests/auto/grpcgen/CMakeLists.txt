@@ -82,6 +82,29 @@ target_link_libraries(tst_qtgrpcgen_invalid-identifier
     PRIVATE tst_qtgrpcgen_protobuf_invalid-identifier)
 list(APPEND cmake_generator_tests invalid-identifier protobuf_invalid-identifier)
 
+# QTBUG-128754: the export header must be found when calls use different OUTPUT_DIRECTORYs
+add_library(tst_qtgrpcgen_shared_output_dirs SHARED)
+qt_add_protobuf(tst_qtgrpcgen_shared_output_dirs
+    PROTO_FILES
+        data/qtgrpcgen.proto
+    OUTPUT_DIRECTORY
+        "${CMAKE_CURRENT_BINARY_DIR}/${cmake_generated_dir}/shared_output_dirs/protobuf1"
+)
+qt_add_protobuf(tst_qtgrpcgen_shared_output_dirs
+    PROTO_FILES
+        data/666-invalid-identifier.proto
+    OUTPUT_DIRECTORY
+        "${CMAKE_CURRENT_BINARY_DIR}/${cmake_generated_dir}/shared_output_dirs/protobuf2"
+)
+qt_add_grpc(tst_qtgrpcgen_shared_output_dirs CLIENT
+    PROTO_FILES
+        data/qtgrpcgen.proto
+    OUTPUT_DIRECTORY
+        "${CMAKE_CURRENT_BINARY_DIR}/${cmake_generated_dir}/shared_output_dirs/grpc"
+)
+qt_autogen_tools_initial_setup(tst_qtgrpcgen_shared_output_dirs)
+add_dependencies(tst_qtgrpcgen tst_qtgrpcgen_shared_output_dirs)
+
 if(TARGET Qt6::GrpcQuick)
     qt_internal_extend_target(tst_qtgrpcgen
         DEFINES
