@@ -34,5 +34,13 @@ if(__qt_Protobuf_targets_file_included)
             QT_PROTO_INCLUDES "${proto_include_dir}")
     endforeach()
 
+    get_target_property(_@target@_proto_includes ${QT_CMAKE_EXPORT_NAMESPACE}::@target@
+        QT_PROTO_INCLUDES)
+    if(_@target@_proto_includes)
+        set_property(TARGET ${QT_CMAKE_EXPORT_NAMESPACE}::@target@ APPEND PROPERTY
+            INTERFACE_QT_PROTO_INCLUDES "${_@target@_proto_includes}")
+    endif()
+
+    unset(_@target@_proto_includes)
     unset(_@target@_proto_include_dirs)
 endif()

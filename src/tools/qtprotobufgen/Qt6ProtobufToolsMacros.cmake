@@ -114,10 +114,33 @@ function(_qt_internal_protoc_generate target generator output_directory)
 
     set(generator_file $<TARGET_FILE:${QT_CMAKE_EXPORT_NAMESPACE}::${generator}>)
 
-    set(proto_includes_string "")
+    set(proto_includes_genex "")
     if(proto_includes)
         list(JOIN proto_includes "$<SEMICOLON>" proto_includes)
         set(proto_includes_genex "$<GENEX_EVAL:${proto_includes}>")
+    endif()
+
+    # Custom transitive properties need CMake 3.30. With older versions users have to pass the
+    # QT_PROTO_INCLUDES of the linked protobuf libraries in PROTO_INCLUDES.
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.30")
+        get_target_property(transitive_props ${target} TRANSITIVE_LINK_PROPERTIES)
+        if(NOT "QT_PROTO_INCLUDES" IN_LIST transitive_props)
+            set_property(TARGET ${target} APPEND PROPERTY
+                TRANSITIVE_LINK_PROPERTIES "QT_PROTO_INCLUDES")
+        endif()
+        string(JOIN "" proto_includes_genex
+            "$<LIST:FILTER,"
+                "$<REMOVE_DUPLICATES:"
+                    "${proto_includes_genex}$<SEMICOLON>"
+                    "$<TARGET_PROPERTY:${target},QT_PROTO_INCLUDES>"
+                ">,"
+                "INCLUDE,."
+            ">"
+        )
+    endif()
+
+    set(proto_includes_string "")
+    if(proto_includes_genex)
         set(proto_includes_condition "$<BOOL:${proto_includes_genex}>")
         string(JOIN "" proto_includes_string
             "$<${proto_includes_condition}:"

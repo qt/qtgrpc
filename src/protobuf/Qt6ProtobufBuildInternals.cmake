@@ -104,7 +104,11 @@ function(qt_internal_add_protobuf_module target)
             )
         endforeach()
 
-        set_target_properties(${target} PROPERTIES QT_PROTO_INCLUDES "${proto_files_base_dir}")
+        # The installed paths are added to the imported targets by the properties file.
+        set_target_properties(${target} PROPERTIES
+            QT_PROTO_INCLUDES "${proto_files_base_dir}"
+            INTERFACE_QT_PROTO_INCLUDES "$<BUILD_INTERFACE:${proto_files_base_dir}>"
+        )
 
         qt_internal_protobuf_generate_properties(${target}
             PROTO_INCLUDES "${module_install_interface_include_dir}")

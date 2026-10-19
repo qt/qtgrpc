@@ -66,8 +66,12 @@ function(qt_internal_add_protobuf_wellknown_types target)
         endif()
         list(APPEND known_proto_includes "${proto_file_dir}")
         list(REMOVE_DUPLICATES known_proto_includes)
+        set(interface_proto_includes "${known_proto_includes}")
+        list(TRANSFORM interface_proto_includes REPLACE "^(.+)$" "$<BUILD_INTERFACE:\\1>")
         set_target_properties(${target} PROPERTIES
-            QT_PROTO_INCLUDES "${known_proto_includes}")
+            QT_PROTO_INCLUDES "${known_proto_includes}"
+            INTERFACE_QT_PROTO_INCLUDES "${interface_proto_includes}"
+        )
         # Assume that ProtobufWellKnownTypes is the Qt module that should have _sync_headers.
         foreach(generated_target IN LISTS generated_targets)
             add_dependencies(${generated_target} ${target}_sync_headers)

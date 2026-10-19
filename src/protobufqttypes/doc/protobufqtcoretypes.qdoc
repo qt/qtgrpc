@@ -76,8 +76,10 @@
     ProtobufQtCoreTypes package, and uses them directly. This gives
     you the flexibility to use these types without additional conversion.
 
-    In CMake, you can extract the proto include path from the library using the
-    \c{QT_PROTO_INCLUDES} target property:
+    Since Qt 6.13, with CMake 3.30 or later, linking against the library is
+    enough for \c{qt_add_protobuf} to find the imported \e{.proto} files. With older
+    CMake versions, you can extract the proto include path from the library
+    using the \c{QT_PROTO_INCLUDES} target property:
     \badcode
         qt_add_protobuf(MyProtoLib
             PROTO_FILES

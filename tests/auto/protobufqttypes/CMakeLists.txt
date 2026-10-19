@@ -7,6 +7,16 @@ if(NOT QT_BUILD_STANDALONE_TESTS AND NOT QT_BUILDING_QT)
     find_package(Qt6BuildInternals REQUIRED COMPONENTS STANDALONE_TEST)
 endif()
 
+# The QT_PROTO_INCLUDES of linked protobuf libraries are transitive since CMake 3.30.
+set(qtcoretypes_proto_includes "")
+set(qtguitypes_proto_includes "")
+if(CMAKE_VERSION VERSION_LESS "3.30")
+    set(qtcoretypes_proto_includes
+        PROTO_INCLUDES $<TARGET_PROPERTY:Qt6::ProtobufQtCoreTypes,QT_PROTO_INCLUDES>)
+    set(qtguitypes_proto_includes
+        PROTO_INCLUDES $<TARGET_PROPERTY:Qt6::ProtobufQtGuiTypes,QT_PROTO_INCLUDES>)
+endif()
+
 qt_internal_add_test(tst_protobuf_qtcoretypes
     SOURCES
         qtprotobufqttypescoretest.cpp
@@ -26,8 +36,7 @@ qt_add_protobuf(tst_protobuf_qtcoretypes
     PROTO_FILES
         ../shared/data/proto/qtcoretypes.proto
         qtcoretypesnested.proto
-    PROTO_INCLUDES
-        $<TARGET_PROPERTY:Qt6::ProtobufQtCoreTypes,QT_PROTO_INCLUDES>
+    ${qtcoretypes_proto_includes}
     OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/generated"
 )
 
@@ -53,8 +62,7 @@ if(QT_FEATURE_gui)
         PROTO_FILES
             ../shared/data/proto/qtguitypes.proto
             qtguitypesnested.proto
-        PROTO_INCLUDES
-            $<TARGET_PROPERTY:Qt6::ProtobufQtGuiTypes,QT_PROTO_INCLUDES>
+        ${qtguitypes_proto_includes}
         OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/generated_gui"
     )
 

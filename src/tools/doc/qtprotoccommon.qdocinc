@@ -13,6 +13,12 @@
 
     \note The location of the \c {PROTO_FILES} is implicitly considered part of
     the protobuf include path.
+
+    \note Since Qt 6.13, when using CMake 3.30 or later, the
+    \c {QT_PROTO_INCLUDES} of the protobuf libraries that the target links
+    against, such as \c {Qt::ProtobufQtCoreTypes}, are implicitly considered
+    part of the protobuf include path. With older CMake versions, pass them
+    in \c {PROTO_INCLUDES}.
 //! [proto_includes-li]
 
 //! [output_directory-li]
