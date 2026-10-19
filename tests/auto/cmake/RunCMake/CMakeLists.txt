@@ -14,6 +14,7 @@ if(QT_USE_VCPKG)
 endif()
 
 if(QT_FEATURE_qtprotobufgen)
+    qt_internal_add_RunCMake_test(FindWrapProtoc ${config_flags})
     qt_internal_add_RunCMake_test(qt_add_protobuf ${config_flags})
 endif()
 if(QT_FEATURE_qtgrpcgen AND TARGET Qt6::Grpc)
