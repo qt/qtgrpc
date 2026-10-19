@@ -5,6 +5,7 @@ path = ["tests/auto/protobufgen/data/cmd_line_generated/**",
         "tests/auto/protobufgen/data/cmake_generated/**",
         "tests/auto/grpcgen/data/expected_result/**",
         "tests/auto/grpc/**",
+        "tests/auto/cmake/**",
         "tests/auto/protobuf/conformance/expect_failing_tests_v*.txt",
         "tests/auto/grpcgen/data/cmake_generated/**",
         "tests/auto/grpcgen/data/cmd_line_generated/**"]

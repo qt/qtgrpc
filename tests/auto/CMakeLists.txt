@@ -3,6 +3,9 @@
 
 if(QT_FEATURE_qtprotobufgen OR QT_FEATURE_qtgrpcgen)
     add_subdirectory(protocplugintestcommon)
+    if(NOT CMAKE_CROSSCOMPILING)
+        add_subdirectory(cmake)
+    endif()
 endif()
 
 if(QT_FEATURE_qtprotobufgen)

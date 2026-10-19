@@ -1,0 +1,1 @@
+EXPORT_MACRO should be a valid C identifier\.
