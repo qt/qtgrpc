@@ -105,6 +105,9 @@ QGrpcClientStream::~QGrpcClientStream() = default;
 /*!
 //! [write-message-desc]
     Serializes \a message and sends it to the server.
+
+    If \a message cannot be serialized, the RPC is cancelled and finishes with
+    the serialization error. See \l{QGrpcOperation::}{finished()}.
 //! [write-message-desc]
 */
 void QGrpcClientStream::writeMessage(const QProtobufMessage &message)
