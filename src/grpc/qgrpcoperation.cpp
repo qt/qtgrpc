@@ -22,10 +22,14 @@ using namespace Qt::StringLiterals;
 namespace {
 std::optional<QGrpcStatus> serializationFailure(const QAbstractProtobufSerializer &serializer)
 {
-    if (serializer.lastError() == QAbstractProtobufSerializer::Error::None)
+    using Error = QAbstractProtobufSerializer::Error;
+    const Error error = serializer.lastError();
+    if (error == Error::None)
         return std::nullopt;
+    const auto code = error == Error::MessageTooLarge ? QtGrpc::StatusCode::ResourceExhausted
+                                                      : QtGrpc::StatusCode::Internal;
     return QGrpcStatus{
-        QtGrpc::StatusCode::Internal,
+        code,
         QGrpcOperation::tr("Failed to serialize the message: %1").arg(serializer.lastErrorString())
     };
 }
@@ -123,8 +127,10 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
     status provides additional information about the outcome of the RPC.
 
     If the serializer fails to serialize a request message, that message is
-    not sent and the RPC finishes with an \l{QtGrpc::StatusCode::}{Internal}
-    status.
+    not sent and the RPC finishes with
+    \l{QtGrpc::StatusCode::}{ResourceExhausted} if the message exceeds the
+    serializer's maximum message size, or with
+    \l{QtGrpc::StatusCode::}{Internal} for any other serialization error.
 
     After this signal is received, no further write or read operations should
     be performed on the operation object. At this point, it is safe to reuse or

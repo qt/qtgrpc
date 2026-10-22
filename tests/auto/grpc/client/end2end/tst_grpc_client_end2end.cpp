@@ -2106,6 +2106,10 @@ void QtGrpcClientEnd2EndTest::serializationFailureFinishesRpc_data() const
         << RpcType::ClientStreaming << 0 << Error::InvalidFormat << StatusCode::Internal;
     QTest::newRow("clientStream/write")
         << RpcType::ClientStreaming << 1 << Error::InvalidFormat << StatusCode::Internal;
+    QTest::newRow("unary/tooLarge")
+        << RpcType::UnaryCall << 0 << Error::MessageTooLarge << StatusCode::ResourceExhausted;
+    QTest::newRow("bidiStream/write/tooLarge")
+        << RpcType::BidiStreaming << 1 << Error::MessageTooLarge << StatusCode::ResourceExhausted;
     QTest::newRow("bidiStream/initial")
         << RpcType::BidiStreaming << 0 << Error::UnknownType << StatusCode::Internal;
     QTest::newRow("bidiStream/write")
