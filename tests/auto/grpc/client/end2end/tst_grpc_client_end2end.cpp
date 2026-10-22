@@ -12,6 +12,8 @@
 #include <QtGrpc/qgrpccalloptions.h>
 #include <QtGrpc/qgrpcchanneloptions.h>
 #include <QtGrpc/qgrpchttp2channel.h>
+#include <QtGrpc/qgrpcserializationformat.h>
+#include <QtGrpc/qgrpcstream.h>
 
 #include <QtProtobuf/qprotobufserializer.h>
 
@@ -38,6 +40,46 @@
 using namespace Qt::Literals::StringLiterals;
 using namespace QtGrpc;
 using MultiHash = QMultiHash<QByteArray, QByteArray>;
+
+class FailingSerializer final : public QAbstractProtobufSerializer
+{
+public:
+    FailingSerializer(Error error, int failingCall) : m_failure(error), m_failingCall(failingCall)
+    {
+    }
+
+    Error lastError() const override { return m_lastError; }
+    QString lastErrorString() const override { return m_lastErrorString; }
+
+private:
+    QByteArray serializeMessage(const QProtobufMessage *message) const override
+    {
+        if (m_calls++ == m_failingCall) {
+            m_lastError = m_failure;
+            m_lastErrorString = u"forced serialization failure"_s;
+            return {};
+        }
+        QByteArray result = m_impl.serialize(message);
+        m_lastError = m_impl.lastError();
+        m_lastErrorString = m_impl.lastErrorString();
+        return result;
+    }
+
+    bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const override
+    {
+        const bool ok = m_impl.deserialize(message, data);
+        m_lastError = m_impl.lastError();
+        m_lastErrorString = m_impl.lastErrorString();
+        return ok;
+    }
+
+    QProtobufSerializer m_impl;
+    const Error m_failure;
+    const int m_failingCall;
+    mutable int m_calls = 0;
+    mutable Error m_lastError = Error::None;
+    mutable QString m_lastErrorString;
+};
 
 class QtGrpcClientEnd2EndTest : public QObject
 {
@@ -120,6 +162,9 @@ private Q_SLOTS:
     void messageWrittenNotAfterCancel();
 
     void streamBytesToWrite();
+
+    void serializationFailureFinishesRpc_data() const;
+    void serializationFailureFinishesRpc();
 
 private:
     static std::shared_ptr<grpc::ServerCredentials> serverSslCredentials()
@@ -2045,6 +2090,77 @@ void QtGrpcClientEnd2EndTest::streamBytesToWrite()
     QVERIFY(finishedSpy.wait());
     QVERIFY(qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first()).isOk());
     QCOMPARE_EQ(stream->bytesToWrite(), 0u);
+}
+
+void QtGrpcClientEnd2EndTest::serializationFailureFinishesRpc_data() const
+{
+    using Error = QAbstractProtobufSerializer::Error;
+    QTest::addColumn<RpcType>("rpcType");
+    QTest::addColumn<int>("failingCall");
+    QTest::addColumn<Error>("serializerError");
+    QTest::addColumn<StatusCode>("expectedCode");
+
+    QTest::newRow("unary") << RpcType::UnaryCall << 0 << Error::InvalidFormat
+                           << StatusCode::Internal;
+    QTest::newRow("clientStream/initial")
+        << RpcType::ClientStreaming << 0 << Error::InvalidFormat << StatusCode::Internal;
+    QTest::newRow("clientStream/write")
+        << RpcType::ClientStreaming << 1 << Error::InvalidFormat << StatusCode::Internal;
+    QTest::newRow("bidiStream/initial")
+        << RpcType::BidiStreaming << 0 << Error::UnknownType << StatusCode::Internal;
+    QTest::newRow("bidiStream/write")
+        << RpcType::BidiStreaming << 1 << Error::UnknownType << StatusCode::Internal;
+}
+
+void QtGrpcClientEnd2EndTest::serializationFailureFinishesRpc()
+{
+    QFETCH(const RpcType, rpcType);
+    QFETCH(const int, failingCall);
+    QFETCH(const QAbstractProtobufSerializer::Error, serializerError);
+    QFETCH(const StatusCode, expectedCode);
+
+    // Cancelled RPC leaves a half-drained server; rebuild for the next test.
+    const auto restoreServer = qScopeGuard([this] { restartServer(); });
+    TagProcessor processor(m_server.get());
+
+    QFETCH_GLOBAL(const QUrl, hostUri);
+    QFETCH_GLOBAL(const QGrpcChannelOptions, channelOptions);
+    auto serializer = std::make_shared<FailingSerializer>(serializerError, failingCall);
+    QGrpcChannelOptions chOpts = channelOptions;
+    chOpts.setSerializationFormat(QGrpcSerializationFormat(QByteArrayView(),
+                                                           std::move(serializer)));
+    QVERIFY(m_client->attachChannel(std::make_shared<QGrpcHttp2Channel>(hostUri, chOpts)));
+
+    qt::Event event;
+    event.setNumber(1);
+
+    std::unique_ptr<QGrpcOperation> operation;
+    if (rpcType == RpcType::UnaryCall)
+        operation = m_client->Push(event);
+    else if (rpcType == RpcType::ClientStreaming)
+        operation = m_client->Notify(event);
+    else
+        operation = m_client->Exchange(event);
+    QVERIFY(operation);
+
+    QSignalSpy finishedSpy(operation.get(), &QGrpcOperation::finished);
+    QVERIFY(finishedSpy.isValid());
+
+    if (failingCall == 1) {
+        if (auto *stream = qobject_cast<QGrpcClientStream *>(operation.get()))
+            stream->writeMessage(event);
+        else
+            qobject_cast<QGrpcBidiStream *>(operation.get())->writeMessage(event);
+    }
+
+    QTRY_COMPARE_EQ(finishedSpy.count(), 1);
+    // The channel's teardown of the RPC must not report a second status.
+    QCoreApplication::processEvents();
+    QCOMPARE_EQ(finishedSpy.count(), 1);
+
+    const auto status = qvariant_cast<QGrpcStatus>(finishedSpy.at(0).first());
+    QCOMPARE_EQ(status.code(), expectedCode);
+    QVERIFY(status.message().contains(u"forced serialization failure"_s));
 }
 
 QTEST_MAIN(QtGrpcClientEnd2EndTest)

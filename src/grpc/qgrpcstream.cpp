@@ -143,6 +143,9 @@ QGrpcClientStream::~QGrpcClientStream() = default;
 
     Messages are queued and handed to the transport. The queue is unbounded, so
     pace high-rate writes using the messageWritten() signal.
+
+    If \a message cannot be serialized, the RPC is cancelled and finishes with
+    the serialization error. See \l{QGrpcOperation::}{finished()}.
 //! [write-message-desc]
 
     \sa messageWritten()

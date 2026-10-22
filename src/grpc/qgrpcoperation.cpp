@@ -19,6 +19,18 @@ QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;
 
+namespace {
+std::optional<QGrpcStatus> serializationFailure(const QAbstractProtobufSerializer &serializer)
+{
+    if (serializer.lastError() == QAbstractProtobufSerializer::Error::None)
+        return std::nullopt;
+    return QGrpcStatus{
+        QtGrpc::StatusCode::Internal,
+        QGrpcOperation::tr("Failed to serialize the message: %1").arg(serializer.lastErrorString())
+    };
+}
+} // namespace
+
 QGrpcOperationPrivate::~QGrpcOperationPrivate()
     = default;
 
@@ -49,6 +61,7 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
 
     auto &interceptorEngine = QAbstractGrpcChannelPrivate::get(ch.get())->interceptorEngine;
 
+    QByteArray data;
     if (interceptorEngine.hasHandlerFor(QtGrpc::InterceptorCapability::Start)) {
         auto mt = QProtobufMessagePrivate::get(&message)->metaObject->metaType();
         auto *interceptedMessage = static_cast<QProtobufMessage *>(mt.create(&message));
@@ -72,10 +85,16 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
                 Qt::QueuedConnection);
             return {};
         }
-        return serializer->serialize(interceptedMessage);
+        data = serializer->serialize(interceptedMessage);
+    } else {
+        data = serializer->serialize(&message);
     }
 
-    return serializer->serialize(&message);
+    if (auto status = serializationFailure(*serializer)) {
+        asyncFinishInvalid(std::move(*status));
+        return std::nullopt;
+    }
+    return data;
 }
 
 /*!
@@ -102,6 +121,10 @@ QGrpcOperationPrivate::serializeInitialMessage(const QProtobufMessage &message)
 
     This signal is emitted when a previously started RPC has finished. The \a
     status provides additional information about the outcome of the RPC.
+
+    If the serializer fails to serialize a request message, that message is
+    not sent and the RPC finishes with an \l{QtGrpc::StatusCode::}{Internal}
+    status.
 
     After this signal is received, no further write or read operations should
     be performed on the operation object. At this point, it is safe to reuse or
@@ -422,6 +445,15 @@ void QGrpcOperation::writeMessage(const QProtobufMessage &message)
         mt.destroy(interceptedMessage);
     } else {
         messageData = serializer->serialize(&message);
+    }
+
+    if (auto status = serializationFailure(*serializer)) {
+        // Finish first so the channel's Cancelled status that follows is ignored.
+        const QPointer guard(this);
+        emit d->operationContext->finished(*status);
+        if (guard)
+            emit d->operationContext->cancelRequested();
+        return;
     }
 
     emit d->operationContext->writeMessageRequested(messageData);
