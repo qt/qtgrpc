@@ -365,7 +365,7 @@ QGrpcChannelOptions &QGrpcChannelOptions::setMaximumReceiveMessageSize(quint64 s
 quint64 QGrpcChannelOptions::maximumMetadataSize() const
 {
     Q_D(const QGrpcChannelOptions);
-    return d->maximumMetadataSize.value_or(QtGrpcPrivate::MinimumMetadataSize);
+    return d->maximumMetadataSize.value_or(QtGrpcPrivate::DefaultMaximumMetadataSize);
 }
 
 /*!

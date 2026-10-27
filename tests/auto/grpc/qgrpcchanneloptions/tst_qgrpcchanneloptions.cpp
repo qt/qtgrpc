@@ -32,6 +32,7 @@ private Q_SLOTS:
 
     void propertySerializationFormat() const;
     void propertyBackoff() const;
+    void propertyMaximumMetadataSize() const;
 #if QT_CONFIG(ssl)
     void propertySslConfiguration() const;
 #endif
@@ -157,6 +158,27 @@ void QGrpcChannelOptionsTest::propertyBackoff() const
                          "aren't allowed (-1ms); clamping to 0.");
     o1.setConnectTimeout(-1ms);
     QCOMPARE_EQ(o1.connectTimeout(), 0ms);
+}
+
+void QGrpcChannelOptionsTest::propertyMaximumMetadataSize() const
+{
+    QGrpcChannelOptions opt;
+    // The default is 16 KiB, matching the gRPC specification.
+    QCOMPARE_EQ(opt.maximumMetadataSize(), 16u * 1024);
+
+    const auto optDetach = opt;
+    const quint64 newMaximumMetadataSize = 64 * 1024;
+    opt.setMaximumMetadataSize(newMaximumMetadataSize);
+    QCOMPARE_EQ(opt.maximumMetadataSize(), newMaximumMetadataSize);
+    QCOMPARE_NE(opt.maximumMetadataSize(), optDetach.maximumMetadataSize());
+    QCOMPARE_NE(opt, optDetach);
+
+    // Values below the 4 KiB minimum are raised to the minimum.
+    QTest::ignoreMessage(QtWarningMsg,
+                         "QGrpcChannelOptions::setMaximumMetadataSize: 1024 is below the minimum "
+                         "of 4096 bytes; raising to the minimum.");
+    opt.setMaximumMetadataSize(1024);
+    QCOMPARE_EQ(opt.maximumMetadataSize(), 4u * 1024);
 }
 
 QTEST_MAIN(QGrpcChannelOptionsTest)
