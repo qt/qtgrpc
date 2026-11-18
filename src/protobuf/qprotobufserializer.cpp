@@ -22,6 +22,8 @@
 #include <QtCore/qreadwritelock.h>
 #include <QtCore/qtenvironmentvariables.h>
 
+#include <limits>
+
 QT_BEGIN_NAMESPACE
 
 /*!
@@ -237,19 +239,10 @@ quint32 clampMaximumInputSize(quint64 configured, const char *source)
 // with a warning.
 std::optional<quint32> readEnvMaximumInputSize()
 {
-    if (!qEnvironmentVariableIsSet(EnvMaximumInputSize))
+    const auto env = QtProtobufSerializerHelpers::readEnvInteger(
+            EnvMaximumInputSize, 0, (std::numeric_limits<qint64>::max)());
+    if (!env)
         return std::nullopt;
-    const auto env = qEnvironmentVariableIntegerValue(EnvMaximumInputSize);
-    if (!env) {
-        qProtoWarning("%s is set to \"%s\", which is not an integer; ignoring.",
-                      EnvMaximumInputSize, qgetenv(EnvMaximumInputSize).constData());
-        return std::nullopt;
-    }
-    if (*env < 0) {
-        qProtoWarning("%s has an invalid value (%lld); ignoring.", EnvMaximumInputSize,
-                      static_cast<long long>(*env));
-        return std::nullopt;
-    }
     return clampMaximumInputSize(quint64(*env), EnvMaximumInputSize);
 }
 
@@ -397,6 +390,7 @@ void QProtobufDeserializerImpl::reset(QByteArrayView data)
     m_state.clear();
     m_state.push_back(data.end());
     clearCachedValue();
+    resetDepth();
 }
 
 void QProtobufDeserializerImpl::setError(QAbstractProtobufSerializer::Error error,
@@ -747,6 +741,37 @@ quint64 QProtobufSerializer::maximumInputSize() const
 void QProtobufSerializer::setMaximumInputSize(quint64 size)
 {
     d_ptr->maximumInputSize = clampMaximumInputSize(size, "setMaximumInputSize()");
+}
+
+/*!
+    \since 6.13
+
+    \include qprotobuf-depth-limit.qdocinc depth-limit-getter
+
+    \note Each map field entry whose value is a message counts as two levels:
+    the entry and its value.
+
+    \sa setDeserializationDepthLimit()
+*/
+int QProtobufSerializer::deserializationDepthLimit() const
+{
+    return d_ptr->deserializer.deserializationDepthLimit();
+}
+
+/*!
+    \since 6.13
+
+    \include qprotobuf-depth-limit.qdocinc depth-limit-setter
+
+    \sa deserializationDepthLimit()
+*/
+void QProtobufSerializer::setDeserializationDepthLimit(int limit)
+{
+    if (!QtProtobufSerializerHelpers::checkRecursionLimit(limit,
+                                                          "setDeserializationDepthLimit()")) {
+        return;
+    }
+    d_ptr->deserializer.setDeserializationDepthLimit(limit);
 }
 
 QT_END_NAMESPACE

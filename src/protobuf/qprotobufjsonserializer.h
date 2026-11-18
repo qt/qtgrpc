@@ -24,6 +24,9 @@ public:
     Error lastError() const override;
     QString lastErrorString() const override;
 
+    int deserializationDepthLimit() const;
+    void setDeserializationDepthLimit(int limit);
+
 private:
     QByteArray serializeMessage(const QProtobufMessage *message) const override;
     bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const override;

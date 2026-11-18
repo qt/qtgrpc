@@ -32,6 +32,9 @@ public:
     quint64 maximumInputSize() const;
     void setMaximumInputSize(quint64 size);
 
+    int deserializationDepthLimit() const;
+    void setDeserializationDepthLimit(int limit);
+
 private:
     QByteArray serializeMessage(const QProtobufMessage *message) const override;
     bool deserializeMessage(QProtobufMessage *message, QByteArrayView data) const override;

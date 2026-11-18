@@ -14,12 +14,15 @@
 // We mean it.
 //
 
+#include <QtProtobuf/private/qtprotobufserializerhelpers_p.h>
 #include <QtProtobuf/qabstractprotobufserializer.h>
 #include <QtProtobuf/qprotobufpropertyordering.h>
 #include <QtProtobuf/qprotobufrepeatediterator.h>
 
 #include <QtCore/qtconfigmacros.h>
 #include <QtCore/qvarlengtharray.h>
+
+#include <optional>
 
 QT_BEGIN_NAMESPACE
 
@@ -34,6 +37,12 @@ public:
     bool deserializeMessage(QProtobufMessage *message);
     void clearCachedValue();
 
+    int deserializationDepthLimit() const
+    {
+        return QtProtobufSerializerHelpers::effectiveRecursionLimit(m_recursionLimit);
+    }
+    void setDeserializationDepthLimit(int limit) { m_recursionLimit = limit; }
+
 protected:
     ~QProtobufDeserializerBase();
 
@@ -41,6 +50,10 @@ protected:
     virtual bool hasError() const = 0;
 
     virtual bool deserializeMessageField(QProtobufMessage *message);
+
+    bool enterNestedMessage();
+    void leaveNestedMessage();
+    void resetDepth() { m_depth = 0; }
 
 private:
     virtual bool deserializeEnum(QVariant &value,
@@ -56,6 +69,8 @@ private:
     QVariant m_cachedPropertyValue;
     QProtobufRepeatedIterator m_cachedRepeatedIterator;
     int m_cachedIndex = -1;
+    int m_depth = 0;
+    std::optional<int> m_recursionLimit;
     const bool m_enforceRequiredFields;
 
     Q_DISABLE_COPY_MOVE(QProtobufDeserializerBase)

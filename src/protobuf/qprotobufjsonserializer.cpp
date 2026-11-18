@@ -363,6 +363,7 @@ QProtobufJsonDeserializerImpl::~QProtobufJsonDeserializerImpl()
 void QProtobufJsonDeserializerImpl::reset(QJsonObject obj)
 {
     clearCachedValue();
+    resetDepth();
     m_state.clear();
     if (!obj.isEmpty())
         m_state.push_back({ obj });
@@ -387,13 +388,19 @@ bool QProtobufJsonDeserializerImpl::deserializeMessageField(QProtobufMessage *me
 
     const auto &value = m_state.last().scalarValue;
     if (!value.isUndefined()) {
+        // The message is nested too, so it counts for the recursion limit.
+        if (!enterNestedMessage())
+            return false;
         const auto *metaObject = QtProtobufSerializerHelpers::messageMetaObject(message);
+        bool result = false;
         if (auto *deserializer = QtProtobufPrivate::findCustomJsonDeserializer(metaObject
                                                                                    ->metaType())) {
-            return deserializer(message, value);
+            result = deserializer(message, value);
+        } else {
+            setInvalidFormatError();
         }
-        setInvalidFormatError();
-        return false;
+        leaveNestedMessage();
+        return result;
     }
     return QProtobufDeserializerBase::deserializeMessageField(message);
 }
@@ -672,6 +679,39 @@ bool ProtobufScalarJsonSerializers::validateJsonNumberString(const QString &inpu
 {
     static const QRegularExpression NumberValidator("^-?\\d+$"_L1);
     return NumberValidator.match(input).hasMatch();
+}
+
+/*!
+    \since 6.13
+
+    \include qprotobuf-depth-limit.qdocinc depth-limit-getter
+
+    \note The JSON parser has its own limit of 1024 nested JSON objects and
+    arrays. Input nested deeper than that fails even if this limit is higher.
+    A repeated message field adds an array level, so the effective message
+    nesting can be lower than 1024.
+
+    \sa setDeserializationDepthLimit()
+*/
+int QProtobufJsonSerializer::deserializationDepthLimit() const
+{
+    return d_ptr->deserializer.deserializationDepthLimit();
+}
+
+/*!
+    \since 6.13
+
+    \include qprotobuf-depth-limit.qdocinc depth-limit-setter
+
+    \sa deserializationDepthLimit()
+*/
+void QProtobufJsonSerializer::setDeserializationDepthLimit(int limit)
+{
+    if (!QtProtobufSerializerHelpers::checkRecursionLimit(limit,
+                                                          "setDeserializationDepthLimit()")) {
+        return;
+    }
+    d_ptr->deserializer.setDeserializationDepthLimit(limit);
 }
 
 QT_END_NAMESPACE

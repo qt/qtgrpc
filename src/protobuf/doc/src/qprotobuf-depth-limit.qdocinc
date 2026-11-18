@@ -1,0 +1,34 @@
+// Copyright (C) 2026 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
+
+//! [depth-limit-getter]
+Returns the maximum nesting depth of messages that deserialize() accepts.
+
+If the input data contains messages nested deeper than this limit,
+deserialize() returns \c false and lastError() returns
+QAbstractProtobufSerializer::Error::InvalidFormat. This limit does not
+affect serialize(). The default is the same as in the upstream C++
+and Java protobuf implementations. The top-level message is not counted:
+with a limit of N, a message may contain N levels of nested messages.
+
+The value is chosen in this order:
+\list 1
+\li The limit set with setDeserializationDepthLimit().
+\li The \c{QT_PROTOBUF_NESTING_LIMIT} environment variable, if it is
+    set to a positive integer. It is read once per process, the first time
+    the limit is needed. Later changes to it are not used. Any other
+    value is ignored with a warning.
+\li The default: \c{100}.
+\endlist
+//! [depth-limit-getter]
+
+//! [depth-limit-setter]
+Sets the maximum nesting depth of messages that deserialize() accepts to
+\a limit. It does not affect serialize(). The \a limit must be a positive
+integer; otherwise a warning is printed and the limit is not changed. This
+limit is used instead of the \c{QT_PROTOBUF_NESTING_LIMIT} environment
+variable.
+
+It is recommended to bound the nesting of messages received from
+untrusted sources.
+//! [depth-limit-setter]

@@ -24,3 +24,56 @@ qt_internal_add_test(tst_protobuf_recursive
         Qt::Protobuf
         tst_protobuf_recursive_gen
 )
+
+qt_internal_add_test(tst_protobuf_recursion_limit
+    SOURCES
+        tst_protobuf_recursion_limit.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+)
+qt6_add_protobuf(tst_protobuf_recursion_limit
+    PROTO_FILES
+        recursionlimit.proto
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
+)
+qt_autogen_tools_initial_setup(tst_protobuf_recursion_limit)
+
+if(TARGET Qt6::ProtobufWellKnownTypes)
+    qt6_add_protobuf(tst_protobuf_recursion_limit_wellknown_gen
+        PROTO_FILES
+            recursionlimitwellknown.proto
+        OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qt_protobuf_generated"
+        PROTO_INCLUDES
+            $<TARGET_PROPERTY:Qt6::ProtobufWellKnownTypes,QT_PROTO_INCLUDES>
+    )
+    qt_autogen_tools_initial_setup(tst_protobuf_recursion_limit_wellknown_gen)
+    target_link_libraries(tst_protobuf_recursion_limit_wellknown_gen
+        PUBLIC
+            Qt::ProtobufWellKnownTypes
+    )
+    target_link_libraries(tst_protobuf_recursion_limit
+        PRIVATE
+            tst_protobuf_recursion_limit_wellknown_gen
+    )
+    target_compile_definitions(tst_protobuf_recursion_limit
+        PRIVATE
+            HAS_PROTOBUF_WELLKNOWN_TYPES
+    )
+endif()
+
+qt_internal_add_test(tst_protobuf_recursion_limit_env
+    SOURCES
+        tst_protobuf_recursion_limit_env.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+)
+
+qt_internal_add_test(tst_protobuf_recursion_limit_env_invalid
+    SOURCES
+        tst_protobuf_recursion_limit_env_invalid.cpp
+    LIBRARIES
+        Qt::Test
+        Qt::Protobuf
+)

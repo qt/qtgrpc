@@ -1,0 +1,38 @@
+// Copyright (C) 2026 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+syntax = "proto3";
+
+package qtprotobufnamespace.tests.recursionlimit;
+
+message Node {
+    int32 value = 1;
+    Node child = 2;
+}
+
+message RepeatedNode {
+    int32 value = 1;
+    repeated RepeatedNode children = 2;
+}
+
+// Each hop is two levels of nesting: the map entry and its value.
+message MapNode {
+    int32 value = 1;
+    map<int32, MapNode> children = 2;
+}
+
+message OneofNode {
+    oneof kind {
+        int32 value = 1;
+        OneofNode child = 2;
+    }
+}
+
+message MutualA {
+    int32 value = 1;
+    MutualB b = 2;
+}
+
+message MutualB {
+    int32 value = 1;
+    MutualA a = 2;
+}
