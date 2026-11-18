@@ -663,7 +663,7 @@ bool QProtobufJsonSerializer::deserializeMessage(QProtobufMessage *message,
         d_ptr->deserializer.reset(obj);
         bool result = d_ptr->deserializer.deserializeMessage(message);
         d_ptr->deserializer.reset({});
-        return result;
+        return result && d_ptr->lastError == QAbstractProtobufSerializer::Error::None;
     }
     return true;
 }

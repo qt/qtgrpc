@@ -112,6 +112,9 @@ bool QProtobufDeserializerBase::deserializeMessage(QProtobufMessage *message)
         handler.deserializer([this](QProtobufMessage *
                                         message) { return this->deserializeMessageField(message); },
                              m_cachedPropertyValue.data());
+        // Handlers do not report failures, and the parser state is undefined after one.
+        if (hasError())
+            return false;
     }
 
     if (!storeCachedValue(message)) {

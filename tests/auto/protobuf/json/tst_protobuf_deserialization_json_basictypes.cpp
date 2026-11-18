@@ -563,16 +563,16 @@ void QtProtobufTypesJsonDeserializationTest::invalidTypeTest()
              QAbstractProtobufSerializer::Error::InvalidFormat);
 
     SimpleIntMessage intMsg;
-    intMsg.deserialize(serializer.get(), "{\"testFieldInt\": 0.5}");
+    QVERIFY(!intMsg.deserialize(serializer.get(), "{\"testFieldInt\": 0.5}"));
     QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::InvalidFormat);
     QCOMPARE(intMsg.testFieldInt(), 0);
 
-    intMsg.deserialize(serializer.get(), "{\"testFieldInt\":4294967296}");
+    QVERIFY(!intMsg.deserialize(serializer.get(), "{\"testFieldInt\":4294967296}"));
     QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::InvalidFormat);
     QCOMPARE(intMsg.testFieldInt(), 0);
 
     SimpleUIntMessage uintMsg;
-    uintMsg.deserialize(serializer.get(), "{\"testFieldInt\":4294967296}");
+    QVERIFY(!uintMsg.deserialize(serializer.get(), "{\"testFieldInt\":4294967296}"));
     QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::InvalidFormat);
     QCOMPARE(uintMsg.testFieldInt(), 0u);
 }
