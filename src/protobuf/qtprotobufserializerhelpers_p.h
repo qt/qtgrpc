@@ -18,6 +18,9 @@
 #include <QtProtobuf/qtprotobufexports.h>
 
 #include <QtCore/qtconfigmacros.h>
+#include <QtCore/qtypes.h>
+
+#include <optional>
 
 QT_BEGIN_NAMESPACE
 
@@ -40,6 +43,14 @@ bool setMessageProperty(QProtobufMessage *message,
                         const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo, QVariant &&value);
 
 const QMetaObject *messageMetaObject(const QProtobufMessage *message);
+
+// Resolves the recursion limit: the QT_PROTOBUF_NESTING_LIMIT environment
+// variable, else the default.
+int effectiveRecursionLimit();
+// Reads the integer environment variable `name`. Returns nullopt if it is unset,
+// is not an integer, or is outside [`minimum`, `maximum`]; the last two are
+// reported with a warning.
+std::optional<qint64> readEnvInteger(const char *name, qint64 minimum, qint64 maximum);
 }
 
 QT_END_NAMESPACE

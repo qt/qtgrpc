@@ -1,0 +1,28 @@
+// Copyright (C) 2026 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
+
+//! [depth-limit]
+\section1 Depth limit
+
+A message can contain other messages, and those can contain further
+messages, so the nesting of a message can be arbitrarily deep. Parsing
+deeply nested input uses a lot of stack, so a malicious or corrupt input
+could crash the application. To prevent this, the serializer limits
+the nesting depth of messages when it deserializes. By default, the limit
+is 100 levels, the same as the default in other protobuf implementations
+such as C++ and Java. When the limit is exceeded, deserialize() fails and
+lastError() returns QAbstractProtobufSerializer::Error::InvalidFormat.
+
+You can change the limit with the \c{QT_PROTOBUF_NESTING_LIMIT}
+environment variable. The value must be an integer of at least 1. The
+limit only affects deserialize(), and does not affect serialize().
+
+The environment variable is read once per process, the first time the
+limit is needed. If you change it later, the new value is not used. A
+value that is not an integer, or is smaller than 1, is ignored, and the
+default limit is used.
+
+The top-level message is not counted: with a limit of N, a message can
+contain N levels of nested messages. Each map field entry whose value is a
+message counts as two levels: the entry and its value.
+//! [depth-limit]

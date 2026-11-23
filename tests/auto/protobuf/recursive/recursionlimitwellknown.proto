@@ -1,0 +1,18 @@
+// Copyright (C) 2026 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+syntax = "proto3";
+
+package qtprotobufnamespace.tests.recursionlimit;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/wrappers.proto";
+
+// google.protobuf.Any is deserialized through a registered type handler
+// rather than the generic message path.
+message AnyNode {
+    AnyNode child = 1;
+    google.protobuf.Any payload = 2;
+    int32 value = 3;
+    // JSON: a scalar value, read by a custom JSON deserializer.
+    google.protobuf.Int32Value number = 4;
+}

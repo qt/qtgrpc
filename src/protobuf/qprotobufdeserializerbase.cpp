@@ -9,6 +9,8 @@
 
 QT_BEGIN_NAMESPACE
 
+using namespace Qt::StringLiterals;
+
 QProtobufDeserializerBase::QProtobufDeserializerBase()
     = default;
 
@@ -19,6 +21,9 @@ bool QProtobufDeserializerBase::deserializeMessageField(QProtobufMessage *messag
 {
     Q_ASSERT(message != nullptr);
 
+    if (!enterNestedMessage())
+        return false;
+
     auto prevCachedRepeatedIterator = std::move(m_cachedRepeatedIterator);
     auto prevCachedPropertyValue = m_cachedPropertyValue;
     auto prevCachedIndex = m_cachedIndex;
@@ -28,7 +33,30 @@ bool QProtobufDeserializerBase::deserializeMessageField(QProtobufMessage *messag
     m_cachedIndex = prevCachedIndex;
     m_cachedRepeatedIterator = std::move(prevCachedRepeatedIterator);
 
+    leaveNestedMessage();
     return result;
+}
+
+// Must be called before reading a nested message, and paired with
+// leaveNestedMessage() if it returns true.
+bool QProtobufDeserializerBase::enterNestedMessage()
+{
+    const int limit = QtProtobufSerializerHelpers::effectiveRecursionLimit();
+    if (m_depth >= limit) {
+        setError(QAbstractProtobufSerializer::Error::InvalidFormat,
+                 u"Message nesting exceeds the recursion limit of %1"_s
+                     .arg(limit));
+        return false;
+    }
+    // Go one level deeper before the recursive call
+    ++m_depth;
+    return true;
+}
+
+void QProtobufDeserializerBase::leaveNestedMessage()
+{
+    // Go one level back
+    --m_depth;
 }
 
 bool QProtobufDeserializerBase::deserializeMessage(QProtobufMessage *message)

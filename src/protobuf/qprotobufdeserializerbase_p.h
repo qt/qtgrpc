@@ -41,6 +41,10 @@ protected:
 
     virtual bool deserializeMessageField(QProtobufMessage *message);
 
+    bool enterNestedMessage();
+    void leaveNestedMessage();
+    void resetDepth() { m_depth = 0; }
+
 private:
     virtual bool deserializeEnum(QVariant &value,
                                  const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) = 0;
@@ -53,6 +57,7 @@ private:
     QVariant m_cachedPropertyValue;
     QProtobufRepeatedIterator m_cachedRepeatedIterator;
     int m_cachedIndex = -1;
+    int m_depth = 0;
 
     Q_DISABLE_COPY_MOVE(QProtobufDeserializerBase)
 

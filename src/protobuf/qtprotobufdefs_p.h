@@ -21,6 +21,9 @@ constexpr int ProtobufFieldNumMin = 1;
 constexpr int ProtobufFieldNumMax = 536870911;
 constexpr int ProtobufFieldMaxCount = ProtobufFieldNumMax - ProtobufFieldNumMin + 1;
 
+// Maximum nesting of messages, same as the default of upstream protobuf.
+constexpr int ProtobufDefaultRecursionLimit = 100;
+
 QT_END_NAMESPACE
 
 #endif // QTPROTOBUFDEFS_P_H

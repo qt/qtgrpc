@@ -20,7 +20,8 @@
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qmetatype.h>
 #include <QtCore/qreadwritelock.h>
-#include <QtCore/qtenvironmentvariables.h>
+
+#include <limits>
 
 QT_BEGIN_NAMESPACE
 
@@ -64,6 +65,8 @@ QT_BEGIN_NAMESPACE
     limit is needed. If you change it later, the new value is not used. A
     value that is not a non-negative integer is ignored. Values larger than
     \c{2 GiB - 1} are reduced to that value.
+
+    \include qprotobuf-depth-limit.qdocinc depth-limit
 */
 
 using namespace Qt::StringLiterals;
@@ -229,19 +232,10 @@ quint32 clampMaximumInputSize(quint64 configured, const char *source)
 // with a warning.
 std::optional<quint32> readEnvMaximumInputSize()
 {
-    if (!qEnvironmentVariableIsSet(EnvMaximumInputSize))
+    const auto env = QtProtobufSerializerHelpers::readEnvInteger(
+            EnvMaximumInputSize, 0, (std::numeric_limits<qint64>::max)());
+    if (!env)
         return std::nullopt;
-    const auto env = qEnvironmentVariableIntegerValue(EnvMaximumInputSize);
-    if (!env) {
-        qProtoWarning("%s is set to \"%s\", which is not an integer; ignoring.",
-                      EnvMaximumInputSize, qgetenv(EnvMaximumInputSize).constData());
-        return std::nullopt;
-    }
-    if (*env < 0) {
-        qProtoWarning("%s has an invalid value (%lld); ignoring.", EnvMaximumInputSize,
-                      static_cast<long long>(*env));
-        return std::nullopt;
-    }
     return clampMaximumInputSize(quint64(*env), EnvMaximumInputSize);
 }
 
@@ -389,6 +383,7 @@ void QProtobufDeserializerImpl::reset(QByteArrayView data)
     m_state.clear();
     m_state.push_back(data.end());
     clearCachedValue();
+    resetDepth();
 }
 
 void QProtobufDeserializerImpl::setError(QAbstractProtobufSerializer::Error error,

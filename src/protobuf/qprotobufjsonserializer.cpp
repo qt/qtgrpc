@@ -43,6 +43,13 @@ QT_BEGIN_NAMESPACE
     classes are generated automatically, based on a \c{.proto} file, using the CMake
     function \l qt_add_protobuf or by running
     \l {The qtprotobufgen Tool} {qtprotobufgen} directly.
+
+    \include qprotobuf-depth-limit.qdocinc depth-limit
+
+    \note The JSON parser has its own limit of 1024 nested JSON objects and
+    arrays. Input nested deeper than that fails even if the depth limit is
+    higher. A repeated message field adds an array level, so the effective
+    message nesting can be lower than 1024.
 */
 
 using namespace Qt::StringLiterals;
@@ -363,6 +370,7 @@ QProtobufJsonDeserializerImpl::~QProtobufJsonDeserializerImpl()
 void QProtobufJsonDeserializerImpl::reset(QJsonObject obj)
 {
     clearCachedValue();
+    resetDepth();
     m_state.clear();
     if (!obj.isEmpty())
         m_state.push_back({ obj });
@@ -387,13 +395,19 @@ bool QProtobufJsonDeserializerImpl::deserializeMessageField(QProtobufMessage *me
 
     const auto &value = m_state.last().scalarValue;
     if (!value.isUndefined()) {
+        // The message is nested too, so it counts for the recursion limit.
+        if (!enterNestedMessage())
+            return false;
         const auto *metaObject = QtProtobufSerializerHelpers::messageMetaObject(message);
+        bool result = false;
         if (auto *deserializer = QtProtobufPrivate::findCustomJsonDeserializer(metaObject
                                                                                    ->metaType())) {
-            return deserializer(message, value);
+            result = deserializer(message, value);
+        } else {
+            setInvalidFormatError();
         }
-        setInvalidFormatError();
-        return false;
+        leaveNestedMessage();
+        return result;
     }
     return QProtobufDeserializerBase::deserializeMessageField(message);
 }
