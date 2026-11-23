@@ -37,6 +37,7 @@ protected:
     ~QProtobufDeserializerBase();
 
     virtual void setError(QAbstractProtobufSerializer::Error error, QAnyStringView errorString) = 0;
+    virtual bool hasError() const = 0;
 
     virtual bool deserializeMessageField(QProtobufMessage *message);
 

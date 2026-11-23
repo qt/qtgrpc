@@ -398,6 +398,11 @@ void QProtobufDeserializerImpl::setError(QAbstractProtobufSerializer::Error erro
     m_parent->lastErrorString = errorString.toString();
 }
 
+bool QProtobufDeserializerImpl::hasError() const
+{
+    return m_parent->lastError != QAbstractProtobufSerializer::Error::None;
+}
+
 bool QProtobufDeserializerImpl::deserializeEnum(QVariant &value,
                                                 const QProtobufFieldInfo &fieldInfo)
 {

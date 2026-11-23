@@ -78,6 +78,7 @@ public:
 
 private:
     void setError(QAbstractProtobufSerializer::Error error, QAnyStringView errorString) override;
+    bool hasError() const override;
     bool deserializeEnum(QVariant &value,
                          const QtProtobufPrivate::QProtobufFieldInfo &fieldInfo) override;
     int nextFieldIndex(QProtobufMessage *message) override;
