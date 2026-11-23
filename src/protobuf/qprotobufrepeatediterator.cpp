@@ -65,13 +65,13 @@
 */
 
 /*!
-    \fn template<typename T> static QProtobufRepeatedIterator fromList(QList<T> &list)
+    \fn template<typename T> QProtobufRepeatedIterator QProtobufRepeatedIterator::fromList(QList<T> &list)
 
     Creates a QProtobufRepeatedIterator instance from a \a list.
 */
 
 /*!
-    \fn template<typename K, typename V> static QProtobufRepeatedIterator fromHash(QHash<K, V> &hash)
+    \fn template<typename K, typename V> QProtobufRepeatedIterator QProtobufRepeatedIterator::fromHash(QHash<K, V> &hash)
 
     Creates a QProtobufRepeatedIterator instance from a \a hash.
 */
