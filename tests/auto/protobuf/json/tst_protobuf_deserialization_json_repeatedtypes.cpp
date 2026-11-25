@@ -259,15 +259,15 @@ void QtProtobufRepeatedTypesJsonDeserializationTest::invalidTypeTest()
 {
     // expected sint, string is used
     RepeatedSInt64Message test;
-    test.deserialize(serializer.get(), "{\"testRepeatedInt\":[1,321,\"abcd\",12324523123123,-3,3]}"_ba);
-    QCOMPARE(test.testRepeatedInt().size(), 2);
+    QVERIFY(!test.deserialize(serializer.get(), "{\"testRepeatedInt\":[1,321,\"abcd\",12324523123123,-3,3]}"_ba));
+    QCOMPARE(test.testRepeatedInt().size(), 0);
     QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::InvalidFormat);
 
     // expected bool, float is used
     RepeatedBoolMessage boolMsg;
-    boolMsg.deserialize(serializer.get(),
-                        "{\"testRepeatedBool\":[true,true,true,7.8,false,false,false,false,false,false,false,false,true]}"_ba);
-    QCOMPARE(boolMsg.testRepeatedBool().size(), 3);
+    QVERIFY(!boolMsg.deserialize(serializer.get(),
+                        "{\"testRepeatedBool\":[true,true,true,7.8,false,false,false,false,false,false,false,false,true]}"_ba));
+    QCOMPARE(boolMsg.testRepeatedBool().size(), 0);
     QCOMPARE(serializer->lastError(), QAbstractProtobufSerializer::Error::InvalidFormat);
 
 }

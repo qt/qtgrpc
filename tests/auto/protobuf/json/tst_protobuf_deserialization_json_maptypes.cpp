@@ -250,26 +250,26 @@ void QtProtobufJsonMapTypesDeserializationTest::invalidTypeTest()
 {
     // Expected int, but float is used
     SimpleInt32StringMapMessage fTest, bTest;
-    fTest.deserialize(
+    QVERIFY(!fTest.deserialize(
         serializer.get(),
-        "{\"mapField\":{\"-10\":\"minus ten\",\"15\":\"fifteen\",\"42.3\":\"fourty two\"}}"_ba);
+        "{\"mapField\":{\"-10\":\"minus ten\",\"15\":\"fifteen\",\"42.3\":\"fourty two\"}}"_ba));
 
     QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::Error::InvalidFormat);
 
     // -10 for uint32 is used
     SimpleUInt32StringMapMessage uTest;
-    uTest.deserialize(serializer.get(),
+    QVERIFY(!uTest.deserialize(serializer.get(),
                      "{\"mapField\":{\"-10\":\"ten\",\"15\":\"fifteen\",\"42\":\"fourty"
-                      " two\"}}"_ba);
+                      " two\"}}"_ba));
 
     QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::Error::InvalidFormat);
 
     // expected int, but bool is used
-    bTest.deserialize(
+    QVERIFY(!bTest.deserialize(
         serializer.get(),
-        "{\"mapField\":{\"-10\":\"minus ten\",\"15\":\"fifteen\",\"false\":\"fourty two\"}}"_ba);
+        "{\"mapField\":{\"-10\":\"minus ten\",\"15\":\"fifteen\",\"false\":\"fourty two\"}}"_ba));
 
     QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::Error::InvalidFormat);
