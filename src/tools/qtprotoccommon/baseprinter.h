@@ -6,6 +6,7 @@
 #define BASEPRINTER_H
 
 #include <google/protobuf/descriptor.h>
+#include <map>
 #include <memory>
 
 #include "options.h"
