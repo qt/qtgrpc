@@ -75,26 +75,27 @@ void QtProtobufEnumTypesDeserializationTest::invalidTypeTest()
 {
     // no LOCAL_ENUM_VALUE240
     SimpleEnumMessage invalidTest;
-    invalidTest.deserialize(m_serializer.get(), "{\"localEnum\":\"LOCAL_ENUM_VALUE240\"}");
+    QVERIFY(!invalidTest.deserialize(m_serializer.get(),
+                                     "{\"localEnum\":\"LOCAL_ENUM_VALUE240\"}"));
     QCOMPARE(m_serializer->lastError(),
              QAbstractProtobufSerializer::Error::InvalidFormat);
 
     RepeatedEnumMessage msg, msg2;
     // 'false'
-    msg.deserialize(m_serializer.get(),
-                    "{\"localEnumList\":[\"false\","
-                    "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
-                    "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
-                    "\"LOCAL_ENUM_VALUE3\"]}");
+    QVERIFY(!msg.deserialize(m_serializer.get(),
+                             "{\"localEnumList\":[\"false\","
+                             "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
+                             "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
+                             "\"LOCAL_ENUM_VALUE3\"]}"));
     QCOMPARE(m_serializer->lastError(),
              QAbstractProtobufSerializer::Error::InvalidFormat);
 
     // no LOCAL_ENUM_VALUE_100
-    msg2.deserialize(m_serializer.get(),
-                     "{\"localEnumList\":[\"LOCAL_ENUM_VALUE_100\","
-                     "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
-                     "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
-                     "\"LOCAL_ENUM_VALUE3\"]}");
+    QVERIFY(!msg2.deserialize(m_serializer.get(),
+                              "{\"localEnumList\":[\"LOCAL_ENUM_VALUE_100\","
+                              "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
+                              "\"LOCAL_ENUM_VALUE1\",\"LOCAL_ENUM_VALUE2\","
+                              "\"LOCAL_ENUM_VALUE3\"]}"));
     QCOMPARE(m_serializer->lastError(),
              QAbstractProtobufSerializer::Error::InvalidFormat);
 }

@@ -536,8 +536,12 @@ bool QProtobufJsonDeserializerImpl::deserializeScalarField(QVariant &value,
 
     bool ok = false;
     value = handler.value().deserializer(m_state.last().scalarValue, ok);
-    if (!ok)
+    if (!ok) {
+        // Still return true: the field is handled as a scalar. The caller detects
+        // the failure from the cleared value.
         setInvalidFormatError();
+        value.clear();
+    }
     return true;
 }
 
@@ -670,7 +674,7 @@ bool QProtobufJsonSerializer::deserializeMessage(QProtobufMessage *message,
         d_ptr->deserializer.reset(obj);
         bool result = d_ptr->deserializer.deserializeMessage(message);
         d_ptr->deserializer.reset({});
-        return result && d_ptr->lastError == QAbstractProtobufSerializer::Error::None;
+        return result;
     }
     return true;
 }

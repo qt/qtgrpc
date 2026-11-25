@@ -543,9 +543,9 @@ void QtProtobufTypesJsonDeserializationTest::invalidTypeTest()
 {
     ComplexMessage msg;
     // Closing brace is missing
-    msg.deserialize(serializer.get(),
-                    "{\"testFieldInt\":-45,"
-                    "\"testComplexField\":200}"_ba);
+    QVERIFY(!msg.deserialize(serializer.get(),
+                             "{\"testFieldInt\":-45,"
+                             "\"testComplexField\":200}"_ba));
 
     QCOMPARE(msg.testFieldInt(), -45);
     QCOMPARE(msg.testComplexField(), SimpleStringMessage());
@@ -553,12 +553,13 @@ void QtProtobufTypesJsonDeserializationTest::invalidTypeTest()
              QAbstractProtobufSerializer::Error::InvalidFormat);
 
     // Expected integer but the value is an array
-    msg.deserialize(serializer.get(),
-                    "{\"testFieldInt\":[],"
-                    "\"testComplexField\":{\"testFieldString\":\"qwerty\"}}"_ba);
+    QVERIFY(!msg.deserialize(serializer.get(),
+                             "{\"testFieldInt\":[],"
+                             "\"testComplexField\":{\"testFieldString\":\"qwerty\"}}"_ba));
 
-    QCOMPARE(msg.testFieldInt(), 0);
-    QCOMPARE(msg.testComplexField().testFieldString(), "qwerty"_L1);
+    QCOMPARE(msg.testFieldInt(), 0); // default value
+    // should not be qwerty, because deserialize FAILED
+    QCOMPARE_NE(msg.testComplexField().testFieldString(), "qwerty"_L1);
     QCOMPARE(serializer->lastError(),
              QAbstractProtobufSerializer::Error::InvalidFormat);
 

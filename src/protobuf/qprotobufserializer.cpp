@@ -507,6 +507,9 @@ bool QProtobufDeserializerImpl::deserializeScalarField(QVariant &value,
     if (!basicHandler)
         return false;
 
+    // On an error below, the value is cleared and the function still returns true:
+    // the field is handled as a scalar. The caller detects the failure from the
+    // cleared value.
     if (basicHandler->wireType != m_wireType) {
         setError(QAbstractProtobufSerializer::Error::InvalidHeader,
                  QCoreApplication::translate("QtProtobuf",
